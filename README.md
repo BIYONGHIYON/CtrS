@@ -8,12 +8,12 @@
 
 ## 팀원
 
-| 이름 | 소속 | 역할 |
-| --- | --- | --- |
-| 이병현 | 동국대학교 멀티미디어공학과 | 팀장 |
-| 김경찬 | 동국대학교 멀티미디어공학과 | 팀원 |
-| 송준현 | 동국대학교 멀티미디어공학과 | 팀원 |
-| 김윤지 | 동국대학교 데이터사이언스전공 | 팀원 |
+| 이름 | GitHub | 전공 | 역할 |
+| --- | --- | --- | --- |
+| 이병현 | [BIYONGHIYON](https://github.com/BIYONGHIYON) | 멀티미디어공학과 | 팀장 |
+| 김경찬 | [erickks2y-jpg](https://github.com/erickks2y-jpg) | 멀티미디어공학과 | 팀원 |
+| 송준현 | [choco-ssalbbang](https://github.com/choco-ssalbbang) | 멀티미디어공학과 | 팀원 |
+| 김윤지 | [kimrose1015-max](https://github.com/kimrose1015-max) | 데이터사이언스전공 | 팀원 |
 
 ## 팀 운영 방식
 
