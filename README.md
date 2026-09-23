@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./CtrS-icon-circle.png" alt="CtrS" width="180" />
+  <img src="./icon/CtrS-icon-circle.png" alt="CtrS" width="180" />
 </p>
 
 # CtrS
