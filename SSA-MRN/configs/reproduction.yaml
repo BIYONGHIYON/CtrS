@@ -1,0 +1,39 @@
+# 논문 기준값. 재현 실행 전 PanCollection 버전과 split을 기록한다.
+experiment:
+  name: ssa_mrn_paper_reproduction
+  seed: null # 논문 seed 확인 후 값 설정
+  scale_ratio: 4
+
+data:
+  root: data/raw/PanCollection
+  processed_root: data/processed
+  sensor: QB # QB | GF2 | WV3
+  protocol: reduced_resolution # reduced_resolution | full_resolution
+  expected_train_pairs:
+    QB: 19044
+    GF2: 22010
+    WV3: 10794
+  patch_shapes:
+    reduced_resolution:
+      ms: [16, 16]
+      pan: [64, 64]
+    full_resolution:
+      ms: [128, 128]
+      pan: [512, 512]
+
+model:
+  name: SSA-MRN
+  ssai_dimension: 6
+
+training:
+  epochs: 100
+  batch_size: 32
+  optimizer: Adam
+  learning_rate: 0.0001
+  loss: mse
+  device: auto
+
+paths:
+  checkpoints: experiments/checkpoints
+  logs: experiments/logs
+  results: experiments/results

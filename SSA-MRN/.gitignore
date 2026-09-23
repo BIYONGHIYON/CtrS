@@ -1,0 +1,22 @@
+# Local environments
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Datasets and generated artifacts
+data/raw/**
+data/processed/**
+experiments/checkpoints/**
+experiments/logs/**
+experiments/results/**
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!experiments/checkpoints/.gitkeep
+!experiments/logs/.gitkeep
+!experiments/results/.gitkeep
+
+# Local settings
+.env
+.vscode/
