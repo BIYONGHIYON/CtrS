@@ -31,7 +31,7 @@ python scripts/smoke_test.py --crop 256
 python -m unittest discover -s tests -v
 ```
 
-`smoke_test.py`는 **무작위 초기화 모델의 실행/shape만** 확인한다. 출력은 학습된 복원 영상이 아니며, PSNR 등 성능으로 해석하면 안 된다.
+`smoke_test.py`는 **무작위 초기화 모델의 실행/shape와 파일 저장만** 확인한다. `experiments/results/quickbird_smoke/`에 4밴드 출력 `.npy`와 첫 3밴드를 대비 조정한 PNG 미리보기를 저장한다. PNG는 실제 RGB 색 재현이 아니며, 둘 다 학습된 복원 결과나 PSNR 등 성능으로 해석하면 안 된다.
 
 학습·검증 파일을 각각 확보한 뒤에만 다음 명령을 쓴다. 검증 파일로 QuickBird 테스트 H5를 쓸 경우 그 결과는 개발 중 검증 결과로만 기록하고, 최종 시험 수치로 다시 사용하지 않는다.
 

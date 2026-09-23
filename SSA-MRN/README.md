@@ -19,6 +19,8 @@ SSA-MRN 담당 팀원 2명이 **원 논문의 pansharpening 결과 재현**을 �
 
 공식 GitHub 저장소에는 `network.py`와 README가 공개되어 있습니다. README는 PanCollection 사용을 안내하지만, 저장소에는 논문 전체 재현에 필요한 학습 스크립트, 데이터 로더와 설정, 평가 코드, 학습 가중치가 포함되어 있지 않습니다. 따라서 공개 네트워크를 출발점으로 누락된 학습·평가 파이프라인을 별도로 구현하고, 원 논문과의 차이를 기록합니다.
 
+논문 식 (10)–(12)의 `W = Softmax(C_pan C_ms^T)`는 입력 특징에서 계산하는 **어텐션 가중치**이며, 저장된 학습 파라미터(체크포인트)가 아닙니다. 논문은 SSAI의 차원 `K=6`을 명시하지만, 공개 `network.py`의 `SSA.fixed`는 `4`이고 어텐션도 행렬곱 대신 원소별 곱으로 계산합니다. 현재 복구 모델은 공개 코드를 보존한 실행 경로이므로 이 불일치를 그대로 가지며, 논문과 동일한 학습 결과를 재현했다고 볼 수 없습니다.
+
 ## 논문 설정
 
 | 항목 | 논문에 기재된 값 |
@@ -59,7 +61,7 @@ SSA-MRN/
 ├── experiments/
 │   ├── checkpoints/         # 모델 가중치 (Git 제외)
 │   ├── logs/                # 학습 로그 (Git 제외)
-│   └── results/             # 평가 결과 (Git 제외)
+│   └── results/             # QuickBird 스모크 결과만 Git 포함
 ├── references/              # 공식 코드 위치·버전 기록
 ├── scripts/                 # 학습·평가 실행 진입점
 ├── src/ssamrn/              # 재현용 모델·데이터·평가 모듈
@@ -80,11 +82,21 @@ python -m pip install -r requirements.txt
 
 설치한 PyTorch/CUDA 버전과 GPU 모델은 실행 기록에 남깁니다. 서로 다른 CUDA 환경에서 같은 설치 명령이 통한다고 가정하지 않습니다.
 
+### QuickBird 실행 확인
+
+```bash
+python scripts/smoke_test.py --crop 32
+python scripts/smoke_test.py --crop 256
+python -m unittest discover -s tests -v
+```
+
+출력은 [QuickBird 스모크 결과](./experiments/results/quickbird_smoke/README.md)에 정리했습니다. 학습된 가중치가 없는 무작위 초기화 결과이므로 화질 평가는 할 수 없습니다.
+
 ## 코드와 데이터 원칙
 
 - 공식 `network.py`를 기준 구현으로 보존하고, 변경분은 재현 코드와 분리해 추적합니다.
 - 논문에 명시되지 않은 값은 임의로 논문 설정인 것처럼 기재하지 않고 `미확인`으로 표시합니다.
-- `data/raw/QuickBird/test_qb_multiExm1.h5`만 Git에 포함합니다. 다른 원본 데이터, 체크포인트, 로그는 추가하지 않습니다.
+- `data/raw/QuickBird/test_qb_multiExm1.h5`와 `experiments/results/quickbird_smoke/`만 Git에 포함합니다. 다른 원본 데이터, 체크포인트, 로그는 추가하지 않습니다.
 - 재현 완료는 코드 실행 성공과 구분합니다. 논문 수치와의 비교가 끝나기 전에는 “논문 재현 완료”로 표현하지 않습니다.
 - `scripts/visualize_arad_hsi.py`는 기존 HSI 시각화 유틸리티로 보존하며 원 논문 pansharpening 재현의 일부로 사용하지 않습니다.
 

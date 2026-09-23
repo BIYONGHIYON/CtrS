@@ -33,3 +33,25 @@ venv/
 *.npy
 *.npz
 *.mat
+
+# Local Python and editor artifacts
+env/
+ENV/
+pyvenv.cfg
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+*.egg-info/
+build/
+dist/
+.env.*
+tempCodeRunnerFile.py
+
+# Share only these QuickBird smoke-test results.
+!SSA-MRN/experiments/results/quickbird_smoke/
+!SSA-MRN/experiments/results/quickbird_smoke/README.md
+!SSA-MRN/experiments/results/quickbird_smoke/random_output_32.npy
+!SSA-MRN/experiments/results/quickbird_smoke/random_output_256.npy
+!SSA-MRN/experiments/results/quickbird_smoke/random_output_preview_32.png
+!SSA-MRN/experiments/results/quickbird_smoke/random_output_preview_256.png
