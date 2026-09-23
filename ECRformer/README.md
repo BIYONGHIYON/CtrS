@@ -1,12 +1,16 @@
-# Spectral-Semantic Decoupled Learning을 적용한 ECRformer
+# ECRformer 원 논문 재현 및 분광 확장 연구
 
 > 원본 문서: [Notion — Spectral-Semantic Decoupled Learning을 적용한 ECRformer](https://app.notion.com/p/Spectral-Semantic-Decoupled-Learning-ECRformer-3e313c366e45805fa96be3d38c8fc107?source=copy_link)
 
+## 현재 연구 단계
+
+ECRformer 담당 팀원 2명이 SSA-MRN 팀과 동시에 **ECRformer 원 논문 재현**을 진행합니다. 공개 구현과 논문의 데이터 처리, 모델, 학습·평가 조건을 확인하고 기준 성능을 확보합니다. Spectral-Semantic Decoupled Learning과 SAM 손실을 이용한 확장은 원본 모델의 재현 결과를 확인한 뒤 실험합니다.
+
 ## 연구 요약
 
-광학 영상과 SAR 영상을 함께 이용하는 ECRformer 기반 위성영상 구름 제거 연구입니다. 기존 ECRformer의 Structure–Texture 복원 흐름을 **Structure–Spectral–Texture**로 확장하고, Sentinel-2의 13개 밴드 사이의 관계를 보존하도록 Spectral Angle Mapper(SAM)를 학습 손실에 직접 적용했을 때의 효과를 검증합니다.
+광학 영상과 SAR 영상을 함께 이용하는 ECRformer 기반 위성영상 구름 제거 연구입니다. 먼저 원 논문의 Structure–Texture 복원 성능을 재현합니다. 이후 Structure–Spectral–Texture 확장과 Sentinel-2의 13개 밴드 관계를 보존하는 Spectral Angle Mapper(SAM) 손실의 효과를 검토합니다.
 
-핵심 질문은 다음과 같습니다.
+후속 확장의 핵심 질문은 다음과 같습니다.
 
 > 기존 ECRformer에 분광 정보 학습과 spectral fidelity 제약을 명시적으로 추가하면, 시각적 복원 품질을 유지하면서 구름 제거 결과의 분광 충실도를 더 높일 수 있는가?
 
@@ -33,7 +37,7 @@ Output    → Cloud-free 13-band image
 
 논문의 SDFL(Semantic-Decoupled Feature Learning)은 구조 복원과 질감 렌더링의 역할을 분리해 학습합니다. 이 연구에서는 해당 분리 학습에 분광 정보 보존 단계를 명시적으로 추가합니다.
 
-## 3. 제안 방식: SSDFL
+## 3. 재현 이후 제안 방식: SSDFL
 
 SSDFL(Spectral-Semantic Decoupled Feature Learning)의 목표 흐름은 다음과 같습니다.
 
@@ -48,7 +52,7 @@ Encoder   → Decoder  → Late Decoder / Refinement
 
 기존 ECRformer의 장점을 유지하면서 분광 정보를 별도의 학습 목표로 명확히 다루는 것이 핵심입니다.
 
-## 4. Spectral fidelity 제약
+## 4. 재현 이후 Spectral fidelity 제약
 
 ### SAM
 
@@ -86,12 +90,19 @@ L_total = L_reconstruction + λ_sam · L_SAM
 
 ## 6. 실험 계획
 
+### 원 논문 재현
+
+1. [공식 구현](https://github.com/zzaiyan/ECRformer)과 논문의 모델·학습 설정을 대조합니다.
+2. SEN12MS-CR 데이터 구성과 분할을 확인해 원본 모델을 학습·평가합니다.
+3. 논문과 동일한 조건의 성능을 기록하고 차이가 나는 설정 및 실패 사례를 정리합니다.
+
 ### 비교 모델
 
-1. 기존 ECRformer 재현 모델
-2. ECRformer + spectral branch/SSDFL
-3. ECRformer + SAM loss
-4. ECRformer + SSDFL + SAM loss
+원본 ECRformer를 기준 모델로 재현한 뒤, 후속 실험에서 다음 변형을 비교합니다.
+
+1. ECRformer + spectral branch/SSDFL
+2. ECRformer + SAM loss
+3. ECRformer + SSDFL + SAM loss
 
 ### 평가 지표
 
@@ -129,13 +140,13 @@ PSNR·SSIM 개선과 SAM 개선을 따로 확인합니다. SAM만 좋아지고 �
 ## 8. 중간 산출물
 
 - 재현 가능한 SEN12MS-CR 데이터 준비 절차
-- 기존 ECRformer의 최소 학습·평가 파이프라인
-- 기존 모델과 SSDFL·SAM 확장 모델의 비교표
+- 원 논문 설정에 따른 ECRformer 학습·평가 파이프라인과 성능 비교표
+- 후속 SSDFL·SAM 확장 모델의 비교표
 - SAM, 밴드별 오차와 시각 품질의 관계 분석
 - 구름 유형과 지표별 실패 사례
 - 제거 실험 및 계산 비용 분석
 
-현재 팀 운영은 SSA-MRN 트랙과 본 트랙을 중간까지 병렬 개발한 뒤, 데이터 현실성·재현성·정량 성능·구현 난도를 비교해 더 유망한 한 주제에 팀원 4인이 집중하는 방식입니다.
+현재는 두 팀이 2명씩 나뉘어 SSA-MRN과 ECRformer 원 논문을 동시에 재현합니다. 중간 시점에 두 팀의 재현 결과와 후속 연구 가능성을 비교해 최종 주제 하나를 선택하고, 이후 팀원 4명이 함께 개발합니다.
 
 ## 9. 참고 자료
 
