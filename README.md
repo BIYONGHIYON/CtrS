@@ -15,13 +15,13 @@
 
 ## 연구 후보
 
-### 1. SSA-MRN
+### 1. [SSA-MRN](./SSA-MRN/README.md)
 
 고해상도 RGB의 공간 정보와 저해상도 HSI의 분광 정보를 결합해 고해상도 HSI를 복원하는 연구입니다. SSA-MRN의 밴드별 spectral-spatial attention과 다중 해상도 융합 구조를 RGB 유도 HSI 초해상도 문제에 확장합니다.
 
-현재는 HSI로부터 RGB를 합성한 데이터와 실제 RGB 카메라 데이터의 차이를 주요 연구 위험으로 보고 있습니다. 합성 조건에서의 성능뿐 아니라 실제 센서 데이터 적용 가능성과 RGB-HSI 정합 문제도 함께 검토합니다.
+ARAD-1K 1,000개 장면을 기본 학습 데이터로 사용하고, 확보한 실제 RGB–HSI 데이터는 실제 환경 검증 세트로 사용하거나 고해상도 장면을 패치로 나누어 추가 학습 데이터로 활용합니다.
 
-### 2. ECRformer
+### 2. [ECRformer](./ECRformer/README.md)
 
 광학 영상과 SAR 영상을 이용한 위성영상 구름 제거 연구입니다. ECRformer를 기반으로 Spectral-Semantic Decoupled Learning과 spectral fidelity 제약을 적용·확장하고, 구조 복원과 분광 정보 보존을 함께 평가합니다.
 
