@@ -51,4 +51,4 @@ python scripts/train.py \
 3. Wald protocol과 RR 지표(SAM, ERGAS, PSNR, SCC, Q2ⁿ), FR 지표(QNR, Dλ, Ds)의 기준 구현.
 4. 논문 표의 수치와 같은 조건에서 재현되는지 여부.
 
-원본 H5, 체크포인트와 실험 산출물은 Git에서 제외한다. `data_overview_qb_reduce.png`는 데이터 개요 이미지이고, `DLR_HySU.zip`은 다른 연구용 데이터로 현재 QuickBird 실행에는 쓰지 않는다.
+QuickBird 테스트 H5 한 파일만 Git에 포함한다. 다른 원본 H5, 체크포인트와 실험 산출물은 제외한다. `data_overview_qb_reduce.png`는 데이터 개요 이미지이고, `DLR_HySU.zip`은 다른 연구용 데이터로 현재 QuickBird 실행에는 쓰지 않는다.

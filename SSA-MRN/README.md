@@ -53,7 +53,7 @@ SSA-MRN 담당 팀원 2명이 **원 논문의 pansharpening 결과 재현**을 �
 SSA-MRN/
 ├── configs/                 # 논문 재현 설정
 ├── data/
-│   ├── raw/                 # 내려받은 PanCollection 원본 (Git 제외)
+│   ├── raw/                 # QuickBird 테스트 H5만 Git 포함
 │   └── processed/           # 준비된 데이터 (Git 제외)
 ├── docs/                    # 재현 계획과 실험 기록
 ├── experiments/
@@ -84,7 +84,7 @@ python -m pip install -r requirements.txt
 
 - 공식 `network.py`를 기준 구현으로 보존하고, 변경분은 재현 코드와 분리해 추적합니다.
 - 논문에 명시되지 않은 값은 임의로 논문 설정인 것처럼 기재하지 않고 `미확인`으로 표시합니다.
-- 원본 데이터, 체크포인트, 로그는 Git에 추가하지 않습니다.
+- `data/raw/QuickBird/test_qb_multiExm1.h5`만 Git에 포함합니다. 다른 원본 데이터, 체크포인트, 로그는 추가하지 않습니다.
 - 재현 완료는 코드 실행 성공과 구분합니다. 논문 수치와의 비교가 끝나기 전에는 “논문 재현 완료”로 표현하지 않습니다.
 - `scripts/visualize_arad_hsi.py`는 기존 HSI 시각화 유틸리티로 보존하며 원 논문 pansharpening 재현의 일부로 사용하지 않습니다.
 
