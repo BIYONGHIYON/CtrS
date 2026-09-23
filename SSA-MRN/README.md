@@ -85,12 +85,12 @@ python -m pip install -r requirements.txt
 ### QuickBird 실행 확인
 
 ```bash
-python scripts/smoke_test.py --crop 32
-python scripts/smoke_test.py --crop 256
+python scripts/smoke_test.py --size 32
+python scripts/smoke_test.py --size 256
 python -m unittest discover -s tests -v
 ```
 
-출력은 [QuickBird 스모크 결과](./experiments/results/quickbird_smoke/README.md)에 정리했습니다. 학습된 가중치가 없는 무작위 초기화 결과이므로 화질 평가는 할 수 없습니다.
+`--size 32`는 첫 테스트 샘플 전체의 PAN·LMS 256×256과 MS 64×64를 각각 32×32와 8×8로 축소합니다. `--size 256`은 전체 샘플을 그대로 사용합니다. 입력 MS 4밴드의 RGB 합성·입력 PAN·출력 MS RGB 합성은 [QuickBird 스모크 결과](./experiments/results/quickbird_smoke/README.md)에서 나란히 볼 수 있습니다. RGB 합성에는 QuickBird B·G·R·NIR 순서가 H5에서도 유지됐다고 가정하며, 각 이미지는 보기용으로 대비를 별도 조정했습니다. 학습된 가중치가 없는 무작위 초기화 결과이므로 화질 평가는 할 수 없습니다.
 
 ## 코드와 데이터 원칙
 

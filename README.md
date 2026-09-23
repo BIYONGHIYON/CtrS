@@ -47,7 +47,15 @@ ECRformer 팀 2명이 광학 영상과 SAR 영상을 이용한 구름 제거 모
 | [QuickBird 테스트 데이터](./SSA-MRN/data/raw/QuickBird/) | 공개 테스트 H5 20개 사례, 학습용 아님 |
 | [QuickBird 실행 결과](./SSA-MRN/experiments/results/quickbird_smoke/README.md) | 무작위 초기화 모델의 배열·미리보기 |
 
-현재 공유한 결과는 모델의 입출력과 저장 기능을 확인한 **스모크 테스트**입니다. 학습된 체크포인트가 없어 논문 복원 품질이나 성능 지표로 해석하면 안 됩니다.
+32×32 실행은 첫 번째 QuickBird 샘플 전체(PAN·LMS 256×256, MS 64×64)를 각각 32×32와 8×8로 축소합니다. 256×256 실행은 같은 샘플을 원래 크기로 사용합니다. 두 결과는 서로 다른 부분을 잘라낸 타일이 아닙니다. 학습된 체크포인트가 없으므로 복원 품질이나 성능 지표로 해석하면 안 됩니다.
+
+### QuickBird 첫 샘플 입력·출력 비교 (256×256 실행)
+
+| 입력 MS: 64×64 (보기용 256×256 확대) | 입력 PAN: 256×256 | 출력 MS: 256×256 (학습 전) |
+| --- | --- | --- |
+| ![입력 MS RGB 합성](./SSA-MRN/experiments/results/quickbird_smoke/ms_input_rgb_256.png) | ![입력 PAN](./SSA-MRN/experiments/results/quickbird_smoke/pan_input_256.png) | ![무작위 초기화 출력 MS RGB 합성](./SSA-MRN/experiments/results/quickbird_smoke/random_output_preview_256.png) |
+
+MS와 출력의 RGB 합성은 [QuickBird 제품 가이드](https://engineering.purdue.edu/~bethel/qbguide.pdf)의 Blue·Green·Red·NIR 순서를 H5에도 적용한다고 **가정**해 3·2·1번 밴드를 R·G·B로 표시했습니다. H5에는 밴드 이름이 없어 이 순서를 확정할 수 없습니다. 각 PNG는 보기용으로 대비를 별도 조정했고, 입력 MS 확대는 모델 입력 크기를 바꾸지 않습니다. **출력은 미학습 모델의 실행 확인용**입니다.
 
 ### 로컬에서 확인
 
@@ -57,7 +65,7 @@ cd CtrS/SSA-MRN
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install torch -r requirements.txt
-python scripts/smoke_test.py --crop 32
+python scripts/smoke_test.py --size 32
 ```
 
 ## 중간 비교 기준
