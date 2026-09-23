@@ -26,12 +26,12 @@
 
 ```bash
 python scripts/inspect_data.py data/raw/QuickBird/test_qb_multiExm1.h5
-python scripts/smoke_test.py --crop 32
-python scripts/smoke_test.py --crop 256
+python scripts/smoke_test.py --size 32
+python scripts/smoke_test.py --size 256
 python -m unittest discover -s tests -v
 ```
 
-`smoke_test.py`는 **무작위 초기화 모델의 실행/shape와 파일 저장만** 확인한다. `experiments/results/quickbird_smoke/`에 4밴드 출력 `.npy`와 첫 3밴드를 대비 조정한 PNG 미리보기를 저장한다. PNG는 실제 RGB 색 재현이 아니며, 둘 다 학습된 복원 결과나 PSNR 등 성능으로 해석하면 안 된다.
+`smoke_test.py`는 첫 번째 QuickBird H5 샘플 **전체**를 사용한다. `--size 32`에서는 PAN·LMS 256×256→32×32, MS 64×64→8×8로 면적 보간해 4:1 비율을 유지하며, `--size 256`에서는 원래 크기 그대로 입력한다. 왼쪽 위만 자르거나 20개 샘플을 타일로 순회하지 않는다. 이 스크립트는 **무작위 초기화 모델의 실행/shape와 파일 저장만** 확인한다. `experiments/results/quickbird_smoke/`에는 입력 MS와 출력 MS의 RGB 합성(4밴드 중 3·2·1번 밴드 사용), 입력 PAN, 출력 4밴드 `.npy`를 저장한다. RGB 밴드 순서는 H5 메타데이터가 없어 QuickBird의 B·G·R·NIR 순서가 유지됐다고 가정한 것이며, PNG는 각각 대비를 조정한 표시용이다. 학습된 복원 결과나 PSNR 등 성능으로 해석하면 안 된다.
 
 학습·검증 파일을 각각 확보한 뒤에만 다음 명령을 쓴다. 검증 파일로 QuickBird 테스트 H5를 쓸 경우 그 결과는 개발 중 검증 결과로만 기록하고, 최종 시험 수치로 다시 사용하지 않는다.
 
@@ -51,4 +51,4 @@ python scripts/train.py \
 3. Wald protocol과 RR 지표(SAM, ERGAS, PSNR, SCC, Q2ⁿ), FR 지표(QNR, Dλ, Ds)의 기준 구현.
 4. 논문 표의 수치와 같은 조건에서 재현되는지 여부.
 
-QuickBird 테스트 H5 한 파일만 Git에 포함한다. 다른 원본 H5, 체크포인트와 실험 산출물은 제외한다. `data_overview_qb_reduce.png`는 데이터 개요 이미지이고, `DLR_HySU.zip`은 다른 연구용 데이터로 현재 QuickBird 실행에는 쓰지 않는다.
+QuickBird 테스트 H5 한 파일과 `quickbird_smoke/`의 실행 확인 결과만 Git에 포함한다. 다른 원본 H5, 체크포인트와 그 밖의 실험 산출물은 제외한다. `data_overview_qb_reduce.png`는 데이터 개요 이미지이고, `DLR_HySU.zip`은 다른 연구용 데이터로 현재 QuickBird 실행에는 쓰지 않는다.
