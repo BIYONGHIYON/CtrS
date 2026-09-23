@@ -1,0 +1,1 @@
+"""SSA-MRN model adapter."""
