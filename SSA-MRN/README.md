@@ -61,7 +61,7 @@ SSA-MRN/
 ├── experiments/
 │   ├── checkpoints/         # 모델 가중치 (Git 제외)
 │   ├── logs/                # 학습 로그 (Git 제외)
-│   └── results/             # QuickBird 스모크 결과만 Git 포함
+│   └── results/             # QuickBird 스모크·학습 후 비교 결과 Git 포함
 ├── references/              # 공식 코드 위치·버전 기록
 ├── scripts/                 # 학습·평가 실행 진입점
 ├── src/ssamrn/              # 재현용 모델·데이터·평가 모듈
@@ -92,11 +92,33 @@ python -m unittest discover -s tests -v
 
 `--size 32`는 첫 테스트 샘플 전체의 PAN·LMS 256×256과 MS 64×64를 각각 32×32와 8×8로 축소합니다. `--size 256`은 전체 샘플을 그대로 사용합니다. 입력 MS 4밴드의 RGB 합성·입력 PAN·출력 MS RGB 합성은 [QuickBird 스모크 결과](./experiments/results/quickbird_smoke/README.md)에서 나란히 볼 수 있습니다. RGB 합성에는 QuickBird B·G·R·NIR 순서가 H5에서도 유지됐다고 가정하며, 각 이미지는 보기용으로 대비를 별도 조정했습니다. 학습된 가중치가 없는 무작위 초기화 결과이므로 화질 평가는 할 수 없습니다.
 
+### QuickBird 학습 후 로컬 테스트 (2026-09-28)
+
+QuickBird로 100 epochs 학습한 `latest.pt`를 Mac 로컬에서 불러와 테스트 데이터의 첫 번째 샘플(인덱스 0)에 대해 추론했습니다. 체크포인트의 센서는 `QB`, 채널 수는 4이며, 모델 파라미터를 `strict=True`로 로드했습니다. 위의 무작위 초기화 스모크 테스트와는 별도의 **학습된 모델 결과**입니다.
+
+| 항목 | 실제 테스트 조건·결과 |
+|---|---|
+| 테스트 파일 | `data/raw/QuickBird/test_qb_multiExm1.h5` |
+| 사용 샘플 | 20개 중 첫 번째 1개 |
+| 입력 | MS 4밴드 64×64 + PAN 1밴드 256×256 + LMS 4밴드 256×256 |
+| 출력·정답 | 각각 MS 4밴드 256×256 |
+| 입력 처리 | 샘플 전체 사용, 추가 자르기·다운샘플링 없음; QB 센서 범위 2047로 정규화 |
+| 실행 환경 | Mac 로컬 CPU, PyTorch 2.14.0, CPU 스레드 4개 |
+| 순수 추론 시간 | 약 0.34초 (파일 로딩·결과 저장 시간 제외) |
+| LMS 기준 MSE / PSNR | 0.00028536 / 35.45 dB |
+| 학습 모델 MSE / PSNR | 0.00007335 / 41.35 dB |
+
+![QuickBird 입력 MS, PAN, LMS, 학습 모델 출력, 정답 비교](./experiments/results/quickbird_trained/comparison.png)
+
+왼쪽부터 **입력 MS → 입력 PAN → LMS 기준 영상 → 학습 모델 출력 → 정답(GT)**입니다. 입력 MS는 비교 그림에서만 256×256으로 확대 표시하고, 모델에는 원래의 64×64 배열을 넣었습니다. MS 계열 영상은 동일한 GT 기반 채널별 1–99 백분위 대비 범위를 사용했으며, RGB 합성은 B·G·R·NIR 밴드 순서를 가정합니다. PAN은 별도 회색조 대비를 적용했습니다. [원시 수치와 실행 기록](./experiments/results/quickbird_trained/metrics.json)도 보관합니다.
+
+MSE와 PSNR은 정규화된 4밴드 배열에서 계산했으며 PSNR의 기준 최댓값은 1입니다. **첫 샘플의 실행·화질 확인 결과일 뿐**, 20개 전체 평가나 논문 공식 지표 평가가 아니며 논문 재현 완료를 의미하지 않습니다. 학습 가중치는 Git에 포함하지 않습니다.
+
 ## 코드와 데이터 원칙
 
 - 공식 `network.py`를 기준 구현으로 보존하고, 변경분은 재현 코드와 분리해 추적합니다.
 - 논문에 명시되지 않은 값은 임의로 논문 설정인 것처럼 기재하지 않고 `미확인`으로 표시합니다.
-- `data/raw/QuickBird/test_qb_multiExm1.h5`와 `experiments/results/quickbird_smoke/`만 Git에 포함합니다. 다른 원본 데이터, 체크포인트, 로그는 추가하지 않습니다.
+- 원본 데이터는 `data/raw/QuickBird/test_qb_multiExm1.h5`만 Git에 포함합니다. 결과는 `experiments/results/quickbird_smoke/`와 `experiments/results/quickbird_trained/`의 비교 PNG·기록 JSON을 공유하며, 다른 원본 데이터, 체크포인트, 학습 로그는 추가하지 않습니다.
 - 재현 완료는 코드 실행 성공과 구분합니다. 논문 수치와의 비교가 끝나기 전에는 “논문 재현 완료”로 표현하지 않습니다.
 - `scripts/visualize_arad_hsi.py`는 기존 HSI 시각화 유틸리티로 보존하며 원 논문 pansharpening 재현의 일부로 사용하지 않습니다.
 
