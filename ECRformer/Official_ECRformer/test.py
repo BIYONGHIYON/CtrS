@@ -166,6 +166,10 @@ def run_evaluation(args):
     config_class = find_config_using_name(args.config)
     config = config_class()
     config.name = args.name
+
+    if args.data_root is not None:
+        config.dataset.root = args.data_root
+
     config.train.gpu = [args.gpu]
 
     split = resolve_eval_split_name(config, args.split)
@@ -266,6 +270,12 @@ def run_evaluation(args):
 def parse_args():
     parser = ArgumentParser()
     parser.add_argument('--config', '-c', type=str, default='ecrformer', help='Config name')
+    parser.add_argument(
+        '--data-root',
+        type=str,
+        default=None,
+        help='Dataset root directory',
+    )
     parser.add_argument('--name', '-n', type=str, default=None)
     parser.add_argument('--split', type=str, default=None, help='Dataset split to evaluate')
     parser.add_argument('--ckpt-path', type=str, default=None, help='Checkpoint path')

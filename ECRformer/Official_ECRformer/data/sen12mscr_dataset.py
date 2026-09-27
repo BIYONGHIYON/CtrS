@@ -175,6 +175,7 @@ class SEN12MSCR(Dataset):
     def _get_paths(self):
         print(f'\nProcessing paths for {self.split} split (season={self.season})')
         paths = []
+        split_rois = {os.path.normpath(r) for r in self.split_rois}
         seeds_S1 = natsorted([
             d for d in os.listdir(self.root_dir)
             if '_s1' in d and not d.endswith('.tar')
@@ -187,18 +188,28 @@ class SEN12MSCR(Dataset):
                     os.path.join(roi_dir, f) for f in os.listdir(roi_dir)
                 ])
                 patches_S2 = [
-                    p.replace('/s1', '/s2').replace('_s1', '_s2')
+                    os.path.join(
+                        self.root_dir,
+                        seed.replace('_s1', '_s2'),
+                        roi.replace('s1_', 's2_'),
+                        os.path.basename(p).replace('_s1_', '_s2_'),
+                    )
                     for p in patches_S1
                 ]
                 patches_S2_cloudy = [
-                    p.replace('/s1', '/s2_cloudy').replace('_s1', '_s2_cloudy')
+                    os.path.join(
+                        self.root_dir,
+                        seed.replace('_s1', '_s2_cloudy'),
+                        roi.replace('s1_', 's2_cloudy_'),
+                        os.path.basename(p).replace('_s1_', '_s2_cloudy_'),
+                    )
                     for p in patches_S1
                 ]
                 for i in range(len(patches_S1)):
                     if not all(os.path.isfile(p) for p in
                                [patches_S1[i], patches_S2[i], patches_S2_cloudy[i]]):
                         continue
-                    if not any(r in patches_S1[i] for r in self.split_rois):
+                    if os.path.normpath(os.path.join(seed, roi)) not in split_rois:
                         continue
                     paths.append({
                         'S1': patches_S1[i],
