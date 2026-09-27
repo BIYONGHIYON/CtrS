@@ -1,0 +1,21 @@
+{
+  "checkpoint": "/Users/biyonghiyon_e/Downloads/SSA-MRN-backup/QuickBird/latest.pt",
+  "epoch": 100,
+  "sample_index_zero_based": 0,
+  "device": "cpu",
+  "inference_seconds": 0.33688299998175353,
+  "prediction_shape": [
+    4,
+    256,
+    256
+  ],
+  "prediction": {
+    "mse": 7.334686233662069e-05,
+    "psnr_db_peak_1": 41.34618459858022
+  },
+  "lms_baseline": {
+    "mse": 0.0002853567712008953,
+    "psnr_db_peak_1": 35.44611817664543
+  },
+  "notes": "Single sample sanity test, not official paper evaluation. RGB assumes B,G,R,NIR band order. Shared GT 1-99 percentile RGB stretch. No cropping or resizing of inference inputs."
+}
