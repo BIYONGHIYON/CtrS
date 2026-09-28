@@ -1,0 +1,41 @@
+{
+  "sensor": "WV3",
+  "checkpoint_file": "latest.pt",
+  "data_file": "test_wv3_multiExm1.h5",
+  "epoch": 100,
+  "sample_index_zero_based": 0,
+  "sample_count": 20,
+  "device": "cpu",
+  "inference_seconds": 0.3513998339767568,
+  "input_shapes": {
+    "pan": [
+      1,
+      256,
+      256
+    ],
+    "lms": [
+      8,
+      256,
+      256
+    ],
+    "ms": [
+      8,
+      64,
+      64
+    ]
+  },
+  "prediction_shape": [
+    8,
+    256,
+    256
+  ],
+  "prediction": {
+    "mse": 0.00017145447782240808,
+    "psnr_db_peak_1": 37.658511680692
+  },
+  "lms_baseline": {
+    "mse": 0.0012402704451233149,
+    "psnr_db_peak_1": 29.06483605145594
+  },
+  "notes": "Single-sample sanity check, not official paper evaluation. RGB band mapping is assumed; shared GT-based 1-99 percentile stretch. Full sample, no inference crop/downsampling."
+}
