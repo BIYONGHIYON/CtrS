@@ -1,4 +1,4 @@
-# SSA-MRN 원 논문 재현
+# SSA-MRN 원 논문 재현 결과
 
 > 연구 기준: Xu et al., “Spectral–Spatial Attention-Guided Multi-Resolution Network for Pansharpening,” IEEE JSTARS, 2025.
 > 논문: https://doi.org/10.1109/JSTARS.2025.3543827
@@ -6,7 +6,7 @@
 
 ## 현재 연구 단계
 
-SSA-MRN 담당 팀원 2명이 **원 논문의 pansharpening 결과 재현**을 진행합니다. 동시에 다른 팀원 2명은 ECRformer 원 논문을 재현합니다. 공식 저장소의 네트워크 구현을 확인하고, 논문에 공개된 학습 조건·데이터 처리·평가 절차를 재구성합니다. RGB–HSI 확장은 원 논문 재현 결과를 확인한 뒤 검토합니다.
+SSA-MRN 담당 팀원 2명의 **공개 코드 기반 재현 실험은 완료**했습니다. 누락된 학습·평가 파이프라인을 복구하고, QB·GF2·WV3를 각각 100 epochs 학습한 뒤 RR·FR 테스트와 WV3→WV2 교차 위성 평가까지 수행했습니다. 여기서 ‘완료’는 계획한 실험과 논문 수치 비교를 마쳤다는 뜻이며, 논문 모델·평가 설정과 완전히 일치한다는 뜻은 아닙니다. ECRformer 팀은 별도로 재현을 진행합니다.
 
 원 문제의 입력과 출력은 다음과 같습니다.
 
@@ -19,7 +19,7 @@ SSA-MRN 담당 팀원 2명이 **원 논문의 pansharpening 결과 재현**을 �
 
 공식 GitHub 저장소에는 `network.py`와 README가 공개되어 있습니다. README는 PanCollection 사용을 안내하지만, 저장소에는 논문 전체 재현에 필요한 학습 스크립트, 데이터 로더와 설정, 평가 코드, 학습 가중치가 포함되어 있지 않습니다. 따라서 공개 네트워크를 출발점으로 누락된 학습·평가 파이프라인을 별도로 구현하고, 원 논문과의 차이를 기록합니다.
 
-논문 식 (10)–(12)의 `W = Softmax(C_pan C_ms^T)`는 입력 특징에서 계산하는 **어텐션 가중치**이며, 저장된 학습 파라미터(체크포인트)가 아닙니다. 논문은 SSAI의 차원 `K=6`을 명시하지만, 공개 `network.py`의 `SSA.fixed`는 `4`이고 어텐션도 행렬곱 대신 원소별 곱으로 계산합니다. 현재 복구 모델은 공개 코드를 보존한 실행 경로이므로 이 불일치를 그대로 가지며, 논문과 동일한 학습 결과를 재현했다고 볼 수 없습니다.
+논문 식 (10)–(12)의 `W = Softmax(C_pan C_ms^T)`는 입력 특징에서 계산하는 **어텐션 가중치**이며, 저장된 학습 파라미터(체크포인트)가 아닙니다. 논문은 SSAI의 차원 `K=6`을 명시하지만, 공개 `network.py`의 `SSA.fixed`는 `4`이고 어텐션도 행렬곱 대신 원소별 곱으로 계산합니다. 현재 복구 모델은 공개 코드를 보존한 실행 경로이므로 이 불일치를 그대로 가집니다.
 
 ## 논문 설정
 
@@ -36,7 +36,31 @@ SSA-MRN 담당 팀원 2명이 **원 논문의 pansharpening 결과 재현**을 �
 | SSAI 내부 차원 K | 6 |
 | 논문 실험 GPU | NVIDIA GeForce RTX 2080 Ti |
 
-축소 해상도(RR) 평가는 Wald protocol을 따르며, 참조 지표로 SAM, ERGAS, PSNR, SCC, Q2ⁿ을 사용합니다. 원 해상도(FR) 평가는 참조 영상이 없는 QNR, Dλ, Ds를 사용합니다. 먼저 논문 설정을 고정해 재현하고, 메모리 한계 등으로 설정을 바꿀 때는 논문 값과 실제 실행 값을 분리해 기록합니다.
+축소 해상도(RR) 평가는 Wald protocol을 따르며, 참조 지표로 SAM, ERGAS, PSNR, SCC, Q2ⁿ을 사용합니다. 원 해상도(FR) 평가는 참조 영상이 없는 QNR, Dλ, Ds를 사용합니다. 논문 값과 실제 실행 값은 구분해 기록했습니다.
+
+## 재현 결과: 논문과 정량 비교
+
+QB·GF2·WV3의 100-epoch `latest.pt`로 각각 테스트하고, WV2에는 WV3 가중치를 적용했습니다. PanCollection RR·FR 테스트를 센서별 20장씩 총 160장 평가했으며, 표의 현재 값은 이미지별 지표의 평균입니다. 왼쪽은 논문 Tables I–IV의 *Ours*, 오른쪽은 현재 공개 코드 기반 복구 모델의 결과입니다.
+
+| 센서 | SAM↓ 논문/현재 | ERGAS↓ 논문/현재 | PSNR↑ 논문/현재 | SCC↑ 논문/현재 | Q4·Q8↑ 논문/현재 |
+|---|---:|---:|---:|---:|---:|
+| QB | 4.8478 / 4.9557 | 4.0726 / 4.1555 | 37.6645 / 37.3608 | .9702 / .9765 | .9243 / .9214 |
+| GF2 | .9434 / .9668 | .8755 / .9125 | 46.9734 / 46.3520 | .9898 / .9816 | .9688 / .9661 |
+| WV3 | 3.4873 / 3.5277 | 2.5866 / 2.5822 | 37.5691 / 37.3894 | .9735 / .9779 | .8930 / .8753 |
+| WV2 | 5.8845 / 5.9265 | 4.7254 / 4.8002 | 29.4148 / 29.0611 | .9217 / .8959 | .8215 / .8190 |
+
+| 센서 | Dλ↓ 논문/현재 | Ds↓ 논문/현재 | QNR↑ 논문/현재 |
+|---|---:|---:|---:|
+| QB | .0341 / .0479 | .0360 / .0396 | .9311 / .9147 |
+| GF2 | .0395 / .0350 | .0487 / .0565 | .9137 / .9106 |
+| WV3 | .0329 / .0221 | .0617 / .0382 | .9077 / .9408 |
+| WV2 | .0657 / .0511 | .0549 / .0382 | .8831 / .9126 |
+
+**해석:** RR의 SAM·ERGAS와 PSNR은 대체로 논문 수치에 가깝지만 완전히 같지는 않고, WV3 Q8·WV2 SCC와 일부 FR 지표에는 차이가 남습니다. 특히 PSNR은 논문이 계산 세부 설정을 공개하지 않아 확인한 방식 중 논문 수치에 가장 가까운 전 센서 peak 2047·밴드별 평균으로 고정했습니다. 이는 성능 향상이 아니라 평가식 선택입니다. FR의 PAN 축소·보간은 MATLAB 평가 코드와 동일성이 검증되지 않아 QNR 등의 비교는 잠정적입니다. 공개 코드의 SSAI `K=4`와 논문의 `K=6`도 다릅니다. 따라서 **공개 코드 기반 재현 실험 완료**이며 **논문 구현·성능의 완전한 일치까지 입증한 것은 아닙니다**. 계산 조건과 실행 방법은 [상세 비교 문서](./docs/paper_metric_comparison.md)에 기록했습니다.
+
+```bash
+python scripts/evaluate_paper.py --sensor all --protocol both
+```
 
 ## 재현 순서
 
@@ -45,9 +69,9 @@ SSA-MRN 담당 팀원 2명이 **원 논문의 pansharpening 결과 재현**을 �
 3. 센서별 입력 채널 수, 데이터 분할, Wald 열화 방식과 배열 범위를 확인합니다.
 4. 모델 입력/출력 shape 및 단일 배치 forward 검증을 구현합니다.
 5. 손실 감소, 체크포인트 저장·재시작을 포함한 짧은 실행으로 파이프라인을 점검합니다.
-6. QB, GF2, WV3의 100-epoch 학습을 완료하고 [RR·FR 각 20장 수치 비교](./docs/paper_metric_comparison.md)를 수행했습니다. 평가 구현의 논문 일치성은 검증 중입니다.
-7. WV3로 학습한 모델의 WV2 교차 위성 평가와 논문 ablation을 추가합니다.
-8. 로그, 설정, 코드 revision, 지표와 실행 환경을 함께 `experiments/`에 보관합니다.
+6. QB·GF2·WV3의 100-epoch 학습과 RR·FR 각 20장 평가를 완료했습니다.
+7. WV3 모델의 WV2 교차 위성 평가 및 논문 수치 비교를 완료했습니다. 논문 ablation 재현은 이번 범위에 포함하지 않았습니다.
+8. 학습 로그·가중치는 `experiments/`에, 전체 평가 결과와 한계는 [비교 문서](./docs/paper_metric_comparison.md)에 기록했습니다.
 
 ## 저장소 사용
 
@@ -108,7 +132,7 @@ QB·GF2·WV3를 서버의 RTX A6000에서 각각 100 epochs 학습했습니다. 
 
 이미지는 왼쪽부터 입력 MS·PAN·LMS 기준·모델 출력·GT입니다. 원본 MS는 64×64, PAN/LMS/GT와 출력은 256×256이며 **추론 입력을 자르거나 다운샘플링하지 않았습니다**. 그림의 MS만 보기 위해 확대했습니다. MS 계열의 RGB 대비는 GT 기반 채널별 1–99 백분위를 공유하고, RGB 밴드 순서는 GF2/QB `[2,1,0]`, WV3 `[4,2,1]`을 **가정**합니다. PSNR은 정규화된 전 밴드 MSE를 기준 최댓값 1로 환산한 값입니다. 센서 간 수치를 직접 우열 비교하지 마세요.
 
-위 이미지는 각 20개 중 **첫 1개 샘플 실행 확인**이다. 별도로 [20장 전체의 논문 지표 비교](./docs/paper_metric_comparison.md)를 수행했지만, PSNR 집계 방식과 FR QNR 구현의 논문 일치성은 미확인이다. 공개 구현과 논문 설명의 SSA 차이(K=4/6 등)도 남아 있다.
+위 이미지는 각 20개 중 **첫 1개 샘플 시각화**입니다. 바로 위의 단일 샘플 PSNR은 이 문서의 20장 평균 PSNR과 계산 조건·평가 범위가 달라 직접 비교하지 마세요. 전체 논문 지표 비교는 [재현 결과](#재현-결과-논문과-정량-비교)에 있습니다.
 
 ### 다른 사람이 테스트 재실행하기
 
@@ -119,6 +143,8 @@ QB·GF2·WV3를 서버의 RTX A6000에서 각각 100 epochs 학습했습니다. 
 | [QB](https://drive.google.com/drive/folders/1g4kB3Yxmn6Y8_OCqE1Mra1GoUKCmHOUm?usp=sharing) | `data/raw/QuickBird/test_qb_multiExm1.h5` | `9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35` |
 | [GF2](https://drive.google.com/drive/folders/1g4f2NElV7By2gWhCavrDaglzCxiDT6CP?usp=sharing) | `data/raw/Gaofen2/test_gf2_multiExm1.h5` | `709a9a53b2e0f29d3dcd5c6ca4410c2913b62cc03c104fed6c049911dbe1c8ea` |
 | [WV3](https://drive.google.com/drive/folders/1EYjaAxTheNPvukvifKXMq8m_dJ-8qz8G?usp=sharing) | `data/raw/WorldView3/test_wv3_multiExm1.h5` | `00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a` |
+
+전체 논문 수치 평가에는 위 RR 파일에 더해 `data/raw/WorldView2/test_wv2_multiExm1.h5`가 필요합니다. FR 평가에는 각 센서 폴더에 `test_qb_OrigScale_multiExm1.h5`, `test_gf2_OrigScale_multiExm1.h5`, `test_wv3_OrigScale_multiExm1.h5`, `test_wv2_OrigScale_multiExm1.h5`를 각각 둡니다. 모두 [PanCollection](https://github.com/liangjiandeng/PanCollection)의 해당 센서 FullData H5에서 받으며 Git에는 포함되지 않습니다. 파일을 배치한 뒤 `python scripts/evaluate_paper.py --sensor all --protocol both`로 표의 수치를 재계산할 수 있습니다.
 
 ```bash
 cd SSA-MRN
@@ -134,7 +160,7 @@ python scripts/test_checkpoint.py --sensor WV3 --checkpoint experiments/checkpoi
 - 공식 `network.py`를 기준 구현으로 보존하고, 변경분은 재현 코드와 분리해 추적합니다.
 - 논문에 명시되지 않은 값은 임의로 논문 설정인 것처럼 기재하지 않고 `미확인`으로 표시합니다.
 - 원본 학습·검증·테스트 H5는 **모두 Git에서 제외**합니다. 코드, 세 센서의 마지막 가중치·학습 로그, 실행 결과 이미지만 공유합니다. QuickBird H5도 이번 변경부터 추적 해제합니다(과거 커밋 이력에는 남아 있으므로 완전 삭제가 필요한 경우 이력 정리가 별도 필요합니다).
-- 재현 완료는 코드 실행 성공과 구분합니다. 논문 수치와의 비교가 끝나기 전에는 “논문 재현 완료”로 표현하지 않습니다.
+- 공개 코드 기반 재현 실험은 학습·평가·논문 수치 비교까지 완료했습니다. 미확인 평가 설정과 모델 구조 차이는 결과 해석에 유지합니다.
 - `scripts/visualize_arad_hsi.py`는 기존 HSI 시각화 유틸리티로 보존하며 원 논문 pansharpening 재현의 일부로 사용하지 않습니다.
 
 ## 이후 확장
