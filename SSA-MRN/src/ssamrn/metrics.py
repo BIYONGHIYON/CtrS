@@ -70,13 +70,12 @@ def q2n(reference, fused, block=32):
     return float(np.linalg.norm(quality, axis=-1).mean())
 
 
-def rr_metrics(reference, fused, *, peak, ratio=4):
+def rr_metrics(reference, fused, *, ratio=4):
     """Return per-image RR metrics, not an image-concatenated score."""
     reference, fused = _chw(reference), _chw(fused)
     if reference.shape != fused.shape:
         raise ValueError("RR shapes differ")
     diff = fused - reference
-    mse = float(np.mean(diff * diff))
     dot = np.sum(reference * fused, axis=0)
     norms = np.linalg.norm(reference, axis=0) * np.linalg.norm(fused, axis=0)
     valid = norms > 0
@@ -93,15 +92,11 @@ def rr_metrics(reference, fused, *, peak, ratio=4):
         return np.hypot(gx, gy)
     a, b = gradients(reference), gradients(fused)
     scc = float(np.sum(a * b) / np.sqrt(np.sum(a * a) * np.sum(b * b)))
-    band_psnr = lambda value: float(np.mean(10 * np.log10(value * value / np.maximum(band_mse, 1e-30))))
-    cropped = diff[:, 21:-21, 21:-21]
-    cropped_band_mse = np.mean(cropped * cropped, axis=(1, 2))
-    crop21_psnr = float(np.mean(10 * np.log10(2047 * 2047 / np.maximum(cropped_band_mse, 1e-30))))
-    return {"SAM": sam, "ERGAS": ergas, "PSNR": float(10 * np.log10(peak * peak / max(mse, 1e-30))),
-            "SCC": scc, "Q2n": q2n(reference, fused), "MSE": mse,
-            "PSNR_band_mean_sensor_peak": band_psnr(peak),
-            "PSNR_band_mean_2047": band_psnr(2047),
-            "PSNR_band_mean_2047_crop21": crop21_psnr}
+    # The paper does not specify its PSNR convention. Use the empirically
+    # closest documented choice: per-band PSNR at peak 2047, then average.
+    psnr = float(np.mean(10 * np.log10(2047 * 2047 / np.maximum(band_mse, 1e-30))))
+    return {"SAM": sam, "ERGAS": ergas, "PSNR": psnr,
+            "SCC": scc, "Q2n": q2n(reference, fused)}
 
 
 def _block_uqi(a, b, block=32):
