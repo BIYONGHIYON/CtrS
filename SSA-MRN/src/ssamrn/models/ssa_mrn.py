@@ -10,6 +10,7 @@ import importlib.util
 from pathlib import Path
 
 import torch
+from torch import nn
 
 
 UPSTREAM_PATH = Path(__file__).resolve().parents[3] / "references/upstream/network.py"
@@ -24,8 +25,47 @@ def _upstream_model():
     return module.PansharpeningNet
 
 
+class DirectMLPReLU(nn.PReLU):
+    """Equivalent PReLU expression avoiding a DirectML batch backward error."""
+
+    def forward(self, input):
+        slope = self.weight.view(1, -1, 1, 1)
+        return torch.where(input > 0, input, slope * input)
+
+
 class RestoredPansharpeningNet(_upstream_model()):
     """Official layers with an explicit low-resolution MS input."""
+
+    def __init__(self, channels, ssai_dimension=4):
+        super().__init__(channels)
+        if ssai_dimension < 1:
+            raise ValueError("ssai_dimension must be positive")
+        self.ssai_dimension = ssai_dimension
+        if ssai_dimension == 4:
+            return  # Preserve the published upstream architecture and existing checkpoints.
+
+        # The upstream code hard-codes K=4, while the paper specifies K=6.
+        # Resize only the layers used by the restored forward path; leave upstream untouched.
+        self.fixed = ssai_dimension
+        for blocks in (self.SSA_blocks, self.SSA_blocks1, self.SSA_blocks2):
+            for block in blocks:
+                block.fixed = ssai_dimension
+                block.conv1t6 = nn.Conv2d(1, ssai_dimension, 3, padding=1)
+                block.conv6t6 = nn.Conv2d(ssai_dimension, ssai_dimension, 3, padding=1)
+                block.conv7t6_3 = nn.Conv2d(channels + 1, ssai_dimension, 3, padding=1)
+        for name in ("conv48tnum1", "conv48tnum2", "conv48tnum3"):
+            setattr(self, name, nn.Conv2d(ssai_dimension * channels, channels, 3, padding=1))
+
+    def use_directml_prelu(self):
+        """Keep PReLU weights/checkpoints while using a DirectML-safe backward."""
+        for name, module in self.named_modules():
+            if not name or not isinstance(module, nn.PReLU):
+                continue
+            parent = self.get_submodule(name.rpartition(".")[0]) if "." in name else self
+            replacement = DirectMLPReLU(module.num_parameters)
+            with torch.no_grad():
+                replacement.weight.copy_(module.weight)
+            setattr(parent, name.rpartition(".")[2], replacement)
 
     def _attend(self, pan, features, ms, blocks, fusion, activation):
         outputs = []
