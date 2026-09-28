@@ -45,7 +45,7 @@ SSA-MRN 담당 팀원 2명이 **원 논문의 pansharpening 결과 재현**을 �
 3. 센서별 입력 채널 수, 데이터 분할, Wald 열화 방식과 배열 범위를 확인합니다.
 4. 모델 입력/출력 shape 및 단일 배치 forward 검증을 구현합니다.
 5. 손실 감소, 체크포인트 저장·재시작을 포함한 짧은 실행으로 파이프라인을 점검합니다.
-6. 논문 설정으로 QB, GF2, WV3 학습을 진행하고 RR 및 FR 평가를 수행합니다.
+6. QB, GF2, WV3의 100-epoch 학습을 완료했습니다. RR 단일 샘플 실행을 확인했으며 전체 RR·FR 평가는 진행 예정입니다.
 7. WV3로 학습한 모델의 WV2 교차 위성 평가와 논문 ablation을 추가합니다.
 8. 로그, 설정, 코드 revision, 지표와 실행 환경을 함께 `experiments/`에 보관합니다.
 
@@ -55,13 +55,13 @@ SSA-MRN 담당 팀원 2명이 **원 논문의 pansharpening 결과 재현**을 �
 SSA-MRN/
 ├── configs/                 # 논문 재현 설정
 ├── data/
-│   ├── raw/                 # QuickBird 테스트 H5만 Git 포함
+│   ├── raw/                 # 원본 H5 전부 Git 제외 (별도 다운로드)
 │   └── processed/           # 준비된 데이터 (Git 제외)
 ├── docs/                    # 재현 계획과 실험 기록
 ├── experiments/
-│   ├── checkpoints/         # 모델 가중치 (Git 제외)
-│   ├── logs/                # 학습 로그 (Git 제외)
-│   └── results/             # QuickBird 스모크·학습 후 비교 결과 Git 포함
+│   ├── checkpoints/         # QB·GF2·WV3 최신 100-epoch 가중치 Git 포함
+│   ├── logs/                # 세 센서 학습 로그 Git 포함
+│   └── results/             # 단일 샘플 비교 이미지·수치 Git 포함
 ├── references/              # 공식 코드 위치·버전 기록
 ├── scripts/                 # 학습·평가 실행 진입점
 ├── src/ssamrn/              # 재현용 모델·데이터·평가 모듈
@@ -92,33 +92,48 @@ python -m unittest discover -s tests -v
 
 `--size 32`는 첫 테스트 샘플 전체의 PAN·LMS 256×256과 MS 64×64를 각각 32×32와 8×8로 축소합니다. `--size 256`은 전체 샘플을 그대로 사용합니다. 입력 MS 4밴드의 RGB 합성·입력 PAN·출력 MS RGB 합성은 [QuickBird 스모크 결과](./experiments/results/quickbird_smoke/README.md)에서 나란히 볼 수 있습니다. RGB 합성에는 QuickBird B·G·R·NIR 순서가 H5에서도 유지됐다고 가정하며, 각 이미지는 보기용으로 대비를 별도 조정했습니다. 학습된 가중치가 없는 무작위 초기화 결과이므로 화질 평가는 할 수 없습니다.
 
-### QuickBird 학습 후 로컬 테스트 (2026-09-28)
+### 3개 센서 학습·단일 샘플 테스트 현황 (2026-09-28)
 
-QuickBird로 100 epochs 학습한 `latest.pt`를 Mac 로컬에서 불러와 테스트 데이터의 첫 번째 샘플(인덱스 0)에 대해 추론했습니다. 체크포인트의 센서는 `QB`, 채널 수는 4이며, 모델 파라미터를 `strict=True`로 로드했습니다. 위의 무작위 초기화 스모크 테스트와는 별도의 **학습된 모델 결과**입니다.
+QB·GF2·WV3를 서버의 RTX A6000에서 각각 100 epochs 학습했습니다. 사용 코드는 공개 `network.py`를 기반으로 한 현재 복구 구현이며, Adam·MSE·배치 32·학습률 1e-4·시드 42를 사용했습니다. 마지막 에포크 가중치인 `latest.pt`를 Git에 포함했습니다(`best` 체크포인트가 아님). 모든 테스트는 Mac CPU에서 별도 ReducedData H5의 첫 샘플(0번)을 `strict=True`로 불러와 수행했습니다.
 
-| 항목 | 실제 테스트 조건·결과 |
-|---|---|
-| 테스트 파일 | `data/raw/QuickBird/test_qb_multiExm1.h5` |
-| 사용 샘플 | 20개 중 첫 번째 1개 |
-| 입력 | MS 4밴드 64×64 + PAN 1밴드 256×256 + LMS 4밴드 256×256 |
-| 출력·정답 | 각각 MS 4밴드 256×256 |
-| 입력 처리 | 샘플 전체 사용, 추가 자르기·다운샘플링 없음; QB 센서 범위 2047로 정규화 |
-| 실행 환경 | Mac 로컬 CPU, PyTorch 2.14.0, CPU 스레드 4개 |
-| 순수 추론 시간 | 약 0.34초 (파일 로딩·결과 저장 시간 제외) |
-| LMS 기준 MSE / PSNR | 0.00028536 / 35.45 dB |
-| 학습 모델 MSE / PSNR | 0.00007335 / 41.35 dB |
+| 센서 | 채널 | epoch 100 검증 MSE | 테스트 첫 샘플 LMS PSNR | 모델 PSNR | 결과 |
+|---|---:|---:|---:|---:|---|
+| QB | 4 | 0.00017375 | 35.45 dB | 41.35 dB | [이미지·수치](./experiments/results/quickbird_trained/metrics.json) |
+| GF2 | 4 | 0.00008431 | 31.26 dB | 38.65 dB | [이미지·수치](./experiments/results/gaofen2_trained/metrics.json) |
+| WV3 | 8 | 0.00035871 | 29.06 dB | 37.66 dB | [이미지·수치](./experiments/results/worldview3_trained/metrics.json) |
 
-![QuickBird 입력 MS, PAN, LMS, 학습 모델 출력, 정답 비교](./experiments/results/quickbird_trained/comparison.png)
+![QuickBird 비교](./experiments/results/quickbird_trained/comparison.png)
+![Gaofen 2 비교](./experiments/results/gaofen2_trained/comparison.png)
+![WorldView 3 비교](./experiments/results/worldview3_trained/comparison.png)
 
-왼쪽부터 **입력 MS → 입력 PAN → LMS 기준 영상 → 학습 모델 출력 → 정답(GT)**입니다. 입력 MS는 비교 그림에서만 256×256으로 확대 표시하고, 모델에는 원래의 64×64 배열을 넣었습니다. MS 계열 영상은 동일한 GT 기반 채널별 1–99 백분위 대비 범위를 사용했으며, RGB 합성은 B·G·R·NIR 밴드 순서를 가정합니다. PAN은 별도 회색조 대비를 적용했습니다. [원시 수치와 실행 기록](./experiments/results/quickbird_trained/metrics.json)도 보관합니다.
+이미지는 왼쪽부터 입력 MS·PAN·LMS 기준·모델 출력·GT입니다. 원본 MS는 64×64, PAN/LMS/GT와 출력은 256×256이며 **추론 입력을 자르거나 다운샘플링하지 않았습니다**. 그림의 MS만 보기 위해 확대했습니다. MS 계열의 RGB 대비는 GT 기반 채널별 1–99 백분위를 공유하고, RGB 밴드 순서는 GF2/QB `[2,1,0]`, WV3 `[4,2,1]`을 **가정**합니다. PSNR은 정규화된 전 밴드 MSE를 기준 최댓값 1로 환산한 값입니다. 센서 간 수치를 직접 우열 비교하지 마세요.
 
-MSE와 PSNR은 정규화된 4밴드 배열에서 계산했으며 PSNR의 기준 최댓값은 1입니다. **첫 샘플의 실행·화질 확인 결과일 뿐**, 20개 전체 평가나 논문 공식 지표 평가가 아니며 논문 재현 완료를 의미하지 않습니다. 학습 가중치는 Git에 포함하지 않습니다.
+이는 각 20개 중 **첫 1개 샘플 실행 확인**이며, 논문의 전체 RR/FR 지표나 재현 성능 비교가 아닙니다. 앞으로 20개 전체에 대해 논문 지표(SAM·ERGAS·PSNR·SCC·Q2ⁿ 및 FR 지표)를 구현·검증하고 논문 표와 같은 조건에서 수치를 비교할 예정입니다. 공개 구현과 논문 설명의 SSA 차이(K=4/6 등)도 따로 확인해야 합니다.
+
+### 다른 사람이 테스트 재실행하기
+
+`git clone --recurse-submodules` 후 위 환경을 설치합니다. **테스트 H5는 Git에 포함되지 않습니다.** [PanCollection 공개 다운로드 안내](https://github.com/liangjiandeng/PanCollection)의 각 센서 **Testing Dataset (ReducedData, H5 Format)**에서 받아 아래 경로에 둡니다. FullData H5에는 GT가 없어 이 스크립트와 대상이 다릅니다.
+
+| 센서 | 놓을 위치 | 원본 SHA-256 |
+|---|---|---|
+| [QB](https://drive.google.com/drive/folders/1g4kB3Yxmn6Y8_OCqE1Mra1GoUKCmHOUm?usp=sharing) | `data/raw/QuickBird/test_qb_multiExm1.h5` | `9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35` |
+| [GF2](https://drive.google.com/drive/folders/1g4f2NElV7By2gWhCavrDaglzCxiDT6CP?usp=sharing) | `data/raw/Gaofen2/test_gf2_multiExm1.h5` | `709a9a53b2e0f29d3dcd5c6ca4410c2913b62cc03c104fed6c049911dbe1c8ea` |
+| [WV3](https://drive.google.com/drive/folders/1EYjaAxTheNPvukvifKXMq8m_dJ-8qz8G?usp=sharing) | `data/raw/WorldView3/test_wv3_multiExm1.h5` | `00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a` |
+
+```bash
+cd SSA-MRN
+python scripts/test_checkpoint.py --sensor QB --checkpoint experiments/checkpoints/qb_full/latest.pt --data data/raw/QuickBird/test_qb_multiExm1.h5 --output-dir experiments/results/quickbird_trained
+python scripts/test_checkpoint.py --sensor GF2 --checkpoint experiments/checkpoints/gf2_full/latest.pt --data data/raw/Gaofen2/test_gf2_multiExm1.h5 --output-dir experiments/results/gaofen2_trained
+python scripts/test_checkpoint.py --sensor WV3 --checkpoint experiments/checkpoints/wv3_full/latest.pt --data data/raw/WorldView3/test_wv3_multiExm1.h5 --output-dir experiments/results/worldview3_trained
+```
+
+각 결과 폴더에 `comparison.png`, 개별 입력/출력 PNG, 전 밴드 `prediction_bands.npy`, `metrics.json`이 생성됩니다. 재실행하면 공유된 결과 파일을 덮어쓰므로 별도 `--output-dir`을 쓰면 안전합니다. 각 센서 학습 기록은 `experiments/logs/`, 가중치는 `experiments/checkpoints/`에 있습니다. 대용량 `train_*.h5`/`valid_*.h5`는 공유하지 않아 **학습 자체를 똑같이 재실행하려면 별도 다운로드**가 필요합니다.
 
 ## 코드와 데이터 원칙
 
 - 공식 `network.py`를 기준 구현으로 보존하고, 변경분은 재현 코드와 분리해 추적합니다.
 - 논문에 명시되지 않은 값은 임의로 논문 설정인 것처럼 기재하지 않고 `미확인`으로 표시합니다.
-- 원본 데이터는 `data/raw/QuickBird/test_qb_multiExm1.h5`만 Git에 포함합니다. 결과는 `experiments/results/quickbird_smoke/`와 `experiments/results/quickbird_trained/`의 비교 PNG·기록 JSON을 공유하며, 다른 원본 데이터, 체크포인트, 학습 로그는 추가하지 않습니다.
+- 원본 학습·검증·테스트 H5는 **모두 Git에서 제외**합니다. 코드, 세 센서의 마지막 가중치·학습 로그, 실행 결과 이미지만 공유합니다. QuickBird H5도 이번 변경부터 추적 해제합니다(과거 커밋 이력에는 남아 있으므로 완전 삭제가 필요한 경우 이력 정리가 별도 필요합니다).
 - 재현 완료는 코드 실행 성공과 구분합니다. 논문 수치와의 비교가 끝나기 전에는 “논문 재현 완료”로 표현하지 않습니다.
 - `scripts/visualize_arad_hsi.py`는 기존 HSI 시각화 유틸리티로 보존하며 원 논문 pansharpening 재현의 일부로 사용하지 않습니다.
 

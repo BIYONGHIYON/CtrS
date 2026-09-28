@@ -12,8 +12,6 @@ experiments/checkpoints/**
 experiments/logs/**
 experiments/results/**
 !data/raw/.gitkeep
-!data/raw/QuickBird/
-!data/raw/QuickBird/test_qb_multiExm1.h5
 !data/processed/.gitkeep
 !experiments/checkpoints/.gitkeep
 !experiments/logs/.gitkeep
@@ -35,7 +33,25 @@ experiments/results/**
 !experiments/results/quickbird_smoke/ms_input_rgb_32.png
 !experiments/results/quickbird_smoke/ms_input_rgb_256.png
 
-# Trained QuickBird local-test previews and metrics (no weights).
+# Reproducible trained models, logs and test outputs (raw H5 stays local).
+!experiments/checkpoints/qb_full/
+!experiments/checkpoints/qb_full/latest.pt
+!experiments/checkpoints/gf2_full/
+!experiments/checkpoints/gf2_full/latest.pt
+!experiments/checkpoints/wv3_full/
+!experiments/checkpoints/wv3_full/latest.pt
+!experiments/logs/qb_full.log
+!experiments/logs/gf2_full.log
+!experiments/logs/wv3_full.log
 !experiments/results/quickbird_trained/
 !experiments/results/quickbird_trained/*.png
 !experiments/results/quickbird_trained/metrics.json
+!experiments/results/quickbird_trained/prediction_bands.npy
+!experiments/results/gaofen2_trained/
+!experiments/results/gaofen2_trained/*.png
+!experiments/results/gaofen2_trained/metrics.json
+!experiments/results/gaofen2_trained/prediction_bands.npy
+!experiments/results/worldview3_trained/
+!experiments/results/worldview3_trained/*.png
+!experiments/results/worldview3_trained/metrics.json
+!experiments/results/worldview3_trained/prediction_bands.npy
