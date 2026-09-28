@@ -1,12 +1,12 @@
 {
-  "sensor": "QB",
+  "sensor": "GF2",
   "checkpoint_file": "latest.pt",
-  "data_file": "test_qb_multiExm1.h5",
+  "data_file": "test_gf2_multiExm1.h5",
   "epoch": 100,
   "sample_index_zero_based": 0,
   "sample_count": 20,
   "device": "cpu",
-  "inference_seconds": 0.2880056249850895,
+  "inference_seconds": 0.30738879201817326,
   "input_shapes": {
     "pan": [
       1,
@@ -30,12 +30,12 @@
     256
   ],
   "prediction": {
-    "mse": 7.334686233662069e-05,
-    "psnr_db_peak_1": 41.34618459858022
+    "mse": 0.00013655015209224075,
+    "psnr_db_peak_1": 38.647078117982566
   },
   "lms_baseline": {
-    "mse": 0.0002853567712008953,
-    "psnr_db_peak_1": 35.44611817664543
+    "mse": 0.000748115184251219,
+    "psnr_db_peak_1": 31.260315304329694
   },
   "notes": "Single-sample sanity check, not official paper evaluation. RGB band mapping is assumed; shared GT-based 1-99 percentile stretch. Full sample, no inference crop/downsampling."
 }
