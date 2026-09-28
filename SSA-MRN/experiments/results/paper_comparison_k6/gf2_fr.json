@@ -1,0 +1,148 @@
+{
+  "sensor": "GF2",
+  "protocol": "FR",
+  "samples": 20,
+  "checkpoint": "experiments\\checkpoints\\k6\\gf2_full\\latest.pt",
+  "checkpoint_epoch": 100,
+  "ssai_dimension": 6,
+  "data_file": "C:\\Users\\erick\\\ub300\ud559\uad50\\Ctrs\\SSA-MRN\\Gaofen 2\\Testing Dataset (FullData, H5 Format)\\test_gf2_OrigScale_multiExm1.h5",
+  "elapsed_seconds": 3.6719999999986612,
+  "metrics_mean": {
+    "D_lambda": 0.03552535615809261,
+    "D_s": 0.05020805247531797,
+    "QNR": 0.9160999674616714
+  },
+  "paper": {
+    "D_lambda": 0.0395,
+    "D_s": 0.0487,
+    "QNR": 0.9137
+  },
+  "delta_ours_minus_paper": {
+    "D_lambda": -0.003974643841907391,
+    "D_s": 0.0015080524753179683,
+    "QNR": 0.0023999674616714817
+  },
+  "per_sample": [
+    {
+      "index": 0,
+      "D_lambda": 0.04932223448816526,
+      "D_s": 0.050616541589758174,
+      "QNR": 0.9025577448553466
+    },
+    {
+      "index": 1,
+      "D_lambda": 0.03201507854482417,
+      "D_s": 0.03445357996201784,
+      "QNR": 0.9346343755617924
+    },
+    {
+      "index": 2,
+      "D_lambda": 0.035029178361466934,
+      "D_s": 0.047139083276915655,
+      "QNR": 0.9194829817175206
+    },
+    {
+      "index": 3,
+      "D_lambda": 0.031130233699885147,
+      "D_s": 0.0523607840183849,
+      "QNR": 0.9181389857249316
+    },
+    {
+      "index": 4,
+      "D_lambda": 0.023294024425509995,
+      "D_s": 0.056578125835065524,
+      "QNR": 0.9214457819845762
+    },
+    {
+      "index": 5,
+      "D_lambda": 0.027842310008672,
+      "D_s": 0.04822965985213143,
+      "QNR": 0.9252708552804124
+    },
+    {
+      "index": 6,
+      "D_lambda": 0.03980877100493058,
+      "D_s": 0.048147083220392156,
+      "QNR": 0.9139608219851532
+    },
+    {
+      "index": 7,
+      "D_lambda": 0.035148310747504456,
+      "D_s": 0.04887675963629359,
+      "QNR": 0.9176928651522295
+    },
+    {
+      "index": 8,
+      "D_lambda": 0.03602465084243652,
+      "D_s": 0.053851368577601144,
+      "QNR": 0.9120639573303577
+    },
+    {
+      "index": 9,
+      "D_lambda": 0.03454842984578076,
+      "D_s": 0.04930024727776547,
+      "QNR": 0.9178545690109092
+    },
+    {
+      "index": 10,
+      "D_lambda": 0.038745814711527354,
+      "D_s": 0.04990152420307589,
+      "QNR": 0.9132861362959919
+    },
+    {
+      "index": 11,
+      "D_lambda": 0.02785375719161237,
+      "D_s": 0.041469811640739845,
+      "QNR": 0.9318315212318709
+    },
+    {
+      "index": 12,
+      "D_lambda": 0.02414187425302546,
+      "D_s": 0.04009797527673864,
+      "QNR": 0.9367281907471678
+    },
+    {
+      "index": 13,
+      "D_lambda": 0.027618553076547387,
+      "D_s": 0.03959490885845787,
+      "QNR": 0.9338800921568632
+    },
+    {
+      "index": 14,
+      "D_lambda": 0.03534941127083587,
+      "D_s": 0.059457846983167556,
+      "QNR": 0.907294541632283
+    },
+    {
+      "index": 15,
+      "D_lambda": 0.03738096581103888,
+      "D_s": 0.04604268619558778,
+      "QNR": 0.9182974680718989
+    },
+    {
+      "index": 16,
+      "D_lambda": 0.04610260352537545,
+      "D_s": 0.06534541289542628,
+      "QNR": 0.8915645772421181
+    },
+    {
+      "index": 17,
+      "D_lambda": 0.03206963277487889,
+      "D_s": 0.045161742599987245,
+      "QNR": 0.9242169451257891
+    },
+    {
+      "index": 18,
+      "D_lambda": 0.03733815618681909,
+      "D_s": 0.053794312963171206,
+      "QNR": 0.9108761113093912
+    },
+    {
+      "index": 19,
+      "D_lambda": 0.05974313239101562,
+      "D_s": 0.07374159464368103,
+      "QNR": 0.8709208268168255
+    }
+  ],
+  "parity": "PSNR uses per-band mean at peak 2047, selected because the paper does not disclose its calculation and this is numerically closest; it is not verified as the authors' protocol. FR uses scikit-image antialiased cubic PAN resize, not MATLAB imresize; D_s and QNR are provisional. RR Q2n port and SCC border handling have not yet been cross-tested against MATLAB."
+}
