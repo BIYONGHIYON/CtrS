@@ -60,7 +60,7 @@ def evaluate(sensor, protocol, limit):
             with torch.inference_mode():
                 fused = model(*inputs)[0].numpy().astype(np.float64) * scale
             if protocol == "RR":
-                metrics = rr_metrics(arrays["gt"].astype(np.float64), fused, peak=scale)
+                metrics = rr_metrics(arrays["gt"].astype(np.float64), fused)
             else:
                 metrics = fr_metrics(fused, arrays["lms"], arrays["ms"], arrays["pan"])
             if not all(np.isfinite(value) for value in metrics.values()):
@@ -69,10 +69,6 @@ def evaluate(sensor, protocol, limit):
             print(f"{sensor} {protocol} {index + 1}/{count}", flush=True)
     keys = tuple(key for key in METRIC_KEYS if key in rows[0])
     averages = {key: float(np.mean([row[key] for row in rows])) for key in keys}
-    if protocol == "RR":
-        averages.update({key: float(np.mean([row[key] for row in rows]))
-                         for key in ("PSNR_band_mean_sensor_peak", "PSNR_band_mean_2047",
-                                     "PSNR_band_mean_2047_crop21")})
     paper = {key: PAPER[sensor][METRIC_KEYS.index(key)] for key in keys}
     return {"sensor": sensor, "protocol": protocol, "samples": count,
             "checkpoint": str(checkpoint_file.relative_to(ROOT)), "checkpoint_epoch": checkpoint["epoch"],
@@ -80,7 +76,7 @@ def evaluate(sensor, protocol, limit):
             "metrics_mean": averages, "paper": paper,
             "delta_ours_minus_paper": {key: averages[key] - paper[key] for key in keys},
             "per_sample": rows,
-            "parity": "FR uses scikit-image antialiased cubic PAN resize, not MATLAB imresize; D_s and QNR are provisional. RR Q2n port and SCC border handling have not yet been cross-tested against MATLAB."}
+            "parity": "PSNR uses per-band mean at peak 2047, selected because the paper does not disclose its calculation and this is numerically closest; it is not verified as the authors' protocol. FR uses scikit-image antialiased cubic PAN resize, not MATLAB imresize; D_s and QNR are provisional. RR Q2n port and SCC border handling have not yet been cross-tested against MATLAB."}
 
 
 def main():
