@@ -31,6 +31,7 @@ class TrainResumeTests(unittest.TestCase):
                 "--train", str(root / "train.h5"),
                 "--val", str(root / "val.h5"),
                 "--batch-size", "1",
+                "--ssai-dimension", "6",
                 "--checkpoint-dir", str(checkpoint.parent),
             ]
             first = subprocess.run(command + ["--epochs", "1"], capture_output=True, text=True)
@@ -40,6 +41,7 @@ class TrainResumeTests(unittest.TestCase):
                                     capture_output=True, text=True)
             self.assertEqual(second.returncode, 0, second.stderr)
             self.assertEqual(torch.load(checkpoint, weights_only=True)["epoch"], 2)
+            self.assertEqual(torch.load(checkpoint, weights_only=True)["ssai_dimension"], 6)
 
 
 if __name__ == "__main__":

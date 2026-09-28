@@ -1,5 +1,7 @@
 # SSA-MRN 원 논문 재현 결과
 
+> `experiment` 브랜치의 Radeon 780M 로컬 K=6 재학습 절차는 [실험 가이드](./docs/experiment_k6.md)를 참조하세요.
+
 > 연구 기준: Xu et al., “Spectral–Spatial Attention-Guided Multi-Resolution Network for Pansharpening,” IEEE JSTARS, 2025.
 > 논문: https://doi.org/10.1109/JSTARS.2025.3543827
 > 공식 저장소: https://github.com/zhouchuanxu/SSA-MRN
