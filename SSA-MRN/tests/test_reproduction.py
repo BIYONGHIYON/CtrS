@@ -12,7 +12,7 @@ import torch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from ssamrn.data.pancollection import PanCollectionH5
-from ssamrn.models.ssa_mrn import RestoredPansharpeningNet
+from ssamrn.models.ssa_mrn import DirectMLPReLU, RestoredPansharpeningNet
 
 
 class ReproductionTests(unittest.TestCase):
@@ -29,11 +29,12 @@ class ReproductionTests(unittest.TestCase):
             self.assertEqual(dataset[0]["pan"].shape, (1, 16, 16))
             self.assertAlmostEqual(dataset[0]["pan"].max().item(), 1.0)
             self.assertAlmostEqual(dataset[0]["gt"].max().item(), 0.5)
+            dataset.close()
 
     def test_model_forward_and_backward(self):
-        for channels in (4, 8):
-            with self.subTest(channels=channels):
-                model = RestoredPansharpeningNet(channels=channels)
+        for channels, dimension in ((4, 4), (4, 6), (8, 6)):
+            with self.subTest(channels=channels, dimension=dimension):
+                model = RestoredPansharpeningNet(channels=channels, ssai_dimension=dimension)
                 pan = torch.rand(1, 1, 16, 16)
                 lms = torch.rand(1, channels, 16, 16)
                 ms = torch.rand(1, channels, 4, 4)
@@ -48,6 +49,22 @@ class ReproductionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             model(torch.rand(1, 1, 16, 16), torch.rand(1, 4, 16, 16),
                   torch.rand(1, 4, 5, 5))
+
+    def test_directml_prelu_matches_standard_prelu(self):
+        standard = torch.nn.PReLU()
+        compatible = DirectMLPReLU()
+        compatible.load_state_dict(standard.state_dict())
+        x1 = torch.randn(2, 4, 4, 4)
+        x1[0, 0, 0, 0] = 0  # Match PReLU's derivative at the boundary.
+        x1.requires_grad_()
+        x2 = x1.detach().clone().requires_grad_()
+        standard_output = standard(x1)
+        compatible_output = compatible(x2)
+        torch.testing.assert_close(standard_output, compatible_output)
+        standard_output.sum().backward()
+        compatible_output.sum().backward()
+        torch.testing.assert_close(x1.grad, x2.grad)
+        torch.testing.assert_close(standard.weight.grad, compatible.weight.grad)
 
 
 if __name__ == "__main__":
