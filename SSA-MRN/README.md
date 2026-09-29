@@ -6,13 +6,25 @@ SSA-MRN은 **고해상도 PAN 영상**과 **저해상도 다중분광(MS) 영상
 
 ## 현재 상태
 
-**공개 코드 기반 K=4 재현과 논문 수치 비교를 완료했습니다.** QuickBird(QB), Gaofen 2(GF2), WorldView 3(WV3)를 각각 100 epochs 학습했고, 세 센서와 WorldView 2(WV2)의 축소 해상도(RR)·원 해상도(FR) 테스트를 마쳤습니다. WV2에는 WV3 모델을 적용했습니다.
+**후속 실험의 기본 설정은 K=6이며, K=4는 비교 기준으로 보관합니다.** QuickBird(QB), Gaofen 2(GF2), WorldView 3(WV3)를 두 설정으로 각각 100 epochs 학습하고 축소 해상도(RR)·원 해상도(FR) 테스트를 마쳤습니다. K=4의 WorldView 2(WV2) 교차 평가에는 WV3 모델을 적용했습니다.
 
-이는 계획한 공개 코드 기반 실험의 완료를 뜻합니다. 논문의 K=6 모델이나 평가 세부 설정까지 동일하게 재현했다는 뜻은 아닙니다. K=6 실험은 [PR #10](https://github.com/BIYONGHIYON/CtrS/pull/10)에서 별도로 검토 중이며, 이 문서의 아래 수치와 섞지 않습니다.
+K=6 실험과 K=4 비교 결과는 [별도 실험 기록](./docs/experiment_k6.md)에 있습니다. 두 설정 모두 공개 코드의 어텐션 연산을 따르므로 논문 구현과 완전히 동일하다는 뜻은 아닙니다. 또한 K=4는 RTX A6000, K=6은 Radeon DirectML 환경에서 학습해 관측된 차이를 K만의 효과로 단정할 수 없습니다.
 
 ## 실험 결과
 
-### 논문 수치와 비교
+### K=6 기본 설정과 K=4 비교
+
+아래는 각 센서의 RR·FR 테스트 20장 평균에서 대표 지표를 뽑은 값입니다. 각 셀은 **K=4 → K=6** 순서입니다. WV2의 K=6 교차 평가는 아직 기록되지 않았습니다.
+
+| 센서 | RR SAM↓ | RR PSNR↑ | FR QNR↑ |
+| --- | ---: | ---: | ---: |
+| QB | 4.9557 → 4.9350 | 37.3608 → 37.5040 | .9147 → .9072 |
+| GF2 | .9668 → 1.0035 | 46.3520 → 45.8631 | .9106 → .9161 |
+| WV3 | 3.5277 → 3.4504 | 37.3894 → 37.6326 | .9408 → .9522 |
+
+WV3는 보고된 RR·FR 지표 모두 개선됐고, QB는 RR 개선·FR 악화, GF2는 RR 악화·FR 일부 개선으로 나타났습니다. 전체 지표와 K=6 평가 JSON은 [K=6 실험 기록](./docs/experiment_k6.md)에 있습니다.
+
+### K=4 공개 코드 재현과 논문 수치 비교
 
 PanCollection의 RR·FR 테스트를 센서별 20장씩 **총 160장** 평가했습니다. 표의 값은 이미지별 지표의 평균이며, 각 셀은 **논문 / 현재 K=4 재현** 순서입니다. RR에는 참조 영상이 있고 FR에는 없습니다.
 
@@ -38,7 +50,7 @@ RR의 SAM·ERGAS·PSNR은 대체로 논문 수치에 가깝지만, WV3 Q8·WV2 S
 
 ### 학습 모델의 단일 샘플 확인
 
-아래는 각 센서 테스트 20장 중 **첫 1장**의 실행 확인입니다. 논문 비교 표의 20장 평균과 계산 조건이 달라 수치를 직접 비교하지 않습니다. 가중치는 `best`가 아닌 마지막 epoch의 `latest.pt`입니다.
+아래는 **K=4**에서 각 센서 테스트 20장 중 첫 1장의 실행 확인입니다. 논문 비교 표의 20장 평균과 계산 조건이 달라 수치를 직접 비교하지 않습니다. 가중치는 `best`가 아닌 마지막 epoch의 `latest.pt`입니다.
 
 | 센서 | epoch 100 검증 MSE | LMS PSNR | 모델 PSNR |
 | --- | ---: | ---: | ---: |
@@ -62,7 +74,7 @@ RR의 SAM·ERGAS·PSNR은 대체로 논문 수치에 가깝지만, WV3 Q8·WV2 S
 
 ## 논문과의 차이 및 해석 범위
 
-- 논문은 SSAI 내부 차원 **K=6**과 행렬곱 기반 어텐션을 설명하지만, 공개 `network.py`는 `SSA.fixed=4`와 원소별 곱을 사용합니다. 이 재현은 공개 코드 구조를 따릅니다.
+- 논문은 SSAI 내부 차원 **K=6**과 행렬곱 기반 어텐션을 설명하지만, 공개 `network.py`는 `SSA.fixed=4`와 원소별 곱을 사용합니다. 현재 K=6 변형도 차원만 바꾸고 공개 코드의 어텐션 연산을 유지합니다.
 - 공식 저장소에는 모델 정의와 README만 있어 데이터 로더, 학습·체크포인트·평가 코드를 추가했습니다. 논문 설정인 MSE, Adam, 배치 32, 초기 학습률 1e-4, 100 epochs를 적용했으며 시드는 42입니다.
 - 논문의 PSNR 계산 세부 조건은 미공개입니다. 현재 값은 전 센서 peak 2047·밴드별 평균으로 계산했습니다. FR의 PAN 축소·보간이 MATLAB 평가 코드와 동일한지도 미확인입니다. 따라서 표의 차이를 모델 성능 차이만으로 설명할 수 없습니다.
 - 논문 ablation은 이번 재현 범위에 포함하지 않았습니다. [재현 상태 기록](./docs/reproduction_status.md)에 공개 자료와 구현 범위를 구분했습니다.
@@ -101,13 +113,16 @@ python -m pip install -r requirements.txt
 
 ```bash
 python scripts/evaluate_paper.py --sensor all --protocol both
+python scripts/evaluate_paper.py --sensor all --protocol both \
+  --checkpoint-root experiments/checkpoints \
+  --output-dir experiments/results/local_k4_eval
 python scripts/test_checkpoint.py --sensor QB \
   --checkpoint experiments/checkpoints/qb_full/latest.pt \
   --data data/raw/QuickBird/test_qb_multiExm1.h5 \
   --output-dir experiments/results/local_qb
 ```
 
-두 번째 명령은 QB의 단일 샘플 확인입니다. 공유 결과를 덮어쓰지 않도록 별도 출력 폴더를 사용했습니다. 학습 로그와 마지막 가중치는 `experiments/logs/`, `experiments/checkpoints/`에 있습니다. 학습을 다시 실행하려면 Git에 없는 원본 `train_*.h5`·`valid_*.h5`도 필요합니다. 원본 H5는 수정하거나 Git에 추가하지 않습니다.
+첫 번째 명령은 K=6, 두 번째는 K=4의 전체 평가입니다. 마지막 명령은 K=4 QB 단일 샘플 확인입니다. 기본 출력은 공유 결과를 덮어쓰지 않는 로컬 폴더를 사용합니다. K=6 가중치는 `experiments/checkpoints/k6/`, K=4 가중치는 `experiments/checkpoints/`의 센서별 폴더에 있습니다. **새 학습의 기본 K는 6**이며, K=4는 `python scripts/train.py ... --ssai-dimension 4`로 선택합니다. 새 학습의 기본 체크포인트 경로는 `experiments/checkpoints/local/k{K}/{sensor}_full/`입니다. 학습을 다시 실행하려면 Git에 없는 원본 `train_*.h5`·`valid_*.h5`도 필요합니다. 원본 H5는 수정하거나 Git에 추가하지 않습니다.
 
 ## 후속 연구
 

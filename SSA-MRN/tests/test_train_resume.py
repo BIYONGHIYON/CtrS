@@ -31,7 +31,6 @@ class TrainResumeTests(unittest.TestCase):
                 "--train", str(root / "train.h5"),
                 "--val", str(root / "val.h5"),
                 "--batch-size", "1",
-                "--ssai-dimension", "6",
                 "--checkpoint-dir", str(checkpoint.parent),
             ]
             first = subprocess.run(command + ["--epochs", "1"], capture_output=True, text=True)
