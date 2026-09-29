@@ -33,7 +33,7 @@ PAPER = {
 METRIC_KEYS = ("SAM", "ERGAS", "PSNR", "SCC", "Q2n", "D_lambda", "D_s", "QNR")
 
 
-def evaluate(sensor, protocol, limit, checkpoint_root=ROOT / "experiments/checkpoints",
+def evaluate(sensor, protocol, limit, checkpoint_root=ROOT / "experiments/checkpoints/k6",
              data_root=ROOT / "data/raw", device=torch.device("cpu")):
     folder, stem, ckpt_dir = SENSORS[sensor]
     filename = f"test_{stem}{'_OrigScale' if protocol == 'FR' else ''}_multiExm1.h5"
@@ -97,8 +97,8 @@ def main():
     parser.add_argument("--sensor", choices=(*SENSORS, "all"), default="all")
     parser.add_argument("--protocol", choices=("RR", "FR", "both"), default="both")
     parser.add_argument("--max-samples", type=int)
-    parser.add_argument("--output-dir", type=Path, default=ROOT / "experiments/results/paper_comparison")
-    parser.add_argument("--checkpoint-root", type=Path, default=ROOT / "experiments/checkpoints")
+    parser.add_argument("--output-dir", type=Path, default=ROOT / "experiments/results/local_k6_eval")
+    parser.add_argument("--checkpoint-root", type=Path, default=ROOT / "experiments/checkpoints/k6")
     parser.add_argument("--data-root", type=Path, default=ROOT / "data/raw")
     parser.add_argument("--device", choices=("cpu", "cuda", "dml"), default="cpu")
     args = parser.parse_args()

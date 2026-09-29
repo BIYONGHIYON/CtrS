@@ -2,7 +2,9 @@
 
 ## 목적과 변경 변수
 
-기존 재현 가중치는 공개 `network.py`의 SSAI 차원 K=4로 학습했다. [논문](https://doi.org/10.1109/JSTARS.2025.3543827)은 K=6을 명시한다. 이번 실험은 **K만 4에서 6으로 바꾸고**, 센서별 데이터 분할, MSE, Adam, 배치 32, 초기 학습률 1e-4, 100 epochs, 시드 42를 유지한다. 시드 42는 재현 실험 값이며 논문에 공개된 값은 아니다. K=6은 합성곱의 채널 수를 바꾸므로 기존 K=4 가중치에서 이어 학습할 수 없고 처음부터 학습해야 한다.
+기존 재현 가중치는 공개 `network.py`의 SSAI 차원 K=4로 학습했다. [논문](https://doi.org/10.1109/JSTARS.2025.3543827)은 K=6을 명시한다. 이번 실험은 SSAI 차원을 6으로 바꾸고, 센서별 데이터 분할, MSE, Adam, 배치 32, 초기 학습률 1e-4, 100 epochs, 시드 42를 유지했다. 시드 42는 재현 실험 값이며 논문에 공개된 값은 아니다. K=6은 합성곱의 채널 수를 바꾸므로 기존 K=4 가중치에서 이어 학습할 수 없고 처음부터 학습했다.
+
+K=4는 RTX A6000에서, K=6은 아래 Radeon DirectML 환경에서 학습했다. 모델 차원 외에 실행 장치와 백엔드도 달라, 관측된 성능 차이를 **K 값만의 인과 효과**로 해석할 수 없다. 같은 환경에서 두 설정을 다시 학습·평가해야 통제된 비교가 된다. 여기서는 확보된 결과를 비교 기준으로 기록한다.
 
 이 저장소는 공식 모델 코드를 하위 모듈로 고정해 둔다. K=6 변형은 재현용 래퍼에서 사용되는 SSAI 계층과 융합 계층에만 적용한다. K=4 경로와 기존 체크포인트는 계속 읽을 수 있다. 논문 수식의 어텐션 행렬곱과 공개 코드의 원소별 곱 차이는 이번 실험에서 변경하지 않는다. 따라서 K=6 결과도 논문 구현과 완전히 같다고 주장할 수 없다.
 
@@ -29,7 +31,7 @@ uv pip install --python .venv-dml\Scripts\python.exe -r requirements.txt
 .\scripts\run_k6_local.ps1 -DataRoot 'C:\Users\erick\대학교\Ctrs\SSA-MRN' -Sensors QB -Smoke
 ```
 
-전체 학습은 센서별로 순차 실행한다. 새 체크포인트는 `experiments/checkpoints/k6/{qb_full,gf2_full,wv3_full}/latest.pt`, 로그는 `experiments/logs/k6/`에 남는다. 기존 K=4 결과를 덮어쓰지 않는다.
+전체 학습은 센서별로 순차 실행한다. 새 실행의 체크포인트는 `experiments/checkpoints/local/k6/{qb_full,gf2_full,wv3_full}/latest.pt`, 로그는 `experiments/logs/local/k6/`에 남아 저장소에 포함된 가중치를 덮어쓰지 않는다. 공유된 epoch 100 가중치는 `experiments/checkpoints/k6/`에 있다.
 
 ```powershell
 .\scripts\run_k6_local.ps1 -DataRoot 'C:\Users\erick\대학교\Ctrs\SSA-MRN'
@@ -41,14 +43,14 @@ uv pip install --python .venv-dml\Scripts\python.exe -r requirements.txt
 
 ## 비교 평가
 
-학습이 완료되면 같은 테스트 H5와 지표 계산으로 기존 K=4 및 K=6을 비교한다. 시험 데이터에서 하이퍼파라미터를 고르지 않는다. 논문 수치와 비교할 때 PSNR peak·집계, SCC 경계, Q2n MATLAB 일치성 및 FR PAN 축소 차이 때문에 지표 자체의 불확실성을 함께 기록한다.
+학습 완료 후 같은 테스트 H5와 지표 계산으로 기존 K=4 및 K=6을 비교했다. 시험 데이터에서 하이퍼파라미터를 고르지 않았다. 논문 수치와 비교할 때 PSNR peak·집계, SCC 경계, Q2n MATLAB 일치성 및 FR PAN 축소 차이 때문에 지표 자체의 불확실성을 함께 기록한다.
 
 ```powershell
 .\.venv-dml\Scripts\python.exe scripts\evaluate_paper.py `
   --sensor all --protocol both --device cpu `
   --data-root 'C:\Users\erick\대학교\Ctrs\SSA-MRN' `
   --checkpoint-root experiments\checkpoints\k6 `
-  --output-dir experiments\results\paper_comparison_k6
+  --output-dir experiments\results\local_k6_eval
 ```
 
 평가 JSON에는 체크포인트 경로와 K가 기록된다. 모든 모델의 RR·FR 결과를 확인한 뒤, SAM·ERGAS·PSNR·SCC·Q2ⁿ 및 QNR·Dλ·Ds를 각각 비교한다. 하나의 지표만으로 전체 성능 향상을 판단하지 않는다.
@@ -112,8 +114,8 @@ WV3에서는 K=6 적용 후 K=4 대비 RR 및 FR 지표가 전반적으로 개�
 - GF2: RR 악화, FR 일부 개선
 - WV3: RR 및 FR 전반적 개선
 
-따라서 공개 코드의 K=4 설정은 논문 재현 결과 차이에 영향을 줄 수 있는 요소이지만, K를 6으로 변경하는 것만으로 논문과 공개 코드 사이의 결과 차이를 모두 설명할 수는 없다.
+공개 코드의 K=4 설정은 논문 재현 결과 차이의 후보 원인이다. 다만 이번 비교는 실행 환경도 달라 K의 영향을 분리하지 못하며, K를 6으로 변경하는 것만으로 논문과 공개 코드 사이의 결과 차이를 모두 설명할 수도 없다.
 
-또한 현재 실험은 K 값만 변경한 비교 실험이며, 논문에서 기술된 SSAI attention 연산과 공개 코드 구현 사이의 차이는 수정하지 않았다. 따라서 해당 연산 차이에 대한 추가 검증이 필요하다.
+논문에서 기술된 SSAI attention 연산과 공개 코드 구현 사이의 차이는 수정하지 않았다. K=4·K=6의 실행 환경도 달라 같은 환경에서 재비교하고 해당 연산 차이를 추가로 검증해야 한다.
 
 K=6의 상세 평가 결과는 `experiments/results/paper_comparison_k6/`의 JSON 파일에 저장하였다.
