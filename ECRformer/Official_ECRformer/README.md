@@ -135,6 +135,13 @@ python train.py --config ecrformer_light --gpu 0
 
 # Train with a custom experiment name
 python train.py --config ecrformer --name my_experiment --gpu 0
+
+# Initialize from model weights for a separate fine-tuning experiment.
+# Unlike --ckpt-path, this resets optimizer, scheduler, and early-stopping state.
+python train.py --config ecrformer --name winter_half2_finetune --gpu 0 \
+  --data-root datasets/sen12mscr_winter \
+  --init-weights ../reproduction/winter_half1/model_weights.pt \
+  --lr 1e-4 --max-epochs 200 --num-workers 4
 ```
 
 Training logs are saved to `experiments/`. You can inspect them with TensorBoard:

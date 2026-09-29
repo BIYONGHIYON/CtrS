@@ -1,0 +1,62 @@
+config: !!python/object:config.ecrformer_config.ECRformerConfig
+  dataset: !!python/object:argparse.Namespace
+    crop_size: 128
+    data_range: 1.0
+    name: sen12mscr
+    root: datasets/sen12mscr_winter
+    split:
+    - train
+    - val
+    - test
+    train_ratio: 0.8
+  name: winter_half2_finetune
+  net: !!python/object:argparse.Namespace
+    cfg:
+      block_type:
+      - ecrformer
+      - ecrformer
+      bottle_neck: tsa
+      cbam: 1ca2+1sa2
+      drop_path_rate: 0.0
+      features_start: 48
+      in_chans:
+      - 2
+      - 13
+      num_blocks:
+      - 2
+      - 3
+      - 2
+      - 2
+      num_refine: 4
+      out_chans: 13
+      pos_encoding: null
+    input:
+    - SAR
+    - cloudy
+    name: ecrformer
+    output:
+    - target
+  no_resume: false
+  optim: !!python/object:argparse.Namespace
+    accelerator: auto
+    accumulate_grad_batches: 4
+    precision: 32
+  seed: 42
+  train: !!python/object:argparse.Namespace
+    ckpt_path: null
+    early_stop: 10
+    gpu:
+    - 0
+    init_weights_path: ../reproduction/winter_half1/model_weights.pt
+    loss_weight:
+    - 0.9
+    - 0.1
+    lr: 0.0001
+    max_epoch: 200
+    num_workers: 4
+    proj_weight:
+    - 0.05
+    - 0.05
+    save_dir: ./experiments
+    train_bs: 4
+    valid_bs: 16
