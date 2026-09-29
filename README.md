@@ -4,7 +4,7 @@
 
 # CtrS
 
-동국대학교 종합설계 연구 저장소입니다. 팀원 4명이 2명씩 두 팀으로 나뉘어 SSA-MRN과 ECRformer를 연구합니다. **SSA-MRN의 공개 코드 기반 재현 실험과 논문 수치 비교는 완료**했고, ECRformer 재현은 별도로 진행합니다.
+동국대학교 종합설계 연구 저장소입니다. 팀원 4명이 2명씩 두 팀으로 나뉘어 SSA-MRN과 ECRformer를 연구합니다. **SSA-MRN의 공개 코드 기반 재현 실험과 논문 수치 비교는 완료**했고, ECRformer는 겨울 데이터 일부로 기준 모델의 학습·평가를 진행했습니다.
 
 ## 팀원
 
@@ -44,7 +44,7 @@ ECRformer 팀 2명이 광학 영상과 SAR 영상을 이용한 구름 제거 모
 | --- | --- |
 | [SSA-MRN](./SSA-MRN/README.md) | 팬샤프닝 재현 코드·설정·문서 |
 | [ECRformer](./ECRformer/README.md) | 구름 제거 재현 계획·겨울 절반 데이터 기준 결과 |
-| [ECRformer 겨울 실험 결과](./ECRformer/reproduction/winter_half1/README.md) | 모델 가중치·783개 샘플 지표·비교 이미지 |
+| [ECRformer 겨울 실험 결과](./ECRformer/README.md#겨울-절반-데이터-재현-결과-2026-09-29) | 모델 가중치·783개 샘플 지표·비교 이미지 |
 | [SSA-MRN 가중치](./SSA-MRN/experiments/checkpoints/) | QB·GF2·WV3의 epoch 100 체크포인트 |
 | [SSA-MRN 학습 로그](./SSA-MRN/experiments/logs/) | 센서별 epoch 1–100 학습·검증 MSE |
 | [SSA-MRN 단일 샘플 결과](./SSA-MRN/README.md#3개-센서-학습단일-샘플-테스트-현황-2026-09-28) | 각 센서의 입력·출력·정답 비교, 수치, 재실행 방법 |
@@ -73,6 +73,22 @@ ECRformer 팀 2명이 광학 영상과 SAR 영상을 이용한 구름 제거 모
 | WV2 | 5.8845 / 5.9265 | 29.4148 / 29.0611 | .8831 / .9126 |
 
 RR의 SAM·PSNR은 대체로 논문 수치에 근접하지만, 이 표만으로 동등한 성능을 입증할 수는 없습니다. 논문이 PSNR 계산 세부 설정을 공개하지 않아 가장 가까운 계산 방식을 사용했고, FR QNR 구현도 논문 방식과 완전히 대조되지 않았습니다. 공개 코드의 SSAI 구성 역시 논문 설명과 다릅니다. 나머지 ERGAS·SCC·Q4/Q8·Dλ·Ds 수치와 차이의 해석은 [SSA-MRN README](./SSA-MRN/README.md#재현-결과-논문과-정량-비교)에 있습니다.
+
+### ECRformer 겨울 절반 데이터 결과와 논문 비교
+
+RTX A6000에서 SEN12MS-CR **겨울 데이터의 약 절반**만으로 학습했습니다. 학습 6,833개·검증 1,386개 패치를 사용했고, 조기 종료로 14 epochs를 실행한 뒤 최고 성능 가중치(epoch 3)를 별도 테스트 패치 783개에 평가했습니다. 아래 논문 수치는 [ECRformer 논문 Table 1](https://zzaiyan.github.io/assets/pubs/ecrformer.pdf)의 **SEN12MS-CR 전체 테스트 세트**, 현재 수치는 겨울의 **테스트 ROI 한 곳**에 대한 평균이므로 동일 조건의 성능 비교는 아닙니다.
+
+| 지표 | 논문 ECRformer | 현재 겨울 절반 실험 | 차이 (현재 − 논문) |
+| --- | ---: | ---: | ---: |
+| MAE ↓ | 0.0164 | 0.0254 | +0.0090 |
+| SAM ↓ | 4.693° | 11.250° | +6.557° |
+| PSNR ↑ | 33.37 dB | 29.61 dB | −3.76 dB |
+| SSIM ↑ | 0.932 | 0.847 | −0.085 |
+| LPIPS ↓ | 0.188 | 0.397 | +0.209 |
+
+![ECRformer 겨울 테스트 비교: SAR · 구름 낀 영상 · 복원 · 정답](./ECRformer/reproduction/winter_half1/comparisons/test_0000.png)
+
+시각화는 테스트 패치 중 한 예시이며, 평균값은 783개 전체에서 계산했습니다. [샘플별 지표](./ECRformer/reproduction/winter_half1/metrics.csv), [평균 지표](./ECRformer/reproduction/winter_half1/summary.json), [평가용 가중치](./ECRformer/reproduction/winter_half1/model_weights.pt)와 차이의 해석은 [ECRformer README](./ECRformer/README.md#겨울-절반-데이터-재현-결과-2026-09-29)에 있습니다. 원본 TIFF 데이터와 학습 재개용 전체 체크포인트는 Git에 포함하지 않았습니다.
 
 ### 로컬에서 확인
 

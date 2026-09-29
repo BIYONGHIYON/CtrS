@@ -90,10 +90,44 @@ L_total = L_reconstruction + λ_sam · L_SAM
 
 ## 6. 실험 계획
 
-### 현재 재현 진행 상황 (2026-09-29)
+### 겨울 절반 데이터 재현 결과 (2026-09-29)
 
-RTX A6000에서 SEN12MS-CR **겨울 데이터 절반**으로 ECRformer 기준 모델을 학습했습니다. 200 epochs를 설정했으나 검증 손실이 개선되지 않아 총 14 epochs 후 조기 종료되었고, 최고 성능 가중치(epoch 3)로 학습에 쓰지 않은 겨울 테스트 패치 783개를 평가했습니다. PSNR 29.61 dB, SSIM 0.84656, SAM 11.25°입니다. 평균·샘플별 지표, 모델 가중치 및 입력/복원/정답 비교 이미지는 [겨울 절반 재현 결과](./reproduction/winter_half1/README.md)에 있습니다. 아직 **논문 수치와 동등 조건의 비교를 완료한 것은 아닙니다**.
+RTX A6000에서 SEN12MS-CR **겨울 데이터의 약 절반**으로 ECRformer 기준 모델을 학습했습니다. 공식 ROI 분할 중 확보한 패치는 학습 6,833개, 검증 1,386개, 테스트 783개입니다. 테스트 783개는 서로 독립적인 위성 장면이 아니라 **겨울 테스트 ROI 한 곳의 패치**입니다.
 
+시드 42, AdamW, 학습률 4e-4, 배치 4와 gradient accumulation 4(유효 배치 16), 최대 200 epochs 및 early stopping patience 10으로 실행했습니다. 검증 손실의 최저점은 epoch 3(`valid_loss` 약 0.038)이었고, 10회 연속 개선이 없어 epoch 13 종료 시점에 중단됐습니다. **총 14 epochs를 실행했으며 200 epochs를 완료한 것은 아닙니다.** [서버에서 저장한 학습 설정](./reproduction/winter_half1/hparams.yaml)을 함께 보관합니다.
+
+최고 성능 가중치로 겨울 `test` 분할의 783개 패치를 평가했습니다. 아래 논문 수치는 [ECRformer 논문 Table 1의 SEN12MS-CR 전체 테스트 결과](https://zzaiyan.github.io/assets/pubs/ecrformer.pdf)입니다. `차이`는 현재 값에서 논문 값을 뺀 것으로, **평가 범위가 달라 동일 조건의 재현 오차를 뜻하지 않습니다.**
+
+| 지표 | 논문 ECRformer | 현재 겨울 절반 실험 | 차이 (현재 − 논문) |
+| --- | ---: | ---: | ---: |
+| MAE ↓ | 0.0164 | 0.02544 | +0.00904 |
+| SAM ↓ | 4.693° | 11.250° | +6.557° |
+| PSNR ↑ | 33.37 dB | 29.61 dB | −3.76 dB |
+| SSIM ↑ | 0.932 | 0.84656 | −0.08544 |
+| LPIPS ↓ | 0.188 | 0.39683 | +0.20883 |
+
+현재 실험의 RMSE는 0.03438입니다(논문 Table 1에는 RMSE가 없어 차이값을 계산하지 않았습니다). [평균 지표와 평가 설정](./reproduction/winter_half1/summary.json), [783개 샘플별 지표](./reproduction/winter_half1/metrics.csv), [비교 이미지 8장](./reproduction/winter_half1/comparisons/)과 [평가용 모델 가중치](./reproduction/winter_half1/model_weights.pt)를 저장소에 포함했습니다. 이 가중치는 최고 성능 Lightning 체크포인트에서 모델 텐서만 추출한 약 45MB 파일로, optimizer·scheduler 상태가 없어 학습 재개용은 아닙니다. 131MB 원본 체크포인트와 원본 TIFF 데이터는 Git에 포함하지 않았습니다.
+
+![테스트 패치 예시: SAR · 구름 낀 광학 입력 · 복원 결과 · 구름 없는 정답](./reproduction/winter_half1/comparisons/test_0000.png)
+
+그림의 SAR는 첫 밴드를 회색조로, 세 광학영상은 Sentinel-2 밴드 인덱스 `(3, 2, 1)`에 밝기 배율 3.0을 적용해 표시한 RGB 미리보기입니다. 13밴드 원본 영상이나 전체 테스트의 대표 사례로 해석하면 안 됩니다.
+
+논문과 현재 실험은 데이터 범위 외에도 조건 차이가 있습니다. 논문은 검증 손실이 5 epochs 개선되지 않으면 학습률을 0.1배로 낮추지만, 현재 공개 코드의 학습률 스케줄러는 정해진 epoch에서만 낮추므로 이번 조기 종료 전에는 학습률 감소가 없었습니다. 논문의 SAR 전처리는 VV를 `[-25, 0]` dB, VH를 `[-35, 0]` dB로 자르지만 현재 데이터 로더는 두 채널 모두 `[-25, 0]` dB로 처리합니다. 따라서 현 수치만으로 논문 모델의 성능을 재현했다고 결론 내릴 수 없으며, 전체 데이터와 전처리·학습 조건을 맞춘 뒤 다시 비교해야 합니다.
+
+같은 겨울 절반 데이터가 `Official_ECRformer/datasets/sen12mscr_winter/`에 준비된 경우 다음과 같이 지표를 재계산할 수 있습니다.
+
+```bash
+cd ECRformer/Official_ECRformer
+python -m pip install -r requirements.txt rasterio
+python test.py \
+  --config ecrformer \
+  --name winter_half1 \
+  --data-root datasets/sen12mscr_winter \
+  --split test \
+  --ckpt-path ../reproduction/winter_half1/model_weights.pt \
+  --export-format none \
+  --output-dir results/winter_half1_test
+```
 
 ### 원 논문 재현
 
