@@ -22,6 +22,7 @@ SENSORS = {
     "WV3": ("WorldView3", "wv3", "wv3_full"),
     "WV2": ("WorldView2", "wv2", "wv3_full"),  # paper's WV3 -> WV2 transfer
 }
+ARCHIVE_FOLDERS = {"QB": "QuickBird", "GF2": "Gaofen 2", "WV3": "WorldView 3", "WV2": "WorldView 2"}
 # SSA-MRN paper Tables I-IV: Ours. Order SAM, ERGAS, PSNR, SCC, Q2n, D_lambda, D_s, QNR.
 PAPER = {
     "QB": (4.8478, 4.0726, 37.6645, .9702, .9243, .0341, .0360, .9311),
@@ -32,18 +33,28 @@ PAPER = {
 METRIC_KEYS = ("SAM", "ERGAS", "PSNR", "SCC", "Q2n", "D_lambda", "D_s", "QNR")
 
 
-def evaluate(sensor, protocol, limit):
+def evaluate(sensor, protocol, limit, checkpoint_root=ROOT / "experiments/checkpoints",
+             data_root=ROOT / "data/raw", device=torch.device("cpu")):
     folder, stem, ckpt_dir = SENSORS[sensor]
     filename = f"test_{stem}{'_OrigScale' if protocol == 'FR' else ''}_multiExm1.h5"
-    data_file = ROOT / "data/raw" / folder / filename
-    checkpoint_file = ROOT / "experiments/checkpoints" / ckpt_dir / "latest.pt"
+    archive_section = ("Testing Dataset (FullData, H5 Format)" if protocol == "FR"
+                       else "Testing Dataset (ReducedData, H5 Format)")
+    candidates = (data_root / folder / filename,
+                  data_root / ARCHIVE_FOLDERS[sensor] / archive_section / filename)
+    data_file = next((path for path in candidates if path.is_file()), None)
+    if data_file is None:
+        raise FileNotFoundError(f"Missing {sensor} {protocol} H5; checked {candidates}")
+    checkpoint_file = checkpoint_root / ckpt_dir / "latest.pt"
     checkpoint = torch.load(checkpoint_file, map_location="cpu", weights_only=True)
     expected_checkpoint_sensor = "WV3" if sensor == "WV2" else sensor
     if checkpoint["sensor"] != expected_checkpoint_sensor:
         raise ValueError(f"Wrong checkpoint for {sensor}")
-    model = RestoredPansharpeningNet(channels=checkpoint["channels"])
+    model = RestoredPansharpeningNet(channels=checkpoint["channels"],
+                                    ssai_dimension=checkpoint.get("ssai_dimension", 4))
+    if device.type == "privateuseone":
+        model.use_directml_prelu()
     model.load_state_dict(checkpoint["model"], strict=True)
-    model.eval()
+    model = model.to(device).eval()
     scale = SENSOR_MAX[sensor]
     rows = []
     started = time.monotonic()
@@ -56,9 +67,10 @@ def evaluate(sensor, protocol, limit):
             arrays = {key: np.asarray(h5[key][index], dtype=np.float32) for key in required}
             if any(not np.isfinite(value).all() for value in arrays.values()):
                 raise ValueError(f"Non-finite source at {sensor} {protocol} {index}")
-            inputs = [torch.from_numpy(arrays[key] / scale).unsqueeze(0) for key in ("pan", "lms", "ms")]
-            with torch.inference_mode():
-                fused = model(*inputs)[0].numpy().astype(np.float64) * scale
+            inputs = [torch.from_numpy(arrays[key] / scale).unsqueeze(0).to(device)
+                      for key in ("pan", "lms", "ms")]
+            with torch.no_grad():
+                fused = model(*inputs)[0].cpu().numpy().astype(np.float64) * scale
             if protocol == "RR":
                 metrics = rr_metrics(arrays["gt"].astype(np.float64), fused)
             else:
@@ -71,8 +83,9 @@ def evaluate(sensor, protocol, limit):
     averages = {key: float(np.mean([row[key] for row in rows])) for key in keys}
     paper = {key: PAPER[sensor][METRIC_KEYS.index(key)] for key in keys}
     return {"sensor": sensor, "protocol": protocol, "samples": count,
-            "checkpoint": str(checkpoint_file.relative_to(ROOT)), "checkpoint_epoch": checkpoint["epoch"],
-            "data_file": filename, "elapsed_seconds": time.monotonic() - started,
+            "checkpoint": str(checkpoint_file), "checkpoint_epoch": checkpoint["epoch"],
+            "ssai_dimension": checkpoint.get("ssai_dimension", 4),
+            "data_file": str(data_file), "elapsed_seconds": time.monotonic() - started,
             "metrics_mean": averages, "paper": paper,
             "delta_ours_minus_paper": {key: averages[key] - paper[key] for key in keys},
             "per_sample": rows,
@@ -85,14 +98,30 @@ def main():
     parser.add_argument("--protocol", choices=("RR", "FR", "both"), default="both")
     parser.add_argument("--max-samples", type=int)
     parser.add_argument("--output-dir", type=Path, default=ROOT / "experiments/results/paper_comparison")
+    parser.add_argument("--checkpoint-root", type=Path, default=ROOT / "experiments/checkpoints")
+    parser.add_argument("--data-root", type=Path, default=ROOT / "data/raw")
+    parser.add_argument("--device", choices=("cpu", "cuda", "dml"), default="cpu")
     args = parser.parse_args()
+    if args.device == "dml":
+        try:
+            import torch_directml
+        except ImportError:
+            parser.error("Install torch-directml to use --device dml")
+        device = torch_directml.device()
+    elif args.device == "cuda":
+        if not torch.cuda.is_available():
+            parser.error("CUDA is unavailable in this PyTorch environment")
+        device = torch.device("cuda")
+    else:
+        device = torch.device("cpu")
     torch.set_num_threads(4)
     sensors = SENSORS if args.sensor == "all" else (args.sensor,)
     protocols = ("RR", "FR") if args.protocol == "both" else (args.protocol,)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     for sensor in sensors:
         for protocol in protocols:
-            report = evaluate(sensor, protocol, args.max_samples)
+            report = evaluate(sensor, protocol, args.max_samples, args.checkpoint_root,
+                              args.data_root, device)
             target = args.output_dir / f"{sensor.lower()}_{protocol.lower()}.json"
             target.write_text(json.dumps(report, indent=2), encoding="utf-8")
             print(f"Saved {target}: {report['metrics_mean']}", flush=True)
