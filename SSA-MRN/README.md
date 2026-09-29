@@ -48,29 +48,29 @@ PanCollection의 QB·GF2·WV3 RR·FR 테스트를 각각 20장씩 **총 120장**
 
 K=6도 논문과 동일한 구현·평가 조건으로 확인된 결과는 아닙니다. 공개 코드의 어텐션 연산 차이와 PSNR·FR 지표의 미확인 계산 조건을 고려해야 합니다. [K=6 샘플별 결과와 해석](./docs/experiment_k6.md)을 함께 보세요. 기존 K=4의 전체 논문 비교와 WV2 교차 평가는 [K=4 비교 기록](./docs/paper_metric_comparison.md)에 보관합니다.
 
-### K=4 모델의 단일 샘플 확인
+### K=6 모델의 단일 샘플 확인
 
-아래는 **K=4**에서 각 센서 테스트 20장 중 첫 1장의 실행 확인입니다. 바로 위 K=6 논문 비교 표와 모델·평가 범위·계산 조건이 달라 수치를 직접 비교하지 않습니다. 가중치는 `best`가 아닌 마지막 epoch의 `latest.pt`입니다.
+아래는 **K=6**에서 각 센서 테스트 20장 중 첫 1장의 실행 확인입니다. epoch 100의 `latest.pt` 가중치를 사용했습니다. 단일 샘플의 peak 1 PSNR이므로 위 20장 평균의 논문 비교 PSNR과 직접 비교하지 않습니다.
 
-| 센서 | epoch 100 검증 MSE | LMS PSNR | 모델 PSNR |
-| --- | ---: | ---: | ---: |
-| QB | 0.00017375 | 35.45 dB | 41.35 dB |
-| GF2 | 0.00008431 | 31.26 dB | 38.65 dB |
-| WV3 | 0.00035871 | 29.06 dB | 37.66 dB |
+| 센서 | LMS PSNR | 모델 PSNR |
+| --- | ---: | ---: |
+| QB | 35.45 dB | 41.53 dB |
+| GF2 | 31.26 dB | 38.51 dB |
+| WV3 | 29.06 dB | 37.79 dB |
 
 세 그림 모두 입력 MS·PAN·LMS·출력·정답 순서입니다. 입력을 자르지 않았고, MS만 표시를 위해 확대했습니다. RGB 밴드 순서는 가정이며 표시 대비를 조정했습니다.
 
 **QuickBird (QB)**
 
-![QuickBird 첫 테스트 샘플: 입력 MS, PAN, LMS, 모델 출력, 정답](./experiments/results/quickbird_trained/comparison.png)
+![QuickBird K=6 첫 테스트 샘플: 입력 MS, PAN, LMS, 모델 출력, 정답](./experiments/results/quickbird_k6_trained/comparison.png)
 
 **Gaofen 2 (GF2)**
 
-![Gaofen 2 첫 테스트 샘플: 입력 MS, PAN, LMS, 모델 출력, 정답](./experiments/results/gaofen2_trained/comparison.png)
+![Gaofen 2 K=6 첫 테스트 샘플: 입력 MS, PAN, LMS, 모델 출력, 정답](./experiments/results/gaofen2_k6_trained/comparison.png)
 
 **WorldView 3 (WV3)**
 
-![WorldView 3 첫 테스트 샘플: 입력 MS, PAN, LMS, 모델 출력, 정답](./experiments/results/worldview3_trained/comparison.png)
+![WorldView 3 K=6 첫 테스트 샘플: 입력 MS, PAN, LMS, 모델 출력, 정답](./experiments/results/worldview3_k6_trained/comparison.png)
 
 ## 논문과의 차이 및 해석 범위
 
@@ -117,12 +117,12 @@ python scripts/evaluate_paper.py --sensor all --protocol both \
   --checkpoint-root experiments/checkpoints \
   --output-dir experiments/results/local_k4_eval
 python scripts/test_checkpoint.py --sensor QB \
-  --checkpoint experiments/checkpoints/qb_full/latest.pt \
+  --checkpoint experiments/checkpoints/k6/qb_full/latest.pt \
   --data data/raw/QuickBird/test_qb_multiExm1.h5 \
   --output-dir experiments/results/local_qb
 ```
 
-첫 번째 명령은 K=6, 두 번째는 K=4의 전체 평가입니다. 마지막 명령은 K=4 QB 단일 샘플 확인입니다. 기본 출력은 공유 결과를 덮어쓰지 않는 로컬 폴더를 사용합니다. K=6 가중치는 `experiments/checkpoints/k6/`, K=4 가중치는 `experiments/checkpoints/`의 센서별 폴더에 있습니다. **새 학습의 기본 K는 6**이며, K=4는 `python scripts/train.py ... --ssai-dimension 4`로 선택합니다. 새 학습의 기본 체크포인트 경로는 `experiments/checkpoints/local/k{K}/{sensor}_full/`입니다. 학습을 다시 실행하려면 Git에 없는 원본 `train_*.h5`·`valid_*.h5`도 필요합니다. 원본 H5는 수정하거나 Git에 추가하지 않습니다.
+첫 번째 명령은 K=6, 두 번째는 K=4의 전체 평가입니다. 마지막 명령은 K=6 QB 단일 샘플 확인입니다. 기본 출력은 공유 결과를 덮어쓰지 않는 로컬 폴더를 사용합니다. K=6 가중치는 `experiments/checkpoints/k6/`, K=4 가중치는 `experiments/checkpoints/`의 센서별 폴더에 있습니다. **새 학습의 기본 K는 6**이며, K=4는 `python scripts/train.py ... --ssai-dimension 4`로 선택합니다. 새 학습의 기본 체크포인트 경로는 `experiments/checkpoints/local/k{K}/{sensor}_full/`입니다. 학습을 다시 실행하려면 Git에 없는 원본 `train_*.h5`·`valid_*.h5`도 필요합니다. 원본 H5는 수정하거나 Git에 추가하지 않습니다.
 
 ## 후속 연구
 
