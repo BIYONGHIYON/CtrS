@@ -90,6 +90,11 @@ L_total = L_reconstruction + λ_sam · L_SAM
 
 ## 6. 실험 계획
 
+### 현재 재현 진행 상황 (2026-09-29)
+
+RTX A6000에서 SEN12MS-CR **겨울 데이터 절반**으로 ECRformer 기준 모델을 학습했습니다. 200 epochs를 설정했으나 검증 손실이 개선되지 않아 총 14 epochs 후 조기 종료되었고, 최고 성능 가중치(epoch 3)로 학습에 쓰지 않은 겨울 테스트 패치 783개를 평가했습니다. PSNR 29.61 dB, SSIM 0.84656, SAM 11.25°입니다. 평균·샘플별 지표, 모델 가중치 및 입력/복원/정답 비교 이미지는 [겨울 절반 재현 결과](./reproduction/winter_half1/README.md)에 있습니다. 아직 **논문 수치와 동등 조건의 비교를 완료한 것은 아닙니다**.
+
+
 ### 원 논문 재현
 
 1. [공식 구현](https://github.com/zzaiyan/ECRformer)과 논문의 모델·학습 설정을 대조합니다.

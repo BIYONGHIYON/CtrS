@@ -36,14 +36,15 @@ git submodule update --init --recursive
 
 ### [ECRformer 원 논문 재현](./ECRformer/README.md)
 
-ECRformer 팀 2명이 광학 영상과 SAR 영상을 이용한 구름 제거 모델의 원 논문 결과를 재현합니다. 데이터 준비, 공개 코드 실행, 학습·평가 조건 확인과 기준 성능 확보를 우선 진행합니다. Spectral-Semantic Decoupled Learning 확장은 재현 결과를 확인한 뒤 검토합니다.
+ECRformer 팀 2명이 광학 영상과 SAR 영상을 이용한 구름 제거 모델의 원 논문 결과를 재현합니다. 현재 SEN12MS-CR 겨울 데이터 절반으로 기준 모델을 학습하고, 별도 테스트 패치 783개를 평가했습니다. 전체 데이터·논문과 동등 조건의 비교는 아직 완료하지 않았습니다. Spectral-Semantic Decoupled Learning 확장은 재현 결과를 확인한 뒤 검토합니다.
 
 ## 폴더와 현재 결과
 
 | 위치 | 내용 |
 | --- | --- |
 | [SSA-MRN](./SSA-MRN/README.md) | 팬샤프닝 재현 코드·설정·문서 |
-| [ECRformer](./ECRformer/README.md) | 구름 제거 재현 계획 |
+| [ECRformer](./ECRformer/README.md) | 구름 제거 재현 계획·겨울 절반 데이터 기준 결과 |
+| [ECRformer 겨울 실험 결과](./ECRformer/reproduction/winter_half1/README.md) | 모델 가중치·783개 샘플 지표·비교 이미지 |
 | [SSA-MRN 가중치](./SSA-MRN/experiments/checkpoints/) | QB·GF2·WV3의 epoch 100 체크포인트 |
 | [SSA-MRN 학습 로그](./SSA-MRN/experiments/logs/) | 센서별 epoch 1–100 학습·검증 MSE |
 | [SSA-MRN 단일 샘플 결과](./SSA-MRN/README.md#3개-센서-학습단일-샘플-테스트-현황-2026-09-28) | 각 센서의 입력·출력·정답 비교, 수치, 재실행 방법 |
