@@ -46,9 +46,19 @@ RR의 SAM·ERGAS·PSNR은 대체로 논문 수치에 가깝지만, WV3 Q8·WV2 S
 | GF2 | 0.00008431 | 31.26 dB | 38.65 dB |
 | WV3 | 0.00035871 | 29.06 dB | 37.66 dB |
 
+세 그림 모두 입력 MS·PAN·LMS·출력·정답 순서입니다. 입력을 자르지 않았고, MS만 표시를 위해 확대했습니다. RGB 밴드 순서는 가정이며 표시 대비를 조정했습니다.
+
+**QuickBird (QB)**
+
 ![QuickBird 첫 테스트 샘플: 입력 MS, PAN, LMS, 모델 출력, 정답](./experiments/results/quickbird_trained/comparison.png)
 
-그림은 입력 MS·PAN·LMS·출력·정답 순서입니다. 입력을 자르지 않았고, MS만 표시를 위해 확대했습니다. RGB 밴드 순서는 가정이며 표시 대비를 조정했습니다. [GF2](./experiments/results/gaofen2_trained/comparison.png)와 [WV3](./experiments/results/worldview3_trained/comparison.png)의 같은 형식 그림도 저장돼 있습니다.
+**Gaofen 2 (GF2)**
+
+![Gaofen 2 첫 테스트 샘플: 입력 MS, PAN, LMS, 모델 출력, 정답](./experiments/results/gaofen2_trained/comparison.png)
+
+**WorldView 3 (WV3)**
+
+![WorldView 3 첫 테스트 샘플: 입력 MS, PAN, LMS, 모델 출력, 정답](./experiments/results/worldview3_trained/comparison.png)
 
 ## 논문과의 차이 및 해석 범위
 
