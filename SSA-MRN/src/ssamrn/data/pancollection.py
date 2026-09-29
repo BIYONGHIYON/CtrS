@@ -75,6 +75,10 @@ class PanCollectionH5(Dataset):
         state["_file"] = None
         return state
 
-    def __del__(self):
+    def close(self):
         if getattr(self, "_file", None) is not None:
             self._file.close()
+            self._file = None
+
+    def __del__(self):
+        self.close()
