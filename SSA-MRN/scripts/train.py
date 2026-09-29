@@ -14,6 +14,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from ssamrn.data.pancollection import PanCollectionH5
 from ssamrn.models.ssa_mrn import RestoredPansharpeningNet
 
+ROOT = Path(__file__).resolve().parents[1]
+
 
 def cpu_state(value):
     """Save portable checkpoints from GPU backends, including DirectML."""
@@ -47,14 +49,14 @@ def main():
     parser.add_argument("--epochs", type=int, default=100)
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--lr", type=float, default=1e-4)
-    parser.add_argument("--ssai-dimension", type=int, default=4,
-                        help="SSAI K: upstream code uses 4; the paper specifies 6")
+    parser.add_argument("--ssai-dimension", type=int, default=6,
+                        help="SSAI K (default: 6; use 4 for the upstream baseline)")
     parser.add_argument("--seed", type=int, default=42, help="Working seed; paper seed unconfirmed")
     parser.add_argument("--device", default="cpu", choices=("cpu", "mps", "cuda", "dml"))
     parser.add_argument("--max-train-samples", type=int, default=None)
     parser.add_argument("--max-val-samples", type=int, default=None)
     parser.add_argument("--checkpoint-dir", type=Path,
-                        default=Path(__file__).resolve().parents[1] / "experiments/checkpoints")
+                        help="Defaults to an ignored local directory for this K and sensor")
     parser.add_argument("--resume", type=Path)
     args = parser.parse_args()
     if args.train.resolve() == args.val.resolve():
@@ -63,6 +65,9 @@ def main():
         parser.error("both --train and --val must exist")
     if args.epochs < 1 or args.batch_size < 1 or args.lr <= 0 or args.ssai_dimension < 1:
         parser.error("epochs, batch-size, lr, and ssai-dimension must be positive")
+    if args.checkpoint_dir is None:
+        args.checkpoint_dir = (ROOT / "experiments/checkpoints/local"
+                               / f"k{args.ssai_dimension}" / f"{args.sensor.lower()}_full")
     if args.device == "cuda" and not torch.cuda.is_available():
         parser.error("CUDA is unavailable in this PyTorch environment")
     if args.device == "dml":

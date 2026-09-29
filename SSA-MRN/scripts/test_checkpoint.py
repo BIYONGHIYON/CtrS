@@ -32,7 +32,8 @@ def main():
     checkpoint = torch.load(args.checkpoint, map_location="cpu", weights_only=True)
     if checkpoint["sensor"] != args.sensor or checkpoint["channels"] != dataset.channels:
         raise ValueError("Checkpoint sensor/channels do not match the test data")
-    model = RestoredPansharpeningNet(channels=dataset.channels)
+    dimension = checkpoint.get("ssai_dimension", 4)
+    model = RestoredPansharpeningNet(channels=dataset.channels, ssai_dimension=dimension)
     model.load_state_dict(checkpoint["model"], strict=True)
     model.eval()
 
@@ -86,6 +87,7 @@ def main():
         "checkpoint_file": args.checkpoint.name,
         "data_file": args.data.name,
         "epoch": checkpoint["epoch"],
+        "ssai_dimension": dimension,
         "sample_index_zero_based": args.sample_index,
         "sample_count": len(dataset),
         "device": "cpu",

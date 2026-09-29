@@ -17,7 +17,7 @@ $dataset = @{
 if (-not (Test-Path -LiteralPath $Python -PathType Leaf)) {
     throw "Python executable not found: $Python"
 }
-$logs = Join-Path $projectRoot 'experiments\logs\k6'
+$logs = Join-Path $projectRoot 'experiments\logs\local\k6'
 New-Item -ItemType Directory -Path $logs -Force | Out-Null
 
 foreach ($sensor in $Sensors) {
@@ -31,7 +31,7 @@ foreach ($sensor in $Sensors) {
     }
 
     $runGroup = if ($Smoke) { 'k6_smoke' } else { 'k6' }
-    $checkpointDir = Join-Path $projectRoot "experiments\checkpoints\$runGroup\$($entry.Run)"
+    $checkpointDir = Join-Path $projectRoot "experiments\checkpoints\local\$runGroup\$($entry.Run)"
     $latest = Join-Path $checkpointDir 'latest.pt'
     $arguments = @(
         (Join-Path $PSScriptRoot 'train.py'),

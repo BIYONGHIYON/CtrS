@@ -35,16 +35,17 @@ python -m unittest discover -s tests -v
 
 `smoke_test.py`는 첫 번째 QuickBird H5 샘플 **전체**를 사용한다. `--size 32`에서는 PAN·LMS 256×256→32×32, MS 64×64→8×8로 면적 보간해 4:1 비율을 유지하며, `--size 256`에서는 원래 크기 그대로 입력한다. 왼쪽 위만 자르거나 20개 샘플을 타일로 순회하지 않는다. 이 스크립트는 **무작위 초기화 모델의 실행/shape와 파일 저장만** 확인한다. `experiments/results/quickbird_smoke/`에는 입력 MS와 출력 MS의 RGB 합성(4밴드 중 3·2·1번 밴드 사용), 입력 PAN, 출력 4밴드 `.npy`를 저장한다. RGB 밴드 순서는 H5 메타데이터가 없어 QuickBird의 B·G·R·NIR 순서가 유지됐다고 가정한 것이며, PNG는 각각 대비를 조정한 표시용이다. 학습된 복원 결과나 PSNR 등 성능으로 해석하면 안 된다.
 
-학습·검증 파일을 각각 확보해 아래 명령으로 QB 학습을 완료했다. 검증 파일로 테스트 H5를 쓰지 않았다.
+학습·검증 파일을 각각 확보해 QB K=4 학습을 완료했다. 검증 파일로 테스트 H5를 쓰지 않았다. 같은 설정으로 새 실험을 실행할 때는 아래처럼 K=4와 별도 로컬 저장 경로를 명시한다. 기존 공유 가중치는 `experiments/checkpoints/qb_full/latest.pt`에 그대로 보관한다.
 
 ```bash
 python scripts/train.py \
   --train data/raw/QuickBird/train_qb.h5 \
   --val data/raw/QuickBird/valid_qb.h5 \
-  --sensor QB --epochs 100 --batch-size 32 --lr 0.0001
+  --sensor QB --epochs 100 --batch-size 32 --lr 0.0001 \
+  --ssai-dimension 4 --checkpoint-dir experiments/checkpoints/local/k4/qb_full
 ```
 
-장비 메모리가 부족하면 `--batch-size`를 줄이고 논문 설정에서 벗어난 사실을 실험 기록에 남긴다. 저장된 QB 체크포인트에서 재개할 때는 `--resume experiments/checkpoints/qb_full/latest.pt`와 동일한 센서·학습 파일을 사용한다. 외부에서 받은 체크포인트는 신뢰한 출처인지 확인한 후 사용한다.
+장비 메모리가 부족하면 `--batch-size`를 줄이고 논문 설정에서 벗어난 사실을 실험 기록에 남긴다. 위 명령으로 만든 체크포인트에서 재개할 때는 `--resume experiments/checkpoints/local/k4/qb_full/latest.pt`와 동일한 센서·학습 파일을 사용한다. 외부에서 받은 체크포인트는 신뢰한 출처인지 확인한 후 사용한다.
 
 ## 아직 확인할 것
 
