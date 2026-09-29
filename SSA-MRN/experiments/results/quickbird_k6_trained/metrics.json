@@ -1,0 +1,42 @@
+{
+  "sensor": "QB",
+  "checkpoint_file": "latest.pt",
+  "data_file": "test_qb_multiExm1.h5",
+  "epoch": 100,
+  "ssai_dimension": 6,
+  "sample_index_zero_based": 0,
+  "sample_count": 20,
+  "device": "cpu",
+  "inference_seconds": 1.0138854169927072,
+  "input_shapes": {
+    "pan": [
+      1,
+      256,
+      256
+    ],
+    "lms": [
+      4,
+      256,
+      256
+    ],
+    "ms": [
+      4,
+      64,
+      64
+    ]
+  },
+  "prediction_shape": [
+    4,
+    256,
+    256
+  ],
+  "prediction": {
+    "mse": 7.031290442682803e-05,
+    "psnr_db_peak_1": 41.529649622197844
+  },
+  "lms_baseline": {
+    "mse": 0.0002853567712008953,
+    "psnr_db_peak_1": 35.44611817664543
+  },
+  "notes": "Single-sample sanity check, not official paper evaluation. RGB band mapping is assumed; shared GT-based 1-99 percentile stretch. Full sample, no inference crop/downsampling."
+}
