@@ -1,0 +1,22 @@
+{
+  "config": "ecrformer",
+  "run_name": null,
+  "split": "test",
+  "checkpoint": "experiments/ecrformer_winter_half2_finetune/version_0/checkpoints/epoch=2-step=1344.ckpt",
+  "num_samples": 784,
+  "metrics": {
+    "RMSE": 0.05145806337621215,
+    "MAE": 0.036609821529982954,
+    "PSNR": 25.888461601977447,
+    "SAM": 10.77944229999367,
+    "SSIM": 0.8299366064673784,
+    "LPIPS": 0.4742812594132764
+  },
+  "export_format": "none",
+  "rgb_bands": [
+    3,
+    2,
+    1
+  ],
+  "png_brightness": 3.0
+}
