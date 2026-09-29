@@ -10,7 +10,11 @@ from argparse import ArgumentParser, Namespace
 from util.pytorch_ssim import SSIM
 from util.util import count_parameters, initialize_weights, compute_metric
 from util.augment import TestAugment, TrainAugment
-from util.checkpoint import find_latest_checkpoint
+from util.checkpoint import (
+    extract_state_dict,
+    find_latest_checkpoint,
+    load_checkpoint_file,
+)
 from util.data_split import build_train_valid_datasets
 
 from models import find_model_using_name
@@ -164,6 +168,13 @@ def main(config):
 
     print("\nBuilding model...")
     model = CloudRemovalModel(config)
+    init_weights_path = getattr(config.train, 'init_weights_path', None)
+    if init_weights_path:
+        if config.train.ckpt_path is not None:
+            raise ValueError('Use either init_weights_path or ckpt_path, not both.')
+        checkpoint = load_checkpoint_file(init_weights_path, map_location='cpu')
+        model.load_state_dict(extract_state_dict(checkpoint), strict=True)
+        print(f'Initialized model weights from: {init_weights_path}')
     print(f"Model class: {model.net.__class__.__name__}")
     count_parameters(model)
 
@@ -200,7 +211,9 @@ def main(config):
     ckpt_path = config.train.ckpt_path
     resume_version = None
 
-    if ckpt_path is None and not getattr(config, 'no_resume', False):
+    if init_weights_path:
+        print('Starting a new fine-tuning run with fresh optimizer and callbacks.')
+    elif ckpt_path is None and not getattr(config, 'no_resume', False):
         auto_ckpt_path, version_num = find_latest_checkpoint(
             save_dir, log_name)
         if auto_ckpt_path is not None:
@@ -244,6 +257,16 @@ if __name__ == "__main__":
     parser.add_argument('--gpu', '-g', type=int, default=0)
     parser.add_argument('--no-resume', action='store_true',
                         help="Disable automatic checkpoint resume")
+    parser.add_argument('--data-root', type=str,
+                        help='Override the dataset root directory')
+    parser.add_argument('--init-weights', type=str,
+                        help='Initialize model weights without resuming optimizer or callbacks')
+    parser.add_argument('--max-epochs', type=int,
+                        help='Override the maximum number of epochs')
+    parser.add_argument('--num-workers', type=int,
+                        help='Override the number of data-loading workers')
+    parser.add_argument('--lr', type=float,
+                        help='Override the initial learning rate')
     args = parser.parse_args()
 
     config_name = args.config
@@ -253,5 +276,15 @@ if __name__ == "__main__":
     config.name = args.name
     config.train.gpu = [args.gpu]
     config.no_resume = args.no_resume
+    if args.data_root is not None:
+        config.dataset.root = args.data_root
+    if args.init_weights is not None:
+        config.train.init_weights_path = args.init_weights
+    if args.max_epochs is not None:
+        config.train.max_epoch = args.max_epochs
+    if args.num_workers is not None:
+        config.train.num_workers = args.num_workers
+    if args.lr is not None:
+        config.train.lr = args.lr
 
     main(config)
