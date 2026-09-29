@@ -1,10 +1,53 @@
 <p align="center">
-  <img src="./icon/CtrS-icon-circle.png" alt="CtrS" width="180" />
+  <img src="./icon/CtrS-icon-circle.png" alt="CtrS" width="160" />
 </p>
 
 # CtrS
 
-동국대학교 종합설계 연구 저장소입니다. 팀원 4명이 2명씩 두 팀으로 나뉘어 SSA-MRN과 ECRformer를 연구합니다. **SSA-MRN의 공개 코드 기반 재현 실험과 논문 수치 비교는 완료**했고, ECRformer는 겨울 데이터 일부로 기준 모델의 학습·평가를 진행했습니다.
+동국대학교 종합설계 연구 프로젝트입니다. 팀원 4명이 두 그룹으로 나뉘어 위성영상 복원 모델 **SSA-MRN**과 **ECRformer**를 연구하고, 재현 결과와 후속 연구 가능성을 비교해 최종 주제를 선택합니다. **최종 주제는 아직 정하지 않았습니다.**
+
+## 두 연구 한눈에 보기
+
+| 연구 | 해결하려는 문제 | 현재까지 확인된 결과 | 남은 핵심 작업 |
+| --- | --- | --- | --- |
+| SSA-MRN | 고해상도 PAN과 저해상도 MS로 고해상도 MS 복원 | 공개 코드의 K=4 구조로 QB·GF2·WV3 학습, RR·FR 평가와 WV3→WV2 교차 평가, 논문 수치 비교 완료 | 논문의 K=6 구조와 공개 코드의 차이 검토; RGB 유도 HSI 확장 가능성 검증 |
+| ECRformer | 구름 낀 광학 영상과 SAR로 구름 없는 13밴드 광학 영상 복원 | SEN12MS-CR 겨울 데이터 두 부분에서 기준 학습·평가 및 두 번째 부분 미세조정 전후 비교 완료 | 더 넓은 데이터 범위와 논문 조건에 맞춘 비교; 분광 보존 개선안 검증 |
+
+두 연구는 **입력 데이터와 과제가 달라 지표의 절댓값으로 우열을 정할 수 없습니다.** 각각의 데이터 분할, 평가 조건, 실패 사례, 개선 실험의 실현 가능성을 함께 봅니다.
+
+## 현재 결과
+
+### SSA-MRN: 공개 코드 기반 재현
+
+QB·GF2·WV3 모델을 각각 100 epochs 학습하고, 각 센서의 축소 해상도(RR)·원 해상도(FR) 테스트 20장씩 평가했습니다. WV2에는 WV3로 학습한 모델을 적용했습니다. RR의 SAM·PSNR은 대체로 논문 수치에 가깝지만, 공개 코드의 내부 차원은 **K=4**, 논문은 **K=6**입니다. PSNR 계산 방식과 FR 지표의 세부 구현도 논문과 동일하다고 확인되지 않았습니다. 따라서 완료된 것은 **공개 코드 기반 실험과 논문 수치 비교**입니다.
+
+### ECRformer: 겨울 데이터 기준 결과
+
+겨울 첫 번째 부분으로 학습한 가중치를 두 번째 부분에 미세조정했습니다. 두 번째 부분의 **동일한 테스트 패치 784개**에서 PSNR은 25.245→25.888 dB, SAM은 11.478→10.779°로 변했습니다. 이는 한 테스트 ROI의 패치이며 독립 장면 784개가 아닙니다. 논문의 SEN12MS-CR 전체 테스트 수치와는 데이터 범위와 일부 학습·전처리 조건이 달라 직접적인 재현 오차로 해석할 수 없습니다.
+
+결과 표, 실험 조건, 비교 이미지와 재실행 방법은 아래 각 연구 README에 모았습니다.
+
+## 연구별 문서와 코드
+
+| 폴더 | 읽을 내용 |
+| --- | --- |
+| [SSA-MRN](./SSA-MRN/README.md) | 팬샤프닝 재현 결과, 논문과의 차이, 테스트 재실행, RGB–HSI 확장 |
+| [ECRformer](./ECRformer/README.md) | 겨울 기준 실험과 미세조정 결과, 한계, 평가 재실행, 후속 연구안 |
+
+원본 학습·테스트 데이터는 저장소에 포함하지 않았습니다. 각 README에 필요한 데이터 위치와 실행 명령을 적었습니다. SSA-MRN의 공식 코드는 Git 하위 모듈이므로 처음 내려받을 때는 다음 명령을 사용합니다.
+
+```bash
+git clone --recurse-submodules https://github.com/BIYONGHIYON/CtrS.git
+```
+
+## 최종 주제 선정 기준
+
+1. **재현 신뢰도:** 논문과 데이터·모델·평가 조건의 차이를 설명할 수 있는가?
+2. **데이터와 평가:** 독립 장면을 분리하고, 개선 효과를 같은 조건에서 검증할 수 있는가?
+3. **개선 여지:** 기준 모델 대비 정량·정성 개선과 실패 사례를 보여줄 수 있는가?
+4. **실행 가능성:** 남은 기간에 데이터 준비, 학습, 제거 실험, 시연을 마칠 수 있는가?
+
+한 모델의 미확인 설정이나 일부 데이터 결과를 전체 재현 완료로 간주하지 않습니다. 최종 주제 선정 후에는 팀원 4명이 선택한 연구의 개선·추가 실험·발표를 함께 진행합니다.
 
 ## 팀원
 
@@ -14,109 +57,3 @@
 | 김경찬 | [erickks2y-jpg](https://github.com/erickks2y-jpg) | 멀티미디어공학과 | 팀원 |
 | 송준현 | [choco-ssalbbang](https://github.com/choco-ssalbbang) | 멀티미디어공학과 | 팀원 |
 | 김윤지 | [kimrose1015-max](https://github.com/kimrose1015-max) | 데이터사이언스전공 | 팀원 |
-
-## 팀 운영 방식
-
-1. SSA-MRN 담당 2명과 ECRformer 담당 2명이 각 원 논문의 데이터, 모델, 학습 및 평가 절차를 재현합니다.
-2. 각 팀은 실행 환경, 공개 코드에서 빠진 부분, 논문 설정과 재현 결과의 차이를 기록합니다.
-3. 중간 시점에 재현 결과와 후속 연구 가능성을 같은 기준으로 비교해 최종 주제 하나를 선택합니다.
-4. 주제가 결정되면 팀원 4명이 해당 연구의 모델 개선, 추가 실험, 시연 및 보고서를 함께 진행합니다.
-
-## 병렬 재현 연구
-
-### [SSA-MRN 원 논문 재현](./SSA-MRN/README.md)
-
-SSA-MRN 팀 2명이 고해상도 PAN과 저해상도 MS로 고해상도 MS를 복원하는 연구를 재현했습니다. 공식 코드를 버전 고정된 하위 모듈로 연결하고 누락된 데이터 로더·학습·체크포인트·평가 코드를 복구했습니다. **QB·GF2·WV3 100-epoch 학습, 각 센서 RR·FR 20장 평가, WV3→WV2 교차 위성 평가 및 논문 수치 비교를 완료**했습니다. 다만 공개 코드와 논문 모델 설명의 차이 및 평가 세부 설정의 미확인 사항이 있어, 논문 구현과 완전히 동일하다는 의미는 아닙니다.
-
-저장소를 처음 내려받았거나 하위 모듈 파일이 비어 있다면 다음 명령으로 공식 코드를 가져옵니다.
-
-```bash
-git submodule update --init --recursive
-```
-
-### [ECRformer 원 논문 재현](./ECRformer/README.md)
-
-ECRformer 팀 2명이 광학 영상과 SAR 영상을 이용한 구름 제거 모델의 원 논문 결과를 재현합니다. 현재 SEN12MS-CR 겨울 데이터 절반으로 기준 모델을 학습하고, 별도 테스트 패치 783개를 평가했습니다. 전체 데이터·논문과 동등 조건의 비교는 아직 완료하지 않았습니다. Spectral-Semantic Decoupled Learning 확장은 재현 결과를 확인한 뒤 검토합니다.
-
-## 폴더와 현재 결과
-
-| 위치 | 내용 |
-| --- | --- |
-| [SSA-MRN](./SSA-MRN/README.md) | 팬샤프닝 재현 코드·설정·문서 |
-| [ECRformer](./ECRformer/README.md) | 구름 제거 재현 계획·겨울 절반 데이터 기준 결과 |
-| [ECRformer 겨울 실험 결과](./ECRformer/README.md#겨울-절반-데이터-재현-결과-2026-09-29) | 모델 가중치·783개 샘플 지표·비교 이미지 |
-| [SSA-MRN 가중치](./SSA-MRN/experiments/checkpoints/) | QB·GF2·WV3의 epoch 100 체크포인트 |
-| [SSA-MRN 학습 로그](./SSA-MRN/experiments/logs/) | 센서별 epoch 1–100 학습·검증 MSE |
-| [SSA-MRN 단일 샘플 결과](./SSA-MRN/README.md#3개-센서-학습단일-샘플-테스트-현황-2026-09-28) | 각 센서의 입력·출력·정답 비교, 수치, 재실행 방법 |
-| [SSA-MRN 논문 수치 비교](./SSA-MRN/README.md#재현-결과-논문과-정량-비교) | QB·GF2·WV3·WV2의 RR·FR 전체 테스트 결과와 해석 |
-| [QuickBird 스모크 결과](./SSA-MRN/experiments/results/quickbird_smoke/README.md) | 무작위 초기화 모델의 배열·미리보기 (학습 결과 아님) |
-
-### SSA-MRN 학습 모델의 첫 테스트 샘플 결과
-
-| 센서 | LMS 기준 PSNR | 학습 모델 PSNR | 비교 이미지 |
-|---|---:|---:|---|
-| QuickBird | 35.45 dB | 41.35 dB | ![QuickBird 비교](./SSA-MRN/experiments/results/quickbird_trained/comparison.png) |
-| Gaofen 2 | 31.26 dB | 38.65 dB | ![Gaofen 2 비교](./SSA-MRN/experiments/results/gaofen2_trained/comparison.png) |
-| WorldView 3 | 29.06 dB | 37.66 dB | ![WorldView 3 비교](./SSA-MRN/experiments/results/worldview3_trained/comparison.png) |
-
-각 그림은 입력 MS·PAN·LMS·학습 모델 출력·정답 순서입니다. 테스트 H5의 **20개 중 첫 1개**만 사용했으며 입력 영상을 자르지 않았습니다. 이 수치는 단일 샘플 실행 확인용 PSNR로, 아래 20장 평균의 논문 비교 지표와 계산 조건이 다릅니다. 시각화의 RGB 밴드 순서는 가정입니다.
-
-### SSA-MRN 논문 수치와 재현 결과
-
-각 센서 RR·FR 테스트 20장씩 총 160장을 평가했습니다. 표는 **논문 / 현재 재현 결과** 순서이며, WV2는 WV3로 학습한 모델을 사용했습니다.
-
-| 센서 | RR SAM↓ | RR PSNR↑ | FR QNR↑ |
-|---|---:|---:|---:|
-| QB | 4.8478 / 4.9557 | 37.6645 / 37.3608 | .9311 / .9147 |
-| GF2 | .9434 / .9668 | 46.9734 / 46.3520 | .9137 / .9106 |
-| WV3 | 3.4873 / 3.5277 | 37.5691 / 37.3894 | .9077 / .9408 |
-| WV2 | 5.8845 / 5.9265 | 29.4148 / 29.0611 | .8831 / .9126 |
-
-RR의 SAM·PSNR은 대체로 논문 수치에 근접하지만, 이 표만으로 동등한 성능을 입증할 수는 없습니다. 논문이 PSNR 계산 세부 설정을 공개하지 않아 가장 가까운 계산 방식을 사용했고, FR QNR 구현도 논문 방식과 완전히 대조되지 않았습니다. 공개 코드의 SSAI 구성 역시 논문 설명과 다릅니다. 나머지 ERGAS·SCC·Q4/Q8·Dλ·Ds 수치와 차이의 해석은 [SSA-MRN README](./SSA-MRN/README.md#재현-결과-논문과-정량-비교)에 있습니다.
-
-### ECRformer 겨울 절반 데이터 결과와 논문 비교
-
-RTX A6000에서 SEN12MS-CR **겨울 데이터의 약 절반**만으로 학습했습니다. 학습 6,833개·검증 1,386개 패치를 사용했고, 조기 종료로 14 epochs를 실행한 뒤 최고 성능 가중치(epoch 3)를 별도 테스트 패치 783개에 평가했습니다. 아래 논문 수치는 [ECRformer 논문 Table 1](https://zzaiyan.github.io/assets/pubs/ecrformer.pdf)의 **SEN12MS-CR 전체 테스트 세트**, 현재 수치는 겨울의 **테스트 ROI 한 곳**에 대한 평균이므로 동일 조건의 성능 비교는 아닙니다.
-
-| 지표 | 논문 ECRformer | 현재 겨울 절반 실험 | 차이 (현재 − 논문) |
-| --- | ---: | ---: | ---: |
-| MAE ↓ | 0.0164 | 0.0254 | +0.0090 |
-| SAM ↓ | 4.693° | 11.250° | +6.557° |
-| PSNR ↑ | 33.37 dB | 29.61 dB | −3.76 dB |
-| SSIM ↑ | 0.932 | 0.847 | −0.085 |
-| LPIPS ↓ | 0.188 | 0.397 | +0.209 |
-
-![ECRformer 겨울 테스트 비교: SAR · 구름 낀 영상 · 복원 · 정답](./ECRformer/reproduction/winter_half1/comparisons/test_0000.png)
-
-시각화는 테스트 패치 중 한 예시이며, 평균값은 783개 전체에서 계산했습니다. [샘플별 지표](./ECRformer/reproduction/winter_half1/metrics.csv), [평균 지표](./ECRformer/reproduction/winter_half1/summary.json), [평가용 가중치](./ECRformer/reproduction/winter_half1/model_weights.pt)와 차이의 해석은 [ECRformer README](./ECRformer/README.md#겨울-절반-데이터-재현-결과-2026-09-29)에 있습니다. 원본 TIFF 데이터와 학습 재개용 전체 체크포인트는 Git에 포함하지 않았습니다.
-
-### 로컬에서 확인
-
-```bash
-git clone --recurse-submodules https://github.com/BIYONGHIYON/CtrS.git
-cd CtrS/SSA-MRN
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install torch -r requirements.txt
-python scripts/test_checkpoint.py --sensor QB --checkpoint experiments/checkpoints/qb_full/latest.pt --data data/raw/QuickBird/test_qb_multiExm1.h5 --output-dir experiments/results/local_qb
-```
-
-테스트 H5는 Git에 넣지 않았습니다. 실행 전에 [PanCollection](https://github.com/liangjiandeng/PanCollection)의 센서별 ReducedData H5를 내려받아 [정해진 위치](./SSA-MRN/README.md#다른-사람이-테스트-재실행하기)에 놓아야 합니다. 체크포인트·로그·미리보기 결과는 저장소에 포함되어 있습니다.
-
-## 중간 비교 기준
-
-- 원 논문 설정과 결과의 재현 정도
-- 데이터셋 확보 및 전처리 가능성
-- 정량 성능과 실패 사례
-- 후속 개선 아이디어의 효과를 검증할 수 있는지
-- 남은 기간의 학습 비용과 구현 난도
-
-## 공통 원칙
-
-- 논문에 기재된 설정과 재현 구현에서 바꾼 설정을 구분해 기록합니다.
-- SSA-MRN의 원본 학습·검증·테스트 H5는 Git에서 제외합니다. 재현 코드, 세 센서의 가중치·로그·테스트 결과는 공유합니다.
-- 재현 완료는 실행 성공만으로 판단하지 않고 논문 결과와 비교한 뒤 기록합니다. SSA-MRN은 이 비교까지 완료했으나 동일 구현·평가 설정은 미확인입니다.
-
-## 원격 저장소
-
-- GitHub: https://github.com/BIYONGHIYON/CtrS
