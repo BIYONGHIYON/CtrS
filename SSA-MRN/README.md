@@ -113,7 +113,7 @@ python scripts/test_checkpoint.py --sensor QB \
 
 팬샤프닝 재현과 별도로 **고해상도 RGB로 저해상도 HSI의 공간 정보를 보완하는 연구**를 검토합니다. 실제 RGB–HSI 센서 쌍과 HSI에서 만든 합성 RGB를 구분하고, 패치가 아닌 촬영 장면 단위로 데이터를 나눠야 합니다. 실제 센서 쌍에 고해상도 HSI 정답이 없으면 PSNR·SAM을 실제 성능으로 주장할 수 없습니다.
 
-[RGB–HSI 데이터셋 비교](./docs/rgb_hsi_datasets.md)는 후보의 촬영 방식과 공개 규모를, [PCB-Vision 예비 실험](./docs/pcb_rgb_hsi_plan.md)은 53개 PCB의 파일 감사·장면 분할·합성 기준선·정합 과제를 기록합니다. 이 수치는 위 팬샤프닝 재현 결과와 별개입니다.
+[RGB–HSI 데이터셋 비교](./docs/rgb_hsi_datasets.md)에는 후보의 촬영 방식과 공개 규모를 정리했습니다. RGB–HSI 확장은 위 팬샤프닝 재현 결과와 별도 연구로 다룹니다.
 
 ## 참고 자료
 
