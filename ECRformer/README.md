@@ -127,6 +127,18 @@ RTX A6000에서 SEN12MS-CR **겨울 데이터의 약 절반**으로 ECRformer �
 | SSIM ↑ | 0.81873 | 0.82994 | +0.01121 |
 | LPIPS ↓ | 0.48422 | 0.47428 | −0.00994 |
 
+미세조정 후 수치를 위에서 사용한 [ECRformer 논문 Table 1의 SEN12MS-CR 결과](https://zzaiyan.github.io/assets/pubs/ecrformer.pdf)와 나란히 놓으면 다음과 같습니다. `차이`는 미세조정 후 값에서 논문 값을 뺀 값입니다.
+
+| 지표 | 논문 ECRformer | 두 번째 부분 미세조정 후 | 차이 (후 − 논문) |
+| --- | ---: | ---: | ---: |
+| MAE ↓ | 0.0164 | 0.03661 | +0.02021 |
+| SAM ↓ | 4.693° | 10.779° | +6.086° |
+| PSNR ↑ | 33.37 dB | 25.888 dB | −7.482 dB |
+| SSIM ↑ | 0.932 | 0.82994 | −0.10206 |
+| LPIPS ↓ | 0.188 | 0.47428 | +0.28628 |
+
+논문은 SEN12MS-CR 전체 테스트 범위를 보고하지만 여기서는 두 번째 겨울 부분의 한 테스트 ROI, 784개 패치만 평가했습니다. 데이터 범위와 전처리·학습 설정이 달라 이 차이를 동일 조건의 재현 오차로 해석할 수 없습니다. 논문 Table 1에 RMSE가 없어 비교표에서는 제외했습니다(미세조정 후 RMSE `0.05146`).
+
 [미세조정 전 요약](./reproduction/winter_half2/before_summary.json), [후 요약](./reproduction/winter_half2/after_summary.json), 샘플별 지표 ([전](./reproduction/winter_half2/before_metrics.csv)·[후](./reproduction/winter_half2/after_metrics.csv)), [평가용 가중치](./reproduction/winter_half2/model_weights.pt)를 저장했습니다. 가중치 파일은 optimizer 상태가 없는 평가용 파일이며 원본 Lightning 체크포인트와 TIFF 데이터는 저장소에 포함하지 않았습니다.
 
 ![두 번째 부분 테스트 패치 4개의 SAR, 구름 입력, 미세조정 전후 복원 결과와 정답](./reproduction/winter_half2/comparisons/before_after_0000_0003.png)
