@@ -1,0 +1,203 @@
+{
+  "date": "2026-10-01",
+  "status": "training_in_progress_not_final_test",
+  "hardware": {
+    "cpu": "Ryzen 5600X",
+    "gpu": "RTX 3060 Ti 8GB",
+    "ram_gib": 16,
+    "data_drive": "Samsung T7 Shield"
+  },
+  "protocol": {
+    "train_scenes": 393,
+    "validation_scenes": 45,
+    "test_scenes": 75,
+    "bands": 204,
+    "patch_size": 128,
+    "scale": 4,
+    "train_patches_per_epoch": 1572,
+    "validation_tiles": 720,
+    "train_batch_size": 4,
+    "val_batch_size": 16,
+    "accumulation_steps": 1,
+    "degradation": "float32 antialiased bicubic x4; clip GT/LR to [0,1]"
+  },
+  "previous_user_epochs": [
+    {
+      "epoch": 1,
+      "train_mse": 0.0011941536780027688,
+      "seconds": 1052.6875142,
+      "model_mse": 0.0010898719909616132,
+      "model_psnr_db": 30.383830929971584,
+      "model_sam_deg": 2.452563875585376,
+      "bicubic_mse": 0.001168588674495358,
+      "bicubic_psnr_db": 30.06111560521972,
+      "bicubic_sam_deg": 2.440887543559618,
+      "peak_allocated_mb": 132.234375,
+      "peak_reserved_mb": 168.0
+    },
+    {
+      "epoch": 2,
+      "train_mse": 0.0011755199302766672,
+      "seconds": 1050.0390827,
+      "model_mse": 0.0010677498191043943,
+      "model_psnr_db": 30.490408160570546,
+      "model_sam_deg": 2.449960466927817,
+      "bicubic_mse": 0.001168588674495358,
+      "bicubic_psnr_db": 30.06111560521972,
+      "bicubic_sam_deg": 2.440887543559618,
+      "peak_allocated_mb": 132.234375,
+      "peak_reserved_mb": 168.0
+    }
+  ],
+  "optimized_full_verification": [
+    {
+      "epoch": 1,
+      "train_mse": 0.0012186193132521846,
+      "seconds": 114.74729800000023,
+      "train_seconds": 93.80908450000061,
+      "validation_seconds": 20.938213400000677,
+      "loader_wait_seconds": 83.13639800000783,
+      "train_patches_per_second": 16.75743888109248,
+      "train_cube_requested_gib": 62.5048828125,
+      "validation_cube_requested_gib": 8.96484375,
+      "limited_scenes": false,
+      "model_mse": 0.0010791515315994964,
+      "model_psnr_db": 30.433024681791863,
+      "model_sam_deg": 2.445737582380774,
+      "bicubic_mse": 0.001168588674882141,
+      "bicubic_psnr_db": 30.061115595715364,
+      "bicubic_sam_deg": 2.4408876191610083,
+      "train_gpu_stream_seconds": 15.011209320068359,
+      "peak_allocated_mb": 1453.291015625,
+      "peak_reserved_mb": 1662.0
+    },
+    {
+      "epoch": 2,
+      "train_mse": 0.00116164917860929,
+      "seconds": 108.52521250000063,
+      "train_seconds": 89.5584359000004,
+      "validation_seconds": 18.966776399998707,
+      "loader_wait_seconds": 80.31479750001563,
+      "train_patches_per_second": 17.55278533175,
+      "train_cube_requested_gib": 62.6044921875,
+      "validation_cube_requested_gib": 8.96484375,
+      "limited_scenes": false,
+      "model_mse": 0.0010537400244101619,
+      "model_psnr_db": 30.549743369504064,
+      "model_sam_deg": 2.450368848109841,
+      "bicubic_mse": 0.001168588674882141,
+      "bicubic_psnr_db": 30.061115595715364,
+      "bicubic_sam_deg": 2.4408876191610083,
+      "train_gpu_stream_seconds": 13.91964277458191,
+      "peak_allocated_mb": 1453.291015625,
+      "peak_reserved_mb": 2454.0
+    }
+  ],
+  "optimized_training_first_two": [
+    {
+      "epoch": 1,
+      "train_mse": 0.0012183569314825626,
+      "seconds": 117.92135830000007,
+      "train_seconds": 96.24730509999972,
+      "validation_seconds": 21.674053199998525,
+      "loader_wait_seconds": 83.9399686000379,
+      "train_patches_per_second": 16.332924837393755,
+      "train_cube_requested_gib": 62.5048828125,
+      "validation_cube_requested_gib": 8.96484375,
+      "limited_scenes": false,
+      "model_mse": 0.0010800442389455526,
+      "model_psnr_db": 30.429127084463065,
+      "model_sam_deg": 2.4462824855326235,
+      "bicubic_mse": 0.001168588674882141,
+      "bicubic_psnr_db": 30.061115595715364,
+      "bicubic_sam_deg": 2.4408876191610083,
+      "peak_allocated_mb": 1452.291015625,
+      "peak_reserved_mb": 1672.0
+    },
+    {
+      "epoch": 2,
+      "train_mse": 0.0011623996208035613,
+      "seconds": 111.53258290000122,
+      "train_seconds": 91.8083045000003,
+      "validation_seconds": 19.72427830000015,
+      "loader_wait_seconds": 81.50882719999208,
+      "train_patches_per_second": 17.12263404232669,
+      "train_cube_requested_gib": 62.6044921875,
+      "validation_cube_requested_gib": 8.96484375,
+      "limited_scenes": false,
+      "model_mse": 0.001054337351670573,
+      "model_psnr_db": 30.54778891273243,
+      "model_sam_deg": 2.449500634506125,
+      "bicubic_mse": 0.001168588674882141,
+      "bicubic_psnr_db": 30.061115595715364,
+      "bicubic_sam_deg": 2.4408876191610083,
+      "peak_allocated_mb": 1452.291015625,
+      "peak_reserved_mb": 2696.0
+    }
+  ],
+  "cuda_microbenchmark": {
+    "first_scene_plus_crop_seconds": 0.493233400000463,
+    "cached_crop_cpu_degradation_seconds": 0.01634809999995923,
+    "cuda": [
+      {
+        "batch_size": 1,
+        "vectorized_ssa": false,
+        "channels_last": false,
+        "seconds_per_batch": 0.075125241666683,
+        "patches_per_second": 13.311105266546997,
+        "peak_allocated_mib": 94.15771484375
+      },
+      {
+        "batch_size": 4,
+        "vectorized_ssa": false,
+        "channels_last": false,
+        "seconds_per_batch": 0.07697475833333556,
+        "patches_per_second": 51.965086823373824,
+        "peak_allocated_mib": 367.19677734375
+      },
+      {
+        "batch_size": 4,
+        "vectorized_ssa": true,
+        "channels_last": false,
+        "seconds_per_batch": 0.026659333333327595,
+        "patches_per_second": 150.04126134690267,
+        "peak_allocated_mib": 360.703125
+      },
+      {
+        "batch_size": 8,
+        "vectorized_ssa": true,
+        "channels_last": false,
+        "seconds_per_batch": 0.04545289999994869,
+        "patches_per_second": 176.00637143084447,
+        "peak_allocated_mib": 705.57080078125
+      },
+      {
+        "batch_size": 4,
+        "vectorized_ssa": true,
+        "channels_last": true,
+        "seconds_per_batch": 0.02874092500004129,
+        "patches_per_second": 139.17436547342348,
+        "peak_allocated_mib": 362.453125
+      },
+      {
+        "batch_size": 8,
+        "vectorized_ssa": true,
+        "channels_last": true,
+        "seconds_per_batch": 0.052945558333325,
+        "patches_per_second": 151.09860490345682,
+        "peak_allocated_mib": 705.00830078125
+      }
+    ]
+  },
+  "tests": {
+    "unittest_count": 22,
+    "result": "passed",
+    "real_validation_whole_vs_stripes": "five tiles pixel-exact"
+  },
+  "notes": [
+    "Earlier user log and optimized run are not a controlled same-condition comparison.",
+    "CUDA microbenchmark excludes I/O.",
+    "Source requested bytes are not physical disk counters.",
+    "First two epochs are preliminary; SAM has not improved over bicubic."
+  ]
+}

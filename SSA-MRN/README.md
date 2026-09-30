@@ -135,3 +135,17 @@ python scripts/test_checkpoint.py --sensor QB \
 - [SSA-MRN 논문](https://doi.org/10.1109/JSTARS.2025.3543827) · [공식 코드](https://github.com/zhouchuanxu/SSA-MRN)
 - [PanCollection 데이터](https://github.com/liangjiandeng/PanCollection)
 - [무작위 초기화 QuickBird 스모크 테스트](./experiments/results/quickbird_smoke/README.md): 학습 성능 자료가 아닌 실행 확인 자료
+
+## Windows LIB-HSI RGB–HSI 확장
+
+LIB 데이터로 로컬 GPU 학습을 실행하려면 [로컬 학습 안내](docs/lib_local_training.md)를 참고한다.
+실행 스크립트는 `scripts/train_lib.py`, 설정은 `configs/lib_rgb_hsi.json`이다.
+기존 PAN–MS 재현과 별도인 실험용 latent RGB–HSI 모델이다.
+
+RGB 3채널과 LR HSI 204밴드를 사용하며, 학습 가능한 8채널 latent SSA-MRN과
+204밴드 residual decoder로 HR HSI를 복원한다. LIB의 합성 x4 프로토콜을 사용한다.
+batch 4, 병렬 데이터 로더, BIL 부분 읽기, grouped SSA, GPU 열화/AMP로 로컬 학습을 최적화했다.
+전체 데이터 검증은 약 109–115초/epoch이며 이전 사용자 실행 로그는 약 1,050초/epoch였다.
+최종 시험 성능 검증은 아직 진행하지 않았다.
+
+모델 변경, 데이터 규칙, 성능 측정과 한계는 [확장 연구 정리](docs/rgb_hsi_extension.md)에 기록했다.

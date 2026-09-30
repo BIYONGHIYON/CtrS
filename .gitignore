@@ -7,7 +7,10 @@ __pycache__/
 venv/
 .env
 .idea/
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
 
 # Local datasets
 **/data/raw/**
@@ -47,6 +50,14 @@ build/
 dist/
 .env.*
 tempCodeRunnerFile.py
+
+# Local Java runtime created by an editor extension.
+SSA-MRN/scripts/oracleJdk-*/
+
+# Small, reviewable LIB smoke-test figure; datasets/checkpoints stay local.
+!SSA-MRN/experiments/results/lib_rgb_hsi_smoke/
+!SSA-MRN/experiments/results/lib_rgb_hsi_smoke/comparison.png
+!SSA-MRN/experiments/results/lib_rgb_hsi_smoke/metrics.json
 
 # Share only these QuickBird smoke-test results.
 !SSA-MRN/experiments/results/quickbird_smoke/

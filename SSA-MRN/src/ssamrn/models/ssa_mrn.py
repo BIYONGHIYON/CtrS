@@ -36,8 +36,17 @@ class DirectMLPReLU(nn.PReLU):
 class RestoredPansharpeningNet(_upstream_model()):
     """Official layers with an explicit low-resolution MS input."""
 
-    def __init__(self, channels, ssai_dimension=4):
+    def __init__(self, channels, ssai_dimension=4, guide_channels=1):
         super().__init__(channels)
+        if guide_channels not in (1, 3):
+            raise ValueError("guide_channels must be 1 (PAN) or 3 (RGB)")
+        self.guide_channels = guide_channels
+        if guide_channels == 3:
+            self.conv1t1 = nn.Conv2d(3, 3, 3, padding=1)
+            self.cov2t64 = nn.Conv2d(channels + 6, 64, 3, padding=1)
+            for blocks in (self.SSA_blocks, self.SSA_blocks1, self.SSA_blocks2):
+                for block in blocks:
+                    block.conv1t6 = nn.Conv2d(3, 4, 3, padding=1)
         if ssai_dimension < 1:
             raise ValueError("ssai_dimension must be positive")
         self.ssai_dimension = ssai_dimension
@@ -50,7 +59,7 @@ class RestoredPansharpeningNet(_upstream_model()):
         for blocks in (self.SSA_blocks, self.SSA_blocks1, self.SSA_blocks2):
             for block in blocks:
                 block.fixed = ssai_dimension
-                block.conv1t6 = nn.Conv2d(1, ssai_dimension, 3, padding=1)
+                block.conv1t6 = nn.Conv2d(guide_channels, ssai_dimension, 3, padding=1)
                 block.conv6t6 = nn.Conv2d(ssai_dimension, ssai_dimension, 3, padding=1)
                 block.conv7t6_3 = nn.Conv2d(channels + 1, ssai_dimension, 3, padding=1)
         for name in ("conv48tnum1", "conv48tnum2", "conv48tnum3"):
@@ -80,8 +89,8 @@ class RestoredPansharpeningNet(_upstream_model()):
         n, channels, h, w = lms.shape
         if channels != self.channels or h % 4 or w % 4 or min(h, w) < 4:
             raise ValueError(f"Invalid LMS shape: {tuple(lms.shape)}")
-        if pan.shape != (n, 1, h, w) or ms.shape != (n, channels, h // 4, w // 4):
-            raise ValueError("Expected PAN at LMS resolution and MS at 1/4 resolution")
+        if pan.shape != (n, self.guide_channels, h, w) or ms.shape != (n, channels, h // 4, w // 4):
+            raise ValueError("Expected guide at LMS resolution and MS at 1/4 resolution")
 
         pan_down_up = self.upsample1(self.downsample1(pan))
         pan_updown = self.prelu(self.conv1t1(pan_down_up))
