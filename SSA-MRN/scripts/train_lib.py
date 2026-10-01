@@ -49,14 +49,22 @@ def move_batch(batch, device, channels_last=False):
 
 class DevicePrefetch:
     """Overlap pinned host transfers/degradation with work already queued on CUDA."""
+    _streams = {}
+
     def __init__(self, loader, device, channels_last=False):
         self.loader, self.device, self.channels_last = loader, device, channels_last
+        index = device.index if device.index is not None else torch.cuda.current_device()
+        # CUDA allocator pools are tied to the creation stream. Reuse one transfer
+        # stream per device across both train/validation iterators and all epochs.
+        if index not in self._streams:
+            self._streams[index] = torch.cuda.Stream(device=device)
+        self.stream = self._streams[index]
 
     def __len__(self):
         return len(self.loader)
 
     def __iter__(self):
-        stream = torch.cuda.Stream(device=self.device)
+        stream = self.stream
         for host in self.loader:
             with torch.cuda.stream(stream):
                 rgb, lr, gt = move_batch(host, self.device, self.channels_last)
@@ -325,6 +333,8 @@ def main():
         if device.type == "cuda":
             record["peak_allocated_mb"] = torch.cuda.max_memory_allocated() / 2**20
             record["peak_reserved_mb"] = torch.cuda.max_memory_reserved() / 2**20
+            record['current_allocated_mb'] = torch.cuda.memory_allocated() / 2**20
+            record['current_reserved_mb'] = torch.cuda.memory_reserved() / 2**20
         with (output / "history.jsonl").open("a", encoding="utf-8") as file:
             file.write(json.dumps(record) + "\n")
         (output / "validation_metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")

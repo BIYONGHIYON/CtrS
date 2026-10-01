@@ -128,3 +128,19 @@ VS Code의 `LIB: train aligned (new run)`으로 새 학습을 시작할 수 있�
 학습 결과는 `lib_rgb_hsi_aligned_256_b4`에 별도 저장하며 기존 128 패치 가중치로 재개하지 않습니다.
 이전 batch 1×누적 4 설정은 실제 CUDA에서 train 2장면·validation 1장면의 제한된 1 epoch를 완료했습니다. batch 4 설정도 train 8장면·validation 2장면에서 2 epoch 학습·검증을 통과했습니다. 최대 할당 GPU 메모리는 약 1,928MiB, 예약 메모리는 약 2,750MiB였습니다. 같은 소규모 측정의 두 번째 epoch에서 batch 1×누적 4는 10.10패치/초, batch 4×누적 1은 8.09패치/초로 batch 4의 속도 향상은 확인하지 못했습니다. 순차 실행의 OS cache 및 시작 비용 영향을 받는 제한된 측정이며 전체 학습 속도를 보장하지 않습니다. [측정 기록](benchmarks/lib_256_batch_comparison.json)을 함께 저장했습니다.
 이는 실행·메모리 검증이며 학습 성능 검증 결과는 아닙니다.
+## 장시간 실행의 CUDA 예약 메모리 증가 수정
+
+기존 전송 코드가 iterator마다 새 CUDA stream을 생성해 stream별 allocator cache가
+반복 생성되는 문제를 재현했습니다. 모델 없이 batch 4의 204밴드 256×256 데이터를
+12회 전송해도 예약 메모리가 458→5,474MiB로 증가했습니다. 사용 중인 tensor 메모리는
+반복 종료 후 0으로 돌아와 모델·gradient 누적과 구분했습니다.
+
+장치별 전송 stream을 한 번 생성하고 학습·검증·epoch 전환에서 재사용하도록 수정했습니다.
+동일 실험에서 예약 메모리는 472MiB로 안정화됐으며, 실제 train 8장면·validation 2장면의
+12 epoch 검증에서는 2 epoch 이후 2,262MiB를 유지했습니다. 학습 프로토콜과 가중치 구조는
+변경하지 않았습니다. 현재 할당·예약 메모리도 로그에 추가했고, iterator 반복의 stream 재사용과
+메모리 안정화를 확인하는 CUDA 회귀 테스트를 추가했습니다.
+
+[재현 및 검증 기록](benchmarks/lib_cuda_stream_memory.json)을 저장했습니다.
+전체 100 epoch의 장시간 검증을 대신하는 결과는 아니며, GPU 공유 메모리 사용 여부와
+속도 저하의 모든 원인을 분리 측정한 결과도 아닙니다. PyTorch의 [stream별 메모리 재사용 규칙](https://docs.pytorch.org/docs/stable/generated/torch.Tensor.record_stream.html)을 따랐습니다.
