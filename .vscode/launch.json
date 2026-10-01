@@ -60,6 +60,62 @@
         "--config",
         "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned.json"
       ]
+    },
+    {
+      "name": "LIB: train aligned 64 to 256 (new run)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned_256.json"
+      ]
+    },
+    {
+      "name": "LIB: smoke aligned 64 to 256",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned_256.json",
+        "--smoke"
+      ]
+    },
+    {
+      "name": "LIB: resume aligned 256 best",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned_256.json",
+        "--resume",
+        "${workspaceFolder}/SSA-MRN/experiments/checkpoints/lib_rgb_hsi_aligned_256/best.pt"
+      ]
+    },
+    {
+      "name": "LIB: evaluate aligned 256 best",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned_256.json",
+        "--evaluate"
+      ]
     }
   ]
 }

@@ -113,3 +113,18 @@ VS Code의 `LIB: train aligned (new run)`으로 새 학습을 시작할 수 있�
 ![정합 전후 경계 비교](../experiments/results/lib_registration/edge_comparison.png)
 
 보라색은 HSI 경계, 초록색은 RGB 경계이며 왼쪽은 보정 전, 오른쪽은 보정 후입니다. 자동 측정 결과는 [장면별 manifest](../experiments/results/lib_registration/alignment.json)에 기록했습니다.
+## 64×64 → 256×256 실험 설정
+
+정합 보정을 사용하는 별도 설정 `configs/lib_rgb_hsi_aligned_256.json`을 추가했습니다.
+원본 512×512 HSI에서 256×256 GT 패치를 자르고, 동일한 antialiased bicubic x4 열화로
+64×64 LR HSI를 생성합니다. RGB guide와 출력은 256×256입니다.
+
+8GB GPU의 메모리 여유를 위해 실제 batch 1, gradient accumulation 4(유효 배치 4),
+검증 batch 2, worker별 prefetch 1로 설정했습니다. 장면별 학습 패치 수는 4개를 유지하고,
+검증·시험은 장면별 256×256 비중첩 타일 4개를 사용합니다. 정합으로 생긴 빈 테두리는
+기존과 동일하게 평가에서 제외합니다. 128 패치 실험보다 패치 면적이 4배이며,
+타일 경계와 문맥이 달라 지표가 달라질 수 있습니다.
+
+학습 결과는 `lib_rgb_hsi_aligned_256`에 별도 저장하며 기존 128 패치 가중치로 재개하지 않습니다.
+실제 CUDA에서 train 2장면·validation 1장면의 제한된 1 epoch를 완료했습니다.
+이는 실행·메모리 검증이며 학습 성능 검증 결과는 아닙니다.
