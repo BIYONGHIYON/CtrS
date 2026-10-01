@@ -25,7 +25,8 @@ def main():
     args = parser.parse_args()
     state = torch.load(args.checkpoint, map_location="cpu", weights_only=True)
     config = state["config"]
-    data = LIBHSI(args.data_root or config["data_root"], args.split, config["patch_size"])
+    data = LIBHSI(args.data_root or config["data_root"], args.split, config["patch_size"],
+                  alignment_manifest=(ROOT/config['alignment_manifest']) if config.get('alignment_manifest') else None)
     sample = data[args.sample_index]
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     torch.set_num_threads(6)
@@ -69,7 +70,8 @@ def main():
     canvas.save(args.output_dir / "comparison.png")
 
     def metrics(image):
-        mse = (image - sample["gt"]).square().mean().item()
+        error = (image - sample['gt']).square()
+        mse = error[:,sample['valid_mask']].mean().item() if 'valid_mask' in sample else error.mean().item()
         return {"mse": mse, "psnr_db_range_1": float(-10 * np.log10(max(mse, 1e-12)))}
 
     report = {"checkpoint": str(args.checkpoint), "epoch": state["epoch"], "scene": sample["scene"],

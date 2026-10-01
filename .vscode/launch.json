@@ -9,7 +9,9 @@
       "python": "${workspaceFolder}/.venv/Scripts/python.exe",
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
-      "args": ["--smoke"]
+      "args": [
+        "--smoke"
+      ]
     },
     {
       "name": "LIB: train optimized (3060 Ti)",
@@ -29,7 +31,10 @@
       "python": "${workspaceFolder}/.venv/Scripts/python.exe",
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
-      "args": ["--resume", "${workspaceFolder}/SSA-MRN/experiments/checkpoints/lib_rgb_hsi_fast/best.pt"]
+      "args": [
+        "--resume",
+        "${workspaceFolder}/SSA-MRN/experiments/checkpoints/lib_rgb_hsi_fast/best.pt"
+      ]
     },
     {
       "name": "LIB: evaluate test (best)",
@@ -39,7 +44,22 @@
       "python": "${workspaceFolder}/.venv/Scripts/python.exe",
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
-      "args": ["--evaluate"]
+      "args": [
+        "--evaluate"
+      ]
+    },
+    {
+      "name": "LIB: train aligned (new run)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned.json"
+      ]
     }
   ]
 }

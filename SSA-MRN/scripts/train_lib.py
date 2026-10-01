@@ -3,6 +3,7 @@ import argparse
 import json
 import math
 import random
+import hashlib
 import sys
 import time
 from pathlib import Path
@@ -64,6 +65,8 @@ class DevicePrefetch:
             for tensor in (rgb, lr, gt):
                 tensor.record_stream(current)
             batch = {"rgb": rgb, "lr_hsi": lr, "gt": gt, "scene": host["scene"]}
+            if 'valid_mask' in host:
+                batch['valid_mask']=host['valid_mask'].to(self.device,non_blocking=True)
             if "source_cube_bytes" in host:
                 batch["source_cube_bytes"] = host["source_cube_bytes"]
             yield batch
@@ -94,10 +97,12 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
         baseline = F.interpolate(lr, size=gt.shape[-2:], mode="bicubic", align_corners=False)
         finite.logical_and_(torch.isfinite(prediction).all())
         valid = torch.linalg.vector_norm(gt, dim=1) > 1e-6
+        spatial = batch.get('valid_mask', torch.ones_like(valid)).to(device)
+        valid = valid & spatial
         gt_norm = torch.linalg.vector_norm(gt, dim=1)
         values = []
         for image in (prediction, baseline):
-            sse = (image - gt).square().sum(dim=(1, 2, 3))
+            sse = ((image - gt).square()*spatial[:,None]).sum(dim=(1, 2, 3))
             cosine = (image * gt).sum(1) / (torch.linalg.vector_norm(image, dim=1) * gt_norm).clamp_min(1e-12)
             sam = (torch.rad2deg(torch.acos(cosine.clamp(-1, 1))) * valid).sum(dim=(1, 2))
             values.extend((sse, sam))
@@ -107,7 +112,7 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
             if scene not in totals:
                 totals[scene] = {"values": torch.zeros(5, dtype=torch.float64, device=device), "count": 0}
             totals[scene]["values"].add_(packed[i])
-            totals[scene]["count"] += gt[i].numel()
+            totals[scene]["count"] += int(spatial[i].sum())*gt.shape[1] if 'valid_mask' in batch else gt[i].numel()
         if step == 0:
             preview(batch, prediction, baseline, output / "preview_rgb_gt_bicubic_prediction.png")
         if max_batches is not None and step + 1 >= max_batches:
@@ -127,6 +132,7 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
                for key in next(iter(scenes.values()))
                if any(r[key] is not None for r in scenes.values())}
     return {"scene_mean": summary, "scenes": scenes, "partial": max_batches is not None,
+            "alignment_border_masked": 'valid_mask' in batch,
             "source_cube_requested_gib": read_bytes / 2**30,
             "protocol": "x4 antialiased bicubic LR; clipped [0,1] reflectance GT; unclipped output; "
                         "PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels"}
@@ -148,6 +154,8 @@ def main():
     parser.add_argument("--profile", action="store_true", help="Record GPU event timing and loader waits")
     args = parser.parse_args()
     config = json.loads(args.config.read_text(encoding="utf-8"))
+    if config.get('alignment_manifest'):
+        config['alignment_sha256']=hashlib.sha256((ROOT/config['alignment_manifest']).read_bytes()).hexdigest()
     if args.data_root:
         config["data_root"] = str(args.data_root)
     if args.device:
@@ -193,7 +201,8 @@ def main():
     dataset_args = dict(root=config["data_root"], patch_size=config["patch_size"],
                         patches_per_scene=config["patches_per_scene"],
                         compute_lr=not gpu_degradation, crop_seed=config["seed"],
-                        read_mode=config.get("read_mode", "whole"))
+                        read_mode=config.get("read_mode", "whole"),
+                        alignment_manifest=(ROOT/config['alignment_manifest']) if config.get('alignment_manifest') else None)
     validation = LIBHSI(split="test" if args.evaluate else "validation", **dataset_args,
                         limit=1 if args.smoke else args.max_val_scenes, allow_incomplete=args.smoke)
     loader_args = dict(batch_size=config["batch_size"], num_workers=config["workers"],
@@ -216,11 +225,15 @@ def main():
         checkpoint_path = ROOT / config["output_dir"] / "best.pt"
     if checkpoint_path:
         state = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
+        if state['config'].get('alignment_sha256') != config.get('alignment_sha256'):
+            parser.error('Alignment protocol changed: use a new training run and its checkpoint')
         for key in ("patch_size", "latent_channels", "ssai_dimension"):
             if state["config"][key] != config[key]:
                 parser.error(f"Checkpoint {key} differs from config")
         model.load_state_dict(state["model"])
         if args.resume:
+            if state['config'].get('alignment_manifest') != config.get('alignment_manifest'):
+                parser.error('Alignment protocol changed: start a new run rather than resume')
             for key in ("batch_size", "accumulation_steps", "learning_rate", "patches_per_scene", "seed", "amp", "device", "workers"):
                 if state["config"][key] != config[key]:
                     parser.error(f"Resume {key} differs from checkpoint")

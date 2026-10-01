@@ -1,5 +1,6 @@
 """Read LIB ENVI cubes with one-scene cache; rotate as supplied create_patches.py."""
 import re
+import json
 from pathlib import Path
 
 import numpy as np
@@ -46,7 +47,8 @@ def downsample(hsi):
 
 class LIBHSI(Dataset):
     def __init__(self, root, split, patch_size=128, patches_per_scene=4,
-                 limit=None, allow_incomplete=False, compute_lr=True, crop_seed=42, read_mode="whole"):
+                 limit=None, allow_incomplete=False, compute_lr=True, crop_seed=42, read_mode="whole",
+                 alignment_manifest=None):
         if patch_size < 8 or patch_size % 4 or 512 % patch_size:
             raise ValueError("patch_size must divide 512 and be a multiple of 4 (>=8)")
         if split not in EXPECTED or patches_per_scene < 1:
@@ -58,6 +60,13 @@ class LIBHSI(Dataset):
         if read_mode not in ("whole", "stripes"):
             raise ValueError("read_mode must be whole or stripes")
         self.read_mode = read_mode
+        self.alignment = None
+        self._rgb_scene = None
+        if alignment_manifest:
+            manifest = json.loads(Path(alignment_manifest).read_text(encoding='utf-8'))
+            if manifest.get('partial') or manifest.get('version') != 1:
+                raise ValueError('Alignment manifest must be a complete version 1 audit')
+            self.alignment = manifest['scenes']
         base = self.root / split
         self.files = sorted(p for p in (base / "rgb").glob("*.png") if not p.name.startswith("._"))
         if not allow_incomplete and len(self.files) != EXPECTED[split]:
@@ -71,6 +80,8 @@ class LIBHSI(Dataset):
             raise FileNotFoundError(f"No RGB images: {base / 'rgb'}")
         self.headers = [base / "reflectance_cubes" / (p.stem + ".hdr") for p in self.files]
         for rgb, hdr in zip(self.files, self.headers):
+            if self.alignment is not None and split+'/'+rgb.stem not in self.alignment:
+                raise ValueError('Missing alignment record: '+rgb.stem)
             cube = cube_view(hdr)
             if cube.shape != (512, 512, 204):
                 raise ValueError(f"Unexpected LIB shape {cube.shape}: {hdr}")
@@ -144,9 +155,20 @@ class LIBHSI(Dataset):
             generator = torch.Generator().manual_seed(self.crop_seed + epoch * len(self) + index)
         scene, tile = divmod(index, self.per_scene)
         p = self.patch_size
+        dy, dx = 0, 0
+        if self.alignment is not None:
+            record = self.alignment[self.split+'/'+self.files[scene].stem]
+            dy, dx = int(record['dy']), int(record['dx'])
+            if max(abs(dy), abs(dx)) > 12:
+                raise ValueError('Alignment shift exceeds safe bound')
         if self.split == "train":
             # x4-aligned random crops; online joint flips, no precomputed cubes.
-            y, x = (int(torch.randint(0, (512 - p) // 4 + 1, (), generator=generator)) * 4 for _ in range(2))
+            starts=[]
+            for delta in (dy,dx):
+                low=(max(0,delta)+3)//4
+                high=(min(512,512+delta)-p)//4
+                starts.append(int(torch.randint(low,high+1,(),generator=generator))*4)
+            y,x=starts
         else:
             y, x = (tile // self.tiles_per_side) * p, (tile % self.tiles_per_side) * p
         before_bytes = self._read_bytes_total
@@ -158,20 +180,33 @@ class LIBHSI(Dataset):
         if not np.isfinite(gt_array).all():
             raise ValueError(f"Nonfinite reflectance: {self.headers[scene]}")
         np.clip(gt_array, 0, 1, out=gt_array)
-        with Image.open(self.files[scene]) as image:
-            rgb_array = np.array(image.convert("RGB").crop((x, y, x+p, y+p)), copy=True)
+        if self.alignment is not None:
+            from .registration import warp_rgb
+            if self._rgb_scene != scene:
+                with Image.open(self.files[scene]) as image:
+                    self._aligned_rgb,self._valid_rgb=warp_rgb(np.array(image.convert('RGB')),dy,dx)
+                self._rgb_scene=scene
+            rgb_array=self._aligned_rgb[y:y+p,x:x+p].copy()
+            valid_array=self._valid_rgb[y:y+p,x:x+p].copy()
+        else:
+            with Image.open(self.files[scene]) as image:
+                rgb_array = np.array(image.convert("RGB").crop((x, y, x+p, y+p)), copy=True)
+            valid_array=np.ones((p,p),dtype=bool)
         rgb_array = rgb_array.transpose(2, 0, 1).astype(np.float32) / 255
         if self.split == "train":
             for dimension in (1, 2):
                 if torch.rand((), generator=generator) < 0.5:
                     gt_array = np.flip(gt_array, axis=dimension)
                     rgb_array = np.flip(rgb_array, axis=dimension)
+                    valid_array = np.flip(valid_array, axis=dimension-1)
         gt = torch.from_numpy(np.ascontiguousarray(gt_array))
         rgb = torch.from_numpy(np.ascontiguousarray(rgb_array))
         result = {"rgb": rgb, "gt": gt, "scene": self.files[scene].stem,
                   "source_cube_bytes": self._read_bytes_total - before_bytes}
         if self.compute_lr:
             result["lr_hsi"] = downsample(gt)
+        if self.alignment is not None:
+            result['valid_mask']=torch.from_numpy(np.ascontiguousarray(valid_array))
         return result
 
 
