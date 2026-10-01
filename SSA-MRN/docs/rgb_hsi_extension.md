@@ -119,12 +119,12 @@ VS Code의 `LIB: train aligned (new run)`으로 새 학습을 시작할 수 있�
 원본 512×512 HSI에서 256×256 GT 패치를 자르고, 동일한 antialiased bicubic x4 열화로
 64×64 LR HSI를 생성합니다. RGB guide와 출력은 256×256입니다.
 
-8GB GPU의 메모리 여유를 위해 실제 batch 1, gradient accumulation 4(유효 배치 4),
+실제 batch 4, gradient accumulation 1(유효 배치 4),
 검증 batch 2, worker별 prefetch 1로 설정했습니다. 장면별 학습 패치 수는 4개를 유지하고,
 검증·시험은 장면별 256×256 비중첩 타일 4개를 사용합니다. 정합으로 생긴 빈 테두리는
 기존과 동일하게 평가에서 제외합니다. 128 패치 실험보다 패치 면적이 4배이며,
 타일 경계와 문맥이 달라 지표가 달라질 수 있습니다.
 
-학습 결과는 `lib_rgb_hsi_aligned_256`에 별도 저장하며 기존 128 패치 가중치로 재개하지 않습니다.
-실제 CUDA에서 train 2장면·validation 1장면의 제한된 1 epoch를 완료했습니다.
+학습 결과는 `lib_rgb_hsi_aligned_256_b4`에 별도 저장하며 기존 128 패치 가중치로 재개하지 않습니다.
+이전 batch 1×누적 4 설정은 실제 CUDA에서 train 2장면·validation 1장면의 제한된 1 epoch를 완료했습니다. batch 4 설정도 train 8장면·validation 2장면에서 2 epoch 학습·검증을 통과했습니다. 최대 할당 GPU 메모리는 약 1,928MiB, 예약 메모리는 약 2,750MiB였습니다. 같은 소규모 측정의 두 번째 epoch에서 batch 1×누적 4는 10.10패치/초, batch 4×누적 1은 8.09패치/초로 batch 4의 속도 향상은 확인하지 못했습니다. 순차 실행의 OS cache 및 시작 비용 영향을 받는 제한된 측정이며 전체 학습 속도를 보장하지 않습니다. [측정 기록](benchmarks/lib_256_batch_comparison.json)을 함께 저장했습니다.
 이는 실행·메모리 검증이며 학습 성능 검증 결과는 아닙니다.

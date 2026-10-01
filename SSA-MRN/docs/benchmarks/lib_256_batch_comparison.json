@@ -1,0 +1,89 @@
+{
+  "note": "Sequential small test: 8 train scenes, 2 val scenes, 2 epochs. OS cache/startup effects; not full-run throughput.",
+  "results": {
+    "batch1_acc4": [
+      {
+        "epoch": 1,
+        "train_mse": 0.0010706527391448617,
+        "seconds": 14.650185699999838,
+        "train_seconds": 9.122769499999777,
+        "validation_seconds": 5.5274162000000615,
+        "loader_wait_seconds": 6.785460300000977,
+        "train_patches_per_second": 3.5077067331363336,
+        "train_cube_requested_gib": 2.390625,
+        "validation_cube_requested_gib": 0.796875,
+        "limited_scenes": true,
+        "model_mse": 0.001008299953759634,
+        "model_psnr_db": 30.000908029102213,
+        "model_sam_deg": 3.708783355014818,
+        "bicubic_mse": 0.0010083177323029183,
+        "bicubic_psnr_db": 30.000849114860465,
+        "bicubic_sam_deg": 3.7083415105138786,
+        "peak_allocated_mb": 1460.08544921875,
+        "peak_reserved_mb": 1524.0
+      },
+      {
+        "epoch": 2,
+        "train_mse": 0.0009421816794201732,
+        "seconds": 3.998702200000025,
+        "train_seconds": 3.166959200000292,
+        "validation_seconds": 0.831742999999733,
+        "loader_wait_seconds": 2.197413100000631,
+        "train_patches_per_second": 10.104329730549432,
+        "train_cube_requested_gib": 2.41552734375,
+        "validation_cube_requested_gib": 0.796875,
+        "limited_scenes": true,
+        "model_mse": 0.0010081686737468266,
+        "model_psnr_db": 30.001448120391863,
+        "model_sam_deg": 3.7089193084230727,
+        "bicubic_mse": 0.0010083177323029183,
+        "bicubic_psnr_db": 30.000849114860465,
+        "bicubic_sam_deg": 3.7083415105138786,
+        "peak_allocated_mb": 1460.08544921875,
+        "peak_reserved_mb": 1524.0
+      }
+    ],
+    "batch4_acc1": [
+      {
+        "epoch": 1,
+        "train_mse": 0.0010706528555601835,
+        "seconds": 16.58107569999993,
+        "train_seconds": 10.51365530000021,
+        "validation_seconds": 6.067420400000174,
+        "loader_wait_seconds": 8.027432200000476,
+        "train_patches_per_second": 3.043660752316976,
+        "train_cube_requested_gib": 1.39453125,
+        "validation_cube_requested_gib": 0.796875,
+        "limited_scenes": true,
+        "model_mse": 0.001008299949194345,
+        "model_psnr_db": 30.000908041303262,
+        "model_sam_deg": 3.7087834145023626,
+        "bicubic_mse": 0.0010083177323029183,
+        "bicubic_psnr_db": 30.000849114860465,
+        "bicubic_sam_deg": 3.7083415105138786,
+        "peak_allocated_mb": 1928.08544921875,
+        "peak_reserved_mb": 2274.0
+      },
+      {
+        "epoch": 2,
+        "train_mse": 0.0009421817376278341,
+        "seconds": 5.222173000000112,
+        "train_seconds": 3.9558999000000767,
+        "validation_seconds": 1.2662728999998762,
+        "loader_wait_seconds": 3.6462025999994694,
+        "train_patches_per_second": 8.08918344976307,
+        "train_cube_requested_gib": 1.12060546875,
+        "validation_cube_requested_gib": 0.796875,
+        "limited_scenes": true,
+        "model_mse": 0.0010081686737110204,
+        "model_psnr_db": 30.001448141347332,
+        "model_sam_deg": 3.708918978904147,
+        "bicubic_mse": 0.0010083177323029183,
+        "bicubic_psnr_db": 30.000849114860465,
+        "bicubic_sam_deg": 3.7083415105138786,
+        "peak_allocated_mb": 1928.08544921875,
+        "peak_reserved_mb": 2750.0
+      }
+    ]
+  }
+}
