@@ -20,11 +20,12 @@ def main():
     parser.add_argument("--checkpoint", type=Path, default=ROOT / "SSA-MRN/experiments/checkpoints/lib_rgb_hsi/smoke/best.pt")
     parser.add_argument("--data-root", type=Path)
     parser.add_argument("--sample-index", type=int, default=0, help="Validation tile index (zero based)")
+    parser.add_argument("--split", choices=("validation", "test"), default="validation")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "SSA-MRN/experiments/results/lib_rgb_hsi_smoke")
     args = parser.parse_args()
     state = torch.load(args.checkpoint, map_location="cpu", weights_only=True)
     config = state["config"]
-    data = LIBHSI(args.data_root or config["data_root"], "validation", config["patch_size"])
+    data = LIBHSI(args.data_root or config["data_root"], args.split, config["patch_size"])
     sample = data[args.sample_index]
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     torch.set_num_threads(6)
@@ -59,7 +60,7 @@ def main():
     title_font = ImageFont.truetype(str(font_path), 20) if font_path.exists() else font
     steps = int(next(iter(state["optimizer"]["state"].values()))["step"])
     scope = "smoke" if args.checkpoint.parent.name == "smoke" else "checkpoint"
-    draw.text((10, 8), f"LIB-HSI | {scope}: {steps} optimizer steps | validation scene {sample['scene']} | tile {args.sample_index}", fill="black", font=title_font)
+    draw.text((10, 8), f"LIB-HSI | epoch {state['epoch']} | {scope}: {steps} steps | {args.split} {sample['scene']} | tile {args.sample_index}", fill="black", font=title_font)
     for i, (label, picture, filename) in enumerate(panels):
         picture.save(args.output_dir / filename)
         draw.text((i * width + 9, 43), label, fill="black", font=font)
@@ -74,7 +75,8 @@ def main():
     report = {"checkpoint": str(args.checkpoint), "epoch": state["epoch"], "scene": sample["scene"],
               "sample_index": args.sample_index, "patch_size": config["patch_size"],
               "prediction": metrics(prediction), "bicubic": metrics(baseline),
-              "notes": "Single validation tile, all 204 bands for metrics, not a trained benchmark result."}
+              "split": args.split,
+              "notes": "Single tile illustration; all 204 bands for metrics; not a full-split benchmark."}
     (args.output_dir / "metrics.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps(report, indent=2))
     print(args.output_dir / "comparison.png")

@@ -1,7 +1,7 @@
 # LIB-HSI RGB–HSI 확장 연구
 
 기존 PAN–MS SSA-MRN을 기반으로 RGB 유도 HSI 공간 초해상도 모델을 구현했습니다.
-LIB-HSI에서 실행 가능성과 학습 속도를 확인했으며, 최종 시험 성능은 아직 검증하지 않았습니다.
+LIB-HSI에서 100 epoch 학습과 best 가중치의 전체 시험 평가를 완료했습니다.
 
 ## 모델 변경
 
@@ -73,7 +73,7 @@ PyTorch 2.7.1+cu128로 측정했습니다.
 
 본학습 첫 두 epoch의 validation PSNR은 30.429 / 30.548dB로 bicubic 30.061dB보다
 높았습니다. SAM은 모델 2.446 / 2.450°, bicubic 2.441°로 아직 개선되지 않았습니다.
-최종 시험 평가, SSIM/ERGAS, HSI-only ablation과 여러 seed 비교가 필요합니다.
+전체 시험 평가에서 PSNR 32.3048 dB, SAM 2.3161°를 확인했습니다. 상세 결과와 이미지는 [README](../README.md#100-epoch-학습-결과)에 정리했습니다. SSIM/ERGAS, HSI-only ablation과 여러 seed 비교는 추가 검증이 필요합니다.
 측정 상세는 [benchmark JSON](benchmarks/lib_rgb_hsi_optimization.json)에 기록했습니다.
 
 ## 초기 실행 확인 이미지

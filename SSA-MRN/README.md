@@ -144,5 +144,38 @@ RGB 3채널과 LR HSI 204밴드를 융합하는 8채널 latent SSA-MRN과
 
 BIL 부분 읽기, 병렬 데이터 로더, grouped SSA, GPU 열화와 AMP로 학습 속도를
 최적화했습니다. 전체 데이터 검증에서 약 109–115초/epoch를 확인했으며,
-최종 시험 성능은 아직 검증하지 않았습니다.
+100 epoch 학습 후 best 가중치의 전체 시험 성능을 평가했습니다.
 모델 변경, 실험 구성, 최적화 방법과 측정 한계는 [확장 연구 정리](docs/rgb_hsi_extension.md)에 정리했습니다.
+
+## 100 epoch 학습 결과
+
+100 epoch 학습을 완료했으며, 검증 MSE로 선택한 **99 epoch best 가중치**를 시험 75개 장면의
+1,200개 타일에 평가했습니다. 지표는 전체 204밴드를 사용한 장면별 값의 평균입니다.
+
+| 시험 지표 | Bicubic | RGB–HSI SSA-MRN | 변화 |
+|---|---:|---:|---:|
+| MSE ↓ | 0.00112455 | 0.00070645 | 37.2% 감소 |
+| PSNR ↑ | 30.2187 dB | 32.3048 dB | +2.0861 dB |
+| SAM ↓ | 2.3771° | 2.3161° | −0.0610° |
+
+PSNR은 75개 장면 모두에서, SAM은 63개 장면에서 Bicubic보다 개선됐습니다.
+공간 복원 개선을 확인했으며 스펙트럼 각도 개선 폭은 상대적으로 작았습니다.
+검증 PSNR은 첫 epoch 30.4291 dB에서 best epoch 32.0513 dB로 상승했습니다.
+학습 중 OOM으로 중단되어 23 epoch best부터 재개했으며, 중복된 24 epoch 기록은
+학습 곡선에서 마지막 기록만 사용했습니다. 단일 seed 결과이므로 여러 seed와 HSI-only
+ablation으로 RGB guide의 기여를 추가 검증해야 합니다.
+
+![LIB 학습 곡선](./experiments/results/lib_rgb_hsi_trained/learning_curve.png)
+
+아래 이미지는 시험 split의 첫 장면 `2020-11-20_017`, 첫 타일을 사전에 고정하여 표시했습니다.
+왼쪽부터 LR HSI, RGB guide, Bicubic, best prediction, HSI GT입니다.
+HSI는 0-based bands 69/52/18과 동일한 GT 기반 1–99% stretch를 적용했습니다.
+이 타일의 PSNR은 모델 28.7971 dB, Bicubic 28.3754 dB이며 전체 시험 평균과 구분했습니다.
+
+![LIB 시험 결과 비교](./experiments/results/lib_rgb_hsi_trained/comparison.png)
+
+[시험 지표와 장면별 결과](./experiments/results/lib_rgb_hsi_trained/test_metrics.json)와
+[학습 기록](./experiments/results/lib_rgb_hsi_trained/history.json)을 함께 공개했습니다.
+이 결과는 **합성 bicubic x4 공간 초해상도**이며 실제 저해상도 HSI 센서에 대한 성능을
+입증하지는 않습니다. 제공 split의 촬영 위치·날짜 단위 독립성과 정합 정확도 검증,
+SSIM/ERGAS 및 다른 열화 조건 평가는 후속 과제로 남겼습니다.
