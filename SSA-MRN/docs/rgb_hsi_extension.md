@@ -144,3 +144,5 @@ VS Code의 `LIB: train aligned (new run)`으로 새 학습을 시작할 수 있�
 [재현 및 검증 기록](benchmarks/lib_cuda_stream_memory.json)을 저장했습니다.
 전체 100 epoch의 장시간 검증을 대신하는 결과는 아니며, GPU 공유 메모리 사용 여부와
 속도 저하의 모든 원인을 분리 측정한 결과도 아닙니다. PyTorch의 [stream별 메모리 재사용 규칙](https://docs.pytorch.org/docs/stable/generated/torch.Tensor.record_stream.html)을 따랐습니다.
+
+64→256 정합 보정 실험의 100 epoch 학습과 전체 시험 평가를 완료했습니다. 98 epoch best의 시험 PSNR은 32.4817 dB, SAM은 2.3121°였으며 같은 조건의 Bicubic 대비 PSNR +2.2068 dB, 평균 MSE 38.3% 감소를 확인했습니다. 결과 요약과 비교 이미지는 [README](../README.md)에 추가했습니다. 기존 32→128 실험과는 정합·패치·평가 영역이 달라 직접적인 ablation 비교로 해석하지 않았습니다.

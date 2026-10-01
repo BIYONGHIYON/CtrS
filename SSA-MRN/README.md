@@ -185,3 +185,45 @@ SSIM/ERGAS 및 다른 열화 조건 평가는 후속 과제로 남겼습니다.
 전체 513개 장면의 RGB–HSI 경계를 검사하고 162개 장면에 제한된 평행이동 보정을 적용했습니다. HSI 정답은 유지하고 RGB만 이동했으며, 불확실한 보정은 적용하지 않았습니다. 정합 보정 학습은 별도 설정과 결과 폴더로 구성했습니다. 방법·정합 전후 이미지·한계는 [정합 보정 정리](./docs/rgb_hsi_extension.md#rgbhsi-정합-보정)에 기록했습니다. 위 100 epoch 성능은 보정 전 결과입니다.
 
 정합 보정의 64×64 HSI → 256×256 복원 실험 설정도 추가했습니다. 실제 배치 4와 gradient accumulation 1로 유효 배치 4를 유지하도록 변경했습니다. 이전 배치 1 설정은 제한된 실제 데이터의 CUDA 학습·검증을 통과했습니다. 기존 128 패치 실험과 별도 폴더에 저장합니다.
+## 정합 보정 64×64 → 256×256 학습 결과
+
+정합 보정과 256×256 패치를 적용한 별도 실험의 100 epoch 학습을 완료했습니다.
+검증 장면 평균 MSE가 가장 낮은 **98 epoch best 가중치**로 시험 75개 장면,
+총 300개 비중첩 타일을 평가했습니다. latest는 100 epoch이며 시험 평가에는 사용하지 않았습니다.
+모든 지표는 전체 204밴드에서 계산한 장면별 값의 평균입니다.
+
+| 시험 지표 | Bicubic | 정합 보정 RGB–HSI SSA-MRN | 변화 |
+|---|---:|---:|---:|
+| MSE ↓ | 0.00111120 | 0.00068602 | 38.3% 감소 |
+| PSNR ↑ | 30.2750 dB | 32.4817 dB | +2.2068 dB |
+| SAM ↓ | 2.3751° | 2.3121° | −0.0629° |
+
+PSNR은 시험 75개 장면 모두에서, SAM은 64개 장면에서 Bicubic보다 개선됐습니다.
+공간 복원 개선을 확인했으며 스펙트럼 각도 개선 폭은 상대적으로 작았습니다.
+검증 PSNR은 첫 epoch 30.5378 dB에서 best epoch 32.3370 dB로 상승했습니다.
+단일 seed 결과이며, 정합 보정·패치 크기 각각의 기여를 확인하려면 조건을 통제한 ablation이 필요합니다.
+
+![정합 보정 256 패치 학습 곡선](./experiments/results/lib_rgb_hsi_aligned_256_trained/learning_curve.png)
+
+시험 split의 첫 장면 `2020-11-20_017`, 첫 타일을 고정하여 시각화했습니다.
+왼쪽부터 64×64 LR HSI, 256×256 RGB guide, Bicubic, best prediction, HSI GT입니다.
+HSI는 0-based bands 69/52/18과 동일한 GT 기반 1–99% stretch로 표시했습니다.
+단일 타일 PSNR은 모델 29.4809 dB, Bicubic 28.0704 dB이며 전체 시험 평균과 구분했습니다.
+영상에서는 벽돌 경계가 Bicubic보다 뚜렷해졌지만 세부 구조의 완전한 복원을 의미하지는 않습니다.
+
+![정합 보정 64에서 256 시험 결과](./experiments/results/lib_rgb_hsi_aligned_256_trained/comparison.png)
+
+학습은 실제 batch 4, 누적 1, AMP로 진행했습니다. 재개한 epoch의 중복 기록은 학습 곡선에서
+마지막 기록만 사용했습니다. 77 epoch 전 CUDA 전송 stream의 예약 메모리 누적을 수정했고,
+이후 100 epoch까지 약 2,202MiB의 예약 메모리를 유지했습니다. 마지막 두 epoch는 각각
+약 175초였으며, 데이터 공급 대기는 여전히 남았습니다.
+
+**이번 실험도 합성 antialiased bicubic x4 공간 초해상도입니다.** HSI GT는 유지하고 RGB만
+정수 평행이동으로 보정했으며, 유효 RGB가 없는 테두리는 모델과 Bicubic 모두의 지표에서
+제외했습니다. 정합 추정에 HR HSI를 사용했으므로 실제 LR 센서만 주어진 환경과 구분해야 합니다.
+앞선 32→128 실험은 패치 크기·정합·평가 영역이 달라 수치 차이를 정합 효과로 단정하지 않았습니다.
+실제 센서 열화, 서브픽셀·비선형 정합, 여러 seed, HSI-only 비교, SSIM/ERGAS는 후속 검증 과제입니다.
+
+[전체 시험 및 장면별 지표](./experiments/results/lib_rgb_hsi_aligned_256_trained/test_metrics.json),
+[학습 기록](./experiments/results/lib_rgb_hsi_aligned_256_trained/history.json),
+[단일 타일 지표](./experiments/results/lib_rgb_hsi_aligned_256_trained/metrics.json)를 함께 공개했습니다.
