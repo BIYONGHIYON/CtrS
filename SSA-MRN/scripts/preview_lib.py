@@ -61,7 +61,8 @@ def main():
     title_font = ImageFont.truetype(str(font_path), 20) if font_path.exists() else font
     steps = int(next(iter(state["optimizer"]["state"].values()))["step"])
     scope = "smoke" if args.checkpoint.parent.name == "smoke" else "checkpoint"
-    draw.text((10, 8), f"LIB-HSI | epoch {state['epoch']} | {scope}: {steps} steps | {args.split} {sample['scene']} | tile {args.sample_index}", fill="black", font=title_font)
+    scene_tile = args.sample_index % data.per_scene
+    draw.text((10, 8), f"LIB-HSI | epoch {state['epoch']} | {scope}: {steps} steps | {args.split} {sample['scene']} | tile {scene_tile} (index {args.sample_index})", fill="black", font=title_font)
     for i, (label, picture, filename) in enumerate(panels):
         picture.save(args.output_dir / filename)
         draw.text((i * width + 9, 43), label, fill="black", font=font)
@@ -78,6 +79,7 @@ def main():
               "sample_index": args.sample_index, "patch_size": config["patch_size"],
               "prediction": metrics(prediction), "bicubic": metrics(baseline),
               "split": args.split,
+              "scene_tile": scene_tile,
               "notes": "Single tile illustration; all 204 bands for metrics; not a full-split benchmark."}
     (args.output_dir / "metrics.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps(report, indent=2))

@@ -227,3 +227,39 @@ HSI는 0-based bands 69/52/18과 동일한 GT 기반 1–99% stretch로 표시�
 [전체 시험 및 장면별 지표](./experiments/results/lib_rgb_hsi_aligned_256_trained/test_metrics.json),
 [학습 기록](./experiments/results/lib_rgb_hsi_aligned_256_trained/history.json),
 [단일 타일 지표](./experiments/results/lib_rgb_hsi_aligned_256_trained/metrics.json)를 함께 공개했습니다.
+
+## 무작위 시험 이미지 5세트와 공개 가중치
+
+시험 75개 장면 중 seed `20261002`로 서로 다른 5개 장면을 무작위 선택하고, 각 장면에서 타일 1개를 무작위 선택했습니다. 성능에 따른 재선택은 하지 않았습니다. 각 세트는 LR HSI · RGB guide · Bicubic · best prediction · HSI GT 순서입니다. 아래 PSNR은 단일 타일의 유효 영역·204밴드 기준이며 전체 시험 평균과 구분했습니다.
+
+| 세트 | 시험 장면 | 타일 (0-based) | Bicubic PSNR | 모델 PSNR |
+|---|---|---:|---:|---:|
+| 1 | 2020-11-27_014 | 2 | 26.5832 dB | 30.3539 dB |
+| 2 | 2020-11-26_038 | 0 | 34.5612 dB | 35.0199 dB |
+| 3 | 2021-01-07_047 | 3 | 34.2337 dB | 36.0087 dB |
+| 4 | 2020-12-21_012 | 2 | 26.6727 dB | 28.1759 dB |
+| 5 | 2020-12-21_036 | 2 | 30.8030 dB | 34.5022 dB |
+
+**세트 1 — 2020-11-27_014, 타일 2**
+
+![무작위 시험 세트 1](./experiments/results/lib_rgb_hsi_aligned_256_trained/random_samples/sample_01/comparison.png)
+
+**세트 2 — 2020-11-26_038, 타일 0**
+
+![무작위 시험 세트 2](./experiments/results/lib_rgb_hsi_aligned_256_trained/random_samples/sample_02/comparison.png)
+
+**세트 3 — 2021-01-07_047, 타일 3**
+
+![무작위 시험 세트 3](./experiments/results/lib_rgb_hsi_aligned_256_trained/random_samples/sample_03/comparison.png)
+
+**세트 4 — 2020-12-21_012, 타일 2**
+
+![무작위 시험 세트 4](./experiments/results/lib_rgb_hsi_aligned_256_trained/random_samples/sample_04/comparison.png)
+
+**세트 5 — 2020-12-21_036, 타일 2**
+
+![무작위 시험 세트 5](./experiments/results/lib_rgb_hsi_aligned_256_trained/random_samples/sample_05/comparison.png)
+
+[무작위 선택 기록](./experiments/results/lib_rgb_hsi_aligned_256_trained/random_samples/selection.json)과 세트별 지표·개별 패널도 함께 공개했습니다.
+
+평가용 [best.pt](./experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/best.pt) (98 epoch), 최종 학습 상태 [latest.pt](./experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/latest.pt) (100 epoch), [SHA256 체크섬](./experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/checksums.json)을 공개했습니다. 원본 LIB-HSI 데이터는 별도로 준비해야 합니다. 팀원은 [테스트 안내](./experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/README.md)의 명령에 자신의 데이터 경로를 지정해 전체 시험 평가와 이미지 생성을 실행할 수 있습니다. CUDA가 없는 환경의 CPU 평가도 지원했습니다.
