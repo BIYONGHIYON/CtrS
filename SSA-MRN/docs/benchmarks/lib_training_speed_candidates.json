@@ -1,0 +1,540 @@
+{
+  "date": "2026-10-02",
+  "baseline_commit": "44a56809825ccd9c871a0eff37c4e94a7f5bedd8",
+  "scope": "Experimental candidates only. Current training code/config/checkpoints were not changed.",
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 3060 Ti",
+    "torch": "2.7.1+cu128",
+    "cpu": "Ryzen 5600X",
+    "ram_gib": 16
+  },
+  "protocol": {
+    "train_scenes": 16,
+    "patches": 64,
+    "batch_size": 4,
+    "gt_dtype": "float32",
+    "gt_size": 256,
+    "lr_size": 64,
+    "feature_groups": 12,
+    "K": 4,
+    "training_order_epoch": 0,
+    "repeats": 3,
+    "exclude_startup_repeat": true,
+    "comparison_order": "ABBA for raw GPU and combined candidates; OS cache not flushed"
+  },
+  "median_warm_training_seconds": {
+    "process_workers_2": 6.333675149999863,
+    "raw_scene_gpu": 2.140012749999869,
+    "raw_scene_gpu_polyphase23": 2.0241117999999005
+  },
+  "speedup": {
+    "raw_scene_gpu": 2.959643651655931,
+    "combined_cross_run": 3.1291132979908394
+  },
+  "exact_input_equality": true,
+  "equality_scope": "All RGB/GT/mask pixels checked on two whole scenes (eight flipped quadrants); loader-only signature checked for all modes. CPU/GPU interpolation and CPU gradients within float32 tolerances.",
+  "io": [
+    {
+      "mode": "process:2",
+      "measurements": [
+        {
+          "repetition": 0,
+          "seconds": 10.218283800000336,
+          "patches_per_second": 6.263282685493419,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 10.21524780000027
+        },
+        {
+          "repetition": 1,
+          "seconds": 4.931713100000252,
+          "patches_per_second": 12.97723503015549,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 4.928252900000189
+        },
+        {
+          "repetition": 2,
+          "seconds": 4.80523119999998,
+          "patches_per_second": 13.318818041471191,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 4.800922499999615
+        }
+      ]
+    },
+    {
+      "mode": "thread:2",
+      "measurements": [
+        {
+          "repetition": 0,
+          "seconds": 4.265492600000016,
+          "patches_per_second": 15.00412871423098,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 4.133744499999466
+        },
+        {
+          "repetition": 1,
+          "seconds": 3.691716699999688,
+          "patches_per_second": 17.33610815802995,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 3.5717242000000624
+        },
+        {
+          "repetition": 2,
+          "seconds": 3.7271161999997275,
+          "patches_per_second": 17.171452824573777,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 3.612913800000115
+        }
+      ]
+    },
+    {
+      "mode": "process:1",
+      "measurements": [
+        {
+          "repetition": 0,
+          "seconds": 10.320412000000033,
+          "patches_per_second": 6.20130281620538,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 10.31650629999831
+        },
+        {
+          "repetition": 1,
+          "seconds": 7.903620099999898,
+          "patches_per_second": 8.097555194992333,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 7.90048139999999
+        },
+        {
+          "repetition": 2,
+          "seconds": 7.935507000000143,
+          "patches_per_second": 8.065017143832,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 7.9328010000003815
+        }
+      ]
+    },
+    {
+      "mode": "process:0",
+      "measurements": [
+        {
+          "repetition": 0,
+          "seconds": 5.847914400000263,
+          "patches_per_second": 10.944072642376078,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 5.846485199999734
+        },
+        {
+          "repetition": 1,
+          "seconds": 5.866933499999959,
+          "patches_per_second": 10.908594753971636,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 5.865675099999862
+        },
+        {
+          "repetition": 2,
+          "seconds": 5.881484100000307,
+          "patches_per_second": 10.881607246034493,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 5.880241800000476
+        }
+      ]
+    },
+    {
+      "mode": "thread:1",
+      "measurements": [
+        {
+          "repetition": 0,
+          "seconds": 6.1490522999997665,
+          "patches_per_second": 10.408107929087288,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 6.026944900001126
+        },
+        {
+          "repetition": 1,
+          "seconds": 6.36751060000006,
+          "patches_per_second": 10.051023707757848,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 6.2536811999993915
+        },
+        {
+          "repetition": 2,
+          "seconds": 6.476724699999977,
+          "patches_per_second": 9.88153780876316,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 6.357605799999874
+        }
+      ]
+    }
+  ],
+  "thread_training": [
+    {
+      "mode": "process:2",
+      "measurements": [
+        {
+          "repetition": 0,
+          "seconds": 15.304610700000012,
+          "patches_per_second": 4.181746354384561,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 10.203422000000046,
+          "gpu_stream_seconds": 5.767203712463379,
+          "loss": 0.0009596277959644794,
+          "peak_allocated_mib": 2175.10546875,
+          "current_reserved_mib": 2734.0
+        },
+        {
+          "repetition": 1,
+          "seconds": 6.429898899999898,
+          "patches_per_second": 9.953500202001779,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 5.2279631000001245,
+          "gpu_stream_seconds": 1.8889649810791016,
+          "loss": 0.0009591579437255859,
+          "peak_allocated_mib": 2175.10546875,
+          "current_reserved_mib": 2734.0
+        },
+        {
+          "repetition": 2,
+          "seconds": 6.376238100000137,
+          "patches_per_second": 10.037266331067315,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 5.191514400001324,
+          "gpu_stream_seconds": 1.8787491912841796,
+          "loss": 0.0009568647365085781,
+          "peak_allocated_mib": 2175.10546875,
+          "current_reserved_mib": 2734.0
+        }
+      ]
+    },
+    {
+      "mode": "thread:2",
+      "measurements": [
+        {
+          "repetition": 0,
+          "seconds": 5.991620499999954,
+          "patches_per_second": 10.681584389398576,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 4.4433494000013525,
+          "gpu_stream_seconds": 2.1176459121704103,
+          "loss": 0.0009596277959644794,
+          "peak_allocated_mib": 2172.0361328125,
+          "current_reserved_mib": 2734.0
+        },
+        {
+          "repetition": 1,
+          "seconds": 5.104299800000263,
+          "patches_per_second": 12.538448466525557,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 3.696346100000028,
+          "gpu_stream_seconds": 1.9024623565673828,
+          "loss": 0.0009591579437255859,
+          "peak_allocated_mib": 2172.0361328125,
+          "current_reserved_mib": 2734.0
+        },
+        {
+          "repetition": 2,
+          "seconds": 4.582983899999817,
+          "patches_per_second": 13.964701032443633,
+          "source_cube_requested_gib": 3.1875,
+          "batch_wait_seconds": 3.2214475000005223,
+          "gpu_stream_seconds": 1.9065283813476563,
+          "loss": 0.0009568647365085781,
+          "peak_allocated_mib": 2172.0361328125,
+          "current_reserved_mib": 2734.0
+        }
+      ]
+    }
+  ],
+  "raw_scene_training": [
+    [
+      {
+        "mode": "process:2",
+        "repetition": 0,
+        "seconds": 13.565305399999943,
+        "patches_per_second": 4.717918108942853,
+        "last_loss": 0.0009596277959644794,
+        "peak_allocated_mib": 2175.10546875,
+        "current_reserved_mib": 2734.0
+      },
+      {
+        "mode": "process:2",
+        "repetition": 1,
+        "seconds": 6.343237300000055,
+        "patches_per_second": 10.089485379965124,
+        "last_loss": 0.0009591579437255859,
+        "peak_allocated_mib": 2175.10546875,
+        "current_reserved_mib": 2734.0
+      },
+      {
+        "mode": "process:2",
+        "repetition": 2,
+        "seconds": 6.359651499999927,
+        "patches_per_second": 10.063444514216028,
+        "last_loss": 0.0009568647365085781,
+        "peak_allocated_mib": 2175.10546875,
+        "current_reserved_mib": 2734.0
+      }
+    ],
+    [
+      {
+        "mode": "raw:2",
+        "repetition": 0,
+        "seconds": 2.2869572999998127,
+        "patches_per_second": 27.984781351188868,
+        "last_loss": 0.0009596277959644794,
+        "peak_allocated_mib": 2172.0361328125,
+        "current_reserved_mib": 3492.0
+      },
+      {
+        "mode": "raw:2",
+        "repetition": 1,
+        "seconds": 2.164958900000329,
+        "patches_per_second": 29.561762119359532,
+        "last_loss": 0.0009591579437255859,
+        "peak_allocated_mib": 2172.0361328125,
+        "current_reserved_mib": 3492.0
+      },
+      {
+        "mode": "raw:2",
+        "repetition": 2,
+        "seconds": 2.1383248000001913,
+        "patches_per_second": 29.92997134953225,
+        "last_loss": 0.0009568647365085781,
+        "peak_allocated_mib": 2172.0361328125,
+        "current_reserved_mib": 3492.0
+      }
+    ],
+    [
+      {
+        "mode": "raw:2",
+        "repetition": 0,
+        "seconds": 2.16394500000024,
+        "patches_per_second": 29.575613058554126,
+        "last_loss": 0.0009596277959644794,
+        "peak_allocated_mib": 2172.0361328125,
+        "current_reserved_mib": 3492.0
+      },
+      {
+        "mode": "raw:2",
+        "repetition": 1,
+        "seconds": 2.140835299999708,
+        "patches_per_second": 29.894873276804027,
+        "last_loss": 0.0009591579437255859,
+        "peak_allocated_mib": 2172.0361328125,
+        "current_reserved_mib": 3492.0
+      },
+      {
+        "mode": "raw:2",
+        "repetition": 2,
+        "seconds": 2.13919020000003,
+        "patches_per_second": 29.917863311078698,
+        "last_loss": 0.0009568647365085781,
+        "peak_allocated_mib": 2172.0361328125,
+        "current_reserved_mib": 3492.0
+      }
+    ],
+    [
+      {
+        "mode": "process:2",
+        "repetition": 0,
+        "seconds": 12.427364199999829,
+        "patches_per_second": 5.149925516788257,
+        "last_loss": 0.0009596277959644794,
+        "peak_allocated_mib": 2172.0361328125,
+        "current_reserved_mib": 2734.0
+      },
+      {
+        "mode": "process:2",
+        "repetition": 1,
+        "seconds": 6.240262900000289,
+        "patches_per_second": 10.255978157586444,
+        "last_loss": 0.0009591579437255859,
+        "peak_allocated_mib": 2172.0361328125,
+        "current_reserved_mib": 2734.0
+      },
+      {
+        "mode": "process:2",
+        "repetition": 2,
+        "seconds": 6.32411299999967,
+        "patches_per_second": 10.119996274576899,
+        "last_loss": 0.0009568647365085781,
+        "peak_allocated_mib": 2172.0361328125,
+        "current_reserved_mib": 2734.0
+      }
+    ]
+  ],
+  "combined_training": [
+    [
+      {
+        "mode": "raw_original23",
+        "repetition": 0,
+        "seconds": 5.187014799999815,
+        "patches_per_second": 12.33850344903629,
+        "last_loss": 0.0009596277959644794,
+        "peak_allocated_mib": 2175.10546875,
+        "current_reserved_mib": 3408.0
+      },
+      {
+        "mode": "raw_original23",
+        "repetition": 1,
+        "seconds": 2.231277500000033,
+        "patches_per_second": 28.68311987191152,
+        "last_loss": 0.0009591579437255859,
+        "peak_allocated_mib": 2175.10546875,
+        "current_reserved_mib": 3408.0
+      },
+      {
+        "mode": "raw_original23",
+        "repetition": 2,
+        "seconds": 2.1794224999998733,
+        "patches_per_second": 29.365577349047154,
+        "last_loss": 0.0009568646200932562,
+        "peak_allocated_mib": 2175.10546875,
+        "current_reserved_mib": 3408.0
+      }
+    ],
+    [
+      {
+        "mode": "raw_polyphase23",
+        "repetition": 0,
+        "seconds": 2.0592461999999614,
+        "patches_per_second": 31.079333787286433,
+        "last_loss": 0.0009596277959644794,
+        "peak_allocated_mib": 2125.0693359375,
+        "current_reserved_mib": 3760.0
+      },
+      {
+        "mode": "raw_polyphase23",
+        "repetition": 1,
+        "seconds": 1.971453499999825,
+        "patches_per_second": 32.46335761914023,
+        "last_loss": 0.0009591579437255859,
+        "peak_allocated_mib": 2125.0693359375,
+        "current_reserved_mib": 3760.0
+      },
+      {
+        "mode": "raw_polyphase23",
+        "repetition": 2,
+        "seconds": 2.029662299999927,
+        "patches_per_second": 31.532339148242688,
+        "last_loss": 0.0009568642126396298,
+        "peak_allocated_mib": 2125.0693359375,
+        "current_reserved_mib": 3760.0
+      }
+    ],
+    [
+      {
+        "mode": "raw_polyphase23",
+        "repetition": 0,
+        "seconds": 2.023229899999933,
+        "patches_per_second": 31.632589059702074,
+        "last_loss": 0.0009596277959644794,
+        "peak_allocated_mib": 2125.0693359375,
+        "current_reserved_mib": 3760.0
+      },
+      {
+        "mode": "raw_polyphase23",
+        "repetition": 1,
+        "seconds": 2.018561299999874,
+        "patches_per_second": 31.70575003097701,
+        "last_loss": 0.0009591579437255859,
+        "peak_allocated_mib": 2125.0693359375,
+        "current_reserved_mib": 3760.0
+      },
+      {
+        "mode": "raw_polyphase23",
+        "repetition": 2,
+        "seconds": 2.0577252999996745,
+        "patches_per_second": 31.102305055009104,
+        "last_loss": 0.0009568642126396298,
+        "peak_allocated_mib": 2125.0693359375,
+        "current_reserved_mib": 3760.0
+      }
+    ],
+    [
+      {
+        "mode": "raw_original23",
+        "repetition": 0,
+        "seconds": 2.2163186000002497,
+        "patches_per_second": 28.876714746694265,
+        "last_loss": 0.0009596277959644794,
+        "peak_allocated_mib": 2172.0361328125,
+        "current_reserved_mib": 3492.0
+      },
+      {
+        "mode": "raw_original23",
+        "repetition": 1,
+        "seconds": 2.1844579999997222,
+        "patches_per_second": 29.297885333573884,
+        "last_loss": 0.0009591579437255859,
+        "peak_allocated_mib": 2172.0361328125,
+        "current_reserved_mib": 3492.0
+      },
+      {
+        "mode": "raw_original23",
+        "repetition": 2,
+        "seconds": 2.163099599999896,
+        "patches_per_second": 29.587172037756876,
+        "last_loss": 0.0009568646200932562,
+        "peak_allocated_mib": 2172.0361328125,
+        "current_reserved_mib": 3492.0
+      }
+    ]
+  ],
+  "interpolation_calls": [
+    {
+      "channels": 204,
+      "lr_size": 64,
+      "ratio": 4,
+      "batch_size": 4,
+      "seconds_per_call": {
+        "original": [
+          0.02387186500000098,
+          0.023669059999997445
+        ],
+        "polyphase": [
+          0.008481684999992467,
+          0.008477650000008908
+        ]
+      }
+    },
+    {
+      "channels": 12,
+      "lr_size": 64,
+      "ratio": 4,
+      "batch_size": 4,
+      "seconds_per_call": {
+        "original": [
+          0.0016395599999896148,
+          0.0016462399999909393
+        ],
+        "polyphase": [
+          0.0009007399999973132,
+          0.0009272000000009939
+        ]
+      }
+    },
+    {
+      "channels": 12,
+      "lr_size": 128,
+      "ratio": 2,
+      "batch_size": 4,
+      "seconds_per_call": {
+        "original": [
+          0.0013024650000033945,
+          0.001366415000006782
+        ],
+        "polyphase": [
+          0.0005415300000095157,
+          0.0005808749999914653
+        ]
+      }
+    }
+  ],
+  "interpretation": "Raw GPU processing avoids CPU BIL transpose/patch copies and multiprocessing collation/transport. Polyphase uses the same 23 coefficients, insertion phase and periodic boundary while skipping structural zeros.",
+  "limitations": [
+    "Tiny cached subset is not full-393-scene epoch time.",
+    "Comparisons exclude validation, metrics and checkpoint writes.",
+    "Polyphase combined vs process baseline is across two runs, not one paired comparison.",
+    "No 100-epoch training, convergence or long-run memory claim.",
+    "Raw candidate currently targets CUDA, fixed four 256 quadrants, batch4; not yet a general trainer backend."
+  ]
+}
