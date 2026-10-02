@@ -146,3 +146,47 @@ VS Code의 `LIB: train aligned (new run)`으로 새 학습을 시작할 수 있�
 속도 저하의 모든 원인을 분리 측정한 결과도 아닙니다. PyTorch의 [stream별 메모리 재사용 규칙](https://docs.pytorch.org/docs/stable/generated/torch.Tensor.record_stream.html)을 따랐습니다.
 
 64→256 정합 보정 실험의 100 epoch 학습과 전체 시험 평가를 완료했습니다. 98 epoch best의 시험 PSNR은 32.4817 dB, SAM은 2.3121°였으며 같은 조건의 Bicubic 대비 PSNR +2.2068 dB, 평균 MSE 38.3% 감소를 확인했습니다. 결과 요약과 비교 이미지는 [README](../README.md)에 추가했습니다. 기존 32→128 실험과는 정합·패치·평가 영역이 달라 직접적인 ablation 비교로 해석하지 않았습니다.
+
+## 12그룹·K=4·23탭 신규 프로토콜
+
+기존 실험을 보존하고 `lib_rgb_hsi_grouped12_k4_23tap.json`에 새 구성을 추가했습니다.
+204밴드를 연속 17밴드씩 12그룹으로 나누고 grouped 1×1 encoder로 그룹당 feature 1개를 생성했습니다.
+각 SSA 단계에서 앞 4개 feature의 분기는 R, 다음 4개는 G, 마지막 4개는 B를 1채널 guide로 사용합니다.
+분기 입력은 원래 MS별 방식처럼 전체 feature와 해당 feature를 함께 사용하며, 공유 backbone과 fusion으로 그룹 사이 정보를 교환합니다.
+grouped decoder로 204밴드 residual을 복원해 204밴드 23탭 LMS에 더했습니다.
+RGB 연결 순서는 실험적 배정이며 특정 파장과 색의 물리적 일치를 주장하지 않습니다.
+
+K=4로 분기 내부 차원을 줄였으며 채널별 separable 23탭 필터를 GPU에서 실행하도록 구현했습니다.
+툴박스 구현의 계수, 주기 경계와 2배 확대 단계별 삽입 위치를 유지하고 미분 가능하게 구성했습니다.
+feature·HSI·중간 해상도의 확대에 bicubic/bilinear를 사용하지 않습니다.
+원본 크기의 RGB는 학습 crop guide로 사용합니다. 모델 내부의 RGB 저주파 guide도 area 축소 후 23탭 확대를 사용합니다.
+K 감소와 동시에 feature 수가 8→12로 늘고 보간 연산도 바뀌었으므로 전체 학습 시간 감소는 별도 측정이 필요합니다.
+CUDA stream 재사용, AMP, grouped SSA, 장면별 BIL 캐시와 실제 batch 4는 유지했습니다.
+
+학습 장면은 좌상·우상·좌하·우하의 고정 256×256 네 조각을 각 epoch에서 모두 사용합니다.
+train 393장면 × 4패치 = 1,572패치, batch 4에서 393 step입니다. 공동 flip은 유지했습니다.
+검증 45장면과 시험 75장면은 원본 전체 시야를 area 2×2 평균으로 256×256으로 축소해 장면당 1개 sample로 평가합니다.
+GT에서 area 4×4 평균으로 LR HSI 64×64를 생성하고 23탭 LMS와 모델을 비교합니다.
+정합 후 유효 RGB mask도 함께 축소하며 유효하지 않은 픽셀은 학습 loss와 MSE·PSNR·SAM에서 제외합니다.
+이 프로토콜은 합성 area x4 초해상도이며 기존 타일 평가 및 Bicubic 열화와 직접 비교하지 않습니다.
+
+`register_lib_projective.py`는 HSI 가시광 경계에 RGB 경계를 ECC homography로 맞춥니다.
+입력 테두리를 추정에서 제외하고 최대 모서리 이동 32픽셀, 투영 면적비 0.85–1.15, 유효 면적 85% 이상,
+경계 NCC ≥0.25 및 fallback 대비 0.005 이상 개선, 네 구역 중 세 구역 이상 일치 조건을 적용했습니다.
+보정이 불확실하면 검증된 평행이동 또는 원본을 유지합니다. RGB만 Lanczos로 warp하며 HSI를 고정 기준으로 사용했습니다.
+homography는 평면의 회전·원근 기울기를 다루며 실제 3D 각도나 깊이에 따른 시차는 계산하지 않습니다.
+GT 기반 정합의 한계는 이전과 동일합니다. manifest SHA256와 모델·열화·평가 프로토콜을 가중치에 저장해 다른 구성의 재개를 차단했습니다.
+
+전체 513장면 중 homography 489개, 평행이동 8개, 원본 유지 16개를 확인했습니다.
+전체 장면의 경계 NCC 중앙값은 0.5819→0.7289였습니다. 아래 예시는 검증 split에서
+채택된 보정의 개선 폭이 가장 큰 장면이며 전체를 대표하지 않습니다. 보라색은 HSI, 초록색은 RGB 경계입니다.
+
+![원근 정합 전후 경계](../experiments/results/lib_registration/projective_edge_comparison.png)
+
+새 구성은 기존 모델을 포함한 33개 테스트를 통과했습니다. 23탭 필터의 SciPy 결과·gradient,
+R/G/B 1채널 분기의 loop 대비 출력·gradient, 고정 네 조각과 전체 시야 평가,
+합성 원근 변형 복구와 CUDA 전송 stream 재사용을 확인했습니다.
+실제 LIB CUDA smoke와 train 8장면·validation 2장면의 2 epoch 학습, best에서 3 epoch 재개,
+시험 2장면의 전체 시야 평가 및 이미지 생성을 완료했습니다. 최대 할당 메모리는 약 2,175MiB였습니다.
+실행 가능 여부를 검증한 결과이며 새 모델의 100 epoch 학습 성능·속도 향상을 입증하지 않습니다.
+[검증 기록](./benchmarks/lib_grouped12_protocol_check.json)을 함께 저장했습니다.

@@ -18,7 +18,8 @@ from tqdm import tqdm
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "SSA-MRN/src"))
 from ssamrn.data.lib_hsi import LIBHSI, ScenePatchSampler
-from ssamrn.models.rgb_hsi import RGBHSISsaMRN
+from ssamrn.models.rgb_grouped import build_rgb_hsi_model
+from ssamrn.models.interp23 import interp23tap
 
 
 def save_checkpoint(state, path):
@@ -40,8 +41,15 @@ def move_batch(batch, device, channels_last=False):
         lr = batch["lr_hsi"].to(device, non_blocking=True)
     else:
         # Run outside autocast: preserve float32 antialiased degradation.
-        lr = F.interpolate(gt, scale_factor=0.25, mode="bicubic", align_corners=False,
+        mode=batch.get('degradation_mode','bicubic')
+        mode=mode[0] if isinstance(mode,(list,tuple)) else mode
+        if mode=='area':
+            lr=F.avg_pool2d(gt,4)
+        elif mode=='bicubic':
+            lr = F.interpolate(gt, scale_factor=0.25, mode="bicubic", align_corners=False,
                            antialias=True).clamp(0, 1)
+        else:
+            raise ValueError('Unknown degradation mode: '+mode)
     if channels_last:
         rgb, lr, gt = (x.contiguous(memory_format=torch.channels_last) for x in (rgb, lr, gt))
     return rgb, lr, gt
@@ -89,7 +97,11 @@ def preview(batch, prediction, baseline, path):
 
 
 @torch.no_grad()
-def evaluate(model, loader, device, amp, output, max_batches=None, channels_last=False):
+def evaluate(model, loader, device, amp, output, max_batches=None, channels_last=False,
+             baseline_mode='bicubic', degradation_mode='bicubic'):
+    if baseline_mode not in ('bicubic', '23tap'):
+        raise ValueError('Unknown baseline interpolation')
+    baseline_label = 'interp23' if baseline_mode == '23tap' else 'bicubic'
     model.eval()
     totals = {}
     read_bytes = 0
@@ -102,7 +114,7 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
         with torch.autocast(device.type, enabled=amp):
             prediction = model(rgb, lr)
         prediction = prediction.float()  # Unclipped model metrics, data range=1.
-        baseline = F.interpolate(lr, size=gt.shape[-2:], mode="bicubic", align_corners=False)
+        baseline = interp23tap(lr,4) if baseline_mode=='23tap' else F.interpolate(lr, size=gt.shape[-2:], mode="bicubic", align_corners=False)
         finite.logical_and_(torch.isfinite(prediction).all())
         valid = torch.linalg.vector_norm(gt, dim=1) > 1e-6
         spatial = batch.get('valid_mask', torch.ones_like(valid)).to(device)
@@ -122,7 +134,7 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
             totals[scene]["values"].add_(packed[i])
             totals[scene]["count"] += int(spatial[i].sum())*gt.shape[1] if 'valid_mask' in batch else gt[i].numel()
         if step == 0:
-            preview(batch, prediction, baseline, output / "preview_rgb_gt_bicubic_prediction.png")
+            preview(batch, prediction, baseline, output / f"preview_rgb_gt_{baseline_label}_prediction.png")
         if max_batches is not None and step + 1 >= max_batches:
             break
     if not finite.item():
@@ -131,7 +143,7 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
     cpu_values = torch.stack([record["values"] for record in totals.values()]).cpu().tolist()
     for (scene, record), numbers in zip(totals.items(), cpu_values):
         scenes[scene] = {}
-        for offset, label in ((0, "model"), (2, "bicubic")):
+        for offset, label in ((0, "model"), (2, baseline_label)):
             mse = numbers[offset] / record["count"]
             scenes[scene][label + "_mse"] = mse
             scenes[scene][label + "_psnr_db"] = -10 * math.log10(max(mse, 1e-12))
@@ -142,7 +154,8 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
     return {"scene_mean": summary, "scenes": scenes, "partial": max_batches is not None,
             "alignment_border_masked": 'valid_mask' in batch,
             "source_cube_requested_gib": read_bytes / 2**30,
-            "protocol": "x4 antialiased bicubic LR; clipped [0,1] reflectance GT; unclipped output; "
+            "baseline_mode": baseline_mode,
+            "protocol": f"x4 {degradation_mode} LR; {baseline_label} baseline; clipped [0,1] reflectance GT; unclipped output; "
                         "PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels"}
 
 
@@ -168,6 +181,7 @@ def main():
         config["data_root"] = str(args.data_root)
     if args.device:
         config["device"] = args.device
+    config['data_root'] = str(ROOT / config['data_root'])
     if args.output_dir:
         config["output_dir"] = str(args.output_dir)
     if args.epochs is not None:
@@ -186,7 +200,7 @@ def main():
             parser.error(f"{key} must be positive")
     device = torch.device(config["device"])
     if device.type == "cuda" and not torch.cuda.is_available():
-        parser.error("CUDA unavailable. Select .venv/Scripts/python.exe; see docs/lib_local_training.md")
+        parser.error("CUDA unavailable. Select a CUDA-enabled Python interpreter or pass --device cpu")
     amp = config["amp"] and device.type == "cuda"
     random.seed(config["seed"])
     np.random.seed(config["seed"])
@@ -210,7 +224,9 @@ def main():
                         patches_per_scene=config["patches_per_scene"],
                         compute_lr=not gpu_degradation, crop_seed=config["seed"],
                         read_mode=config.get("read_mode", "whole"),
-                        alignment_manifest=(ROOT/config['alignment_manifest']) if config.get('alignment_manifest') else None)
+                        alignment_manifest=(ROOT/config['alignment_manifest']) if config.get('alignment_manifest') else None,
+                        train_layout=config.get('train_layout','random'),eval_layout=config.get('eval_layout','tiles'),
+                        degradation=config.get('degradation','bicubic'))
     validation = LIBHSI(split="test" if args.evaluate else "validation", **dataset_args,
                         limit=1 if args.smoke else args.max_val_scenes, allow_incomplete=args.smoke)
     loader_args = dict(batch_size=config["batch_size"], num_workers=config["workers"],
@@ -220,8 +236,7 @@ def main():
                            worker_init_fn=worker_init)
     val_loader = DataLoader(validation, shuffle=False,
                             **dict(loader_args, batch_size=config.get("val_batch_size", config["batch_size"])))
-    model = RGBHSISsaMRN(204, config["latent_channels"], config["ssai_dimension"],
-                        config.get("vectorized_ssa", True)).to(device)
+    model = build_rgb_hsi_model(config).to(device)
     if channels_last:
         model = model.to(memory_format=torch.channels_last)
     optimizer = torch.optim.Adam(model.parameters(), lr=config["learning_rate"],
@@ -233,6 +248,9 @@ def main():
         checkpoint_path = ROOT / config["output_dir"] / "best.pt"
     if checkpoint_path:
         state = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
+        for key,default in [('model_type','latent_rgb'),('upsampler','bicubic'),('train_layout','random'),('eval_layout','tiles'),('degradation','bicubic')]:
+            if state['config'].get(key,default)!=config.get(key,default):
+                parser.error('Checkpoint protocol differs: '+key)
         if state['config'].get('alignment_sha256') != config.get('alignment_sha256'):
             parser.error('Alignment protocol changed: use a new training run and its checkpoint')
         for key in ("patch_size", "latent_channels", "ssai_dimension"):
@@ -254,8 +272,12 @@ def main():
     (output / "run_config.json").write_text(json.dumps(config, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"device={device} torch={torch.__version__} amp={amp} parameters={sum(p.numel() for p in model.parameters()):,}", flush=True)
     print(f"data={config['data_root']} patch={config['patch_size']} RGB=3 HSI=204 latent={config['latent_channels']}", flush=True)
+    print(f"model={config.get('model_type','latent_rgb')} K={config['ssai_dimension']} train_layout={config.get('train_layout','random')} eval_layout={config.get('eval_layout','tiles')} degradation={config.get('degradation','bicubic')} upsampler={config.get('upsampler','bicubic')}", flush=True)
     if args.evaluate:
-        metrics = evaluate(model, val_loader, device, amp, output, channels_last=channels_last)
+        metrics = evaluate(model, val_loader, device, amp, output, channels_last=channels_last,
+                           baseline_mode=config.get('upsampler','bicubic'), degradation_mode=config.get('degradation','bicubic'))
+        metrics['eval_layout']=config.get('eval_layout','tiles')
+        metrics['limited_scenes']=args.max_val_scenes is not None
         (output / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
         print(json.dumps(metrics["scene_mean"], indent=2))
         return
@@ -292,7 +314,11 @@ def main():
             group_size = min(accumulation, steps - (step // accumulation) * accumulation)
             with torch.autocast(device.type, enabled=amp):
                 prediction = model(rgb, lr)
-                loss = F.mse_loss(prediction.float(), gt)
+                if 'valid_mask' in batch:
+                    mask=batch['valid_mask'].to(device)[:,None]
+                    loss=((prediction.float()-gt).square()*mask).sum()/(mask.sum()*gt.shape[1]).clamp_min(1)
+                else:
+                    loss = F.mse_loss(prediction.float(), gt)
             finite.logical_and_(torch.isfinite(loss))
             scaler.scale(loss / group_size).backward()
             if (step + 1) % accumulation == 0 or step + 1 == steps:
@@ -316,8 +342,10 @@ def main():
         train_seconds = time.perf_counter() - started
         validation_started = time.perf_counter()
         metrics = evaluate(model, val_loader, device, amp, output, max_batches=2 if args.smoke else None,
-                           channels_last=channels_last)
-        metrics["limited_scenes"] = args.max_val_scenes is not None
+                           channels_last=channels_last,baseline_mode=config.get('upsampler','bicubic'),
+                           degradation_mode=config.get('degradation','bicubic'))
+        metrics['eval_layout']=config.get('eval_layout','tiles')
+        metrics["limited_scenes"] = args.smoke or args.max_val_scenes is not None
         val_mse = metrics["scene_mean"]["model_mse"]
         improved = val_mse < best
         best = min(best, val_mse)
@@ -326,7 +354,7 @@ def main():
                   "loader_wait_seconds": data_wait, "train_patches_per_second": count / train_seconds,
                   "train_cube_requested_gib": read_bytes / 2**30,
                   "validation_cube_requested_gib": metrics["source_cube_requested_gib"],
-                  "data_root": config["data_root"], "limited_scenes": args.max_train_scenes is not None,
+                  "data_root": config["data_root"], "limited_scenes": args.smoke or args.max_train_scenes is not None,
                   **metrics["scene_mean"]}
         if timings:
             record["train_gpu_stream_seconds"] = sum(first.elapsed_time(last) for first, last in timings) / 1000

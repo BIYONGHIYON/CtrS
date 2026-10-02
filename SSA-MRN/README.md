@@ -263,3 +263,24 @@ HSI는 0-based bands 69/52/18과 동일한 GT 기반 1–99% stretch로 표시�
 [무작위 선택 기록](./experiments/results/lib_rgb_hsi_aligned_256_trained/random_samples/selection.json)과 세트별 지표·개별 패널도 함께 공개했습니다.
 
 평가용 [best.pt](./experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/best.pt) (98 epoch), 최종 학습 상태 [latest.pt](./experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/latest.pt) (100 epoch), [SHA256 체크섬](./experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/checksums.json)을 공개했습니다. 원본 LIB-HSI 데이터는 별도로 준비해야 합니다. 팀원은 [테스트 안내](./experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/README.md)의 명령에 자신의 데이터 경로를 지정해 전체 시험 평가와 이미지 생성을 실행할 수 있습니다. CUDA가 없는 환경의 CPU 평가도 지원했습니다.
+
+## RGB별 4그룹·K=4·23탭 보간 실험
+
+새 [실험 설정](./configs/lib_rgb_hsi_grouped12_k4_23tap.json)을 추가했습니다. 위의 100 epoch 결과와 공개 가중치는 기존 모델의 결과이며, 아래 구성은 별도 학습을 사용합니다.
+
+| 항목 | 새 구성 |
+|---|---|
+| HSI 압축·출력 | 연속 17밴드씩 12그룹 → 그룹별 feature 1개 → 최종 204밴드 |
+| SSA guide | feature 1–4는 R, 5–8은 G, 9–12는 B; 분기별 guide 1채널 |
+| SSA 내부 차원 | K=4 |
+| HSI 확대 | 채널별 23탭 LMS 보간; 모델의 중간 확대도 동일 방식 |
+| 정합 | RGB에 제한된 homography를 적용해 이동·회전·원근 기울기를 보정했습니다. |
+| 학습 | 원본 512×512 장면을 비중첩 256×256 네 조각으로 사용했습니다. |
+| 검증·시험 | 전체 512×512 시야를 area 평균으로 256×256으로 축소하며 조각으로 나누지 않습니다. |
+| 합성 LR | 256×256 GT를 area 평균으로 64×64로 축소했습니다. |
+
+학습 RGB는 원본에서 동일 위치를 자른 guide이며 HSI만 23탭으로 확대합니다. 검증·시험 RGB도 전체 시야를 256×256으로 축소해 GT와 맞춥니다. 정합으로 생긴 유효하지 않은 테두리는 loss와 양쪽 평가 지표에서 제외했습니다. 그룹과 RGB의 연결은 실험적 분기 배정이며 센서의 실제 파장 응답을 뜻하지 않습니다.
+
+정합은 학습 전에 [장면별 manifest](./experiments/results/lib_registration/projective_alignment.json)로 고정했으며, 실제 3D 회전각·깊이·시차를 복원하지는 않습니다. 정합 추정에 HR HSI를 사용하므로 GT 기반 전처리입니다. 확대·열화·평가 영역이 바뀌었으므로 기존 Bicubic 결과와 직접적인 ablation 비교로 해석하지 않습니다. 새 지표의 비교 기준은 `interp23_*`이며 기존 `bicubic_*`와 구분했습니다.
+
+VS Code 실행 설정 `LIB: train grouped12 K4 23tap (new run)`으로 시작하며 결과는 `lib_rgb_hsi_grouped12_k4_23tap`에 저장합니다. 재개와 시험 평가는 해당 구성의 `best.pt`를 사용합니다. 기존 latent 8/K=6 가중치를 새 모델로 재개하는 경우는 차단했습니다. 세부 구조와 검증 범위는 [확장 연구 정리](./docs/rgb_hsi_extension.md#12그룹k423탭-신규-프로토콜)에 기록했습니다.

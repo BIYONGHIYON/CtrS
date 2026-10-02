@@ -39,8 +39,12 @@ def cube_view(hdr):
     return np.rot90(raw.transpose(0, 2, 1), 3)
 
 
-def downsample(hsi):
-    """Synthetic x4 degradation: antialiased bicubic, fixed reflectance range."""
+def downsample(hsi,mode='bicubic'):
+    """Synthetic x4 degradation with a configured downsampling kernel."""
+    if mode=='area':
+        return F.avg_pool2d(hsi.unsqueeze(0),4).squeeze(0)
+    if mode!='bicubic':
+        raise ValueError('Unknown degradation mode')
     return F.interpolate(hsi.unsqueeze(0), scale_factor=0.25, mode="bicubic",
                          align_corners=False, antialias=True).squeeze(0).clamp(0, 1)
 
@@ -48,7 +52,7 @@ def downsample(hsi):
 class LIBHSI(Dataset):
     def __init__(self, root, split, patch_size=128, patches_per_scene=4,
                  limit=None, allow_incomplete=False, compute_lr=True, crop_seed=42, read_mode="whole",
-                 alignment_manifest=None):
+                 alignment_manifest=None,train_layout='random',eval_layout='tiles',degradation='bicubic'):
         if patch_size < 8 or patch_size % 4 or 512 % patch_size:
             raise ValueError("patch_size must divide 512 and be a multiple of 4 (>=8)")
         if split not in EXPECTED or patches_per_scene < 1:
@@ -57,6 +61,15 @@ class LIBHSI(Dataset):
         self.patch_size, self.patches_per_scene = patch_size, patches_per_scene
         self.compute_lr = compute_lr
         self.crop_seed = crop_seed
+        if train_layout not in ('random','quadrants') or eval_layout not in ('tiles','full256'):
+            raise ValueError('Invalid scene layout')
+        if (train_layout=='quadrants' or eval_layout=='full256') and patch_size!=256:
+            raise ValueError('Fixed quadrants/full256 require patch_size=256')
+        if degradation not in ('bicubic', 'area'):
+            raise ValueError('Unknown degradation mode')
+        if train_layout=='quadrants' and patches_per_scene!=4:
+            raise ValueError('Quadrant training requires patches_per_scene=4')
+        self.train_layout,self.eval_layout,self.degradation=train_layout,eval_layout,degradation
         if read_mode not in ("whole", "stripes"):
             raise ValueError("read_mode must be whole or stripes")
         self.read_mode = read_mode
@@ -64,8 +77,8 @@ class LIBHSI(Dataset):
         self._rgb_scene = None
         if alignment_manifest:
             manifest = json.loads(Path(alignment_manifest).read_text(encoding='utf-8'))
-            if manifest.get('partial') or manifest.get('version') != 1:
-                raise ValueError('Alignment manifest must be a complete version 1 audit')
+            if manifest.get('partial') or manifest.get('version') not in (1,2):
+                raise ValueError('Alignment manifest must be a complete supported audit')
             self.alignment = manifest['scenes']
         base = self.root / split
         self.files = sorted(p for p in (base / "rgb").glob("*.png") if not p.name.startswith("._"))
@@ -89,7 +102,7 @@ class LIBHSI(Dataset):
                 if im.size != (512, 512):
                     raise ValueError(f"Unexpected RGB shape: {rgb}")
         self.tiles_per_side = 512 // patch_size
-        self.per_scene = patches_per_scene if split == "train" else self.tiles_per_side ** 2
+        self.per_scene = (4 if train_layout=='quadrants' else patches_per_scene) if split=='train' else (1 if eval_layout=='full256' else self.tiles_per_side**2)
         self._cache_scene = None
         self._cache_cube = None
         self._stripe_scene = None
@@ -158,10 +171,12 @@ class LIBHSI(Dataset):
         dy, dx = 0, 0
         if self.alignment is not None:
             record = self.alignment[self.split+'/'+self.files[scene].stem]
-            dy, dx = int(record['dy']), int(record['dx'])
+            dy, dx = int(record.get('dy',0)), int(record.get('dx',0))
             if max(abs(dy), abs(dx)) > 12:
                 raise ValueError('Alignment shift exceeds safe bound')
-        if self.split == "train":
+        if self.split=='train' and self.train_layout=='quadrants':
+            y,x=(tile//2)*256,(tile%2)*256
+        elif self.split == "train":
             # x4-aligned random crops; online joint flips, no precomputed cubes.
             starts=[]
             for delta in (dy,dx):
@@ -172,7 +187,11 @@ class LIBHSI(Dataset):
         else:
             y, x = (tile // self.tiles_per_side) * p, (tile % self.tiles_per_side) * p
         before_bytes = self._read_bytes_total
-        if self.read_mode == "stripes":
+        full_scene=self.split!='train' and self.eval_layout=='full256'
+        if full_scene:
+            cube=self._read_scene(scene)
+            gt_array=np.array(cube.transpose(2,0,1),dtype='float32',order='C',copy=True)
+        elif self.read_mode == "stripes":
             gt_array = self._read_patch(scene, y, x, p)
         else:
             cube = self._read_scene(scene)
@@ -181,18 +200,23 @@ class LIBHSI(Dataset):
             raise ValueError(f"Nonfinite reflectance: {self.headers[scene]}")
         np.clip(gt_array, 0, 1, out=gt_array)
         if self.alignment is not None:
-            from .registration import warp_rgb
+            from .registration import warp_rgb,warp_projective
             if self._rgb_scene != scene:
                 with Image.open(self.files[scene]) as image:
-                    self._aligned_rgb,self._valid_rgb=warp_rgb(np.array(image.convert('RGB')),dy,dx)
+                    original=np.array(image.convert('RGB'))
+                    self._aligned_rgb,self._valid_rgb=(warp_projective(original,record['matrix']) if 'matrix' in record else warp_rgb(original,dy,dx))
                 self._rgb_scene=scene
-            rgb_array=self._aligned_rgb[y:y+p,x:x+p].copy()
-            valid_array=self._valid_rgb[y:y+p,x:x+p].copy()
+            rgb_array=self._aligned_rgb.copy() if full_scene else self._aligned_rgb[y:y+p,x:x+p].copy()
+            valid_array=self._valid_rgb.copy() if full_scene else self._valid_rgb[y:y+p,x:x+p].copy()
         else:
             with Image.open(self.files[scene]) as image:
-                rgb_array = np.array(image.convert("RGB").crop((x, y, x+p, y+p)), copy=True)
-            valid_array=np.ones((p,p),dtype=bool)
+                rgb_array = np.array(image.convert('RGB') if full_scene else image.convert("RGB").crop((x, y, x+p, y+p)), copy=True)
+            valid_array=np.ones(rgb_array.shape[:2],dtype=bool)
         rgb_array = rgb_array.transpose(2, 0, 1).astype(np.float32) / 255
+        if full_scene:
+            gt_array=F.avg_pool2d(torch.from_numpy(gt_array)[None],2)[0].numpy()
+            rgb_array=F.avg_pool2d(torch.from_numpy(rgb_array)[None],2)[0].numpy()
+            valid_array=(F.avg_pool2d(torch.from_numpy(valid_array.astype('float32'))[None,None],2)[0,0]==1).numpy()
         if self.split == "train":
             for dimension in (1, 2):
                 if torch.rand((), generator=generator) < 0.5:
@@ -204,7 +228,9 @@ class LIBHSI(Dataset):
         result = {"rgb": rgb, "gt": gt, "scene": self.files[scene].stem,
                   "source_cube_bytes": self._read_bytes_total - before_bytes}
         if self.compute_lr:
-            result["lr_hsi"] = downsample(gt)
+            result["lr_hsi"] = downsample(gt,self.degradation)
+        if self.degradation!='bicubic':
+            result['degradation_mode']=self.degradation
         if self.alignment is not None:
             result['valid_mask']=torch.from_numpy(np.ascontiguousarray(valid_array))
         return result

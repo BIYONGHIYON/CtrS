@@ -12,30 +12,40 @@ from torch.nn import functional as F
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "SSA-MRN/src"))
 from ssamrn.data.lib_hsi import LIBHSI
-from ssamrn.models.rgb_hsi import RGBHSISsaMRN
+from ssamrn.models.rgb_grouped import build_rgb_hsi_model
+from ssamrn.models.interp23 import interp23tap
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--checkpoint", type=Path, default=ROOT / "SSA-MRN/experiments/checkpoints/lib_rgb_hsi/smoke/best.pt")
     parser.add_argument("--data-root", type=Path)
-    parser.add_argument("--sample-index", type=int, default=0, help="Validation tile index (zero based)")
+    parser.add_argument("--sample-index", type=int, default=0, help="Split sample index (zero based)")
     parser.add_argument("--split", choices=("validation", "test"), default="validation")
     parser.add_argument("--output-dir", type=Path, default=ROOT / "SSA-MRN/experiments/results/lib_rgb_hsi_smoke")
     args = parser.parse_args()
     state = torch.load(args.checkpoint, map_location="cpu", weights_only=True)
     config = state["config"]
-    data = LIBHSI(args.data_root or config["data_root"], args.split, config["patch_size"],
-                  alignment_manifest=(ROOT/config['alignment_manifest']) if config.get('alignment_manifest') else None)
+    manifest = (ROOT/config['alignment_manifest']) if config.get('alignment_manifest') else None
+    if manifest and config.get('alignment_sha256'):
+        import hashlib
+        if hashlib.sha256(manifest.read_bytes()).hexdigest() != config['alignment_sha256']:
+            parser.error('Alignment manifest differs from the checkpoint')
+    data = LIBHSI(ROOT/(args.data_root or config["data_root"]), args.split, config["patch_size"],
+                  alignment_manifest=manifest, eval_layout=config.get('eval_layout','tiles'),
+                  degradation=config.get('degradation','bicubic'))
     sample = data[args.sample_index]
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     torch.set_num_threads(6)
-    model = RGBHSISsaMRN(204, config["latent_channels"], config["ssai_dimension"]).to(device).eval()
+    model = build_rgb_hsi_model(config).to(device).eval()
     model.load_state_dict(state["model"])
     with torch.inference_mode(), torch.autocast(device.type, enabled=config["amp"] and device.type == "cuda"):
         prediction = model(sample["rgb"].unsqueeze(0).to(device), sample["lr_hsi"].unsqueeze(0).to(device))[0].float().cpu()
-    baseline = F.interpolate(sample["lr_hsi"].unsqueeze(0), size=sample["gt"].shape[-2:],
-                             mode="bicubic", align_corners=False)[0]
+    use_23tap = config.get('upsampler') == '23tap'
+    baseline = (interp23tap(sample['lr_hsi'].unsqueeze(0),4) if use_23tap else
+                F.interpolate(sample["lr_hsi"].unsqueeze(0), size=sample["gt"].shape[-2:],
+                              mode="bicubic", align_corners=False))[0]
+    baseline_label, baseline_key = ('23-tap LMS baseline','interp23') if use_23tap else ('Bicubic baseline','bicubic')
     bands = [69, 52, 18]
     gt_rgb = sample["gt"][bands].permute(1, 2, 0).numpy()
     lo, hi = np.percentile(gt_rgb, [1, 99], axis=(0, 1))
@@ -49,7 +59,7 @@ def main():
     size = config["patch_size"]
     panels = [(f"LR HSI input ({size//4}x{size//4})", hsi_display(sample["lr_hsi"]), "input_lr_hsi.png"),
               (f"RGB guide ({size}x{size})", rgb, "input_rgb.png"),
-              ("Bicubic baseline", hsi_display(baseline), "bicubic.png"),
+              (baseline_label, hsi_display(baseline), baseline_key+'.png'),
               ("Prediction: best.pt", hsi_display(prediction), "prediction.png"),
               ("HSI ground truth", hsi_display(sample["gt"]), "ground_truth.png")]
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -62,7 +72,8 @@ def main():
     steps = int(next(iter(state["optimizer"]["state"].values()))["step"])
     scope = "smoke" if args.checkpoint.parent.name == "smoke" else "checkpoint"
     scene_tile = args.sample_index % data.per_scene
-    draw.text((10, 8), f"LIB-HSI | epoch {state['epoch']} | {scope}: {steps} steps | {args.split} {sample['scene']} | tile {scene_tile} (index {args.sample_index})", fill="black", font=title_font)
+    sample_label = 'full scene' if config.get('eval_layout')=='full256' else f'tile {scene_tile}'
+    draw.text((10, 8), f"LIB-HSI | epoch {state['epoch']} | {scope}: {steps} steps | {args.split} {sample['scene']} | {sample_label} (index {args.sample_index})", fill="black", font=title_font)
     for i, (label, picture, filename) in enumerate(panels):
         picture.save(args.output_dir / filename)
         draw.text((i * width + 9, 43), label, fill="black", font=font)
@@ -77,10 +88,11 @@ def main():
 
     report = {"checkpoint": str(args.checkpoint), "epoch": state["epoch"], "scene": sample["scene"],
               "sample_index": args.sample_index, "patch_size": config["patch_size"],
-              "prediction": metrics(prediction), "bicubic": metrics(baseline),
+              "prediction": metrics(prediction), baseline_key: metrics(baseline),
               "split": args.split,
               "scene_tile": scene_tile,
-              "notes": "Single tile illustration; all 204 bands for metrics; not a full-split benchmark."}
+              "eval_layout": config.get('eval_layout','tiles'),
+              "notes": "Single sample illustration; all 204 bands for metrics; not a full-split benchmark."}
     (args.output_dir / "metrics.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps(report, indent=2))
     print(args.output_dir / "comparison.png")
