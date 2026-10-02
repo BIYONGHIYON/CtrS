@@ -1,0 +1,161 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "LIB: train grouped12 K4 23tap (new run)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": ["--config", "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json"]
+    },
+    {
+      "name": "LIB: smoke grouped12 K4 23tap",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": ["--config", "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json", "--smoke"]
+    },
+    {
+      "name": "LIB: resume grouped12 best",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": ["--config", "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json", "--resume", "${workspaceFolder}/SSA-MRN/experiments/checkpoints/lib_rgb_hsi_grouped12_k4_23tap/best.pt"]
+    },
+    {
+      "name": "LIB: evaluate grouped12 best (whole scene)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": ["--config", "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json", "--evaluate"]
+    },
+    {
+      "name": "LIB: smoke (external E drive)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--smoke"
+      ]
+    },
+    {
+      "name": "LIB: train optimized (3060 Ti)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": []
+    },
+    {
+      "name": "LIB: resume best",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--resume",
+        "${workspaceFolder}/SSA-MRN/experiments/checkpoints/lib_rgb_hsi_fast/best.pt"
+      ]
+    },
+    {
+      "name": "LIB: evaluate test (best)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--evaluate"
+      ]
+    },
+    {
+      "name": "LIB: train aligned (new run)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned.json"
+      ]
+    },
+    {
+      "name": "LIB: train aligned 64 to 256 (new run)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned_256.json"
+      ]
+    },
+    {
+      "name": "LIB: smoke aligned 64 to 256",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned_256.json",
+        "--smoke"
+      ]
+    },
+    {
+      "name": "LIB: resume aligned 256 best",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned_256.json",
+        "--resume",
+        "${workspaceFolder}/SSA-MRN/experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/best.pt"
+      ]
+    },
+    {
+      "name": "LIB: evaluate aligned 256 best",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned_256.json",
+        "--evaluate"
+      ]
+    }
+  ]
+}

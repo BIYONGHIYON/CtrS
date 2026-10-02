@@ -1,4 +1,5 @@
 .DS_Store
+backups/
 __pycache__/
 *.py[cod]
 .venv/
@@ -7,9 +8,13 @@ __pycache__/
 venv/
 .env
 .idea/
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
 
 # Local datasets
+SSA-MRN/data/dataset/
 **/data/raw/**
 **/data/processed/**
 !**/data/raw/.gitkeep
@@ -47,6 +52,14 @@ build/
 dist/
 .env.*
 tempCodeRunnerFile.py
+
+# Local Java runtime created by an editor extension.
+SSA-MRN/scripts/oracleJdk-*/
+
+# Small, reviewable LIB smoke-test figure; datasets/checkpoints stay local.
+!SSA-MRN/experiments/results/lib_rgb_hsi_smoke/
+!SSA-MRN/experiments/results/lib_rgb_hsi_smoke/comparison.png
+!SSA-MRN/experiments/results/lib_rgb_hsi_smoke/metrics.json
 
 # Share only these QuickBird smoke-test results.
 !SSA-MRN/experiments/results/quickbird_smoke/
@@ -96,3 +109,25 @@ tempCodeRunnerFile.py
 !SSA-MRN/experiments/results/worldview3_k6_trained/*.png
 !SSA-MRN/experiments/results/worldview3_k6_trained/metrics.json
 !SSA-MRN/experiments/results/worldview3_k6_trained/prediction_bands.npy
+
+# Reviewable LIB trained results.
+!SSA-MRN/experiments/results/lib_rgb_hsi_trained/
+!SSA-MRN/experiments/results/lib_rgb_hsi_trained/*.png
+!SSA-MRN/experiments/results/lib_rgb_hsi_trained/*.json
+
+!SSA-MRN/experiments/results/lib_registration/
+!SSA-MRN/experiments/results/lib_registration/*.json
+!SSA-MRN/experiments/results/lib_registration/*.png
+
+!SSA-MRN/experiments/results/lib_rgb_hsi_aligned_256_trained/
+!SSA-MRN/experiments/results/lib_rgb_hsi_aligned_256_trained/*.png
+!SSA-MRN/experiments/results/lib_rgb_hsi_aligned_256_trained/*.json
+
+# Shared LIB aligned 256 model and reproducibility files.
+!SSA-MRN/experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/
+!SSA-MRN/experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/best.pt
+!SSA-MRN/experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/latest.pt
+!SSA-MRN/experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/checksums.json
+!SSA-MRN/experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/README.md
+!SSA-MRN/experiments/results/lib_rgb_hsi_aligned_256_trained/random_samples/
+!SSA-MRN/experiments/results/lib_rgb_hsi_aligned_256_trained/random_samples/**
