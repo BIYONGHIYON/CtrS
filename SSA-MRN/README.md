@@ -30,7 +30,7 @@ best epoch 99. [상세 보고서·직전 연구와 차이](docs/experiments/rgb0
 
 ### test 예시 5종
 
-[204밴드 슬라이더 뷰어](docs/assets/rgb04_triple12/band_viewer/index.html) · HTML 폴더를 내려받아 `index.html`을 브라우저에서 여세요. 각 장면 HTML도 단독 실행됩니다. 같은 epoch 99 가중치의 CPU 추론이며, 기존 CUDA AMP 예시와 미세한 수치 차이가 있을 수 있습니다.
+[204밴드 슬라이더 웹 뷰어](https://biyonghiyon.github.io/CtrS/ssa-mrn/) · [오프라인 HTML](docs/assets/rgb04_triple12/band_viewer/index.html). 웹 링크에서 5장면을 선택해 확인할 수 있으며, 내려받은 HTML도 단독 실행됩니다. 같은 epoch 99 가중치의 CPU 추론이며, 기존 CUDA AMP 예시와 미세한 수치 차이가 있을 수 있습니다.
 
 왼쪽부터 **LR HSI · RGB 입력 · 예측 · 정답**입니다. 동일한 HSI 대비 범위를 사용하며, 지표는 204밴드 원래 값으로 계산합니다. 이전 보고서와 같은 5장면의 tile 0입니다.
 

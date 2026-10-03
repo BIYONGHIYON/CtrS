@@ -68,6 +68,6 @@ def main():
         records.append(dict(metadata,file=path.name,bytes=path.stat().st_size));print(json.dumps(records[-1]),flush=True)
     (args.output_dir/'manifest.json').write_text(json.dumps(records,indent=2),encoding='utf-8')
     links=''.join(f'<li><a href="{r["file"]}">예시 {i}: {r["scene"]} · 204밴드</a></li>' for i,r in enumerate(records,1))
-    (args.output_dir/'index.html').write_text('<!doctype html><html lang="ko"><meta charset="utf-8"><title>SSA-MRN 밴드 뷰어</title><h1>테스트 5장면 · 204밴드</h1><p>각 HTML은 단독으로 열 수 있습니다. GitHub에서는 파일을 내려받아 브라우저에서 여세요.</p><ul>'+links+'</ul></html>',encoding='utf-8')
+    (args.output_dir/'index.html').write_text('<!doctype html><html lang="ko"><meta charset="utf-8"><title>SSA-MRN 밴드 뷰어</title><h1>테스트 5장면 · 204밴드</h1><p>장면을 선택하면 204밴드 슬라이더가 열립니다. 각 HTML은 내려받아 오프라인에서도 사용할 수 있습니다.</p><ul>'+links+'</ul></html>',encoding='utf-8')
 
 if __name__=='__main__': main()
