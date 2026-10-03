@@ -123,6 +123,12 @@ $run = 'C:\CtrS-triple\SSA-MRN\experiments\checkpoints\remote-runs\20261003-1624
 5세트는 [preview_lib.py](./scripts/preview_lib.py)에 `--split test --sample-index`로
 12, 0, 172, 72, 252를 각각 지정하여 생성했습니다.
 
+## 준비 중인 후속 실험 — 6밴드씩 34그룹
+
+원본 HSI 204밴드를 연속 6밴드씩 34그룹으로 압축하고, R·G·B 각각 34특징을 처리하는
+[triple34 구성](./docs/triple_rgb_34.md)을 추가했습니다. 별도 설정과 결과 폴더를 사용합니다.
+실제 데이터의 GPU smoke 및 학습 결과는 아직 없으며, 위 시험 지표와 이미지 5세트는 triple12 결과입니다.
+
 ## 자료와 해석 범위
 
 - [triple RGB와 타일 구성](./docs/triple_rgb_tiles.md)

@@ -2,6 +2,47 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "LIB: triple34 tiles smoke",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple34_k4_23tap_tiles.json",
+        "--smoke"
+      ]
+    },
+    {
+      "name": "LIB: triple34 tiles train (new run)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple34_k4_23tap_tiles.json"
+      ]
+    },
+    {
+      "name": "LIB: triple34 tiles evaluate best",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple34_k4_23tap_tiles.json",
+        "--evaluate"
+      ]
+    },
+    {
       "name": "LIB: triple12 tiles smoke",
       "type": "debugpy",
       "request": "launch",
