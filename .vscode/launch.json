@@ -2,6 +2,47 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "LIB: triple12 tiles smoke",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple12_k4_23tap_tiles.json",
+        "--smoke"
+      ]
+    },
+    {
+      "name": "LIB: triple12 tiles train (new run)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple12_k4_23tap_tiles.json"
+      ]
+    },
+    {
+      "name": "LIB: triple12 tiles evaluate best",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple12_k4_23tap_tiles.json",
+        "--evaluate"
+      ]
+    },
+    {
       "name": "LIB: train grouped12 K4 23tap (new run)",
       "type": "debugpy",
       "request": "launch",
@@ -9,7 +50,10 @@
       "python": "${workspaceFolder}/.venv/Scripts/python.exe",
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
-      "args": ["--config", "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json"]
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json"
+      ]
     },
     {
       "name": "LIB: smoke grouped12 K4 23tap",
@@ -19,7 +63,11 @@
       "python": "${workspaceFolder}/.venv/Scripts/python.exe",
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
-      "args": ["--config", "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json", "--smoke"]
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json",
+        "--smoke"
+      ]
     },
     {
       "name": "LIB: resume grouped12 best",
@@ -29,7 +77,12 @@
       "python": "${workspaceFolder}/.venv/Scripts/python.exe",
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
-      "args": ["--config", "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json", "--resume", "${workspaceFolder}/SSA-MRN/experiments/checkpoints/lib_rgb_hsi_grouped12_k4_23tap/best.pt"]
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json",
+        "--resume",
+        "${workspaceFolder}/SSA-MRN/experiments/checkpoints/lib_rgb_hsi_grouped12_k4_23tap/best.pt"
+      ]
     },
     {
       "name": "LIB: evaluate grouped12 best (whole scene)",
@@ -39,7 +92,11 @@
       "python": "${workspaceFolder}/.venv/Scripts/python.exe",
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
-      "args": ["--config", "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json", "--evaluate"]
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json",
+        "--evaluate"
+      ]
     },
     {
       "name": "LIB: smoke (external E drive)",

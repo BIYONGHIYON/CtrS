@@ -50,14 +50,60 @@ class RGBGroupedSsaMRN(nn.Module):
         return interp23tap(lr_hsi,4)+self.decoder(residual)
 
 
+class ScalarGrouped12Core(RGBGroupedCore):
+    """One scalar guide drives all twelve spectral branches at every scale."""
+    def __init__(self):
+        super().__init__()
+        self.guide_channels = 1
+        self.conv1t1 = nn.Conv2d(1, 1, 3, padding=1)
+        self.cov2t64 = nn.Conv2d(14, 64, 3, padding=1)
+
+    def _attend(self, guide, features, ms, blocks, fusion, activation):
+        # Reuse the vectorized implementation: all three guide groups see
+        # the same scalar input, while their branch weights remain independent.
+        return super()._attend(guide.expand(-1, 3, -1, -1), features, ms,
+                               blocks, fusion, activation)
+
+
+class RGBTripleGroupedSsaMRN(nn.Module):
+    """R/G/B independently reconstruct all 204 bands; learn bandwise fusion."""
+    def __init__(self):
+        super().__init__()
+        self.encoder = nn.Conv2d(204, 12, 1, groups=12)
+        self.cores = nn.ModuleList([ScalarGrouped12Core() for _ in range(3)])
+        self.decoders = nn.ModuleList([nn.Conv2d(12, 204, 1, groups=12) for _ in range(3)])
+        self.fusion = nn.Conv2d(204 * 3, 204, 1, groups=204)
+        for decoder in self.decoders:
+            nn.init.normal_(decoder.weight, std=1e-3)
+            nn.init.zeros_(decoder.bias)
+        nn.init.constant_(self.fusion.weight, 1 / 3)
+        nn.init.zeros_(self.fusion.bias)
+
+    def forward(self, rgb, lr_hsi):
+        if rgb.ndim != 4 or lr_hsi.ndim != 4:
+            raise ValueError('Expected NCHW RGB and HSI')
+        if rgb.shape[1] != 3 or lr_hsi.shape[1] != 204 or rgb.shape[0] != lr_hsi.shape[0]:
+            raise ValueError('Expected matching batches, RGB=3 and HSI=204')
+        if rgb.shape[-2:] != tuple(s * 4 for s in lr_hsi.shape[-2:]):
+            raise ValueError('Expected x4 spatial ratio')
+        latent = self.encoder(lr_hsi)
+        up = interp23tap(latent, 4)
+        corrections = [decoder(core(rgb[:, i:i+1], up, latent))
+                       for i, (core, decoder) in enumerate(zip(self.cores, self.decoders))]
+        # Interleave R/G/B estimates for each output band before grouped fusion.
+        n, c, h, w = corrections[0].shape
+        per_band = torch.stack(corrections, dim=2).reshape(n, c * 3, h, w)
+        return interp23tap(lr_hsi, 4) + self.fusion(per_band)
+
+
 def build_rgb_hsi_model(config):
     kind=config.get('model_type','latent_rgb')
-    if kind=='rgb_grouped12_23tap':
+    if kind in ('rgb_grouped12_23tap', 'rgb_triple_grouped12_23tap'):
         if config['latent_channels']!=12 or config['ssai_dimension']!=4:
             raise ValueError('Grouped model requires 12 features and K=4')
         if config.get('upsampler') != '23tap':
             raise ValueError('Grouped model requires upsampler=23tap')
-        return RGBGroupedSsaMRN()
+        return RGBTripleGroupedSsaMRN() if kind == 'rgb_triple_grouped12_23tap' else RGBGroupedSsaMRN()
     if kind!='latent_rgb':
         raise ValueError('Unknown model_type: '+kind)
     return RGBHSISsaMRN(204,config['latent_channels'],config['ssai_dimension'],config.get('vectorized_ssa',True))
