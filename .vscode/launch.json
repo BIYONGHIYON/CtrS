@@ -2,6 +2,88 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "LIB: triple12 bilinear tiles smoke",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple12_k4_bilinear_tiles.json",
+        "--smoke"
+      ]
+    },
+    {
+      "name": "LIB: triple12 bilinear tiles train (new run)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple12_k4_bilinear_tiles.json"
+      ]
+    },
+    {
+      "name": "LIB: triple12 bilinear tiles evaluate best",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple12_k4_bilinear_tiles.json",
+        "--evaluate"
+      ]
+    },
+    {
+      "name": "LIB: triple34 bilinear tiles smoke",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple34_k4_bilinear_tiles.json",
+        "--smoke"
+      ]
+    },
+    {
+      "name": "LIB: triple34 bilinear tiles train (new run)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple34_k4_bilinear_tiles.json"
+      ]
+    },
+    {
+      "name": "LIB: triple34 bilinear tiles evaluate best",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
+      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--config",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple34_k4_bilinear_tiles.json",
+        "--evaluate"
+      ]
+    },
+    {
       "name": "LIB: triple34 tiles smoke",
       "type": "debugpy",
       "request": "launch",

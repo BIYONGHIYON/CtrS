@@ -65,47 +65,9 @@ smoke 결과의 유한 지표·메모리·완료 여부를 확인한 후 `--smok
 VS Code 실행 구성에는 `LIB: triple34 tiles smoke / train (new run) / evaluate best`를 추가했습니다.
 해당 구성은 저장소 안의 `.venv`와 기본 데이터 경로를 가정하므로 별도 worktree에서는 위 명령으로 공용 경로를 지정하세요.
 
-## SSH 연결과 독립적인 백그라운드 실행
+## 실험 중단 및 결과 삭제
 
-서버에 별도 작업 폴더 `C:\CtrS-triple34`와 예약 작업 `CtrS-Triple34-LIB-Control`을 등록했습니다.
-기존 12특징 실행기·가중치·결과를 보존했습니다. 서버의 기존 controller를 새 폴더로 복사하여
-34특징 설정과 공용 Python·데이터 경로를 지정한 서버 로컬 설정입니다.
-`C:\CtrS-triple34\scripts`의 controller와 `triple34-remote-config.json`은 서버 로컬 파일이며 이 PR에 포함되지 않습니다.
-
-2026-10-03 21:44:41부터 새로운 가중치로 100 epoch 학습을 시작했습니다.
-실행 ID는 `20261003-214440-953e9b4298e3`입니다. smoke 가중치나 기존 12특징 가중치를 재개하지 않았습니다.
-
-SSH/VS Code Remote SSH로 접속한 PowerShell에서:
-
-```powershell
-$py = 'C:\CtrS\.venv\Scripts\python.exe'
-$ctl = 'C:\CtrS-triple34\scripts\remote-training.py'
-& $py $ctl status
-& $py $ctl logs --follow
-```
-
-실행기는 예약 작업 아래에서 학습 프로세스를 생성합니다. 클라이언트 연결 종료나 Mac 절전과 독립적입니다.
-실제 SSH 세션을 종료한 뒤 새 세션으로 재접속해 동일 PID(25272)와 실행 ID가 유지되고,
-epoch 1 진행이 81/1,572 → 427/1,572 단계로 증가한 것을 확인했습니다.
-로그 보기에서 Ctrl+C를 눌러도 학습은 중단되지 않습니다. 서버 `trainer` 계정은 로그인 상태를 유지해야 하며,
-화면 잠금은 가능합니다. 서버 전원·로그아웃·재부팅 시 학습이 계속된다는 뜻은 아닙니다.
-서버 AC 전원의 자동 절전 대기 시간은 0(사용 안 함)으로 확인했습니다.
-
-학습을 명시적으로 중단한 뒤 저장 지점에서 재개하려면:
-
-```powershell
-# 학습 중단을 원할 때만 실행. 저장되지 않은 현재 epoch 진행분은 잃을 수 있습니다.
-& $py $ctl stop
-$run = 'C:\CtrS-triple34\SSA-MRN\experiments\checkpoints\remote-runs\20261003-214440-953e9b4298e3'
-& $py $ctl resume-latest --from-dir $run
-```
-
-최소 한 epoch가 완료되어 `latest.pt`가 있어야 재개할 수 있습니다.
-재개는 원본 체크포인트를 복사해 새 고유 실행 폴더에 저장하며 기존 결과를 덮어쓰지 않습니다.
-학습이 이미 진행 중이면 `start`나 재개 명령을 추가로 실행하지 마세요.
-
-현재 실행 결과 폴더:
-
-```text
-C:\CtrS-triple34\SSA-MRN\experiments\checkpoints\remote-runs\20261003-214440-953e9b4298e3
-```
+2026-10-03 21:56:00에 사용자 요청으로 34특징 학습을 중단했습니다.
+이후 사용자 요청으로 해당 실행의 체크포인트, smoke 결과, 실행 로그를 삭제했습니다.
+이 문서의 smoke 수치는 삭제 전 확인한 실행 기록이며 파일은 현재 존재하지 않습니다.
+원본 데이터와 완료된 12특징 결과는 유지합니다. 후속 실험은 [12특징 Bilinear 구성](./triple_rgb_12_bilinear.md)입니다.
