@@ -76,13 +76,14 @@ class ScalarGrouped12Core(RGBGroupedCore):
                                blocks, fusion, activation)
 
 
-class ScalarGrouped34Core(RGBLatentCore):
-    """One scalar RGB guide drives 34 branches; each feature represents six bands."""
-    def __init__(self, core_resampling='area_23tap'):
-        super().__init__(34, 4, vectorized=True)
+class ScalarGroupedCore(RGBLatentCore):
+    """One scalar guide drives grouped spectral branches without expanded HR inputs."""
+    def __init__(self, channels=34, core_resampling='area_23tap'):
+        super().__init__(channels, 4, vectorized=True)
+        self.channels = channels
         self.guide_channels = 1
         self.conv1t1 = nn.Conv2d(1, 1, 3, padding=1)
-        self.cov2t64 = nn.Conv2d(36, 64, 3, padding=1)
+        self.cov2t64 = nn.Conv2d(channels + 2, 64, 3, padding=1)
         for blocks in (self.SSA_blocks, self.SSA_blocks1, self.SSA_blocks2):
             for block in blocks:
                 block.conv1t6 = nn.Conv2d(1, 4, 3, padding=1)
@@ -97,31 +98,37 @@ class ScalarGrouped34Core(RGBLatentCore):
         guide = F.conv2d(pan, torch.cat([b.conv1t6.weight for b in blocks]),
                          torch.cat([b.conv1t6.bias for b in blocks]), padding=1).relu()
         guide = F.conv2d(guide, torch.cat([b.conv6t6.weight for b in blocks]),
-                         torch.cat([b.conv6t6.bias for b in blocks]), padding=1, groups=34)
+                         torch.cat([b.conv6t6.bias for b in blocks]), padding=1, groups=self.channels)
         # Split the linear projection into shared features + one per-branch band.
         # This equals conv(cat(features, band)) without a 34*35-channel HR tensor.
-        shared_weights = torch.cat([b.conv7t6_3.weight[:, :34] for b in blocks])
-        band_weights = torch.cat([b.conv7t6_3.weight[:, 34:] for b in blocks])
+        shared_weights = torch.cat([b.conv7t6_3.weight[:, :self.channels] for b in blocks])
+        band_weights = torch.cat([b.conv7t6_3.weight[:, self.channels:] for b in blocks])
         projected = F.conv2d(features, shared_weights, padding=1)
         projected = projected + F.conv2d(ms, band_weights,
-                         torch.cat([b.conv7t6_3.bias for b in blocks]), padding=1, groups=34)
-        guide_flat = guide.reshape(n, 136, h*w)
-        attention = (guide_flat * projected.transpose(-1, -2).reshape(n, 136, h*w)).reshape(n, 136, h, w)
-        attention = attention.transpose(-1, -2).reshape(n, 136, h*w).softmax(dim=-1)
-        return activation(fusion((guide_flat * attention).reshape(n, 136, h, w)))
+                         torch.cat([b.conv7t6_3.bias for b in blocks]), padding=1, groups=self.channels)
+        guide_flat = guide.reshape(n, self.channels * 4, h*w)
+        attention = (guide_flat * projected.transpose(-1, -2).reshape(n, self.channels * 4, h*w)).reshape(n, self.channels * 4, h, w)
+        attention = attention.transpose(-1, -2).reshape(n, self.channels * 4, h*w).softmax(dim=-1)
+        return activation(fusion((guide_flat * attention).reshape(n, self.channels * 4, h, w)))
+
+
+class ScalarGrouped34Core(ScalarGroupedCore):
+    """Compatibility for existing 34-feature checkpoints."""
+    def __init__(self, core_resampling="area_23tap"):
+        super().__init__(34, core_resampling)
 
 
 class RGBTripleGroupedSsaMRN(nn.Module):
     """R/G/B independently reconstruct all 204 bands; learn bandwise fusion."""
     def __init__(self, latent_channels=12, core_resampling='area_23tap'):
         super().__init__()
-        if latent_channels not in (12, 34):
-            raise ValueError('Triple grouped model supports 12 or 34 features')
+        if latent_channels not in (12, 17, 34):
+            raise ValueError('Triple grouped model supports 12, 17 or 34 features')
         self.encoder = nn.Conv2d(204, latent_channels, 1, groups=latent_channels)
         if latent_channels == 12:
             self.cores = nn.ModuleList([ScalarGrouped12Core(core_resampling) for _ in range(3)])
         else:
-            self.cores = nn.ModuleList([ScalarGrouped34Core(core_resampling) for _ in range(3)])
+            self.cores = nn.ModuleList([ScalarGroupedCore(latent_channels, core_resampling) for _ in range(3)])
         self.decoders = nn.ModuleList([nn.Conv2d(latent_channels, 204, 1, groups=latent_channels) for _ in range(3)])
         self.fusion = nn.Conv2d(204 * 3, 204, 1, groups=204)
         for decoder in self.decoders:
@@ -149,8 +156,8 @@ class RGBTripleGroupedSsaMRN(nn.Module):
 
 def build_rgb_hsi_model(config):
     kind=config.get('model_type','latent_rgb')
-    if kind in ('rgb_grouped12_23tap', 'rgb_triple_grouped12_23tap', 'rgb_triple_grouped34_23tap', 'rgb_triple_grouped34_bilinear', 'rgb_triple_grouped12_bilinear'):
-        channels = 34 if kind in ('rgb_triple_grouped34_23tap', 'rgb_triple_grouped34_bilinear') else 12
+    if kind in ('rgb_grouped12_23tap', 'rgb_triple_grouped12_23tap', 'rgb_triple_grouped34_23tap', 'rgb_triple_grouped34_bilinear', 'rgb_triple_grouped12_bilinear', 'rgb_triple_grouped17_23tap'):
+        channels = 17 if kind == 'rgb_triple_grouped17_23tap' else 34 if kind in ('rgb_triple_grouped34_23tap', 'rgb_triple_grouped34_bilinear') else 12
         if config['latent_channels'] != channels or config['ssai_dimension'] != 4:
             raise ValueError(f'Grouped model requires {channels} features and K=4')
         if config.get('upsampler') != '23tap':
