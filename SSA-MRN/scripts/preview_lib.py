@@ -1,4 +1,4 @@
-"""Render five comparable panels from saved LIB weights without additional training."""
+"""Render four comparable panels from saved LIB weights without additional training."""
 import argparse
 import json
 import sys
@@ -18,11 +18,12 @@ from ssamrn.models.interp23 import interp23tap
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--checkpoint", type=Path, default=ROOT / "SSA-MRN/experiments/checkpoints/lib_rgb_hsi/smoke/best.pt")
+    parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--data-root", type=Path)
+    parser.add_argument("--device", choices=("cuda", "cpu"))
     parser.add_argument("--sample-index", type=int, default=0, help="Split sample index (zero based)")
     parser.add_argument("--split", choices=("validation", "test"), default="validation")
-    parser.add_argument("--output-dir", type=Path, default=ROOT / "SSA-MRN/experiments/results/lib_rgb_hsi_smoke")
+    parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
     state = torch.load(args.checkpoint, map_location="cpu", weights_only=True)
     config = state["config"]
@@ -35,7 +36,7 @@ def main():
                   alignment_manifest=manifest, eval_layout=config.get('eval_layout','tiles'),
                   degradation=config.get('degradation','bicubic'))
     sample = data[args.sample_index]
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device(args.device or ("cuda" if torch.cuda.is_available() else "cpu"))
     torch.set_num_threads(6)
     model = build_rgb_hsi_model(config).to(device).eval()
     model.load_state_dict(state["model"])
@@ -45,7 +46,7 @@ def main():
     baseline = (interp23tap(sample['lr_hsi'].unsqueeze(0),4) if use_23tap else
                 F.interpolate(sample["lr_hsi"].unsqueeze(0), size=sample["gt"].shape[-2:],
                               mode="bicubic", align_corners=False))[0]
-    baseline_label, baseline_key = ('23-tap LMS baseline','interp23') if use_23tap else ('Bicubic baseline','bicubic')
+    baseline_key = 'interp23' if use_23tap else 'bicubic'
     bands = [69, 52, 18]
     gt_rgb = sample["gt"][bands].permute(1, 2, 0).numpy()
     lo, hi = np.percentile(gt_rgb, [1, 99], axis=(0, 1))
@@ -59,26 +60,27 @@ def main():
     size = config["patch_size"]
     panels = [(f"LR HSI input ({size//4}x{size//4})", hsi_display(sample["lr_hsi"]), "input_lr_hsi.png"),
               (f"RGB guide ({size}x{size})", rgb, "input_rgb.png"),
-              (baseline_label, hsi_display(baseline), baseline_key+'.png'),
-              ("Prediction: best.pt", hsi_display(prediction), "prediction.png"),
+              (f"Prediction: {args.checkpoint.name}", hsi_display(prediction), "prediction.png"),
               ("HSI ground truth", hsi_display(sample["gt"]), "ground_truth.png")]
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    width, top, bottom = 256, 70, 42
-    canvas = Image.new("RGB", (width * 5, width + top + bottom), "white")
+    width, top, bottom = 256, 90, 50
+    canvas = Image.new("RGB", (width * 4, width + top + bottom), "white")
     draw = ImageDraw.Draw(canvas)
     font_path = Path("C:/Windows/Fonts/arial.ttf")
     font = ImageFont.truetype(str(font_path), 17) if font_path.exists() else ImageFont.load_default()
     title_font = ImageFont.truetype(str(font_path), 20) if font_path.exists() else font
-    steps = int(next(iter(state["optimizer"]["state"].values()))["step"])
+    steps = int(next(iter(state.get("optimizer", {}).get("state", {}).values()), {"step": 0})["step"])
     scope = "smoke" if args.checkpoint.parent.name == "smoke" else "checkpoint"
     scene_tile = args.sample_index % data.per_scene
     sample_label = 'full scene' if config.get('eval_layout')=='full256' else f'tile {scene_tile}'
-    draw.text((10, 8), f"LIB-HSI | epoch {state['epoch']} | {scope}: {steps} steps | {args.split} {sample['scene']} | {sample_label} (index {args.sample_index})", fill="black", font=title_font)
+    draw.text((10, 8), f"LIB-HSI | epoch {state['epoch']} | {scope}: {steps} steps | {args.split}", fill="black", font=title_font)
+    draw.text((10, 32), f"{sample['scene']} | {sample_label} (index {args.sample_index})", fill="black", font=font)
     for i, (label, picture, filename) in enumerate(panels):
         picture.save(args.output_dir / filename)
-        draw.text((i * width + 9, 43), label, fill="black", font=font)
+        draw.text((i * width + 9, 64), label, fill="black", font=font)
         canvas.paste(picture.resize((width, width), Image.Resampling.NEAREST), (i * width, top))
-    draw.text((10, width + top + 10), "HSI display: bands 69/52/18; same GT-based 1-99% stretch for all HSI panels. RGB guide uses original color.", fill="black", font=font)
+    draw.text((10, width + top + 10), "HSI: bands 69/52/18; same GT-based 1-99% stretch for all HSI panels.", fill="black", font=font)
+    draw.text((10, width + top + 29), "LR is displayed with nearest-neighbor enlargement; RGB guide uses original color.", fill="black", font=font)
     canvas.save(args.output_dir / "comparison.png")
 
     def metrics(image):
@@ -92,6 +94,7 @@ def main():
               "split": args.split,
               "scene_tile": scene_tile,
               "eval_layout": config.get('eval_layout','tiles'),
+              "panel_order": ["LR HSI", "RGB guide", "Prediction", "Ground truth"],
               "notes": "Single sample illustration; all 204 bands for metrics; not a full-split benchmark."}
     (args.output_dir / "metrics.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     print(json.dumps(report, indent=2))

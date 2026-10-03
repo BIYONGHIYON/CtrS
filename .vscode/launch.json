@@ -6,7 +6,7 @@
       "type": "debugpy",
       "request": "launch",
       "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "python": "C:\\CtrS\\.venv\\Scripts\\python.exe",
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
       "args": [
@@ -20,7 +20,7 @@
       "type": "debugpy",
       "request": "launch",
       "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "python": "C:\\CtrS\\.venv\\Scripts\\python.exe",
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
       "args": [
@@ -29,313 +29,37 @@
       ]
     },
     {
-      "name": "LIB: triple12 bilinear tiles evaluate best",
+      "name": "LIB: export full test, graphs and five examples",
       "type": "debugpy",
       "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/export_results.py",
+      "python": "C:\\CtrS\\.venv\\Scripts\\python.exe",
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
       "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple12_k4_bilinear_tiles.json",
-        "--evaluate"
+        "--checkpoint",
+        "${input:checkpoint}",
+        "--data-root",
+        "C:\\CtrS\\SSA-MRN\\data\\dataset\\RGB-HSI\\LIB-HSI",
+        "--output-dir",
+        "${input:reportOutput}",
+        "--previous-metrics",
+        "${workspaceFolder}/SSA-MRN/experiments/results/rgb04_triple12/test/metrics.json"
       ]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "checkpoint",
+      "type": "promptString",
+      "description": "Completed experiment best.pt path",
+      "default": "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-220209-d4faa37d0365\\best.pt"
     },
     {
-      "name": "LIB: triple34 bilinear tiles smoke",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple34_k4_bilinear_tiles.json",
-        "--smoke"
-      ]
-    },
-    {
-      "name": "LIB: triple34 bilinear tiles train (new run)",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple34_k4_bilinear_tiles.json"
-      ]
-    },
-    {
-      "name": "LIB: triple34 bilinear tiles evaluate best",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple34_k4_bilinear_tiles.json",
-        "--evaluate"
-      ]
-    },
-    {
-      "name": "LIB: triple34 tiles smoke",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple34_k4_23tap_tiles.json",
-        "--smoke"
-      ]
-    },
-    {
-      "name": "LIB: triple34 tiles train (new run)",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple34_k4_23tap_tiles.json"
-      ]
-    },
-    {
-      "name": "LIB: triple34 tiles evaluate best",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple34_k4_23tap_tiles.json",
-        "--evaluate"
-      ]
-    },
-    {
-      "name": "LIB: triple12 tiles smoke",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple12_k4_23tap_tiles.json",
-        "--smoke"
-      ]
-    },
-    {
-      "name": "LIB: triple12 tiles train (new run)",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple12_k4_23tap_tiles.json"
-      ]
-    },
-    {
-      "name": "LIB: triple12 tiles evaluate best",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple12_k4_23tap_tiles.json",
-        "--evaluate"
-      ]
-    },
-    {
-      "name": "LIB: train grouped12 K4 23tap (new run)",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json"
-      ]
-    },
-    {
-      "name": "LIB: smoke grouped12 K4 23tap",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json",
-        "--smoke"
-      ]
-    },
-    {
-      "name": "LIB: resume grouped12 best",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json",
-        "--resume",
-        "${workspaceFolder}/SSA-MRN/experiments/checkpoints/lib_rgb_hsi_grouped12_k4_23tap/best.pt"
-      ]
-    },
-    {
-      "name": "LIB: evaluate grouped12 best (whole scene)",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_grouped12_k4_23tap.json",
-        "--evaluate"
-      ]
-    },
-    {
-      "name": "LIB: smoke (external E drive)",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--smoke"
-      ]
-    },
-    {
-      "name": "LIB: train optimized (3060 Ti)",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": []
-    },
-    {
-      "name": "LIB: resume best",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--resume",
-        "${workspaceFolder}/SSA-MRN/experiments/checkpoints/lib_rgb_hsi_fast/best.pt"
-      ]
-    },
-    {
-      "name": "LIB: evaluate test (best)",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--evaluate"
-      ]
-    },
-    {
-      "name": "LIB: train aligned (new run)",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned.json"
-      ]
-    },
-    {
-      "name": "LIB: train aligned 64 to 256 (new run)",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned_256.json"
-      ]
-    },
-    {
-      "name": "LIB: smoke aligned 64 to 256",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned_256.json",
-        "--smoke"
-      ]
-    },
-    {
-      "name": "LIB: resume aligned 256 best",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned_256.json",
-        "--resume",
-        "${workspaceFolder}/SSA-MRN/experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/best.pt"
-      ]
-    },
-    {
-      "name": "LIB: evaluate aligned 256 best",
-      "type": "debugpy",
-      "request": "launch",
-      "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
-      "python": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "cwd": "${workspaceFolder}",
-      "console": "integratedTerminal",
-      "args": [
-        "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_aligned_256.json",
-        "--evaluate"
-      ]
+      "id": "reportOutput",
+      "type": "promptString",
+      "description": "New output folder (must not already exist)",
+      "default": "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\results\\rgb05_triple12_bilinear"
     }
   ]
 }

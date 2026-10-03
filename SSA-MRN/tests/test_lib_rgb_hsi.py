@@ -43,7 +43,8 @@ class LIBTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as directory, patch.object(trainer, "LIBHSI", TinyDataset):
             output = Path(directory) / "run"
-            config = json.loads((script.parents[1] / "configs/lib_rgb_hsi.json").read_text(encoding="utf-8"))
+            config = {"data_root": str(Path(directory)/"data"), "ssai_dimension": 6,
+                      "val_batch_size": 1, "patches_per_scene": 4, "learning_rate": 0.0001, "seed": 42}
             config.update(device="cpu", amp=False, latent_channels=4, patch_size=16, epochs=1,
                           workers=0, cpu_threads=2, batch_size=1, accumulation_steps=4,
                           output_dir=str(output))
