@@ -1,0 +1,37 @@
+{
+  "checkpoint_sha256": "6628bd8e699bc4d09c95effeb4257bcfecc6ce4a060b89333faa87d0e9825af1",
+  "checkpoint_source": "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-220209-d4faa37d0365\\best.pt",
+  "epoch": 100,
+  "protocol": {
+    "model_type": "rgb_triple_grouped12_bilinear",
+    "latent_channels": 12,
+    "ssai_dimension": 4,
+    "patch_size": 256,
+    "train_layout": "quadrants",
+    "eval_layout": "tiles",
+    "degradation": "area",
+    "upsampler": "23tap",
+    "alignment_manifest": "SSA-MRN/experiments/results/lib_registration/projective_alignment.json",
+    "alignment_sha256": "7a66ad28bc78fe8691fddbc2d94f0a871d7c10507407f7d1f36abe1b20f004f4",
+    "seed": 42
+  },
+  "test_scenes": 75,
+  "panel_order": [
+    "LR HSI",
+    "RGB guide",
+    "Prediction",
+    "Ground truth"
+  ],
+  "complete": true,
+  "previous_metrics": "C:\\Users\\trainer\\ssa-result-export-20261004\\SSA-MRN\\experiments\\results\\rgb04_triple12\\test\\metrics.json",
+  "previous_delta": {
+    "model_mse": 3.305980019361151e-05,
+    "model_psnr_db": -0.26329967382038433,
+    "model_sam_deg": 0.013242024508700379
+  },
+  "comparability": "Verified same 75 scene IDs/order, per-scene baseline values, x4 area, tile layout and masked metric protocol; internal resampling differs. Single seed, no multi-run significance claim.",
+  "training_code_commit": "d947f84",
+  "export_code_commit": "6a488a8",
+  "run_id": "20261003-220209-d4faa37d0365",
+  "test_tiles": 300
+}
