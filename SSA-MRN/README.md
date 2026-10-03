@@ -2,6 +2,12 @@
 
 고해상도 RGB와 저해상도 HSI에서 ×4 HSI 복원을 연구합니다. 아래 결과는 LIB-HSI의 관측 HSI를 합성 축소한 평가이며 실제 센서의 HR-HSI 정답 성능과 구분합니다.
 
+## 연구 개요
+
+204밴드 HSI의 보간 결과를 유지하면서, 인접한 17밴드씩 학습 압축한 12특징에서 공간 보정량을 추정합니다. R·G·B 각각의 독립 SSA-MRN 경로와 밴드별 학습 fusion으로 보정량을 결합합니다. 현재는 같은 구조에서 내부 23탭/평균 resampling과 Bilinear의 영향을 비교합니다.
+
+[연구 설명 · 재현부터 RGB별 12특징까지](docs/guide/research_overview.md)에서 단계별 연산, 텐서 크기, 결과 해석과 교수님 보고용 요약을 확인할 수 있습니다.
+
 ## 연구 문서
 
 - [기존 PAN–MS 재현 정리](docs/reproduction.md)
@@ -23,6 +29,8 @@ best epoch 99. [상세 보고서·직전 연구와 차이](docs/experiments/rgb0
 ![test baseline 및 직전 연구 수치 비교](docs/assets/rgb04_triple12/test_metrics.png)
 
 ### test 예시 5종
+
+[204밴드 슬라이더 뷰어](docs/assets/rgb04_triple12/band_viewer/index.html) · HTML 폴더를 내려받아 `index.html`을 브라우저에서 여세요. 각 장면 HTML도 단독 실행됩니다. 같은 epoch 99 가중치의 CPU 추론이며, 기존 CUDA AMP 예시와 미세한 수치 차이가 있을 수 있습니다.
 
 왼쪽부터 **LR HSI · RGB 입력 · 예측 · 정답**입니다. 동일한 HSI 대비 범위를 사용하며, 지표는 204밴드 원래 값으로 계산합니다. 이전 보고서와 같은 5장면의 tile 0입니다.
 

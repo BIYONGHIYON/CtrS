@@ -1,5 +1,7 @@
 # 이전 RGB–HSI 실험
 
+[전체 연구 설명](guide/research_overview.md)
+
 [현재 연구](../README.md) · [PAN–MS 재현](reproduction.md)
 
 모든 수치는 75개 test 장면 평균입니다. 조건이 다른 행의 순위를 성능 개선의 근거로 삼지 않습니다. 차이와 평가 조건은 각 보고서의 4절에 기록했습니다.

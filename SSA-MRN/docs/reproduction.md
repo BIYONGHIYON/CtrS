@@ -1,5 +1,7 @@
 # 기존 PAN–MS 재현 연구
 
+[전체 연구 설명](guide/research_overview.md)
+
 [현재 RGB–HSI 연구](../README.md)
 
 | 연구 | 문서 | 내용 |

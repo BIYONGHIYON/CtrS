@@ -80,6 +80,11 @@ def main():
                         '--split', 'test', '--sample-index', str(index),
                         '--output-dir', str((args.output_dir/f'sample_{i:02}').resolve())] +
                        (['--device', args.device] if args.device else []), check=True)
+    subprocess.run([sys.executable, str(ROOT/'SSA-MRN/scripts/export_band_viewer.py'),
+                    '--checkpoint', str(frozen), '--expected-sha256', weight_hash,
+                    '--data-root', str(args.data_root.resolve()),
+                    '--output-dir', str((args.output_dir/'band_viewer').resolve()),
+                    '--sample-indices', *map(str, selection['sample_indices'])], check=True)
     for i in range(1,6):
         path = args.output_dir/f'sample_{i:02}/metrics.json'
         sample_metrics = json.loads(path.read_text(encoding='utf-8'))
