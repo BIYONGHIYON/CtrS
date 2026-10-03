@@ -13,7 +13,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-root", type=Path)
     args = parser.parse_args()
-    config = json.loads((ROOT / "SSA-MRN/configs/lib_rgb_hsi.json").read_text(encoding="utf-8"))
+    config = json.loads((ROOT / "SSA-MRN/configs/lib_rgb_hsi_triple12_k4_bilinear_tiles.json").read_text(encoding="utf-8"))
     root = args.data_root or Path(config["data_root"])
     datasets = {}
     for split in ("train", "validation", "test"):

@@ -1,0 +1,1171 @@
+{
+  "active_run": "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-220209-d4faa37d0365",
+  "preserved_weights": {
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\gf2_full\\latest.pt": "8f1892e99102d83d6f141b4e5094b0aee53a1c927aa56d5924b6a15d3efee41e",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\k6\\gf2_full\\latest.pt": "b2149ddc451bc4431cbb2a1436fdb98dc7b8a9142e18ea1495847f696cde4b54",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\k6\\qb_full\\latest.pt": "d56a779ce2e05d8cb76232f04bf3d29fc0ff2ccd504bc80396d458021f1d63b3",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\k6\\wv3_full\\latest.pt": "70cded64e23a6c0ee01db0a54cc26b79eabbddbb4c89f822cc1f8d74831a4a07",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi\\best.pt": "785e1d1e3a9abdb64083b78e1834d748c7f57a825e7bf0bee12d2b89599d7c70",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi\\latest.pt": "0fefce0dab34bc7cf73a7bbae0ab2574a41cb32b5d8fc05236c20aabf8b0886a",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_aligned_256_b4\\best.pt": "368f42a9939adf3282e8a0080c093680fafe3a2d35ae52be632aaa01febee674",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_aligned_256_b4\\latest.pt": "bd5d92528bc254676ab52441c1a993ff6c1ad42ebf82f319afd15b101cb742c1",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_fast\\best.pt": "8769e5a984eee610a4b9140f7e50b286b3e1a1312c55f5d603906c66d9a8fd19",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_fast\\latest.pt": "9501c3456e55cb81441a322652e781d50e77f2ac92c296d61c07ed3c896e6abc",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_grouped12_k4_23tap\\best.pt": "620a9938271f3e1d1853561aa9e7979c2bb587e77171b14e7a878b9e4ca41423",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_grouped12_k4_23tap\\latest.pt": "35392849cfa1934057feae367fd90d2b8c6b33d5d6cc7d4a9ec87d7d2176975c",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\qb_full\\latest.pt": "6deff1da9ddd6b3e0b528be3124d6558076856cd4a2ff2fa55fabb7bf2780180",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-022329-72b8a17b50de\\best.pt": "8b5f39c7858475de8b720dc0f4b42db024cb782c6d9ce180bd554c44262edcf9",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-022329-72b8a17b50de\\latest.pt": "056b3b422c02bbe61cfa081bed04f100d9de796dd8869c3d27de17dc858ebe74",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-022329-72b8a17b50de\\resume-source.pt": "35392849cfa1934057feae367fd90d2b8c6b33d5d6cc7d4a9ec87d7d2176975c",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\wv3_full\\latest.pt": "ef4b46c2c42999800c1a2bb33e0615035543089a6de32e9fb84462e82c45bb2c",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\gf2_full\\latest.pt": "8f1892e99102d83d6f141b4e5094b0aee53a1c927aa56d5924b6a15d3efee41e",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\k6\\gf2_full\\latest.pt": "b2149ddc451bc4431cbb2a1436fdb98dc7b8a9142e18ea1495847f696cde4b54",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\k6\\qb_full\\latest.pt": "d56a779ce2e05d8cb76232f04bf3d29fc0ff2ccd504bc80396d458021f1d63b3",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\k6\\wv3_full\\latest.pt": "70cded64e23a6c0ee01db0a54cc26b79eabbddbb4c89f822cc1f8d74831a4a07",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_aligned_256_b4\\best.pt": "368f42a9939adf3282e8a0080c093680fafe3a2d35ae52be632aaa01febee674",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_aligned_256_b4\\latest.pt": "bd5d92528bc254676ab52441c1a993ff6c1ad42ebf82f319afd15b101cb742c1",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_triple12_k4_23tap_tiles\\best.pt": "d4d0da5e8cb746a7fae8b73ae93de33908fa34f345bf7a351c3dbe83e1e5bd49",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_triple12_k4_23tap_tiles\\latest.pt": "e4c525a4fd64f6a35af871b161358923b68c11d544e2dc259ebccc0b29388ec5",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\qb_full\\latest.pt": "6deff1da9ddd6b3e0b528be3124d6558076856cd4a2ff2fa55fabb7bf2780180",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-162314-bb3d3c89e94a\\best.pt": "d4d0da5e8cb746a7fae8b73ae93de33908fa34f345bf7a351c3dbe83e1e5bd49",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-162314-bb3d3c89e94a\\resume-source.pt": "e4c525a4fd64f6a35af871b161358923b68c11d544e2dc259ebccc0b29388ec5",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-162417-e46b8079c798\\best.pt": "0fb1e1f31aa0ad3340604fa093908774aa9b279008afd987aa24b4c11edc6a18",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-162417-e46b8079c798\\latest.pt": "f1ef05fc412dbc48da563caf52d74c2712fcc9ff6ad0eccc0aa88cd927cd62d2",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-162417-e46b8079c798\\resume-source.pt": "e4c525a4fd64f6a35af871b161358923b68c11d544e2dc259ebccc0b29388ec5",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\wv3_full\\latest.pt": "ef4b46c2c42999800c1a2bb33e0615035543089a6de32e9fb84462e82c45bb2c",
+    "C:\\CtrS-triple34\\SSA-MRN\\experiments\\checkpoints\\gf2_full\\latest.pt": "8f1892e99102d83d6f141b4e5094b0aee53a1c927aa56d5924b6a15d3efee41e",
+    "C:\\CtrS-triple34\\SSA-MRN\\experiments\\checkpoints\\k6\\gf2_full\\latest.pt": "b2149ddc451bc4431cbb2a1436fdb98dc7b8a9142e18ea1495847f696cde4b54",
+    "C:\\CtrS-triple34\\SSA-MRN\\experiments\\checkpoints\\k6\\qb_full\\latest.pt": "d56a779ce2e05d8cb76232f04bf3d29fc0ff2ccd504bc80396d458021f1d63b3",
+    "C:\\CtrS-triple34\\SSA-MRN\\experiments\\checkpoints\\k6\\wv3_full\\latest.pt": "70cded64e23a6c0ee01db0a54cc26b79eabbddbb4c89f822cc1f8d74831a4a07",
+    "C:\\CtrS-triple34\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_aligned_256_b4\\best.pt": "368f42a9939adf3282e8a0080c093680fafe3a2d35ae52be632aaa01febee674",
+    "C:\\CtrS-triple34\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_aligned_256_b4\\latest.pt": "bd5d92528bc254676ab52441c1a993ff6c1ad42ebf82f319afd15b101cb742c1",
+    "C:\\CtrS-triple34\\SSA-MRN\\experiments\\checkpoints\\qb_full\\latest.pt": "6deff1da9ddd6b3e0b528be3124d6558076856cd4a2ff2fa55fabb7bf2780180",
+    "C:\\CtrS-triple34\\SSA-MRN\\experiments\\checkpoints\\wv3_full\\latest.pt": "ef4b46c2c42999800c1a2bb33e0615035543089a6de32e9fb84462e82c45bb2c",
+    "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\checkpoints\\gf2_full\\latest.pt": "8f1892e99102d83d6f141b4e5094b0aee53a1c927aa56d5924b6a15d3efee41e",
+    "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\checkpoints\\k6\\gf2_full\\latest.pt": "b2149ddc451bc4431cbb2a1436fdb98dc7b8a9142e18ea1495847f696cde4b54",
+    "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\checkpoints\\k6\\qb_full\\latest.pt": "d56a779ce2e05d8cb76232f04bf3d29fc0ff2ccd504bc80396d458021f1d63b3",
+    "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\checkpoints\\k6\\wv3_full\\latest.pt": "70cded64e23a6c0ee01db0a54cc26b79eabbddbb4c89f822cc1f8d74831a4a07",
+    "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_aligned_256_b4\\best.pt": "368f42a9939adf3282e8a0080c093680fafe3a2d35ae52be632aaa01febee674",
+    "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_aligned_256_b4\\latest.pt": "bd5d92528bc254676ab52441c1a993ff6c1ad42ebf82f319afd15b101cb742c1",
+    "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\checkpoints\\qb_full\\latest.pt": "6deff1da9ddd6b3e0b528be3124d6558076856cd4a2ff2fa55fabb7bf2780180",
+    "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\checkpoints\\wv3_full\\latest.pt": "ef4b46c2c42999800c1a2bb33e0615035543089a6de32e9fb84462e82c45bb2c"
+  },
+  "removed": [
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_cuda_stream_fix_check",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_grouped12_protocol_check",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_256_b1_compare",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_256_b4_check",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_aligned_256_check",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi\\smoke",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_aligned\\smoke",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_aligned_256\\smoke",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_fast\\smoke",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_grouped12_k4_23tap\\smoke",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_triple12_k4_23tap_tiles\\smoke",
+    "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_triple12_k4_bilinear_tiles\\smoke",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-162417-e46b8079c798\\history.jsonl",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-162417-e46b8079c798\\run_config.json",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\logs\\remote-control\\runs\\20261003-162417-e46b8079c798\\config.json",
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\logs\\remote-control\\runs\\20261003-162417-e46b8079c798\\train.log",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-022329-72b8a17b50de\\history.jsonl",
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-022329-72b8a17b50de\\run_config.json",
+    "C:\\CtrS\\SSA-MRN\\experiments\\logs\\remote-control\\runs\\20261003-022329-72b8a17b50de\\config.json",
+    "C:\\CtrS\\SSA-MRN\\experiments\\logs\\remote-control\\runs\\20261003-022329-72b8a17b50de\\train.log",
+    "C:\\CtrS-triple\\SSA-MRN\\src\\ssamrn\\__pycache__",
+    "C:\\CtrS-triple\\SSA-MRN\\src\\ssamrn\\data\\__pycache__",
+    "C:\\CtrS-triple\\SSA-MRN\\src\\ssamrn\\models\\__pycache__",
+    "C:\\CtrS-triple34\\SSA-MRN\\src\\ssamrn\\__pycache__",
+    "C:\\CtrS-triple34\\SSA-MRN\\src\\ssamrn\\data\\__pycache__",
+    "C:\\CtrS-triple34\\SSA-MRN\\src\\ssamrn\\models\\__pycache__"
+  ],
+  "note": "Only audited limited checks/smoke outputs and completed-run raw logs/config; code checkout and active logs unchanged.",
+  "discarded_check_metrics": {
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_cuda_stream_fix_check": {
+      "validation_metrics.json": {
+        "scene_mean": {
+          "model_mse": 0.00098847927525798,
+          "model_psnr_db": 30.086199293825956,
+          "model_sam_deg": 3.7451149341024417,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786
+        },
+        "scenes": {
+          "2020-11-24_008": {
+            "model_mse": 0.0008619488581256532,
+            "model_psnr_db": 30.645185013362152,
+            "model_sam_deg": 3.3540403682583935,
+            "bicubic_mse": 0.0008775675710123841,
+            "bicubic_psnr_db": 30.567194337362075,
+            "bicubic_sam_deg": 3.355558282845884
+          },
+          "2020-11-24_010": {
+            "model_mse": 0.001115009692390307,
+            "model_psnr_db": 29.52721357428976,
+            "model_sam_deg": 4.136189499946489,
+            "bicubic_mse": 0.0011390678935934524,
+            "bicubic_psnr_db": 29.43450389235885,
+            "bicubic_sam_deg": 4.061124738181873
+          }
+        },
+        "partial": false,
+        "alignment_border_masked": true,
+        "source_cube_requested_gib": 0.796875,
+        "protocol": "x4 antialiased bicubic LR; clipped [0,1] reflectance GT; unclipped output; PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels",
+        "limited_scenes": true
+      },
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_mse": 0.0010706528555601835,
+          "seconds": 16.36411909999879,
+          "train_seconds": 10.478516499999387,
+          "validation_seconds": 5.885602599999402,
+          "loader_wait_seconds": 7.533886200002598,
+          "train_patches_per_second": 3.0538674057536555,
+          "train_cube_requested_gib": 1.39453125,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "C:/Users/pilot/Desktop/CtrS/SSA-MRN/data/dataset/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0010082999125646122,
+          "model_psnr_db": 30.000908201791965,
+          "model_sam_deg": 3.708783922717667,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1928.08544921875,
+          "peak_reserved_mb": 2166.0,
+          "current_allocated_mb": 633.029296875,
+          "current_reserved_mb": 1416.0
+        },
+        {
+          "epoch": 2,
+          "train_mse": 0.0009421816794201732,
+          "seconds": 3.6530089999978372,
+          "train_seconds": 2.921547099998861,
+          "validation_seconds": 0.7314618999989762,
+          "loader_wait_seconds": 2.6218195000037667,
+          "train_patches_per_second": 10.95310084167819,
+          "train_cube_requested_gib": 1.12060546875,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "C:/Users/pilot/Desktop/CtrS/SSA-MRN/data/dataset/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.001008168701138562,
+          "model_psnr_db": 30.001448047160892,
+          "model_sam_deg": 3.7089183218531083,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1928.08544921875,
+          "peak_reserved_mb": 2262.0,
+          "current_allocated_mb": 633.029296875,
+          "current_reserved_mb": 2262.0
+        },
+        {
+          "epoch": 3,
+          "train_mse": 0.0009517351863905787,
+          "seconds": 3.405546300000424,
+          "train_seconds": 2.680579799998668,
+          "validation_seconds": 0.7249664999981178,
+          "loader_wait_seconds": 2.3784173000021838,
+          "train_patches_per_second": 11.937715862820387,
+          "train_cube_requested_gib": 1.31982421875,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "C:/Users/pilot/Desktop/CtrS/SSA-MRN/data/dataset/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0010080112504887312,
+          "model_psnr_db": 30.002091511832706,
+          "model_sam_deg": 3.709640001843539,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1928.08544921875,
+          "peak_reserved_mb": 2262.0,
+          "current_allocated_mb": 633.029296875,
+          "current_reserved_mb": 2262.0
+        },
+        {
+          "epoch": 4,
+          "train_mse": 0.0009254500037059188,
+          "seconds": 3.281020399997942,
+          "train_seconds": 2.5577747999996063,
+          "validation_seconds": 0.7232456000019738,
+          "loader_wait_seconds": 2.280785200000537,
+          "train_patches_per_second": 12.510874686858642,
+          "train_cube_requested_gib": 1.41943359375,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "C:/Users/pilot/Desktop/CtrS/SSA-MRN/data/dataset/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0010076638393883208,
+          "model_psnr_db": 30.003513852904337,
+          "model_sam_deg": 3.709868626913,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1928.08544921875,
+          "peak_reserved_mb": 2262.0,
+          "current_allocated_mb": 633.029296875,
+          "current_reserved_mb": 2262.0
+        },
+        {
+          "epoch": 5,
+          "train_mse": 0.0009313788032159209,
+          "seconds": 3.5311185000027763,
+          "train_seconds": 2.7717499999998836,
+          "validation_seconds": 0.7593683999984933,
+          "loader_wait_seconds": 2.483464199998707,
+          "train_patches_per_second": 11.545052764499447,
+          "train_cube_requested_gib": 1.41943359375,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "C:/Users/pilot/Desktop/CtrS/SSA-MRN/data/dataset/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.001007257053442788,
+          "model_psnr_db": 30.005177400661307,
+          "model_sam_deg": 3.7104733556753375,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1928.08544921875,
+          "peak_reserved_mb": 2262.0,
+          "current_allocated_mb": 633.029296875,
+          "current_reserved_mb": 2262.0
+        },
+        {
+          "epoch": 6,
+          "train_mse": 0.0010750325163826346,
+          "seconds": 3.498112300003413,
+          "train_seconds": 2.736582100002124,
+          "validation_seconds": 0.7615302999984124,
+          "loader_wait_seconds": 2.430614800003241,
+          "train_patches_per_second": 11.693418589551968,
+          "train_cube_requested_gib": 1.41943359375,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "C:/Users/pilot/Desktop/CtrS/SSA-MRN/data/dataset/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0010066130309162996,
+          "model_psnr_db": 30.007831924862366,
+          "model_sam_deg": 3.712533893034668,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1928.08544921875,
+          "peak_reserved_mb": 2262.0,
+          "current_allocated_mb": 633.029296875,
+          "current_reserved_mb": 2262.0
+        },
+        {
+          "epoch": 7,
+          "train_mse": 0.000955797266215086,
+          "seconds": 3.4167974000010872,
+          "train_seconds": 2.65886540000065,
+          "validation_seconds": 0.7579318000025523,
+          "loader_wait_seconds": 2.382085000001098,
+          "train_patches_per_second": 12.035208702175062,
+          "train_cube_requested_gib": 1.51904296875,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "C:/Users/pilot/Desktop/CtrS/SSA-MRN/data/dataset/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0010054172587378113,
+          "model_psnr_db": 30.01282169230859,
+          "model_sam_deg": 3.7137290565437286,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1928.08544921875,
+          "peak_reserved_mb": 2262.0,
+          "current_allocated_mb": 633.029296875,
+          "current_reserved_mb": 2262.0
+        },
+        {
+          "epoch": 8,
+          "train_mse": 0.0009499361040070653,
+          "seconds": 3.282072199999675,
+          "train_seconds": 2.528913999998622,
+          "validation_seconds": 0.7531577000008838,
+          "loader_wait_seconds": 2.2462704999925336,
+          "train_patches_per_second": 12.65365291188923,
+          "train_cube_requested_gib": 1.3447265625,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "C:/Users/pilot/Desktop/CtrS/SSA-MRN/data/dataset/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.00100370956488465,
+          "model_psnr_db": 30.01985700546301,
+          "model_sam_deg": 3.717134275558423,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1928.08544921875,
+          "peak_reserved_mb": 2262.0,
+          "current_allocated_mb": 633.029296875,
+          "current_reserved_mb": 2262.0
+        },
+        {
+          "epoch": 9,
+          "train_mse": 0.001062355120666325,
+          "seconds": 3.3917221000010613,
+          "train_seconds": 2.608460899999045,
+          "validation_seconds": 0.7832607999989705,
+          "loader_wait_seconds": 2.3260599999957776,
+          "train_patches_per_second": 12.267770622903228,
+          "train_cube_requested_gib": 1.2451171875,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "C:/Users/pilot/Desktop/CtrS/SSA-MRN/data/dataset/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0010021876605442897,
+          "model_psnr_db": 30.025824916680474,
+          "model_sam_deg": 3.721930806808766,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1928.08544921875,
+          "peak_reserved_mb": 2262.0,
+          "current_allocated_mb": 633.029296875,
+          "current_reserved_mb": 2262.0
+        },
+        {
+          "epoch": 10,
+          "train_mse": 0.0010461148340255022,
+          "seconds": 3.3582505000013043,
+          "train_seconds": 2.638234400001238,
+          "validation_seconds": 0.7200162000008277,
+          "loader_wait_seconds": 2.3412495000011404,
+          "train_patches_per_second": 12.129324066119743,
+          "train_cube_requested_gib": 1.494140625,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "C:/Users/pilot/Desktop/CtrS/SSA-MRN/data/dataset/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.001002539606695627,
+          "model_psnr_db": 30.022814677867174,
+          "model_sam_deg": 3.7324784163922953,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1928.08544921875,
+          "peak_reserved_mb": 2262.0,
+          "current_allocated_mb": 633.029296875,
+          "current_reserved_mb": 2262.0
+        },
+        {
+          "epoch": 11,
+          "train_mse": 0.0009062851895578206,
+          "seconds": 3.3709022000002733,
+          "train_seconds": 2.6542354999983218,
+          "validation_seconds": 0.7166665999975521,
+          "loader_wait_seconds": 2.375744900004065,
+          "train_patches_per_second": 12.056202247321398,
+          "train_cube_requested_gib": 1.4443359375,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "C:/Users/pilot/Desktop/CtrS/SSA-MRN/data/dataset/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0009970472149160767,
+          "model_psnr_db": 30.046991161160747,
+          "model_sam_deg": 3.738548806862819,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1928.08544921875,
+          "peak_reserved_mb": 2262.0,
+          "current_allocated_mb": 633.029296875,
+          "current_reserved_mb": 2262.0
+        },
+        {
+          "epoch": 12,
+          "train_mse": 0.0009586437372490764,
+          "seconds": 3.533999800001766,
+          "train_seconds": 2.767772999999579,
+          "validation_seconds": 0.7662264999999024,
+          "loader_wait_seconds": 2.466981700003089,
+          "train_patches_per_second": 11.561641796493017,
+          "train_cube_requested_gib": 1.41943359375,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "C:/Users/pilot/Desktop/CtrS/SSA-MRN/data/dataset/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.00098847927525798,
+          "model_psnr_db": 30.086199293825956,
+          "model_sam_deg": 3.7451149341024417,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1928.08544921875,
+          "peak_reserved_mb": 2262.0,
+          "current_allocated_mb": 633.029296875,
+          "current_reserved_mb": 2262.0
+        }
+      ]
+    },
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_grouped12_protocol_check": {
+      "validation_metrics.json": {
+        "scene_mean": {
+          "model_mse": 0.002783358581741992,
+          "model_psnr_db": 25.986893395212647,
+          "model_sam_deg": 4.13374596989107,
+          "interp23_mse": 0.002785680773809742,
+          "interp23_psnr_db": 25.983813973293664,
+          "interp23_sam_deg": 4.133129353806251
+        },
+        "scenes": {
+          "2020-11-24_008": {
+            "model_mse": 0.001600432983623782,
+            "model_psnr_db": 27.957625067443082,
+            "model_sam_deg": 2.361905143866654,
+            "interp23_mse": 0.001601097715552219,
+            "interp23_psnr_db": 27.955821621280982,
+            "interp23_sam_deg": 2.3620561602813956
+          },
+          "2020-11-24_010": {
+            "model_mse": 0.003966284179860202,
+            "model_psnr_db": 24.016161722982208,
+            "model_sam_deg": 5.905586795915486,
+            "interp23_mse": 0.003970263832067265,
+            "interp23_psnr_db": 24.011806325306345,
+            "interp23_sam_deg": 5.904202547331106
+          }
+        },
+        "partial": false,
+        "alignment_border_masked": true,
+        "source_cube_requested_gib": 0.3984375,
+        "baseline_mode": "23tap",
+        "protocol": "x4 area LR, 23tap LMS; clipped [0,1] reflectance GT; unclipped output; PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels",
+        "eval_layout": "full256",
+        "limited_scenes": true
+      },
+      "test\\metrics.json": {
+        "scene_mean": {
+          "model_mse": 0.004291106245043813,
+          "model_psnr_db": 23.71019811073834,
+          "model_sam_deg": 2.908376604479332,
+          "interp23_mse": 0.004292969985379523,
+          "interp23_psnr_db": 23.708314652742388,
+          "interp23_sam_deg": 2.908186387204003
+        },
+        "scenes": {
+          "2020-11-20_017": {
+            "model_mse": 0.004840509877379029,
+            "model_psnr_db": 23.15108889333032,
+            "model_sam_deg": 2.7895777824755097,
+            "interp23_mse": 0.0048426303700785656,
+            "interp23_psnr_db": 23.149186786638666,
+            "interp23_sam_deg": 2.7892242892242893
+          },
+          "2020-11-24_007": {
+            "model_mse": 0.0037417026127085965,
+            "model_psnr_db": 24.269307328146354,
+            "model_sam_deg": 3.0271754264831543,
+            "interp23_mse": 0.003743309600680482,
+            "interp23_psnr_db": 24.267442518846106,
+            "interp23_sam_deg": 3.027148485183716
+          }
+        },
+        "partial": false,
+        "alignment_border_masked": true,
+        "source_cube_requested_gib": 0.3984375,
+        "baseline_mode": "23tap",
+        "protocol": "x4 area LR; interp23 baseline; clipped [0,1] reflectance GT; unclipped output; PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels",
+        "eval_layout": "full256",
+        "limited_scenes": true
+      },
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_mse": 0.0013617223594337702,
+          "seconds": 17.682780500000035,
+          "train_seconds": 10.926959600000146,
+          "validation_seconds": 6.755820900000117,
+          "loader_wait_seconds": 7.550527600000123,
+          "train_patches_per_second": 2.9285364979293576,
+          "train_cube_requested_gib": 1.59375,
+          "validation_cube_requested_gib": 0.3984375,
+          "data_root": "C:\\Users\\pilot\\Desktop\\CtrS\\SSA-MRN\\data\\dataset\\RGB-HSI\\LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0027854326484726007,
+          "model_psnr_db": 25.98411536028705,
+          "model_sam_deg": 4.133898156006149,
+          "interp23_mse": 0.002785680773809742,
+          "interp23_psnr_db": 25.983813973293664,
+          "interp23_sam_deg": 4.133129353806251,
+          "train_gpu_stream_seconds": 3.601385459899902,
+          "peak_allocated_mb": 2175.1064453125,
+          "peak_reserved_mb": 2734.0,
+          "current_allocated_mb": 429.7041015625,
+          "current_reserved_mb": 1372.0
+        },
+        {
+          "epoch": 2,
+          "train_mse": 0.0013680770061910152,
+          "seconds": 4.104655000000093,
+          "train_seconds": 3.108156400000098,
+          "validation_seconds": 0.996498499999916,
+          "loader_wait_seconds": 2.4628748000004634,
+          "train_patches_per_second": 10.2954922088216,
+          "train_cube_requested_gib": 1.1953125,
+          "validation_cube_requested_gib": 0.3984375,
+          "data_root": "C:\\Users\\pilot\\Desktop\\CtrS\\SSA-MRN\\data\\dataset\\RGB-HSI\\LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.002784947088801646,
+          "model_psnr_db": 25.98472616735541,
+          "model_sam_deg": 4.134332060001922,
+          "interp23_mse": 0.002785680773809742,
+          "interp23_psnr_db": 25.983813973293664,
+          "interp23_sam_deg": 4.133129353806251,
+          "train_gpu_stream_seconds": 0.9810004196166993,
+          "peak_allocated_mb": 2175.1064453125,
+          "peak_reserved_mb": 2762.0,
+          "current_allocated_mb": 429.7041015625,
+          "current_reserved_mb": 2762.0
+        },
+        {
+          "epoch": 3,
+          "train_mse": 0.0013907477259635925,
+          "seconds": 15.913569199999984,
+          "train_seconds": 9.985218199999963,
+          "validation_seconds": 5.9283511000001,
+          "loader_wait_seconds": 6.961780399999725,
+          "train_patches_per_second": 3.204737178402383,
+          "train_cube_requested_gib": 1.59375,
+          "validation_cube_requested_gib": 0.3984375,
+          "data_root": "C:\\Users\\pilot\\Desktop\\CtrS\\SSA-MRN\\data\\dataset\\RGB-HSI\\LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.002783358581741992,
+          "model_psnr_db": 25.986893395212647,
+          "model_sam_deg": 4.13374596989107,
+          "interp23_mse": 0.002785680773809742,
+          "interp23_psnr_db": 25.983813973293664,
+          "interp23_sam_deg": 4.133129353806251,
+          "train_gpu_stream_seconds": 3.247367835998535,
+          "peak_allocated_mb": 2175.1064453125,
+          "peak_reserved_mb": 2734.0,
+          "current_allocated_mb": 429.7041015625,
+          "current_reserved_mb": 1372.0
+        }
+      ]
+    },
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_256_b1_compare": {
+      "validation_metrics.json": {
+        "scene_mean": {
+          "model_mse": 0.0010081686737468266,
+          "model_psnr_db": 30.001448120391863,
+          "model_sam_deg": 3.7089193084230727,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786
+        },
+        "scenes": {
+          "2020-11-24_008": {
+            "model_mse": 0.0008775136451711948,
+            "model_psnr_db": 30.567461216125885,
+            "model_sam_deg": 3.355644330118987,
+            "bicubic_mse": 0.0008775675710123841,
+            "bicubic_psnr_db": 30.567194337362075,
+            "bicubic_sam_deg": 3.355558282845884
+          },
+          "2020-11-24_010": {
+            "model_mse": 0.0011388237023224584,
+            "model_psnr_db": 29.435435024657842,
+            "model_sam_deg": 4.062194286727158,
+            "bicubic_mse": 0.0011390678935934524,
+            "bicubic_psnr_db": 29.43450389235885,
+            "bicubic_sam_deg": 4.061124738181873
+          }
+        },
+        "partial": false,
+        "alignment_border_masked": true,
+        "source_cube_requested_gib": 0.796875,
+        "protocol": "x4 antialiased bicubic LR; clipped [0,1] reflectance GT; unclipped output; PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels",
+        "limited_scenes": true
+      },
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_mse": 0.0010706527391448617,
+          "seconds": 14.650185699999838,
+          "train_seconds": 9.122769499999777,
+          "validation_seconds": 5.5274162000000615,
+          "loader_wait_seconds": 6.785460300000977,
+          "train_patches_per_second": 3.5077067331363336,
+          "train_cube_requested_gib": 2.390625,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "E:/\uc724\uc9c0/\ubcd1\ud604/SSA-MRN Data/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.001008299953759634,
+          "model_psnr_db": 30.000908029102213,
+          "model_sam_deg": 3.708783355014818,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1460.08544921875,
+          "peak_reserved_mb": 1524.0
+        },
+        {
+          "epoch": 2,
+          "train_mse": 0.0009421816794201732,
+          "seconds": 3.998702200000025,
+          "train_seconds": 3.166959200000292,
+          "validation_seconds": 0.831742999999733,
+          "loader_wait_seconds": 2.197413100000631,
+          "train_patches_per_second": 10.104329730549432,
+          "train_cube_requested_gib": 2.41552734375,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "E:/\uc724\uc9c0/\ubcd1\ud604/SSA-MRN Data/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0010081686737468266,
+          "model_psnr_db": 30.001448120391863,
+          "model_sam_deg": 3.7089193084230727,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1460.08544921875,
+          "peak_reserved_mb": 1524.0
+        }
+      ]
+    },
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_256_b4_check": {
+      "validation_metrics.json": {
+        "scene_mean": {
+          "model_mse": 0.0010081686737110204,
+          "model_psnr_db": 30.001448141347332,
+          "model_sam_deg": 3.708918978904147,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786
+        },
+        "scenes": {
+          "2020-11-24_008": {
+            "model_mse": 0.0008775136085056559,
+            "model_psnr_db": 30.567461397589064,
+            "model_sam_deg": 3.3556432530321194,
+            "bicubic_mse": 0.0008775675710123841,
+            "bicubic_psnr_db": 30.567194337362075,
+            "bicubic_sam_deg": 3.355558282845884
+          },
+          "2020-11-24_010": {
+            "model_mse": 0.0011388237389163846,
+            "model_psnr_db": 29.4354348851056,
+            "model_sam_deg": 4.062194704776174,
+            "bicubic_mse": 0.0011390678935934524,
+            "bicubic_psnr_db": 29.43450389235885,
+            "bicubic_sam_deg": 4.061124738181873
+          }
+        },
+        "partial": false,
+        "alignment_border_masked": true,
+        "source_cube_requested_gib": 0.796875,
+        "protocol": "x4 antialiased bicubic LR; clipped [0,1] reflectance GT; unclipped output; PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels",
+        "limited_scenes": true
+      },
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_mse": 0.0010706528555601835,
+          "seconds": 16.58107569999993,
+          "train_seconds": 10.51365530000021,
+          "validation_seconds": 6.067420400000174,
+          "loader_wait_seconds": 8.027432200000476,
+          "train_patches_per_second": 3.043660752316976,
+          "train_cube_requested_gib": 1.39453125,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "E:/\uc724\uc9c0/\ubcd1\ud604/SSA-MRN Data/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.001008299949194345,
+          "model_psnr_db": 30.000908041303262,
+          "model_sam_deg": 3.7087834145023626,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1928.08544921875,
+          "peak_reserved_mb": 2274.0
+        },
+        {
+          "epoch": 2,
+          "train_mse": 0.0009421817376278341,
+          "seconds": 5.222173000000112,
+          "train_seconds": 3.9558999000000767,
+          "validation_seconds": 1.2662728999998762,
+          "loader_wait_seconds": 3.6462025999994694,
+          "train_patches_per_second": 8.08918344976307,
+          "train_cube_requested_gib": 1.12060546875,
+          "validation_cube_requested_gib": 0.796875,
+          "data_root": "E:/\uc724\uc9c0/\ubcd1\ud604/SSA-MRN Data/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0010081686737110204,
+          "model_psnr_db": 30.001448141347332,
+          "model_sam_deg": 3.708918978904147,
+          "bicubic_mse": 0.0010083177323029183,
+          "bicubic_psnr_db": 30.000849114860465,
+          "bicubic_sam_deg": 3.7083415105138786,
+          "peak_allocated_mb": 1928.08544921875,
+          "peak_reserved_mb": 2750.0
+        }
+      ]
+    },
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_aligned_256_check": {
+      "validation_metrics.json": {
+        "scene_mean": {
+          "model_mse": 0.0008775958309764139,
+          "model_psnr_db": 30.56705448546653,
+          "model_sam_deg": 3.3556834642751827,
+          "bicubic_mse": 0.0008775675710123841,
+          "bicubic_psnr_db": 30.567194337362075,
+          "bicubic_sam_deg": 3.355558282845884
+        },
+        "scenes": {
+          "2020-11-24_008": {
+            "model_mse": 0.0008775958309764139,
+            "model_psnr_db": 30.56705448546653,
+            "model_sam_deg": 3.3556834642751827,
+            "bicubic_mse": 0.0008775675710123841,
+            "bicubic_psnr_db": 30.567194337362075,
+            "bicubic_sam_deg": 3.355558282845884
+          }
+        },
+        "partial": false,
+        "alignment_border_masked": true,
+        "source_cube_requested_gib": 0.3984375,
+        "protocol": "x4 antialiased bicubic LR; clipped [0,1] reflectance GT; unclipped output; PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels",
+        "limited_scenes": true
+      },
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_mse": 0.0009361387928947806,
+          "seconds": 11.158396799999991,
+          "train_seconds": 5.903882600000088,
+          "validation_seconds": 5.254514100000051,
+          "loader_wait_seconds": 4.6523586999999225,
+          "train_patches_per_second": 1.355040494877029,
+          "train_cube_requested_gib": 0.57275390625,
+          "validation_cube_requested_gib": 0.3984375,
+          "data_root": "E:/\uc724\uc9c0/\ubcd1\ud604/SSA-MRN Data/RGB-HSI/LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0008775958309764139,
+          "model_psnr_db": 30.56705448546653,
+          "model_sam_deg": 3.3556834642751827,
+          "bicubic_mse": 0.0008775675710123841,
+          "bicubic_psnr_db": 30.567194337362075,
+          "bicubic_sam_deg": 3.355558282845884,
+          "peak_allocated_mb": 1460.08544921875,
+          "peak_reserved_mb": 1524.0
+        }
+      ]
+    },
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi\\smoke": {
+      "validation_metrics.json": {
+        "scene_mean": {
+          "model_mse": 0.000619219871712666,
+          "model_psnr_db": 32.08155114927428,
+          "model_sam_deg": 3.6390798091888428,
+          "bicubic_mse": 0.0006191758256332547,
+          "bicubic_psnr_db": 32.081860080729506,
+          "bicubic_sam_deg": 3.638966202735901
+        },
+        "scenes": {
+          "2020-11-24_008": {
+            "model_mse": 0.000619219871712666,
+            "model_psnr_db": 32.08155114927428,
+            "model_sam_deg": 3.6390798091888428,
+            "bicubic_mse": 0.0006191758256332547,
+            "bicubic_psnr_db": 32.081860080729506,
+            "bicubic_sam_deg": 3.638966202735901
+          }
+        },
+        "partial": true,
+        "protocol": "x4 antialiased bicubic LR; clipped [0,1] reflectance GT; unclipped output; PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels"
+      },
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_mse": 0.0012253610038897023,
+          "seconds": 2.966510499999913,
+          "model_mse": 0.0006191945251296548,
+          "model_psnr_db": 32.08172892306578,
+          "model_sam_deg": 3.6390836238861084,
+          "bicubic_mse": 0.0006191758256332547,
+          "bicubic_psnr_db": 32.081860080729506,
+          "bicubic_sam_deg": 3.638966202735901,
+          "peak_allocated_mb": 132.234375,
+          "peak_reserved_mb": 166.0
+        },
+        {
+          "epoch": 1,
+          "train_mse": 0.0012253610038897023,
+          "seconds": 157.45482660000016,
+          "model_mse": 0.0006191945251296548,
+          "model_psnr_db": 32.08172892306578,
+          "model_sam_deg": 3.6390836238861084,
+          "bicubic_mse": 0.0006191758256332547,
+          "bicubic_psnr_db": 32.081860080729506,
+          "bicubic_sam_deg": 3.638966202735901,
+          "peak_allocated_mb": 132.234375,
+          "peak_reserved_mb": 166.0
+        },
+        {
+          "epoch": 1,
+          "train_mse": 0.0014191199443303049,
+          "seconds": 3.8138105999996696,
+          "model_mse": 0.000619219871712666,
+          "model_psnr_db": 32.08155114927428,
+          "model_sam_deg": 3.6390798091888428,
+          "bicubic_mse": 0.0006191758256332547,
+          "bicubic_psnr_db": 32.081860080729506,
+          "bicubic_sam_deg": 3.638966202735901,
+          "peak_allocated_mb": 132.234375,
+          "peak_reserved_mb": 166.0
+        }
+      ]
+    },
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_aligned\\smoke": {
+      "validation_metrics.json": {
+        "scene_mean": {
+          "model_mse": 0.0008834751363733357,
+          "model_psnr_db": 30.538056683279073,
+          "model_sam_deg": 3.3571562160119255,
+          "bicubic_mse": 0.0008834471101521158,
+          "bicubic_psnr_db": 30.538194455422122,
+          "bicubic_sam_deg": 3.3570234351363926
+        },
+        "scenes": {
+          "2020-11-24_008": {
+            "model_mse": 0.0008834751363733357,
+            "model_psnr_db": 30.538056683279073,
+            "model_sam_deg": 3.3571562160119255,
+            "bicubic_mse": 0.0008834471101521158,
+            "bicubic_psnr_db": 30.538194455422122,
+            "bicubic_sam_deg": 3.3570234351363926
+          }
+        },
+        "partial": true,
+        "alignment_border_masked": true,
+        "source_cube_requested_gib": 0.19921875,
+        "protocol": "x4 antialiased bicubic LR; clipped [0,1] reflectance GT; unclipped output; PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels",
+        "limited_scenes": false
+      },
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_mse": 0.001193374628201127,
+          "seconds": 12.288614000000052,
+          "train_seconds": 6.371493300000111,
+          "validation_seconds": 5.917120699999941,
+          "loader_wait_seconds": 4.870734399999719,
+          "train_patches_per_second": 1.2555926253583065,
+          "train_cube_requested_gib": 0.3486328125,
+          "validation_cube_requested_gib": 0.19921875,
+          "data_root": "E:/\uc724\uc9c0/\ubcd1\ud604/SSA-MRN Data/RGB-HSI/LIB-HSI",
+          "limited_scenes": false,
+          "model_mse": 0.0008834751363733357,
+          "model_psnr_db": 30.538056683279073,
+          "model_sam_deg": 3.3571562160119255,
+          "bicubic_mse": 0.0008834471101521158,
+          "bicubic_psnr_db": 30.538194455422122,
+          "bicubic_sam_deg": 3.3570234351363926,
+          "peak_allocated_mb": 1452.603515625,
+          "peak_reserved_mb": 1530.0
+        }
+      ]
+    },
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_aligned_256\\smoke": {
+      "validation_metrics.json": {
+        "scene_mean": {
+          "model_mse": 0.0008776045940401869,
+          "model_psnr_db": 30.56701112004584,
+          "model_sam_deg": 3.355699680416359,
+          "bicubic_mse": 0.0008775675710123841,
+          "bicubic_psnr_db": 30.567194337362075,
+          "bicubic_sam_deg": 3.355558282845884
+        },
+        "scenes": {
+          "2020-11-24_008": {
+            "model_mse": 0.0008776045940401869,
+            "model_psnr_db": 30.56701112004584,
+            "model_sam_deg": 3.355699680416359,
+            "bicubic_mse": 0.0008775675710123841,
+            "bicubic_psnr_db": 30.567194337362075,
+            "bicubic_sam_deg": 3.355558282845884
+          }
+        },
+        "partial": true,
+        "alignment_border_masked": true,
+        "source_cube_requested_gib": 0.3984375,
+        "protocol": "x4 antialiased bicubic LR; clipped [0,1] reflectance GT; unclipped output; PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels",
+        "limited_scenes": false
+      },
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_mse": 0.001146216643974185,
+          "seconds": 10.81583710000018,
+          "train_seconds": 5.657129000000168,
+          "validation_seconds": 5.158708100000013,
+          "loader_wait_seconds": 4.459881499999938,
+          "train_patches_per_second": 0.3535362195205272,
+          "train_cube_requested_gib": 0.2490234375,
+          "validation_cube_requested_gib": 0.3984375,
+          "data_root": "E:/\uc724\uc9c0/\ubcd1\ud604/SSA-MRN Data/RGB-HSI/LIB-HSI",
+          "limited_scenes": false,
+          "model_mse": 0.0008776045940401869,
+          "model_psnr_db": 30.56701112004584,
+          "model_sam_deg": 3.355699680416359,
+          "bicubic_mse": 0.0008775675710123841,
+          "bicubic_psnr_db": 30.567194337362075,
+          "bicubic_sam_deg": 3.355558282845884,
+          "peak_allocated_mb": 1460.08544921875,
+          "peak_reserved_mb": 1524.0
+        }
+      ]
+    },
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_fast\\smoke": {
+      "validation_metrics.json": {
+        "scene_mean": {
+          "model_mse": 0.0005832804987827936,
+          "model_psnr_db": 32.34122543392719,
+          "model_sam_deg": 3.389872968196869,
+          "bicubic_mse": 0.0005832482220641538,
+          "bicubic_psnr_db": 32.3414657640717,
+          "bicubic_sam_deg": 3.389751136302948
+        },
+        "scenes": {
+          "2020-11-24_008": {
+            "model_mse": 0.0005832804987827936,
+            "model_psnr_db": 32.34122543392719,
+            "model_sam_deg": 3.389872968196869,
+            "bicubic_mse": 0.0005832482220641538,
+            "bicubic_psnr_db": 32.3414657640717,
+            "bicubic_sam_deg": 3.389751136302948
+          }
+        },
+        "partial": true,
+        "protocol": "x4 antialiased bicubic LR; clipped [0,1] reflectance GT; unclipped output; PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels",
+        "limited_scenes": false
+      },
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_mse": 0.0011933747446164489,
+          "seconds": 9.497945199999776,
+          "train_seconds": 6.594528499999797,
+          "validation_seconds": 2.903416600000128,
+          "loader_wait_seconds": 2.8989246999999523,
+          "train_patches_per_second": 1.213126912712599,
+          "data_root": "E:/\uc724\uc9c0/\ubcd1\ud604/SSA-MRN Data/RGB-HSI/LIB-HSI",
+          "limited_scenes": false,
+          "model_mse": 0.0005832804987827936,
+          "model_psnr_db": 32.34122543392719,
+          "model_sam_deg": 3.389872968196869,
+          "bicubic_mse": 0.0005832482220641538,
+          "bicubic_psnr_db": 32.3414657640717,
+          "bicubic_sam_deg": 3.389751136302948,
+          "train_gpu_stream_seconds": 3.6566600189208986,
+          "peak_allocated_mb": 563.75244140625,
+          "peak_reserved_mb": 610.0
+        }
+      ]
+    },
+    "C:\\CtrS\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_grouped12_k4_23tap\\smoke": {
+      "validation_metrics.json": {
+        "scene_mean": {
+          "model_mse": 0.0016010919511037294,
+          "model_psnr_db": 27.9558372572578,
+          "model_sam_deg": 2.362088591675381,
+          "interp23_mse": 0.001601097715552219,
+          "interp23_psnr_db": 27.955821621280982,
+          "interp23_sam_deg": 2.3620561602813956
+        },
+        "scenes": {
+          "2020-11-24_008": {
+            "model_mse": 0.0016010919511037294,
+            "model_psnr_db": 27.9558372572578,
+            "model_sam_deg": 2.362088591675381,
+            "interp23_mse": 0.001601097715552219,
+            "interp23_psnr_db": 27.955821621280982,
+            "interp23_sam_deg": 2.3620561602813956
+          }
+        },
+        "partial": true,
+        "alignment_border_masked": true,
+        "source_cube_requested_gib": 0.19921875,
+        "baseline_mode": "23tap",
+        "protocol": "x4 area LR; interp23 baseline; clipped [0,1] reflectance GT; unclipped output; PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels",
+        "eval_layout": "full256",
+        "limited_scenes": true
+      },
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_mse": 0.001271989312954247,
+          "seconds": 13.575654800000166,
+          "train_seconds": 8.03535910000005,
+          "validation_seconds": 5.5402959000000465,
+          "loader_wait_seconds": 5.242821200000208,
+          "train_patches_per_second": 0.9955995619411645,
+          "train_cube_requested_gib": 0.3984375,
+          "validation_cube_requested_gib": 0.19921875,
+          "data_root": "C:\\Users\\pilot\\Desktop\\CtrS\\SSA-MRN\\data\\dataset\\RGB-HSI\\LIB-HSI",
+          "limited_scenes": false,
+          "model_mse": 0.0016010919511037294,
+          "model_psnr_db": 27.9558372572578,
+          "model_sam_deg": 2.362087848971702,
+          "interp23_mse": 0.001601097715552219,
+          "interp23_psnr_db": 27.955821621280982,
+          "interp23_sam_deg": 2.3620561602813956,
+          "peak_allocated_mb": 2175.1064453125,
+          "peak_reserved_mb": 2736.0,
+          "current_allocated_mb": 429.7041015625,
+          "current_reserved_mb": 990.0
+        },
+        {
+          "epoch": 1,
+          "train_mse": 0.001271989312954247,
+          "seconds": 21.60666180000044,
+          "train_seconds": 13.90955860000031,
+          "validation_seconds": 7.697103099999367,
+          "loader_wait_seconds": 11.041525200000251,
+          "train_patches_per_second": 0.5751440595677725,
+          "train_cube_requested_gib": 0.3984375,
+          "validation_cube_requested_gib": 0.19921875,
+          "data_root": "C:\\CtrS\\SSA-MRN\\data\\dataset\\RGB-HSI\\LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0016010919511037294,
+          "model_psnr_db": 27.9558372572578,
+          "model_sam_deg": 2.362087848971702,
+          "interp23_mse": 0.001601097715552219,
+          "interp23_psnr_db": 27.955821621280982,
+          "interp23_sam_deg": 2.3620561602813956,
+          "peak_allocated_mb": 2175.1064453125,
+          "peak_reserved_mb": 2736.0,
+          "current_allocated_mb": 429.7041015625,
+          "current_reserved_mb": 1006.0
+        },
+        {
+          "epoch": 1,
+          "train_mse": 0.001271989312954247,
+          "seconds": 17.39654420000079,
+          "train_seconds": 9.977742400000352,
+          "validation_seconds": 7.418801799998619,
+          "loader_wait_seconds": 6.991503600000215,
+          "train_patches_per_second": 0.8017845800468568,
+          "train_cube_requested_gib": 0.3984375,
+          "validation_cube_requested_gib": 0.19921875,
+          "data_root": "C:\\CtrS\\SSA-MRN\\data\\dataset\\RGB-HSI\\LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0016010919511037294,
+          "model_psnr_db": 27.9558372572578,
+          "model_sam_deg": 2.362088591675381,
+          "interp23_mse": 0.001601097715552219,
+          "interp23_psnr_db": 27.955821621280982,
+          "interp23_sam_deg": 2.3620561602813956,
+          "peak_allocated_mb": 2175.1064453125,
+          "peak_reserved_mb": 2736.0,
+          "current_allocated_mb": 429.7041015625,
+          "current_reserved_mb": 1006.0
+        }
+      ]
+    },
+    "C:\\CtrS-triple\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_triple12_k4_23tap_tiles\\smoke": {
+      "validation_metrics.json": {
+        "scene_mean": {
+          "model_mse": 0.0010368022301374257,
+          "model_psnr_db": 29.843040773151714,
+          "model_sam_deg": 3.4269091420641278,
+          "interp23_mse": 0.001036854234572844,
+          "interp23_psnr_db": 29.84282294305569,
+          "interp23_sam_deg": 3.426920546588654
+        },
+        "scenes": {
+          "2020-11-24_008": {
+            "model_mse": 0.0010368022301374257,
+            "model_psnr_db": 29.843040773151714,
+            "model_sam_deg": 3.4269091420641278,
+            "interp23_mse": 0.001036854234572844,
+            "interp23_psnr_db": 29.84282294305569,
+            "interp23_sam_deg": 3.426920546588654
+          }
+        },
+        "partial": true,
+        "alignment_border_masked": true,
+        "source_cube_requested_gib": 0.3984375,
+        "baseline_mode": "23tap",
+        "protocol": "x4 area LR; interp23 baseline; clipped [0,1] reflectance GT; unclipped output; PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels",
+        "eval_layout": "tiles",
+        "limited_scenes": true
+      },
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_mse": 0.0012720117811113596,
+          "seconds": 15.978821100005007,
+          "train_seconds": 10.467647500001476,
+          "validation_seconds": 5.511173499995493,
+          "loader_wait_seconds": 5.270667000004323,
+          "train_patches_per_second": 0.7642595912786394,
+          "train_cube_requested_gib": 0.3984375,
+          "validation_cube_requested_gib": 0.3984375,
+          "data_root": "C:\\CtrS\\SSA-MRN\\data\\dataset\\RGB-HSI\\LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0010368022301374257,
+          "model_psnr_db": 29.843040773151714,
+          "model_sam_deg": 3.4269091420641278,
+          "interp23_mse": 0.001036854234572844,
+          "interp23_psnr_db": 29.84282294305569,
+          "interp23_sam_deg": 3.426920546588654,
+          "peak_allocated_mb": 4055.53662109375,
+          "peak_reserved_mb": 5438.0,
+          "current_allocated_mb": 441.02880859375,
+          "current_reserved_mb": 1788.0
+        }
+      ]
+    },
+    "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\checkpoints\\lib_rgb_hsi_triple12_k4_bilinear_tiles\\smoke": {
+      "validation_metrics.json": {
+        "scene_mean": {
+          "model_mse": 0.0010368014274541116,
+          "model_psnr_db": 29.843044135423312,
+          "model_sam_deg": 3.426907600912165,
+          "interp23_mse": 0.001036854234572844,
+          "interp23_psnr_db": 29.84282294305569,
+          "interp23_sam_deg": 3.426920546588654
+        },
+        "scenes": {
+          "2020-11-24_008": {
+            "model_mse": 0.0010368014274541116,
+            "model_psnr_db": 29.843044135423312,
+            "model_sam_deg": 3.426907600912165,
+            "interp23_mse": 0.001036854234572844,
+            "interp23_psnr_db": 29.84282294305569,
+            "interp23_sam_deg": 3.426920546588654
+          }
+        },
+        "partial": true,
+        "alignment_border_masked": true,
+        "source_cube_requested_gib": 0.3984375,
+        "baseline_mode": "23tap",
+        "protocol": "x4 area LR; interp23 baseline; clipped [0,1] reflectance GT; unclipped output; PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels",
+        "eval_layout": "tiles",
+        "limited_scenes": true
+      },
+      "measured_epochs": [
+        {
+          "epoch": 1,
+          "train_mse": 0.0012720098020508885,
+          "seconds": 13.45407000000705,
+          "train_seconds": 8.408655599996564,
+          "validation_seconds": 5.045414300009725,
+          "loader_wait_seconds": 4.4753901999938535,
+          "train_patches_per_second": 0.9514006020181477,
+          "train_cube_requested_gib": 0.3984375,
+          "validation_cube_requested_gib": 0.3984375,
+          "data_root": "C:\\CtrS\\SSA-MRN\\data\\dataset\\RGB-HSI\\LIB-HSI",
+          "limited_scenes": true,
+          "model_mse": 0.0010368014274541116,
+          "model_psnr_db": 29.843044135423312,
+          "model_sam_deg": 3.426907600912165,
+          "interp23_mse": 0.001036854234572844,
+          "interp23_psnr_db": 29.84282294305569,
+          "interp23_sam_deg": 3.426920546588654,
+          "peak_allocated_mb": 3883.38427734375,
+          "peak_reserved_mb": 5344.0,
+          "current_allocated_mb": 441.02880859375,
+          "current_reserved_mb": 1788.0
+        }
+      ]
+    }
+  }
+}
