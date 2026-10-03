@@ -2,13 +2,13 @@
 
 [현재 연구와 최신 결과](../../README.md) · [재현 연구](../reproduction.md) · [이전 RGB–HSI 실험](../previous_experiments.md)
 
-문서 작성: 2026-10-04. 실제 재현·확장 코드와 저장된 평가 결과를 기준으로 작성했습니다. **완료된 triple12/내부 23탭 모델의 test 결과**와 **후속 triple12/내부 Bilinear 실험**을 구분합니다. 새 실험의 현재 실행 상태는 README의 controller 명령으로 확인합니다.
+문서 작성: 2026-10-04. 실제 재현·확장 코드와 저장된 평가 결과를 기준으로 작성했습니다. 내부 23탭과 Bilinear의 완료 결과를 구분합니다. 최신 완료 결과는 README에서 확인합니다.
 
 ## 핵심 요약
 
 기존 PAN–MS 팬샤프닝 모델의 실행과 학습·평가를 복원한 뒤, RGB 3채널과 HSI 204밴드를 이용하는 공간 초해상도로 확장했습니다. 현재 구조는 HSI를 인접한 17밴드씩 12개 특징으로 학습 압축하고, R·G·B 각각의 독립 SSA-MRN 경로에서 204밴드 보정량을 생성합니다. 세 보정량을 밴드별로 융합해 204밴드의 23탭 보간 결과에 더합니다.
 
-최근 완료 모델은 LIB-HSI test 75장면의 합성 ×4 평가에서 23탭 baseline보다 PSNR 4.8272 dB 상승, SAM 0.2733° 감소를 보였습니다. 현재는 같은 구조에서 내부 확대·축소를 PAN–MS 재현과 동일한 Bilinear로 변경해 연산 차이의 영향을 검증합니다. 이 결과는 합성 축소 조건의 복원 성능이며 실제 센서 HR-HSI 정확도를 입증한 결과는 아닙니다.
+최근 완료 모델은 LIB-HSI test 75장면의 합성 ×4 평가에서 23탭 baseline보다 PSNR 4.5639 dB 상승, SAM 0.2601° 감소를 보였습니다. 내부 확대·축소를 PAN–MS 재현과 동일한 Bilinear로 변경한 실험을 완료했으며 직전 모델보다 PSNR 0.2633 dB 감소, SAM 0.0132° 증가했습니다. 이 결과는 합성 축소 조건의 복원 성능이며 실제 센서 HR-HSI 정확도를 입증한 결과는 아닙니다.
 
 ## 1. 연구 목적과 용어
 
@@ -240,22 +240,22 @@ MSE를 줄이면서 스펙트럼 방향의 오차가 커질 수 있으므로 PSN
 | 방법 | MSE ↓ | PSNR ↑ | SAM ↓ |
 |---|---:|---:|---:|
 | 23탭 보간 | 0.0013944695 | 29.2259 dB | 2.4790° |
-| RGB별 triple12 | 0.0004733597 | 34.0530 dB | 2.2057° |
-| 차이 | 약 66.1% 감소 | +4.8272 dB | −0.2733° |
+| RGB별 triple12 | 0.0005064195 | 33.7897 dB | 2.2190° |
+| 차이 | 약 63.7% 감소 | +4.5639 dB | −0.2601° |
 
 이는 정합된 LIB-HSI의 합성 area ×4 조건에서 학습 모델이 23탭 보간보다 전체 값 오차와 분광 각도 오차를 줄였음을 보여줍니다. 이 비교만으로 RGB별 독립 경로가 개선의 원인임을 분리해 증명하지는 않습니다. HSI-only 및 동일 타일 조건의 단일 core 비교가 필요합니다.
 
-[전체 75장면 수치](../../experiments/results/rgb04_triple12/test/metrics.json), [완료 실험 보고서](../experiments/rgb04_triple12.md).
+[전체 75장면 수치](../../experiments/results/rgb05_triple12_bilinear/test/metrics.json), [완료 실험 보고서](../experiments/rgb05_triple12_bilinear.md).
 
-![학습과 검증 그래프](../assets/rgb04_triple12/learning.png)
+![학습과 검증 그래프](../assets/rgb05_triple12_bilinear/learning.png)
 
 ### 7.3 결과 그림이 보여주는 범위
 
-![LR HSI · RGB · 예측 · 정답](../assets/rgb04_triple12/sample_03.png)
+![LR HSI · RGB · 예측 · 정답](../assets/rgb05_triple12_bilinear/sample_03.png)
 
 왼쪽부터 LR HSI, RGB guide, 예측, GT입니다. HSI 0-based 69/52/18 밴드를 R/G/B 표시 채널로 사용하고, 모든 HSI 패널에 동일 GT 기반 1–99% 대비 범위를 적용합니다. 지표는 대비 조정 전의 전체 204밴드로 계산합니다.
 
-그림은 선택한 3밴드의 공간 구조를 보여줍니다. 전체 밴드의 성능은 밴드별 영상·오차 지도·스펙트럼 곡선·전체 지표에서 확인해야 합니다. 사전 선택한 [test 예시 5종](../experiments/rgb04_triple12.md#6-결과-이미지-예시)을 함께 보존합니다.
+그림은 선택한 3밴드의 공간 구조를 보여줍니다. 전체 밴드의 성능은 밴드별 영상·오차 지도·스펙트럼 곡선·전체 지표에서 확인해야 합니다. 사전 선택한 [test 예시 5종](../experiments/rgb05_triple12_bilinear.md#6-결과-이미지-예시)을 함께 보존합니다.
 
 ## 8. 후속 실험: 내부 보간의 영향 분리
 
@@ -271,9 +271,7 @@ MSE를 줄이면서 스펙트럼 방향의 오차가 커질 수 있으므로 PSN
 
 연구 질문은 **동일 구조·평가 조건에서 내부 resampling 연산이 공간·분광 복원에 미치는 영향**입니다. Bilinear가 더 좋다고 전제하지 않으며, 재현 모델과 달라진 연산을 통제해 검사합니다. area 입력 축소·분광 압축·최종 residual까지 원 PAN–MS와 같아진 것은 아닙니다.
 
-**학습 중간 로그 예시:** 앞선 서버 조회에서 38 epoch 완료, validation PSNR 32.5204 dB/SAM 2.3831°였고 같은 validation의 baseline은 29.1723 dB/2.5315°였습니다. 이는 기록된 중간 스냅샷이며 이 문서를 읽는 시점의 진행률이나 최종 결과가 아닙니다. 이전 모델의 test 34.0530 dB와 직접 비교하지 않습니다.
-
-최종 비교는 validation으로 선택한 best를 동일 test 75장면에 평가한 후 수행합니다. [후속 실험 보고서](../experiments/rgb05_triple12_bilinear.md).
+최종 best epoch 100의 동일 test 75장면 평가에서 PSNR은 34.0530→33.7897 dB, SAM은 2.2057→2.2190°였습니다. 이번 학습에서는 내부 Bilinear 변경이 개선으로 이어지지 않았습니다. 장면 ID·순서·baseline·평가 프로토콜을 대조했으며 단일 seed라는 한계가 있습니다. [완료 보고서](../experiments/rgb05_triple12_bilinear.md).
 
 ## 9. 성과와 다음 검증
 

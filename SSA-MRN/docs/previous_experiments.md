@@ -38,7 +38,7 @@ SSA-MRN/
 │   └── assets/                실험 ID별 그래프·4패널 예시
 ├── experiments/
 │   ├── checkpoints/           학습된 .pt·checksum
-│   ├── results/               pan_k4, pan_k6, rgb01~04, 정합 근거
+│   ├── results/               pan_k4, pan_k6, rgb01~05, 정합 근거
 │   └── logs/                  현재 실행 중인 로그만 로컬 유지
 ├── references/                공식 코드·데이터 감사·측정 근거
 ├── scripts/                   학습·정합·평가·결과 내보내기·정리

@@ -13,69 +13,50 @@
 - [기존 PAN–MS 재현 정리](docs/reproduction.md)
 - [이전 RGB–HSI 실험 정리](docs/previous_experiments.md)
 
-## 가장 최근 완료 연구 · RGB별 12특징 23탭 타일
+## 가장 최근 완료 연구 · RGB별 12특징 Bilinear 타일
 
-204밴드를 17개씩 grouped 압축해 12특징으로 만들고, R/G/B 각각 독립 core·decoder의 출력을 밴드별로 결합합니다. K=4, 내부 평균 축소/23탭 확대, 입력 baseline 23탭. 학습·test 모두 256 타일, LR HSI 64×64입니다.
+204밴드를 17개씩 grouped 압축해 12특징으로 만들고, R/G/B 각각 독립 core·decoder의 출력을 밴드별로 결합합니다. K=4, 내부 Bilinear 축소/확대(align_corners=True), 입력 baseline 23탭. 학습·test 모두 256 타일, LR HSI 64×64입니다.
 
 | test 75장면 평균 | MSE ↓ | PSNR dB ↑ | SAM ° ↓ |
 |---|---:|---:|---:|
 | 23탭 baseline | 0.0013944695 | 29.2259 | 2.4790 |
-| RGB별 SSA-MRN | 0.0004733597 | 34.0530 | 2.2057 |
+| RGB별 SSA-MRN | 0.0005064195 | 33.7897 | 2.2190 |
 
-best epoch 99. [상세 보고서·직전 연구와 차이](docs/experiments/rgb04_triple12.md). 직전 연구와는 test full256→tiles 변경이 있어 수치 차이를 통제된 개선으로 해석하지 않습니다.
+best epoch 100. [상세 보고서·직전 연구와 차이](docs/experiments/rgb05_triple12_bilinear.md). 동일 75장면·타일 평가에서 직전 내부 23탭 모델보다 PSNR **0.2633 dB 감소**, SAM **0.0132° 증가**했습니다. 이번 단일 학습에서는 개선되지 않았습니다. baseline 대비 PSNR은 4.5639 dB 상승했습니다.
 
-![학습 및 검증 그래프](docs/assets/rgb04_triple12/learning.png)
+![학습 및 검증 그래프](docs/assets/rgb05_triple12_bilinear/learning.png)
 
-![test baseline 및 직전 연구 수치 비교](docs/assets/rgb04_triple12/test_metrics.png)
+![test baseline 및 직전 연구 수치 비교](docs/assets/rgb05_triple12_bilinear/test_metrics.png)
 
 ### test 예시 5종
 
-[204밴드 슬라이더 웹 뷰어](https://biyonghiyon.github.io/CtrS/ssa-mrn/) · [오프라인 HTML](docs/assets/rgb04_triple12/band_viewer/index.html). 웹 링크에서 5장면을 선택해 확인할 수 있으며, 내려받은 HTML도 단독 실행됩니다. 같은 epoch 99 가중치의 CPU 추론이며, 기존 CUDA AMP 예시와 미세한 수치 차이가 있을 수 있습니다.
+[204밴드 슬라이더 웹 뷰어](https://biyonghiyon.github.io/CtrS/ssa-mrn/) · [오프라인 HTML](docs/assets/rgb05_triple12_bilinear/band_viewer/index.html). 웹 링크에서 5장면을 선택해 확인할 수 있으며, 내려받은 HTML도 단독 실행됩니다. 같은 epoch 100 가중치의 CPU 추론이며, 기존 CUDA AMP 예시와 미세한 수치 차이가 있을 수 있습니다.
 
 왼쪽부터 **LR HSI · RGB 입력 · 예측 · 정답**입니다. 동일한 HSI 대비 범위를 사용하며, 지표는 204밴드 원래 값으로 계산합니다. 이전 보고서와 같은 5장면의 tile 0입니다.
 
 [예시 1 · 204밴드 슬라이더](https://biyonghiyon.github.io/CtrS/ssa-mrn/sample_01.html)
 
-![test 예시 1](docs/assets/rgb04_triple12/sample_01.png)
+![test 예시 1](docs/assets/rgb05_triple12_bilinear/sample_01.png)
 
 [예시 2 · 204밴드 슬라이더](https://biyonghiyon.github.io/CtrS/ssa-mrn/sample_02.html)
 
-![test 예시 2](docs/assets/rgb04_triple12/sample_02.png)
+![test 예시 2](docs/assets/rgb05_triple12_bilinear/sample_02.png)
 
 [예시 3 · 204밴드 슬라이더](https://biyonghiyon.github.io/CtrS/ssa-mrn/sample_03.html)
 
-![test 예시 3](docs/assets/rgb04_triple12/sample_03.png)
+![test 예시 3](docs/assets/rgb05_triple12_bilinear/sample_03.png)
 
 [예시 4 · 204밴드 슬라이더](https://biyonghiyon.github.io/CtrS/ssa-mrn/sample_04.html)
 
-![test 예시 4](docs/assets/rgb04_triple12/sample_04.png)
+![test 예시 4](docs/assets/rgb05_triple12_bilinear/sample_04.png)
 
 [예시 5 · 204밴드 슬라이더](https://biyonghiyon.github.io/CtrS/ssa-mrn/sample_05.html)
 
-![test 예시 5](docs/assets/rgb04_triple12/sample_05.png)
+![test 예시 5](docs/assets/rgb05_triple12_bilinear/sample_05.png)
 
-## 현재 학습 · RGB별 12특징 Bilinear 타일
+## 현재 학습 상태
 
-직전 모델의 내부 guide·분광 특징 확대/축소를 재현 모델과 같은 **Bilinear, align_corners=True**로 바꿉니다. HSI 입력의 area 축소와 23탭 LMS baseline은 유지합니다. 구조·분할·타일 평가 조건을 고정해 내부 보간의 영향을 비교합니다.
-
-- 모델 `rgb_triple_grouped12_bilinear`, K=4, 1,950,186 parameters.
-- LIB-HSI train/validation/test 393/45/75 장면. 패치 수는 독립 장면 수가 아닙니다.
-- 설정: `configs/lib_rgb_hsi_triple12_k4_bilinear_tiles.json` (현재 학습 설정만 보관).
-- 서버 실행 `20261003-220209-d4faa37d0365`, 코드 `d947f84`에서 새 학습 시작. 원격 controller로 SSH 종료 후에도 실행.
-- 최종 test 결과는 아직 없습니다. [진행 보고서와 완료 기준](docs/experiments/rgb05_triple12_bilinear.md).
-
-### 원격 클라이언트에서 상태·로그 확인
-
-VS Code Remote SSH의 PowerShell에서 실행합니다.
-
-```powershell
-$py = 'C:\CtrS\.venv\Scripts\python.exe'
-$ctl = 'C:\CtrS-triple12-bilinear\scripts\remote-training.py'
-& $py $ctl status
-& $py $ctl logs --follow
-```
-
-로그 보기의 Ctrl+C는 학습을 중단하지 않습니다. 현재 학습 중에는 실행 코드·run config·로그 폴더를 정리하거나 갱신하지 않습니다.
+현재 보고 대상 학습은 완료되었습니다. 100/100 epoch, 종료 코드 0, 종료 시각 2026-10-04 03:09(KST). run `20261003-220209-d4faa37d0365`의 best/latest 가중치를 보존했습니다. 새 학습은 시작하지 않았습니다.
 
 ## 결과 보고와 파일 보관
 
