@@ -517,4 +517,3 @@ $run = 'C:\CtrS-triple\SSA-MRN\experiments\checkpoints\remote-runs\20261003-1624
 기존 결과와 다른 새 출력 폴더를 지정하세요. 평가 코드는 출력 폴더 아래 `test`에 지표를 저장합니다.
 5세트는 [preview_lib.py](../scripts/preview_lib.py)에 `--split test --sample-index`로
 12, 0, 172, 72, 252를 각각 지정하여 생성했습니다.
-
