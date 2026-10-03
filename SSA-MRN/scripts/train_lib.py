@@ -290,7 +290,9 @@ def main():
     accumulation = 1 if args.smoke else config["accumulation_steps"]
     steps = min(2, len(train_loader)) if args.smoke else len(train_loader)
     print(f"train_scenes={len(training.files)} val_scenes={len(validation.files)} steps/epoch={steps} effective_batch={config['batch_size'] * accumulation}", flush=True)
-    print(f"workers={config['workers']} gpu_degradation={gpu_degradation} vectorized_ssa={model.core.vectorized} channels_last={channels_last}", flush=True)
+    cores = list(model.cores) if hasattr(model, "cores") else [model.core]
+    vectorized_ssa = all(core.vectorized for core in cores)
+    print(f"workers={config['workers']} gpu_degradation={gpu_degradation} vectorized_ssa={vectorized_ssa} cores={len(cores)} channels_last={channels_last}", flush=True)
     for epoch in range(start_epoch, epochs):
         started = time.perf_counter()
         model.train()
