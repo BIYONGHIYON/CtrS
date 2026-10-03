@@ -90,10 +90,22 @@ class DevicePrefetch:
 
 def preview(batch, prediction, baseline, path):
     bands = [69, 52, 18]
-    images = [batch["rgb"][0], batch["gt"][0, bands], baseline[0, bands], prediction[0, bands]]
-    arrays = [(x.detach().float().cpu().clamp(0, 1).permute(1, 2, 0).numpy() * 255).astype(np.uint8)
-              for x in images]
-    Image.fromarray(np.concatenate(arrays, axis=1)).save(path)
+    gt = batch["gt"][0, bands].detach().float().cpu()
+    lo = torch.quantile(gt.flatten(1), .01, dim=1)[:, None, None]
+    hi = torch.quantile(gt.flatten(1), .99, dim=1)[:, None, None]
+    lr = batch.get("lr_hsi")
+    if lr is None:
+        lr = F.interpolate(batch["gt"], scale_factor=.25, mode="area")
+    tensors = [lr[0, bands], batch["rgb"][0], prediction[0, bands], gt]
+    pictures = []
+    for index, tensor in enumerate(tensors):
+        tensor = tensor.detach().float().cpu()
+        if index != 1:
+            tensor = (tensor-lo)/(hi-lo).clamp_min(1e-8)
+        array = (tensor.clamp(0,1).permute(1,2,0).numpy()*255).astype(np.uint8)
+        picture = Image.fromarray(array).resize((gt.shape[-1],gt.shape[-2]),Image.Resampling.NEAREST)
+        pictures.append(np.asarray(picture))
+    Image.fromarray(np.concatenate(pictures, axis=1)).save(path)
 
 
 @torch.no_grad()
@@ -134,7 +146,7 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
             totals[scene]["values"].add_(packed[i])
             totals[scene]["count"] += int(spatial[i].sum())*gt.shape[1] if 'valid_mask' in batch else gt[i].numel()
         if step == 0:
-            preview(batch, prediction, baseline, output / f"preview_rgb_gt_{baseline_label}_prediction.png")
+            preview(batch, prediction, baseline, output / "preview_inputs_prediction_gt.png")
         if max_batches is not None and step + 1 >= max_batches:
             break
     if not finite.item():
@@ -161,7 +173,7 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", type=Path, default=ROOT / "SSA-MRN/configs/lib_rgb_hsi.json")
+    parser.add_argument("--config", type=Path, default=ROOT / "SSA-MRN/configs/lib_rgb_hsi_triple12_k4_bilinear_tiles.json")
     parser.add_argument("--data-root", type=Path)
     parser.add_argument("--device", choices=("cpu", "cuda"))
     parser.add_argument("--output-dir", type=Path)
