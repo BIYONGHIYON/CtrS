@@ -174,7 +174,7 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", type=Path, default=ROOT / "SSA-MRN/configs/lib_rgb_hsi_triple12_k4_bilinear_tiles.json")
+    parser.add_argument("--config", type=Path, default=ROOT / "SSA-MRN/configs/lib_rgb_hsi_triple17_k4_spectral_tiles.json")
     parser.add_argument("--data-root", type=Path)
     parser.add_argument("--device", choices=("cpu", "cuda"))
     parser.add_argument("--output-dir", type=Path)

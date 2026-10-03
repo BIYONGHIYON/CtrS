@@ -2,19 +2,43 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "LIB: smoke",
+      "label": "LIB17 remote: status",
       "type": "process",
-      "command": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "args": ["${workspaceFolder}/SSA-MRN/scripts/train_lib.py", "--smoke"],
-      "options": {"cwd": "${workspaceFolder}"},
+      "command": "C:\\CtrS\\.venv\\Scripts\\python.exe",
+      "args": [
+        "${workspaceFolder}/scripts/remote-training.py",
+        "status"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "problemMatcher": []
     },
     {
-      "label": "LIB: train",
+      "label": "LIB17 remote: start",
       "type": "process",
-      "command": "${workspaceFolder}/.venv/Scripts/python.exe",
-      "args": ["${workspaceFolder}/SSA-MRN/scripts/train_lib.py"],
-      "options": {"cwd": "${workspaceFolder}"},
+      "command": "C:\\CtrS\\.venv\\Scripts\\python.exe",
+      "args": [
+        "${workspaceFolder}/scripts/remote-training.py",
+        "start"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "LIB17 remote: logs",
+      "type": "process",
+      "command": "C:\\CtrS\\.venv\\Scripts\\python.exe",
+      "args": [
+        "${workspaceFolder}/scripts/remote-training.py",
+        "logs",
+        "--follow"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "problemMatcher": []
     }
   ]
