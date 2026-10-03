@@ -37,6 +37,13 @@ def render(sample, prediction, metadata):
 <script>const data=PAYLOAD;const slider=document.getElementById('slider'),number=document.getElementById('number');function update(v){v=Math.max(1,Math.min(204,Math.round(Number(v)||1)));slider.value=number.value=v;const b=v-1;document.getElementById('lr').src=data.bands[b][0];document.getElementById('pred').src=data.bands[b][1];document.getElementById('gt').src=data.bands[b][2];document.getElementById('range').textContent=`밴드 ${v}/204 (0-based index ${b}) · 공통 표시 범위 ${data.limits[b][0].toFixed(6)} ~ ${data.limits[b][1].toFixed(6)}`;}slider.oninput=()=>update(slider.value);number.oninput=()=>update(number.value);document.getElementById('rgb').src=data.rgb;document.getElementById('mask').src=data.mask;document.getElementById('scene').textContent=`${data.scene} · tile ${data.tile} · test sample ${data.sample_index} · epoch ${data.epoch}`;const {bands,rgb,mask,limits,...meta}=data;document.getElementById('meta').textContent=JSON.stringify(meta,null,2);update(70);</script></html>'''.replace('PAYLOAD', payload)
 
 
+
+def render_index(records):
+    cards=''.join(f'<a class="card" href="{r["file"]}"><span class="badge">SCENE {i:02}</span><h2>{r["scene"]}</h2><p>LR HSI · RGB · 예측 · 정답</p><span class="open">204밴드 살펴보기 →</span></a>' for i,r in enumerate(records,1))
+    return """<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SSA-MRN 밴드 뷰어</title>
+<style>:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#101820;color:#e7edf4;font:16px/1.65 system-ui,-apple-system,sans-serif}main{max-width:1100px;margin:auto;padding:64px 24px}.eyebrow{color:#73d6ce;font-size:13px;font-weight:700;letter-spacing:.12em}h1{font-size:clamp(28px,5vw,44px);line-height:1.25;margin:12px 0 20px}p{color:#b6c5d3}.intro{max-width:700px}.stats{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0 36px}.stats span{background:#1b2936;border:1px solid #33475a;border-radius:24px;padding:6px 16px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}.card{display:block;background:#192735;border:1px solid #35495b;border-radius:16px;padding:24px;color:inherit;text-decoration:none;transition:background .15s,transform .15s}.card:hover{background:#223647;transform:translateY(-3px);border-color:#73d6ce}.card:focus-visible{outline:3px solid #73d6ce;outline-offset:4px}.badge{font-size:12px;letter-spacing:.1em;color:#73d6ce;font-weight:700}h2{font-size:21px;margin:12px 0}.card p{font-size:14px}.open{color:#94e5dd;font-weight:600;font-size:14px}footer{border-top:1px solid #33475a;margin-top:40px;padding-top:20px;font-size:14px;color:#aabccc}footer a{color:#94e5dd}@media(max-width:600px){main{padding:32px 18px}.grid{grid-template-columns:1fr}}
+</style></head><body><main><div class="eyebrow">CtrS / SSA-MRN</div><h1>테스트 5장면 · 204밴드</h1><p class="intro">장면을 선택하고 슬라이더를 움직여 분광 밴드별 복원 결과를 비교하세요. LR HSI와 RGB 입력, 예측 HSI, 정답 HSI를 함께 확인할 수 있습니다.</p><div class="stats"><span>5개 독립 장면</span><span>204개 분광 밴드</span><span>합성 ×4 초해상도</span></div><section class="grid" aria-label="테스트 장면">"""+cards+"""</section><footer>최근 완료 실험: RGB별 12특징 · K=4 · 23탭 · epoch 99<br>밴드별 공통 대비로 표시한 정성 비교입니다. 각 장면 HTML은 오프라인에서도 사용할 수 있습니다.<br><a href="https://github.com/BIYONGHIYON/CtrS/tree/codex/ssa-mrn-triple34-tiles/SSA-MRN">연구 문서와 평가 근거 ↗</a></footer></main></body></html>"""
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--repo-root', type=Path, default=Path(__file__).resolve().parents[2])
@@ -67,7 +74,6 @@ def main():
         path=args.output_dir/f'sample_{i:02}.html';path.write_text(render(sample,prediction,metadata),encoding='utf-8')
         records.append(dict(metadata,file=path.name,bytes=path.stat().st_size));print(json.dumps(records[-1]),flush=True)
     (args.output_dir/'manifest.json').write_text(json.dumps(records,indent=2),encoding='utf-8')
-    links=''.join(f'<li><a href="{r["file"]}">예시 {i}: {r["scene"]} · 204밴드</a></li>' for i,r in enumerate(records,1))
-    (args.output_dir/'index.html').write_text('<!doctype html><html lang="ko"><meta charset="utf-8"><title>SSA-MRN 밴드 뷰어</title><h1>테스트 5장면 · 204밴드</h1><p>장면을 선택하면 204밴드 슬라이더가 열립니다. 각 HTML은 내려받아 오프라인에서도 사용할 수 있습니다.</p><ul>'+links+'</ul></html>',encoding='utf-8')
+    (args.output_dir/'index.html').write_text(render_index(records),encoding='utf-8')
 
 if __name__=='__main__': main()

@@ -34,13 +34,23 @@ best epoch 99. [상세 보고서·직전 연구와 차이](docs/experiments/rgb0
 
 왼쪽부터 **LR HSI · RGB 입력 · 예측 · 정답**입니다. 동일한 HSI 대비 범위를 사용하며, 지표는 204밴드 원래 값으로 계산합니다. 이전 보고서와 같은 5장면의 tile 0입니다.
 
+[예시 1 · 204밴드 슬라이더](https://biyonghiyon.github.io/CtrS/ssa-mrn/sample_01.html)
+
 ![test 예시 1](docs/assets/rgb04_triple12/sample_01.png)
+
+[예시 2 · 204밴드 슬라이더](https://biyonghiyon.github.io/CtrS/ssa-mrn/sample_02.html)
 
 ![test 예시 2](docs/assets/rgb04_triple12/sample_02.png)
 
+[예시 3 · 204밴드 슬라이더](https://biyonghiyon.github.io/CtrS/ssa-mrn/sample_03.html)
+
 ![test 예시 3](docs/assets/rgb04_triple12/sample_03.png)
 
+[예시 4 · 204밴드 슬라이더](https://biyonghiyon.github.io/CtrS/ssa-mrn/sample_04.html)
+
 ![test 예시 4](docs/assets/rgb04_triple12/sample_04.png)
+
+[예시 5 · 204밴드 슬라이더](https://biyonghiyon.github.io/CtrS/ssa-mrn/sample_05.html)
 
 ![test 예시 5](docs/assets/rgb04_triple12/sample_05.png)
 
