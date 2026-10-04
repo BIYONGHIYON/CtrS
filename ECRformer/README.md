@@ -12,6 +12,8 @@ ECRformer는 **구름 낀 광학 영상과 SAR 영상**을 입력으로 사용�
 
 ## 공용 Windows 서버의 spring 학습 설정 (2026-10-04)
 
+실제 실행 이후의 [spring 6,000개 학습 로그 분석과 개선 계획](./docs/spring_subset6000_log_analysis_20261005.md)을 별도로 정리했습니다. epoch 8에서 가장 좋은 검증 성능을 기록했으나 epoch 16부터 오차가 급증하고 epoch 18 이후 조기 종료됐습니다. 아래 설정 변경 설명은 당시 기록이며, 성능 개선이 입증됐다는 의미는 아닙니다.
+
 RTX 3060 Ti(VRAM 8GB), RAM 16GB 서버에서 다음 학습을 위해 `config/ecrformer_spring_config.py` 설정을 조정했습니다. 아래는 서버 로컬 설정이며, 이 설정 파일은 아직 Git에 추적되지 않습니다.
 
 | 항목 | 수정 전 | 수정 후 |
