@@ -30,11 +30,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--checkpoint', type=Path, required=True)
     parser.add_argument('--data-root', type=Path, required=True)
+    parser.add_argument('--alignment-manifest', type=Path, help='Exact registration file required by the checkpoint')
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--history', type=Path, help='Defaults to checkpoint folder history.jsonl or curves.json')
     parser.add_argument('--previous-metrics', type=Path)
     parser.add_argument('--seed', type=int, default=20261003)
     parser.add_argument('--device', choices=('cpu', 'cuda'))
+    parser.add_argument('--area-consistency', action='store_true', help='Apply x4 area LR consistency in all exported results')
     args = parser.parse_args()
     # Freeze one weight file so evaluation and all five previews cannot mix epochs.
     snapshot_dir = tempfile.TemporaryDirectory()
@@ -43,6 +45,8 @@ def main():
     weight_hash = hashlib.sha256(frozen.read_bytes()).hexdigest()
     state = torch.load(frozen, map_location='cpu', weights_only=True)
     config = dict(state['config'])
+    if args.area_consistency and config.get('degradation') != 'area':
+        parser.error('--area-consistency requires area degradation')
     if args.device:
         config['device'] = args.device
     config['data_root'] = str(args.data_root.resolve())
@@ -52,7 +56,9 @@ def main():
     curves = compact_history(history)
     if not curves['epochs']:
         parser.error('Measured training history is required')
-    manifest = ROOT / config['alignment_manifest'] if config.get('alignment_manifest') else None
+    manifest = args.alignment_manifest.resolve() if args.alignment_manifest else ROOT / config['alignment_manifest'] if config.get('alignment_manifest') else None
+    if manifest and config.get('alignment_sha256') and hashlib.sha256(manifest.read_bytes()).hexdigest() != config['alignment_sha256']:
+        parser.error('Alignment manifest differs from the checkpoint')
     data = LIBHSI(args.data_root, 'test', config['patch_size'], alignment_manifest=manifest,
                   eval_layout=config.get('eval_layout', 'tiles'), degradation=config.get('degradation', 'bicubic'))
     selection = choose_samples(len(data.files), data.per_scene, args.seed)
@@ -60,6 +66,8 @@ def main():
     previous = json.loads(args.previous_metrics.read_text(encoding='utf-8-sig')) if args.previous_metrics else None
     if args.output_dir.exists():
         parser.error('Use a new output directory; existing results are preserved')
+    consistency_arg = ['--area-consistency'] if args.area_consistency else []
+    alignment_arg = ['--alignment-manifest', str(manifest)] if args.alignment_manifest else []
     args.output_dir.mkdir(parents=True)
     selection_path = args.output_dir / 'selection.json'
     selection_path.write_text(json.dumps(selection, indent=2), encoding='utf-8')
@@ -69,7 +77,7 @@ def main():
         path.write_text(json.dumps(config), encoding='utf-8')
         subprocess.run([sys.executable, str(ROOT/'SSA-MRN/scripts/train_lib.py'), '--config', str(path),
                         '--checkpoint', str(frozen), '--data-root', str(args.data_root.resolve()),
-                        '--output-dir', str(args.output_dir.resolve()), '--evaluate'], check=True)
+                        '--output-dir', str(args.output_dir.resolve()), '--evaluate', *consistency_arg, *alignment_arg], check=True)
     metrics_path = args.output_dir / 'test/metrics.json'
     metrics = json.loads(metrics_path.read_text(encoding='utf-8'))
     if metrics.get('partial') or set(metrics['scenes']) != {p.stem for p in data.files}:
@@ -78,13 +86,13 @@ def main():
         subprocess.run([sys.executable, str(ROOT/'SSA-MRN/scripts/preview_lib.py'),
                         '--checkpoint', str(frozen), '--data-root', str(args.data_root.resolve()),
                         '--split', 'test', '--sample-index', str(index),
-                        '--output-dir', str((args.output_dir/f'sample_{i:02}').resolve())] +
+                        '--output-dir', str((args.output_dir/f'sample_{i:02}').resolve()), *consistency_arg, *alignment_arg] +
                        (['--device', args.device] if args.device else []), check=True)
     subprocess.run([sys.executable, str(ROOT/'SSA-MRN/scripts/export_band_viewer.py'),
                     '--checkpoint', str(frozen), '--expected-sha256', weight_hash,
                     '--data-root', str(args.data_root.resolve()),
                     '--output-dir', str((args.output_dir/'band_viewer').resolve()),
-                    '--sample-indices', *map(str, selection['sample_indices'])], check=True)
+                    '--sample-indices', *map(str, selection['sample_indices']), *consistency_arg, *alignment_arg], check=True)
     for i in range(1,6):
         path = args.output_dir/f'sample_{i:02}/metrics.json'
         sample_metrics = json.loads(path.read_text(encoding='utf-8'))
@@ -100,6 +108,11 @@ def main():
                 'checkpoint_source': str(args.checkpoint.resolve()), 'epoch': state['epoch'], 'protocol': {k:config[k] for k in protocol_keys if k in config},
                 'test_scenes': len(data.files), 'panel_order': ['LR HSI','RGB guide','Prediction','Ground truth'],
                 'complete': True}
+    evidence['protocol']['area_consistency'] = args.area_consistency
+    if manifest:
+        evidence['protocol']['alignment_manifest_used'] = str(manifest)
+    if metrics.get('area_consistency') != args.area_consistency:
+        raise ValueError('Evaluation postprocessing mode mismatch')
     if previous:
         evidence['previous_metrics'] = str(args.previous_metrics)
         evidence['previous_delta'] = {key: metrics['scene_mean'][key]-previous['scene_mean'][key]

@@ -21,6 +21,7 @@ from ssamrn.data.lib_hsi import LIBHSI, ScenePatchSampler
 from ssamrn.losses import reconstruction_loss
 from ssamrn.models.rgb_grouped import build_rgb_hsi_model
 from ssamrn.models.interp23 import interp23tap
+from ssamrn.models.area_consistency import project_area_consistency
 
 
 def save_checkpoint(state, path):
@@ -111,9 +112,11 @@ def preview(batch, prediction, baseline, path):
 
 @torch.no_grad()
 def evaluate(model, loader, device, amp, output, max_batches=None, channels_last=False,
-             baseline_mode='bicubic', degradation_mode='bicubic'):
+             baseline_mode='bicubic', degradation_mode='bicubic', area_consistency=False):
     if baseline_mode not in ('bicubic', '23tap'):
         raise ValueError('Unknown baseline interpolation')
+    if area_consistency and degradation_mode != 'area':
+        raise ValueError('Area consistency requires area degradation')
     baseline_label = 'interp23' if baseline_mode == '23tap' else 'bicubic'
     model.eval()
     totals = {}
@@ -131,6 +134,9 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
         finite.logical_and_(torch.isfinite(prediction).all())
         valid = torch.linalg.vector_norm(gt, dim=1) > 1e-6
         spatial = batch.get('valid_mask', torch.ones_like(valid)).to(device)
+        if area_consistency:
+            prediction = project_area_consistency(prediction, lr, spatial)
+            baseline = project_area_consistency(baseline, lr, spatial)
         valid = valid & spatial
         gt_norm = torch.linalg.vector_norm(gt, dim=1)
         values = []
@@ -168,7 +174,9 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
             "alignment_border_masked": 'valid_mask' in batch,
             "source_cube_requested_gib": read_bytes / 2**30,
             "baseline_mode": baseline_mode,
+            "area_consistency": area_consistency,
             "protocol": f"x4 {degradation_mode} LR; {baseline_label} baseline; clipped [0,1] reflectance GT; unclipped output; "
+                        f"area consistency {'on' if area_consistency else 'off'}; "
                         "PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels"}
 
 
@@ -176,10 +184,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", type=Path, default=ROOT / "SSA-MRN/configs/lib_rgb_hsi_triple17_k4_spectral_tiles.json")
     parser.add_argument("--data-root", type=Path)
+    parser.add_argument("--alignment-manifest", type=Path, help="Exact registration file required by the checkpoint")
     parser.add_argument("--device", choices=("cpu", "cuda"))
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--smoke", action="store_true", help="Two real-data optimizer steps, partial validation")
     parser.add_argument("--evaluate", action="store_true", help="Evaluate test split, no training")
+    parser.add_argument("--area-consistency", action="store_true", help="Project evaluated x4 area outputs onto LR HSI")
     parser.add_argument("--checkpoint", type=Path)
     parser.add_argument("--resume", type=Path)
     parser.add_argument("--epochs", type=int)
@@ -188,6 +198,8 @@ def main():
     parser.add_argument("--profile", action="store_true", help="Record GPU event timing and loader waits")
     args = parser.parse_args()
     config = json.loads(args.config.read_text(encoding="utf-8"))
+    if args.alignment_manifest:
+        config['alignment_manifest'] = str(args.alignment_manifest.resolve())
     if config.get('alignment_manifest'):
         config['alignment_sha256']=hashlib.sha256((ROOT/config['alignment_manifest']).read_bytes()).hexdigest()
     if args.data_root:
@@ -201,6 +213,8 @@ def main():
         config["epochs"] = args.epochs
     if args.smoke and args.evaluate:
         parser.error("--smoke and --evaluate are mutually exclusive")
+    if args.area_consistency and (not args.evaluate or config.get('degradation') != 'area'):
+        parser.error('--area-consistency requires --evaluate with area degradation')
     if args.smoke and args.resume:
         parser.error("smoke must not resume a full training run")
     for key in ("epochs", "batch_size", "accumulation_steps", "patches_per_scene", "latent_channels", "ssai_dimension"):
@@ -293,7 +307,8 @@ def main():
     print(f"model={config.get('model_type','latent_rgb')} K={config['ssai_dimension']} train_layout={config.get('train_layout','random')} eval_layout={config.get('eval_layout','tiles')} degradation={config.get('degradation','bicubic')} upsampler={config.get('upsampler','bicubic')}", flush=True)
     if args.evaluate:
         metrics = evaluate(model, val_loader, device, amp, output, channels_last=channels_last,
-                           baseline_mode=config.get('upsampler','bicubic'), degradation_mode=config.get('degradation','bicubic'))
+                           baseline_mode=config.get('upsampler','bicubic'), degradation_mode=config.get('degradation','bicubic'),
+                           area_consistency=args.area_consistency)
         metrics['eval_layout']=config.get('eval_layout','tiles')
         metrics['limited_scenes']=args.max_val_scenes is not None
         (output / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")

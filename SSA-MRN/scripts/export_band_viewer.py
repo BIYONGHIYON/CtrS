@@ -47,7 +47,7 @@ def render_index(records):
     rows=''.join(f'<li><a href="{r["file"]}"><span class="number">{i:02}</span><span class="scene">{r["scene"]}</span><span class="action">보기 <span aria-hidden="true">→</span></span></a></li>' for i,r in enumerate(records,1))
     return ("""<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SSA-MRN 밴드 뷰어</title>
 <style>:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#202020;color:#ebebeb;font:16px/1.7 system-ui,-apple-system,sans-serif}main{max-width:820px;margin:auto;padding:60px 24px}header{margin-bottom:38px}.project{font-size:14px;color:#aaa;margin:0 0 12px}h1{font-size:28px;font-weight:600;line-height:1.4;margin:0 0 14px}.intro{color:#bbb;margin:0;max-width:650px}.info{font-size:14px;color:#999;margin-top:16px}ul{list-style:none;margin:0;padding:0;border-top:1px solid #444}li{border-bottom:1px solid #444}li a{display:flex;gap:24px;align-items:center;padding:23px 12px;color:inherit;text-decoration:none}li a:hover{background:#292929}a:focus-visible{outline:2px solid #ccc;outline-offset:3px}.number{font-size:14px;color:#999}.scene{font-size:18px;font-weight:500}.action{margin-left:auto;color:#aaa;font-size:14px;white-space:nowrap}footer{margin-top:32px;font-size:13px;color:#aaa}footer p{margin:8px 0}footer a{color:#ccc;text-underline-offset:4px}@media(max-width:600px){main{padding:32px 20px}h1{font-size:24px}li a{gap:16px;padding:22px 4px}.scene{font-size:16px}}
-</style></head><body><main><header><p class="project">CtrS / SSA-MRN</p><h1>테스트 결과 · 204밴드 뷰어</h1><p class="intro">장면별로 LR HSI, RGB 입력, 예측 HSI와 정답을 비교합니다. 슬라이더로 확인할 밴드를 선택할 수 있습니다.</p><p class="info">5개 장면 · 합성 ×4 초해상도 · epoch EPOCH_VALUE</p></header><ul aria-label="테스트 장면">"""+rows+"""</ul><footer><p>RGB별 LATENT_VALUE특징 · K=4 · 내부 INTERNAL_VALUE · 입력 23탭</p><p>HSI는 밴드별로 동일한 대비를 적용했습니다. 각 HTML은 오프라인에서도 사용할 수 있습니다.</p><a href="https://github.com/BIYONGHIYON/CtrS/tree/research/ssa-mrn-triple17-spectral/SSA-MRN">연구 문서</a></footer></main></body></html>""").replace("EPOCH_VALUE", str(epoch)).replace("INTERNAL_VALUE", internal).replace("LATENT_VALUE", str(records[0].get("latent_channels", 12)))
+</style></head><body><main><header><p class="project">CtrS / SSA-MRN</p><h1>테스트 결과 · 204밴드 뷰어</h1><p class="intro">장면별로 LR HSI, RGB 입력, 예측 HSI와 정답을 비교합니다. 슬라이더로 확인할 밴드를 선택할 수 있습니다.</p><p class="info">5개 장면 · 합성 ×4 초해상도 · epoch EPOCH_VALUE · CONSISTENCY_VALUE</p></header><ul aria-label="테스트 장면">"""+rows+"""</ul><footer><p>RGB별 LATENT_VALUE특징 · K=4 · 내부 INTERNAL_VALUE · 입력 23탭</p><p>HSI는 밴드별로 동일한 대비를 적용했습니다. 각 HTML은 오프라인에서도 사용할 수 있습니다.</p><a href="https://github.com/BIYONGHIYON/CtrS/tree/main/SSA-MRN">연구 문서</a></footer></main></body></html>""").replace("EPOCH_VALUE", str(epoch)).replace("INTERNAL_VALUE", internal).replace("LATENT_VALUE", str(records[0].get("latent_channels", 12))).replace("CONSISTENCY_VALUE", "LR 평균 일관성 보정" if records[0].get('area_consistency') else "원래 출력")
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
@@ -55,18 +55,22 @@ def main():
     parser.add_argument('--checkpoint',type=Path,required=True)
     parser.add_argument('--expected-sha256')
     parser.add_argument('--data-root',type=Path,required=True)
+    parser.add_argument('--alignment-manifest',type=Path,help='Exact registration file required by the checkpoint')
     parser.add_argument('--output-dir',type=Path,required=True)
     parser.add_argument('--sample-indices',type=int,nargs=5,default=[12,0,172,72,252])
+    parser.add_argument('--area-consistency',action='store_true',help='Project x4 area predictions onto LR HSI')
     args=parser.parse_args()
     if args.output_dir.exists(): parser.error('Use a new output directory')
     sys.path.insert(0,str(args.repo_root/'SSA-MRN/src'))
     from ssamrn.data.lib_hsi import LIBHSI
     from ssamrn.models.rgb_grouped import build_rgb_hsi_model
+    from ssamrn.models.area_consistency import project_area_consistency
     digest=hashlib.sha256(args.checkpoint.read_bytes()).hexdigest()
     if args.expected_sha256 and digest!=args.expected_sha256: parser.error('Checkpoint hash mismatch')
     state=torch.load(args.checkpoint,map_location='cpu',weights_only=True)
     config=state['config'];torch.set_num_threads(2)
-    manifest=args.repo_root/config['alignment_manifest'] if config.get('alignment_manifest') else None
+    if args.area_consistency and config.get('degradation') != 'area': parser.error('--area-consistency requires area degradation')
+    manifest=args.alignment_manifest.resolve() if args.alignment_manifest else args.repo_root/config['alignment_manifest'] if config.get('alignment_manifest') else None
     if manifest and config.get('alignment_sha256') and hashlib.sha256(manifest.read_bytes()).hexdigest()!=config['alignment_sha256']: parser.error('Alignment hash mismatch')
     data=LIBHSI(args.data_root,'test',config['patch_size'],alignment_manifest=manifest,eval_layout=config.get('eval_layout','tiles'),degradation=config.get('degradation','bicubic'))
     model=build_rgb_hsi_model(config).eval();model.load_state_dict(state['model'])
@@ -74,8 +78,13 @@ def main():
     records=[]
     for i,index in enumerate(args.sample_indices,1):
         sample=data[index]
-        with torch.inference_mode(): prediction=model(sample['rgb'][None],sample['lr_hsi'][None])[0].float()
-        metadata=dict(latent_channels=config['latent_channels'],model_type=config['model_type'],scene=sample['scene'],sample_index=index,tile=index%data.per_scene,epoch=state['epoch'],checkpoint_sha256=digest,split='test',inference_device='cpu',display='GT valid-mask percentile 1-99 per band, shared across HSI panels',bands_count=204)
+        with torch.inference_mode():
+            prediction=model(sample['rgb'][None],sample['lr_hsi'][None]).float()
+            if args.area_consistency:
+                mask=sample.get('valid_mask')
+                prediction=project_area_consistency(prediction,sample['lr_hsi'][None],mask[None] if mask is not None else None)
+            prediction=prediction[0]
+        metadata=dict(latent_channels=config['latent_channels'],model_type=config['model_type'],scene=sample['scene'],sample_index=index,tile=index%data.per_scene,epoch=state['epoch'],checkpoint_sha256=digest,split='test',inference_device='cpu',display='GT valid-mask percentile 1-99 per band, shared across HSI panels',bands_count=204,area_consistency=args.area_consistency)
         path=args.output_dir/f'sample_{i:02}.html';path.write_text(render(sample,prediction,metadata),encoding='utf-8')
         records.append(dict(metadata,file=path.name,bytes=path.stat().st_size));print(json.dumps(records[-1]),flush=True)
     (args.output_dir/'manifest.json').write_text(json.dumps(records,indent=2),encoding='utf-8')

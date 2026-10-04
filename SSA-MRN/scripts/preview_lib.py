@@ -14,20 +14,25 @@ sys.path.insert(0, str(ROOT / "SSA-MRN/src"))
 from ssamrn.data.lib_hsi import LIBHSI
 from ssamrn.models.rgb_grouped import build_rgb_hsi_model
 from ssamrn.models.interp23 import interp23tap
+from ssamrn.models.area_consistency import project_area_consistency
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--data-root", type=Path)
+    parser.add_argument("--alignment-manifest", type=Path, help="Exact registration file required by the checkpoint")
     parser.add_argument("--device", choices=("cuda", "cpu"))
     parser.add_argument("--sample-index", type=int, default=0, help="Split sample index (zero based)")
     parser.add_argument("--split", choices=("validation", "test"), default="validation")
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--area-consistency", action="store_true", help="Apply x4 area LR consistency to prediction and baseline")
     args = parser.parse_args()
     state = torch.load(args.checkpoint, map_location="cpu", weights_only=True)
     config = state["config"]
-    manifest = (ROOT/config['alignment_manifest']) if config.get('alignment_manifest') else None
+    if args.area_consistency and config.get('degradation') != 'area':
+        parser.error('--area-consistency requires area degradation')
+    manifest = args.alignment_manifest.resolve() if args.alignment_manifest else (ROOT/config['alignment_manifest']) if config.get('alignment_manifest') else None
     if manifest and config.get('alignment_sha256'):
         import hashlib
         if hashlib.sha256(manifest.read_bytes()).hexdigest() != config['alignment_sha256']:
@@ -40,13 +45,24 @@ def main():
     torch.set_num_threads(6)
     model = build_rgb_hsi_model(config).to(device).eval()
     model.load_state_dict(state["model"])
-    with torch.inference_mode(), torch.autocast(device.type, enabled=config["amp"] and device.type == "cuda"):
-        prediction = model(sample["rgb"].unsqueeze(0).to(device), sample["lr_hsi"].unsqueeze(0).to(device))[0].float().cpu()
+    with torch.inference_mode():
+        lr_device = sample["lr_hsi"].unsqueeze(0).to(device)
+        with torch.autocast(device.type, enabled=config["amp"] and device.type == "cuda"):
+            prediction = model(sample["rgb"].unsqueeze(0).to(device), lr_device)
+        prediction = prediction.float()
+        if args.area_consistency:
+            mask = sample.get('valid_mask')
+            prediction = project_area_consistency(prediction, lr_device, mask.unsqueeze(0).to(device) if mask is not None else None)
+        prediction = prediction[0].cpu()
     use_23tap = config.get('upsampler') == '23tap'
     baseline = (interp23tap(sample['lr_hsi'].unsqueeze(0),4) if use_23tap else
                 F.interpolate(sample["lr_hsi"].unsqueeze(0), size=sample["gt"].shape[-2:],
                               mode="bicubic", align_corners=False))[0]
     baseline_key = 'interp23' if use_23tap else 'bicubic'
+    if args.area_consistency:
+        mask = sample.get('valid_mask')
+        baseline = project_area_consistency(baseline.unsqueeze(0), sample['lr_hsi'].unsqueeze(0),
+                                            mask.unsqueeze(0) if mask is not None else None)[0]
     bands = [69, 52, 18]
     gt_rgb = sample["gt"][bands].permute(1, 2, 0).numpy()
     lo, hi = np.percentile(gt_rgb, [1, 99], axis=(0, 1))
@@ -94,6 +110,7 @@ def main():
               "split": args.split,
               "scene_tile": scene_tile,
               "eval_layout": config.get('eval_layout','tiles'),
+              "area_consistency": args.area_consistency,
               "panel_order": ["LR HSI", "RGB guide", "Prediction", "Ground truth"],
               "notes": "Single sample illustration; all 204 bands for metrics; not a full-split benchmark."}
     (args.output_dir / "metrics.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
