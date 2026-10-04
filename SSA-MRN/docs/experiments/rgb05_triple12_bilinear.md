@@ -55,7 +55,7 @@ RTX 3060 Ti 8GB, torch 2.7.1+cu128, AMP, batch 4. 원격 controller 실행이므
 
 사전 고정한 이전 연구와 동일한 5장면 `[3, 0, 43, 18, 63]`의 tile 0입니다. 왼쪽부터 **LR HSI · RGB · 예측 · 정답**입니다. 지표를 보고 장면을 재선택하지 않았습니다.
 
-[204밴드 웹 뷰어](https://biyonghiyon.github.io/CtrS/ssa-mrn/) · [오프라인 HTML](../assets/rgb05_triple12_bilinear/band_viewer/index.html).
+[보존된 204밴드 HTML](../assets/rgb05_triple12_bilinear/band_viewer/index.html) (내려받아 실행).
 
 슬라이더는 같은 best 가중치의 CPU float32 추론이며 PNG의 CUDA AMP 추론과 미세한 차이가 있을 수 있습니다. 밴드별 GT 유효 영역의 1–99% 범위를 HSI 세 패널에 공통 적용한 8비트 표시입니다. 표시 대비는 정량 지표에 사용하지 않으며, 파장은 확인되지 않아 밴드 번호를 사용합니다.
 

@@ -12,7 +12,7 @@ def compact_history(path):
         obj = json.loads(path.read_text(encoding='utf-8-sig'))
         rows = obj.get('epochs', []) if isinstance(obj, dict) else obj
         note = obj.get('note', '') if isinstance(obj, dict) else ''
-    keys = ('epoch', 'train_mse', 'model_mse', 'model_psnr_db', 'model_sam_deg',
+    keys = ('epoch', 'train_mse', 'train_loss', 'train_spectral', 'spectral_weight', 'model_mse', 'model_psnr_db', 'model_sam_deg',
             'seconds', 'train_seconds', 'validation_seconds', 'loader_wait_seconds',
             'train_patches_per_second', 'peak_allocated_mb', 'peak_reserved_mb')
     # A best-resume may repeat epochs; preserve the final observed record per epoch.
