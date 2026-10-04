@@ -1,0 +1,33 @@
+{
+  "checkpoint_sha256": "fd45f86077a90927c79545edd7aafbfba1e3a2f473cc2e7ad751f48994677210",
+  "checkpoint_source": "C:\\Users\\erick\\\ub300\ud559\uad50\\Ctrs\\RGB 04\\CtrS\\SSA-MRN\\experiments\\checkpoints\\rgb06_triple17\\best.pt",
+  "epoch": 99,
+  "protocol": {
+    "model_type": "rgb_triple_grouped17_23tap",
+    "latent_channels": 17,
+    "ssai_dimension": 4,
+    "patch_size": 256,
+    "train_layout": "quadrants",
+    "eval_layout": "tiles",
+    "degradation": "area",
+    "upsampler": "23tap",
+    "alignment_manifest": "SSA-MRN/experiments/results/lib_registration/projective_alignment.json",
+    "alignment_sha256": "7a66ad28bc78fe8691fddbc2d94f0a871d7c10507407f7d1f36abe1b20f004f4",
+    "seed": 42
+  },
+  "test_scenes": 75,
+  "panel_order": [
+    "LR HSI",
+    "RGB guide",
+    "Prediction",
+    "Ground truth"
+  ],
+  "complete": true,
+  "previous_metrics": "SSA-MRN\\experiments\\results\\rgb04_triple12\\test\\metrics.json",
+  "previous_delta": {
+    "model_mse": 7.107838325993705e-06,
+    "model_psnr_db": -0.07136113595404225,
+    "model_sam_deg": 0.009846941269386011
+  },
+  "comparability": "Check split/IDs, scale, masking, degradation and layouts before claiming improvement"
+}
