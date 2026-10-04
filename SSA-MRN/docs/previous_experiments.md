@@ -12,6 +12,7 @@
 | RGB 02 · 정합 보정 Bicubic 256 | [rgb02_aligned256](experiments/rgb02_aligned256.md) | 32.4817 | 2.3121 |
 | RGB 03 · grouped12 K=4 23탭 | [rgb03_grouped12](experiments/rgb03_grouped12.md) | 30.7574 | 2.0893 |
 | RGB 04 · RGB별 12특징 23탭 타일 | [rgb04_triple12](experiments/rgb04_triple12.md) | 34.0530 | 2.2057 |
+| RGB 06 · RGB별 17특징 23탭 타일 | [rgb06_triple17](experiments/rgb06_triple17.md) | 33.9817 | 2.2156 |
 
 34특징 실험은 중단 후 요청에 따라 결과를 삭제했습니다. 검증된 최종 test 결과가 없으므로 완료 연구 표에 포함하지 않습니다. 모델 코드는 보존 가중치 평가와 향후 구조 변경을 위해 남깁니다.
 
