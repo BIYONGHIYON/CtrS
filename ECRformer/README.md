@@ -12,6 +12,8 @@ ECRformer는 **구름 낀 광학 영상과 SAR 영상**을 입력으로 사용�
 
 ## 공용 Windows 서버의 spring 학습 설정 (2026-10-04)
 
+발산 진단과 다음 실행을 위한 [선택형 안정화 실행 안내](./docs/stable_training.md)를 추가했습니다. `train_stable.py`는 낮은 학습률, 검증 정체 기반 감소, FP32 학습 손실과 배치별 진단을 사용합니다. 자동으로 학습을 시작하지 않으며 기존 `train.py`의 기본 실행은 유지합니다.
+
 RTX 3060 Ti(VRAM 8GB), RAM 16GB 서버에서 다음 학습을 위해 `config/ecrformer_spring_config.py` 설정을 조정했습니다. 아래는 서버 로컬 설정이며, 이 설정 파일은 아직 Git에 추적되지 않습니다.
 
 | 항목 | 수정 전 | 수정 후 |

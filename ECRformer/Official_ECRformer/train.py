@@ -1,5 +1,6 @@
 import os
 import json
+import importlib
 from pathlib import Path
 import torch
 import torch.nn as nn
@@ -213,12 +214,24 @@ def save_subset_manifest(dataset, indices, config, split_info, log_dir):
     print(f'Training subset manifest: {manifest_path}')
 
 
+def resolve_training_extension(spec):
+    """Keep optional extension specifications serializable in checkpoints."""
+    if isinstance(spec, str):
+        module, name = spec.rsplit('.', 1)
+        return getattr(importlib.import_module(module), name)
+    if isinstance(spec, dict):
+        return resolve_training_extension(spec['class'])(**spec.get('kwargs', {}))
+    return spec
+
+
 def main(config):
     torch.set_float32_matmul_precision("highest")
     pl.seed_everything(config.seed)
 
     print("\nBuilding model...")
-    model = CloudRemovalModel(config)
+    model_class = resolve_training_extension(
+        getattr(config.train, 'model_class', CloudRemovalModel))
+    model = model_class(config)
     init_weights_path = getattr(config.train, 'init_weights_path', None)
     if init_weights_path:
         if config.train.ckpt_path is not None:
@@ -240,6 +253,10 @@ def main(config):
     print(f'Validation samples used: {len(valid_dataset)}')
     print(f"Training split: {split_info['train']}")
     print(f"Validation split: {split_info['valid']}")
+
+    dataset_wrapper = getattr(config.train, 'dataset_wrapper', None)
+    if dataset_wrapper is not None:
+        train_dataset = resolve_training_extension(dataset_wrapper)(train_dataset)
 
     num_workers = config.train.num_workers
     train_loader = DataLoader(
@@ -295,7 +312,9 @@ def main(config):
     trainer = pl.Trainer(
         max_epochs=config.train.max_epoch,
         gradient_clip_val=.5,
-        callbacks=[checkpoint_callback, early_stop_callback],
+        callbacks=[checkpoint_callback, early_stop_callback] +
+                  [resolve_training_extension(spec) for spec in
+                   getattr(config.train, 'extra_callbacks', [])],
         logger=[tb_logger],
         devices=config.train.gpu,
         **config.optim.__dict__,
