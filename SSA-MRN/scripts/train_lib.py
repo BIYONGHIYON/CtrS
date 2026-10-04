@@ -18,6 +18,7 @@ from tqdm import tqdm
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "SSA-MRN/src"))
 from ssamrn.data.lib_hsi import LIBHSI, ScenePatchSampler
+from ssamrn.losses import reconstruction_loss
 from ssamrn.models.rgb_grouped import build_rgb_hsi_model
 from ssamrn.models.interp23 import interp23tap
 
@@ -173,7 +174,7 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", type=Path, default=ROOT / "SSA-MRN/configs/lib_rgb_hsi_triple12_k4_bilinear_tiles.json")
+    parser.add_argument("--config", type=Path, default=ROOT / "SSA-MRN/configs/lib_rgb_hsi_triple17_k4_spectral_tiles.json")
     parser.add_argument("--data-root", type=Path)
     parser.add_argument("--device", choices=("cpu", "cuda"))
     parser.add_argument("--output-dir", type=Path)
@@ -210,6 +211,8 @@ def main():
     for key in ("val_batch_size", "cpu_threads", "prefetch_factor", "log_interval"):
         if config.get(key, 1) < 1:
             parser.error(f"{key} must be positive")
+    if config.get("spectral_weight", 0.) < 0 or config.get("spectral_eps", 1e-6) <= 0:
+        parser.error("Invalid spectral loss weight or norm threshold")
     device = torch.device(config["device"])
     if device.type == "cuda" and not torch.cuda.is_available():
         parser.error("CUDA unavailable. Select a CUDA-enabled Python interpreter or pass --device cpu")
@@ -275,6 +278,9 @@ def main():
             for key in ("batch_size", "accumulation_steps", "learning_rate", "patches_per_scene", "seed", "amp", "device", "workers"):
                 if state["config"][key] != config[key]:
                     parser.error(f"Resume {key} differs from checkpoint")
+            for key, default in [("spectral_weight", 0.), ("spectral_eps", 1e-6)]:
+                if state["config"].get(key, default) != config.get(key, default):
+                    parser.error("Resume loss differs: " + key)
             optimizer.load_state_dict(state["optimizer"])
             scaler.load_state_dict(state["scaler"])
             start_epoch, best = state["epoch"], state["best_mse"]
@@ -312,6 +318,8 @@ def main():
         train_loader.sampler.set_epoch(epoch)
         total = torch.zeros((), device=device)
         finite = torch.ones((), dtype=torch.bool, device=device)
+        spectral_total = torch.zeros((), device=device)
+        loss_total = torch.zeros((), device=device)
         count, data_wait, timings, read_bytes = 0, 0., [], 0
         batches = DevicePrefetch(train_loader, device, channels_last) if device.type == "cuda" else train_loader
         progress = tqdm(batches, total=steps, desc=f"epoch {epoch+1}/{epochs}", mininterval=2.)
@@ -328,11 +336,9 @@ def main():
             group_size = min(accumulation, steps - (step // accumulation) * accumulation)
             with torch.autocast(device.type, enabled=amp):
                 prediction = model(rgb, lr)
-                if 'valid_mask' in batch:
-                    mask=batch['valid_mask'].to(device)[:,None]
-                    loss=((prediction.float()-gt).square()*mask).sum()/(mask.sum()*gt.shape[1]).clamp_min(1)
-                else:
-                    loss = F.mse_loss(prediction.float(), gt)
+            loss, mse_loss, spectral_loss = reconstruction_loss(
+                prediction, gt, batch.get('valid_mask', None).to(device) if 'valid_mask' in batch else None,
+                config.get('spectral_weight', 0.), config.get('spectral_eps', 1e-6))
             finite.logical_and_(torch.isfinite(loss))
             scaler.scale(loss / group_size).backward()
             if (step + 1) % accumulation == 0 or step + 1 == steps:
@@ -341,13 +347,15 @@ def main():
                 scaler.step(optimizer)
                 scaler.update()
                 optimizer.zero_grad(set_to_none=True)
-            total.add_(loss.detach() * gt.shape[0])
+            total.add_(mse_loss.detach() * gt.shape[0])
+            spectral_total.add_(spectral_loss.detach() * gt.shape[0])
+            loss_total.add_(loss.detach() * gt.shape[0])
             count += gt.shape[0]
             if args.profile and device.type == "cuda":
                 event_end.record()
                 timings.append((event_start, event_end))
             if (step+1) % config.get("log_interval", 20) == 0 or step+1 == steps:
-                progress.set_postfix(mse=f"{loss.item():.6f}", refresh=False)
+                progress.set_postfix(mse=f"{mse_loss.item():.6f}", spectral=f"{spectral_loss.item():.6f}", refresh=False)
             last_step_finished = time.perf_counter()
             if step + 1 >= steps:
                 break
@@ -363,7 +371,8 @@ def main():
         val_mse = metrics["scene_mean"]["model_mse"]
         improved = val_mse < best
         best = min(best, val_mse)
-        record = {"epoch": epoch+1, "train_mse": total.item() / count, "seconds": time.perf_counter()-started,
+        record = {"epoch": epoch+1, "train_mse": total.item() / count, "train_loss": loss_total.item() / count, "train_spectral": spectral_total.item() / count,
+                  "spectral_weight": config.get("spectral_weight", 0.), "seconds": time.perf_counter()-started,
                   "train_seconds": train_seconds, "validation_seconds": time.perf_counter()-validation_started,
                   "loader_wait_seconds": data_wait, "train_patches_per_second": count / train_seconds,
                   "train_cube_requested_gib": read_bytes / 2**30,

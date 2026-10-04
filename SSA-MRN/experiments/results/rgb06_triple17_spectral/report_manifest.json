@@ -1,0 +1,40 @@
+{
+  "checkpoint_sha256": "f9dcc29f1dd93980c2d405ed303e8d243d0a65e9246f5e172e021962ff7308d8",
+  "checkpoint_source": "C:\\CtrS-triple17-spectral\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261004-235831-565c8ba31ed7\\best.pt",
+  "epoch": 99,
+  "protocol": {
+    "model_type": "rgb_triple_grouped17_23tap",
+    "latent_channels": 17,
+    "ssai_dimension": 4,
+    "patch_size": 256,
+    "train_layout": "quadrants",
+    "eval_layout": "tiles",
+    "degradation": "area",
+    "upsampler": "23tap",
+    "alignment_manifest": "SSA-MRN/experiments/results/lib_registration/projective_alignment.json",
+    "alignment_sha256": "7a66ad28bc78fe8691fddbc2d94f0a871d7c10507407f7d1f36abe1b20f004f4",
+    "seed": 42,
+    "spectral_weight": 0.01,
+    "spectral_eps": 1e-06
+  },
+  "test_scenes": 75,
+  "panel_order": [
+    "LR HSI",
+    "RGB guide",
+    "Prediction",
+    "Ground truth"
+  ],
+  "complete": true,
+  "previous_metrics": "C:\\Users\\trainer\\ssa-result-export-20261004\\SSA-MRN\\experiments\\results\\rgb05_complete\\test\\metrics.json",
+  "previous_delta": {
+    "model_mse": -3.478029276626321e-05,
+    "model_psnr_db": 0.2713563183874115,
+    "model_sam_deg": -0.018374166153936056
+  },
+  "comparability": "Verified same 75 scene IDs/order, per-scene baseline values, masked x4 area tiles protocol versus RGB04 and RGB05. Features and loss changed; single seed, no significance claim.",
+  "run_id": "20261004-235831-565c8ba31ed7",
+  "training_code_commit": "f681dae",
+  "export_code_commit": "f681dae",
+  "test_tiles": 300,
+  "ended_at": "2026-10-05T05:10:19.232298+09:00"
+}

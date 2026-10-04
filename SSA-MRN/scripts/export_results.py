@@ -95,7 +95,7 @@ def main():
     (args.output_dir/'curves.json').write_text(json.dumps(curves, indent=2), encoding='utf-8')
     plot_report(curves, metrics, args.output_dir, previous)
     protocol_keys = ('model_type','latent_channels','ssai_dimension','patch_size','train_layout','eval_layout',
-                     'degradation','upsampler','alignment_manifest','alignment_sha256','seed')
+                     'degradation','upsampler','alignment_manifest','alignment_sha256','seed','spectral_weight','spectral_eps')
     evidence = {'checkpoint_sha256': weight_hash,
                 'checkpoint_source': str(args.checkpoint.resolve()), 'epoch': state['epoch'], 'protocol': {k:config[k] for k in protocol_keys if k in config},
                 'test_scenes': len(data.files), 'panel_order': ['LR HSI','RGB guide','Prediction','Ground truth'],
