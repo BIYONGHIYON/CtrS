@@ -47,13 +47,29 @@ LIB-HSI 합성 ×4 평가입니다. 204→17 grouped 압축(인접 12밴드/특�
 
 ![test 예시 5](docs/assets/rgb07_joint17_consistency/sample_05.png)
 
+## 축소 예비실험 결과 · 2026-10-06
+
+**train155 / validation45 축소 예비실험을 완료했습니다.** RGB 진단과 7개 작업을 각각 10에폭 실행했으며 test는 후보 선택에 사용하지 않았습니다. 전체 학습은 10월 6일 03:37 KST에 정상 종료됐고 현재 실행 중인 학습은 없습니다.
+
+| 작업 | best epoch | MSE ↓ | PSNR dB ↑ | SAM ° ↓ | gradient RMSE ↓ |
+|---|---:|---:|---:|---:|---:|
+| 00_baseline10 | 10 | 0.0008318284 | 31.6981 | 2.4058 | 0.025434 |
+| 02_warm_control10 | 2 | 0.0004969431 | 34.0741 | 2.2505 | 0.021576 |
+| 02_warm_low10 | 5 | 0.0004858836 | 34.1811 | 2.2482 | 0.021444 |
+| 03_aligned_attention10 | 10 | 0.0008283217 | 31.7231 | 2.4074 | 0.025393 |
+| 04_gated_detail10 | 10 | 0.0008279778 | 31.7271 | 2.4037 | 0.025387 |
+| 05_global_encoder10 | 10 | 0.0008293195 | 31.7239 | 2.4077 | 0.025410 |
+| 06_local_alignment10 | 10 | 0.0008275112 | 31.7334 | 2.4098 | 0.025372 |
+
+warm 비교는 **LR1e-5가 LR1e-4보다 PSNR +0.1070dB, SAM −0.0023°**로 우세했습니다. 구조 후보의 baseline 대비 PSNR 이득은 +0.025~0.035dB로 작습니다. local alignment는 PSNR이 가장 높지만 SAM이 악화됐고, gated detail은 PSNR·SAM 모두 조금 개선됐습니다. 단일 seed·10에폭 결과이며 구조 후보 모두 마지막 에폭이 best이므로 확정적 개선이나 수렴 완료로 해석하지 않습니다.
+
+![축소 예비실험 학습·검증 곡선](docs/assets/pilot_subset155/curves.png)
+
+RGB 원본·흐림·±1px 이동·평균·0 입력 진단, 상세 조건, 장면별 지표 및 가중치 해시는 [축소 예비실험 보고서](docs/experiments/pilot_subset155.md)에 있습니다. 진단은 공통 보수적 마스크를 사용해 위 학습 평가와 직접 비교할 수 없습니다. 기존 RGB07 test75 결과는 위에 보존했으며 이번 validation 결과와 분할·학습 규모가 달라 직접 비교하지 않습니다.
+
 ## 현재 학습 상태
 
-[6단계 예비 실험 환경](docs/guide/six_stage_pilot.md)을 별도 서버 폴더 `C:\CtrS-pilot-suite`에 준비했습니다. RGB 진단과 10에폭 비교 설정을 사용할 수 있으며 학습은 아직 시작하지 않았습니다.
-
-run `20261005-061505-8be6241e5a6c`은 2026-10-05 11:26(KST)에 종료 코드 0으로 완료됐습니다. 서버의 `C:\CtrS-joint17\SSA-MRN\experiments\checkpoints\remote-runs-joint17\<run ID>`에 best/latest를 보존했습니다. 가중치는 Git에 넣지 않았습니다.
-
-최신 가중치의 설정에는 LR 보정이 포함되어 있어 평가·5개 예시·오프라인 뷰어에 자동 적용됩니다. 이 보정은 합성 ×4 `area` 축소 조건에만 검증됐습니다. 결과와 체크포인트 해시는 [실험 보고서](docs/experiments/rgb07_joint17_consistency.md)에서 확인할 수 있습니다.
+모든 예비실험이 종료됐습니다. Linux 서버의 `SSA-MRN/experiments/checkpoints/pilot-subset155/suite_20261005T160615Z/<작업명>/`에 best/latest를 보존했습니다. 가중치와 데이터는 Git에 넣지 않았습니다. 기존 Windows용 [6단계 준비 안내](docs/guide/six_stage_pilot.md)와 이번 Linux subset155 실행 환경을 구분합니다.
 
 ## 결과 보고와 파일 보관
 
