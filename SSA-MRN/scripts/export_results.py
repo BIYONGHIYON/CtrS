@@ -45,7 +45,8 @@ def main():
     weight_hash = hashlib.sha256(frozen.read_bytes()).hexdigest()
     state = torch.load(frozen, map_location='cpu', weights_only=True)
     config = dict(state['config'])
-    if args.area_consistency and config.get('degradation') != 'area':
+    area_consistency = args.area_consistency or config.get('train_area_consistency', False)
+    if area_consistency and config.get('degradation') != 'area':
         parser.error('--area-consistency requires area degradation')
     if args.device:
         config['device'] = args.device
@@ -66,7 +67,7 @@ def main():
     previous = json.loads(args.previous_metrics.read_text(encoding='utf-8-sig')) if args.previous_metrics else None
     if args.output_dir.exists():
         parser.error('Use a new output directory; existing results are preserved')
-    consistency_arg = ['--area-consistency'] if args.area_consistency else []
+    consistency_arg = ['--area-consistency'] if area_consistency else []
     alignment_arg = ['--alignment-manifest', str(manifest)] if args.alignment_manifest else []
     args.output_dir.mkdir(parents=True)
     selection_path = args.output_dir / 'selection.json'
@@ -108,10 +109,11 @@ def main():
                 'checkpoint_source': str(args.checkpoint.resolve()), 'epoch': state['epoch'], 'protocol': {k:config[k] for k in protocol_keys if k in config},
                 'test_scenes': len(data.files), 'panel_order': ['LR HSI','RGB guide','Prediction','Ground truth'],
                 'complete': True}
-    evidence['protocol']['area_consistency'] = args.area_consistency
+    evidence['protocol']['area_consistency'] = area_consistency
+    evidence['protocol']['train_area_consistency'] = config.get('train_area_consistency', False)
     if manifest:
         evidence['protocol']['alignment_manifest_used'] = str(manifest)
-    if metrics.get('area_consistency') != args.area_consistency:
+    if metrics.get('area_consistency') != area_consistency:
         raise ValueError('Evaluation postprocessing mode mismatch')
     if previous:
         evidence['previous_metrics'] = str(args.previous_metrics)

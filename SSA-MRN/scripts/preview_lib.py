@@ -30,7 +30,8 @@ def main():
     args = parser.parse_args()
     state = torch.load(args.checkpoint, map_location="cpu", weights_only=True)
     config = state["config"]
-    if args.area_consistency and config.get('degradation') != 'area':
+    area_consistency = args.area_consistency or config.get('train_area_consistency', False)
+    if area_consistency and config.get('degradation') != 'area':
         parser.error('--area-consistency requires area degradation')
     manifest = args.alignment_manifest.resolve() if args.alignment_manifest else (ROOT/config['alignment_manifest']) if config.get('alignment_manifest') else None
     if manifest and config.get('alignment_sha256'):
@@ -50,7 +51,7 @@ def main():
         with torch.autocast(device.type, enabled=config["amp"] and device.type == "cuda"):
             prediction = model(sample["rgb"].unsqueeze(0).to(device), lr_device)
         prediction = prediction.float()
-        if args.area_consistency:
+        if area_consistency:
             mask = sample.get('valid_mask')
             prediction = project_area_consistency(prediction, lr_device, mask.unsqueeze(0).to(device) if mask is not None else None)
         prediction = prediction[0].cpu()
@@ -59,7 +60,7 @@ def main():
                 F.interpolate(sample["lr_hsi"].unsqueeze(0), size=sample["gt"].shape[-2:],
                               mode="bicubic", align_corners=False))[0]
     baseline_key = 'interp23' if use_23tap else 'bicubic'
-    if args.area_consistency:
+    if area_consistency:
         mask = sample.get('valid_mask')
         baseline = project_area_consistency(baseline.unsqueeze(0), sample['lr_hsi'].unsqueeze(0),
                                             mask.unsqueeze(0) if mask is not None else None)[0]
@@ -110,7 +111,7 @@ def main():
               "split": args.split,
               "scene_tile": scene_tile,
               "eval_layout": config.get('eval_layout','tiles'),
-              "area_consistency": args.area_consistency,
+              "area_consistency": area_consistency,
               "panel_order": ["LR HSI", "RGB guide", "Prediction", "Ground truth"],
               "notes": "Single sample illustration; all 204 bands for metrics; not a full-split benchmark."}
     (args.output_dir / "metrics.json").write_text(json.dumps(report, indent=2), encoding="utf-8")

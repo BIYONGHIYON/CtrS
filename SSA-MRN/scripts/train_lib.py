@@ -215,6 +215,8 @@ def main():
         parser.error("--smoke and --evaluate are mutually exclusive")
     if args.area_consistency and (not args.evaluate or config.get('degradation') != 'area'):
         parser.error('--area-consistency requires --evaluate with area degradation')
+    if config.get('train_area_consistency', False) and config.get('degradation') != 'area':
+        parser.error('train_area_consistency requires area degradation')
     if args.smoke and args.resume:
         parser.error("smoke must not resume a full training run")
     for key in ("epochs", "batch_size", "accumulation_steps", "patches_per_scene", "latent_channels", "ssai_dimension"):
@@ -295,6 +297,8 @@ def main():
             for key, default in [("spectral_weight", 0.), ("spectral_eps", 1e-6)]:
                 if state["config"].get(key, default) != config.get(key, default):
                     parser.error("Resume loss differs: " + key)
+            if state['config'].get('train_area_consistency', False) != config.get('train_area_consistency', False):
+                parser.error('Resume LR consistency differs from checkpoint')
             optimizer.load_state_dict(state["optimizer"])
             scaler.load_state_dict(state["scaler"])
             start_epoch, best = state["epoch"], state["best_mse"]
@@ -308,7 +312,7 @@ def main():
     if args.evaluate:
         metrics = evaluate(model, val_loader, device, amp, output, channels_last=channels_last,
                            baseline_mode=config.get('upsampler','bicubic'), degradation_mode=config.get('degradation','bicubic'),
-                           area_consistency=args.area_consistency)
+                           area_consistency=args.area_consistency or config.get('train_area_consistency', False))
         metrics['eval_layout']=config.get('eval_layout','tiles')
         metrics['limited_scenes']=args.max_val_scenes is not None
         (output / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
@@ -351,8 +355,12 @@ def main():
             group_size = min(accumulation, steps - (step // accumulation) * accumulation)
             with torch.autocast(device.type, enabled=amp):
                 prediction = model(rgb, lr)
+            mask = batch.get('valid_mask', None)
+            mask = mask.to(device) if mask is not None else None
+            if config.get('train_area_consistency', False):
+                prediction = project_area_consistency(prediction, lr, mask)
             loss, mse_loss, spectral_loss = reconstruction_loss(
-                prediction, gt, batch.get('valid_mask', None).to(device) if 'valid_mask' in batch else None,
+                prediction, gt, mask,
                 config.get('spectral_weight', 0.), config.get('spectral_eps', 1e-6))
             finite.logical_and_(torch.isfinite(loss))
             scaler.scale(loss / group_size).backward()
@@ -380,14 +388,17 @@ def main():
         validation_started = time.perf_counter()
         metrics = evaluate(model, val_loader, device, amp, output, max_batches=2 if args.smoke else None,
                            channels_last=channels_last,baseline_mode=config.get('upsampler','bicubic'),
-                           degradation_mode=config.get('degradation','bicubic'))
+                           degradation_mode=config.get('degradation','bicubic'),
+                           area_consistency=config.get('train_area_consistency', False))
         metrics['eval_layout']=config.get('eval_layout','tiles')
         metrics["limited_scenes"] = args.smoke or args.max_val_scenes is not None
         val_mse = metrics["scene_mean"]["model_mse"]
         improved = val_mse < best
         best = min(best, val_mse)
         record = {"epoch": epoch+1, "train_mse": total.item() / count, "train_loss": loss_total.item() / count, "train_spectral": spectral_total.item() / count,
-                  "spectral_weight": config.get("spectral_weight", 0.), "seconds": time.perf_counter()-started,
+                  "spectral_weight": config.get("spectral_weight", 0.),
+                  "train_area_consistency": config.get('train_area_consistency', False),
+                  "seconds": time.perf_counter()-started,
                   "train_seconds": train_seconds, "validation_seconds": time.perf_counter()-validation_started,
                   "loader_wait_seconds": data_wait, "train_patches_per_second": count / train_seconds,
                   "train_cube_requested_gib": read_bytes / 2**30,

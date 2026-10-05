@@ -1,0 +1,38 @@
+{
+  "checkpoint_sha256": "5e126b17f0d95f445e8226fce401d0891593b245b737e73dc2810a3e4510d704",
+  "checkpoint_source": "C:\\CtrS-joint17\\SSA-MRN\\experiments\\checkpoints\\remote-runs-joint17\\20261005-061505-8be6241e5a6c\\best.pt",
+  "epoch": 99,
+  "protocol": {
+    "model_type": "rgb_triple_joint17_23tap",
+    "latent_channels": 17,
+    "ssai_dimension": 4,
+    "patch_size": 256,
+    "train_layout": "quadrants",
+    "eval_layout": "tiles",
+    "degradation": "area",
+    "upsampler": "23tap",
+    "alignment_manifest": "SSA-MRN/experiments/results/rgb06_lr_consistency/alignment_manifest.json",
+    "alignment_sha256": "7a66ad28bc78fe8691fddbc2d94f0a871d7c10507407f7d1f36abe1b20f004f4",
+    "seed": 42,
+    "spectral_weight": 0.01,
+    "spectral_eps": 1e-06,
+    "area_consistency": true,
+    "train_area_consistency": true,
+    "alignment_manifest_used": "C:\\CtrS-joint17\\SSA-MRN\\experiments\\results\\rgb06_lr_consistency\\alignment_manifest.json"
+  },
+  "test_scenes": 75,
+  "panel_order": [
+    "LR HSI",
+    "RGB guide",
+    "Prediction",
+    "Ground truth"
+  ],
+  "complete": true,
+  "previous_metrics": "C:\\CtrS-joint17\\previous_rgb06_projected.json",
+  "previous_delta": {
+    "model_mse": -7.774894121536356e-06,
+    "model_psnr_db": 0.06583457385864477,
+    "model_sam_deg": -0.005527599551522044
+  },
+  "comparability": "Check split/IDs, scale, masking, degradation and layouts before claiming improvement"
+}
