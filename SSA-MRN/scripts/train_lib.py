@@ -22,6 +22,7 @@ from ssamrn.losses import reconstruction_loss
 from ssamrn.models.rgb_grouped import build_rgb_hsi_model
 from ssamrn.models.interp23 import interp23tap
 from ssamrn.models.area_consistency import project_area_consistency
+from ssamrn.pilot_metrics import gradient_error_stats
 
 
 def save_checkpoint(state, path):
@@ -112,7 +113,8 @@ def preview(batch, prediction, baseline, path):
 
 @torch.no_grad()
 def evaluate(model, loader, device, amp, output, max_batches=None, channels_last=False,
-             baseline_mode='bicubic', degradation_mode='bicubic', area_consistency=False):
+             baseline_mode='bicubic', degradation_mode='bicubic', area_consistency=False,
+             spatial_metrics=False):
     if baseline_mode not in ('bicubic', '23tap'):
         raise ValueError('Unknown baseline interpolation')
     if area_consistency and degradation_mode != 'area':
@@ -120,6 +122,7 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
     baseline_label = 'interp23' if baseline_mode == '23tap' else 'bicubic'
     model.eval()
     totals = {}
+    gradient_totals = {}
     read_bytes = 0
     finite = torch.ones((), dtype=torch.bool, device=device)
     batches = DevicePrefetch(loader, device, channels_last) if device.type == "cuda" else loader
@@ -152,6 +155,14 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
                 totals[scene] = {"values": torch.zeros(5, dtype=torch.float64, device=device), "count": 0}
             totals[scene]["values"].add_(packed[i])
             totals[scene]["count"] += int(spatial[i].sum())*gt.shape[1] if 'valid_mask' in batch else gt[i].numel()
+        if spatial_metrics:
+            model_sse, gradient_count = gradient_error_stats(prediction, gt, spatial.bool())
+            baseline_sse, _ = gradient_error_stats(baseline, gt, spatial.bool())
+            stats = torch.stack([model_sse, baseline_sse, gradient_count], 1).double()
+            for i, scene in enumerate(batch['scene']):
+                if scene not in gradient_totals:
+                    gradient_totals[scene] = torch.zeros(3, dtype=torch.float64, device=device)
+                gradient_totals[scene].add_(stats[i])
         if step == 0:
             preview(batch, prediction, baseline, output / "preview_inputs_prediction_gt.png")
         if max_batches is not None and step + 1 >= max_batches:
@@ -167,6 +178,10 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
             scenes[scene][label + "_mse"] = mse
             scenes[scene][label + "_psnr_db"] = -10 * math.log10(max(mse, 1e-12))
             scenes[scene][label + "_sam_deg"] = numbers[offset+1] / numbers[4] if numbers[4] else None
+        if spatial_metrics:
+            gs = gradient_totals[scene].cpu().tolist()
+            for j, label in enumerate(('model', baseline_label)):
+                scenes[scene][label + '_gradient_rmse'] = math.sqrt(gs[j] / gs[2]) if gs[2] else None
     summary = {key: float(np.mean([r[key] for r in scenes.values() if r[key] is not None]))
                for key in next(iter(scenes.values()))
                if any(r[key] is not None for r in scenes.values())}
@@ -192,12 +207,19 @@ def main():
     parser.add_argument("--area-consistency", action="store_true", help="Project evaluated x4 area outputs onto LR HSI")
     parser.add_argument("--checkpoint", type=Path)
     parser.add_argument("--resume", type=Path)
+    parser.add_argument("--init-checkpoint", type=Path, help="Load model weights only; reset optimizer, epoch and best score")
+    parser.add_argument("--eval-split", choices=('validation', 'test'), default='test')
+    parser.add_argument("--check-only", action='store_true', help="Check data/model/initialization without optimizer steps")
     parser.add_argument("--epochs", type=int)
     parser.add_argument("--max-train-scenes", type=int, help="Limited benchmark, not a full training run")
     parser.add_argument("--max-val-scenes", type=int, help="Limited benchmark, not a full validation run")
     parser.add_argument("--profile", action="store_true", help="Record GPU event timing and loader waits")
     args = parser.parse_args()
+    if args.init_checkpoint and (args.resume or args.evaluate):
+        parser.error('--init-checkpoint cannot be combined with --resume or --evaluate')
     config = json.loads(args.config.read_text(encoding="utf-8"))
+    if config.get('pilot_label') and args.evaluate and args.eval_split != 'validation':
+        parser.error('Pilot selection uses validation only; test is reserved for the final chosen experiment')
     if args.alignment_manifest:
         config['alignment_manifest'] = str(args.alignment_manifest.resolve())
     if config.get('alignment_manifest'):
@@ -245,7 +267,7 @@ def main():
     if args.smoke:
         output = output / "smoke"
     if args.evaluate:
-        output = output / "test"
+        output = output / args.eval_split
     if not args.smoke and not args.evaluate and not args.resume and (output / "latest.pt").exists():
         parser.error("Existing training run: use --resume or choose a new --output-dir")
     output.mkdir(parents=True, exist_ok=True)
@@ -258,7 +280,7 @@ def main():
                         alignment_manifest=(ROOT/config['alignment_manifest']) if config.get('alignment_manifest') else None,
                         train_layout=config.get('train_layout','random'),eval_layout=config.get('eval_layout','tiles'),
                         degradation=config.get('degradation','bicubic'))
-    validation = LIBHSI(split="test" if args.evaluate else "validation", **dataset_args,
+    validation = LIBHSI(split=args.eval_split if args.evaluate else "validation", **dataset_args,
                         limit=1 if args.smoke else args.max_val_scenes, allow_incomplete=args.smoke)
     loader_args = dict(batch_size=config["batch_size"], num_workers=config["workers"],
                        pin_memory=device.type == "cuda")
@@ -274,7 +296,8 @@ def main():
                                  fused=config.get("fused_adam", False) and device.type == "cuda")
     scaler = torch.amp.GradScaler("cuda", enabled=amp)
     start_epoch, best = 0, float("inf")
-    checkpoint_path = args.resume or args.checkpoint
+    init_path = (args.init_checkpoint or config.get('init_checkpoint')) if not (args.resume or args.evaluate) else None
+    checkpoint_path = args.resume or args.checkpoint or init_path
     if args.evaluate and not checkpoint_path:
         checkpoint_path = ROOT / config["output_dir"] / "best.pt"
     if checkpoint_path:
@@ -287,8 +310,16 @@ def main():
         for key in ("patch_size", "latent_channels", "ssai_dimension"):
             if state["config"][key] != config[key]:
                 parser.error(f"Checkpoint {key} differs from config")
+        if state['config'].get('pilot_options', {}) != config.get('pilot_options', {}):
+            parser.error('Checkpoint pilot options differ: start a new ablation')
         model.load_state_dict(state["model"])
+        if init_path:
+            config['initialization'] = {'mode': 'weights_only', 'epoch': state['epoch'],
+                'sha256': hashlib.sha256(Path(init_path).read_bytes()).hexdigest(),
+                'source': str(Path(init_path).resolve())}
         if args.resume:
+            if state['config'].get('initialization'):
+                config['initialization'] = state['config']['initialization']
             if state['config'].get('alignment_manifest') != config.get('alignment_manifest'):
                 parser.error('Alignment protocol changed: start a new run rather than resume')
             for key in ("batch_size", "accumulation_steps", "learning_rate", "patches_per_scene", "seed", "amp", "device", "workers"):
@@ -305,6 +336,14 @@ def main():
             torch.set_rng_state(state["rng"])
             if device.type == "cuda" and state.get("cuda_rng"):
                 torch.cuda.set_rng_state_all(state["cuda_rng"])
+    if args.check_only:
+        print(json.dumps({'check_only': True, 'model_type': config.get('model_type'),
+            'next_epoch': start_epoch + 1, 'optimizer_state_entries': len(optimizer.state),
+            'validation_scenes': len(validation.files), 'initialization': config.get('initialization'),
+            'parameters': sum(p.numel() for p in model.parameters()), 'training_started': False}), flush=True)
+        return
+    if not args.evaluate and config['epochs'] <= start_epoch:
+        parser.error('Requested total epochs must exceed checkpoint epoch')
     (output / "run_config.json").write_text(json.dumps(config, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"device={device} torch={torch.__version__} amp={amp} parameters={sum(p.numel() for p in model.parameters()):,}", flush=True)
     print(f"data={config['data_root']} patch={config['patch_size']} RGB=3 HSI=204 latent={config['latent_channels']}", flush=True)
@@ -312,8 +351,10 @@ def main():
     if args.evaluate:
         metrics = evaluate(model, val_loader, device, amp, output, channels_last=channels_last,
                            baseline_mode=config.get('upsampler','bicubic'), degradation_mode=config.get('degradation','bicubic'),
-                           area_consistency=args.area_consistency or config.get('train_area_consistency', False))
+                           area_consistency=args.area_consistency or config.get('train_area_consistency', False),
+                           spatial_metrics=config.get('pilot_metrics', False))
         metrics['eval_layout']=config.get('eval_layout','tiles')
+        metrics['split'] = args.eval_split
         metrics['limited_scenes']=args.max_val_scenes is not None
         (output / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
         print(json.dumps(metrics["scene_mean"], indent=2))
@@ -389,7 +430,8 @@ def main():
         metrics = evaluate(model, val_loader, device, amp, output, max_batches=2 if args.smoke else None,
                            channels_last=channels_last,baseline_mode=config.get('upsampler','bicubic'),
                            degradation_mode=config.get('degradation','bicubic'),
-                           area_consistency=config.get('train_area_consistency', False))
+                           area_consistency=config.get('train_area_consistency', False),
+                           spatial_metrics=config.get('pilot_metrics', False))
         metrics['eval_layout']=config.get('eval_layout','tiles')
         metrics["limited_scenes"] = args.smoke or args.max_val_scenes is not None
         val_mse = metrics["scene_mean"]["model_mse"]
@@ -415,6 +457,8 @@ def main():
         with (output / "history.jsonl").open("a", encoding="utf-8") as file:
             file.write(json.dumps(record) + "\n")
         (output / "validation_metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
+        if improved:
+            (output / 'best_validation_metrics.json').write_text(json.dumps(metrics, indent=2), encoding='utf-8')
         state = {"epoch": epoch+1, "model": model.state_dict(), "optimizer": optimizer.state_dict(),
                  "scaler": scaler.state_dict(), "best_mse": best, "config": config,
                  "rng": torch.get_rng_state(),

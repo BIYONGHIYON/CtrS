@@ -49,6 +49,8 @@ LIB-HSI 합성 ×4 평가입니다. 204→17 grouped 압축(인접 12밴드/특�
 
 ## 현재 학습 상태
 
+[6단계 예비 실험 환경](docs/guide/six_stage_pilot.md)을 별도 서버 폴더 `C:\CtrS-pilot-suite`에 준비했습니다. RGB 진단과 10에폭 비교 설정을 사용할 수 있으며 학습은 아직 시작하지 않았습니다.
+
 run `20261005-061505-8be6241e5a6c`은 2026-10-05 11:26(KST)에 종료 코드 0으로 완료됐습니다. 서버의 `C:\CtrS-joint17\SSA-MRN\experiments\checkpoints\remote-runs-joint17\<run ID>`에 best/latest를 보존했습니다. 가중치는 Git에 넣지 않았습니다.
 
 최신 가중치의 설정에는 LR 보정이 포함되어 있어 평가·5개 예시·오프라인 뷰어에 자동 적용됩니다. 이 보정은 합성 ×4 `area` 축소 조건에만 검증됐습니다. 결과와 체크포인트 해시는 [실험 보고서](docs/experiments/rgb07_joint17_consistency.md)에서 확인할 수 있습니다.
