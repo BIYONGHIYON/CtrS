@@ -1,0 +1,78 @@
+{
+  "seed": 42,
+  "dataset": {
+    "name": "sen12mscr",
+    "root": "spring=E:\\윤지\\DataSet\\ECRformer Data\\SEN12MSCR_spring;winter=E:\\윤지\\DataSet\\ECRformer Data\\sen12mscr_winter",
+    "split": [
+      "train",
+      "val",
+      "test"
+    ],
+    "train_ratio": 0.8,
+    "data_range": 1.0,
+    "crop_size": 128
+  },
+  "train": {
+    "max_epoch": 20,
+    "early_stop": 10,
+    "lr": 0.0004,
+    "loss_weight": [
+      0.9,
+      0.1
+    ],
+    "proj_weight": [
+      0.05,
+      0.05
+    ],
+    "train_bs": 2,
+    "valid_bs": 1,
+    "num_workers": 2,
+    "ckpt_path": null,
+    "save_dir": "./experiments",
+    "max_train_samples": 6000,
+    "gpu": [
+      0
+    ],
+    "init_weights_path": null
+  },
+  "optim": {
+    "accelerator": "auto",
+    "precision": "16-mixed",
+    "accumulate_grad_batches": 8
+  },
+  "net": {
+    "name": "ecrformer",
+    "input": [
+      "SAR",
+      "cloudy"
+    ],
+    "output": [
+      "target"
+    ],
+    "cfg": {
+      "features_start": 48,
+      "num_blocks": [
+        2,
+        3,
+        2,
+        2
+      ],
+      "block_type": [
+        "ecrformer",
+        "ecrformer"
+      ],
+      "cbam": "1ca2+1sa2",
+      "bottle_neck": "tsa",
+      "num_refine": 4,
+      "pos_encoding": null,
+      "drop_path_rate": 0.0,
+      "in_chans": [
+        2,
+        13
+      ],
+      "out_chans": 13
+    }
+  },
+  "no_resume": false,
+  "name": "winter_3000_each_seed42_20ep"
+}
