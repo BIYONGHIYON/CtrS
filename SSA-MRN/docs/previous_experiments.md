@@ -13,6 +13,9 @@
 | RGB 03 · grouped12 K=4 23탭 | [rgb03_grouped12](experiments/rgb03_grouped12.md) | 30.7574 | 2.0893 |
 | RGB 04 · RGB별 12특징 23탭 타일 | [rgb04_triple12](experiments/rgb04_triple12.md) | 34.0530 | 2.2057 |
 | RGB 06 · RGB별 17특징 23탭 타일 | [rgb06_triple17](experiments/rgb06_triple17.md) | 33.9817 | 2.2156 |
+| RGB 05 · RGB별 12특징 Bilinear 타일 | [rgb05_triple12_bilinear](experiments/rgb05_triple12_bilinear.md) | 33.7897 | 2.2190 |
+| RGB 06 · RGB별 17특징 23탭·분광 손실 | [rgb06_triple17_spectral](experiments/rgb06_triple17_spectral.md) | 34.0611 | 2.2006 |
+| RGB 06 후처리 · LR 평균 일관성 보정 | [rgb06_lr_consistency](experiments/rgb06_lr_consistency.md) | 34.2173 | 2.1625 |
 
 34특징 실험은 중단 후 요청에 따라 결과를 삭제했습니다. 검증된 최종 test 결과가 없으므로 완료 연구 표에 포함하지 않습니다. 모델 코드는 보존 가중치 평가와 향후 구조 변경을 위해 남깁니다.
 
@@ -31,7 +34,7 @@
 SSA-MRN/
 ├── README.md                  최신 완료·현재 학습
 ├── AGENTS.md                  결과 완료·정리 규칙
-├── configs/                   현재 학습 JSON 1개
+├── configs/                   학습 설정과 이전 가중치 평가용 설정
 ├── docs/
 │   ├── reproduction.md        PAN–MS 입구
 │   ├── previous_experiments.md RGB–HSI 입구
@@ -39,7 +42,7 @@ SSA-MRN/
 │   └── assets/                실험 ID별 그래프·4패널 예시
 ├── experiments/
 │   ├── checkpoints/           학습된 .pt·checksum
-│   ├── results/               pan_k4, pan_k6, rgb01~05, 정합 근거
+│   ├── results/               pan_k4, pan_k6, rgb01~07, 정합 근거
 │   └── logs/                  현재 실행 중인 로그만 로컬 유지
 ├── references/                공식 코드·데이터 감사·측정 근거
 ├── scripts/                   학습·정합·평가·결과 내보내기·정리

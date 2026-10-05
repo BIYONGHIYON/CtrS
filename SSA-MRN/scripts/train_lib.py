@@ -18,8 +18,10 @@ from tqdm import tqdm
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "SSA-MRN/src"))
 from ssamrn.data.lib_hsi import LIBHSI, ScenePatchSampler
+from ssamrn.losses import reconstruction_loss
 from ssamrn.models.rgb_grouped import build_rgb_hsi_model
 from ssamrn.models.interp23 import interp23tap
+from ssamrn.models.area_consistency import project_area_consistency
 
 
 def save_checkpoint(state, path):
@@ -110,9 +112,11 @@ def preview(batch, prediction, baseline, path):
 
 @torch.no_grad()
 def evaluate(model, loader, device, amp, output, max_batches=None, channels_last=False,
-             baseline_mode='bicubic', degradation_mode='bicubic'):
+             baseline_mode='bicubic', degradation_mode='bicubic', area_consistency=False):
     if baseline_mode not in ('bicubic', '23tap'):
         raise ValueError('Unknown baseline interpolation')
+    if area_consistency and degradation_mode != 'area':
+        raise ValueError('Area consistency requires area degradation')
     baseline_label = 'interp23' if baseline_mode == '23tap' else 'bicubic'
     model.eval()
     totals = {}
@@ -130,6 +134,9 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
         finite.logical_and_(torch.isfinite(prediction).all())
         valid = torch.linalg.vector_norm(gt, dim=1) > 1e-6
         spatial = batch.get('valid_mask', torch.ones_like(valid)).to(device)
+        if area_consistency:
+            prediction = project_area_consistency(prediction, lr, spatial)
+            baseline = project_area_consistency(baseline, lr, spatial)
         valid = valid & spatial
         gt_norm = torch.linalg.vector_norm(gt, dim=1)
         values = []
@@ -167,18 +174,22 @@ def evaluate(model, loader, device, amp, output, max_batches=None, channels_last
             "alignment_border_masked": 'valid_mask' in batch,
             "source_cube_requested_gib": read_bytes / 2**30,
             "baseline_mode": baseline_mode,
+            "area_consistency": area_consistency,
             "protocol": f"x4 {degradation_mode} LR; {baseline_label} baseline; clipped [0,1] reflectance GT; unclipped output; "
+                        f"area consistency {'on' if area_consistency else 'off'}; "
                         "PSNR from all-band scene MSE (range=1); SAM ignores zero GT pixels"}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--config", type=Path, default=ROOT / "SSA-MRN/configs/lib_rgb_hsi_triple12_k4_bilinear_tiles.json")
+    parser.add_argument("--config", type=Path, default=ROOT / "SSA-MRN/configs/lib_rgb_hsi_triple17_k4_spectral_tiles.json")
     parser.add_argument("--data-root", type=Path)
+    parser.add_argument("--alignment-manifest", type=Path, help="Exact registration file required by the checkpoint")
     parser.add_argument("--device", choices=("cpu", "cuda"))
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--smoke", action="store_true", help="Two real-data optimizer steps, partial validation")
     parser.add_argument("--evaluate", action="store_true", help="Evaluate test split, no training")
+    parser.add_argument("--area-consistency", action="store_true", help="Project evaluated x4 area outputs onto LR HSI")
     parser.add_argument("--checkpoint", type=Path)
     parser.add_argument("--resume", type=Path)
     parser.add_argument("--epochs", type=int)
@@ -187,6 +198,8 @@ def main():
     parser.add_argument("--profile", action="store_true", help="Record GPU event timing and loader waits")
     args = parser.parse_args()
     config = json.loads(args.config.read_text(encoding="utf-8"))
+    if args.alignment_manifest:
+        config['alignment_manifest'] = str(args.alignment_manifest.resolve())
     if config.get('alignment_manifest'):
         config['alignment_sha256']=hashlib.sha256((ROOT/config['alignment_manifest']).read_bytes()).hexdigest()
     if args.data_root:
@@ -200,6 +213,10 @@ def main():
         config["epochs"] = args.epochs
     if args.smoke and args.evaluate:
         parser.error("--smoke and --evaluate are mutually exclusive")
+    if args.area_consistency and (not args.evaluate or config.get('degradation') != 'area'):
+        parser.error('--area-consistency requires --evaluate with area degradation')
+    if config.get('train_area_consistency', False) and config.get('degradation') != 'area':
+        parser.error('train_area_consistency requires area degradation')
     if args.smoke and args.resume:
         parser.error("smoke must not resume a full training run")
     for key in ("epochs", "batch_size", "accumulation_steps", "patches_per_scene", "latent_channels", "ssai_dimension"):
@@ -210,6 +227,8 @@ def main():
     for key in ("val_batch_size", "cpu_threads", "prefetch_factor", "log_interval"):
         if config.get(key, 1) < 1:
             parser.error(f"{key} must be positive")
+    if config.get("spectral_weight", 0.) < 0 or config.get("spectral_eps", 1e-6) <= 0:
+        parser.error("Invalid spectral loss weight or norm threshold")
     device = torch.device(config["device"])
     if device.type == "cuda" and not torch.cuda.is_available():
         parser.error("CUDA unavailable. Select a CUDA-enabled Python interpreter or pass --device cpu")
@@ -275,6 +294,11 @@ def main():
             for key in ("batch_size", "accumulation_steps", "learning_rate", "patches_per_scene", "seed", "amp", "device", "workers"):
                 if state["config"][key] != config[key]:
                     parser.error(f"Resume {key} differs from checkpoint")
+            for key, default in [("spectral_weight", 0.), ("spectral_eps", 1e-6)]:
+                if state["config"].get(key, default) != config.get(key, default):
+                    parser.error("Resume loss differs: " + key)
+            if state['config'].get('train_area_consistency', False) != config.get('train_area_consistency', False):
+                parser.error('Resume LR consistency differs from checkpoint')
             optimizer.load_state_dict(state["optimizer"])
             scaler.load_state_dict(state["scaler"])
             start_epoch, best = state["epoch"], state["best_mse"]
@@ -287,7 +311,8 @@ def main():
     print(f"model={config.get('model_type','latent_rgb')} K={config['ssai_dimension']} train_layout={config.get('train_layout','random')} eval_layout={config.get('eval_layout','tiles')} degradation={config.get('degradation','bicubic')} upsampler={config.get('upsampler','bicubic')}", flush=True)
     if args.evaluate:
         metrics = evaluate(model, val_loader, device, amp, output, channels_last=channels_last,
-                           baseline_mode=config.get('upsampler','bicubic'), degradation_mode=config.get('degradation','bicubic'))
+                           baseline_mode=config.get('upsampler','bicubic'), degradation_mode=config.get('degradation','bicubic'),
+                           area_consistency=args.area_consistency or config.get('train_area_consistency', False))
         metrics['eval_layout']=config.get('eval_layout','tiles')
         metrics['limited_scenes']=args.max_val_scenes is not None
         (output / "metrics.json").write_text(json.dumps(metrics, indent=2), encoding="utf-8")
@@ -312,6 +337,8 @@ def main():
         train_loader.sampler.set_epoch(epoch)
         total = torch.zeros((), device=device)
         finite = torch.ones((), dtype=torch.bool, device=device)
+        spectral_total = torch.zeros((), device=device)
+        loss_total = torch.zeros((), device=device)
         count, data_wait, timings, read_bytes = 0, 0., [], 0
         batches = DevicePrefetch(train_loader, device, channels_last) if device.type == "cuda" else train_loader
         progress = tqdm(batches, total=steps, desc=f"epoch {epoch+1}/{epochs}", mininterval=2.)
@@ -328,11 +355,13 @@ def main():
             group_size = min(accumulation, steps - (step // accumulation) * accumulation)
             with torch.autocast(device.type, enabled=amp):
                 prediction = model(rgb, lr)
-                if 'valid_mask' in batch:
-                    mask=batch['valid_mask'].to(device)[:,None]
-                    loss=((prediction.float()-gt).square()*mask).sum()/(mask.sum()*gt.shape[1]).clamp_min(1)
-                else:
-                    loss = F.mse_loss(prediction.float(), gt)
+            mask = batch.get('valid_mask', None)
+            mask = mask.to(device) if mask is not None else None
+            if config.get('train_area_consistency', False):
+                prediction = project_area_consistency(prediction, lr, mask)
+            loss, mse_loss, spectral_loss = reconstruction_loss(
+                prediction, gt, mask,
+                config.get('spectral_weight', 0.), config.get('spectral_eps', 1e-6))
             finite.logical_and_(torch.isfinite(loss))
             scaler.scale(loss / group_size).backward()
             if (step + 1) % accumulation == 0 or step + 1 == steps:
@@ -341,13 +370,15 @@ def main():
                 scaler.step(optimizer)
                 scaler.update()
                 optimizer.zero_grad(set_to_none=True)
-            total.add_(loss.detach() * gt.shape[0])
+            total.add_(mse_loss.detach() * gt.shape[0])
+            spectral_total.add_(spectral_loss.detach() * gt.shape[0])
+            loss_total.add_(loss.detach() * gt.shape[0])
             count += gt.shape[0]
             if args.profile and device.type == "cuda":
                 event_end.record()
                 timings.append((event_start, event_end))
             if (step+1) % config.get("log_interval", 20) == 0 or step+1 == steps:
-                progress.set_postfix(mse=f"{loss.item():.6f}", refresh=False)
+                progress.set_postfix(mse=f"{mse_loss.item():.6f}", spectral=f"{spectral_loss.item():.6f}", refresh=False)
             last_step_finished = time.perf_counter()
             if step + 1 >= steps:
                 break
@@ -357,13 +388,17 @@ def main():
         validation_started = time.perf_counter()
         metrics = evaluate(model, val_loader, device, amp, output, max_batches=2 if args.smoke else None,
                            channels_last=channels_last,baseline_mode=config.get('upsampler','bicubic'),
-                           degradation_mode=config.get('degradation','bicubic'))
+                           degradation_mode=config.get('degradation','bicubic'),
+                           area_consistency=config.get('train_area_consistency', False))
         metrics['eval_layout']=config.get('eval_layout','tiles')
         metrics["limited_scenes"] = args.smoke or args.max_val_scenes is not None
         val_mse = metrics["scene_mean"]["model_mse"]
         improved = val_mse < best
         best = min(best, val_mse)
-        record = {"epoch": epoch+1, "train_mse": total.item() / count, "seconds": time.perf_counter()-started,
+        record = {"epoch": epoch+1, "train_mse": total.item() / count, "train_loss": loss_total.item() / count, "train_spectral": spectral_total.item() / count,
+                  "spectral_weight": config.get("spectral_weight", 0.),
+                  "train_area_consistency": config.get('train_area_consistency', False),
+                  "seconds": time.perf_counter()-started,
                   "train_seconds": train_seconds, "validation_seconds": time.perf_counter()-validation_started,
                   "loader_wait_seconds": data_wait, "train_patches_per_second": count / train_seconds,
                   "train_cube_requested_gib": read_bytes / 2**30,

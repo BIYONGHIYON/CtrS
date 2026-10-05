@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "LIB: triple12 bilinear tiles smoke",
+      "name": "LIB: triple17 23tap spectral tiles smoke",
       "type": "debugpy",
       "request": "launch",
       "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
@@ -11,12 +11,12 @@
       "console": "integratedTerminal",
       "args": [
         "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple12_k4_bilinear_tiles.json",
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple17_k4_spectral_tiles.json",
         "--smoke"
       ]
     },
     {
-      "name": "LIB: triple12 bilinear tiles train (new run)",
+      "name": "LIB: triple17 23tap spectral tiles train (new run)",
       "type": "debugpy",
       "request": "launch",
       "program": "${workspaceFolder}/SSA-MRN/scripts/train_lib.py",
@@ -25,7 +25,7 @@
       "console": "integratedTerminal",
       "args": [
         "--config",
-        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple12_k4_bilinear_tiles.json"
+        "${workspaceFolder}/SSA-MRN/configs/lib_rgb_hsi_triple17_k4_spectral_tiles.json"
       ]
     },
     {
@@ -44,7 +44,7 @@
         "--output-dir",
         "${input:reportOutput}",
         "--previous-metrics",
-        "${workspaceFolder}/SSA-MRN/experiments/results/rgb04_triple12/test/metrics.json"
+        "${workspaceFolder}/SSA-MRN/experiments/results/rgb04_triple17/test/metrics.json"
       ]
     }
   ],
@@ -53,13 +53,13 @@
       "id": "checkpoint",
       "type": "promptString",
       "description": "Completed experiment best.pt path",
-      "default": "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\20261003-220209-d4faa37d0365\\best.pt"
+      "default": "C:\\CtrS-triple17-spectral\\SSA-MRN\\experiments\\checkpoints\\remote-runs\\<run-id>\\best.pt"
     },
     {
       "id": "reportOutput",
       "type": "promptString",
       "description": "New output folder (must not already exist)",
-      "default": "C:\\CtrS-triple12-bilinear\\SSA-MRN\\experiments\\results\\rgb05_triple12_bilinear"
+      "default": "C:\\CtrS-triple17-spectral\\SSA-MRN\\experiments\\results\\rgb06_triple17_spectral"
     }
   ]
 }

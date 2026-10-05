@@ -1,7 +1,7 @@
 {
   "data_root": "SSA-MRN/data/dataset/RGB-HSI/LIB-HSI",
-  "output_dir": "SSA-MRN/experiments/checkpoints/lib_rgb_hsi_triple12_k4_bilinear_tiles",
-  "model_type": "rgb_triple_grouped12_bilinear",
+  "output_dir": "SSA-MRN/experiments/checkpoints/lib_rgb_hsi_triple17_spectral",
+  "model_type": "rgb_triple_grouped17_23tap",
   "upsampler": "23tap",
   "degradation": "area",
   "train_layout": "quadrants",
@@ -12,7 +12,7 @@
   "accumulation_steps": 1,
   "patch_size": 256,
   "patches_per_scene": 4,
-  "latent_channels": 12,
+  "latent_channels": 17,
   "ssai_dimension": 4,
   "learning_rate": 0.0001,
   "workers": 2,
@@ -28,5 +28,7 @@
   "seed": 42,
   "device": "cuda",
   "amp": true,
-  "alignment_manifest": "SSA-MRN/experiments/results/lib_registration/projective_alignment.json"
+  "alignment_manifest": "SSA-MRN/experiments/results/lib_registration/projective_alignment.json",
+  "spectral_weight": 0.01,
+  "spectral_eps": 1e-06
 }
