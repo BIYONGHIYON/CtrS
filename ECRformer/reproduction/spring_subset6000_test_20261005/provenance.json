@@ -1,0 +1,63 @@
+{
+  "date": "2026-10-05T12:37:33.321653+09:00",
+  "evaluation_git_head": "4c14d0924dd5134b0442af834a9c5e3b057f4d99",
+  "training_code_commit": null,
+  "training_code_commit_note": "Not recorded by historical run",
+  "best": {
+    "path": "experiments\\ecrformer_spring_spring_subset6000\\version_0\\checkpoints\\epoch=8-step=3375.ckpt",
+    "sha256": "f365d3384b202eb6580327069cd6e10a5f3c7ee764d0dec9678d22e9eccb88dd",
+    "epoch": 8
+  },
+  "last": {
+    "path": "experiments\\ecrformer_spring_spring_subset6000\\version_0\\checkpoints\\last.ckpt",
+    "sha256": "fc846942092451b4bcb1d03571f1f9295f73db57e0f59b75656e9ce2d6647551",
+    "epoch": 18
+  },
+  "source_sha256": {
+    "train.py": "12c100b25dd5ff479ca1c0327b63f59fcf05ad2dd9417a894f61189ea00078e0",
+    "test.py": "d4a82a6ae9404f13096f38b06bb7878d16f6627e2a0d4b5e1cd26c9717692271",
+    "export_test_report.py": "d4b9aba7342aecfcd4543bdc178d315e607fe0678a3a0535090676c9a847b854",
+    "models\\ecrformer_model.py": "3a5472a7e5bccb75ceef08b7795f1193a0229efe9aded2d4107522215b5af2b0",
+    "models\\module.py": "7ae76a4ced5f44fd2c451affb6daf91ef21ae8a6fb55021b6d4ce30f3c72df26",
+    "models\\module_util.py": "dfabab66daf29d67d51566ee8680ebb91eec5e08c702260058a7d92a3e6b7003",
+    "models\\__init__.py": "dde85a33379838288676bbfec52124a812aa3801a8348b35c09b0b796d9c152c",
+    "data\\convert_sen12mscr_to_npz.py": "66db69d008af4701fa07464bc899119f1152846b6c554e846bdf33b15089febe",
+    "data\\npz_dataset.py": "5ecdaab33c67fac581246c1d26591e86f9a8a2824abaff18ae71f48961053a41",
+    "data\\sen12mscr_dataset.py": "7e9d7bc27bc7e92fbc005b1d450ae8ba15bee73e57eed164e28241a9f815a2be",
+    "data\\__init__.py": "5d47e02543acb30b7c745d383adae96b8329da846344aa0d4c95e113422a0f28",
+    "util\\augment.py": "89c920885bd3e85a74c6fc362edfe9bf69d91e1a5899ace44d2a9766661a0f67",
+    "util\\checkpoint.py": "4f5aacdad4c1f8c7d008aea5b551cb21643fe3b654c5510e0f1409560cea9619",
+    "util\\data_split.py": "744eed71ae9a8889e5098f5835297d0a92b56c3af7b9c9ac0ed51655bf6f4f08",
+    "util\\detailed_training_log.py": "edeb677c70c2fead8696875cf557e6d2f975dbc5cdcf0ea9089475a4dfc7cc8d",
+    "util\\EMA.py": "42603d817fdb88ca6fbbaf691f45627b4ced431091d58b55318bf6cc2f23e9b6",
+    "util\\lpips_loss.py": "d14b41448cf763527fd48c90182b5a71f6827aea2bba81879c719f366c7c25d0",
+    "util\\util.py": "4f7eb033673f898d9e6dfff3f40aab418c2d18ecc68e67a65d4cb0f60f79b47a",
+    "util\\__init__.py": "418ee6976e65b5018f14ad57e1095a9112836104c01b260e44f83f6d135b2290",
+    "util\\pytorch_ssim\\__init__.py": "0178620145a19e3c13e163266812c79787f096ca166e01fd12e54021238fb1e8",
+    "config\\base_config.py": "7373cdb626343b5d0819717a1786ce62fe76ff63b62d647e259785580f5073fa",
+    "config\\ecrformer_config.py": "7e8031f2e73e0586c6feac7fdbcf7e3aaba5fc3bf5a46880dbd61b171cf8ab6b",
+    "config\\ecrformer_light_config.py": "5afa11a84e875d64060df22ca7c81b1fb4176e3a9e7a00de88ed35dfcdbcdb67",
+    "config\\ecrformer_spring_config.py": "72a6eaca6d52786feb99829c8515e8575a6bb47560a2148e433624837d6d5006",
+    "config\\__init__.py": "d7cb53984407d98929f03d39b6aa33c22b3121da4a5c8a96904e2a88fbfdb0a8"
+  },
+  "torch": "2.7.1+cu128",
+  "device": "cuda:0",
+  "input_shape": [
+    15,
+    256,
+    256
+  ],
+  "output_channels": 13,
+  "crop": null,
+  "precision": "float32",
+  "tta": false,
+  "metrics_clipped": false,
+  "rgb_bands_zero_based": [
+    3,
+    2,
+    1
+  ],
+  "png_brightness": 3.0,
+  "exact_train_subset_overlap": 0,
+  "train_subset_size": 6000
+}

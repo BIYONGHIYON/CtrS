@@ -27,16 +27,16 @@ epoch 16 배치 201~400 구간에서 누적 오차 이상을 확인했습니다.
 
 ## 5. 곡선
 
-상세 로그는 서버에 있지만 이번 정리에서 다운로드·곡선 생성을 하지 않았습니다. 표는 기존 관측값만 요약하며 없는 epoch를 채우지 않습니다.
+처음 문서를 정리할 때는 곡선을 생성하지 않았습니다. 이후 2026-10-05 test 평가에서 실제 epoch 7~18의 compact 기록과 곡선을 추가했습니다. [평가 보고서](spring_subset6000_test.md#5-학습검증-및-test-그래프)에서 볼 수 있으며 없는 0~6은 채우지 않았습니다.
 
 ## 6. 이미지
 
-spring best의 test 그림과 사전 선정 5사례는 미확보입니다. 겨울 그림을 spring 결과로 표시하지 않습니다.
+2026-10-05에 spring best 전체 test 3,983패치 평가와 사전 고정 5 ROI 비교 그림을 확보했습니다. [test 보고서](spring_subset6000_test.md)에서 수치·선정 근거와 best/last 그림을 확인합니다. 겨울 그림을 spring 결과로 표시하지 않습니다.
 
 ## 7. 근거
 
-서버 `C:\CtrS\ECRformer\Official_ECRformer`의 `spring_subset_resume_detailed.stdout.log`, `.stderr.log` 및 `experiments\ecrformer_spring_spring_subset6000\version_0\training_diagnostics.jsonl`. checkpoint의 `epoch=8-step=3375.ckpt`는 평가 후보이고 `last.ckpt`는 발산 상태입니다. 서버 경로는 GitHub 링크가 아닙니다. 실행 당시 코드 commit·가중치 해시는 미확보입니다.
+서버 `C:\CtrS\ECRformer\Official_ECRformer`의 `spring_subset_resume_detailed.stdout.log`, `.stderr.log` 및 `experiments\ecrformer_spring_spring_subset6000\version_0\training_diagnostics.jsonl`. checkpoint의 `epoch=8-step=3375.ckpt`는 평가 후보이고 `last.ckpt`는 발산 상태입니다. 서버 경로는 GitHub 링크가 아닙니다. 학습 당시 코드 commit은 미확보이며 가중치 SHA-256은 [후속 평가 provenance](../../reproduction/spring_subset6000_test_20261005/provenance.json)에 추가했습니다.
 
 ## 8. 다음 판단
 
-[안정화 실행](../stable_training.md)은 lr 1e-4, 정체 기반 감소, FP32 손실·지표와 배치별 진단을 지원합니다. 여러 요인을 동시에 바꾸므로 FP16 단독 원인을 확정할 수 없습니다. 다음 결과에 실제 곡선·이미지·비교 조건·실패 사례를 기록합니다. 이번 작업은 학습·추론을 실행하지 않습니다.
+[안정화 실행](../stable_training.md)은 lr 1e-4, 정체 기반 감소, FP32 손실·지표와 배치별 진단을 지원합니다. 여러 요인을 동시에 바꾸므로 FP16 단독 원인을 확정할 수 없습니다. 초기 문서 정리에서는 실행하지 않았고, 2026-10-05 후속 작업은 기존 checkpoint 추론만 수행했습니다. 새로운 안정화 학습은 아직 실행하지 않았습니다.
