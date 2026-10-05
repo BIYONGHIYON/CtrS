@@ -1,8 +1,12 @@
+param(
+    [string]$TaskName = 'CtrS-Triple17-Spectral-Control',
+    [string]$ControllerName = 'remote-training.py'
+)
 $ErrorActionPreference = 'Stop'
 $root = Split-Path $PSScriptRoot -Parent
 $python = 'C:\CtrS\.venv\Scripts\pythonw.exe'
-$controller = Join-Path $PSScriptRoot 'remote-training.py'
-$task = 'CtrS-Triple17-Spectral-Control'
+$controller = Join-Path $PSScriptRoot $ControllerName
+$task = $TaskName
 $user = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
 $escape = { param($s) [System.Security.SecurityElement]::Escape($s) }
 $xml = @"

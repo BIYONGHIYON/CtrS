@@ -154,8 +154,38 @@ class RGBTripleGroupedSsaMRN(nn.Module):
         return interp23tap(lr_hsi, 4) + self.fusion(per_band)
 
 
+class RGBTripleJointSsaMRN(nn.Module):
+    """Fuse the three 17-feature RGB branches before decoding 204 HSI bands."""
+    def __init__(self):
+        super().__init__()
+        self.encoder = nn.Conv2d(204, 17, 1, groups=17)
+        self.cores = nn.ModuleList([ScalarGroupedCore(17) for _ in range(3)])
+        self.decoder = nn.Sequential(
+            nn.Conv2d(51, 64, 1), nn.ReLU(inplace=True),
+            nn.Conv2d(64, 64, 3, padding=1, groups=64), nn.ReLU(inplace=True),
+            nn.Conv2d(64, 204, 1),
+        )
+        nn.init.zeros_(self.decoder[-1].weight)
+        nn.init.zeros_(self.decoder[-1].bias)
+
+    def forward(self, rgb, lr_hsi):
+        if rgb.ndim != 4 or lr_hsi.ndim != 4 or rgb.shape[1] != 3 or lr_hsi.shape[1] != 204:
+            raise ValueError('Expected NCHW RGB=3 and HSI=204')
+        if rgb.shape[0] != lr_hsi.shape[0] or rgb.shape[-2:] != tuple(s * 4 for s in lr_hsi.shape[-2:]):
+            raise ValueError('Expected matching batches at x4 spatial ratio')
+        latent = self.encoder(lr_hsi)
+        up = interp23tap(latent, 4)
+        features = torch.cat([core(rgb[:, i:i+1], up, latent)
+                              for i, core in enumerate(self.cores)], dim=1)
+        return interp23tap(lr_hsi, 4) + self.decoder(features)
+
+
 def build_rgb_hsi_model(config):
     kind=config.get('model_type','latent_rgb')
+    if kind == 'rgb_triple_joint17_23tap':
+        if config['latent_channels'] != 17 or config['ssai_dimension'] != 4 or config.get('upsampler') != '23tap':
+            raise ValueError('Joint model requires 17 features, K=4 and 23tap')
+        return RGBTripleJointSsaMRN()
     if kind in ('rgb_grouped12_23tap', 'rgb_triple_grouped12_23tap', 'rgb_triple_grouped34_23tap', 'rgb_triple_grouped34_bilinear', 'rgb_triple_grouped12_bilinear', 'rgb_triple_grouped17_23tap'):
         channels = 17 if kind == 'rgb_triple_grouped17_23tap' else 34 if kind in ('rgb_triple_grouped34_23tap', 'rgb_triple_grouped34_bilinear') else 12
         if config['latent_channels'] != channels or config['ssai_dimension'] != 4:

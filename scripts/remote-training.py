@@ -149,7 +149,9 @@ def legacy_processes():
 
 
 def prepare(request):
-    cfg = read(CONFIG)
+    cfg = read(Path(request.get('config', str(CONFIG))))
+    if cfg is None:
+        raise RuntimeError('Requested training config does not exist')
     run = RUNS / request['id']
     run.mkdir(parents=True, exist_ok=False)
     log_dir = BASE / 'runs' / request['id']
@@ -294,7 +296,10 @@ def submit(args):
         else:
             if state.get('status') in ('running', 'starting'):
                 raise RuntimeError('Training already active. Use status/logs/stop.')
-            cfg = read(CONFIG)
+            config_path = Path(args.config).resolve() if args.config else CONFIG
+            cfg = read(config_path)
+            if cfg is None:
+                raise RuntimeError('Training config does not exist: ' + str(config_path))
             source = None
             if args.command.startswith('resume-'):
                 directory = Path(args.from_dir) if args.from_dir else ROOT / cfg['output_dir']
@@ -303,7 +308,7 @@ def submit(args):
                 if not source.is_file():
                     raise RuntimeError('Checkpoint not found: ' + str(source))
             request = {'action': 'start', 'mode': args.command,
-                       'checkpoint': source and str(source)}
+                       'checkpoint': source and str(source), 'config': str(config_path)}
         request.update(id=dt.datetime.now().strftime('%Y%m%d-%H%M%S-') + uuid.uuid4().hex[:12],
                        time=time.time())
         write(BASE / 'requests' / (request['id'] + '.json'), request)
@@ -325,6 +330,7 @@ def main():
     parser.add_argument('command', choices=['worker', 'start', 'resume-latest', 'resume-best',
                                           'stop', 'status', 'logs', 'inspect'])
     parser.add_argument('--from-dir', help='Read-only checkpoint directory for resume; default: original config output_dir')
+    parser.add_argument('--config', help='Training config for start/resume; snapshot is saved per run')
     parser.add_argument('--follow', action='store_true')
     args = parser.parse_args()
     if os.name != 'nt':
