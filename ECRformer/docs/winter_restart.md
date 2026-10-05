@@ -7,6 +7,12 @@
 - SSA-MRN과 저장소 공통 파일은 변경하지 않았습니다. 겨울 두 번째 결과와 기존 분석 문서는 삭제하지 않고 역사 자료로 보존했습니다. 봄 안정화 코드와 오늘의 테스트 결과는 `research/ecrformer-stable-training` 브랜치에 남아 있습니다.
 - 원본 데이터·서버 로그·체크포인트는 Git 복구 대상이 아닙니다. 학습은 실행하지 않았습니다.
 
+## 서버 반영 위치
+
+`C:\CtrS`에는 다른 팀의 미커밋 변경과 추적되지 않은 실행 스크립트가 있어 브랜치 전환이 Git에 의해 차단됐습니다. 기존 변경을 강제로 덮어쓰지 않고, 같은 저장소의 별도 worktree `C:\CtrS-ecrformer-winter`에 `ecrformer-winter` 브랜치를 준비했습니다. 겨울 작업 위치는 `C:\CtrS-ecrformer-winter\ECRformer\Official_ECRformer`입니다.
+
+기존 `C:\CtrS\ECRformer`의 봄 로컬 수정은 원래 상태로 복원했습니다. 추가 안전 사본은 원 저장소 stash `699157d94f0693a7e0aa8ffe02ae3c1e0f4b1e69`에 보존했습니다. `.gitignore`와 다른 팀의 수정 파일은 전후 해시가 동일합니다. 원래 경로를 겨울 브랜치로 전환하려면 다른 팀과 미커밋 변경 처리를 먼저 조율해야 합니다.
+
 ## 다음 실행 전에 확인할 내용
 
 겨울 첫 실험 설정은 `reproduction/winter_half1/hparams.yaml`에 있습니다. 당시 데이터 경로는 Linux 경로이므로 현재 서버의 실제 겨울 데이터 경로를 별도로 확인해야 합니다. 봄 데이터 경로를 겨울 데이터로 간주하면 안 됩니다.
