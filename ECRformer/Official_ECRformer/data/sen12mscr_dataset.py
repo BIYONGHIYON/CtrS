@@ -178,7 +178,10 @@ class SEN12MSCR(Dataset):
         split_rois = {os.path.normpath(r) for r in self.split_rois}
         seeds_S1 = natsorted([
             d for d in os.listdir(self.root_dir)
-            if '_s1' in d and not d.endswith('.tar')
+            if '_s1' in d
+            and not d.startswith('._')
+            and not d.endswith('.tar')
+            and os.path.isdir(os.path.join(self.root_dir, d))
         ])
         for seed in tqdm(seeds_S1, desc='Indexing ROIs'):
             seed_root = os.path.join(self.root_dir, seed)
@@ -202,6 +205,7 @@ class SEN12MSCR(Dataset):
                 patches_S1 = natsorted([
                     os.path.join(roi_dir, f) for f in os.listdir(roi_dir)
                     if f.lower().endswith('.tif')
+                    and not f.startswith('._')
                     and os.path.isfile(os.path.join(roi_dir, f))
                 ])
                 patches_S2 = [
