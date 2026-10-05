@@ -1,0 +1,30 @@
+{
+  "checkpoint": "C:\\CtrS-ecrformer-winter\\ECRformer\\Official_ECRformer\\experiments\\ecrformer_spring_winter_3000_each_seed42_20ep\\version_1\\checkpoints\\epoch=5-step=2250.ckpt",
+  "checkpoint_sha256": "08d39deea44ff4e1e31e9bb36c109b9c79278aeb16b3947ffaa84b1e140edec2",
+  "best_epoch": 5,
+  "global_step": 2250,
+  "manifest_sha256": "a7bfa454a884854a0194aca1e3d416bf11ce1ee49d353fe3ad7a1a11dfe16beb",
+  "train_samples": 6000,
+  "evaluation_dtype": "float32",
+  "batch_size": 1,
+  "num_workers": 2,
+  "seed": 42,
+  "rgb_bands_zero_based": [
+    3,
+    2,
+    1
+  ],
+  "brightness": 3.0,
+  "image_selection": "first two test patches in natural order per season",
+  "python": "3.10.6",
+  "pytorch": "2.7.1+cu128",
+  "cuda": "12.8",
+  "gpu": "NVIDIA GeForce RTX 3060 Ti",
+  "source_sha256": {
+    "test.py": "d4a82a6ae9404f13096f38b06bb7878d16f6627e2a0d4b5e1cd26c9717692271",
+    "train.py": "5b9486e3c57f123a45923bda6e2b4a41c93023ada989a83d969100bf686b03c4",
+    "util\\util.py": "4f7eb033673f898d9e6dfff3f40aab418c2d18ecc68e67a65d4cb0f60f79b47a",
+    "data\\sen12mscr_dataset.py": "ad40e802b8895496b821395a0da360f740267508cfb872d9baa7c42d56f26971"
+  },
+  "evaluation_completed": "2026-10-06T04:37:03.593219+09:00"
+}

@@ -1,0 +1,32 @@
+{
+  "last_epoch": 15,
+  "global_step": 6000,
+  "exit_code": 0,
+  "ended": "2026-10-06T03:41:16.676222+09:00",
+  "stop_reason": "valid_loss did not improve for 10 validations",
+  "best_checkpoint": "epoch=5-step=2250.ckpt",
+  "train_counts": {
+    "spring": 3000,
+    "winter": 3000
+  },
+  "validation_counts": {
+    "spring": 756,
+    "winter": 2771
+  },
+  "best_epoch": 5,
+  "best_valid_loss": 0.03944391757249832,
+  "early_stop_wait_count": 10,
+  "initial_start": "fresh initialization; no init-weights in original launch log",
+  "resume_from_epoch": 3,
+  "resumed_at": "2026-10-05T22:59:45.204325+09:00",
+  "learning_rate_reductions": [
+    {
+      "epoch": 10,
+      "lr": 0.0002
+    },
+    {
+      "epoch": 14,
+      "lr": 0.0001
+    }
+  ]
+}
