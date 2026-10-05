@@ -1,0 +1,47 @@
+{
+  "run": {
+    "id": "20261006-053053-ea63614f1e45",
+    "status": "running",
+    "output": "C:\\CtrS-rgb-detail\\SSA-MRN\\experiments\\checkpoints\\remote-runs-detail\\20261006-053053-ea63614f1e45",
+    "log": "C:\\CtrS-rgb-detail\\SSA-MRN\\experiments\\logs\\remote-control-detail\\runs\\20261006-053053-ea63614f1e45\\train.log",
+    "source": null,
+    "mode": "start",
+    "started_at": "2026-10-06T05:30:54.651944",
+    "command": [
+      "C:\\CtrS\\.venv\\Scripts\\python.exe",
+      "-u",
+      "C:\\CtrS-rgb-detail\\SSA-MRN\\scripts\\train_lib.py",
+      "--config",
+      "C:\\CtrS-rgb-detail\\SSA-MRN\\experiments\\logs\\remote-control-detail\\runs\\20261006-053053-ea63614f1e45\\config.json",
+      "--output-dir",
+      "C:\\CtrS-rgb-detail\\SSA-MRN\\experiments\\checkpoints\\remote-runs-detail\\20261006-053053-ea63614f1e45"
+    ],
+    "pid": 30504,
+    "controller_online": true,
+    "log_bytes": 8176,
+    "log_modified": 1791232442.388219
+  },
+  "base_commit": "9461ea7",
+  "source_sha256": {
+    "scripts/remote-training.py": "6c4d5065e1f11211b7d36f286f8e69ea1352fa6b2114694932f1cab509b1c8db",
+    "scripts/remote-training-detail.py": "1b574c4e26778d73ea4e426ccfbaa9c13a16c54fdb4d1d77b01b5b5e9220f7c6",
+    "scripts/start-detail-finetune.py": "27421959082644644ba0a35fd6c969bcf9209dabacff48a903a29c2e991e5812",
+    "SSA-MRN/scripts/train_lib.py": "89b82fa2f544ad83064df03fc839d5dbede01cec50e24085f89c6177cd30640a",
+    "SSA-MRN/src/ssamrn/models/rgb_pilot.py": "765645affd2ec8f1261d12aee0f0cb22c8a022f79e2ca2ac88d1f955caaa41f0",
+    "SSA-MRN/configs/lib_rgb_hsi_detail17_full.json": "ee96d95177459f6053c4edfde24d5ad0d9d6e3f0c24eaba9bc388ff6ca7e1cd1",
+    "SSA-MRN/configs/lib_rgb_hsi_detail17_finetune.json": "0f4998d4e36d4f90356e7971dca474586403d40f0fb0cd636b06218b796b943f"
+  },
+  "validation": {
+    "rgb07_training_settings_match": true,
+    "scenes": {
+      "train": 393,
+      "validation": 45,
+      "test": 75
+    },
+    "model_tests_passed": 5,
+    "real_data_smoke_exit_code": 0,
+    "smoke_peak_allocated_mib": 4179.623046875,
+    "smoke_peak_reserved_mib": 4920.0
+  },
+  "note": "Running full training; final metrics not measured. Fine-tuning10 is prepared for a separate start after full100."
+}

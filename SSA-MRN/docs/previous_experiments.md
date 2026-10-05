@@ -18,6 +18,13 @@
 
 34특징 실험은 중단 후 요청에 따라 결과를 삭제했습니다. 검증된 최종 test 결과가 없으므로 완료 연구 표에 포함하지 않습니다. 모델 코드는 보존 가중치 평가와 향후 구조 변경을 위해 남깁니다.
 
+## 검증 전용 예비실험
+
+- [6단계10에폭·train155](experiments/pilot_subset155.md)
+- [원본 대 미세조정·30에폭후속 비교](experiments/pilot_followup.md)
+
+위 보고서는 validation 결과이며 상단test 표와 직접 비교하지 않습니다.
+
 ## 보존 파일
 
 - `experiments/checkpoints/`: 실제 학습된 가중치와 체크섬. smoke 가중치는 제외.

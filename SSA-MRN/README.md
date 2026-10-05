@@ -14,29 +14,19 @@
 - [기존 PAN–MS 재현 정리](docs/reproduction.md)
 - [이전 RGB–HSI 실험 정리](docs/previous_experiments.md)
 
-## 축소 예비실험 결과 · 2026-10-06
+## 현재 학습 · RGB08 고주파 보정 전체 데이터
 
-**train155 / validation45 축소 예비실험을 완료했습니다.** 검증 전용 RGB 진단과 7개 학습 작업(각 10에폭)을 실행했으며 test는 후보 선택에 사용하지 않았습니다. 전체 학습은 10월 6일 03:37 KST에 정상 종료됐고 현재 실행 중인 학습은 없습니다.
+2026-10-06 05:30(KST)에 Windows3060Ti에서 **train393 / validation45,100에폭** 학습을 시작했습니다. RGB07과 같은17특징·공동 디코더·23탭·분광 손실·LR 보정을 유지하고 RGB 고주파 보정 경로만 추가합니다. 기존 RGB07을 비교 기준으로 사용합니다.
 
-| 작업 | best epoch | MSE ↓ | PSNR dB ↑ | SAM ° ↓ | gradient RMSE ↓ |
-|---|---:|---:|---:|---:|---:|
-| 00_baseline10 | 10 | 0.0008318284 | 31.6981 | 2.4058 | 0.025434 |
-| 02_warm_control10 | 2 | 0.0004969431 | 34.0741 | 2.2505 | 0.021576 |
-| 02_warm_low10 | 5 | 0.0004858836 | 34.1811 | 2.2482 | 0.021444 |
-| 03_aligned_attention10 | 10 | 0.0008283217 | 31.7231 | 2.4074 | 0.025393 |
-| 04_gated_detail10 | 10 | 0.0008279778 | 31.7271 | 2.4037 | 0.025387 |
-| 05_global_encoder10 | 10 | 0.0008293195 | 31.7239 | 2.4077 | 0.025410 |
-| 06_local_alignment10 | 10 | 0.0008275112 | 31.7334 | 2.4098 | 0.025372 |
+run `20261006-053053-ea63614f1e45`, 서버 폴더 `C:\CtrS-rgb-detail`. 연결이 끊겨도 예약 작업 컨트롤러가 실행을 유지합니다. 100에폭 완료 후 best에서 LR1e-5로10에폭 미세조정하고 validation에서 전후를 비교합니다. 현재 최종 성능은 미측정입니다. [전체 설정·로그 명령·최종 평가 계획](docs/experiments/rgb08_gated_detail.md).
 
-warm 비교는 **LR1e-5가 LR1e-4보다 PSNR +0.1070dB, SAM −0.0023°**로 우세했습니다. 구조 후보의 baseline 대비 PSNR 이득은 +0.025~0.035dB로 작습니다. local alignment는 PSNR이 가장 높지만 SAM이 악화됐고, gated detail은 PSNR·SAM 모두 조금 개선됐습니다. 단일 seed·10에폭 결과이며 구조 후보 모두 마지막 에폭이 best이므로 확정적 개선이나 수렴 완료로 해석하지 않습니다.
+## 최근 완료 · 예비실험 후속 검증
 
-![축소 예비실험 학습·검증 곡선](docs/assets/pilot_subset155/curves.png)
+동일 validation45에서 원본 RGB07 대비 낮은 학습률 미세조정은 PSNR**+0.0789dB**,SAM**−0.00325°**였습니다. train155·30에폭 구조 비교에서는 고주파 보정이 baseline 대비 PSNR**+0.0356dB**,MSE**0.84% 감소**했고 SAM 차이는 거의 없었습니다. 단일 seed·검증 결과로 최종test 개선을 확정하지 않습니다.
 
-RGB 원본·흐림·±1px 이동·평균·0 입력 진단, 상세 조건, 장면별 지표 및 가중치 해시는 [축소 예비실험 보고서](docs/experiments/pilot_subset155.md)에 있습니다. 진단은 공통 보수적 마스크를 사용해 위 학습 평가와 직접 비교할 수 없습니다. 기존 RGB07 test75 결과는 아래 기준 연구에 보존했으며 이번 validation 결과와 분할·학습 규모가 달라 직접 비교하지 않습니다.
+[후속 결과·장면별 수치·학습곡선](docs/experiments/pilot_followup.md) · [10에폭6단계 예비실험](docs/experiments/pilot_subset155.md)
 
-## 실행 상태와 보관 위치
-
-모든 예비실험이 종료됐습니다. Linux 서버의 `SSA-MRN/experiments/checkpoints/pilot-subset155/suite_20261005T160615Z/<작업명>/`에 best/latest를 보존했습니다. 가중치와 데이터는 Git에 넣지 않았습니다. 기존 Windows용 [6단계 준비 안내](docs/guide/six_stage_pilot.md)와 이번 Linux subset155 실행 환경을 구분합니다.
+![baseline과 고주파 보정30에폭 곡선](docs/assets/pilot_followup/curves30.png)
 
 ## 기준 연구 · RGB07의 독립 test 결과
 
