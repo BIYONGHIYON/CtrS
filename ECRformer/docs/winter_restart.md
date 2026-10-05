@@ -9,9 +9,13 @@
 
 ## 서버 반영 위치
 
-`C:\CtrS`에는 다른 팀의 미커밋 변경과 추적되지 않은 실행 스크립트가 있어 브랜치 전환이 Git에 의해 차단됐습니다. 기존 변경을 강제로 덮어쓰지 않고, 같은 저장소의 별도 worktree `C:\CtrS-ecrformer-winter`에 `ecrformer-winter` 브랜치를 준비했습니다. 겨울 작업 위치는 `C:\CtrS-ecrformer-winter\ECRformer\Official_ECRformer`입니다.
+현재 겨울 코드 작업 위치는 **`C:\CtrS\ECRformer\Official_ECRformer`**입니다. 사용자의 추가 요청에 따라 원래 경로의 코드만 `origin/ecrformer-winter` 버전으로 교체했습니다. 해당 폴더의 추적 파일이 `6dc9581`과 동일함을 Git diff로 확인했고 Python 23개 파일 구문 검사를 통과했습니다. 학습은 실행하지 않았습니다.
 
-기존 `C:\CtrS\ECRformer`의 봄 로컬 수정은 원래 상태로 복원했습니다. 추가 안전 사본은 원 저장소 stash `699157d94f0693a7e0aa8ffe02ae3c1e0f4b1e69`에 보존했습니다. `.gitignore`와 다른 팀의 수정 파일은 전후 해시가 동일합니다. 원래 경로를 겨울 브랜치로 전환하려면 다른 팀과 미커밋 변경 처리를 먼저 조율해야 합니다.
+`C:\CtrS` 전체의 브랜치 전환은 다른 팀의 미커밋 변경과 추적되지 않은 실행 스크립트 때문에 차단돼 진행하지 않았습니다. 따라서 **공용 저장소의 현재 브랜치 이름은 `research/ecrformer-stable-training`이지만, ECRformer 실행 코드는 겨울 버전**입니다. 이 차이는 미커밋 변경으로 표시됩니다. 이 공용 checkout에서 그대로 commit/push하거나 pull하면 안 됩니다. 다음 변경을 GitHub에 반영할 때는 겨울 브랜치와 변경 파일의 대응을 확인해야 합니다.
+
+커밋·푸시된 봄 코드는 `research/ecrformer-stable-training`에 보존돼 있습니다. 서버 전용 미커밋 코드는 원 저장소 stash `6442ca0f32f244bbeb77816064ab7a6b99796b8c`에 추가로 보관했고, 이전 전체 ECRformer 안전 사본 `699157d94f0693a7e0aa8ffe02ae3c1e0f4b1e69`도 유지했습니다. 새 봄 전용 실행 파일은 백업 후 활성 코드 폴더에서 제외했습니다. 원본 데이터·로그·체크포인트와 기존 문서는 유지했으며 `.gitignore`와 다른 팀의 수정 파일은 전후 해시가 동일합니다.
+
+별도 worktree `C:\CtrS-ecrformer-winter`도 삭제하지 않고 겨울 브랜치의 깨끗한 Git 작업 공간으로 유지합니다. 원래 경로에서 코드를 실행·수정할 수 있지만, Git commit/push의 대상 브랜치와는 구분해야 합니다.
 
 ## 다음 실행 전에 확인할 내용
 
