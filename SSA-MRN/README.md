@@ -8,12 +8,37 @@
 
 [연구 설명 · 재현부터 17특징·분광 손실까지](docs/guide/research_overview.md)에서 단계별 연산, 텐서 크기, 결과 해석을 확인할 수 있습니다.
 
-## 연구 문서
+## 문서 안내
 
+- [최신 축소 예비실험 보고서](docs/experiments/pilot_subset155.md): 조건·RGB 진단·장면별 결과·가중치 해시
 - [기존 PAN–MS 재현 정리](docs/reproduction.md)
 - [이전 RGB–HSI 실험 정리](docs/previous_experiments.md)
 
-## 가장 최근 완료 연구 · RGB별 17특징 공동 디코더 + LR 평균 일관성 보정
+## 축소 예비실험 결과 · 2026-10-06
+
+**train155 / validation45 축소 예비실험을 완료했습니다.** 검증 전용 RGB 진단과 7개 학습 작업(각 10에폭)을 실행했으며 test는 후보 선택에 사용하지 않았습니다. 전체 학습은 10월 6일 03:37 KST에 정상 종료됐고 현재 실행 중인 학습은 없습니다.
+
+| 작업 | best epoch | MSE ↓ | PSNR dB ↑ | SAM ° ↓ | gradient RMSE ↓ |
+|---|---:|---:|---:|---:|---:|
+| 00_baseline10 | 10 | 0.0008318284 | 31.6981 | 2.4058 | 0.025434 |
+| 02_warm_control10 | 2 | 0.0004969431 | 34.0741 | 2.2505 | 0.021576 |
+| 02_warm_low10 | 5 | 0.0004858836 | 34.1811 | 2.2482 | 0.021444 |
+| 03_aligned_attention10 | 10 | 0.0008283217 | 31.7231 | 2.4074 | 0.025393 |
+| 04_gated_detail10 | 10 | 0.0008279778 | 31.7271 | 2.4037 | 0.025387 |
+| 05_global_encoder10 | 10 | 0.0008293195 | 31.7239 | 2.4077 | 0.025410 |
+| 06_local_alignment10 | 10 | 0.0008275112 | 31.7334 | 2.4098 | 0.025372 |
+
+warm 비교는 **LR1e-5가 LR1e-4보다 PSNR +0.1070dB, SAM −0.0023°**로 우세했습니다. 구조 후보의 baseline 대비 PSNR 이득은 +0.025~0.035dB로 작습니다. local alignment는 PSNR이 가장 높지만 SAM이 악화됐고, gated detail은 PSNR·SAM 모두 조금 개선됐습니다. 단일 seed·10에폭 결과이며 구조 후보 모두 마지막 에폭이 best이므로 확정적 개선이나 수렴 완료로 해석하지 않습니다.
+
+![축소 예비실험 학습·검증 곡선](docs/assets/pilot_subset155/curves.png)
+
+RGB 원본·흐림·±1px 이동·평균·0 입력 진단, 상세 조건, 장면별 지표 및 가중치 해시는 [축소 예비실험 보고서](docs/experiments/pilot_subset155.md)에 있습니다. 진단은 공통 보수적 마스크를 사용해 위 학습 평가와 직접 비교할 수 없습니다. 기존 RGB07 test75 결과는 아래 기준 연구에 보존했으며 이번 validation 결과와 분할·학습 규모가 달라 직접 비교하지 않습니다.
+
+## 실행 상태와 보관 위치
+
+모든 예비실험이 종료됐습니다. Linux 서버의 `SSA-MRN/experiments/checkpoints/pilot-subset155/suite_20261005T160615Z/<작업명>/`에 best/latest를 보존했습니다. 가중치와 데이터는 Git에 넣지 않았습니다. 기존 Windows용 [6단계 준비 안내](docs/guide/six_stage_pilot.md)와 이번 Linux subset155 실행 환경을 구분합니다.
+
+## 기준 연구 · RGB07의 독립 test 결과
 
 LIB-HSI 합성 ×4 평가입니다. 204→17 grouped 압축(인접 12밴드/특징), R/G/B 독립 core, 공동 디코더, K=4, **2,616,274개 파라미터**를 사용했습니다. HR256/LR64, 내부 평균 축소·23탭 확대, 정합 유효 마스크, 17특징 및 분광 손실 가중치 0.01을 유지했습니다. 이번에는 LR 평균 보정을 **학습 손실과 검증·테스트 모두에 적용**했습니다. best는 100에폭 중 검증 MSE가 가장 낮은 **99에폭**입니다.
 
@@ -24,6 +49,9 @@ LIB-HSI 합성 ×4 평가입니다. 204→17 grouped 압축(인접 12밴드/특�
 | **공동 디코더 17특징 + LR 보정** | **0.0004482036** | **34.2831** | **2.1570** |
 
 직전 RGB06의 **보정 후 출력**과 같은 75개 테스트 장면·정합 마스크를 비교하면 PSNR **+0.0658 dB**, SAM **−0.0055°**, MSE **−0.000007775**입니다. 장면별 PSNR은 **44/75개 개선, 31/75개 하락**으로 차이가 작고 균일하지 않습니다. 구조 변경과 학습 중 보정 적용이 함께 바뀌었으므로 개선 원인을 하나로 분리할 수 없습니다. [새 실험 보고서](docs/experiments/rgb07_joint17_consistency.md)에 조건과 한계를 기록했습니다.
+
+<details>
+<summary>RGB07 학습 곡선과 고정 test 예시 5종</summary>
 
 ![학습 MSE와 검증 PSNR·SAM](docs/assets/rgb07_joint17_consistency/learning.png)
 
@@ -47,29 +75,7 @@ LIB-HSI 합성 ×4 평가입니다. 204→17 grouped 압축(인접 12밴드/특�
 
 ![test 예시 5](docs/assets/rgb07_joint17_consistency/sample_05.png)
 
-## 축소 예비실험 결과 · 2026-10-06
-
-**train155 / validation45 축소 예비실험을 완료했습니다.** RGB 진단과 7개 작업을 각각 10에폭 실행했으며 test는 후보 선택에 사용하지 않았습니다. 전체 학습은 10월 6일 03:37 KST에 정상 종료됐고 현재 실행 중인 학습은 없습니다.
-
-| 작업 | best epoch | MSE ↓ | PSNR dB ↑ | SAM ° ↓ | gradient RMSE ↓ |
-|---|---:|---:|---:|---:|---:|
-| 00_baseline10 | 10 | 0.0008318284 | 31.6981 | 2.4058 | 0.025434 |
-| 02_warm_control10 | 2 | 0.0004969431 | 34.0741 | 2.2505 | 0.021576 |
-| 02_warm_low10 | 5 | 0.0004858836 | 34.1811 | 2.2482 | 0.021444 |
-| 03_aligned_attention10 | 10 | 0.0008283217 | 31.7231 | 2.4074 | 0.025393 |
-| 04_gated_detail10 | 10 | 0.0008279778 | 31.7271 | 2.4037 | 0.025387 |
-| 05_global_encoder10 | 10 | 0.0008293195 | 31.7239 | 2.4077 | 0.025410 |
-| 06_local_alignment10 | 10 | 0.0008275112 | 31.7334 | 2.4098 | 0.025372 |
-
-warm 비교는 **LR1e-5가 LR1e-4보다 PSNR +0.1070dB, SAM −0.0023°**로 우세했습니다. 구조 후보의 baseline 대비 PSNR 이득은 +0.025~0.035dB로 작습니다. local alignment는 PSNR이 가장 높지만 SAM이 악화됐고, gated detail은 PSNR·SAM 모두 조금 개선됐습니다. 단일 seed·10에폭 결과이며 구조 후보 모두 마지막 에폭이 best이므로 확정적 개선이나 수렴 완료로 해석하지 않습니다.
-
-![축소 예비실험 학습·검증 곡선](docs/assets/pilot_subset155/curves.png)
-
-RGB 원본·흐림·±1px 이동·평균·0 입력 진단, 상세 조건, 장면별 지표 및 가중치 해시는 [축소 예비실험 보고서](docs/experiments/pilot_subset155.md)에 있습니다. 진단은 공통 보수적 마스크를 사용해 위 학습 평가와 직접 비교할 수 없습니다. 기존 RGB07 test75 결과는 위에 보존했으며 이번 validation 결과와 분할·학습 규모가 달라 직접 비교하지 않습니다.
-
-## 현재 학습 상태
-
-모든 예비실험이 종료됐습니다. Linux 서버의 `SSA-MRN/experiments/checkpoints/pilot-subset155/suite_20261005T160615Z/<작업명>/`에 best/latest를 보존했습니다. 가중치와 데이터는 Git에 넣지 않았습니다. 기존 Windows용 [6단계 준비 안내](docs/guide/six_stage_pilot.md)와 이번 Linux subset155 실행 환경을 구분합니다.
+</details>
 
 ## 결과 보고와 파일 보관
 
