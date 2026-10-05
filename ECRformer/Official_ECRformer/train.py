@@ -1,7 +1,9 @@
 import os
+import json
+from pathlib import Path
 import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, Subset
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import EarlyStopping, ModelCheckpoint
 from pytorch_lightning.loggers import TensorBoardLogger
@@ -10,7 +12,11 @@ from argparse import ArgumentParser, Namespace
 from util.pytorch_ssim import SSIM
 from util.util import count_parameters, initialize_weights, compute_metric
 from util.augment import TestAugment, TrainAugment
-from util.checkpoint import find_latest_checkpoint
+from util.checkpoint import (
+    extract_state_dict,
+    find_latest_checkpoint,
+    load_checkpoint_file,
+)
 from util.data_split import build_train_valid_datasets
 
 from models import find_model_using_name
@@ -137,26 +143,65 @@ class CloudRemovalModel(pl.LightningModule):
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(
             self.net.parameters(), lr=self.lr, weight_decay=1e-3)
-        # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        #     optimizer, mode='min', factor=0.5, patience=10)
-        # return {
-        #     'optimizer': optimizer,
-        #     'lr_scheduler': {
-        #         'scheduler': scheduler,
-        #         'monitor': 'valid_loss',
-        #         'interval': 'epoch',
-        #         'frequency': 1,
-        #     },
-        # }
-
-        scheduler = torch.optim.lr_scheduler.MultiStepLR(
-            optimizer, milestones=[120, 150, 170, 180, 190, 200], gamma=0.5)
-        return [optimizer], [scheduler]
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer, mode='min', factor=0.5, patience=3, min_lr=1e-7)
+        return {'optimizer': optimizer, 'lr_scheduler': {
+            'scheduler': scheduler, 'monitor': 'valid_loss',
+            'interval': 'epoch', 'frequency': 1}}
 
 
 # ---------------------------------------------------------------------------
 # Training Entry Point
 # ---------------------------------------------------------------------------
+
+def select_fixed_subset(dataset, max_samples, seed):
+    if max_samples is None:
+        return dataset, None
+    if not 0 < max_samples <= len(dataset):
+        raise ValueError(
+            f'max_train_samples must be between 1 and {len(dataset)}, '
+            f'got {max_samples}'
+        )
+    generator = torch.Generator().manual_seed(seed)
+    indices = torch.randperm(len(dataset), generator=generator)[:max_samples].tolist()
+    return Subset(dataset, indices), indices
+
+
+def get_subset_paths(dataset, indices):
+    # Resolve indices through single-split and other nested Subset wrappers.
+    while isinstance(dataset, Subset):
+        indices = [int(dataset.indices[i]) for i in indices]
+        dataset = dataset.dataset
+    raw_dataset = getattr(dataset, 'dataset', dataset)
+    paths = getattr(raw_dataset, 'paths', None)
+    return [paths[i] for i in indices] if paths is not None else None
+
+
+def save_subset_manifest(dataset, indices, config, split_info, log_dir):
+    if indices is None:
+        return
+    manifest = {
+        'seed': config.seed,
+        'data_root': str(config.dataset.root),
+        'split': split_info['train'],
+        'num_samples': len(indices),
+        'indices': indices,
+        'paths': get_subset_paths(dataset, indices),
+    }
+    manifest_path = Path(log_dir) / 'train_subset.json'
+    if manifest_path.exists():
+        existing = json.loads(manifest_path.read_text(encoding='utf-8'))
+        if existing != manifest:
+            raise ValueError(
+                'The saved training subset differs from this run. '
+                'Use the original dataset and sample count, or start a new experiment.'
+            )
+    else:
+        manifest_path.parent.mkdir(parents=True, exist_ok=True)
+        manifest_path.write_text(
+            json.dumps(manifest, indent=2, ensure_ascii=False), encoding='utf-8')
+    print(f'Training subset manifest: {manifest_path}')
+
 
 def main(config):
     torch.set_float32_matmul_precision("highest")
@@ -164,6 +209,13 @@ def main(config):
 
     print("\nBuilding model...")
     model = CloudRemovalModel(config)
+    init_weights_path = getattr(config.train, 'init_weights_path', None)
+    if init_weights_path:
+        if config.train.ckpt_path is not None:
+            raise ValueError('Use either init_weights_path or ckpt_path, not both.')
+        checkpoint = load_checkpoint_file(init_weights_path, map_location='cpu')
+        model.load_state_dict(extract_state_dict(checkpoint), strict=True)
+        print(f'Initialized model weights from: {init_weights_path}')
     print(f"Model class: {model.net.__class__.__name__}")
     count_parameters(model)
 
@@ -171,6 +223,11 @@ def main(config):
     dataset_class = find_dataset_using_name(config.dataset.name)
     train_dataset, valid_dataset, split_info = build_train_valid_datasets(
         config, dataset_class)
+    full_train_dataset = train_dataset
+    train_dataset, selected_train_indices = select_fixed_subset(
+        train_dataset, getattr(config.train, 'max_train_samples', None), config.seed)
+    print(f'Training samples used: {len(train_dataset)}')
+    print(f'Validation samples used: {len(valid_dataset)}')
     print(f"Training split: {split_info['train']}")
     print(f"Validation split: {split_info['valid']}")
 
@@ -178,11 +235,11 @@ def main(config):
     train_loader = DataLoader(
         train_dataset, batch_size=config.train.train_bs, drop_last=True,
         shuffle=True, num_workers=num_workers,
-        pin_memory=True, persistent_workers=True)
+        pin_memory=True, persistent_workers=num_workers > 0)
     valid_loader = DataLoader(
         valid_dataset, batch_size=config.train.valid_bs,
         shuffle=False, num_workers=num_workers,
-        pin_memory=True, persistent_workers=True)
+        pin_memory=True, persistent_workers=num_workers > 0)
 
     checkpoint_callback = ModelCheckpoint(
         monitor='valid_loss', verbose=False, mode='min',
@@ -200,7 +257,9 @@ def main(config):
     ckpt_path = config.train.ckpt_path
     resume_version = None
 
-    if ckpt_path is None and not getattr(config, 'no_resume', False):
+    if init_weights_path:
+        print('Starting a new fine-tuning run with fresh optimizer and callbacks.')
+    elif ckpt_path is None and not getattr(config, 'no_resume', False):
         auto_ckpt_path, version_num = find_latest_checkpoint(
             save_dir, log_name)
         if auto_ckpt_path is not None:
@@ -218,6 +277,9 @@ def main(config):
             save_dir=save_dir, name=log_name, version=resume_version)
     else:
         tb_logger = TensorBoardLogger(save_dir=save_dir, name=log_name)
+
+    save_subset_manifest(
+        full_train_dataset, selected_train_indices, config, split_info, tb_logger.log_dir)
 
     print("\nCreating trainer...")
     trainer = pl.Trainer(
@@ -244,6 +306,18 @@ if __name__ == "__main__":
     parser.add_argument('--gpu', '-g', type=int, default=0)
     parser.add_argument('--no-resume', action='store_true',
                         help="Disable automatic checkpoint resume")
+    parser.add_argument('--data-root', type=str,
+                        help='Override the dataset root directory')
+    parser.add_argument('--init-weights', type=str,
+                        help='Initialize model weights without resuming optimizer or callbacks')
+    parser.add_argument('--max-epochs', type=int,
+                        help='Override the maximum number of epochs')
+    parser.add_argument('--max-train-samples', type=int,
+                        help='Select a fixed number of training samples for this run')
+    parser.add_argument('--num-workers', type=int,
+                        help='Override the number of data-loading workers')
+    parser.add_argument('--lr', type=float,
+                        help='Override the initial learning rate')
     args = parser.parse_args()
 
     config_name = args.config
@@ -253,5 +327,17 @@ if __name__ == "__main__":
     config.name = args.name
     config.train.gpu = [args.gpu]
     config.no_resume = args.no_resume
+    if args.data_root is not None:
+        config.dataset.root = args.data_root
+    if args.init_weights is not None:
+        config.train.init_weights_path = args.init_weights
+    if args.max_epochs is not None:
+        config.train.max_epoch = args.max_epochs
+    if args.max_train_samples is not None:
+        config.train.max_train_samples = args.max_train_samples
+    if args.num_workers is not None:
+        config.train.num_workers = args.num_workers
+    if args.lr is not None:
+        config.train.lr = args.lr
 
     main(config)

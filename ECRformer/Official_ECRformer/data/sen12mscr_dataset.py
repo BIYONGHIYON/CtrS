@@ -181,16 +181,32 @@ class SEN12MSCR(Dataset):
             if '_s1' in d and not d.endswith('.tar')
         ])
         for seed in tqdm(seeds_S1, desc='Indexing ROIs'):
-            rois = natsorted(os.listdir(os.path.join(self.root_dir, seed)))
+            seed_root = os.path.join(self.root_dir, seed)
+            nested_root = os.path.join(seed_root, seed)
+            is_nested = os.path.isdir(nested_root)
+            roi_root = nested_root if is_nested else seed_root
+
+            target_seed_s2 = seed.replace('_s1', '_s2')
+            target_seed_cloudy = seed.replace('_s1', '_s2_cloudy')
+            target_root_s2 = os.path.join(self.root_dir, target_seed_s2)
+            target_root_cloudy = os.path.join(self.root_dir, target_seed_cloudy)
+            if is_nested:
+                target_root_s2 = os.path.join(target_root_s2, target_seed_s2)
+                target_root_cloudy = os.path.join(target_root_cloudy, target_seed_cloudy)
+
+            rois = natsorted(os.listdir(roi_root))
             for roi in rois:
-                roi_dir = os.path.join(self.root_dir, seed, roi)
+                roi_dir = os.path.join(roi_root, roi)
+                if not os.path.isdir(roi_dir):
+                    continue
                 patches_S1 = natsorted([
                     os.path.join(roi_dir, f) for f in os.listdir(roi_dir)
+                    if f.lower().endswith('.tif')
+                    and os.path.isfile(os.path.join(roi_dir, f))
                 ])
                 patches_S2 = [
                     os.path.join(
-                        self.root_dir,
-                        seed.replace('_s1', '_s2'),
+                        target_root_s2,
                         roi.replace('s1_', 's2_'),
                         os.path.basename(p).replace('_s1_', '_s2_'),
                     )
@@ -198,8 +214,7 @@ class SEN12MSCR(Dataset):
                 ]
                 patches_S2_cloudy = [
                     os.path.join(
-                        self.root_dir,
-                        seed.replace('_s1', '_s2_cloudy'),
+                        target_root_cloudy,
                         roi.replace('s1_', 's2_cloudy_'),
                         os.path.basename(p).replace('_s1_', '_s2_cloudy_'),
                     )

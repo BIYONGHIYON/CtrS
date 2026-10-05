@@ -1,6 +1,6 @@
 # ECRformer 원 논문 재현 및 분광 확장 연구
 
-> `ecrformer-winter`: 겨울 첫 기준 실험 시점의 코드로 복구한 브랜치입니다. 복구 근거와 실행 전 확인 사항은 [겨울 재시작 안내](docs/winter_restart.md)를 참고하세요. 아래 연구 설명은 당시 기록이며, 보존된 후속 결과가 이 브랜치의 실행 코드로 생성됐다는 뜻은 아닙니다.
+> `ecrformer-winter`: 겨울 기준 모델을 유지하고, `966a2f2` 직전의 실행 기능과 검증 정체 기반 학습률 감소를 포함한 브랜치입니다. 현재 서버 설정은 봄 데이터에서 고정 6,000개, 최대 100 epoch, 배치 2 / 누적 8, FP16, 초기 학습률 0.0004입니다. 학습은 아직 실행하지 않았고 사계절 균등 선택은 추후 반영합니다. 상세 조건은 [겨울 재시작 안내](docs/winter_restart.md)를 참고하세요. 아래 연구 설명은 당시 기록입니다.
 
 > 원본 문서: [Notion — Spectral-Semantic Decoupled Learning을 적용한 ECRformer](https://app.notion.com/p/Spectral-Semantic-Decoupled-Learning-ECRformer-3e313c366e45805fa96be3d38c8fc107?source=copy_link)
 
