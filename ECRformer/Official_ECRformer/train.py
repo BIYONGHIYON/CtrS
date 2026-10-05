@@ -143,21 +143,11 @@ class CloudRemovalModel(pl.LightningModule):
     def configure_optimizers(self):
         optimizer = torch.optim.AdamW(
             self.net.parameters(), lr=self.lr, weight_decay=1e-3)
-        # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        #     optimizer, mode='min', factor=0.5, patience=10)
-        # return {
-        #     'optimizer': optimizer,
-        #     'lr_scheduler': {
-        #         'scheduler': scheduler,
-        #         'monitor': 'valid_loss',
-        #         'interval': 'epoch',
-        #         'frequency': 1,
-        #     },
-        # }
-
-        scheduler = torch.optim.lr_scheduler.MultiStepLR(
-            optimizer, milestones=[120, 150, 170, 180, 190, 200], gamma=0.5)
-        return [optimizer], [scheduler]
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer, mode='min', factor=0.5, patience=3, min_lr=1e-7)
+        return {'optimizer': optimizer, 'lr_scheduler': {
+            'scheduler': scheduler, 'monitor': 'valid_loss',
+            'interval': 'epoch', 'frequency': 1}}
 
 
 # ---------------------------------------------------------------------------

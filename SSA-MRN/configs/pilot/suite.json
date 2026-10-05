@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "selection_split": "validation",
+  "train_scenes": 393,
+  "validation_scenes": 45,
+  "test_reserved": true,
+  "seed": 42,
+  "note": "Independent ablations against 00_baseline10; warm variants compare only each other. No automatic training.",
+  "jobs": [
+    {
+      "label": "00_baseline10",
+      "stage": 0,
+      "purpose": "동일 조건 10에폭 기준 모델",
+      "config": "SSA-MRN/configs/pilot/00_baseline10.json",
+      "compare_to": null
+    },
+    {
+      "label": "01_rgb_diagnostic",
+      "stage": 1,
+      "purpose": "가중치 고정 RGB 흐림·이동·제거 진단",
+      "config": "SSA-MRN/configs/pilot/01_rgb_diagnostic.json",
+      "compare_to": null
+    },
+    {
+      "label": "02_warm_control10",
+      "stage": 2,
+      "purpose": "현재 가중치에서 LR1e-4 추가 학습 대조군",
+      "config": "SSA-MRN/configs/pilot/02_warm_control10.json",
+      "compare_to": null
+    },
+    {
+      "label": "02_warm_low10",
+      "stage": 2,
+      "purpose": "같은 가중치에서 LR1e-5 추가 학습",
+      "config": "SSA-MRN/configs/pilot/02_warm_low10.json",
+      "compare_to": "02_warm_control10"
+    },
+    {
+      "label": "03_aligned_attention10",
+      "stage": 3,
+      "purpose": "attention 전치만 제거",
+      "config": "SSA-MRN/configs/pilot/03_aligned_attention10.json",
+      "compare_to": "00_baseline10"
+    },
+    {
+      "label": "04_gated_detail10",
+      "stage": 4,
+      "purpose": "RGB 고주파 경로와 HSI 조건 gate",
+      "config": "SSA-MRN/configs/pilot/04_gated_detail10.json",
+      "compare_to": "00_baseline10"
+    },
+    {
+      "label": "05_global_encoder10",
+      "stage": 5,
+      "purpose": "LR 분광 그룹·전역 특징 혼합",
+      "config": "SSA-MRN/configs/pilot/05_global_encoder10.json",
+      "compare_to": "00_baseline10"
+    },
+    {
+      "label": "06_local_alignment10",
+      "stage": 6,
+      "purpose": "LR 특징 조건 국소 정합과 세부 gain",
+      "config": "SSA-MRN/configs/pilot/06_local_alignment10.json",
+      "compare_to": "00_baseline10"
+    }
+  ]
+}

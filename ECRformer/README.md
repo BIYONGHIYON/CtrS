@@ -1,132 +1,244 @@
-# ECRformer: 구름 제거 재현
+# ECRformer 원 논문 재현 및 분광 확장 연구
 
-## 연구 개요
+## 최신 학습·평가 결과 (2026-10-06)
 
-ECRformer는 **구름 낀 광학 영상과 SAR 영상**을 입력으로 사용해 **구름 없는 Sentinel-2 13밴드 광학 영상**을 복원합니다. 이 폴더는 [원 논문](https://doi.org/10.1016/j.isprsjprs.2026.04.009)과 [공식 구현](https://github.com/zzaiyan/ECRformer)을 바탕으로 SEN12MS-CR 기준 모델의 학습·평가를 기록합니다. 이후 분광 정보 보존을 강화할 수 있는지 검토합니다.
+**봄·겨울 각 3,000개 패치로 학습한 혼합 데이터 실험을 완료했습니다.** 최적 검증 체크포인트인 Epoch 5를 선택해 두 계절의 test 분할을 각각 평가했습니다. 이전 겨울 half1/half2 미세조정 실험과는 별개의 실행입니다.
 
-## 현재 상태
+### 학습 조건과 종료
 
-**겨울 데이터 두 부분의 기준 실험과 두 번째 부분 미세조정 전후 평가를 완료했습니다.** 첫 번째 부분의 최고 성능 가중치를 두 번째 부분에 이어 학습했고, 같은 두 번째 부분 테스트 패치로 전후를 비교했습니다.
+| 항목 | 실행 조건 |
+| --- | --- |
+| 서버 GPU | RTX 3060 Ti 8GB |
+| 학습 데이터 | 봄 3,000 + 겨울 3,000 = 6,000개, seed 42 고정 목록 |
+| 선택 전 train 패치 | 봄 24,378 / 겨울 13,995 |
+| 검증 데이터 | 봄 756 + 겨울 2,771 = 3,527개 |
+| 모델 / optimizer | ECRformer / AdamW, weight decay 1e-3 |
+| 정밀도 / 배치 | FP16 mixed / 배치 2 × accumulation 8 = 유효 배치 16 |
+| 검증 배치 / workers | 1 / 2 |
+| 학습 crop | 128×128 |
+| 초기 학습률 | 4e-4 |
+| 학습률 감소 | 검증 loss 기준 ReduceLROnPlateau, factor 0.5, patience 3 |
+| 조기 종료 | 검증 loss가 10회 연속 개선되지 않으면 종료 |
+| 실제 실행 | Epoch 0–15, 총 16 epochs; 중단 후 Epoch 4부터 체크포인트 재개 |
+| 최적 체크포인트 | `epoch=5-step=2250.ckpt`, 검증 loss 0.0394439 |
+| 종료 | 2026-10-06 03:41 KST, 조기 종료, 프로세스 종료 코드 0 |
 
-논문의 SEN12MS-CR 전체 테스트 세트를 동일 조건으로 평가한 단계는 아닙니다. 두 부분의 테스트 패치는 각각 한 겨울 테스트 ROI에서 나온 패치이며 독립 위성 장면 수로 해석하지 않습니다. 분광 확장 모델과 SAM 손실의 효과도 아직 검증되지 않았습니다.
+검증 loss는 `0.9 × MAE + 0.1 × (1 − SSIM)`입니다. Epoch 5 이후 최적값을 갱신하지 못했고, 학습률은 Epoch 10에서 2e-4, Epoch 14에서 1e-4로 감소했습니다. 지표는 매 epoch 단조롭게 개선되지 않았습니다.
 
-## 공용 Windows 서버의 spring 학습 설정 (2026-10-04)
+| Epoch (0부터) | 검증 MAE↓ | 검증 loss↓ | 학습률 |
+| ---: | ---: | ---: | ---: |
+| 0 | 0.03254 | 0.04356 | 4e-04 |
+| 3 | 0.03114 | 0.04027 | 4e-04 |
+| 5 | 0.03013 | 0.03944 | 4e-04 |
+| 10 | 0.03130 | 0.04133 | 2e-04 |
+| 15 | 0.03097 | 0.04028 | 1e-04 |
 
-실제 실행 이후의 [spring 6,000개 학습 로그 분석과 개선 계획](./docs/spring_subset6000_log_analysis_20261005.md)을 별도로 정리했습니다. epoch 8에서 가장 좋은 검증 성능을 기록했으나 epoch 16부터 오차가 급증하고 epoch 18 이후 조기 종료됐습니다. 아래 설정 변경 설명은 당시 기록이며, 성능 개선이 입증됐다는 의미는 아닙니다.
+![검증 MAE와 loss의 epoch별 변화](./reproduction/spring_winter6000/validation_history.png)
 
-RTX 3060 Ti(VRAM 8GB), RAM 16GB 서버에서 다음 학습을 위해 `config/ecrformer_spring_config.py` 설정을 조정했습니다. 아래는 서버 로컬 설정이며, 이 설정 파일은 아직 Git에 추적되지 않습니다.
+### 최적 체크포인트의 테스트 결과
 
-| 항목 | 수정 전 | 수정 후 |
-| --- | --- | --- |
-| 정밀도 | FP32 | FP16 혼합 정밀도 (`16-mixed`) |
-| 학습 배치 크기 | 1 | 2 |
-| Gradient accumulation | 16 | 8 |
-| 유효 배치 크기 (단일 GPU) | 16 | 16 |
+**FP32, 배치 1, workers 2, crop 없이 256×256 원본 패치**를 평가했습니다. RMSE·MAE·PSNR·SAM·SSIM은 13밴드, LPIPS는 RGB 밴드 `(3, 2, 1)`와 VGG를 사용합니다. 지표는 패치별 계산값의 평균이며, 합계는 계절별 패치 수로 가중한 평균입니다. 검증에서는 학습과 같은 mixed precision을 사용했으므로 검증값과 테스트값의 절댓값을 직접 비교하지 않습니다.
 
-혼합 정밀도를 사용해 GPU 메모리 사용량을 줄이고 FP16 연산을 활용하도록 설정했습니다. 한 번에 처리하는 샘플 수는 2개로 늘렸으며, optimizer 업데이트당 샘플 수는 `2 × 8 = 16`으로 유지합니다. 배치 크기 증가와 accumulation 감소로 동작 특성은 달라질 수 있으며, 메모리 절감량·처리 속도·복원 성능은 실제 학습에서 측정해야 합니다. 설정 로딩은 확인했으며 **다음에 시작하는 학습부터 적용**됩니다. 이미 실행 중인 학습에는 반영되지 않습니다.
+| 테스트 범위 | 패치 수 | RMSE↓ | MAE↓ | PSNR↑ (dB) | SAM↓ (°) | SSIM↑ | LPIPS↓ |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 봄 | 3,983 | 0.04485 | 0.03065 | 27.716 | 9.669 | 0.87421 | 0.41115 |
+| 겨울 | 1,567 | 0.04570 | 0.03141 | 27.199 | 11.844 | 0.84082 | 0.43569 |
+| 합계 (패치 수 가중 평균) | 5,550 | 0.04509 | 0.03086 | 27.570 | 10.283 | 0.86478 | 0.41808 |
 
-### 고정 1,000개 샘플로 소규모 학습
+### 논문 수치와의 참고 비교
 
-`Official_ECRformer/train.py`에 `--max-train-samples` 옵션을 추가했습니다. train·validation 분할을 만든 후 train에서 지정한 샘플 수를 시드 42로 한 번 선택하고, 각 epoch에서는 같은 샘플들의 처리 순서만 섞습니다. 검증 데이터 수는 유지하며 옵션을 생략하면 기존처럼 전체 train 분할을 사용합니다. 원본 TIFF를 별도 폴더로 복사하지 않습니다.
+| 평가 범위 | MAE↓ | SAM↓ (°) | PSNR↑ (dB) | SSIM↑ | LPIPS↓ |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 논문 Table 1: SEN12MS-CR 전체 | 0.0164 | 4.693 | 33.37 | 0.932 | 0.188 |
+| 이번 실행: 봄·겨울 테스트 합계 | 0.03086 | 10.283 | 27.570 | 0.86478 | 0.41808 |
 
-서버 spring 데이터에서 train **24,378개 중 1,000개 선택**, validation **756개 유지**, 선택된 샘플의 실제 TIFF 로딩을 확인했습니다. 1,000개는 S1·cloudy S2·정답 S2 묶음 1,000개(총 TIFF 3,000개)입니다. 현재 서버 데이터가 spring만 있으므로 전체 계절에서 고른 샘플은 아닙니다. 모델·전처리·손실·학습률 스케줄러는 변경하지 않았습니다.
+논문 수치는 [저자 공개 PDF의 Table 1](https://zzaiyan.github.io/assets/pubs/ecrformer.pdf#page=7)을 확인했습니다. **평가 범위와 학습 조건이 다르므로 동일 조건의 모델 비교나 재현 성공 판정에 사용할 수 없습니다.** 논문 표에 RMSE는 없어 이 참고 표에서 제외했습니다.
 
-선택 번호와 가능한 경우 원본 TIFF 경로를 TensorBoard 로그 폴더의 `train_subset.json`에 기록합니다. 중첩 `Subset`도 원본 경로로 해석하며, 동일 로그 폴더에 저장된 목록과 현재 선택이 다르면 오류로 알립니다. JSON을 읽어 목록을 복원하는 기능은 아니므로 재개할 때 데이터 구성·시드·샘플 수를 유지해야 합니다. 랜덤 crop과 회전·뒤집기는 계속 적용되므로 샘플이 고정돼도 모델이 보는 영상 영역과 방향은 달라질 수 있습니다. `--num-workers 0`도 지원합니다.
+![봄·겨울 테스트 비교: SAR, 구름 입력, 복원, 정답](./reproduction/spring_winter6000/comparison.png)
 
-서버 로컬 spring 설정으로 새 실험을 시작하는 PowerShell 명령은 다음과 같습니다.
+각 계절의 자연 정렬된 test 목록에서 **앞 두 패치**를 표시했습니다. SAR는 VV 채널 회색조, 광학 영상은 밴드 인덱스 `(3, 2, 1)`의 RGB에 밝기 배율 3.0을 적용했습니다. 일부 RGB 예시이며, 13밴드 전체의 복원 품질이나 전체 테스트의 대표 사례로 해석하지 않습니다.
+
+표시한 겨울 패치에서는 정답에 비해 경계와 질감이 흐리고 구름 형태의 잔여 패턴이 보입니다. 구름 제거가 완전하거나 세부 구조가 충분히 복원됐다고 해석하지 않습니다.
+
+### 데이터 분할 확인과 해석 범위
+
+- 저장된 학습 목록은 6,000개이며 중복 sample ID가 없습니다. 재개 시 원래 TIFF 경로와 목록의 일치를 확인했습니다.
+- 현재 학습·검증·테스트 사이의 **동일 sample ID 및 동일 계절/ROI 디렉터리 중복은 각 0개**입니다. [분할 점검 결과](./reproduction/spring_winter6000/split_audit.json)에 계절별 수치를 기록했습니다.
+- 서로 다른 ROI 사이의 지리적 근접·공간 중첩과 이전 실험 데이터 전체의 중복은 이번 점검 범위에 포함하지 않았습니다.
+- 논문은 SEN12MS-CR 전체 계절을 평가합니다. 이번 결과는 봄·겨울 데이터와 축소된 학습량을 사용하므로 **논문과 동등 조건의 재현 결과가 아닙니다.** SAR 두 채널 `[-25, 0]` dB 전처리와 학습률 조정 설정에도 차이가 있습니다.
+- 이전 겨울 half1/half2와 테스트 범위가 다릅니다. 이번 결과를 이전 실험 대비 성능 향상으로 해석하지 않습니다.
+
+### 결과 파일과 재평가
+
+[봄 평균 지표](./reproduction/spring_winter6000/spring/summary.json) · [겨울 평균 지표](./reproduction/spring_winter6000/winter/summary.json) · [합계 지표](./reproduction/spring_winter6000/combined_summary.json) · [검증 기록](./reproduction/spring_winter6000/validation_history.csv) · [학습 샘플 목록](./reproduction/spring_winter6000/train_samples.csv) · [학습 설정](./reproduction/spring_winter6000/training_config.json) · [체크포인트 해시·평가 환경](./reproduction/spring_winter6000/provenance.json)
+
+샘플별 지표는 `reproduction/spring_winter6000/spring/metrics.csv`와 `winter/metrics.csv`에 있습니다. 원본 TIFF와 학습 재개용 체크포인트는 서버에 보존하며 Git에 포함하지 않습니다.
+
+서버 PowerShell에서 평가를 다시 수행할 때는 새 출력 폴더를 지정합니다.
 
 ```powershell
-cd C:\CtrS\ECRformer\Official_ECRformer
-C:\CtrS\.venv\Scripts\python.exe train.py --config ecrformer_spring --name spring_fixed1000 --max-train-samples 1000 --max-epochs 100 --no-resume
+cd C:\CtrS-ecrformer-winter\ECRformer\Official_ECRformer
+& 'C:\CtrS\.venv\Scripts\python.exe' ..\reproduction\spring_winter6000\evaluate.py `
+  --checkpoint '.\experiments\ecrformer_spring_winter_3000_each_seed42_20ep\version_1\checkpoints\epoch=5-step=2250.ckpt' `
+  --output '.\results\spring_winter6000_retest'
 ```
 
-배치 크기 2에서 epoch당 500배치이며, 최대 100 epoch 이전에 조기 종료될 수 있습니다. 새 실험에는 기존 로그와 겹치지 않는 이름을 사용합니다. 기존 MultiStepLR의 첫 감소 시점은 epoch 120이므로 새 100 epoch 실험에서는 해당 학습률 감소가 발생하지 않습니다. 이 절의 검증은 선택·로딩·설정 확인까지이며, **새 설정의 학습 결과나 성능 개선을 확인한 것은 아닙니다.** 원본 데이터·실험 로그·샘플 목록은 이번 문서 커밋에 포함하지 않습니다.
+`evaluate.py`는 신뢰하는 서버 체크포인트의 설정과 모델을 읽어 두 계절의 test 분할을 평가합니다. 동일 데이터·저장된 학습 목록과 체크포인트가 필요합니다.
 
-## 실험 결과
 
-### 겨울 첫 번째 부분: 기준 모델
+## 현재 연구 단계
 
-RTX A6000에서 학습 6,833개·검증 1,386개 패치를 사용했습니다. 시드 42, AdamW, 학습률 4e-4, 배치 4와 gradient accumulation 4(유효 배치 16), 최대 200 epochs, early stopping patience 10으로 설정했습니다. 검증 손실이 가장 낮은 가중치는 epoch 3이며, 실제 실행은 조기 종료까지 **14 epochs**였습니다.
+ECRformer 담당 팀원 2명이 SSA-MRN 팀과 동시에 **ECRformer 원 논문 재현**을 진행합니다. 공개 구현과 논문의 데이터 처리, 모델, 학습·평가 조건을 확인하고 기준 성능을 확보합니다. Spectral-Semantic Decoupled Learning과 SAM 손실을 이용한 확장은 원본 모델의 재현 결과를 확인한 뒤 실험합니다.
 
-최고 성능 가중치로 별도 테스트 패치 **783개**를 평가한 평균입니다.
+## 연구 요약
 
-| MAE↓ | PSNR↑ | SAM↓ | SSIM↑ | LPIPS↓ |
-| ---: | ---: | ---: | ---: | ---: |
-| 0.02544 | 29.61 dB | 11.250° | 0.84656 | 0.39683 |
+광학 영상과 SAR 영상을 함께 이용하는 ECRformer 기반 위성영상 구름 제거 연구입니다. 먼저 원 논문의 Structure–Texture 복원 성능을 재현합니다. 이후 Structure–Spectral–Texture 확장과 Sentinel-2의 13개 밴드 관계를 보존하는 Spectral Angle Mapper(SAM) 손실의 효과를 검토합니다.
 
-RMSE는 0.03438입니다. [평균 지표와 평가 설정](./reproduction/winter_half1/summary.json), [샘플별 지표](./reproduction/winter_half1/metrics.csv), [학습 설정](./reproduction/winter_half1/hparams.yaml)을 보관했습니다.
+후속 확장의 핵심 질문은 다음과 같습니다.
 
-![첫 번째 부분 테스트 예시: SAR, 구름 입력, 복원 결과, 정답](./reproduction/winter_half1/comparisons/test_0000.png)
+> 기존 ECRformer에 분광 정보 학습과 spectral fidelity 제약을 명시적으로 추가하면, 시각적 복원 품질을 유지하면서 구름 제거 결과의 분광 충실도를 더 높일 수 있는가?
 
-### 겨울 두 번째 부분: 미세조정 전후
+## 1. 연구 배경
 
-첫 번째 부분의 모델 가중치에서 **새 optimizer**로 시작했습니다. 두 번째 부분에서 학습 7,162개·검증 1,385개 패치를 인식했고, 학습률 1e-4, 시드 42, 유효 배치 16으로 **13 epochs** 실행했습니다. 검증 손실이 가장 낮은 가중치는 epoch 2입니다.
+구름 제거 결과는 RGB로 보았을 때 자연스러워도 13개 spectral band의 관계가 실제 구름 없는 영상과 다를 수 있습니다. 분광 관계가 왜곡되면 식생이나 토지 피복의 특성이 부정확해지고 복원 영상을 후속 원격탐사 분석에 사용하기 어려워집니다.
 
-아래 값은 두 번째 부분의 **같은 테스트 패치 784개**를 같은 코드와 설정으로 평가한 평균입니다. 전후의 차이만 이 표에서 비교할 수 있습니다.
+따라서 시각적 품질뿐 아니라 다음을 함께 보존해야 합니다.
 
-| 지표 | 미세조정 전 | 미세조정 후 | 변화 (후 − 전) |
-| --- | ---: | ---: | ---: |
-| RMSE↓ | 0.05518 | 0.05146 | −0.00372 |
-| MAE↓ | 0.03932 | 0.03661 | −0.00271 |
-| PSNR↑ | 25.245 dB | 25.888 dB | +0.643 dB |
-| SAM↓ | 11.478° | 10.779° | −0.698° |
-| SSIM↑ | 0.81873 | 0.82994 | +0.01121 |
-| LPIPS↓ | 0.48422 | 0.47428 | −0.00994 |
+- 지형, 건물, 도로와 경계의 공간 구조
+- Sentinel-2 밴드 사이의 spectral signature
+- 표면의 세부 질감
 
-평균 지표([전](./reproduction/winter_half2/before_summary.json)·[후](./reproduction/winter_half2/after_summary.json))와 샘플별 지표(`reproduction/winter_half2/before_metrics.csv`, `after_metrics.csv`)와 [학습 설정](./reproduction/winter_half2/hparams.yaml)을 보관했습니다. 첫 번째 부분의 전체 학습 샘플 명세가 없어 **두 부분 전체의 중복 여부는 확정하지 못했습니다.**
+## 2. 기존 ECRformer
 
-![두 번째 부분 테스트 예시: SAR, 구름 입력, 미세조정 전후 출력, 정답](./reproduction/winter_half2/comparisons/before_after_0000_0003.png)
+기존 ECRformer는 광학 영상과 SAR 영상을 입력으로 사용해 구름 없는 13밴드 광학 영상을 복원합니다.
 
-두 그림은 일부 패치의 표시용 예시입니다. SAR는 첫 밴드를 회색조로, 광학 영상은 밴드 인덱스 `(3, 2, 1)`에 밝기 배율 3.0을 적용했습니다. 13밴드 원본이나 전체 테스트의 대표 사례로 해석하지 않습니다.
-
-## 논문과의 차이 및 해석 범위
-
-| 항목 | 논문 | 현재 실험 |
-| --- | --- | --- |
-| 평가 범위 | SEN12MS-CR 전체 테스트 세트 | 겨울의 각 테스트 ROI에서 783개·784개 패치 |
-| 학습률 조정 | 검증 손실이 5 epochs 개선되지 않으면 0.1배 | 공개 코드의 고정 epoch 스케줄러; 이번 조기 종료 전 감소 없음 |
-| SAR 전처리 | VV `[-25, 0]` dB, VH `[-35, 0]` dB | 두 채널 모두 `[-25, 0]` dB |
-
-논문 Table 1의 MAE 0.0164, SAM 4.693°, PSNR 33.37 dB, SSIM 0.932, LPIPS 0.188은 **전체 테스트 세트**의 수치입니다. 위 두 겨울 부분의 값과 나란히 볼 수는 있지만, 데이터 범위와 설정이 달라 동일 조건의 재현 오차나 모델의 우열로 해석할 수 없습니다. 첫 번째 부분과 두 번째 부분의 절댓값도 테스트 패치가 달라 직접적인 전후 비교가 아닙니다.
-
-결과의 근거는 각 `summary.json`과 `metrics.csv`이며, 평가용 `model_weights.pt`는 각 결과 폴더에 있습니다. 이 파일은 optimizer·scheduler 상태가 없는 **모델 가중치만** 담고 있습니다. 학습 재개용 Lightning 체크포인트와 원본 TIFF는 Git에 포함하지 않았습니다.
-
-## 재실행 방법
-
-[공식 SEN12MS-CR 안내](https://patricktum.github.io/cloud_removal/sen12mscr/)에 따라 원본 데이터를 준비해야 합니다. TIFF 데이터는 Git에 없으며, 아래 경로에는 평가하려는 부분과 동일한 데이터 분할이 있어야 합니다. 공식 구현 의존성을 설치한 후 저장소 루트에서 실행합니다.
-
-```bash
-cd ECRformer/Official_ECRformer
-python -m pip install -r requirements.txt rasterio
-python test.py --config ecrformer --name winter_half1 \
-  --data-root datasets/sen12mscr_winter --split test \
-  --ckpt-path ../reproduction/winter_half1/model_weights.pt \
-  --export-format none --output-dir results/winter_half1_test
+```text
+Structure → Texture
+Encoder   → 구조 복원
+Decoder   → 질감 복원
+Output    → Cloud-free 13-band image
 ```
 
-두 번째 부분의 미세조정 후 결과를 재계산할 때는 **두 번째 부분의 원본 TIFF**를 같은 데이터 경로에 준비하고 다음 명령을 사용합니다.
+논문의 SDFL(Semantic-Decoupled Feature Learning)은 구조 복원과 질감 렌더링의 역할을 분리해 학습합니다. 이 연구에서는 해당 분리 학습에 분광 정보 보존 단계를 명시적으로 추가합니다.
 
-```bash
-python test.py --config ecrformer \
-  --data-root datasets/sen12mscr_winter --split test \
-  --ckpt-path ../reproduction/winter_half2/model_weights.pt \
-  --export-format none --output-dir results/winter_half2_after_finetune
+## 3. 재현 이후 제안 방식: SSDFL
+
+SSDFL(Spectral-Semantic Decoupled Feature Learning)의 목표 흐름은 다음과 같습니다.
+
+```text
+Structure → Spectral → Texture
+Encoder   → Decoder  → Late Decoder / Refinement
 ```
 
-출력 폴더를 새 이름으로 지정해 저장소에 포함된 결과를 덮어쓰지 않도록 합니다. 두 부분의 데이터 분할을 혼용하면 위 결과가 재현되지 않습니다.
+- **Encoder — Structure:** 지형, 건물, 도로와 경계 등 공간 구조를 학습합니다.
+- **Decoder — Spectral:** 13개 밴드 사이의 관계와 spectral signature를 보존합니다.
+- **후반 Decoder / Refinement — Texture:** 최종 세부 질감을 복원합니다.
 
-## 후속 연구
+기존 ECRformer의 장점을 유지하면서 분광 정보를 별도의 학습 목표로 명확히 다루는 것이 핵심입니다.
 
-먼저 전체 데이터와 논문 설정의 차이를 줄여 기준 성능을 다시 평가합니다. 이후 다음 질문을 **같은 데이터 분할·학습 조건**에서 검증합니다.
+## 4. 재현 이후 Spectral fidelity 제약
 
-> 구조와 질감을 복원하는 ECRformer에 분광 정보 보존 단계를 더하면, 시각 품질을 유지하면서 13밴드의 분광 충실도를 높일 수 있는가?
+### SAM
 
-후보는 구조→분광→질감의 SSDFL(Spectral-Semantic Decoupled Feature Learning) 구성과 SAM(Spectral Angle Mapper) 손실입니다. SAM 손실을 적용할 경우 `L_total = L_reconstruction + λ_sam · L_SAM`으로 두고, `λ_sam`은 검증 세트에서 정합니다. 이는 **계획**이며 현재 결과로 효과가 입증된 것은 아닙니다.
+SAM(Spectral Angle Mapper)은 대응하는 픽셀의 분광 벡터 사이 각도를 계산해 spectral fidelity를 평가합니다. 각도가 작을수록 복원 결과의 분광 형태가 정답에 가깝습니다.
 
-MAE·PSNR·SSIM과 SAM, 밴드별 오차를 함께 보고, 분광 손실 유무·가중치·단계별 기여도를 비교합니다. 얇은 구름·두꺼운 구름, 구조 경계, 대표 픽셀의 분광 곡선과 실패 사례도 확인합니다. SAR와 광학 영상의 시점·정합 차이가 결과에 미치는 영향도 기록합니다.
+본 연구에서는 SAM을 평가 지표로만 사용하지 않고 학습 손실에 직접 포함합니다.
 
-## 참고 자료
+```text
+L_total = L_reconstruction + λ_sam · L_SAM
+```
 
-- [ECRformer 논문](https://doi.org/10.1016/j.isprsjprs.2026.04.009) · [공식 구현](https://github.com/zzaiyan/ECRformer)
-- [SEN12MS-CR 데이터](https://patricktum.github.io/cloud_removal/sen12mscr/) · [다운로드](https://dataserv.ub.tum.de/index.php/s/m1554803)
-- [초기 연구안](https://app.notion.com/p/Spectral-Semantic-Decoupled-Learning-ECRformer-3e313c366e45805fa96be3d38c8fc107?source=copy_link)
+기본 재구성 손실에는 L1을 사용하고 SAM 손실의 가중치 `λ_sam`은 검증 세트에서 정합니다. 수치 안정성을 위해 분모에 작은 `ε`를 두고 cosine 값을 유효 범위로 제한합니다.
+
+### 기대 효과
+
+- 식생과 토지 피복의 분광 특성을 더 정확히 보존
+- 복원 영상의 각 밴드 관계를 GT에 가깝게 유지
+- 시각적으로 자연스러우면서 spectral analysis에도 적합한 결과 생성
+
+## 5. 데이터셋
+
+주 데이터셋은 **SEN12MS-CR**입니다.
+
+- Sentinel-1 SAR와 Sentinel-2 광학 영상을 포함한 다중모달 구름 제거 데이터
+- 입력: 구름이 포함된 광학 영상 + SAR 영상
+- 정답: 대응하는 구름 없는 광학 영상
+- 출력: 구름이 제거된 13밴드 광학 영상
+
+데이터 링크:
+
+- [SEN12MS-CR 프로젝트 페이지](https://patricktum.github.io/cloud_removal/sen12mscr/)
+- [TUM 데이터 다운로드](https://dataserv.ub.tum.de/index.php/s/m1554803)
+
+데이터 분할은 장면 단위로 수행해 같은 지역의 패치가 학습과 시험 세트에 동시에 들어가는 누수를 방지합니다.
+
+## 6. 실험 계획
+
+### 이전 겨울 재현 기록 (2026-09-29)
+
+RTX A6000에서 SEN12MS-CR **겨울 데이터 절반**으로 ECRformer 기준 모델을 학습했습니다. 200 epochs를 설정했으나 검증 손실이 개선되지 않아 총 14 epochs 후 조기 종료되었고, 최고 성능 가중치(epoch 3)로 학습에 쓰지 않은 겨울 테스트 패치 783개를 평가했습니다. PSNR 29.61 dB, SSIM 0.84656, SAM 11.25°입니다. 평균·샘플별 지표, 모델 가중치 및 입력/복원/정답 비교 이미지는 [겨울 절반 재현 결과](./reproduction/winter_half1/README.md)에 있습니다. 아직 **논문 수치와 동등 조건의 비교를 완료한 것은 아닙니다**.
+
+
+### 원 논문 재현
+
+1. [공식 구현](https://github.com/zzaiyan/ECRformer)과 논문의 모델·학습 설정을 대조합니다.
+2. SEN12MS-CR 데이터 구성과 분할을 확인해 원본 모델을 학습·평가합니다.
+3. 논문과 동일한 조건의 성능을 기록하고 차이가 나는 설정 및 실패 사례를 정리합니다.
+
+### 비교 모델
+
+원본 ECRformer를 기준 모델로 재현한 뒤, 후속 실험에서 다음 변형을 비교합니다.
+
+1. ECRformer + spectral branch/SSDFL
+2. ECRformer + SAM loss
+3. ECRformer + SSDFL + SAM loss
+
+### 평가 지표
+
+- L1 또는 MAE: 픽셀 단위 복원 오차
+- PSNR: 전체적인 수치 복원 품질
+- SSIM: 구조적 유사도
+- SAM: 픽셀별 분광 벡터의 각도, 낮을수록 좋음
+- 밴드별 MAE/PSNR: 특정 밴드의 성능 저하 확인
+- 계산 비용: 파라미터 수, 추론 시간과 GPU 메모리
+
+PSNR·SSIM 개선과 SAM 개선을 따로 확인합니다. SAM만 좋아지고 시각적 선명도가 떨어지거나, 반대로 RGB 결과만 좋아지고 분광 관계가 악화되는 경우를 모두 분석합니다.
+
+### 제거 실험
+
+- spectral 단계 제거
+- SAM loss 제거
+- SAM loss 가중치 변화
+- Structure–Spectral–Texture 단계별 기여도 비교
+
+### 정성 분석
+
+- 얇은 구름과 두꺼운 구름 영역 비교
+- 건물·도로·해안선·농경지 경계 복원 비교
+- RGB 합성 결과와 개별 spectral band를 함께 시각화
+- 대표 픽셀의 GT·기존 모델·제안 모델 분광 곡선 비교
+
+## 7. 연구 주장 범위와 주의점
+
+- ECRformer 자체를 새로 제안하는 연구가 아니라 분광 충실도를 명시적으로 강화하는 확장 연구입니다.
+- SAM을 손실로 추가하는 것만으로 충분한 차별성이 있는지는 선행연구와 비교해야 합니다.
+- 분광 손실이 과도하면 구조와 질감이 흐려질 수 있으므로 가중치 조절이 중요합니다.
+- SAR와 광학 영상의 시점 차이와 정합 오차가 결과에 영향을 줄 수 있습니다.
+- 개선 효과는 같은 분할과 학습 조건에서 기존 ECRformer와 비교합니다.
+
+## 8. 중간 산출물
+
+- 재현 가능한 SEN12MS-CR 데이터 준비 절차
+- 원 논문 설정에 따른 ECRformer 학습·평가 파이프라인과 성능 비교표
+- 후속 SSDFL·SAM 확장 모델의 비교표
+- SAM, 밴드별 오차와 시각 품질의 관계 분석
+- 구름 유형과 지표별 실패 사례
+- 제거 실험 및 계산 비용 분석
+
+현재는 두 팀이 2명씩 나뉘어 SSA-MRN과 ECRformer 원 논문을 동시에 재현합니다. 중간 시점에 두 팀의 재현 결과와 후속 연구 가능성을 비교해 최종 주제 하나를 선택하고, 이후 팀원 4명이 함께 개발합니다.
+
+## 9. 참고 자료
+
+- [ECRformer 공식 구현](https://github.com/zzaiyan/ECRformer)
+- [ECRformer 논문](https://doi.org/10.1016/j.isprsjprs.2026.04.009)
+- [SEN12MS-CR](https://patricktum.github.io/cloud_removal/sen12mscr/)
