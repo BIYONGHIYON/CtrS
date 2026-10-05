@@ -1,0 +1,175 @@
+{
+  "server_checkout": "C:/CtrS-pilot-suite",
+  "branch": "research/ssa-mrn-pilot-suite",
+  "controller_task": "CtrS-Pilot-Control",
+  "controller_online_verified": true,
+  "training_started": false,
+  "cpu_setup": {
+    "training_started": false,
+    "checks": {
+      "test_pilot_suite.py": ".....\n----------------------------------------------------------------------\nRan 5 tests in 1.991s\n\nOK",
+      "test_joint17_consistency.py": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.428s\n\nOK",
+      "test_area_consistency.py": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.003s\n\nOK",
+      "02_warm_control10": {
+        "check_only": true,
+        "model_type": "rgb_triple_joint17_23tap",
+        "next_epoch": 1,
+        "optimizer_state_entries": 0,
+        "validation_scenes": 45,
+        "initialization": {
+          "mode": "weights_only",
+          "epoch": 99,
+          "sha256": "5e126b17f0d95f445e8226fce401d0891593b245b737e73dc2810a3e4510d704",
+          "source": "C:\\CtrS-joint17\\SSA-MRN\\experiments\\checkpoints\\remote-runs-joint17\\20261005-061505-8be6241e5a6c\\best.pt"
+        },
+        "parameters": 2616274,
+        "training_started": false
+      },
+      "02_warm_low10": {
+        "check_only": true,
+        "model_type": "rgb_triple_joint17_23tap",
+        "next_epoch": 1,
+        "optimizer_state_entries": 0,
+        "validation_scenes": 45,
+        "initialization": {
+          "mode": "weights_only",
+          "epoch": 99,
+          "sha256": "5e126b17f0d95f445e8226fce401d0891593b245b737e73dc2810a3e4510d704",
+          "source": "C:\\CtrS-joint17\\SSA-MRN\\experiments\\checkpoints\\remote-runs-joint17\\20261005-061505-8be6241e5a6c\\best.pt"
+        },
+        "parameters": 2616274,
+        "training_started": false
+      }
+    },
+    "environment": {
+      "python": "C:\\CtrS\\.venv\\Scripts\\python.exe",
+      "torch": "2.7.1+cu128",
+      "cuda_available": true,
+      "gpu": "NVIDIA GeForce RTX 3060 Ti",
+      "checkpoint_epoch": 99,
+      "checkpoint_sha256": "5e126b17f0d95f445e8226fce401d0891593b245b737e73dc2810a3e4510d704",
+      "alignment_sha256": "7a66ad28bc78fe8691fddbc2d94f0a871d7c10507407f7d1f36abe1b20f004f4",
+      "scenes": {
+        "train": 393,
+        "validation": 45,
+        "test": 75
+      },
+      "jobs_count": 8,
+      "training_started": false,
+      "note": "Test file inventory checked; no test prediction or metric computed."
+    }
+  },
+  "cuda_graph_checks": {
+    "training_started": false,
+    "checks": [
+      {
+        "label": "00_baseline10",
+        "parameters": 2616274,
+        "batch_size": 4,
+        "patch_size": 256,
+        "amp": true,
+        "loss": 0.08058831840753555,
+        "peak_allocated_mb": 4116.85986328125,
+        "peak_reserved_mb": 4498.0,
+        "optimizer_steps": 0,
+        "note": "Synthetic graph check; Adam state and loader prefetch are not allocated."
+      },
+      {
+        "label": "03_aligned_attention10",
+        "parameters": 2616274,
+        "batch_size": 4,
+        "patch_size": 256,
+        "amp": true,
+        "loss": 0.08058831840753555,
+        "peak_allocated_mb": 4117.77392578125,
+        "peak_reserved_mb": 4624.0,
+        "optimizer_steps": 0,
+        "note": "Synthetic graph check; Adam state and loader prefetch are not allocated."
+      },
+      {
+        "label": "04_gated_detail10",
+        "parameters": 2623454,
+        "batch_size": 4,
+        "patch_size": 256,
+        "amp": true,
+        "loss": 0.08058776706457138,
+        "peak_allocated_mb": 4169.962890625,
+        "peak_reserved_mb": 4684.0,
+        "optimizer_steps": 0,
+        "note": "Synthetic graph check; Adam state and loader prefetch are not allocated."
+      },
+      {
+        "label": "05_global_encoder10",
+        "parameters": 2620354,
+        "batch_size": 4,
+        "patch_size": 256,
+        "amp": true,
+        "loss": 0.08058831840753555,
+        "peak_allocated_mb": 4121.76416015625,
+        "peak_reserved_mb": 4644.0,
+        "optimizer_steps": 0,
+        "note": "Synthetic graph check; Adam state and loader prefetch are not allocated."
+      },
+      {
+        "label": "06_local_alignment10",
+        "parameters": 2624245,
+        "batch_size": 4,
+        "patch_size": 256,
+        "amp": true,
+        "loss": 0.08058831840753555,
+        "peak_allocated_mb": 4151.81396484375,
+        "peak_reserved_mb": 4654.0,
+        "optimizer_steps": 0,
+        "note": "Synthetic graph check; Adam state and loader prefetch are not allocated."
+      }
+    ]
+  },
+  "source_files_sha256": {
+    "SSA-MRN/src/ssamrn/preview.py": "c5952dec2d38075f06e9f456fdddd5421bed7056e3638de2a0b5151e4944c4cc",
+    "SSA-MRN/src/ssamrn/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "SSA-MRN/src/ssamrn/__init__.py": "4068ee713442b7896609dffeeb5c1a54d22cd19abfb31da1202b3ca45d3ca08a",
+    "SSA-MRN/src/ssamrn/pilot_metrics.py": "ee7441e254c99756ade3d249a84dd99e06f0f8216497afe9290c2c6bf744c8c3",
+    "SSA-MRN/src/ssamrn/losses.py": "e05097b20941d8089666e621167d9775291a6830b064ee6ac16bda619b0eb2f5",
+    "SSA-MRN/src/ssamrn/models/rgb_hsi.py": "8f45ed502319da3b6f22ae5d8536312b51e2b4f52856a3a88f811d1af6928428",
+    "SSA-MRN/src/ssamrn/models/area_consistency.py": "c835cb55774f0084baf4d316ba4409bcfa47b6bce8c639f1fafee5eb303e00fa",
+    "SSA-MRN/src/ssamrn/models/__init__.py": "8f3d7aaa5ff196e99a95c2c2926e11131f1814dd1cb235929c0cfb3124de4b88",
+    "SSA-MRN/src/ssamrn/models/rgb_grouped.py": "04621228ad9ff45ceb824841f294d9fe4830359e9406c87876373409aa24f9b5",
+    "SSA-MRN/src/ssamrn/models/interp23.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "SSA-MRN/src/ssamrn/models/ssa_mrn.py": "c140c1fee05a7958b924c6058e14b31daab7ded51c1aae7122c3287c7afd8891",
+    "SSA-MRN/src/ssamrn/models/rgb_pilot.py": "765645affd2ec8f1261d12aee0f0cb22c8a022f79e2ca2ac88d1f955caaa41f0",
+    "SSA-MRN/src/ssamrn/data/registration.py": "3754c378ff23a97c9d519b7c9fbf6d75d1c759ec3f0a68cd6680dcc88a5eb864",
+    "SSA-MRN/src/ssamrn/data/pancollection.py": "0c33a99af200505184a5e47874d27d82539c906fbf929ac2d53293e6c9a7750b",
+    "SSA-MRN/src/ssamrn/data/__init__.py": "3f2e5aa1c508c54bd7afce6f6ef1c71e165f32061512a530e8a38adc914df5fe",
+    "SSA-MRN/src/ssamrn/data/resize.py": "8e9ec06dbbedbcd3bb9a0a76041fcd015bae32d8100764ab664b8817bda5fa44",
+    "SSA-MRN/src/ssamrn/data/lib_hsi.py": "f24293e71a88abd9acf0806093d185e0627574d16117d3f9d49308dcfe38677c",
+    "SSA-MRN/scripts/train_lib.py": "89b82fa2f544ad83064df03fc839d5dbede01cec50e24085f89c6177cd30640a",
+    "SSA-MRN/scripts/diagnose_rgb_pilot.py": "f066e8e709ecc43081530fc57faf61eedcdd33e53558a8c4f6dc7aa72d7831ea",
+    "SSA-MRN/scripts/pilot.py": "77df6a3f8c5e8f61549b48fdc3ba16a04790c9c2280bd408c0abe7a5d8c21c62",
+    "SSA-MRN/scripts/check_pilot_environment.py": "3ed73a9c0eee52ab73176931735e9076afafeb8994235029deaaf7b3becc6243",
+    "SSA-MRN/scripts/verify_pilot_setup.py": "7a2039f9fa51baea912ef4c704350bfb696caecca69ba64212500d19482350a6",
+    "SSA-MRN/scripts/summarize_pilot.py": "c03d14ccea186739ea9c90515161cf7dbc04cb06cab8b7d1cf9763a85a0ac7e8",
+    "SSA-MRN/tests/test_pilot_suite.py": "54e4f3331b0885f3621c5bb4a758d42a7d4571ec0444fdaadbfa5e66cccb9a7d",
+    "SSA-MRN/tests/test_joint17_consistency.py": "3e4d7e750bf8c9a465f1ea5b8470007994caf881c8997532c1b3c0d052baf30e",
+    "SSA-MRN/tests/test_area_consistency.py": "c8912634929d00ca15b44c0ecebcff703af878a77648b9e017d5d1985de84827",
+    "scripts/remote-training.py": "6c4d5065e1f11211b7d36f286f8e69ea1352fa6b2114694932f1cab509b1c8db",
+    "scripts/remote-training-pilot.py": "5c010b6142f5df0e8865f7348349fdd90af8532dc27027669f351eb1b6f3c14a",
+    "scripts/setup-remote-control.ps1": "bf0908a250cea7a6d98f8b99740a63f12bed531588eea8f9da2988ce08c73c64",
+    "SSA-MRN/experiments/results/rgb06_lr_consistency/alignment_manifest.json": "7a66ad28bc78fe8691fddbc2d94f0a871d7c10507407f7d1f36abe1b20f004f4",
+    "SSA-MRN/docs/guide/six_stage_pilot.md": "75689e4cc5f1fdf19d9c343b5bfd69fcc5a900278454c9954ec3829099530ae9",
+    "SSA-MRN/configs/pilot/02_warm_control10.json": "dd047fae1db84ecb993e662c71440914e51056112cf5c6b7cc108001179d74ac",
+    "SSA-MRN/configs/pilot/06_local_alignment10.json": "4e0ab6fe732f7fa35f4413115b2280880b01d21677e6313ebe1fd0d504fdca38",
+    "SSA-MRN/configs/pilot/suite.json": "9ebc248c3273a8a1dbe4ab5615bf75953264736def8c03f19a80278b79609a95",
+    "SSA-MRN/configs/pilot/01_rgb_diagnostic.json": "d02366f1c0ac2f7ae1228d69fae58839894290c56193fb360abf2a8fae71a139",
+    "SSA-MRN/configs/pilot/02_warm_low10.json": "3bb1bc52f6a1d76ffc65ed0c004bf93cf4c6fca80faea64554488e1b9970c4e0",
+    "SSA-MRN/configs/pilot/00_baseline10.json": "df09f2af26d1e890cfa36cacbfd2fbad6e015e9d66e3e476b9677a6b56db173b",
+    "SSA-MRN/configs/pilot/03_aligned_attention10.json": "a35a5c10d0d068e921382164072e520f7093c1e7f9a2bb2ee442f3110d1295e1",
+    "SSA-MRN/configs/pilot/05_global_encoder10.json": "7dd6fa752c283fdb48ee9585e9f508e1f9619993444f240822d612acbfc482b7",
+    "SSA-MRN/configs/pilot/04_gated_detail10.json": "375aa6b28f93dbf230a8dcb829e02bc040344e5237b7b1877a8d3ea60684d67f",
+    "SSA-MRN/references/upstream/network.py": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a",
+    "SSA-MRN/scripts/check_pilot_cuda.py": "270d5eed9be44d8f59ec3bf4f31417094d389f7743a474a33550ac5ee6e6d023"
+  },
+  "limitations": [
+    "Synthetic CUDA checks exclude Adam state and data prefetch; no measured pilot epoch time yet.",
+    "Scheduled-task CIM query denied for trainer; controller heartbeat and schtasks registration used."
+  ]
+}
