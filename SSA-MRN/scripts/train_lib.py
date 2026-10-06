@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "SSA-MRN/src"))
 from ssamrn.data.lib_hsi import LIBHSI, ScenePatchSampler
 from ssamrn.losses import reconstruction_loss
+from ssamrn.gradient_loss import masked_gradient_l1
 from ssamrn.models.rgb_grouped import build_rgb_hsi_model
 from ssamrn.models.interp23 import interp23tap
 from ssamrn.models.area_consistency import project_area_consistency
@@ -251,6 +252,8 @@ def main():
             parser.error(f"{key} must be positive")
     if config.get("spectral_weight", 0.) < 0 or config.get("spectral_eps", 1e-6) <= 0:
         parser.error("Invalid spectral loss weight or norm threshold")
+    if not math.isfinite(config.get("gradient_weight", 0.)) or config.get("gradient_weight", 0.) < 0:
+        parser.error("Invalid gradient loss weight")
     device = torch.device(config["device"])
     if device.type == "cuda" and not torch.cuda.is_available():
         parser.error("CUDA unavailable. Select a CUDA-enabled Python interpreter or pass --device cpu")
@@ -325,7 +328,7 @@ def main():
             for key in ("batch_size", "accumulation_steps", "learning_rate", "patches_per_scene", "seed", "amp", "device", "workers"):
                 if state["config"][key] != config[key]:
                     parser.error(f"Resume {key} differs from checkpoint")
-            for key, default in [("spectral_weight", 0.), ("spectral_eps", 1e-6)]:
+            for key, default in [("spectral_weight", 0.), ("spectral_eps", 1e-6), ("gradient_weight", 0.)]:
                 if state["config"].get(key, default) != config.get(key, default):
                     parser.error("Resume loss differs: " + key)
             if state['config'].get('train_area_consistency', False) != config.get('train_area_consistency', False):
@@ -379,6 +382,7 @@ def main():
         total = torch.zeros((), device=device)
         finite = torch.ones((), dtype=torch.bool, device=device)
         spectral_total = torch.zeros((), device=device)
+        gradient_total = torch.zeros((), device=device)
         loss_total = torch.zeros((), device=device)
         count, data_wait, timings, read_bytes = 0, 0., [], 0
         batches = DevicePrefetch(train_loader, device, channels_last) if device.type == "cuda" else train_loader
@@ -403,6 +407,8 @@ def main():
             loss, mse_loss, spectral_loss = reconstruction_loss(
                 prediction, gt, mask,
                 config.get('spectral_weight', 0.), config.get('spectral_eps', 1e-6))
+            gradient_loss = masked_gradient_l1(prediction, gt, mask) if config.get("gradient_weight", 0.) else prediction.new_zeros(())
+            loss = loss + config.get("gradient_weight", 0.) * gradient_loss
             finite.logical_and_(torch.isfinite(loss))
             scaler.scale(loss / group_size).backward()
             if (step + 1) % accumulation == 0 or step + 1 == steps:
@@ -413,6 +419,7 @@ def main():
                 optimizer.zero_grad(set_to_none=True)
             total.add_(mse_loss.detach() * gt.shape[0])
             spectral_total.add_(spectral_loss.detach() * gt.shape[0])
+            gradient_total.add_(gradient_loss.detach() * gt.shape[0])
             loss_total.add_(loss.detach() * gt.shape[0])
             count += gt.shape[0]
             if args.profile and device.type == "cuda":
@@ -439,6 +446,8 @@ def main():
         best = min(best, val_mse)
         record = {"epoch": epoch+1, "train_mse": total.item() / count, "train_loss": loss_total.item() / count, "train_spectral": spectral_total.item() / count,
                   "spectral_weight": config.get("spectral_weight", 0.),
+                  "gradient_weight": config.get("gradient_weight", 0.),
+                  "train_gradient_l1": gradient_total.item() / count,
                   "train_area_consistency": config.get('train_area_consistency', False),
                   "seconds": time.perf_counter()-started,
                   "train_seconds": train_seconds, "validation_seconds": time.perf_counter()-validation_started,
