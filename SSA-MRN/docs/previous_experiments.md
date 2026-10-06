@@ -15,8 +15,18 @@
 | RGB 05 · RGB별 12특징 Bilinear 타일 | [rgb05_triple12_bilinear](experiments/rgb05_triple12_bilinear.md) | 33.7897 | 2.2190 |
 | RGB 06 · RGB별 17특징 23탭·분광 손실 | [rgb06_triple17_spectral](experiments/rgb06_triple17_spectral.md) | 34.0611 | 2.2006 |
 | RGB 06 후처리 · LR 평균 일관성 보정 | [rgb06_lr_consistency](experiments/rgb06_lr_consistency.md) | 34.2173 | 2.1625 |
+| RGB 07 ·17특징 공동 디코더·LR 보정 | [rgb07_joint17_consistency](experiments/rgb07_joint17_consistency.md) | 34.2831 | 2.1570 |
+
+| RGB 08 · 고주파 보정 전체 100에폭 | [rgb08_gated_detail](experiments/rgb08_gated_detail.md) | 34.2533 | 2.1593 |
 
 34특징 실험은 중단 후 요청에 따라 결과를 삭제했습니다. 검증된 최종 test 결과가 없으므로 완료 연구 표에 포함하지 않습니다. 모델 코드는 보존 가중치 평가와 향후 구조 변경을 위해 남깁니다.
+
+## 검증 전용 예비실험
+
+- [6단계10에폭·train155](experiments/pilot_subset155.md)
+- [원본 대 미세조정·30에폭후속 비교](experiments/pilot_followup.md)
+
+위 보고서는 validation 결과이며 상단test 표와 직접 비교하지 않습니다.
 
 ## 보존 파일
 
@@ -41,7 +51,7 @@ SSA-MRN/
 │   └── assets/                실험 ID별 그래프·4패널 예시
 ├── experiments/
 │   ├── checkpoints/           학습된 .pt·checksum
-│   ├── results/               pan_k4, pan_k6, rgb01~07, 정합 근거
+│   ├── results/               pan_k4, pan_k6, rgb01~09, 정합 근거
 │   └── logs/                  현재 실행 중인 로그만 로컬 유지
 ├── references/                공식 코드·데이터 감사·측정 근거
 ├── scripts/                   학습·정합·평가·결과 내보내기·정리
