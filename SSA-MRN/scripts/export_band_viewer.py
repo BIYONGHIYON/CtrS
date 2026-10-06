@@ -44,7 +44,9 @@ def render_index(records):
         raise ValueError('Viewer samples must use one checkpoint epoch')
     epoch = next(iter(epochs))
     internal = 'Bilinear' if records[0].get('model_type', '').endswith('_bilinear') else '23탭/평균'
-    decoder = '공동 디코더 · ' if records[0].get('model_type') == 'rgb_triple_joint17_23tap' else ''
+    decoder = '공동 디코더 · ' if records[0].get('model_type') in ('rgb_triple_joint17_23tap', 'rgb_pilot_joint17_23tap') else ''
+    if records[0].get('pilot_options', {}).get('detail_path'):
+        decoder += 'RGB 고주파 보정 · '
     rows=''.join(f'<li><a href="{r["file"]}"><span class="number">{i:02}</span><span class="scene">{r["scene"]}</span><span class="action">보기 <span aria-hidden="true">→</span></span></a></li>' for i,r in enumerate(records,1))
     return ("""<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SSA-MRN 밴드 뷰어</title>
 <style>:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#202020;color:#ebebeb;font:16px/1.7 system-ui,-apple-system,sans-serif}main{max-width:820px;margin:auto;padding:60px 24px}header{margin-bottom:38px}.project{font-size:14px;color:#aaa;margin:0 0 12px}h1{font-size:28px;font-weight:600;line-height:1.4;margin:0 0 14px}.intro{color:#bbb;margin:0;max-width:650px}.info{font-size:14px;color:#999;margin-top:16px}ul{list-style:none;margin:0;padding:0;border-top:1px solid #444}li{border-bottom:1px solid #444}li a{display:flex;gap:24px;align-items:center;padding:23px 12px;color:inherit;text-decoration:none}li a:hover{background:#292929}a:focus-visible{outline:2px solid #ccc;outline-offset:3px}.number{font-size:14px;color:#999}.scene{font-size:18px;font-weight:500}.action{margin-left:auto;color:#aaa;font-size:14px;white-space:nowrap}footer{margin-top:32px;font-size:13px;color:#aaa}footer p{margin:8px 0}footer a{color:#ccc;text-underline-offset:4px}@media(max-width:600px){main{padding:32px 20px}h1{font-size:24px}li a{gap:16px;padding:22px 4px}.scene{font-size:16px}}
@@ -86,7 +88,7 @@ def main():
                 mask=sample.get('valid_mask')
                 prediction=project_area_consistency(prediction,sample['lr_hsi'][None],mask[None] if mask is not None else None)
             prediction=prediction[0]
-        metadata=dict(latent_channels=config['latent_channels'],model_type=config['model_type'],scene=sample['scene'],sample_index=index,tile=index%data.per_scene,epoch=state['epoch'],checkpoint_sha256=digest,split='test',inference_device='cpu',display='GT valid-mask percentile 1-99 per band, shared across HSI panels',bands_count=204,area_consistency=area_consistency)
+        metadata=dict(latent_channels=config['latent_channels'],model_type=config['model_type'],pilot_options=config.get('pilot_options', {}),scene=sample['scene'],sample_index=index,tile=index%data.per_scene,epoch=state['epoch'],checkpoint_sha256=digest,split='test',inference_device='cpu',display='GT valid-mask percentile 1-99 per band, shared across HSI panels',bands_count=204,area_consistency=area_consistency)
         path=args.output_dir/f'sample_{i:02}.html';path.write_text(render(sample,prediction,metadata),encoding='utf-8')
         records.append(dict(metadata,file=path.name,bytes=path.stat().st_size));print(json.dumps(records[-1]),flush=True)
     (args.output_dir/'manifest.json').write_text(json.dumps(records,indent=2),encoding='utf-8')

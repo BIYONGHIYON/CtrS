@@ -15,6 +15,7 @@
 | RGB 05 · RGB별 12특징 Bilinear 타일 | [rgb05_triple12_bilinear](experiments/rgb05_triple12_bilinear.md) | 33.7897 | 2.2190 |
 | RGB 06 · RGB별 17특징 23탭·분광 손실 | [rgb06_triple17_spectral](experiments/rgb06_triple17_spectral.md) | 34.0611 | 2.2006 |
 | RGB 06 후처리 · LR 평균 일관성 보정 | [rgb06_lr_consistency](experiments/rgb06_lr_consistency.md) | 34.2173 | 2.1625 |
+| RGB 07 ·17특징 공동 디코더·LR 보정 | [rgb07_joint17_consistency](experiments/rgb07_joint17_consistency.md) | 34.2831 | 2.1570 |
 
 34특징 실험은 중단 후 요청에 따라 결과를 삭제했습니다. 검증된 최종 test 결과가 없으므로 완료 연구 표에 포함하지 않습니다. 모델 코드는 보존 가중치 평가와 향후 구조 변경을 위해 남깁니다.
 
