@@ -1,6 +1,12 @@
 # PAN–MS 재현 K4
 
-[재현 연구 목록](../reproduction.md) · [현재 연구](../../README.md)
+[재현 연구 목록](../../reproduction.md) · [현재 연구](../../../README.md)
+
+| 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
+|---|---|---|---|
+| 첫 PAN–MS 재현 | 공식 K4 코드의 실행·학습·평가 복원 | 센서별 RR/FR 수치는 3절 | 논문 수치와 구현·평가의 남은 차이를 기록했습니다. |
+
+[수치](#3-정량-결과) · [이전 대비](#4-직전-연구와-수치-차이) · [그래프](#5-그래프) · [결과 이미지](#6-결과-이미지-예시)
 
 ## 1. 목적과 상태
 
@@ -11,38 +17,6 @@
 QB/GF2/WV3/WV2 각각 RR 20장, FR 20장 (총 160장). WV2는 WV3 가중치로 평가했습니다. RR에는 정답 기반 PSNR/SAM/ERGAS/SCC/Q, FR에는 QNR/Dλ/Ds를 사용합니다. 제공 LMS 입력은 23탭 보간 계열이며 네트워크 내부 확대·축소는 Bilinear (`align_corners=True`)입니다.
 
 ## 3. 정량 결과
-
-아래 측정 수치와 논문 비교 표에 원본 결과를 보존했습니다. 서로 다른 센서의 PSNR을 평균내어 RGB–HSI와 비교하지 않습니다.
-
-## 4. 직전 연구와 수치 차이
-
-첫 재현 실험이므로 직전 연구와의 차이 없음.
-
-## 5. 그래프
-
-![센서별 RR PSNR과 SAM](../assets/pan_k4/metrics.png)
-
-![센서별 학습·검증 MSE](../assets/pan_k4/learning.png)
-
-기존 epoch 로그의 학습/검증 MSE 100개를 compact 숫자 기록으로 보존했습니다.
-
-## 6. 결과 이미지 예시
-
-왼쪽부터 LR MS, PAN guide, 예측, 정답입니다. 과거 보관된 3개 센서 예시이며 미래 실험의 5장면 필수 규칙과 구분합니다.
-
-![quickbird: LR MS, PAN, 예측, 정답](../assets/pan_k4/sample_01.png)
-![gaofen2: LR MS, PAN, 예측, 정답](../assets/pan_k4/sample_02.png)
-![worldview3: LR MS, PAN, 예측, 정답](../assets/pan_k4/sample_03.png)
-
-## 7. 가중치와 검증 근거
-
-`experiments/checkpoints/{qb,gf2,wv3}_full/latest.pt`를 보존합니다. 이미지와 숫자 JSON은 `experiments/results/`에 보존합니다.
-
-## 8. 한계와 다음 판단
-
-공식 코드의 attention 곱 연산 등 논문 수식과 구현 차이가 있어 논문과 완전히 동일한 실행으로 주장하지 않습니다. RGB–HSI의 204밴드 복원과 독립된 재현 결과입니다.
-
-## 측정 수치와 재현 상세 기록
 
 ### SSA-MRN 논문 수치와 K=4 공개 코드 재현 비교
 
@@ -66,18 +40,34 @@ QB/GF2/WV3/WV2 각각 RR 20장, FR 20장 (총 160장). WV2는 WV3 가중치로 �
 
 또한 공개 `network.py`의 SSA 내부 차원 K=4·어텐션 연산은 논문 설명(K=6 등)과 다르다. 이 문서의 가중치와 수치는 **K=4 공개 코드를 복구하여 학습한 모델**의 결과다. 향후 MATLAB 평가 툴박스와 동일 입력을 대조하고, 논문의 누락 설정을 확인한 뒤 수치를 다시 비교해야 한다.
 
-### 재실행
+서로 다른 센서의 PSNR을 평균내어 RGB–HSI와 비교하지 않습니다.
 
-테스트 H5는 Git에 없으며 `data/raw/{QuickBird,Gaofen2,WorldView3,WorldView2}/` 아래에 원본 파일명으로 둔다. 자세한 파일 배치는 `scripts/evaluate_paper.py`의 `SENSORS`와 파일명 생성 규칙을 따른다.
+## 4. 직전 연구와 수치 차이
 
-```bash
-cd SSA-MRN
-python scripts/evaluate_paper.py --sensor all --protocol both \
-  --checkpoint-root experiments/checkpoints \
-  --output-dir experiments/results/local_k4_eval
-python -m unittest discover -s tests -v
-```
+첫 재현 실험이므로 직전 연구와의 차이 없음.
 
-센서별·프로토콜별 상세 JSON(샘플별 지표와 평균)은 지정한 로컬 출력 폴더에 생성된다. 대용량 입력 H5와 이 재실행 출력은 Git 추적 대상이 아니다.
+## 5. 그래프
 
-출처: [SSA-MRN 논문](https://www.researchgate.net/publication/389343736_Spectral-Spatial_Attention-guided_Multi-Resolution_Network_for_Pansharpening), [PanCollection](https://github.com/liangjiandeng/PanCollection), [DLPan-Toolbox 평가 코드](https://github.com/liangjiandeng/DLPan-Toolbox).
+![센서별 RR PSNR과 SAM](../../assets/pan_k4/metrics.png)
+
+![센서별 학습·검증 MSE](../../assets/pan_k4/learning.png)
+
+기존 epoch 로그의 학습/검증 MSE 100개를 compact 숫자 기록으로 보존했습니다.
+
+## 6. 결과 이미지 예시
+
+왼쪽부터 LR MS, PAN guide, 예측, 정답입니다. 과거 보관된 3개 센서 예시이며 미래 실험의 5장면 필수 규칙과 구분합니다.
+
+![quickbird: LR MS, PAN, 예측, 정답](../../assets/pan_k4/sample_01.png)
+![gaofen2: LR MS, PAN, 예측, 정답](../../assets/pan_k4/sample_02.png)
+![worldview3: LR MS, PAN, 예측, 정답](../../assets/pan_k4/sample_03.png)
+
+## 7. 가중치와 검증 근거
+
+센서별 원본 평가 기록은 `experiments/results/pan_k4/full_metrics/`에 보존합니다. 재평가는 `scripts/evaluate_paper.py`를 사용합니다. 과거 재학습 전용 명령은 정리했으며 가중치는 보존합니다.
+
+`experiments/checkpoints/{qb,gf2,wv3}_full/latest.pt`를 보존합니다. 이미지와 숫자 JSON은 `experiments/results/`에 보존합니다.
+
+## 8. 한계와 다음 판단
+
+공식 코드의 attention 곱 연산 등 논문 수식과 구현 차이가 있어 논문과 완전히 동일한 실행으로 주장하지 않습니다. RGB–HSI의 204밴드 복원과 독립된 재현 결과입니다.

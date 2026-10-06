@@ -1,6 +1,12 @@
 # RGB11 · HSI 경계 손실 5종 비교
 
-[현재 연구](../../README.md) · [이전 실험](../previous_experiments.md) · [시작 모델의 대조 실험](rgb10_warm07_control.md)
+[현재 연구](../../../README.md) · [이전 실험](../../previous_experiments.md) · [시작 모델의 대조 실험](rgb10_warm07_control.md)
+
+| 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
+|---|---|---|---|
+| 같은 시작 가중치·학습량의 대조군 | HSI 경계 손실 4개 강도와 대조군 비교 | test PSNR +0.003158 dB / SAM −0.000849° | 검증으로 선택한 20% 후보의 이득은 작습니다. RGB09보다 MSE는 높습니다. |
+
+[수치](#3-정량-결과) · [이전 대비](#4-직전-연구와-수치-차이) · [그래프](#5-그래프) · [결과 이미지](#6-결과-이미지-예시)
 
 ## 1. 목적과 상태
 
@@ -39,23 +45,23 @@ RGB07의 저학습률 추가 학습에서 선택한 best 추가 4에폭을 공�
 | 경계 손실 20% | 0.0004376169 | 34.3948 | 2.14986 | 0.020498 |
 | 직전 공개 RGB09 | 0.0004371593 | 34.3929 | 2.15321 | 0.020508 |
 
-[전체·장면별 test](../../experiments/results/rgb11_gradient_suite/test_metrics.json), [대조군 test](../../experiments/results/rgb11_gradient_suite/control_test_metrics.json), [다섯 실험 전체 검증·에폭 기록](../../experiments/results/rgb11_gradient_suite/suite_results.json).
+[전체·장면별 test](../../../experiments/results/rgb11_gradient_suite/test_metrics.json), [대조군 test](../../../experiments/results/rgb11_gradient_suite/control_test_metrics.json), [다섯 실험 전체 검증·에폭 기록](../../../experiments/results/rgb11_gradient_suite/suite_results.json).
 
 ## 4. 직전 연구와 수치 차이
 
-같은 학습량의 대조군 대비 검증 PSNR **+0.002902 dB**, SAM **−0.000896°**, MSE **−0.0000001810**(약 −0.0374%)입니다. test에서는 PSNR **+0.003158 dB**, SAM **−0.000849°**, MSE **−0.0000002249**(약 −0.0514%)입니다. 경계 손실의 평균 이득은 매우 작습니다. test에서 PSNR은 56/75장면, SAM과 gradient RMSE는 각각 70/75장면에서 개선됐습니다. [차이와 개선 장면 수](../../experiments/results/rgb11_gradient_suite/comparison_summary.json).
+같은 학습량의 대조군 대비 검증 PSNR **+0.002902 dB**, SAM **−0.000896°**, MSE **−0.0000001810**(약 −0.0374%)입니다. test에서는 PSNR **+0.003158 dB**, SAM **−0.000849°**, MSE **−0.0000002249**(약 −0.0514%)입니다. 경계 손실의 평균 이득은 매우 작습니다. test에서 PSNR은 56/75장면, SAM과 gradient RMSE는 각각 70/75장면에서 개선됐습니다. [차이와 개선 장면 수](../../../experiments/results/rgb11_gradient_suite/comparison_summary.json).
 
 직전 공개 RGB09 대비 test PSNR +0.001945 dB, SAM −0.003346°이며 **MSE는 약 0.105% 증가**했습니다. 구조와 학습 이력이 달라 이 비교로 경계 손실의 효과를 주장하지 않습니다. 장면별 PSNR 평균과 장면별 MSE 평균은 평균 순서가 달라 순위가 달라질 수 있습니다.
 
 ## 5. 그래프
 
-![다섯 실험의 실제 학습·검증 곡선](../assets/rgb11_gradient_suite/suite_curves.png)
+![다섯 실험의 실제 학습·검증 곡선](../../assets/rgb11_gradient_suite/suite_curves.png)
 
-![같은 학습량의 대조군 대비 검증 지표 차이](../assets/rgb11_gradient_suite/suite_comparison.png)
+![같은 학습량의 대조군 대비 검증 지표 차이](../../assets/rgb11_gradient_suite/suite_comparison.png)
 
-![선택한 모델의 10에폭 실측 곡선](../assets/rgb11_gradient_suite/learning.png)
+![선택한 모델의 10에폭 실측 곡선](../../assets/rgb11_gradient_suite/learning.png)
 
-![대조군·23탭·선택 모델 test 비교](../assets/rgb11_gradient_suite/test_metrics.png)
+![대조군·23탭·선택 모델 test 비교](../../assets/rgb11_gradient_suite/test_metrics.png)
 
 마지막 그래프의 previous는 이번 대조군입니다. 차이가 작으므로 별도 검증 차이 그래프와 숫자를 함께 확인합니다.
 
@@ -65,36 +71,36 @@ RGB07의 저학습률 추가 학습에서 선택한 best 추가 4에폭을 공�
 
 **예시 1 · `2020-11-24_018`**
 
-![test 예시 1](../assets/rgb11_gradient_suite/sample_01.png)
+![test 예시 1](../../assets/rgb11_gradient_suite/sample_01.png)
 
 **예시 2 · `2020-11-20_017`**
 
-![test 예시 2](../assets/rgb11_gradient_suite/sample_02.png)
+![test 예시 2](../../assets/rgb11_gradient_suite/sample_02.png)
 
 **예시 3 · `2020-12-17_010`**
 
-![test 예시 3](../assets/rgb11_gradient_suite/sample_03.png)
+![test 예시 3](../../assets/rgb11_gradient_suite/sample_03.png)
 
 **예시 4 · `2020-11-26_038`**
 
-![test 예시 4](../assets/rgb11_gradient_suite/sample_04.png)
+![test 예시 4](../../assets/rgb11_gradient_suite/sample_04.png)
 
 **예시 5 · `2021-01-07_021`**
 
-![test 예시 5](../assets/rgb11_gradient_suite/sample_05.png)
+![test 예시 5](../../assets/rgb11_gradient_suite/sample_05.png)
 
-[204밴드 오프라인 HTML](../assets/rgb11_gradient_suite/band_viewer/index.html)을 다운로드해 브라우저에서 열 수 있습니다. 같은 best 가중치로 CPU float32 추론하며 test 수치는 GPU AMP에서 측정했습니다. 8비트 표시 영상은 평가 원본을 대신하지 않습니다. 이 작은 수치 차이만으로 눈에 띄는 선명도 개선을 주장하지 않습니다.
+[204밴드 오프라인 HTML](../../assets/rgb11_gradient_suite/band_viewer/index.html)을 다운로드해 브라우저에서 열 수 있습니다. 같은 best 가중치로 CPU float32 추론하며 test 수치는 GPU AMP에서 측정했습니다. 8비트 표시 영상은 평가 원본을 대신하지 않습니다. 이 작은 수치 차이만으로 눈에 띄는 선명도 개선을 주장하지 않습니다.
 
 ## 7. 가중치와 검증 근거
 
 서버 체크포인트는 `C:\CtrS-rgb-detail\SSA-MRN\experiments\checkpoints\remote-runs-warm07` 아래 run별 best/latest로 보존합니다. 다섯 run 경로·해시는 suite JSON에 있습니다. 선택 run은 `20261006-185005-71b1426e91d5`, best 추가 4에폭 SHA-256은 `40e6170da46633004ee292b2434898f1b1e67dcbbd9a3ecf0deef78568a65f65`입니다.
 
-학습 checkout 기준 commit은 `12206bf5803665beee8629580a51b4ce828856d7`이며 경계 손실·실행 도구 변경은 당시 미커밋 상태였습니다. 따라서 commit만으로 실행 코드를 특정하지 않고 [실제 파일 해시](../../experiments/results/rgb11_gradient_suite/source_sha256.json)와 [학습 소스 차이](../../experiments/results/rgb11_gradient_suite/gradient_training_patch.diff)를 함께 보관합니다. 경계 손실 구현과 순차 실행 도구도 저장소에 남깁니다.
+학습 checkout 기준 commit은 `12206bf5803665beee8629580a51b4ce828856d7`이며 경계 손실·실행 도구 변경은 당시 미커밋 상태였습니다. 따라서 commit만으로 실행 코드를 특정하지 않고 [실제 파일 해시](../../../experiments/results/rgb11_gradient_suite/source_sha256.json)와 [학습 소스 차이](../../../experiments/results/rgb11_gradient_suite/gradient_training_patch.diff)를 함께 보관합니다. 경계 손실 구현과 순차 실행 도구도 저장소에 남깁니다.
 
-[report manifest](../../experiments/results/rgb11_gradient_suite/report_manifest.json), [선택 기록](../../experiments/results/rgb11_gradient_suite/selection.json), [가중치 설정·해시](../../experiments/results/rgb11_gradient_suite/checkpoint_metadata.json)를 보관했습니다. 전체 test 장면 ID·평가 조건·기준선 일치와 이미지/HTML의 epoch·장면·해시를 확인했습니다. 원본 데이터는 수정하지 않았습니다.
+[report manifest](../../../experiments/results/rgb11_gradient_suite/report_manifest.json), [선택 기록](../../../experiments/results/rgb11_gradient_suite/selection.json), [가중치 설정·해시](../../../experiments/results/rgb11_gradient_suite/checkpoint_metadata.json)를 보관했습니다. 전체 test 장면 ID·평가 조건·기준선 일치와 이미지/HTML의 epoch·장면·해시를 확인했습니다. 원본 데이터는 수정하지 않았습니다.
 
 ## 8. 한계와 다음 판단
 
 20% 설정은 이번 검증 범위에서 가장 좋았지만 이득이 작고 단일 seed입니다. 작은 경계 손실을 적용한 후보로 보관하며, 확실한 성능 개선이나 시각적 선명도 향상으로 확정하지 않습니다. 강도 범위의 끝이 best라는 이유만으로 더 큰 값을 계속 시험하지 않습니다.
 
-PSNR·SAM·gradient의 장면별 변화를 검토한 뒤 추가 변경 여부를 판단합니다. 반복해서 본 test는 후속 설정 선택에 사용하지 않습니다. 합성 area ×4 평가이며 실제 센서 HR-HSI 정답 성능이 아닙니다. 공개 Pages는 이번 작업에서 변경하지 않았고 최신 HTML은 오프라인 산출물입니다.
+PSNR·SAM·gradient의 장면별 변화를 검토한 뒤 추가 변경 여부를 판단합니다. 반복해서 본 test는 후속 설정 선택에 사용하지 않습니다. 합성 area ×4 평가이며 실제 센서 HR-HSI 정답 성능이 아닙니다. [공개 204밴드 뷰어](https://biyonghiyon.github.io/CtrS/ssa-mrn/)에는 이 RGB11 결과를 표시합니다. 이전 실험 HTML은 각 보고서에서 오프라인으로 확인합니다.

@@ -1,6 +1,12 @@
 # subset155 · 6단계 축소 예비실험
 
-[현재 연구](../../README.md)
+[현재 연구](../../../README.md)
+
+| 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
+|---|---|---|---|
+| RGB07 계열 | 학습 155장면의 짧은 후보 탐색 | validation 결과만 사용 | 전체 데이터 학습과 직접 순위 비교하지 않습니다. |
+
+[수치](#3-정량-결과) · [이전 대비](#4-직전-연구와-수치-차이) · [그래프](#5-그래프) · [결과 이미지](#6-결과-이미지-예시)
 
 ## 1. 목적과 상태
 
@@ -10,7 +16,7 @@ RGB07 개선 후보를 검증으로 선별하는 합성 ×4 예비실험입니�
 
 ## 2. 변경 사항과 평가 조건
 
-LIB-HSI train 393장 중 seed42로 선택한 155장, validation 45장 전체(180타일)를 공통 사용했습니다. Windows PowerShell Get-Random으로 정한 목록을 고정했으며 Python 난수 seed만으로 동일 목록을 재생성한다고 가정하지 않습니다. 장면 목록·설정은 [원본 결과 JSON](pilot_subset155_results.json)에 보존했습니다.
+LIB-HSI train 393장 중 seed42로 선택한 155장, validation 45장 전체(180타일)를 공통 사용했습니다. Windows PowerShell Get-Random으로 정한 목록을 고정했으며 Python 난수 seed만으로 동일 목록을 재생성한다고 가정하지 않습니다. 장면 목록·설정은 [원본 결과 JSON](../pilot_subset155_results.json)에 보존했습니다.
 
 204밴드, HR256/LR64, area ×4 축소, 23tap, latent17, K4, batch4/val_batch2, AMP, seed42, 기존 정합·유효 마스크와 학습/평가 LR 평균 보정을 유지했습니다. RTX A6000 48GB, PyTorch 2.6.0+cu124를 사용했습니다. 파일 대응·ENVI 형식·길이를 검사했지만 cube 내용 전체 해시는 검사하지 않았습니다.
 
@@ -55,7 +61,7 @@ warm low는 warm control 대비 PSNR +0.1070dB, SAM −0.0023°, MSE −0.000011
 
 ## 5. 그래프
 
-![실측 학습 MSE와 검증 PSNR 및 SAM](../assets/pilot_subset155/curves.png)
+![실측 학습 MSE와 검증 PSNR 및 SAM](../../assets/pilot_subset155/curves.png)
 
 7개 작업의 실제 10에폭 기록입니다. test 비교 그래프는 후보 선별 단계이므로 만들지 않았습니다.
 
@@ -65,7 +71,7 @@ test 데이터는 서버에 올리지 않았고 평가·예시 선택에도 사�
 
 ## 7. 가중치와 검증 근거
 
-[원본 지표·장면별 결과·설정·best/latest 해시](pilot_subset155_results.json)에 보존했습니다. 실제 가중치는 서버 `/home/gpu_04/ssa-mrn-pilot/SSA-MRN/experiments/checkpoints/pilot-subset155/suite_20261005T160615Z/<작업명>/`의 best.pt/latest.pt이며 Git에 포함하지 않았습니다. 각 best 체크포인트 epoch와 데이터 해시를 확인했습니다.
+[원본 지표·장면별 결과·설정·best/latest 해시](../pilot_subset155_results.json)에 보존했습니다. 실제 가중치는 서버 `/home/gpu_04/ssa-mrn-pilot/SSA-MRN/experiments/checkpoints/pilot-subset155/suite_20261005T160615Z/<작업명>/`의 best.pt/latest.pt이며 Git에 포함하지 않았습니다. 각 best 체크포인트 epoch와 데이터 해시를 확인했습니다.
 
 초기 RGB07 SHA256: `5e126b17f0d95f445e8226fce401d0891593b245b737e73dc2810a3e4510d704`. 모든 작업 10에폭·exit0, 전체 종료 표식 COMPLETE를 확인했습니다. 합성 GPU 검사를 반복하지 않았습니다.
 

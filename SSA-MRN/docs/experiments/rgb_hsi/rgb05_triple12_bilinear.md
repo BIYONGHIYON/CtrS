@@ -1,6 +1,12 @@
 # RGB 05 · RGB별 12특징 Bilinear 타일
 
-[현재 연구](../../README.md) · [이전 실험 목록](../previous_experiments.md)
+[현재 연구](../../../README.md) · [이전 실험 목록](../../previous_experiments.md)
+
+| 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
+|---|---|---|---|
+| RGB04 | core 내부 축소·확대를 Bilinear로 변경 | PSNR −0.2633 dB / SAM +0.0133° | 내부 Bilinear를 채택하지 않고 23탭을 복구했습니다. |
+
+[수치](#3-정량-결과) · [이전 대비](#4-직전-연구와-수치-차이) · [그래프](#5-그래프) · [결과 이미지](#6-결과-이미지-예시)
 
 ## 1. 목적과 상태
 
@@ -45,47 +51,47 @@ RTX 3060 Ti 8GB, torch 2.7.1+cu128, AMP, batch 4. 원격 controller 실행이므
 
 ## 5. 그래프
 
-![학습 MSE와 검증 PSNR·SAM](../assets/rgb05_triple12_bilinear/learning.png)
+![학습 MSE와 검증 PSNR·SAM](../../assets/rgb05_triple12_bilinear/learning.png)
 
-![test baseline 및 직전 연구 비교](../assets/rgb05_triple12_bilinear/test_metrics.png)
+![test baseline 및 직전 연구 비교](../../assets/rgb05_triple12_bilinear/test_metrics.png)
 
-[100 epoch 수치](../../experiments/results/rgb05_triple12_bilinear/curves.json). test를 best 선택에 사용하지 않았습니다.
+[100 epoch 수치](../../../experiments/results/rgb05_triple12_bilinear/curves.json). test를 best 선택에 사용하지 않았습니다.
 
 ## 6. 결과 이미지 예시
 
 사전 고정한 이전 연구와 동일한 5장면 `[3, 0, 43, 18, 63]`의 tile 0입니다. 왼쪽부터 **LR HSI · RGB · 예측 · 정답**입니다. 지표를 보고 장면을 재선택하지 않았습니다.
 
-[보존된 204밴드 HTML](../assets/rgb05_triple12_bilinear/band_viewer/index.html) (내려받아 실행).
+[보존된 204밴드 HTML](../../assets/rgb05_triple12_bilinear/band_viewer/index.html) (내려받아 실행).
 
 슬라이더는 같은 best 가중치의 CPU float32 추론이며 PNG의 CUDA AMP 추론과 미세한 차이가 있을 수 있습니다. 밴드별 GT 유효 영역의 1–99% 범위를 HSI 세 패널에 공통 적용한 8비트 표시입니다. 표시 대비는 정량 지표에 사용하지 않으며, 파장은 확인되지 않아 밴드 번호를 사용합니다.
 
 ### 예시 1
 
-![LR HSI · RGB · 예측 · 정답](../assets/rgb05_triple12_bilinear/sample_01.png)
+![LR HSI · RGB · 예측 · 정답](../../assets/rgb05_triple12_bilinear/sample_01.png)
 
 ### 예시 2
 
-![LR HSI · RGB · 예측 · 정답](../assets/rgb05_triple12_bilinear/sample_02.png)
+![LR HSI · RGB · 예측 · 정답](../../assets/rgb05_triple12_bilinear/sample_02.png)
 
 ### 예시 3
 
-![LR HSI · RGB · 예측 · 정답](../assets/rgb05_triple12_bilinear/sample_03.png)
+![LR HSI · RGB · 예측 · 정답](../../assets/rgb05_triple12_bilinear/sample_03.png)
 
 ### 예시 4
 
-![LR HSI · RGB · 예측 · 정답](../assets/rgb05_triple12_bilinear/sample_04.png)
+![LR HSI · RGB · 예측 · 정답](../../assets/rgb05_triple12_bilinear/sample_04.png)
 
 ### 예시 5
 
-![LR HSI · RGB · 예측 · 정답](../assets/rgb05_triple12_bilinear/sample_05.png)
+![LR HSI · RGB · 예측 · 정답](../../assets/rgb05_triple12_bilinear/sample_05.png)
 
-[장면·타일 선택 기록](../../experiments/results/rgb05_triple12_bilinear/selection.json)
+[장면·타일 선택 기록](../../../experiments/results/rgb05_triple12_bilinear/selection.json)
 
 ## 7. 가중치와 검증 근거
 
-- [전체·장면별 test 지표](../../experiments/results/rgb05_triple12_bilinear/test/metrics.json)
-- [가중치 epoch·SHA-256](../../experiments/results/rgb05_triple12_bilinear/checkpoint_metadata.json)
-- [평가 조건·완료 기록](../../experiments/results/rgb05_triple12_bilinear/report_manifest.json)
+- [전체·장면별 test 지표](../../../experiments/results/rgb05_triple12_bilinear/test/metrics.json)
+- [가중치 epoch·SHA-256](../../../experiments/results/rgb05_triple12_bilinear/checkpoint_metadata.json)
+- [평가 조건·완료 기록](../../../experiments/results/rgb05_triple12_bilinear/report_manifest.json)
 - best/latest epoch: 100/100. 학습 코드 `d947f84`, 결과 exporter 코드 `6a488a8`.
 - 서버 가중치: `C:\CtrS-triple12-bilinear\SSA-MRN\experiments\checkpoints\remote-runs\20261003-220209-d4faa37d0365`.
 - 정합 manifest SHA-256: `7a66ad28bc78fe8691fddbc2d94f0a871d7c10507407f7d1f36abe1b20f004f4`.

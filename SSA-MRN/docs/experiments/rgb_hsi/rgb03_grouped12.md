@@ -1,6 +1,12 @@
 # RGB 03 · grouped12 K=4 23탭
 
-[이전 실험 목록](../previous_experiments.md) · [현재 연구](../../README.md)
+[이전 실험 목록](../../previous_experiments.md) · [현재 연구](../../../README.md)
+
+| 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
+|---|---|---|---|
+| RGB02 | grouped 12특징, K4, 23탭, full256 평가 | PSNR −1.7243 dB / SAM −0.2228° | 평가 방식이 달라 직접 우열을 판단하지 않습니다. |
+
+[수치](#3-정량-결과) · [이전 대비](#4-직전-연구와-수치-차이) · [그래프](#5-그래프) · [결과 이미지](#6-결과-이미지-예시)
 
 ## 1. 목적과 상태
 
@@ -34,11 +40,11 @@ K=4 · 17밴드씩 204→12 grouped 압축 · guide R/G/B에 4특징씩 · 내�
 
 ## 5. 그래프
 
-![학습 MSE와 검증 PSNR·SAM](../assets/rgb03_grouped12/learning.png)
+![학습 MSE와 검증 PSNR·SAM](../../assets/rgb03_grouped12/learning.png)
 
-원본 기록에서 추출한 [epoch 수치](../../experiments/results/rgb03_grouped12/curves.json). 기록이 없는 epoch를 보간하거나 만들어 넣지 않았습니다. test 결과를 epoch 선택에 사용하지 않습니다.
+원본 기록에서 추출한 [epoch 수치](../../../experiments/results/rgb03_grouped12/curves.json). 기록이 없는 epoch를 보간하거나 만들어 넣지 않았습니다. test 결과를 epoch 선택에 사용하지 않습니다.
 
-![test 수치 비교](../assets/rgb03_grouped12/test_metrics.png)
+![test 수치 비교](../../assets/rgb03_grouped12/test_metrics.png)
 
 직전 수치 비교 그래프의 `previous*`는 평가 조건 확인이 필요한 관측값입니다.
 
@@ -48,30 +54,30 @@ K=4 · 17밴드씩 204→12 grouped 압축 · guide R/G/B에 4특징씩 · 내�
 
 ### 예시 1 · 2020-11-24_018 · full256, sample index 3
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb03_grouped12/sample_01.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb03_grouped12/sample_01.png)
 
 ### 예시 2 · 2020-11-20_017 · full256, sample index 0
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb03_grouped12/sample_02.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb03_grouped12/sample_02.png)
 
 ### 예시 3 · 2020-12-17_010 · full256, sample index 43
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb03_grouped12/sample_03.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb03_grouped12/sample_03.png)
 
 ### 예시 4 · 2020-11-26_038 · full256, sample index 18
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb03_grouped12/sample_04.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb03_grouped12/sample_04.png)
 
 ### 예시 5 · 2021-01-07_021 · full256, sample index 63
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb03_grouped12/sample_05.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb03_grouped12/sample_05.png)
 
-[사전 고정한 선택 기록](../../experiments/results/rgb03_grouped12/selection.json)
+[사전 고정한 선택 기록](../../../experiments/results/rgb03_grouped12/selection.json)
 
 ## 7. 가중치와 검증 근거
 
-- [전체 test 수치](../../experiments/results/rgb03_grouped12/test/metrics.json)
-- [가중치 epoch·SHA-256](../../experiments/results/rgb03_grouped12/checkpoint_metadata.json)
+- [전체 test 수치](../../../experiments/results/rgb03_grouped12/test/metrics.json)
+- [가중치 epoch·SHA-256](../../../experiments/results/rgb03_grouped12/checkpoint_metadata.json)
 - best epoch 96 / latest epoch 100. 서버 가중치: `C:\CtrS\SSA-MRN\experiments\checkpoints\remote-runs\20261003-022329-72b8a17b50de`.
 - 학습된 `.pt`는 보존합니다. 구조/평가 조건은 체크포인트 내 `config`를 읽어 평가할 수 있으므로 과거 별도 학습 JSON은 폐기했습니다.
 

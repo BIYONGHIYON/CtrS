@@ -1,6 +1,12 @@
 # RGB 06 · RGB별 17특징 23탭 + 분광 손실
 
-[현재 연구](../../README.md) · [이전 실험](../previous_experiments.md)
+[현재 연구](../../../README.md) · [이전 실험](../../previous_experiments.md)
+
+| 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
+|---|---|---|---|
+| RGB04의 23탭 기준 | 17특징으로 확대하고 분광 방향 손실 추가 | PSNR +0.0081 dB / SAM −0.0051° | 작은 개선이며 특징 수와 손실 효과가 함께 포함됩니다. |
+
+[수치](#3-정량-결과) · [이전 대비](#4-직전-연구와-수치-차이) · [그래프](#5-그래프) · [결과 이미지](#6-결과-이미지-예시)
 
 ## 1. 목적과 상태
 
@@ -35,45 +41,45 @@ MSE 차이는 직전 대비 -0.0000347803, 복구 기준 대비 -0.0000017205입
 
 ## 5. 그래프
 
-![학습 MSE·검증 PSNR/SAM](../assets/rgb06_triple17_spectral/learning.png)
+![학습 MSE·검증 PSNR/SAM](../../assets/rgb06_triple17_spectral/learning.png)
 
-![test baseline·직전 모델 비교](../assets/rgb06_triple17_spectral/test_metrics.png)
+![test baseline·직전 모델 비교](../../assets/rgb06_triple17_spectral/test_metrics.png)
 
-[100 epoch 수치](../../experiments/results/rgb06_triple17_spectral/curves.json): train_mse, train_spectral, train_loss를 별도로 보존했습니다. test는 best 선택에 사용하지 않았습니다.
+[100 epoch 수치](../../../experiments/results/rgb06_triple17_spectral/curves.json): train_mse, train_spectral, train_loss를 별도로 보존했습니다. test는 best 선택에 사용하지 않았습니다.
 
 ## 6. 결과 이미지 예시
 
 이전 실험과 동일한 사전 고정 5장면 `[3,0,43,18,63]`, tile0입니다. 왼쪽부터 **LR HSI · RGB · 예측 · 정답**입니다.
 
-[204밴드 웹 뷰어](https://biyonghiyon.github.io/CtrS/ssa-mrn/) · [오프라인 HTML](../assets/rgb06_triple17_spectral/band_viewer/index.html). 같은 best 가중치의 CPU float32 HTML이며 PNG는 CUDA AMP입니다. GT 유효 영역의 밴드별 1–99% 범위를 HSI 세 패널에 공통 적용한 8비트 표시입니다. 대비는 지표 계산에 사용하지 않으며 파장은 확인되지 않아 밴드 번호로 표시합니다.
+[오프라인 HTML](../../assets/rgb06_triple17_spectral/band_viewer/index.html). 같은 best 가중치의 CPU float32 HTML이며 PNG는 CUDA AMP입니다. GT 유효 영역의 밴드별 1–99% 범위를 HSI 세 패널에 공통 적용한 8비트 표시입니다. 대비는 지표 계산에 사용하지 않으며 파장은 확인되지 않아 밴드 번호로 표시합니다.
 
 ### 예시 1
 
-![LR HSI · RGB · 예측 · 정답](../assets/rgb06_triple17_spectral/sample_01.png)
+![LR HSI · RGB · 예측 · 정답](../../assets/rgb06_triple17_spectral/sample_01.png)
 
 ### 예시 2
 
-![LR HSI · RGB · 예측 · 정답](../assets/rgb06_triple17_spectral/sample_02.png)
+![LR HSI · RGB · 예측 · 정답](../../assets/rgb06_triple17_spectral/sample_02.png)
 
 ### 예시 3
 
-![LR HSI · RGB · 예측 · 정답](../assets/rgb06_triple17_spectral/sample_03.png)
+![LR HSI · RGB · 예측 · 정답](../../assets/rgb06_triple17_spectral/sample_03.png)
 
 ### 예시 4
 
-![LR HSI · RGB · 예측 · 정답](../assets/rgb06_triple17_spectral/sample_04.png)
+![LR HSI · RGB · 예측 · 정답](../../assets/rgb06_triple17_spectral/sample_04.png)
 
 ### 예시 5
 
-![LR HSI · RGB · 예측 · 정답](../assets/rgb06_triple17_spectral/sample_05.png)
+![LR HSI · RGB · 예측 · 정답](../../assets/rgb06_triple17_spectral/sample_05.png)
 
-[고정 선택 기록](../../experiments/results/rgb06_triple17_spectral/selection.json)
+[고정 선택 기록](../../../experiments/results/rgb06_triple17_spectral/selection.json)
 
 ## 7. 가중치와 검증 근거
 
-- [전체·장면별 test 지표](../../experiments/results/rgb06_triple17_spectral/test/metrics.json)
-- [가중치 epoch·SHA-256](../../experiments/results/rgb06_triple17_spectral/checkpoint_metadata.json)
-- [평가 완료 manifest](../../experiments/results/rgb06_triple17_spectral/report_manifest.json)
+- [전체·장면별 test 지표](../../../experiments/results/rgb06_triple17_spectral/test/metrics.json)
+- [가중치 epoch·SHA-256](../../../experiments/results/rgb06_triple17_spectral/checkpoint_metadata.json)
+- [평가 완료 manifest](../../../experiments/results/rgb06_triple17_spectral/report_manifest.json)
 - best/latest epoch: 99/100. 학습·export 코드: f681dae.
 - 서버 run: `C:\CtrS-triple17-spectral\SSA-MRN\experiments\checkpoints\remote-runs\20261004-235831-565c8ba31ed7`.
 - 2,601,086 parameters. 기존 12특징 가중치에서 이어 학습하지 않은 새 run입니다.
