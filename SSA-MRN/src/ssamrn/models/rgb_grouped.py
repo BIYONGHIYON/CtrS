@@ -182,6 +182,11 @@ class RGBTripleJointSsaMRN(nn.Module):
 
 def build_rgb_hsi_model(config):
     kind=config.get('model_type','latent_rgb')
+    if kind == 'rgb_pilot_joint17_23tap':
+        if config['latent_channels'] != 17 or config['ssai_dimension'] != 4 or config.get('upsampler') != '23tap':
+            raise ValueError('Pilot model requires 17 features, K=4 and 23tap')
+        from .rgb_pilot import RGBPilotJoint17
+        return RGBPilotJoint17(config.get('pilot_options'))
     if kind == 'rgb_triple_joint17_23tap':
         if config['latent_channels'] != 17 or config['ssai_dimension'] != 4 or config.get('upsampler') != '23tap':
             raise ValueError('Joint model requires 17 features, K=4 and 23tap')
