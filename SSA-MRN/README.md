@@ -1,47 +1,50 @@
 # SSA-MRN · RGB 유도 HSI 초해상도
 
-고해상도 RGB 와 저해상도 HSI 에서 ×4 HSI 복원을 연구합니다. 아래는 LIB-HSI 의 관측 HSI 를 합성 area 축소한 평가이며, 실제 센서 HR-HSI 정답 성능과 구분합니다.
+고해상도 RGB와 저해상도 HSI에서 ×4 HSI 복원을 연구합니다. LIB-HSI의 관측 HSI를 합성 area 축소한 평가이며 실제 센서 HR-HSI 정답 성능과 구분합니다.
 
 ## 연구 문서
 
-- [연구 설명 · 재현부터 17 특징·분광 손실까지](docs/guide/research_overview.md)
-- [기존 PAN–MS 재현 정리](docs/reproduction.md)
-- [이전 RGB–HSI 실험과 pilot 정리](docs/previous_experiments.md)
+- [연구 설명](docs/guide/research_overview.md)
+- [기존 PAN–MS 재현](docs/reproduction.md)
+- [이전 RGB–HSI 실험](docs/previous_experiments.md)
 
-## 최신 완료 · RGB08 고주파 보정
+## 최신 완료 · RGB09 저학습률 추가 학습
 
-RGB07 의 17 특징·R/G/B 독립 core·공동 디코더에 **RGB 윤곽·무늬를 추가하는 고주파 보정 경로**를 붙였습니다. 전체 train393 으로 100 에폭 학습하고 validation45 의 MSE 가 최소인 **99 에폭**을 선택했습니다.204 밴드, HR256/LR64, area×4,23 탭, K4, 분광 손실 0.01, 정합 유효 마스크와 LR 평균 일관성 보정을 유지했습니다.2,623,454 파라미터입니다.
+RGB08 고주파 보정 모델의 best 99에폭에서 학습률을 **1e-5로 낮춰 10에폭** 추가 학습했습니다. 모델 가중치만 로드하고 optimizer를 초기화했습니다. 검증 MSE로 선택한 **추가 8에폭** 가중치의 결과입니다. 17특징·K=4·공동 디코더·204밴드·23탭·분광 손실·LR 평균 일관성 보정을 유지했습니다.
 
-|test75 장면 ·300 타일|MSE ↓|PSNR dB ↑|SAM ° ↓|
+| test 75장면 · 300타일 | MSE ↓ | PSNR dB ↑ | SAM ° ↓ |
 |---|---:|---:|---:|
-|23 탭+LR 보정|0.0011539606|30.0649|2.4450|
-|기존 RGB07|0.0004482035|**34.2831**|**2.1570**|
-|RGB08 고주파 보정|0.0004508862|34.2533|2.1593|
+| 23탭 + LR 보정 | 0.0011539606 | 30.0649 | 2.4450 |
+| RGB07 | 0.0004482035 | 34.2831 | 2.1570 |
+| RGB08 | 0.0004508862 | 34.2533 | 2.1593 |
+| **RGB09 추가 학습** | **0.0004371593** | **34.3929** | **2.1532** |
 
-**RGB07 대비 PSNR−0.0299dB, SAM+0.00235°, MSE 약 0.60% 증가**로 평균 성능이 조금 낮았습니다. PSNR 은 38/75 장면에서 개선됐지만 전체 평균 개선은 확인되지 않았습니다. 공간 gradient 오차도 조금 높아져 **기존 RGB07 을 기준 모델로 유지**합니다. [조건·장면별 차이·가중치 해시·결과 보고서](docs/experiments/rgb08_gated_detail.md).
+직전 RGB08 대비 **PSNR +0.1396 dB, SAM −0.00612°, MSE 약 3.04% 감소**했습니다. PSNR은 70/75장면에서 개선됐습니다. RGB07보다도 평균 수치는 나아졌지만 학습량이 달라 고주파 경로 자체의 효과로 단정하지 않습니다. [조건·차이·가중치·결과 보고서](docs/experiments/rgb09_detail_finetune.md).
 
-![실제 100 에폭 학습·검증곡선](docs/assets/rgb08_gated_detail/learning.png)
+![추가 학습 10에폭의 실제 학습·검증 곡선](docs/assets/rgb09_detail_finetune/learning.png)
 
-![23 탭기준선·RGB07·RGB08 test 비교](docs/assets/rgb08_gated_detail/test_metrics.png)
+![RGB08·23탭·RGB09 test 비교](docs/assets/rgb09_detail_finetune/test_metrics.png)
 
-## test 예시 5 종
+## test 예시 5종
 
-서로 다른 test 장면 5 개의 tile0 을 수치 확인 전에 고정했습니다. 왼쪽부터 **LR HSI · RGB 입력 · RGB08 예측 · 정답**입니다. HSI 패널은 같은 3 밴드·같은 정답 기반 대비를 사용하며 지표는 전체 204 밴드로 계산했습니다.
+서로 다른 고정 5장면이며 왼쪽부터 **LR HSI · RGB 입력 · RGB09 예측 · 정답**입니다. HSI 패널의 표시 대비는 동일하며 지표는 전체 204밴드로 계산했습니다.
 
-![test 예시 1](docs/assets/rgb08_gated_detail/sample_01.png)
+![test 예시 1](docs/assets/rgb09_detail_finetune/sample_01.png)
 
-![test 예시 2](docs/assets/rgb08_gated_detail/sample_02.png)
+![test 예시 2](docs/assets/rgb09_detail_finetune/sample_02.png)
 
-![test 예시 3](docs/assets/rgb08_gated_detail/sample_03.png)
+![test 예시 3](docs/assets/rgb09_detail_finetune/sample_03.png)
 
-![test 예시 4](docs/assets/rgb08_gated_detail/sample_04.png)
+![test 예시 4](docs/assets/rgb09_detail_finetune/sample_04.png)
 
-![test 예시 5](docs/assets/rgb08_gated_detail/sample_05.png)
+![test 예시 5](docs/assets/rgb09_detail_finetune/sample_05.png)
 
-[RGB08 204 밴드오프라인 HTML](docs/assets/rgb08_gated_detail/band_viewer/index.html)에서 모든밴드를 볼 수 있습니다. HTML 을 다운로드해 브라우저에서 열면 됩니다. 기존[공개 웹뷰어](https://biyonghiyon.github.io/CtrS/ssa-mrn/)는 RGB07 결과이므로이번 RGB08 이미지와 구분합니다.
+[204밴드 오프라인 HTML](docs/assets/rgb09_detail_finetune/band_viewer/index.html)을 다운로드해 브라우저에서 열 수 있습니다. 기존 [공개 웹뷰어](https://biyonghiyon.github.io/CtrS/ssa-mrn/)는 RGB07 결과입니다.
 
-## 실행 상태와 보관
+## 가중치와 실행 상태
 
-100 에폭 run `20261006-053053-ea63614f1e45`는 2026-10-06 10:38(KST)에 exit0 으로 종료됐습니다. 현재 학습은 없고, LR1e-5 의추가 10 에폭 미세조정은 미실행입니다. 서버 `C:\CtrS-rgb-detail`에 best/latest·전체 결과·HTML 을 보존했습니다. 원본 데이터와 pt 는 Git 에 넣지 않았습니다.
+[best 8에폭](experiments/checkpoints/rgb09_detail_finetune/best.pt) · [latest 10에폭](experiments/checkpoints/rgb09_detail_finetune/latest.pt) · [시작 RGB08 가중치](experiments/checkpoints/rgb09_detail_finetune/init-source.pt) · [체크섬](experiments/checkpoints/rgb09_detail_finetune/sha256.json)
 
-완료 결과에는 공통 보고서·학습/검증 및 비교 그래프·test5 장면의 4 패널·204 밴드 HTML 을 보관합니다. [보고서 양식](docs/experiments/template.md), [작업 규칙](AGENTS.md), [데이터셋 감사 자료](references/rgb_hsi_datasets.md)를 참고합니다.
+추가 학습은 **2026-10-06 15:47:37(KST), exit 0**으로 완료됐습니다. 약 31분 26초이며 이 실험의 학습 프로세스는 종료됐습니다. 서버 원본·가중치와 이전 결과는 보존했습니다. 원본 데이터는 Git에 포함하지 않습니다.
+
+[보고서 양식](docs/experiments/template.md) · [작업 규칙](AGENTS.md) · [데이터셋 감사 자료](references/rgb_hsi_datasets.md)
