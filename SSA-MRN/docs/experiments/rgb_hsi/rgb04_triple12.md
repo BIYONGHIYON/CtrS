@@ -1,6 +1,12 @@
 # RGB 04 · RGB별 12특징 23탭 타일
 
-[이전 실험 목록](../previous_experiments.md) · [현재 연구](../../README.md)
+[이전 실험 목록](../../previous_experiments.md) · [현재 연구](../../../README.md)
+
+| 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
+|---|---|---|---|
+| RGB03 | R/G/B 각각 12특징 처리, 타일 평가 | PSNR +3.2956 dB / SAM +0.1164° | 평가 방식도 바뀌어 증가량을 구조 개선으로 볼 수 없습니다. |
+
+[수치](#3-정량-결과) · [이전 대비](#4-직전-연구와-수치-차이) · [그래프](#5-그래프) · [결과 이미지](#6-결과-이미지-예시)
 
 ## 1. 목적과 상태
 
@@ -34,46 +40,46 @@ K=4 · 17밴드씩 204→12 · R/G/B 각각 독립 12특징 core · 3개 decoder
 
 ## 5. 그래프
 
-![학습 MSE와 검증 PSNR·SAM](../assets/rgb04_triple12/learning.png)
+![학습 MSE와 검증 PSNR·SAM](../../assets/rgb04_triple12/learning.png)
 
-원본 기록에서 추출한 [epoch 수치](../../experiments/results/rgb04_triple12/curves.json). 기록이 없는 epoch를 보간하거나 만들어 넣지 않았습니다. test 결과를 epoch 선택에 사용하지 않습니다.
+원본 기록에서 추출한 [epoch 수치](../../../experiments/results/rgb04_triple12/curves.json). 기록이 없는 epoch를 보간하거나 만들어 넣지 않았습니다. test 결과를 epoch 선택에 사용하지 않습니다.
 
-![test 수치 비교](../assets/rgb04_triple12/test_metrics.png)
+![test 수치 비교](../../assets/rgb04_triple12/test_metrics.png)
 
 직전 수치 비교 그래프의 `previous*`는 평가 조건 확인이 필요한 관측값입니다.
 
 ## 6. 결과 이미지 예시
 
-[보존된 5장면 204밴드 HTML](../assets/rgb04_triple12/band_viewer/index.html) (내려받아 실행). 각 장면의 슬라이더로 1~204밴드를 확인할 수 있습니다. 가중치 SHA-256과 장면·타일은 기존 예시와 동일합니다. CPU float32로 재추론해 기존 CUDA AMP PNG와 미세한 차이가 있을 수 있습니다. 밴드별 정답 유효 영역의 1–99% 범위를 HSI 세 패널에 공통 적용한 8비트 표시이며, 지표는 재평가하지 않았습니다. 파장은 확인되지 않아 밴드 번호로 표시합니다.
+[보존된 5장면 204밴드 HTML](../../assets/rgb04_triple12/band_viewer/index.html) (내려받아 실행). 각 장면의 슬라이더로 1~204밴드를 확인할 수 있습니다. 가중치 SHA-256과 장면·타일은 기존 예시와 동일합니다. CPU float32로 재추론해 기존 CUDA AMP PNG와 미세한 차이가 있을 수 있습니다. 밴드별 정답 유효 영역의 1–99% 범위를 HSI 세 패널에 공통 적용한 8비트 표시이며, 지표는 재평가하지 않았습니다. 파장은 확인되지 않아 밴드 번호로 표시합니다.
 
 왼쪽부터 LR HSI, RGB guide, 예측 HSI, HSI 정답입니다. HSI는 69/52/18 밴드의 GT 1–99% 범위를 공통 적용한 시각화이며, 지표 계산에는 대비 조정을 적용하지 않습니다. LR 표시는 최근접 확대로 픽셀을 보여줍니다.
 
 ### 예시 1 · 2020-11-24_018 · tile 0, sample index 12
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb04_triple12/sample_01.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb04_triple12/sample_01.png)
 
 ### 예시 2 · 2020-11-20_017 · tile 0, sample index 0
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb04_triple12/sample_02.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb04_triple12/sample_02.png)
 
 ### 예시 3 · 2020-12-17_010 · tile 0, sample index 172
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb04_triple12/sample_03.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb04_triple12/sample_03.png)
 
 ### 예시 4 · 2020-11-26_038 · tile 0, sample index 72
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb04_triple12/sample_04.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb04_triple12/sample_04.png)
 
 ### 예시 5 · 2021-01-07_021 · tile 0, sample index 252
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb04_triple12/sample_05.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb04_triple12/sample_05.png)
 
-[사전 고정한 선택 기록](../../experiments/results/rgb04_triple12/selection.json)
+[사전 고정한 선택 기록](../../../experiments/results/rgb04_triple12/selection.json)
 
 ## 7. 가중치와 검증 근거
 
-- [전체 test 수치](../../experiments/results/rgb04_triple12/test/metrics.json)
-- [가중치 epoch·SHA-256](../../experiments/results/rgb04_triple12/checkpoint_metadata.json)
+- [전체 test 수치](../../../experiments/results/rgb04_triple12/test/metrics.json)
+- [가중치 epoch·SHA-256](../../../experiments/results/rgb04_triple12/checkpoint_metadata.json)
 - 서버 가중치: `C:\CtrS-triple\SSA-MRN\experiments\checkpoints\remote-runs\20261003-162417-e46b8079c798` (best 99 / latest 100).
 - 학습된 `.pt`는 보존합니다. 구조/평가 조건은 체크포인트 내 `config`를 읽어 평가할 수 있으므로 과거 별도 학습 JSON은 폐기했습니다.
 

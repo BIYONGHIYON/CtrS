@@ -1,6 +1,12 @@
 # RGB 02 · 정합 보정 Bicubic 256
 
-[이전 실험 목록](../previous_experiments.md) · [현재 연구](../../README.md)
+[이전 실험 목록](../../previous_experiments.md) · [현재 연구](../../../README.md)
+
+| 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
+|---|---|---|---|
+| RGB01 | 정합 보정과 256 타일 | PSNR +0.1769 dB / SAM −0.0040° | 정합·크기가 함께 달라 구조 효과만의 비교는 아닙니다. |
+
+[수치](#3-정량-결과) · [이전 대비](#4-직전-연구와-수치-차이) · [그래프](#5-그래프) · [결과 이미지](#6-결과-이미지-예시)
 
 ## 1. 목적과 상태
 
@@ -34,11 +40,11 @@ K=6 · 204→8 · translation 보정 · 256→64→256 · random crop 학습 / 2
 
 ## 5. 그래프
 
-![학습 MSE와 검증 PSNR·SAM](../assets/rgb02_aligned256/learning.png)
+![학습 MSE와 검증 PSNR·SAM](../../assets/rgb02_aligned256/learning.png)
 
-원본 기록에서 추출한 [epoch 수치](../../experiments/results/rgb02_aligned256/curves.json). 기록이 없는 epoch를 보간하거나 만들어 넣지 않았습니다. test 결과를 epoch 선택에 사용하지 않습니다.
+원본 기록에서 추출한 [epoch 수치](../../../experiments/results/rgb02_aligned256/curves.json). 기록이 없는 epoch를 보간하거나 만들어 넣지 않았습니다. test 결과를 epoch 선택에 사용하지 않습니다.
 
-![test 수치 비교](../assets/rgb02_aligned256/test_metrics.png)
+![test 수치 비교](../../assets/rgb02_aligned256/test_metrics.png)
 
 직전 수치 비교 그래프의 `previous*`는 평가 조건 확인이 필요한 관측값입니다.
 
@@ -48,29 +54,29 @@ K=6 · 204→8 · translation 보정 · 256→64→256 · random crop 학습 / 2
 
 ### 예시 1 · 2020-11-27_014 · tile 2, sample index 82
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb02_aligned256/sample_01.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb02_aligned256/sample_01.png)
 
 ### 예시 2 · 2020-11-26_038 · tile 0, sample index 72
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb02_aligned256/sample_02.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb02_aligned256/sample_02.png)
 
 ### 예시 3 · 2021-01-07_047 · tile 3, sample index 279
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb02_aligned256/sample_03.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb02_aligned256/sample_03.png)
 
 ### 예시 4 · 2020-12-21_012 · tile 2, sample index 190
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb02_aligned256/sample_04.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb02_aligned256/sample_04.png)
 
 ### 예시 5 · 2020-12-21_036 · tile 2, sample index 206
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb02_aligned256/sample_05.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb02_aligned256/sample_05.png)
 
-[사전 고정한 선택 기록](../../experiments/results/rgb02_aligned256/random_samples/selection.json)
+[사전 고정한 선택 기록](../../../experiments/results/rgb02_aligned256/random_samples/selection.json)
 
 ## 7. 가중치와 검증 근거
 
-- [전체 test 수치](../../experiments/results/rgb02_aligned256/test_metrics.json)
+- [전체 test 수치](../../../experiments/results/rgb02_aligned256/test_metrics.json)
 - 가중치: `experiments/checkpoints/lib_rgb_hsi_aligned_256_b4/best.pt` (epoch 98), `latest.pt` (epoch 100).
 - 학습된 `.pt`는 보존합니다. 구조/평가 조건은 체크포인트 내 `config`를 읽어 평가할 수 있으므로 과거 별도 학습 JSON은 폐기했습니다.
 

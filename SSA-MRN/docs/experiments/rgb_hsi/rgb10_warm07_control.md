@@ -1,6 +1,12 @@
 # RGB10 · RGB07 저학습률 대조 실험
 
-[현재 연구](../../README.md) · [RGB07](rgb07_joint17_consistency.md) · [RGB09](rgb09_detail_finetune.md)
+[현재 연구](../../../README.md) · [RGB07](rgb07_joint17_consistency.md) · [RGB09](rgb09_detail_finetune.md)
+
+| 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
+|---|---|---|---|
+| RGB09 · 검증 데이터 비교 | 고주파 경로 없는 RGB07도 같은 저학습률 추가 학습 | 검증 PSNR +0.00507 dB / SAM −0.00395° | 단순한 RGB07 계열을 후속 실험의 시작점으로 선택했습니다. |
+
+[수치](#3-정량-결과) · [이전 대비](#4-직전-연구와-수치-차이) · [그래프](#5-그래프) · [결과 이미지](#6-결과-이미지-예시)
 
 ## 1. 목적과 상태
 
@@ -20,7 +26,7 @@ validation45 장면 평균입니다.
 | RGB09 추가 학습 | 0.0004850071 | 34.1944 | 2.24961 |
 | RGB10 · RGB07 추가 학습 | 0.0004847384 | 34.1995 | 2.24567 |
 
-첫 행은 [기존 matched 검증](pilot_followup.md)의 Linux 재평가 수치이므로 장치 차이도 함께 고려합니다. [전체·장면별 검증과 10개 에폭](../../experiments/results/rgb10_warm07_control/validation_results.json).
+첫 행은 [기존 matched 검증](../pilot/pilot_followup.md)의 Linux 재평가 수치이므로 장치 차이도 함께 고려합니다. [전체·장면별 검증과 10개 에폭](../../../experiments/results/rgb10_warm07_control/validation_results.json).
 
 ## 4. 직전 연구와 수치 차이
 
@@ -28,7 +34,7 @@ validation45 장면 평균입니다.
 
 ## 5. 그래프
 
-![추가 10에폭의 실제 학습·검증 곡선](../assets/rgb10_warm07_control/learning.png)
+![추가 10에폭의 실제 학습·검증 곡선](../../assets/rgb10_warm07_control/learning.png)
 
 ## 6. 결과 이미지 예시
 
@@ -36,7 +42,7 @@ validation45 장면 평균입니다.
 
 ## 7. 가중치와 검증 근거
 
-Run `20261006-160625-01cb8ea06a54`, 서버 `C:\CtrS-rgb-detail\SSA-MRN\experiments\checkpoints\remote-runs-warm07`의 해당 run에 best/latest를 보존했습니다. best 추가4에폭 SHA-256: `025101836f8f69b9d9fa20bbbcadae2a8d46667dfedbe78494817d21c677cffd`. 시작 RGB07 SHA-256: `5e126b17f0d95f445e8226fce401d0891593b245b737e73dc2810a3e4510d704`. 학습 checkout 기준은 `12206bf5803665beee8629580a51b4ce828856d7`의 모델·학습 코드이며, 당시 별도 warm 컨트롤러를 추가했습니다. [시작 상태 기록](../../experiments/results/rgb10_warm07_control/start_state.json)을 보관했습니다.
+Run `20261006-160625-01cb8ea06a54`, 서버 `C:\CtrS-rgb-detail\SSA-MRN\experiments\checkpoints\remote-runs-warm07`의 해당 run에 best/latest를 보존했습니다. best 추가4에폭 SHA-256: `025101836f8f69b9d9fa20bbbcadae2a8d46667dfedbe78494817d21c677cffd`. 시작 RGB07 SHA-256: `5e126b17f0d95f445e8226fce401d0891593b245b737e73dc2810a3e4510d704`. 학습 checkout 기준은 `12206bf5803665beee8629580a51b4ce828856d7`의 모델·학습 코드이며, 당시 별도 warm 컨트롤러를 추가했습니다. [시작 상태 기록](../../../experiments/results/rgb10_warm07_control/start_state.json)을 보관했습니다.
 
 ## 8. 한계와 다음 판단
 

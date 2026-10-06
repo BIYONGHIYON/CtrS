@@ -1,6 +1,12 @@
 # RGB 01 · 8특징 Bicubic 128
 
-[이전 실험 목록](../previous_experiments.md) · [현재 연구](../../README.md)
+[이전 실험 목록](../../previous_experiments.md) · [현재 연구](../../../README.md)
+
+| 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
+|---|---|---|---|
+| 첫 RGB–HSI 실험 | 204→8특징, Bicubic, 128 타일 | PSNR 32.3048 / SAM 2.3161 | RGB–HSI 확장 기준을 확보했습니다. |
+
+[수치](#3-정량-결과) · [이전 대비](#4-직전-연구와-수치-차이) · [그래프](#5-그래프) · [결과 이미지](#6-결과-이미지-예시)
 
 ## 1. 목적과 상태
 
@@ -29,11 +35,11 @@ K=6 · 204→8 dense 압축 · RGB 공통 core · 128→32→128 · 정합 보�
 
 ## 5. 그래프
 
-![학습 MSE와 검증 PSNR·SAM](../assets/rgb01_latent8/learning.png)
+![학습 MSE와 검증 PSNR·SAM](../../assets/rgb01_latent8/learning.png)
 
-원본 기록에서 추출한 [epoch 수치](../../experiments/results/rgb01_latent8/curves.json). 기록이 없는 epoch를 보간하거나 만들어 넣지 않았습니다. test 결과를 epoch 선택에 사용하지 않습니다.
+원본 기록에서 추출한 [epoch 수치](../../../experiments/results/rgb01_latent8/curves.json). 기록이 없는 epoch를 보간하거나 만들어 넣지 않았습니다. test 결과를 epoch 선택에 사용하지 않습니다.
 
-![test 수치 비교](../assets/rgb01_latent8/test_metrics.png)
+![test 수치 비교](../../assets/rgb01_latent8/test_metrics.png)
 
 직전 수치 비교 그래프의 `previous*`는 평가 조건 확인이 필요한 관측값입니다.
 
@@ -43,13 +49,13 @@ K=6 · 204→8 dense 압축 · RGB 공통 core · 128→32→128 · 정합 보�
 
 ### 예시 1 · 2020-11-20_017 · tile 0, sample index 0
 
-![입력 HSI, RGB, 예측, 정답](../assets/rgb01_latent8/sample_01.png)
+![입력 HSI, RGB, 예측, 정답](../../assets/rgb01_latent8/sample_01.png)
 
 과거 보관 예시는 1개입니다. 없는 예측을 새 결과로 생성하지 않았으며, 앞으로 완료되는 실험에는 서로 다른 test 장면 5개가 필수입니다.
 
 ## 7. 가중치와 검증 근거
 
-- [전체 test 수치](../../experiments/results/rgb01_latent8/test_metrics.json)
+- [전체 test 수치](../../../experiments/results/rgb01_latent8/test_metrics.json)
 - best epoch 99, latest epoch 100. 초기 재개로 반복된 epoch는 마지막 기록을 사용했습니다.
 - 서버 가중치: `C:\CtrS\SSA-MRN\experiments\checkpoints\lib_rgb_hsi_fast`.
 - 학습된 `.pt`는 보존합니다. 구조/평가 조건은 체크포인트 내 `config`를 읽어 평가할 수 있으므로 과거 별도 학습 JSON은 폐기했습니다.

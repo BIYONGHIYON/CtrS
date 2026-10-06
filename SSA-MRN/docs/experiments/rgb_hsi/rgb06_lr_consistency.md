@@ -1,6 +1,12 @@
 # RGB 06 후처리 · LR 평균 일관성 보정
 
-[현재 연구](../../README.md) · [원래 RGB06 실험](rgb06_triple17_spectral.md)
+[현재 연구](../../../README.md) · [원래 RGB06 실험](rgb06_triple17_spectral.md)
+
+| 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
+|---|---|---|---|
+| RGB06 | 재학습 없이 LR 평균 일관성 보정 | PSNR +0.1562 dB / SAM −0.0381° | 후속 구조의 기본 보정으로 채택했습니다. |
+
+[수치](#3-정량-결과) · [이전 대비](#4-직전-연구와-수치-차이) · [그래프](#5-그래프) · [결과 이미지](#6-결과-이미지-예시)
 
 ## 1. 목적과 상태
 
@@ -35,33 +41,33 @@
 
 ## 5. 그래프
 
-![테스트 75장면별 PSNR 증가량](../assets/rgb06_lr_consistency/test_scene_psnr_gain.svg)
+![테스트 75장면별 PSNR 증가량](../../assets/rgb06_lr_consistency/test_scene_psnr_gain.svg)
 
-[원래 RGB06의 학습·검증 곡선](../assets/rgb06_triple17_spectral/learning.png)은 같은 가중치의 기록입니다. 후처리에는 별도의 학습 곡선이 없습니다.
+[원래 RGB06의 학습·검증 곡선](../../assets/rgb06_triple17_spectral/learning.png)은 같은 가중치의 기록입니다. 후처리에는 별도의 학습 곡선이 없습니다.
 
 ## 6. 결과 이미지 예시
 
 RGB06에서 수치를 보기 전에 고정한 서로 다른 테스트 장면 `[3, 0, 43, 18, 63]`, 각 장면의 tile0입니다. 왼쪽부터 **LR HSI · RGB 입력 · LR 보정 결과 · 정답**입니다. HSI의 표시용 69/52/18번 밴드에는 정답의 밴드별 1~99% 대비를 동일하게 사용했습니다. 정량 평가는 모든 204밴드 원래 값을 사용했습니다.
 
-![예시 1](../assets/rgb06_lr_consistency/sample_01.png)
+![예시 1](../../assets/rgb06_lr_consistency/sample_01.png)
 
-![예시 2](../assets/rgb06_lr_consistency/sample_02.png)
+![예시 2](../../assets/rgb06_lr_consistency/sample_02.png)
 
-![예시 3](../assets/rgb06_lr_consistency/sample_03.png)
+![예시 3](../../assets/rgb06_lr_consistency/sample_03.png)
 
-![예시 4](../assets/rgb06_lr_consistency/sample_04.png)
+![예시 4](../../assets/rgb06_lr_consistency/sample_04.png)
 
-![예시 5](../assets/rgb06_lr_consistency/sample_05.png)
+![예시 5](../../assets/rgb06_lr_consistency/sample_05.png)
 
-기존 [204밴드 웹 뷰어](https://biyonghiyon.github.io/CtrS/ssa-mrn/)는 **보정 전 RGB06 출력**입니다. 새 평가 옵션으로 보정된 오프라인 뷰어를 생성할 수 있으며, 이 PR에서는 Pages를 변경하지 않습니다.
+이 실험의 LR 보정 전 RGB06 영상은 [보존 HTML](../../assets/rgb06_triple17_spectral/band_viewer/index.html)에서 확인합니다. 해당 HTML은 보정 후 결과가 아닙니다. 공개 Pages는 최신 대표 연구인 RGB11을 표시합니다.
 
 ## 7. 가중치와 검증 근거
 
-- [검증 전체·장면별 JSON](../../experiments/results/rgb06_lr_consistency/validation.json)
-- [테스트 전체·장면별 JSON](../../experiments/results/rgb06_lr_consistency/test.json)
-- [고정 5장면 선택 기록](../../experiments/results/rgb06_triple17_spectral/selection.json)
-- [원래 best 가중치 기록](../../experiments/results/rgb06_triple17_spectral/checkpoint_metadata.json): epoch 99, SHA-256 `f9dcc29f1dd93980c2d405ed303e8d243d0a65e9246f5e172e021962ff7308d8`.
-- [체크포인트와 해시가 일치하는 정합 manifest](../../experiments/results/rgb06_lr_consistency/alignment_manifest.json): SHA-256 `7a66ad28bc78fe8691fddbc2d94f0a871d7c10507407f7d1f36abe1b20f004f4`.
+- [검증 전체·장면별 JSON](../../../experiments/results/rgb06_lr_consistency/validation.json)
+- [테스트 전체·장면별 JSON](../../../experiments/results/rgb06_lr_consistency/test.json)
+- [고정 5장면 선택 기록](../../../experiments/results/rgb06_triple17_spectral/selection.json)
+- [원래 best 가중치 기록](../../../experiments/results/rgb06_triple17_spectral/checkpoint_metadata.json): epoch 99, SHA-256 `f9dcc29f1dd93980c2d405ed303e8d243d0a65e9246f5e172e021962ff7308d8`.
+- [체크포인트와 해시가 일치하는 정합 manifest](../../../experiments/results/rgb06_lr_consistency/alignment_manifest.json): SHA-256 `7a66ad28bc78fe8691fddbc2d94f0a871d7c10507407f7d1f36abe1b20f004f4`.
 
 현재 `main`의 기존 정합 manifest는 파싱된 JSON 내용은 같지만 바이트 배열과 SHA-256이 다릅니다. 체크포인트는 원본 바이트 해시를 검사하므로, 재평가에는 위 보관본을 `--alignment-manifest`로 지정합니다. 기존 manifest를 덮어쓰지 않아 과거 체크포인트의 검증 조건을 보존합니다.
 
