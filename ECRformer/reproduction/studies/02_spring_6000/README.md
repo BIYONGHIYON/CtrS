@@ -10,8 +10,9 @@
 
 ## 3. 수정한 점
 
-- 봄 train pool에서 seed 42로 6,000개를 고정 선택하고 실행 목록을 저장해 재시작 간 표본을 동일하게 했습니다.
+- 봄 train pool에서 seed 42로 6,000개를 선택해 목록으로 저장했습니다. 재시작해도 표본은 같고, epoch마다 목록의 순서만 다시 섞었습니다.
 - 모델 구조는 바꾸지 않았습니다. 학습 표본 선택·기록과 Windows GPU 환경에 맞는 batch/precision 설정을 다뤘습니다.
+- `num_workers=0` 및 학습량 등 실행 옵션을 지정할 수 있게 하고, 서버 데이터의 중첩 폴더 경로를 처리했습니다.
 - 원인 확인을 위해 training_diagnostics.jsonl에 진행 상황을 200 batch 간격으로 남겼습니다. checkpoint 재개 실행도 기록에 포함했습니다.
 - 이 단계는 발산 원인을 입증하는 통제 실험이 아니라, 원인을 좁히기 위한 진단 실행입니다.
 
@@ -23,6 +24,7 @@ Windows 서버의 RTX 3060 Ti 8GB, RAM 16GB에서 실행했습니다. 저장된 
 | --- | --- |
 | 데이터 | 봄 train pool 24,378개 중 고정 6,000개, validation 756개 |
 | 모델·crop | ECRformer 전체 모델(약 11.37M 파라미터), 128×128 |
+| DataLoader workers | 0 |
 | 정밀도·배치 | FP16 mixed, train 2 × accumulation 8 = 유효 batch 16; validation batch 1 |
 | optimizer·LR | AdamW, 4e-4 |
 | 최대 epoch·조기 종료 | 200 / patience 10 |
@@ -39,7 +41,21 @@ Windows 서버의 RTX 3060 Ti 8GB, RAM 16GB에서 실행했습니다. 저장된 
 | 16 | 21.068518 | -26.8539 dB | -0.000260 | 19.061686 |
 | 18 | 64.329369 | -36.4211 dB | 0.000013 | 57.996456 |
 
-epoch 16부터 학습 MAE와 validation 오차가 함께 급증했습니다. 이 양상은 일반적인 validation 과적합보다는 학습 발산에 가깝습니다. test 분할 평가는 기록되지 않았으므로 위 수치는 validation 결과뿐입니다.
+epoch 16부터 학습 MAE와 validation 오차가 함께 급증했습니다. 이 양상은 일반적인 validation 과적합보다는 학습 발산에 가깝습니다. 위 표는 validation 결과입니다. epoch 8 checkpoint는 별도 spring test 분할에서도 평가했으며, 그 결과는 다음 절에 따로 제시합니다.
+
+### 별도 테스트 평가 (epoch 8 checkpoint)
+
+best validation checkpoint인 epoch 8 가중치를 spring test set 3,983패치(5개 ROI)에서 별도로 평가했습니다. 아래 표는 같은 test set에서 구름 입력과 모델 예측을 비교한 결과입니다.
+
+| 지표 | 구름 입력 그대로 | epoch 8 예측 |
+| --- | ---: | ---: |
+| MAE ↓ | 0.12299 | 0.03367 |
+| PSNR ↑ | 18.722 dB | 27.151 dB |
+| SAM ↓ | 13.709° | 9.299° |
+| SSIM ↑ | 0.68092 | 0.86330 |
+| LPIPS ↓ | 0.42027 | 0.43418 |
+
+MAE·PSNR·SAM·SSIM은 개선됐지만 LPIPS는 악화됐습니다. 비교 이미지에서도 흐림과 세부 표현 손실이 관찰됐으므로, 모든 지표와 시각 품질이 개선된 결과로 해석하면 안 됩니다. 이 사후 test 평가는 학습 중 기록한 validation 결과와 별개입니다. validation PSNR 30.0305 dB와 test PSNR 27.151 dB는 서로 다른 분할에서 나온 수치여서 직접 비교하지 않습니다.
 
 ## 6. 논문과 비교
 
@@ -49,7 +65,7 @@ FP32 대조가 없으므로 FP16을 원인으로 단정하지 않습니다. GPU 
 
 ## 7. 결론·한계
 
-고정 표본과 상세 로그로 발산 구간을 epoch 16으로 좁혔지만, 발산한 배치·연산 또는 단일 원인을 확인하지 못했습니다. epoch 8 checkpoint의 test 성능도 아직 없습니다. 따라서 이 연구는 원인 규명에 성공한 실험이 아니라 **학습이 안정적으로 진행되지 않는다는 점을 확인한 진단**입니다.
+고정 표본과 상세 로그로 발산 구간을 epoch 16으로 좁혔지만, 발산한 배치·연산 또는 단일 원인을 확인하지 못했습니다. epoch 8 checkpoint는 별도 test에서 구름 입력 대비 MAE·PSNR·SAM·SSIM이 개선됐지만 LPIPS는 악화됐습니다. 이는 해당 spring test set에서의 복원 결과이지 원인 규명이나 논문 재현 성공을 뜻하지 않습니다. 학습은 epoch 16부터 발산했고 원인도 확정되지 않았으므로, 이 연구의 결론은 **학습이 안정적으로 진행되지 않았다는 진단**입니다.
 
 ## 8. 이력·산출물
 

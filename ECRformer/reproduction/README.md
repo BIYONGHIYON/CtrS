@@ -15,7 +15,7 @@
 | 단계 | 무엇을 바꿨나 | 결과와 판단 |
 | --- | --- | --- |
 | [1. 겨울 데이터 분할 연구](./studies/01_winter/README.md) | 50GB 저장공간 제한으로 겨울 데이터를 두 구간으로 나눠 실행. 첫 구간 기준 학습 후 두 번째 구간에서 가중치 미세조정 | 첫 구간은 14 epoch에서 조기 종료. 두 번째 구간 미세조정은 별도 test에서 일부 지표가 개선됐으나, 전체 겨울 재현은 아님 |
-| [2. 봄 6,000개 진단 연구](./studies/02_spring_6000/README.md) | 봄 train에서 seed 42로 6,000개를 고정 추출하고 샘플 목록·학습 진단 로그를 저장 | best validation은 epoch 8. epoch 16부터 오차가 급증했고 epoch 18에서 조기 종료. 원인은 특정되지 않았고 test 결과도 없음 |
+| [2. 봄 6,000개 진단 연구](./studies/02_spring_6000/README.md) | 봄 train에서 seed 42로 6,000개를 고정 추출하고 샘플 목록·학습 진단 로그를 저장 | best validation은 epoch 8. epoch 16부터 발산해 epoch 18에서 종료. 별도 test(3,983패치, 5 ROI)에서 MAE 0.03367·PSNR 27.151 dB였으나 LPIPS는 악화; 원인은 미확정 |
 | [3. 봄·겨울 혼합 연구](./studies/03_spring_winter_mixed/README.md) | 봄·겨울에서 3,000개씩 고정 추출. 모델 구조는 유지하고 데이터·로그·재개·학습 설정을 실행 환경에 맞춤 | 16 epoch 수행, best epoch 5. 합산 test MAE 0.03086, PSNR 27.57 dB, SSIM 0.86478. 논문과 동등 조건이 아님 |
 
 ## 비교할 때의 한계

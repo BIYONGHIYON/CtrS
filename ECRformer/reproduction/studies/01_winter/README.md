@@ -19,8 +19,8 @@
 
 | 실행 | 데이터·환경 | 설정 |
 | --- | --- | --- |
-| half1 | 겨울 train 6,833 / validation 1,386 / test 783패치. RTX A6000 | seed 42, AdamW, LR 4e-4, batch 4 × accumulation 4, FP32, 최대 200 epoch, early-stop patience 10 |
-| half2 | 겨울의 다른 데이터 구간, test 784패치. 전체 train 수는 기록에서 확인되지 않음 | half1 가중치에서 미세조정, LR 1e-4, FP32, batch 4 × accumulation 4. best epoch=2-step=1344 checkpoint |
+| half1 | 겨울 train 6,833 / validation 1,386 / test 783패치(1 ROI, 제공된 학습 변경 이력 문서 기준). RTX A6000 | seed 42, AdamW, LR 4e-4, batch 4 × accumulation 4, FP32, 최대 200 epoch, early-stop patience 10 |
+| half2 | train 7,162 / validation 1,385 / test 784패치. train/validation 수는 제공된 학습 변경 이력 문서 기준이며, 저장소의 hparams에는 수량이 기록되지 않음 | half1 가중치에서 미세조정, LR 1e-4, FP32, batch 4 × accumulation 4. best epoch=2-step=1344 checkpoint |
 
 ## 5. 실행 결과
 
@@ -30,7 +30,7 @@ half1은 epoch 0–13, 총 14 epoch를 실행했습니다. best validation check
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | 결과 | 0.03438 | 0.02544 | 29.61 dB | 11.25° | 0.84656 | 0.39683 |
 
-half2 test 784패치에서 half1 가중치와 미세조정 checkpoint를 각각 평가했습니다.
+half2 학습은 총 13 epoch 실행됐고 best checkpoint는 epoch 2였습니다. half2 test 784패치에서 half1 가중치와 미세조정 checkpoint를 각각 평가했습니다.
 
 | half2 test | RMSE↓ | MAE↓ | PSNR↑ | SAM↓ | SSIM↑ | LPIPS↓ |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -43,7 +43,7 @@ half1의 MAE·PSNR·SSIM·SAM·LPIPS는 논문 표보다 낮은 성능을 보입
 
 ## 7. 결론·한계
 
-저장공간 문제에 대응해 두 구간을 실행했지만, 첫 학습은 200 epoch에 도달하지 못하고 validation 정체로 조기 종료됐습니다. half2 미세조정은 같은 half2 test에서 일부 개선을 보였으나, 안정적인 전체 겨울 학습이나 원 논문 재현을 입증하지 않습니다. 따라서 이 단계에서 얻은 것은 제한된 겨울 기준선과 실패 기록입니다.
+저장공간 문제에 대응해 두 구간을 실행했지만, 첫 학습은 200 epoch에 도달하지 못하고 validation 정체로 조기 종료됐습니다. half2 미세조정은 같은 half2 test에서 일부 개선을 보였으나, 이는 모델 구조 개선이 아닌 기존 가중치의 두 번째 겨울 데이터 적응 결과입니다. 안정적인 전체 겨울 학습이나 원 논문 재현을 입증하지 않습니다. 따라서 이 단계에서 얻은 것은 제한된 겨울 기준선과 실패 기록입니다.
 
 ## 8. 이력·산출물
 
