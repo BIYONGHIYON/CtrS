@@ -16,9 +16,15 @@
 
 모델 출력 \(\widehat H\)를 4×4 평균 축소한 값과 LR HSI 입력 \(Y\)의 차이를 해당 4×4 영역의 모든 픽셀에 더합니다.
 
-\[
-\widehat H_{\mathrm{DC}}=\widehat H+U_{\mathrm{repeat}}\!\left(Y-D_{\mathrm{area}}(\widehat H)\right).
-\]
+$$
+\widehat H_{\mathrm{DC}}
+=
+\widehat H
++
+U_{\mathrm{repeat}}\!\left(
+Y-D_{\mathrm{area}}(\widehat H)
+\right)
+$$
 
 정합 마스크의 16픽셀이 모두 유효한 블록에만 보정합니다. 혼합 블록은 건드리지 않습니다. RGB06과 같은 204밴드, HR256/LR64, K=4, 17특징, 23탭 출력, 4타일/장면, 정합 manifest와 유효 마스크를 사용했습니다. 모델과 23탭 기준선에 **동일한 보정**을 적용했습니다. GT는 지표와 표시용 대비에만 사용하며 보정 입력에는 사용하지 않습니다.
 
