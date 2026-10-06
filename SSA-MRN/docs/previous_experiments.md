@@ -19,9 +19,13 @@
 
 | RGB 08 · 고주파 보정 전체 100에폭 | [rgb08_gated_detail](experiments/rgb08_gated_detail.md) | 34.2533 | 2.1593 |
 
+| RGB09 · 고주파 모델 저학습률 추가 학습 | [rgb09_detail_finetune](experiments/rgb09_detail_finetune.md) | 34.3929 | 2.1532 |
+
 34특징 실험은 중단 후 요청에 따라 결과를 삭제했습니다. 검증된 최종 test 결과가 없으므로 완료 연구 표에 포함하지 않습니다. 모델 코드는 보존 가중치 평가와 향후 구조 변경을 위해 남깁니다.
 
 ## 검증 전용 예비실험
+
+- [RGB10 · RGB07 저학습률 대조 실험](experiments/rgb10_warm07_control.md)
 
 - [6단계10에폭·train155](experiments/pilot_subset155.md)
 - [원본 대 미세조정·30에폭후속 비교](experiments/pilot_followup.md)
