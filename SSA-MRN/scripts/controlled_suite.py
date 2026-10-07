@@ -21,7 +21,7 @@ def source_hashes():
     files=list((ROOT/"src").rglob("*.py"))+[ROOT/"scripts/train.py",ROOT/"scripts/train_controlled.py",Path(__file__).resolve(),ROOT/"references/upstream/network.py"]
     return {str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
 
-def run(c, name, resume):
+def run(c, name, resume, extend=False):
     if source_hashes()!=json.loads((RUN/"source_hashes.json").read_text()): raise RuntimeError("source changed during suite")
     directory=RUN/name; directory.mkdir(parents=True,exist_ok=True)
     if (directory/"complete.json").exists():
@@ -33,6 +33,7 @@ def run(c, name, resume):
     write(config,c)
     cmd=[sys.executable,str(ROOT/"scripts/train_controlled.py"),"--config",str(config),"--output",str(directory)]
     if (directory/(resume+".pt")).exists():cmd += ["--resume",resume]
+    if extend:cmd += ["--extend-epochs"]
     with (directory/"train.log").open("a") as log:
         child=subprocess.Popen(cmd,stdout=log,stderr=subprocess.STDOUT)
         while child.poll() is None:
@@ -41,7 +42,17 @@ def run(c, name, resume):
         if child.returncode:raise RuntimeError(f"{name} failed; see train.log")
     return json.loads((directory/"complete.json").read_text())["best_mse"]
 
-def worker(plan,resume):
+def worker(plan,resume,adopt_dir=None,adopt_pid=None):
+    if adopt_dir:
+        name="01_QB_k4_s42"
+        expected=dict(plan["training"],sensor="QB",train=plan["data"]["QB"]["train"],val=plan["data"]["QB"]["val"],seed=42,k=4,loss="baseline",weight=0.)
+        if json.loads((adopt_dir/"config.json").read_text())!=expected:raise RuntimeError("adopted config mismatch")
+        while alive(adopt_pid):
+            write(RUN/"state.json",dict(pid=os.getpid(),training_pid=adopt_pid,current=name,status="running",external_directory=str(adopt_dir),heartbeat=time.time()))
+            time.sleep(5)
+        if not (adopt_dir/"complete.json").exists():raise RuntimeError("adopted training stopped before completion; resume it in original suite")
+        shutil.copytree(adopt_dir,RUN/name)
+        write(RUN/"adoption.json",dict(source=str(adopt_dir),config=expected,files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in adopt_dir.iterdir() if p.is_file()}))
     wins={4:0,6:0}; scores={}
     for sensor,paths in plan["data"].items():
         for k in [4,6]:
@@ -53,14 +64,27 @@ def worker(plan,resume):
         winner=4 if scores[f"{sensor}_k4"]<=scores[f"{sensor}_k6"] else 6;wins[winner]+=1
     k=4 if wins[4]>=wins[6] else 6
     write(RUN/"baseline_selection.json",dict(k=k,scores=scores,rule="per-sensor mean best validation MSE; majority vote; ties K4"))
+    candidates=[]
     for step,kind in [(2,"spectral"),(3,"consistency"),(4,"edge")]:
         for weight in plan["weights"][kind]:
             for seed in plan["seeds"]:
                 paths=plan["data"]["QB"]
                 c=dict(plan["training"],sensor="QB",train=paths["train"],val=paths["val"],seed=seed,k=k,loss=kind,weight=weight)
+                c["epochs"]=plan["screening_epochs"]
                 if kind=="consistency":
                     c["observation"]=plan["observations"]["QB"]
-                run(c,f"{step:02}_{kind}_w{weight}_s{seed}",resume)
+                name=f"{step:02}_{kind}_w{weight}_s{seed}"
+                score=run(c,name,resume)
+                candidates.append(dict(name=name,config=c,best_mse=score))
+    winner=min(candidates,key=lambda x:(x["best_mse"],x["name"]))
+    write(RUN/"screening_selection.json",dict(winner=winner,candidates=candidates,rule="lowest best QB validation MSE during 30 epochs; ties by run name; no test selection"))
+    final=RUN/"05_final_candidate"
+    if not final.exists():
+        final.mkdir()
+        for filename in ["latest.pt","best.pt","history.jsonl"]:shutil.copy2(RUN/winner["name"]/filename,final/filename)
+        write(final/"continuation.json",dict(source=winner["name"],resume="latest",start_epoch=plan["screening_epochs"]))
+    c=dict(winner["config"],epochs=plan["final_epochs"])
+    run(c,"05_final_candidate",resume,extend=True)
     write(RUN/"state.json",dict(pid=os.getpid(),status="finished",heartbeat=time.time()))
 
 def validate_plan(plan):
@@ -86,6 +110,7 @@ def validate_plan(plan):
 def main():
     global RUN
     p=argparse.ArgumentParser();p.add_argument("command",choices=["start","resume-latest","resume-best","status","inspect","logs","worker","check"]);p.add_argument("--plan",type=Path,default=ROOT/"scripts/controlled_suite_plan.json");p.add_argument("--follow",action="store_true");p.add_argument("--resume",default="latest",choices=["latest","best"])
+    p.add_argument("--adopt-dir",type=Path);p.add_argument("--adopt-pid",type=int)
     p.add_argument("--run-dir",type=Path,default=RUN)
     a=p.parse_args(); RUN=a.run_dir.resolve();RUN.mkdir(parents=True,exist_ok=True);statepath=RUN/"state.json"
     state=json.loads(statepath.read_text()) if statepath.exists() else {}
@@ -98,12 +123,13 @@ def main():
             import msvcrt;msvcrt.locking(lock.fileno(),msvcrt.LK_NBLCK,1)
         else:
             import fcntl;fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
-        try:worker(json.loads(a.plan.read_text()),a.resume)
+        try:worker(json.loads(a.plan.read_text()),a.resume,a.adopt_dir,a.adopt_pid)
         except Exception as e:
             write(statepath,dict(pid=os.getpid(),status="failed",error=str(e),heartbeat=time.time()));raise
     elif a.command=="check":
         print(json.dumps(validate_plan(json.loads(a.plan.read_text())),indent=2))
     elif a.command in ["start","resume-latest","resume-best"]:
+        if bool(a.adopt_dir)!=bool(a.adopt_pid):raise RuntimeError("both adoption arguments required")
         if alive(state.get("pid")) or alive(state.get("training_pid")):raise RuntimeError("suite or training already running")
         if a.command=="start" and any(RUN.glob("*/latest.pt")):raise RuntimeError("use resume-latest for existing runs")
         plan=json.loads(a.plan.read_text()); snapshot=RUN/"plan.json"
@@ -117,6 +143,7 @@ def main():
         log=(RUN/"controller.log").open("a")
         flags=0x00000008|0x00000200|0x08000000 if os.name=="nt" else 0
         command=[sys.executable,str(Path(__file__).resolve()),"worker","--plan",str(snapshot),"--resume",resume,"--run-dir",str(RUN)]
+        if a.adopt_dir:command += ["--adopt-dir",str(a.adopt_dir),"--adopt-pid",str(a.adopt_pid)]
         if os.name=="nt":
             # WMI creates the worker outside OpenSSH's session job; Popen alone is killed on disconnect.
             line=subprocess.list2cmdline(command).replace("'","''")
