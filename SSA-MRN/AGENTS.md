@@ -6,7 +6,7 @@
 - 문서 입구는 `docs/research.md`(연구 설명), `docs/reproduction.md`(재현), `docs/previous_experiments.md`(실험 이력)로 둔다.
 - 보고서는 `docs/experiments/reproduction/`, `improvements/`로 분류한다. 이미지와 숫자 근거는 기존 실험 ID별 경로를 유지한다.
 - 각 보고서 첫머리에 비교 기준·바꾼 점·관측 차이·판단 표를 넣는다. README에는 대표 이미지와 요약만 두고 5장면·곡선은 상세 보고서에 둔다.
-- RGB–HSI 연구와 204밴드 뷰어는 개인 RGB-HSI-SR 저장소에서 관리한다.
+- RGB–HSI 연구는 개인 RGB-HSI-SR 저장소에서 관리한다.
 - 각 실험은 `docs/experiments/template.md`의 8개 절을 모두 사용한다.
 - 첫 연구 외에는 직전 연구와 PSNR/SAM/MSE 수치 차이를 적는다. 조건이 다르면 직접 비교 불가 사유도 적는다.
 - 서로 다른 데이터·장치·평가 타일의 수치 차이로 구조 개선을 확정하지 않는다.
