@@ -1,0 +1,48 @@
+{
+  "data": {
+    "QB": {
+      "train": "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/QuickBird/Training Dataset/train_qb.h5",
+      "val": "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/QuickBird/Training Dataset/valid_qb.h5"
+    }
+  },
+  "parallel": 4,
+  "training": {
+    "epochs": 100,
+    "batch_size": 32,
+    "micro_batch": 32,
+    "lr": 0.0001,
+    "lr_gain": 0.1
+  },
+  "runs": [
+    {
+      "sensor": "QB",
+      "k": 6,
+      "seed": 42,
+      "variant": "baseline"
+    },
+    {
+      "sensor": "QB",
+      "k": 6,
+      "seed": 42,
+      "variant": "interp23"
+    },
+    {
+      "sensor": "QB",
+      "k": 6,
+      "seed": 42,
+      "variant": "lr_correction"
+    },
+    {
+      "sensor": "QB",
+      "k": 6,
+      "seed": 42,
+      "variant": "high_frequency"
+    }
+  ],
+  "expected_bytes": {
+    "QB": {
+      "train": 5194901672,
+      "val": 577415336
+    }
+  }
+}
