@@ -4,8 +4,6 @@
 
 동국대학교 종합설계 팀 프로젝트입니다. **SSA-MRN의 PAN–MS 팬샤프닝 재현을 기준으로 성능을 개선**합니다. 고해상도 PAN 영상과 저해상도 다중분광 MS 영상에서 고해상도 MS를 복원합니다.
 
-개인 RGB–HSI 초해상도 확장 연구는 [RGB-HSI-SR](https://github.com/BIYONGHIYON/RGB-HSI-SR)로 분리했습니다. 기존 ECRformer 자료는 이관 전 로컬 Git 백업으로 보존하고 이 저장소에서 제거했습니다.
-
 ## 연구 안내
 
 | 자료 | 내용 |
