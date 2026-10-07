@@ -2,13 +2,13 @@
 
 [실험 계획](../improvement_plan.md) · [관측 연산자 검증](../experiments/improvements/observation_validation.md)
 
-**코드·사전 검증 완료 / 본 학습 시작 보류.** 총 45회이며 하룻밤 이상 걸릴 수 있습니다.
+**본 학습 진행 중 / 2~3일 목표의 축소 계획.** 기준선 6회 × 100에폭 → 손실 후보 9회 × 30에폭 → 최종 후보 추가 70에폭, 총 940에폭입니다. 약 53시간은 초기 QB 속도에 근거한 잠정 추정입니다.
 
 ## 실행 위치
 
 | 항목 | 위치 |
 |---|---|
-| 서버 실행 폴더 | `C:\CtrS-controlled-suite\SSA-MRN` |
+| 서버 실행 폴더 | `C:\CtrS-budget-suite\SSA-MRN` |
 | Python | `C:\CtrS\.venv\Scripts\python.exe` |
 | 원본 데이터 | `C:\CtrS\SSA-MRN\data\dataset` — 읽기 전용 |
 | 설정 | `scripts/controlled_suite_plan.json` |
@@ -16,15 +16,15 @@
 
 ## 시작과 점검
 
-서버 PowerShell에서 실행합니다. 지금은 `check`와 `status`까지만 사용합니다.
+서버 PowerShell에서 실행합니다. 실행 중에는 `status`와 `logs`로 확인합니다.
 
 ```powershell
-cd C:\CtrS-controlled-suite\SSA-MRN\scripts
+cd C:\CtrS-budget-suite\SSA-MRN\scripts
 .\run_controlled_suite.ps1 -Command check
 .\run_controlled_suite.ps1 -Command status
 ```
 
-학습 시작이 결정되면:
+새 실행·중단 후 재개 명령:
 
 ```powershell
 .\run_controlled_suite.ps1 -Command start
@@ -39,7 +39,10 @@ cd C:\CtrS-controlled-suite\SSA-MRN\scripts
 | `resume-latest` | 미완료 run의 마지막 완료 epoch에서 재개 |
 | `resume-best` | 미완료 run의 최저 검증 MSE epoch로 되돌아가 재개 |
 | `inspect` | 기록된 best epoch와 검증 MSE 확인 |
-| `logs -Follow` | 실시간 로그 보기 |
+| `logs -Follow` | 같은 한 줄에서 epoch·배치 진행률(%)·MSE 갱신 |
+| `logs -Follow -Raw` | 원본 로그를 줄별로 출력 |
+
+진행률은 기록된 실제 배치 수를 사용합니다. 현재 학습의 기존 로그는 50배치마다 기록되므로 숫자는 그 간격으로 갱신됩니다. 화면 갱신은 1초마다 하며 진행률을 추정해 올리지 않습니다. 원본 파일은 그대로 보존합니다.
 
 일반 재개에는 `resume-latest`를 사용합니다. 모델·Adam·CPU/CUDA RNG·데이터 순서를 복원하고, 중단된 epoch는 다시 계산합니다. 완료 run은 건너뜁니다. 오류가 나면 큐를 중단합니다.
 
@@ -53,4 +56,4 @@ Windows WMI로 SSH 세션과 독립된 프로세스를 만듭니다. 로그 뷰�
 
 각 run은 `config.json`, `history.jsonl`, `train.log`, `best.pt`, `latest.pt`, `complete.json`을 저장합니다. 코드 해시와 계획도 보존합니다. `complete.json`은 **학습 완료**이며 독립 test 평가 완료를 뜻하지 않습니다.
 
-이전에 잠시 실행했다 중지한 기록은 `experiments/controlled_suite/`에 남겨 두었습니다. 새 코드는 별도 `controlled_suite_v2/`를 사용합니다. 다음 실험 전에 [용량 정리 규칙](../../../AGENTS.md)을 적용합니다.
+이전에 잠시 실행했다 중지한 기록은 `experiments/controlled_suite/`에 남겨 두었습니다. 축소 큐는 `C:\CtrS-budget-suite`의 별도 `controlled_suite_v2/`를 사용합니다. 기존 첫 학습은 원래 실행 폴더에서 계속 실행하고, 축소 컨트롤러가 완료를 기다린 뒤 결과를 복사하여 활용합니다. 기존 45회 컨트롤러만 중단했으며 원본 학습 코드는 변경하지 않았습니다. 다음 실험 전에 [용량 정리 규칙](../../../AGENTS.md)을 적용합니다.

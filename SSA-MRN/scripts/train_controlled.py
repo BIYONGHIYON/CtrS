@@ -36,6 +36,7 @@ def auxiliary(pred, gt, ms, kind, operator=None, margin=0, phases=None):
 
 def main():
     p=argparse.ArgumentParser(); p.add_argument("--config",type=Path,required=True); p.add_argument("--output",type=Path,required=True); p.add_argument("--resume",choices=["latest","best"])
+    p.add_argument("--extend-epochs",action="store_true",help="Allow only a larger epoch target when resuming a screened candidate")
     p.add_argument("--stop-after-epoch",type=int,help="Verification only; stop after saving the named epoch")
     a=p.parse_args(); c=json.loads(a.config.read_text()); a.output.mkdir(parents=True,exist_ok=True)
     if not torch.cuda.is_available(): raise RuntimeError("CUDA required")
@@ -61,7 +62,10 @@ def main():
     opt=torch.optim.Adam(model.parameters(),lr=c["lr"]); start=0; best=float("inf")
     if a.resume:
         ck=torch.load(a.output/(a.resume+".pt"),map_location="cpu",weights_only=True)
-        if ck["config"]!=c: raise ValueError("resume config mismatch")
+        if ck["config"]!=c:
+            old=ck["config"]
+            if not (a.extend_epochs and c["epochs"]>old["epochs"] and {k:v for k,v in old.items() if k!="epochs"}=={k:v for k,v in c.items() if k!="epochs"}):
+                raise ValueError("resume config mismatch")
         model.load_state_dict(ck["model"]); opt.load_state_dict(ck["optimizer"])
         torch.set_rng_state(ck["rng"]); torch.cuda.set_rng_state_all(ck["cuda_rng"]); gen.set_state(ck["loader_rng"])
         start=ck["epoch"]; best=ck["best_mse"]
