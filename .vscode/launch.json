@@ -1,0 +1,121 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "PAN-MS: train K4 (new output)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--train",
+        "${input:trainH5}",
+        "--val",
+        "${input:valH5}",
+        "--sensor",
+        "${input:sensor}",
+        "--ssai-dimension",
+        "4",
+        "--device",
+        "${input:device}",
+        "--checkpoint-dir",
+        "${input:checkpointOutput}"
+      ]
+    },
+    {
+      "name": "PAN-MS: train K6 (new output)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/train.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--train",
+        "${input:trainH5}",
+        "--val",
+        "${input:valH5}",
+        "--sensor",
+        "${input:sensor}",
+        "--ssai-dimension",
+        "6",
+        "--device",
+        "${input:device}",
+        "--checkpoint-dir",
+        "${input:checkpointOutput}"
+      ]
+    },
+    {
+      "name": "PAN-MS: evaluate RR + FR",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/SSA-MRN/scripts/evaluate_paper.py",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "args": [
+        "--data-root",
+        "${input:dataRoot}",
+        "--checkpoint-root",
+        "${input:checkpointRoot}",
+        "--sensor",
+        "${input:sensor}",
+        "--device",
+        "${input:device}",
+        "--output-dir",
+        "${input:metricOutput}"
+      ]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "trainH5",
+      "type": "promptString",
+      "description": "Training H5 absolute path"
+    },
+    {
+      "id": "valH5",
+      "type": "promptString",
+      "description": "Validation H5 absolute path"
+    },
+    {
+      "id": "checkpointOutput",
+      "type": "promptString",
+      "description": "New checkpoint directory (do not reuse preserved results)"
+    },
+    {
+      "id": "dataRoot",
+      "type": "promptString",
+      "description": "PAN dataset root containing QuickBird / Gaofen2 / WorldView3 test H5 files"
+    },
+    {
+      "id": "checkpointRoot",
+      "type": "promptString",
+      "description": "Checkpoint root containing qb_full/gf2_full/wv3_full"
+    },
+    {
+      "id": "metricOutput",
+      "type": "promptString",
+      "description": "New evaluation output directory"
+    },
+    {
+      "id": "sensor",
+      "type": "pickString",
+      "description": "Sensor",
+      "options": [
+        "QB",
+        "GF2",
+        "WV3"
+      ]
+    },
+    {
+      "id": "device",
+      "type": "pickString",
+      "description": "Compute device",
+      "options": [
+        "cuda",
+        "cpu",
+        "dml"
+      ]
+    }
+  ]
+}
