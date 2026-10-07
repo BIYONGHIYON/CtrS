@@ -1,0 +1,50 @@
+{
+  "data": {
+    "QB": {
+      "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+      "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5"
+    },
+    "GF2": {
+      "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\Gaofen 2\\Training Dataset\\train_gf2.h5",
+      "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\Gaofen 2\\Training Dataset\\valid_gf2.h5"
+    },
+    "WV3": {
+      "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Training Dataset\\train_wv3.h5",
+      "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Training Dataset\\valid_wv3.h5"
+    }
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "training": {
+    "epochs": 100,
+    "batch_size": 32,
+    "micro_batch": 4,
+    "lr": 0.0001
+  },
+  "weights": {
+    "spectral": [
+      0.001,
+      0.01,
+      0.1
+    ],
+    "consistency": [
+      0.001,
+      0.01,
+      0.1
+    ],
+    "edge": [
+      0.001,
+      0.01,
+      0.1
+    ]
+  },
+  "observations": {
+    "QB": {
+      "profile": "scripts/observation_profiles/qb.json",
+      "sha256": "76f6169d85a210a47cd19452035e2c274e7a975683f699f9982a9ecf65f92f6b"
+    }
+  }
+}

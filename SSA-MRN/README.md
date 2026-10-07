@@ -24,6 +24,8 @@ K4는 CUDA/A6000, K6는 DirectML/Radeon입니다. K6가 모든 센서·프로토
 
 ## 다음 연구
 
-같은 GPU·데이터·학습량에서 기준선을 확인한 뒤 한 번에 한 변수만 바꿉니다. 상세 계획은 [개선 실험 계획](docs/improvement_plan.md)을 따릅니다.
+동일 CUDA 조건의 K4/K6 비교 → 스펙트럼 손실 → MTF 관측 손실 → 경계 손실을 총 45회 직렬 실행하도록 준비했습니다. 보조 손실은 각각 독립적으로 비교합니다. QB 관측 연산자는 전체 TRAIN 17,139개에서 검증했고, **본 학습은 시작 보류 상태**입니다.
+
+[개선 실험 계획](docs/improvement_plan.md) · [실행 명령](docs/operations/controlled_suite.md)
 
 K4/K6 가중치, 전체 평가 JSON, 그래프와 결과 예시는 각 재현 보고서에서 확인할 수 있습니다.
