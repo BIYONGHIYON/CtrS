@@ -2,7 +2,7 @@
 
 # CtrS · PAN–MS 팬샤프닝 연구
 
-동국대학교 종합설계 팀 프로젝트입니다. **SSA-MRN의 PAN–MS 팬샤프닝 재현을 기준으로 성능을 개선**합니다. 고해상도 PAN 영상과 저해상도 다중분광 MS 영상에서 고해상도 MS를 복원합니다.
+**SSA-MRN의 PAN–MS 팬샤프닝 재현을 기준으로 성능을 개선**하는 연구 저장소입니다. 고해상도 PAN 영상과 저해상도 다중분광 MS 영상에서 고해상도 MS를 복원합니다.
 
 ## 연구 안내
 
@@ -18,16 +18,14 @@
 
 QB/GF2/WV3에서 공개 구현 K=4와 논문 설정 K=6을 평가했습니다. K6의 RR PSNR은 QB 37.5040 dB, GF2 45.8631 dB, WV3 37.6326 dB입니다. K4는 CUDA/A6000, K6는 DirectML/Radeon으로 실행 환경도 달라 K만의 효과로 해석하지 않습니다. 후속 개선은 같은 장치·분할·학습량의 기준 모델과 비교합니다.
 
-원본 데이터는 포함하지 않습니다. 기존 학습 가중치와 평가 수치·이미지는 보존합니다. **분리 작업에서 새 학습은 시작하지 않았습니다.**
+학습 가중치와 평가 수치·이미지를 함께 제공합니다. 원본 데이터는 포함하지 않습니다.
 
-2026-10-07에 PAN–MS 경로만 남기도록 Git 이력을 재작성했습니다. 이전 clone에서는 pull/merge하지 말고 [이관 안내](SSA-MRN/docs/repository_split.md)에 따라 새로 clone하세요.
+## 코드 받기
 
 ```bash
 git clone --recurse-submodules https://github.com/BIYONGHIYON/CtrS.git
 cd CtrS
 ```
-
-[저장소 분리 기록](SSA-MRN/docs/repository_split.md) · [개인 연구 웹뷰어](https://biyonghiyon.github.io/RGB-HSI-SR/ssa-mrn/)
 
 ## 팀원
 
