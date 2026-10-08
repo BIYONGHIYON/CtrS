@@ -4,11 +4,13 @@
 
 | 비교 기준 | 바꿀 점 | 관측 차이 | 판단 |
 |---|---|---|---|
-| 원본 PAN/MS/LMS로 학습하는 SSA-MRN K6 | TRAIN MS의 검증된 내부에 MTF 변화량 추가, LMS도 함께 갱신 | 아직 본 학습·평가 전 | 코드 준비 및 합성 데이터 CPU 검증 완료. 실제 T4 실행·개선 여부는 미확인 |
+| 원본 PAN/MS/LMS로 학습하는 SSA-MRN K6 | TRAIN MS의 검증된 내부에 MTF 변화량 추가, LMS도 함께 갱신 | 100에폭 완료; best validation PSNR +0.00576 dB, SAM −0.00499° | 최종 best/latest 보관·검증, RR/FR 평가 대기 |
 
 ## 1. 목적과 상태
 
 흐림 조건 변화에 대한 SSA-MRN의 민감도를 줄이는지 확인합니다. QB 단일 paired seed 46을 첫 탐색으로 사용하며, 개선을 확정하려면 반복 시드와 다른 조건의 평가가 필요합니다.
+
+**완료 확인:** 2026-10-09 01:25 KST. baseline과 mtf_aug 모두100에폭·exit code0, validation MSE 최소 checkpoint는 둘 다99에폭이다. 실제 Kaggle ZIP 다운로드와 전체 파일 해시를 검증했다. 학습 완료이며 전체 RR/FR 연구 평가는 아직 미완료다.
 
 **실행 파일:** [한 셀 Notebook](../../scripts/kaggle_mtf_pair.ipynb) 또는 [한 셀 Python 코드](../../scripts/kaggle_mtf_pair_cell.py). Notebook에는 코드 셀 하나만 있으며 모델·공식 네트워크·관측 프로파일·worker 코드 스냅샷을 포함합니다. 원격 브랜치의 미완료 변경에 의존하지 않습니다. 기본 코드 기준은 main `be02b7c`입니다.
 
@@ -28,7 +30,7 @@
 | GPU 배정 | GPU 0: baseline / GPU 1: mtf_aug, 독립 프로세스 |
 | 공통 모델 | SSA-MRN K6, 내부 bilinear 유지, 구조·고주파 경로·보조 손실 추가 없음 |
 | 공통 학습 | seed 46, Adam lr 1e-4, MSE, 목표 100에폭, effective batch 32, micro batch 16 |
-| 속도 설정 | FP16 autocast + GradScaler, 두 실험 공통 cuDNN autotune, FP32 mmap 캐시, GPU당 DataLoader worker 2 |
+| 속도 설정 | FP16 autocast + GradScaler, 공통 cuDNN autotune, 기본 GPU 상주 캐시; 공간 부족 시 mmap + worker 2로 fallback |
 | 검증 | 원본 validation, 두 모델 모두 FP32 추론, MSE·밴드 평균 PSNR(peak=1)·SAM 기록 |
 | 선택 | 최소 validation MSE의 best; 재개는 latest |
 | MTF 변경 | QB 밴드별 GNyq `[0.34,0.32,0.30,0.22]`의 공통 배율 0.9 또는 1.1; 41탭 signed FIR 유지 |
@@ -51,28 +53,49 @@ LMS증강 = 원본 LMS + interp23(ΔMS)
 
 **한계:** 이 방식은 전체 영상에서 다시 만든 연속·비등방성 MTF 데이터와 다릅니다. 미지의 FR 센서 물리를 재현했다고 주장하지 않습니다. 경계는 원본에 고정되어 있어 일반화 효과가 제한될 수 있습니다. 전체 영상의 안전한 재생성이 가능해지면 별도 실험으로 비교합니다.
 
+### CPU 데이터 처리 병목 개선 · 2026-10-09
+
+`GPU_RESIDENT=True`가 기본입니다. CPU mmap 캐시를 한 번 읽어 각 GPU에 TRAIN/validation을 올립니다. 증강 모델은 MS/LMS 변화량 캐시도 함께 올립니다. 이후 샘플 선택·변화량 합산을 GPU 텐서에서 처리하여 매 배치 CPU 패치 복사·콜레이션·Host→Device 전송과 DataLoader worker 작업을 줄입니다. 모델·패치·micro/effective batch·시드·AMP·손실·순서는 유지합니다.
+
+GPU 데이터 버퍼는 QB 전체 배열 형태 기준 baseline 약 2.69 GiB, 증강 약 4.91 GiB입니다. 이는 데이터 텐서만의 예상치이며 모델·활성값·cuDNN 공간은 추가됩니다. 로딩 전에 필요한 바이트 수와 실제 여유 메모리를 대조하고 3 GiB의 여유를 남깁니다. 부족하면 기존 CPU 경로를 사용합니다. 단순 메모리 점유율 대신 진행률 표의 `패치/초`로 속도를 비교합니다. 첫 로딩·cuDNN 준비 시간과 중간 재개 시 짧은 구간은 비교에서 구분합니다.
+
+loss 누계를 장치 텐서로 유지해 매 micro batch마다 `.item()`을 호출하지 않습니다. AMP scale을 매 optimizer step마다 두 번 조회하던 코드는 optimizer의 실제 step hook으로 교체해 skipped step을 기록합니다. 유한 loss 검사와 실제 저장·표 갱신 때의 동기화는 유지합니다.
+
+기존 worker SHA-256 `6d920ca4dfc03fdda0228567eeab167888d799acf471477a03717ea6f222eb9d`에서의 이관만 허용합니다. 이전·현재 코드 차이가 검증된 캐시/동기화 경로이고, 나머지 코드·데이터·학습 조건이 같을 때 기존 fingerprint를 정확히 유도해 latest를 복원합니다. 시드·batch·AMP·모델이 바뀌면 이관을 거부합니다. 기존 코드 snapshot을 남기고 새 snapshot과 `resume_migration.json`을 추가합니다. 같은 세션에 검증된 이전 mmap/증강 캐시가 있으면 재사용합니다.
+
+**적용:** 현재 셀에서 Cancel Run을 한 번 누르고 저장·종료 메시지를 기다립니다. 세션과 `/kaggle/working`을 유지한 채 같은 셀을 새 Python 코드로 교체하고 실행하면 latest부터 재개합니다. 커널 재시작이나 새 세션 전에는 출력 보관을 먼저 확인합니다. 새 세션에서는 기존 재개 절차대로 이전 Output을 연결합니다.
+
+실제 복원 SSA-MRN·합성 데이터의 CPU 검증에서 원본/증강 모든 선택의 상주 텐서 배치가 기존 샘플 경로와 정확히 일치했습니다. 두 모델 각각 기존 구현의 에폭 중간 체크포인트 → 새 상주 배치 경로로 이어 학습했을 때 연속 학습 가중치와 validation MSE가 정확히 일치했습니다. 이는 CUDA AMP의 비트 단위 일치나 T4 속도 개선 실측을 뜻하지 않습니다. 실제 T4×2에서 GPU 상주 경로가 적용된 채 두 모델이100에폭을 종료했다. 중간 진행 표에서 약440–465 패치/초, allocated baseline2.70 / MTF4.92 GiB를 관측했다. 이전 경로와 동일 조건의 속도 비교가 없어 최적화 배율은 주장하지 않는다.
+
 ## 3. 정량 결과
 
 <a id="results"></a>
 
-본 학습·RR/FR test 결과는 아직 없습니다. 합성 데이터 검증 수치를 연구 성능으로 사용하지 않습니다.
+본 학습100에폭 완료. 원본 validation에서 각 모델의 최소 MSE checkpoint를 선택했다. 아래는 validation 결과이며 RR/FR test 결과가 아니다. PSNR은 peak1의 밴드별 평균, SAM은 유효 픽셀의 각도 평균(도)이다.
 
-| 모델 | 완료 에폭 | Best validation MSE | RR/FR |
-|---|---:|---:|---|
-| baseline | 미확인 | 미측정 | 미평가 |
-| mtf_aug | 미확인 | 미측정 | 미평가 |
+| 모델 | 완료 / best 에폭 | Best validation MSE | PSNR (dB) | SAM (°) | RR/FR |
+|---|---:|---:|---:|---:|---|
+| baseline | 100 / 99 | 0.000171972981 | 39.310003 | 4.550377 | 미평가 |
+| mtf_aug | 100 / 99 | 0.000171249088 | 39.315762 | 4.545383 | 미평가 |
+| MTF − baseline | — | −0.000000723893 | +0.005759 | −0.004994 | N/A |
+
+[검증·수치 원본](../assets/kaggle_mtf_pair_20261009/preservation.json). validation MSE는 약0.421% 낮아졌다. 단일 seed의 작은 관측 차이이며 분광·FR 일반화 개선을 확정하지 않는다. AMP skipped step은 누적 baseline8 / MTF10으로 기록됐다. best의 optimizer·scaler·RNG 상태도 원본대로 보존했다.
 
 ## 4. 직전 연구와 수치 차이
 
 23탭 후속 연구의 QB RR 개선이 FR에서 일관되지 않았던 관측이 출발점입니다. 새 실험의 변경점은 학습 입력의 MTF 변화량이며, 기존 23탭 구조나 밴드별 고주파 게이트와 결합하지 않습니다.
 
-FP16·micro batch 16·T4 조건이 기존 FP32 연구와 달라 **이번 T4의 두 모델끼리만 통제 비교**합니다. BatchNorm은 실제 micro batch 단위로 동작하므로 gradient accumulation이 batch 32의 BatchNorm과 동등하다는 주장을 하지 않습니다. 실제 개선량은 실행 후 측정합니다.
+FP16·micro batch 16·T4 조건이 기존 FP32 연구와 달라 **이번 T4의 두 모델끼리만 통제 비교**합니다. BatchNorm은 실제 micro batch 단위로 동작하므로 gradient accumulation이 batch 32의 BatchNorm과 동등하다는 주장을 하지 않습니다. best validation 기준 MSE −7.23893e-7, PSNR +0.005759 dB, SAM −0.004994°를 관측했다. 기존23탭 연구의 test PSNR과 이 validation 차이는 직접 비교하지 않는다. test는 기존 탐색에 사용됐으며 모델·에폭 선택에 재사용하지 않는다.
 
 ## 5. 그래프
 
 <a id="graphs"></a>
 
-세션 종료 시 실제 history의 train MSE, validation MSE·PSNR·SAM을 그립니다. 이어진 세션의 체크포인트에는 전체 이력을 포함합니다. 세션 간 부분 에폭의 소요 시간은 전체 에폭 시간으로 해석하지 않습니다.
+실제100에폭 history의 train MSE, validation MSE·PSNR·SAM 곡선을 보존했다.
+
+![MTF100에폭 학습·validation 곡선](../assets/kaggle_mtf_pair_20261009/validation_curves.png)
+
+[baseline 기록](../assets/kaggle_mtf_pair_20261009/baseline/history.json) · [MTF 기록](../assets/kaggle_mtf_pair_20261009/mtf_aug/history.json). 이어진 세션의 체크포인트에는 전체 이력을 포함합니다. 세션 간 부분 에폭의 소요 시간은 전체 에폭 시간으로 해석하지 않습니다.
 
 ## 6. 결과 이미지 예시
 
@@ -91,6 +114,21 @@ FP16·micro batch 16·T4 조건이 기존 FP32 연구와 달라 **이번 T4의 �
 - 두 GPU는 같은 공통 모델 초기화와 같은 샘플 순서를 사용하고, 증강 선택도 샘플·에폭으로 재현합니다.
 - 재개 전 코드·데이터·목표 에폭·batch·AMP·PyTorch/CUDA 등 실험 지문을 확인합니다. 조건 변경은 `RUN_TAG`를 바꾼 새 실험으로 시작합니다.
 - 기본 cuDNN autotune에서는 CUDA 비트 단위 일치가 보장되지 않습니다. 같은 조건의 의미 있는 학습 재개를 지원합니다.
+
+### 최종 가중치와 복구 근거 · 2026-10-09
+
+원본 ZIP의 `artifact_manifest.json`에 기재된 모든 파일을 SHA-256·길이로 검증했고, 아래 원본 체크포인트 네 개를 CPU `weights_only=True`로 로드했다. 두 latest는100에폭 완료·next_batch0이고 두 best는 validation 최소99에폭과 일치한다. `.pt`는 ignore 대상이므로 이 네 파일을 정확한 경로로 강제 추가한다.
+
+| 모델 | 파일 | 에폭 | SHA-256 |
+|---|---|---:|---|
+| baseline | [best.pt](../assets/kaggle_mtf_pair_20261009/baseline/best.pt) | 99 | `428d375b981592b2e781059291df422e1d01cabeb0529e53e2b1edbf672ce72e` |
+| baseline | [latest.pt](../assets/kaggle_mtf_pair_20261009/baseline/latest.pt) | 100 | `90649cb3794e272c6edb891edddc06cb2dc80fe67a3786d6eca82aad0d2af1e0` |
+| mtf_aug | [best.pt](../assets/kaggle_mtf_pair_20261009/mtf_aug/best.pt) | 99 | `6bef3763e2aafe3d8794555af2f73f813f72274258789ee8c93726051cb4b1fe` |
+| mtf_aug | [latest.pt](../assets/kaggle_mtf_pair_20261009/mtf_aug/latest.pt) | 100 | `92dc084523acba155a70fddcf2fd24166c9618abb93c8a354c5602e7267d69be` |
+
+[보관 검증](../assets/kaggle_mtf_pair_20261009/preservation.json) · [배포 파일 해시](../assets/kaggle_mtf_pair_20261009/delivery_manifest.json) · [실제 설정](../assets/kaggle_mtf_pair_20261009/pair_config.json). 실행 코드의 원본/최적화 snapshot, 이관 기록, augmentation audit, 로그·compact history·곡선을 함께 보관한다. 원본 Kaggle manifest는 다운로드 ZIP 전체를 나타내며 `.previous.pt` 및 Python bytecode는 이번 Git 배포에 포함하지 않는다. Git 복구 검증에는 `delivery_manifest.json`을 사용한다. 원본 ZIP은 `/private/tmp/ssa-mtf-final-20261009.zip`에 별도로 남겨두었다.
+
+실행 fingerprint는 `4a3b66fcbc318b2f092be1fc5c8a41aabcd5d228c5a7498b17c7c31afcde2c58`, 최적화 worker SHA-256은 `f40d822b4415ee66b8502b182f17d27e14633689e71416b34d9fb58ffcaf0c2a`이다. 실행이 기반으로 표시하는 commit과 실제 소스 해시를 구분한다. 저장된 Kaggle Version Output은 아직 별도 검증하지 않았으며, 이번 보관은 다운로드한 원본과 Git에 전달한 파일로 확인한다. 이전 실행 폴더는 삭제하지 않는다.
 
 ### 중단 후 재개
 
@@ -114,7 +152,7 @@ RESUME_INPUT = '/kaggle/input/이전-notebook-output/mtf_pair_qb_k6_s46'
 - 손상된 latest에서 이전 체크포인트 복원.
 - 한 셀 Notebook과 Python 코드의 동일성 및 셀 문법 확인.
 
-실제 Kaggle T4 2개에서 AMP·병렬 실행·속도·원본 전체 데이터 검증은 실행 후 확인해야 합니다.
+실제 T4×2 AMP·병렬 실행 및 원본 QB 전체 train/validation으로100에폭 완료를 확인했다. CUDA 중간 배치 재개의 비트 단위 일치나 최적화 전후 속도 배율은 별도 검증하지 않았다.
 
 ## 8. 한계와 다음 판단
 
