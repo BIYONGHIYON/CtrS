@@ -11,42 +11,43 @@
 | [현재 PAN–MS 연구](SSA-MRN/README.md) | 기준 모델, 재현 결과, 성능 개선 방향 |
 | [알고리즘과 평가](SSA-MRN/docs/research.md) | PAN/MS/LMS, SSAI, RR·FR 평가 |
 | [K4·K6 재현 기록](SSA-MRN/docs/reproduction.md) | 조건·수치·이미지·가중치 |
-| [현재 학습 현황](SSA-MRN/docs/current_training.md) | Windows 손실 탐색과 학교 서버의 구조 비교 4개 병렬 |
+| [현재 학습 현황](SSA-MRN/docs/current_training.md) | Windows 기록과 Linux 후속 실험 완료 상태 |
 | [다음 실험 계획](SSA-MRN/docs/improvement_plan.md) | 동일 환경 기준선 및 검증 기준 |
 | [실행 방법](SSA-MRN/docs/operations/pan_ms.md) | 환경·학습·평가·VS Code 실행 |
 
-## 최신 결과 · SSA-MRN 구조 개선
+## 최신 결과 · A6000 후속 검증
 
-학교 A6000에서 **QB·K=6·100에폭·시드 42**로 기준선과 세 변형을 비교했습니다. validation으로 고른 best 가중치의 전체 RR20/FR20 평가입니다.
+2026-10-08, **K=6·100에폭 새 학습10개를 완료**하고 기존 QB 시드42 두 모델을 재사용했습니다. validation MSE로 고른 best 가중치로 모델12개 각각 **RR20장·FR20장 전체**를 평가했습니다. 반복시드·확대 위치·센서를 검증했으며 Windows 손실 결합은 제외했습니다.
 
-| 모델 | RR PSNR dB ↑ | RR SAM ° ↓ | FR QNR ↑* |
-|---|---:|---:|---:|
-| 기준선 | 37.4242 | 4.9639 | 0.914868 |
-| 23탭 | 37.4799 | 4.9210 | 0.918011 |
-| LR 보정 | 37.3839 | 4.9604 | 0.911718 |
-| 고주파 경로 | 37.3621 | 4.9408 | 0.910940 |
+| 검증 항목 | 변형 − 같은 센서·시드 기준선 | 판단 |
+| --- | --- | --- |
+| QB 반복 3시드 | RR PSNR +0.0421 ± 0.0127dB; FR QNR -0.011602 ± 0.015583 | RR PSNR은 3/3 개선, FR은 2/3 악화 |
+| QB 입력만 · s42 | RR PSNR +0.0807dB; QNR -0.000981 | 전체 23탭보다 validation MSE가 높음 |
+| QB 출력만 · s42 | RR PSNR -0.0138dB; QNR +0.000293 | 기준선보다 validation MSE가 높음 |
+| GF2 · s42 | RR PSNR +0.1490dB; SAM -0.0242°; QNR +0.005198 | 개선 후보, 반복 시드 필요 |
+| WV3 · s42 | RR PSNR -0.0368dB; SAM +0.0219°; QNR -0.001746 | validation 이득이 test로 이어지지 않음 |
 
-23탭의 PSNR은 기준선 대비 **+0.0557dB**입니다. 단일 시드 탐색 결과라 반복 시드·센서 확장 검증을 거친 뒤 채택합니다. *FR QNR은 MATLAB 일치성 미검증인 잠정 수치입니다.*
+±는 QB 시드42·43·44의 paired 차이 표본 표준편차(n=3)입니다. **QB의 RR PSNR 이득은 반복됐지만 FR 개선은 유지되지 않았고 WV3는 악화돼, 전체23탭의 최종 채택을 보류합니다.** QNR은 MATLAB resize 일치성이 미검증인 잠정 값이며 GF2/WV3는 단일시드입니다. QB test는 기존 구조 탐색에 사용한 데이터라 새로운 독립 검증으로 표시하지 않습니다.
 
-### 테스트 이미지 3종
+### 센서별 실제 예측
 
-같은 장면이며 **LR MS · PAN · 예측 · 정답** 순서입니다. 입력을 자르지 않았고 MS만 표시용으로 확대했습니다. RGB 밴드 순서는 가정이며 같은 대비를 적용했습니다.
+왼쪽부터 **LR MS · PAN · 예측 · 정답**입니다. 각 센서의 사전 고정 첫 장면을 보여 주며, RGB 밴드 [2,1,0]은 가정입니다. 동일 장면의 MS 패널에는 공통 대비를 적용하고 LR만 최근접 확대로 표시합니다.
 
-**23탭**
+**QB 전체23탭 · 시드43**
 
-![23탭 테스트](SSA-MRN/docs/assets/a6000_architecture_qb/interp23_scene_01.png)
+![QB 테스트 예측](SSA-MRN/docs/assets/a6000_followup_123/QB_interp23_k6_s43_scene_01.png)
 
-**LR 보정**
+**GF2 전체23탭 · 시드42**
 
-![LR 보정 테스트](SSA-MRN/docs/assets/a6000_architecture_qb/lr_correction_scene_01.png)
+![GF2 테스트 예측](SSA-MRN/docs/assets/a6000_followup_123/GF2_interp23_k6_s42_scene_01.png)
 
-**고주파 경로**
+**WV3 전체23탭 · 시드42**
 
-![고주파 테스트](SSA-MRN/docs/assets/a6000_architecture_qb/high_frequency_scene_01.png)
+![WV3 테스트 예측](SSA-MRN/docs/assets/a6000_followup_123/WV3_interp23_k6_s42_scene_01.png)
 
-[전체 보고서·5장면 세트·가중치](SSA-MRN/docs/experiments/improvements/a6000_architecture_qb.md)
+[상세 보고서: 시드별 수치·위치 분석·곡선·고정35장면·원본24개 가중치](SSA-MRN/docs/experiments/improvements/a6000_followup_123.md)
 
-Windows 서버의 K 비교·손실 후보 탐색은 별도로 진행 중입니다. 과거 K4/K6 재현과 현재 구조 비교의 조건·결과를 구분해 보관합니다. 원본 데이터는 Git에 포함하지 않습니다.
+Linux 새 학습은 모두 완료됐습니다. Windows의 현재 상태는 별도 채팅에서 관리하며 이번에 재확인하지 않았습니다. 원본 데이터는 Git에 포함하지 않고 실제 **best/latest 원본24개와 해시**는 이번 결과에 포함했습니다.
 
 ## 코드 받기
 

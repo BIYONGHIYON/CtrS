@@ -1,0 +1,128 @@
+{
+  "data": {
+    "QB": {
+      "train": "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/QuickBird/Training Dataset/train_qb.h5",
+      "val": "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/QuickBird/Training Dataset/valid_qb.h5"
+    },
+    "GF2": {
+      "train": "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/Gaofen 2/Training Dataset/train_gf2.h5",
+      "val": "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/Gaofen 2/Training Dataset/valid_gf2.h5"
+    },
+    "WV3": {
+      "train": "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/WorldView 3/Training Dataset/train_wv3.h5",
+      "val": "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/WorldView 3/Training Dataset/valid_wv3.h5"
+    }
+  },
+  "parallel": 4,
+  "training": {
+    "epochs": 100,
+    "batch_size": 32,
+    "micro_batch": 32,
+    "lr": 0.0001,
+    "lr_gain": 0.1
+  },
+  "runs": [
+    {
+      "stage": 1,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 43,
+      "variant": "baseline"
+    },
+    {
+      "stage": 1,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 43,
+      "variant": "interp23"
+    },
+    {
+      "stage": 1,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 44,
+      "variant": "baseline"
+    },
+    {
+      "stage": 1,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 44,
+      "variant": "interp23"
+    },
+    {
+      "stage": 2,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 42,
+      "variant": "interp23_input"
+    },
+    {
+      "stage": 2,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 42,
+      "variant": "interp23_output"
+    },
+    {
+      "stage": 3,
+      "sensor": "GF2",
+      "k": 6,
+      "seed": 42,
+      "variant": "baseline"
+    },
+    {
+      "stage": 3,
+      "sensor": "GF2",
+      "k": 6,
+      "seed": 42,
+      "variant": "interp23"
+    },
+    {
+      "stage": 3,
+      "sensor": "WV3",
+      "k": 6,
+      "seed": 42,
+      "variant": "baseline"
+    },
+    {
+      "stage": 3,
+      "sensor": "WV3",
+      "k": 6,
+      "seed": 42,
+      "variant": "interp23"
+    }
+  ],
+  "references": [
+    {
+      "stage": 2,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 42,
+      "variant": "baseline",
+      "path": "/home/gpu_04/CtrS-a6000/SSA-MRN/experiments/a6000_architecture_qb/QB_baseline_k6_s42"
+    },
+    {
+      "stage": 2,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 42,
+      "variant": "interp23",
+      "path": "/home/gpu_04/CtrS-a6000/SSA-MRN/experiments/a6000_architecture_qb/QB_interp23_k6_s42"
+    }
+  ],
+  "expected_bytes": {
+    "QB": {
+      "train": 5194901672,
+      "val": 577415336
+    },
+    "GF2": {
+      "train": 6004189352,
+      "val": 667134120
+    },
+    "WV3": {
+      "train": 5570398376,
+      "val": 619317416
+    }
+  }
+}
