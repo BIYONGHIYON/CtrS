@@ -287,7 +287,7 @@ QB 전체 23탭 3시드 결과는 직전 연구와 동일합니다(재사용). G
 - [실행 계획](../assets/a6000_gf2_repeat_qb_input/training_plan.json) · [참조 가중치 복구 manifest](../assets/a6000_gf2_repeat_qb_input/reference_manifest.json)
 - [실행·복구 안내](../operations/a6000_next_6h.md) · [이전 폴더 정리 기록](../operations/a6000_next6h_cleanup.json)
 
-서버와 전송 후 로컬에서 검증기를 통과했습니다: 15 models, 30 full weights, 45 fixed images, 90 hashed artifacts. 원격 Git에서 가중치 복구 검증 전에는 이번 서버 실행 폴더를 삭제하지 않습니다.
+서버와 전송 후 로컬에서 검증기를 통과했습니다: 15 models, 30 full weights, 45 fixed images, 90 hashed artifacts. [GitHub 복구 검증](../operations/a6000_next6h_remote_recovery.json): 독립 복제본에서 90개 산출물의 해시·크기를 대조하고 원본 가중치 30개를 실제 파일로 복원해 모두 일치했습니다. 이번 서버 실행 폴더는 유지했습니다.
 
 ## 8. 한계와 다음 판단
 
