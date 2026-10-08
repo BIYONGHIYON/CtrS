@@ -1,0 +1,80 @@
+{
+  "source": {
+    "src/ssamrn/preview.py": "c5952dec2d38075f06e9f456fdddd5421bed7056e3638de2a0b5151e4944c4cc",
+    "src/ssamrn/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "src/ssamrn/__init__.py": "4068ee713442b7896609dffeeb5c1a54d22cd19abfb31da1202b3ca45d3ca08a",
+    "src/ssamrn/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "src/ssamrn/data/__init__.py": "3f2e5aa1c508c54bd7afce6f6ef1c71e165f32061512a530e8a38adc914df5fe",
+    "src/ssamrn/data/pancollection.py": "0c33a99af200505184a5e47874d27d82539c906fbf929ac2d53293e6c9a7750b",
+    "src/ssamrn/models/pan_variants.py": "b19c7004a2be060303a38d216038ffdeac92cea4b3f9112355c9875a01342722",
+    "src/ssamrn/models/interp23.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "src/ssamrn/models/ssa_mrn.py": "c140c1fee05a7958b924c6058e14b31daab7ded51c1aae7122c3287c7afd8891",
+    "src/ssamrn/models/__init__.py": "8f3d7aaa5ff196e99a95c2c2926e11131f1814dd1cb235929c0cfb3124de4b88",
+    "scripts/a6000_followup_suite.py": "7f94b870a13831650b9fb503d81be44a466ae181c7650134444d018f41f9fbfe",
+    "scripts/train.py": "08aec237c649d2d423469568cdbe3ccfd4f5ac7534cb199de454c1bbacec230e",
+    "scripts/train_a6000_followup.py": "ac197d272a17c9ebe3446c560383bf570b9442119a83a09943ae80a5633630d4",
+    "references/upstream/network.py": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a",
+    "scripts/a6000_next6h_suite.py": "ac508d83f3d8d38fa9af7c05001ee0cc68262dce75a52bd6274d22dfdeb1cff1",
+    "scripts/a6000_next_6h_plan.json": "a5553bffbf29c7e50b228a5ddd8ce7448bfeacafc40c720df1f21e24fa2da550",
+    "scripts/run_a6000_next6h.sh": "c805e9f44d4f9fcd37f7bcd4c93cedb9ea9b5888b727b715854ea2752673d41f",
+    "scripts/evaluate_a6000_next6h.py": "ee95efb3f45d411c37d6df26aeea28f98384235b58445555a533be811971f0f4",
+    "scripts/verify_a6000_next6h_report.py": "1362dc53e7e85746b1d62a247b77872994c87e40519dde2fabda98d709a33cda"
+  },
+  "data": {
+    "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/QuickBird/Training Dataset/train_qb.h5": {
+      "bytes": 5194901672,
+      "mtime_ns": 1791396537653148731
+    },
+    "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/QuickBird/Training Dataset/valid_qb.h5": {
+      "bytes": 577415336,
+      "mtime_ns": 1791396588670082926
+    },
+    "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/Gaofen 2/Training Dataset/train_gf2.h5": {
+      "bytes": 6004189352,
+      "mtime_ns": 1791395968078885634
+    },
+    "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/Gaofen 2/Training Dataset/valid_gf2.h5": {
+      "bytes": 667134120,
+      "mtime_ns": 1791396027393808659
+    }
+  },
+  "references": {
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/GF2_baseline_k6_s42/best.pt": "d3c65c7aa26b26418e747f6080dac8e8e7cecc0db58f4e00aab310ab1c29b43c",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/GF2_baseline_k6_s42/latest.pt": "8beb26e263690bc1500a4523f71aeb4d0767c168da2b0653881c636562f13a7e",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/GF2_baseline_k6_s42/complete.json": "c8d74f6b2e33cef7a14c0ed903b45e474f8b6ff8ef56d78516f837e02669a64c",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/GF2_baseline_k6_s42/history.jsonl": "e28fca05b5c4ed9403c328654e53cb6fea52f638c8b08b9dea59e5be51d1e23b",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/GF2_interp23_k6_s42/best.pt": "d8dd7c74f13c554195659e678a0f94ca6ff9562c153ff6b02ef00b88baaff6e1",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/GF2_interp23_k6_s42/latest.pt": "fd1410d80d8c33e75122c2f2528bae9784475b13d36063d5f15243586e528c4d",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/GF2_interp23_k6_s42/complete.json": "41715102048d6e8bf2391734bbead97764aab811a137bc8abb99d9bc2b66f983",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/GF2_interp23_k6_s42/history.jsonl": "68f86da56ebbdf4f4accf3428a8866fa7c05ddf9d82ac41fd738e4ecd20c7b01",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s43/best.pt": "cf7bcb736edbbb7ddb58d0f19420dab6646e0dd40ae559ff16001a1cbd86e1df",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s43/latest.pt": "462f1a4919d3cf4156f0be9ebe0632ced3f660a0b39f40c358bfef4996a17978",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s43/complete.json": "66bf40154beb899f597312a7395225707eb96accdb66ac28e22a9d180bfa7b7f",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s43/history.jsonl": "95899ef6930aca1d43a038471dfe37b0ebce9dfae464edc04e809313411a74df",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s43/best.pt": "98f4adcc2f9b64d4585ac3e6f439a5de2170246d06530107b5b1d8b1f3e2eb52",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s43/latest.pt": "699e18e71152551104a0cfe4fc02a832c2e97546f6343c383c4a8b54fdb1116a",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s43/complete.json": "fc61fe3775c41abf603397c8604a6d52e16c1def508e3a60ff45999b9a18bdcb",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s43/history.jsonl": "f8fe607a09ce2c209999d3d986c2ae107fed521f51c87d81ff8aa9088354ca2c",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s44/best.pt": "662dc5b403e31b4cd6636161aada2edff86c0346a5a2280b3f7a91c587c4f6d5",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s44/latest.pt": "154158cbeba22c07d9161a3c096538b83b1266c8bb44da31d518854a84783d64",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s44/complete.json": "52e6a3f5dadfc28e5377f9a806e6ffc9cfd715d327c087b367120a515608e7b0",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s44/history.jsonl": "0a6d88b9c1d913d0b848da0eb563c698492bd253b7e9e1004e6c9950a3931f48",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s44/best.pt": "d7f81f189194d24abe53ae1f79bfe22119b3e5ebb182b07ffb56c0514e8ac9e0",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s44/latest.pt": "47e530027493d53546449b0eafa8186b0f87f85eb98c0c2ba0bcc31432b15f78",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s44/complete.json": "928eb11b5f66f4596b78fd57fea135b265c3fe90a411920f856b4adfd19e941e",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s44/history.jsonl": "d3fdea065f7876032eabf9478799c789f41b89bbba2b81b25e45b79dd4ffaecb",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_input_k6_s42/best.pt": "b9041ae68065e2fe7aac6db68550b08178838fb3fe5bedc2ca9974093bd09430",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_input_k6_s42/latest.pt": "e755d4a4a29c0e19133fe1087b3c0b23594ef87af9d0ae94421ea8d9feaf7eb7",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_input_k6_s42/complete.json": "0bb7b21a06471cc50d2ea38d1b478e56287d0f147e27babce265892b4c06d338",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_input_k6_s42/history.jsonl": "70350f336223cec9a3c2ea4ef8951fe166d6ca9d6792288b0ffb963c3d4223f8",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s42/best.pt": "1f4e96ec326f58a442c034913e7be8bb8710d8e01eb0ab00ad7b9f6bac2c1086",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s42/latest.pt": "e10452dada0d791b0929dda3958c7aada1ffead1843b62c928c77c29a11c2684",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s42/complete.json": "868d90c74efec038213c32b477449a76753ffb51a8347e371165ef898a8c41bc",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s42/history.jsonl": "2839646574ceb90fd1fa1cdce78dd1016e84ecb5606ccfd6d3b54e76d6a587fd",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s42/best.pt": "aea5f2d612b2324eb938203314b7c194b28349ca9c3bfec5d7952f63c1d9a8c8",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s42/latest.pt": "156db10b42a2b0b20aea868b83d8b80d8c127de27fdaa6a9a4c6f66cabddb6e5",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s42/complete.json": "99a3254e34ae7f5de7c2b22a4607a0f5413f7a677017e052cbc7ee257236f899",
+    "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s42/history.jsonl": "6b0f06ce70c32ca44448f1fb372516f21eb4c230bcbb2cae8d665b45133ce511"
+  },
+  "reference_manifest_sha256": "4f4cbf9c56fcfe48a27be0789c38c047e32cead82fcd4a10606589ba98ded714"
+}
