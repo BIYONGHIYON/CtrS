@@ -37,6 +37,20 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 
 ![QB band_gated_hf 예측](SSA-MRN/docs/assets/kaggle_band_gated_hf/runs/pasted_QB_band_gated_hf_k6_s42/RR_scene_01.png)
 
+## 최근 학습 완료 · QB MTF 증강
+
+2026-10-09, T4×2에서 baseline·MTF 모델 모두100에폭을 마쳤습니다. validation MSE로 선택한 best는 둘 다99에폭입니다.
+
+| 모델 | Best validation MSE | PSNR (dB) | SAM (°) |
+|---|---:|---:|---:|
+| baseline | 0.000171972981 | 39.310003 | 4.550377 |
+| MTF 증강 | 0.000171249088 | 39.315762 | 4.545383 |
+| MTF − baseline | −0.000000723893 | +0.005759 | −0.004994 |
+
+단일 seed46의 **validation 관측**이며 RR/FR 개선 결론은 아직 없습니다. 원본 best/latest4개와 설정·소스·해시·100에폭 기록을 함께 보관했습니다. [조건·곡선·가중치](SSA-MRN/docs/experiments/kaggle_mtf_pair.md).
+
+![MTF 학습·validation 곡선](SSA-MRN/docs/assets/kaggle_mtf_pair_20261009/validation_curves.png)
+
 ## 실험 바로 보기
 
 각 보고서 한 페이지에서 **조건·결과·비교·그래프·이미지·가중치**를 볼 수 있습니다.
@@ -50,6 +64,7 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 | [23탭 후속 검증](SSA-MRN/docs/experiments/a6000_followup_123.md) | QB 3시드·확대 위치·GF2/WV3 | 평가 완료, 모든 센서에 적용하는 최종 채택은 보류 |
 | [GF2 반복·QB 입력 검증](SSA-MRN/docs/experiments/a6000_gf2_repeat_qb_input.md) | GF2 전체/QB 입력 23탭 각각 3시드 | 전체 평가 완료, GF2 PSNR/QNR 개선 반복·SAM 혼재 |
 | [Windows K·손실 비교](SSA-MRN/docs/experiments/windows_controlled.md) | 같은 장치의 K4/K6 → 손실 9개 → 후보 연장 | 마지막 확인 시 학습 중, 손실 효과 미확정 |
+| [QB MTF 증강 학습](SSA-MRN/docs/experiments/kaggle_mtf_pair.md) | 원본 기준선·MTF 변화량 증강의 T4 병렬 비교 | 100에폭 완료·best/latest 보관, RR/FR 평가 대기 |
 | [QB 관측 연산자 검증](SSA-MRN/docs/experiments/observation_validation.md) | consistency 손실의 MTF·패치 위상 검증 | 구현 검증 완료, 모델 성능 평가와 구분 |
 
 ## 연구와 실행 안내
