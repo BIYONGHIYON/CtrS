@@ -130,6 +130,8 @@ FP16·micro batch 16·T4 조건이 기존 FP32 연구와 달라 **이번 T4의 �
 
 실행 fingerprint는 `4a3b66fcbc318b2f092be1fc5c8a41aabcd5d228c5a7498b17c7c31afcde2c58`, 최적화 worker SHA-256은 `f40d822b4415ee66b8502b182f17d27e14633689e71416b34d9fb58ffcaf0c2a`이다. 실행이 기반으로 표시하는 commit과 실제 소스 해시를 구분한다. 저장된 Kaggle Version Output은 아직 별도 검증하지 않았으며, 이번 보관은 다운로드한 원본과 Git에 전달한 파일로 확인한다. 이전 실행 폴더는 삭제하지 않는다.
 
+**원격 복구 검증 완료:** 결과 commit `abcd67ea470392455150aab0caf45ea93d4553a7`에서43개 배포 파일을 GitHub 원격으로부터 새로 다운로드했다. 네 best/latest를 포함해 모든 SHA-256·길이가 일치하고, 복구한 체크포인트의 로드·에폭을 확인했다. [원격 검증 기록](../assets/kaggle_mtf_pair_20261009/remote_verification.json). 복구 위치는 `/private/tmp/ctrs-mtf-remote-restored-abcd67ea`이며 이번 Git 배포에 기록을 추가했다.
+
 ### 중단 후 재개
 
 **같은 세션:** 셀을 다시 실행하면 현재 출력의 latest를 자동으로 읽습니다. 원래 worker가 살아 있으면 중복 실행을 차단합니다.
