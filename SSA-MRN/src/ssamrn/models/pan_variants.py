@@ -8,13 +8,16 @@ from ssamrn.observation import SensorObservation
 
 
 class Internal23(RestoredPansharpeningNet):
-    def __init__(self, channels, ssai_dimension):
+    def __init__(self, channels, ssai_dimension, scope='all'):
         super().__init__(channels, ssai_dimension)
-        # Only the four enlargements actually used by the repaired forward.
-        self.upsample1 = Interp23(4)
-        self.upsample100 = Interp23(2)
-        self.upsample101 = Interp23(2)
-        self.upsample102 = Interp23(2)
+        if scope not in ('all','input','output'):
+            raise ValueError('Unknown 23tap scope')
+        if scope in ('all','input'):
+            self.upsample1 = Interp23(4)
+            self.upsample100 = Interp23(2)
+        if scope in ('all','output'):
+            self.upsample101 = Interp23(2)
+            self.upsample102 = Interp23(2)
 
 
 class LRCorrection(RestoredPansharpeningNet):
@@ -76,12 +79,14 @@ class HighFrequency(RestoredPansharpeningNet):
 
 
 def make_model(config):
-    arguments = dict(channels=4 if config['sensor']=='QB' else 8,ssai_dimension=config['k'])
+    channels={'QB':4,'GF2':4,'WV3':8}[config['sensor']]
+    arguments = dict(channels=channels,ssai_dimension=config['k'])
     variant = config['variant']
     if variant == 'baseline':
         return RestoredPansharpeningNet(**arguments)
-    if variant == 'interp23':
-        return Internal23(**arguments)
+    if variant in ('interp23','interp23_input','interp23_output'):
+        scope={'interp23':'all','interp23_input':'input','interp23_output':'output'}[variant]
+        return Internal23(**arguments,scope=scope)
     if variant == 'lr_correction':
         return LRCorrection(**arguments,sensor=config['sensor'],gain=config['lr_gain'])
     if variant == 'high_frequency':
