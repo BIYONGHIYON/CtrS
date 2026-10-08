@@ -1,0 +1,92 @@
+{
+  "archive": {
+    "path": "/private/tmp/ssa-mtf-final-20261009.zip",
+    "bytes": 40795219,
+    "sha256": "6402f2fab385cb6321f7aed8446a4d3569cf1bf117e13d04434cfca595a37c44",
+    "all_manifest_hashes_verified": true
+  },
+  "models": {
+    "baseline": {
+      "best": {
+        "epoch": 99,
+        "next_batch": 0,
+        "sha256": "428d375b981592b2e781059291df422e1d01cabeb0529e53e2b1edbf672ce72e",
+        "bytes": 5558827,
+        "best_mse": 0.0001719729805590091,
+        "fingerprint": "4a3b66fcbc318b2f092be1fc5c8a41aabcd5d228c5a7498b17c7c31afcde2c58",
+        "last_record": {
+          "epoch": 99,
+          "train_mse": 0.00017028155184971845,
+          "val_mse": 0.0001719729805590091,
+          "val_psnr_band_mean_peak1": 39.31000295123403,
+          "val_sam_deg": 4.550377490326489,
+          "seconds_this_segment": 40.651089668273926,
+          "skipped_amp_steps": 7
+        },
+        "load_verified": true
+      },
+      "latest": {
+        "epoch": 100,
+        "next_batch": 0,
+        "sha256": "90649cb3794e272c6edb891edddc06cb2dc80fe67a3786d6eca82aad0d2af1e0",
+        "bytes": 5566891,
+        "best_mse": 0.0001719729805590091,
+        "fingerprint": "4a3b66fcbc318b2f092be1fc5c8a41aabcd5d228c5a7498b17c7c31afcde2c58",
+        "last_record": {
+          "epoch": 100,
+          "train_mse": 0.00016997429096069652,
+          "val_mse": 0.00017479762570624512,
+          "val_psnr_band_mean_peak1": 39.22410525024094,
+          "val_sam_deg": 4.575264925718933,
+          "seconds_this_segment": 38.67657160758972,
+          "skipped_amp_steps": 8
+        },
+        "load_verified": true
+      }
+    },
+    "mtf_aug": {
+      "best": {
+        "epoch": 99,
+        "next_batch": 0,
+        "sha256": "6bef3763e2aafe3d8794555af2f73f813f72274258789ee8c93726051cb4b1fe",
+        "bytes": 5558827,
+        "best_mse": 0.00017124908802703296,
+        "fingerprint": "4a3b66fcbc318b2f092be1fc5c8a41aabcd5d228c5a7498b17c7c31afcde2c58",
+        "last_record": {
+          "epoch": 99,
+          "train_mse": 0.00016951029676300856,
+          "val_mse": 0.00017124908802703296,
+          "val_psnr_band_mean_peak1": 39.31576220094375,
+          "val_sam_deg": 4.545383329216263,
+          "seconds_this_segment": 39.58235478401184,
+          "skipped_amp_steps": 10
+        },
+        "load_verified": true
+      },
+      "latest": {
+        "epoch": 100,
+        "next_batch": 0,
+        "sha256": "92dc084523acba155a70fddcf2fd24166c9618abb93c8a354c5602e7267d69be",
+        "bytes": 5566891,
+        "best_mse": 0.00017124908802703296,
+        "fingerprint": "4a3b66fcbc318b2f092be1fc5c8a41aabcd5d228c5a7498b17c7c31afcde2c58",
+        "last_record": {
+          "epoch": 100,
+          "train_mse": 0.00016940516419168731,
+          "val_mse": 0.00017375862519220105,
+          "val_psnr_band_mean_peak1": 39.262989839168355,
+          "val_sam_deg": 4.5734205961853185,
+          "seconds_this_segment": 39.92548871040344,
+          "skipped_amp_steps": 10
+        },
+        "load_verified": true
+      }
+    }
+  },
+  "status": "100 epochs training complete; RR/FR evaluation pending",
+  "best_validation_delta_mtf_minus_baseline": {
+    "val_mse": -7.23892531976142e-07,
+    "val_psnr_band_mean_peak1": 0.005759249709718972,
+    "val_sam_deg": -0.004994161110225548
+  }
+}
