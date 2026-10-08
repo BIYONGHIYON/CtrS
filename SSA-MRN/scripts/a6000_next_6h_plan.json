@@ -1,0 +1,162 @@
+{
+  "data": {
+    "QB": {
+      "train": "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/QuickBird/Training Dataset/train_qb.h5",
+      "val": "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/QuickBird/Training Dataset/valid_qb.h5"
+    },
+    "GF2": {
+      "train": "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/Gaofen 2/Training Dataset/train_gf2.h5",
+      "val": "/home/gpu_04/CtrS-a6000/SSA-MRN/data/dataset/Gaofen 2/Training Dataset/valid_gf2.h5"
+    }
+  },
+  "parallel": 4,
+  "training": {
+    "epochs": 100,
+    "batch_size": 32,
+    "micro_batch": 32,
+    "lr": 0.0001,
+    "lr_gain": 0.1
+  },
+  "runs": [
+    {
+      "stage": 1,
+      "sensor": "GF2",
+      "k": 6,
+      "seed": 43,
+      "variant": "baseline"
+    },
+    {
+      "stage": 1,
+      "sensor": "GF2",
+      "k": 6,
+      "seed": 43,
+      "variant": "interp23"
+    },
+    {
+      "stage": 1,
+      "sensor": "GF2",
+      "k": 6,
+      "seed": 44,
+      "variant": "baseline"
+    },
+    {
+      "stage": 1,
+      "sensor": "GF2",
+      "k": 6,
+      "seed": 44,
+      "variant": "interp23"
+    },
+    {
+      "stage": 2,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 43,
+      "variant": "interp23_input"
+    },
+    {
+      "stage": 2,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 44,
+      "variant": "interp23_input"
+    }
+  ],
+  "references": [
+    {
+      "stage": 1,
+      "sensor": "GF2",
+      "k": 6,
+      "seed": 42,
+      "variant": "baseline",
+      "path": "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/GF2_baseline_k6_s42"
+    },
+    {
+      "stage": 1,
+      "sensor": "GF2",
+      "k": 6,
+      "seed": 42,
+      "variant": "interp23",
+      "path": "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/GF2_interp23_k6_s42"
+    },
+    {
+      "stage": 2,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 43,
+      "variant": "baseline",
+      "path": "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s43"
+    },
+    {
+      "stage": 2,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 43,
+      "variant": "interp23",
+      "path": "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s43"
+    },
+    {
+      "stage": 2,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 44,
+      "variant": "baseline",
+      "path": "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s44"
+    },
+    {
+      "stage": 2,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 44,
+      "variant": "interp23",
+      "path": "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s44"
+    },
+    {
+      "stage": 2,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 42,
+      "variant": "interp23_input",
+      "path": "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_input_k6_s42"
+    },
+    {
+      "stage": 2,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 42,
+      "variant": "baseline",
+      "path": "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_baseline_k6_s42"
+    },
+    {
+      "stage": 2,
+      "sensor": "QB",
+      "k": 6,
+      "seed": 42,
+      "variant": "interp23",
+      "path": "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs/QB_interp23_k6_s42"
+    }
+  ],
+  "expected_bytes": {
+    "QB": {
+      "train": 5194901672,
+      "val": 577415336
+    },
+    "GF2": {
+      "train": 6004189352,
+      "val": 667134120
+    }
+  },
+  "budget_policy": {
+    "stage1_required": true,
+    "stage2_optional_whole_pair": true,
+    "pilot_epochs": 10,
+    "timing_only_gate": "At epoch10 estimate latest max per-run median of completed epoch seconds (last5). Also recheck at stage1 completion. Start stage2 only if elapsed + 1.8h training + 0.5h evaluation/report allowance <= 6h. Never gate on validation/test scores. If pilot projects over budget, defer both QB input runs, complete GF2100 only.",
+    "guarantee": "6h is an estimate. A partially completed run must never be reported as100 epochs.",
+    "target_seconds": 21600,
+    "stage2_training_reserve_seconds": 6480,
+    "evaluation_reserve_seconds": 1800
+  },
+  "experiment_id": "a6000_gf2_repeat_qb_input",
+  "branch": "a6000-next6h",
+  "output_relative": "experiments/a6000_gf2_repeat_qb_input",
+  "reference_root": "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs"
+}

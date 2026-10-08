@@ -6,19 +6,21 @@
 
 ## 지금까지의 결론
 
-23탭 확대는 QB의 PSNR을 반복해서 높였지만 실제 해상도 지표와 다른 센서에서는 일관된 이득이 없어 **전체 적용을 보류**했습니다. Windows의 K·손실 비교는 별도 실험이며, 구조와 손실을 결합한 효과는 아직 확인하지 않았습니다.
+2026-10-08 23:17 KST, GF2 반복 시드와 QB 입력 23탭 추가 학습 6개 및 전체 평가가 완료됐습니다. GF2는 PSNR·QNR 이득이 3시드 모두 반복됐지만 SAM은 혼재했고, QB 입력은 PSNR·SAM이 3시드 모두 개선됐지만 QNR은 2/3 악화해 최종 채택을 보류했습니다. Windows 손실 비교는 별도 실험입니다.
 
-| 검증 | 같은 센서·시드 기준선 대비 변화 | 판단 |
-|---|---|---|
-| QB · 3시드 | RR PSNR **+0.0421 ± 0.0127 dB**, FR QNR **−0.011602 ± 0.015583** | PSNR은 3/3 개선, QNR은 2/3 악화 |
-| GF2 · 시드 42 | PSNR **+0.1490 dB**, SAM **−0.0242°**, QNR **+0.005198** | 개선 후보, 반복 시드 필요 |
-| WV3 · 시드 42 | PSNR **−0.0368 dB**, SAM **+0.0219°**, QNR **−0.001746** | validation 이득이 test로 이어지지 않음 |
+| 검증 | ΔPSNR (dB) | ΔSAM (°) | ΔMSE (peak=1) | ΔQNR | 판단 |
+|---|---:|---:|---:|---:|---|
+| GF2 전체 23탭 · 3시드 | +0.1095 ± 0.0698 | +0.00029 ± 0.02157 | -2.711e-06 | +0.005261 ± 0.002222 | PSNR/QNR 3/3 개선, SAM 2/3 악화 |
+| QB 입력 23탭 · 3시드 | +0.0575 ± 0.0369 | -0.02123 ± 0.02598 | -2.543e-06 | +0.003569 ± 0.011528 | PSNR/SAM 3/3 개선, QNR 2/3 악화 |
+| QB 전체 23탭 · 3시드 (재사용) | +0.0421 ± 0.0127 | -0.01894 ± 0.02250 | -2.116e-06 | -0.011602 ± 0.015583 | PSNR 3/3 개선, QNR 2/3 악화 |
 
-RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없는 실제 해상도 평가입니다. PSNR·QNR은 높을수록, SAM은 낮을수록 좋습니다. ±는 QB 시드 42·43·44의 기준선 대비 차이의 표본 표준편차이며, FR QNR은 MATLAB 구현과의 일치성 검증이 남은 잠정 값입니다.
+RR은 정답이 있는 축소 해상도, FR은 정답이 없는 실제 해상도 평가입니다. ±는 시드 42·43·44의 기준선 대비 차이 표본 표준편차이며 통계적 유의성이 아닙니다. FR QNR은 MATLAB 일치성 미검증인 잠정 값입니다.
 
-왼쪽부터 **LR MS · PAN · 예측 · 정답**입니다. GF2 전체 23탭 모델의 고정 장면 예시이며 같은 장면의 MS 패널에 공통 대비를 적용했습니다.
+왼쪽부터 **LR MS · PAN · 예측 · 정답**입니다.
 
-![GF2 전체 23탭 예측](SSA-MRN/docs/assets/a6000_followup_123/GF2_interp23_k6_s42_scene_01.png)
+![GF2 전체 23탭 시드 43](SSA-MRN/docs/assets/a6000_gf2_repeat_qb_input/GF2_interp23_k6_s43_scene_01.png)
+
+[최신 상세 보고서](SSA-MRN/docs/experiments/a6000_gf2_repeat_qb_input.md)에 15개 모델의 전체 RR/FR 평가, 45개 고정 이미지, 원본 best/latest 30개와 해시를 보존했습니다.
 
 ## 실험 바로 보기
 
@@ -31,6 +33,7 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 | [QB 구조 비교](SSA-MRN/docs/experiments/a6000_architecture_qb.md) | 23탭 확대·LR 보정·고주파 경로 | 평가 완료, 단일 시드에서 23탭을 후속 후보로 선정 |
 | [QB 게이트 고주파 계획](SSA-MRN/docs/experiments/kaggle_band_gated_hf.md) | 밴드·위치별 PAN 고주파 주입량 학습 | 계획·미실행, baseline·기존 경로와 paired 비교 예정 |
 | [23탭 후속 검증](SSA-MRN/docs/experiments/a6000_followup_123.md) | QB 3시드·확대 위치·GF2/WV3 | 평가 완료, 모든 센서에 적용하는 최종 채택은 보류 |
+| [GF2 반복·QB 입력 검증](SSA-MRN/docs/experiments/a6000_gf2_repeat_qb_input.md) | GF2 전체/QB 입력 23탭 각각 3시드 | 전체 평가 완료, GF2 PSNR/QNR 개선 반복·SAM 혼재 |
 | [Windows K·손실 비교](SSA-MRN/docs/experiments/windows_controlled.md) | 같은 장치의 K4/K6 → 손실 9개 → 후보 연장 | 마지막 확인 시 학습 중, 손실 효과 미확정 |
 | [QB 관측 연산자 검증](SSA-MRN/docs/experiments/observation_validation.md) | consistency 손실의 MTF·패치 위상 검증 | 구현 검증 완료, 모델 성능 평가와 구분 |
 
