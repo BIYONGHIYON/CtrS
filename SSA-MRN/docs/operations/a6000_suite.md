@@ -4,7 +4,7 @@
 
 Windows에서는 K 비교와 보조 손실을 탐색하고, 학교 서버에서는 SSA-MRN의 **구조 변경을 하나씩** 비교합니다.
 
-2026-10-08 03:26 KST 확인: QB·K=6·시드 42의 4개 병렬 본 학습 실행 중이며 모두 2에폭에 진입했습니다. QB 데이터와 CUDA 사전 검증을 통과했습니다. 자세한 진행 기록은 [현재 학습 현황](../current_training.md)에 있습니다. 단일 시드의 탐색 결과이며 개선 후보는 후속 반복 시드 검증을 거칩니다.
+2026-10-08: 네 모델의 100에폭 학습과 QB RR20/FR20 전체 평가를 완료했습니다. [결과 보고서](../experiments/improvements/a6000_architecture_qb.md)에 수치·5장면 이미지·가중치를 보존합니다. 단일 시드 탐색이므로 반복 검증은 후속 작업입니다.
 
 ## 네 실험
 
@@ -76,3 +76,12 @@ watch -n 2 './SSA-MRN/scripts/run_a6000_suite.sh status'
 ## 판단과 결과 보관
 
 best validation MSE로 후보를 판단하고 test를 선택에 사용하지 않습니다. 효과가 있는 후보만 반복 시드·센서 확장·결합으로 진행합니다. 독립 RR/FR 전체 평가, PSNR·SAM·ERGAS 등 지표, 가중치 해시·곡선·5장면 이미지는 후속 결과 보고에서 정리합니다. 코드 사전 검증과 학습 완료는 연구 성능 개선의 증거가 아닙니다.
+
+## 평가 재현
+
+```bash
+cd /home/gpu_04/CtrS-a6000
+/home/gpu_04/CtrS_old/SSA-MRN/.conda-env/bin/python SSA-MRN/scripts/evaluate_a6000.py
+```
+
+best 가중치의 RR/FR 전체를 평가하고 `docs/assets/a6000_architecture_qb`에 지표·이미지·곡선·추론 가중치·해시 manifest를 생성합니다. 원본 재개 가중치는 삭제하지 않습니다.
