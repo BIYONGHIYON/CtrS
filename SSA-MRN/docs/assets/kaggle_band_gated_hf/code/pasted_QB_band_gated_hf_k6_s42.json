@@ -1,0 +1,171 @@
+{
+  "sensor": "QB",
+  "k": 6,
+  "channels": 4,
+  "mode": "pasted",
+  "controlled": true,
+  "epochs": 100,
+  "seed": 42,
+  "variant": "band_gated_hf",
+  "batch_size": 32,
+  "lr": 0.0001,
+  "micro_batch": 32,
+  "auto_micro": false,
+  "eval_batch": 32,
+  "amp": true,
+  "channels_last": true,
+  "gpu_cache": true,
+  "workers": 2,
+  "scale": 2047.0,
+  "save_predictions": true,
+  "data": {
+    "train": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+      "bytes": 5194901672,
+      "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "shapes": {
+        "pan": [
+          17139,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          17139,
+          4,
+          64,
+          64
+        ],
+        "ms": [
+          17139,
+          4,
+          16,
+          16
+        ],
+        "gt": [
+          17139,
+          4,
+          64,
+          64
+        ]
+      }
+    },
+    "val": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5",
+      "bytes": 577415336,
+      "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "shapes": {
+        "pan": [
+          1905,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          1905,
+          4,
+          64,
+          64
+        ],
+        "ms": [
+          1905,
+          4,
+          16,
+          16
+        ],
+        "gt": [
+          1905,
+          4,
+          64,
+          64
+        ]
+      }
+    },
+    "RR": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+      "bytes": 96997376,
+      "sha256": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "shapes": {
+        "pan": [
+          20,
+          1,
+          256,
+          256
+        ],
+        "lms": [
+          20,
+          4,
+          256,
+          256
+        ],
+        "ms": [
+          20,
+          4,
+          64,
+          64
+        ],
+        "gt": [
+          20,
+          4,
+          256,
+          256
+        ]
+      }
+    },
+    "FR": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5",
+      "bytes": 220202744,
+      "sha256": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f",
+      "shapes": {
+        "pan": [
+          20,
+          1,
+          512,
+          512
+        ],
+        "lms": [
+          20,
+          4,
+          512,
+          512
+        ],
+        "ms": [
+          20,
+          4,
+          128,
+          128
+        ]
+      }
+    }
+  },
+  "cache": "/kaggle/working/ssa_kaggle_model_comparison_v1/_cache",
+  "source": "/kaggle/working/ssa_kaggle_model_comparison_v1/code/CtrS",
+  "run_dir": "/kaggle/working/ssa_kaggle_model_comparison_v1/runs/pasted_QB_band_gated_hf_k6_s42",
+  "selection": {
+    "seed": 42,
+    "protocol": "RR",
+    "tiles": "full scene",
+    "zero_based_scene_indices": [
+      1,
+      8,
+      11,
+      13,
+      19
+    ],
+    "order": "ascending scene index",
+    "rgb_assumed_bands_zero_based": [
+      2,
+      1,
+      0
+    ],
+    "rule": "fixed before training and test scoring"
+  },
+  "repo_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56",
+  "plan_commit": "1b56efb54e9c200d5b497e719bb0857b25f750bf",
+  "pasted_source": "/kaggle/working/ssa_kaggle_model_comparison_v1/code/pasted_models.py",
+  "pasted_source_sha256": "06453387e796eb87e300b009cfaec7a33b6f54871dafe3137cb04b4ced89ff6f",
+  "upstream_commit": "a4ca40e407b12bf4c30f804384405ce321d11c51",
+  "worker_sha256": "3afeedda8b13cb9bb4ff162037c42515a77cadc025996a09e506c0a9265f75eb",
+  "model_definition": "Pinned GitHub baseline versus exact BandGatedHighFrequency from the linked plan notebook; fixed high_frequency excluded by request",
+  "numerics": "Controlled: equal AMP/layout/micro batch, deterministic kernels, no TF32; not legacy bitwise parity"
+}
