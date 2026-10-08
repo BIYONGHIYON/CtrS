@@ -1,20 +1,20 @@
 # 현재 학습 현황 · SSA-MRN 성능 개선
 
-**최신 확인: 2026-10-08 11:39 KST.** Windows는 QB K6의 72에폭을 실행 중입니다. 학교는 05:33에 네 학습을 완료했고 RR20/FR20 평가와 결과 정리를 마쳤습니다. [학교 결과 보고서](experiments/improvements/a6000_architecture_qb.md)
+**Linux 최신 확인: 2026-10-08 18:07 KST.** 후속10개 모두100에폭 완료, 큐 `finished`, active 없음, GPU 학습 프로세스 없음입니다. 이후 best12개 모델의 전체 RR/FR 평가·곡선·예시·가중치 해시를 정리했습니다. [후속 결과](experiments/improvements/a6000_followup_123.md)
 
-아래 상세 진행률은 **03:26 KST의 시작 단계 기록**으로 보존하며 실시간 상태가 아닙니다.
+**Windows 기록은 2026-10-08 11:39 KST의 과거 확인값**이며 이번 Linux 작업에서 현재 상태를 확인하지 않았습니다. 아래 Windows 초기 상세 진행률은 03:26 KST의 과거 기록입니다.
 
 ## 두 서버의 역할
 
 | 항목 | Windows · RTX 3060 Ti | 학교 · RTX A6000 48GB |
 |---|---|---|
-| 목적 | 동일 환경 K 비교와 보조 손실 후보 탐색 | 기준선에서 구조를 하나씩 바꿔 효과 비교 |
-| 데이터 | QB·GF2·WV3 전체 학습/검증 | QB 전체 학습 17,139·검증 1,905패치 |
+| 목적 | 동일 환경 K 비교와 보조 손실 후보 탐색 | QB 반복시드·확대 위치·GF2/WV3 후속 검증 완료 |
+| 데이터 | QB·GF2·WV3 전체 학습/검증 | QB·GF2·WV3 전체 학습/검증 |
 | 실행 | 1개씩 직렬 | 4개 병렬 |
-| 시드 | 42 | 42 |
+| 시드 | 42 | QB 42·43·44, GF2/WV3 42 |
 | 공통 최적화 | Adam·lr 1e-4·effective batch 32·CUDA FP32·결정론 | 동일 |
 | micro batch | 4, gradient 누적 | 32, 한 번에 계산 |
-| 결과 폴더 | `C:\CtrS-budget-suite\SSA-MRN\experiments\controlled_suite_v2` | `/home/gpu_04/CtrS-a6000/SSA-MRN/experiments/a6000_architecture_qb` |
+| 결과 폴더 | `C:\CtrS-budget-suite\SSA-MRN\experiments\controlled_suite_v2` | `/home/gpu_04/CtrS-a6000-followup/SSA-MRN/experiments/a6000_followup_123` |
 
 GPU·PyTorch·gradient 합산 순서가 달라 두 서버의 값을 동일 조건의 반복 시드 평균으로 묶지 않습니다. 개선 효과는 각 서버의 자체 기준선과 비교합니다.
 
@@ -32,22 +32,17 @@ GPU·PyTorch·gradient 합산 순서가 달라 두 서버의 값을 동일 조�
 
 초기 203초/에폭으로 계산한 전체 약 53시간은 잠정 추정입니다. 센서·K·손실별 속도와 후속 평가 시간은 포함 여부가 다르므로 3일 완료를 보장하지 않습니다.
 
-## 2. 학교: 구조 개선 4개 병렬
+## 2. 학교: 후속 1~3단계 완료
 
-모두 **QB·K=6·시드 42·100에폭·기본 MSE**입니다. K=6은 현재 저장소의 연구 기준으로 사전 고정했으며 Windows 큐의 검증 결과로 선택한 값이 아닙니다.
-
-| 실험 | 기준선에서 변경한 것 | 확인한 진행 |
+| 단계 | 학습 | 완료 상태 |
 |---|---|---|
-| `baseline` | 복구한 SSA-MRN 유지 | 2/100에폭, 51/536배치 |
-| `interp23` | 내부 확대 4곳만 23탭 보간으로 교체 | 2/100에폭, 1/536배치 |
-| `lr_correction` | 예측의 LR 관측 오차를 출력에 공간 보정으로 반영 | 2/100에폭, 1/536배치 |
-| `high_frequency` | PAN 고주파에서 밴드별 잔차를 만드는 경로 추가 | 2/100에폭, 51/536배치 |
+| 1 | QB 기준선/전체23탭 × 시드43·44 | 4개 ×100에폭 완료 |
+| 2 | QB 입력만/출력만23탭 × 시드42 | 2개 ×100에폭 완료, 기존 기준선/전체23탭 시드42 재사용 |
+| 3 | GF2·WV3 기준선/전체23탭 × 시드42 | 4개 ×100에폭 완료 |
 
-- **23탭:** 제공 LMS·축소 bilinear·SSA 블록 내부 연산은 유지합니다. 변경하는 확대는 ×4 한 곳, ×2 세 곳입니다.
-- **LR 보정:** QB MTF 관측, 입력 LMS/MS로 결정한 샘플링 위상, LR 경계 5픽셀 마스킹, 고정 보정 gain 0.1을 사용합니다. GT와 예측을 위상 선택에 사용하지 않습니다. 새 위상 선택 가정의 효과는 후속 진단이 필요하며 정확한 역투영으로 주장하지 않습니다.
-- **고주파:** PAN에서 5×5 binomial 저주파를 뺀 뒤 작은 Conv 잔차 경로로 출력에 더합니다. 마지막 계층은 0으로 초기화해 초기 출력이 기준선과 같습니다.
+코드 `/home/gpu_04/CtrS-a6000-followup`, 결과 `SSA-MRN/experiments/a6000_followup_123`, 브랜치 `a6000-followup-suite`입니다. 최대4개 병렬, 이전 단계 전체 완료 뒤 다음 단계를 실행했습니다. 4단계 Windows 손실 결합은 제외했습니다. 공통조건 K6·Adam lr1e-4·batch=micro batch32·MSE·CUDA FP32·결정론입니다. Python·데이터·기존 결과를 참조하는 `CtrS_old`와 `CtrS-a6000`은 유지합니다.
 
-네 조건은 같은 데이터·공통 계층 초기화·학습량으로 비교하며 변형을 결합하지 않습니다. 첫 에폭은 각 약 73~79초였고 확인 시점 GPU 사용률은 98%, 메모리는 약 3.5GiB였습니다. 초기 검증 MSE나 처리 속도만으로 성능 개선을 확정하지 않습니다.
+현재 새 학습은 없습니다. 결과 판단은 [보고서](experiments/improvements/a6000_followup_123.md)를 기준으로 하며 모든 센서의 개선을 주장하지 않습니다.
 
 ## 3. 코드 사전 검증과 제한
 
@@ -56,9 +51,9 @@ GPU·PyTorch·gradient 합산 순서가 달라 두 서버의 값을 동일 조�
 - 고주파 경로 초기 출력이 기준선과 정확히 같음
 - LR 관측 오차가 0일 때 보정량이 0임
 - 실제 QB 32개 train/validation 패치로 4개 동시 학습·검증·체크포인트 저장 통과: 최고 GPU 메모리 3,580MiB
-- 학교 QB 파일의 예상 바이트 수·H5 shape·첫/마지막 패치 읽기 확인. 전체 SHA-256 대조 완료로 주장하지 않음
+- 학습 H5는 예상 바이트·shape·첫/마지막 패치와 inventory 메타데이터 확인. 전체 학습 H5 SHA-256 대조를 완료했다고 주장하지 않음
 
-이 검증은 구현 실행 가능성을 확인하며 연구 성능 개선의 증거가 아닙니다. GF2·WV3의 업로드 완료나 다른 실험 완료 여부를 이 현황에서 확정하지 않습니다.
+이 검증은 구현 실행 가능성을 확인하며 연구 성능 개선의 증거가 아닙니다. 이 절의 초기 smoke 검증은 성능 근거가 아닙니다. 후속 본 학습·test 완료 근거는 이번 보고서에 있습니다.
 
 ## 4. 상태와 로그 확인
 
@@ -72,23 +67,15 @@ Windows PowerShell:
 학교 서버 터미널:
 
 ```bash
-cd /home/gpu_04/CtrS-a6000
-./SSA-MRN/scripts/run_a6000_suite.sh status
-./SSA-MRN/scripts/run_a6000_suite.sh logs
-tail -n 5 -F SSA-MRN/experiments/a6000_architecture_qb/*/train.log
+cd /home/gpu_04/CtrS-a6000-followup
+./SSA-MRN/scripts/run_a6000_followup.sh status
+./SSA-MRN/scripts/run_a6000_followup.sh logs
 ```
 
 접속 종료·로그 화면 Ctrl+C는 학습을 중단하지 않습니다. 재부팅·절전은 피하고 실행 중 코드·계획·데이터를 덮어쓰지 않습니다.
 
 ## 5. 학습 이후 할 일 · 상태 구분
 
-학교의 학습·전체 RR/FR 평가·그림·추론 가중치 해시 정리는 완료했습니다. 아래 항목 중 학교에 남은 일은 반복 시드·센서 확장과 원본 재개 가중치의 별도 백업입니다. Windows는 학습 및 후속 평가가 진행 예정입니다.
+학교 후속10개 학습과 재사용2개를 포함한 전체 RR/FR 평가·35개 예시·실측 곡선·원본24개 가중치/해시 정리는 완료했습니다. 다음 판단은 GF2 반복시드와 FR 평가 구현 검증이며 새 학습은 자동 시작하지 않습니다. 원격 가중치 복구 검증 전에는 서버 결과를 삭제하지 않습니다. Windows 진행과 후속 평가는 별도 관리합니다.
 
-1. 전체 학습 완료·best/latest epoch·계획·로그·가중치 해시 확인
-2. 학교 네 조건의 같은 에폭 구간과 best validation 결과를 기준선과 비교
-3. 독립 RR/FR 전체 평가와 장면별 PSNR·SAM·ERGAS·SCC·Q4/Q8·QNR 등 정리
-4. 학습/검증 곡선·baseline 비교 그래프·사전 고정한 5장면 예시 저장
-5. 효과가 확인된 구조만 반복 시드·센서 확장으로 재검증하고 결합은 그 이후 검토
-6. 코드뿐 아니라 실제 가중치·결과의 원격 보관과 복구를 검증한 뒤 미사용 실행 폴더 정리
-
-[Windows 실행 가이드](operations/controlled_suite.md) · [학교 구조 비교의 구현·실행 가이드](operations/a6000_suite.md)
+[Windows 실행 가이드](operations/controlled_suite.md) · [Linux 후속 실행·평가](operations/a6000_followup.md)
