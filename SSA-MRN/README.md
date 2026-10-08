@@ -4,6 +4,27 @@
 
 PAN의 공간 정보와 MS의 분광 정보를 결합해 고해상도 MS를 복원합니다. QB·GF2는 4밴드, WV3는 8밴드이며 **K는 관측 밴드 수가 아니라 모델 내부 특징 차원**입니다.
 
+<a id="latest"></a>
+
+## 최신 전체 평가 완료 · QB 3단계 공유 복원 B1/B2
+
+**2026-10-09 05:59 KST 다운로드 검증 기준**, T4×2에서 B1·B2 각각100에폭과 RR20장·FR20장 전체 평가를 마쳤습니다. B2는 관측 오차를 전달하며, B1은 같은 3단계 공유 복원을 오차 없이 실행합니다. best는 validation MSE로 선택했고 B1은90에폭, B2는99에폭입니다.
+
+| 지표 | B1 | B2 | B2−B1 |
+|---|---:|---:|---:|
+| RR PSNR dB ↑ | 37.604745 | 37.720504 | +0.115759 |
+| RR SAM ° ↓ | 4.832698 | 4.814416 | -0.018282 |
+| RR MSE peak1 ↓ | 0.000205615557702 | 0.00020025117562 | -5.36438208154e-06 |
+| FR QNR ↑ · 잠정 | 0.904310 | 0.886089 | -0.018221 |
+
+**RR 개선 후보 유지, FR 포함 최종 채택 보류.** RR 지표는 전반 개선됐지만 FR 왜곡과 입력 MS 일치도는 악화했습니다. 단일seed42이며 기존 B0은 재실행하지 않았습니다. 초기 가중치·100에폭 샘플 순서 일치, 원본 best/latest4개·전체 예측80개·원본 manifest152개 해시를 검증했습니다.
+
+왼쪽부터 **LR MS · PAN · B2 예측 · 정답**입니다. 사전 고정 RR index1이며 같은 장면의 MS 패널에는 공통 대비를 적용했습니다.
+
+![B2 고정 RR 장면1](docs/assets/kaggle_b1_b2/runs/B2_QB_B2_k6_s42/RR_scene_01.png)
+
+[완료 보고서](docs/experiments/kaggle_b1_b2.md) · [한 셀 재현·복구](docs/operations/kaggle_b1_b2.md)
+
 <a id="experiments"></a>
 
 ## 실험 한눈에 보기
@@ -16,6 +37,7 @@ PAN의 공간 정보와 MS의 분광 정보를 결합해 고해상도 MS를 복�
 | [K6 재현](docs/experiments/pan_k6.md) | SSAI 내부 차원 4→6 | 평가 완료, 장치도 달라 K만의 효과는 미확정 |
 | [QB 구조 비교](docs/experiments/a6000_architecture_qb.md) | 23탭 확대·LR 보정·고주파 경로 | 평가 완료, 단일 시드에서 23탭을 후속 후보로 선정 |
 | [QB 게이트 고주파](docs/experiments/kaggle_band_gated_hf.md) | PAN 고주파를 MS 밴드·위치별로 게이트 | Kaggle 두 모델 RR/FR 전체 평가 완료, RR 악화로 채택 보류 |
+| [QB 3단계 관측 복원](docs/experiments/kaggle_b1_b2.md) | B1 무오차 반복·B2 관측 오차 전달 | RR/FR 전체 평가 완료, RR 개선·FR 악화로 종합 채택 보류 |
 | [23탭 후속 검증](docs/experiments/a6000_followup_123.md) | QB 3시드·확대 위치·GF2/WV3 | 평가 완료, 모든 센서에 적용하는 최종 채택은 보류 |
 | [GF2 반복·QB 입력 검증](docs/experiments/a6000_gf2_repeat_qb_input.md) | GF2 전체/QB 입력 23탭 각각 3시드 | 전체 평가 완료, GF2 PSNR/QNR 개선 반복·SAM 혼재 |
 | [Windows K·손실 비교](docs/experiments/windows_controlled.md) | 같은 장치의 K4/K6 → 손실 9개 → 후보 연장 | 마지막 확인 시 학습 중, 손실 효과 미확정 |
@@ -36,9 +58,7 @@ PAN의 공간 정보와 MS의 분광 정보를 결합해 고해상도 MS를 복�
 
 ![MTF 학습·validation 곡선](docs/assets/kaggle_mtf_pair_20261009/validation_curves.png)
 
-<a id="latest"></a>
-
-## 최신 완료 결과 · GF2 반복 시드·QB 입력 23탭
+## 이전 완료 결과 · GF2 반복 시드·QB 입력 23탭
 
 2026-10-08 23:17 KST에 새 학습 6개와 자동 평가가 완료됐습니다. 기존 9개 포함 15개 모델 각각 RR 20장·FR 20장 전체를 평가했고 best는 validation MSE로 선택했습니다.
 
@@ -56,7 +76,7 @@ GF2 PSNR·QNR은 3/3 개선했지만 SAM은 2/3 악화했습니다. QB 입력은
 
 ![QB 입력 23탭 시드 43](docs/assets/a6000_gf2_repeat_qb_input/QB_interp23_input_k6_s43_scene_01.png)
 
-[최신 보고서](docs/experiments/a6000_gf2_repeat_qb_input.md)에서 조건·절대 수치·실측 곡선·고정 45개 이미지·원본 가중치 30개를 확인합니다. 없는 과거 QB 시드 42 validation SAM 곡선은 생성하지 않았습니다.
+[이전 보고서](docs/experiments/a6000_gf2_repeat_qb_input.md)에서 조건·절대 수치·실측 곡선·고정 45개 이미지·원본 가중치 30개를 확인합니다. 없는 과거 QB 시드 42 validation SAM 곡선은 생성하지 않았습니다.
 
 ## 병행 완료 · QB 밴드별 게이트 고주파
 
@@ -87,6 +107,7 @@ GF2 PSNR·QNR은 3/3 개선했지만 SAM은 2/3 악화했습니다. QB 입력은
 
 | 서버 | 마지막 확인 | 확인된 상태 | 남은 판단 |
 |---|---|---|---|
+| Kaggle · T4×2 · B1/B2 | 2026-10-09 05:59 KST · 다운로드 검증 | 각100에폭·RR20/FR20장 전체 평가·가중치 해시 확인 | 반복 시드·FR 센서/위상 검증 |
 | Linux · RTX A6000 | 2026-10-08 23:26 KST · SSH 확인 | GF2/QB 추가 6개 100에폭, 15개 모델 평가·해시 검증 완료. GPU 유휴 | FR 구현 검증·Windows 결과 확인 |
 | Windows · RTX 3060 Ti | 2026-10-08 16:24 KST · SSH 확인 | QB K4/K6 각각 100에폭, GF2 K4 49/100에폭 완료 후 학습 중 | 나머지 기준선 → 손실 9개 → 최종 후보 연장 → 평가 |
 | Kaggle · Tesla T4 ×2 | 2026-10-08 23:20 KST부터 다운로드 산출물 검증 | baseline·gate 각 100에폭, 각 RR/FR 20장 전체 평가 완료 | gate 채택 보류; 다른 seed·독립 장면 반복 필요 |
