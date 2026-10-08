@@ -106,3 +106,6 @@ python3 SSA-MRN/scripts/verify_a6000_followup_report.py
 ```
 
 Git의 원본24개 가중치에는 Adam·RNG·checkpoint config가 있으며 전체 환경·데이터를 포함하지 않습니다. 재개할 때 config에 기록된 서버 경로와 Python/의존성을 준비하고 저장된 코드 해시를 맞춰야 합니다. GitHub에서 파일을 실제 복구해 SHA-256 일치와 checkpoint 구조가 확인되기 전에는 보관 검증을 완료했다고 쓰지 않습니다. `CtrS_old`·`CtrS-a6000`은 참조 환경·데이터·기존 결과이므로 그대로 유지합니다.
+
+
+2026-10-08 원격 검증 완료: GitHub의 결과 commit `182e2fa01b39bccd10241810d0cee8faa9c84646`을 fresh clone해 원본24개 가중치와 산출물71개를 실제로 읽어 SHA-256을 대조했습니다. [파일별 검증 기록](a6000_followup_remote_verification.json). 원본 서버 폴더는 그대로 유지합니다.
