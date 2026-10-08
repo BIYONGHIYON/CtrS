@@ -15,11 +15,38 @@
 | [다음 실험 계획](SSA-MRN/docs/improvement_plan.md) | 동일 환경 기준선 및 검증 기준 |
 | [실행 방법](SSA-MRN/docs/operations/pan_ms.md) | 환경·학습·평가·VS Code 실행 |
 
-## 현재 근거
+## 최신 결과 · SSA-MRN 구조 개선
 
-QB/GF2/WV3에서 공개 구현 K=4와 논문 설정 K=6을 평가했습니다. K6의 RR PSNR은 QB 37.5040 dB, GF2 45.8631 dB, WV3 37.6326 dB입니다. K4는 CUDA/A6000, K6는 DirectML/Radeon으로 실행 환경도 달라 K만의 효과로 해석하지 않습니다. 후속 개선은 같은 장치·분할·학습량의 기준 모델과 비교합니다.
+학교 A6000에서 **QB·K=6·100에폭·시드 42**로 기준선과 세 변형을 비교했습니다. validation으로 고른 best 가중치의 전체 RR20/FR20 평가입니다.
 
-학습 가중치와 평가 수치·이미지를 함께 제공합니다. 원본 데이터는 포함하지 않습니다.
+| 모델 | RR PSNR dB ↑ | RR SAM ° ↓ | FR QNR ↑* |
+|---|---:|---:|---:|
+| 기준선 | 37.4242 | 4.9639 | 0.914868 |
+| 23탭 | 37.4799 | 4.9210 | 0.918011 |
+| LR 보정 | 37.3839 | 4.9604 | 0.911718 |
+| 고주파 경로 | 37.3621 | 4.9408 | 0.910940 |
+
+23탭의 PSNR은 기준선 대비 **+0.0557dB**입니다. 단일 시드 탐색 결과라 반복 시드·센서 확장 검증을 거친 뒤 채택합니다. *FR QNR은 MATLAB 일치성 미검증인 잠정 수치입니다.*
+
+### 테스트 이미지 3종
+
+같은 장면이며 **LR MS · PAN · 예측 · 정답** 순서입니다. 입력을 자르지 않았고 MS만 표시용으로 확대했습니다. RGB 밴드 순서는 가정이며 같은 대비를 적용했습니다.
+
+**23탭**
+
+![23탭 테스트](SSA-MRN/docs/assets/a6000_architecture_qb/interp23_scene_01.png)
+
+**LR 보정**
+
+![LR 보정 테스트](SSA-MRN/docs/assets/a6000_architecture_qb/lr_correction_scene_01.png)
+
+**고주파 경로**
+
+![고주파 테스트](SSA-MRN/docs/assets/a6000_architecture_qb/high_frequency_scene_01.png)
+
+[전체 보고서·5장면 세트·가중치](SSA-MRN/docs/experiments/improvements/a6000_architecture_qb.md)
+
+Windows 서버의 K 비교·손실 후보 탐색은 별도로 진행 중입니다. 과거 K4/K6 재현과 현재 구조 비교의 조건·결과를 구분해 보관합니다. 원본 데이터는 Git에 포함하지 않습니다.
 
 ## 코드 받기
 
