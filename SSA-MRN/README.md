@@ -17,8 +17,22 @@ PAN의 공간 정보와 MS의 분광 정보를 결합해 고해상도 MS를 복�
 | [QB 구조 비교](docs/experiments/a6000_architecture_qb.md) | 23탭 확대·LR 보정·고주파 경로 | 평가 완료, 단일 시드에서 23탭을 후속 후보로 선정 |
 | [23탭 후속 검증](docs/experiments/a6000_followup_123.md) | QB 3시드·확대 위치·GF2/WV3 | 평가 완료, 모든 센서에 적용하는 최종 채택은 보류 |
 | [Windows K·손실 비교](docs/experiments/windows_controlled.md) | 같은 장치의 K4/K6 → 손실 9개 → 후보 연장 | 마지막 확인 시 학습 중, 손실 효과 미확정 |
-| [QB MTF 증강 계획](docs/experiments/kaggle_mtf_pair.md) | 원본 기준선·MTF 변화량 증강의 T4 병렬 비교 | 코드 준비·CPU 재개 검증 완료, 본 학습·test 미확인 |
+| [QB MTF 증강 학습](docs/experiments/kaggle_mtf_pair.md) | 원본 기준선·MTF 변화량 증강의 T4 병렬 비교 | 100에폭 완료·best/latest 보관, RR/FR 평가 대기 |
 | [QB 관측 연산자 검증](docs/experiments/observation_validation.md) | consistency 손실의 MTF·패치 위상 검증 | 구현 검증 완료, 모델 성능 평가와 구분 |
+
+## 최근 학습 완료 · QB MTF 증강
+
+2026-10-09, T4×2에서 baseline·MTF 모델 모두100에폭을 마쳤습니다. validation MSE로 선택한 best는 둘 다99에폭입니다.
+
+| 모델 | Best validation MSE | PSNR (dB) | SAM (°) |
+|---|---:|---:|---:|
+| baseline | 0.000171972981 | 39.310003 | 4.550377 |
+| MTF 증강 | 0.000171249088 | 39.315762 | 4.545383 |
+| MTF − baseline | −0.000000723893 | +0.005759 | −0.004994 |
+
+단일 seed46의 **validation 관측**이며 RR/FR 개선 결론은 아직 없습니다. 원본 best/latest4개와 설정·소스·해시·100에폭 기록을 함께 보관했습니다. [조건·곡선·가중치](docs/experiments/kaggle_mtf_pair.md).
+
+![MTF 학습·validation 곡선](docs/assets/kaggle_mtf_pair_20261009/validation_curves.png)
 
 <a id="latest"></a>
 

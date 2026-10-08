@@ -1,0 +1,108 @@
+{
+  "protocol": "qb_mtf_interior_delta_v1",
+  "seed": 46,
+  "k": 6,
+  "epochs": 100,
+  "batch_size": 32,
+  "micro_batch": 16,
+  "lr": 0.0001,
+  "amp": true,
+  "deterministic": false,
+  "smoke": false,
+  "mtf_factors": [
+    0.9,
+    1.1
+  ],
+  "data": {
+    "train": {
+      "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "bytes": 5194901672,
+      "shapes": {
+        "gt": [
+          17139,
+          4,
+          64,
+          64
+        ],
+        "pan": [
+          17139,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          17139,
+          4,
+          64,
+          64
+        ],
+        "ms": [
+          17139,
+          4,
+          16,
+          16
+        ]
+      }
+    },
+    "val": {
+      "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "bytes": 577415336,
+      "shapes": {
+        "gt": [
+          1905,
+          4,
+          64,
+          64
+        ],
+        "pan": [
+          1905,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          1905,
+          4,
+          64,
+          64
+        ],
+        "ms": [
+          1905,
+          4,
+          16,
+          16
+        ]
+      }
+    }
+  },
+  "code": {
+    "SSA-MRN/src/ssamrn/models/ssa_mrn.py": "c140c1fee05a7958b924c6058e14b31daab7ded51c1aae7122c3287c7afd8891",
+    "SSA-MRN/src/ssamrn/models/interp23.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "SSA-MRN/src/ssamrn/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "SSA-MRN/references/upstream/network.py": "b263d99eb88715a8835ca44c33f6820eb02ee7a8314e31982e73fbb5c8bc1816",
+    "qb_profile.json": "76f6169d85a210a47cd19452035e2c274e7a975683f699f9982a9ecf65f92f6b",
+    "SSA-MRN/src/ssamrn/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "SSA-MRN/src/ssamrn/models/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pair_worker.py": "f40d822b4415ee66b8502b182f17d27e14633689e71416b34d9fb58ffcaf0c2a"
+  },
+  "torch": "2.11.0+cu128",
+  "cuda": "12.8",
+  "fingerprint": "4a3b66fcbc318b2f092be1fc5c8a41aabcd5d228c5a7498b17c7c31afcde2c58",
+  "accepted_fingerprints": [
+    "4a3b66fcbc318b2f092be1fc5c8a41aabcd5d228c5a7498b17c7c31afcde2c58",
+    "31e9143b5848f4ce52d59449c87c293545c60833a1eb46196fece21dbe5c2318"
+  ],
+  "gpu_resident": true,
+  "output": "/kaggle/working/mtf_pair_qb_k6_s46",
+  "cache": "/tmp/ctrs_qb_cache_31e9143b5848f4ce",
+  "code_root": "/tmp/mtf_pair_qb_k6_s46_code",
+  "workers": 2,
+  "checkpoint_steps": 200,
+  "epochs_this_session": 100,
+  "deadline": 1791505800.3106062,
+  "input_paths": {
+    "train": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+    "val": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5"
+  },
+  "base_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56"
+}
