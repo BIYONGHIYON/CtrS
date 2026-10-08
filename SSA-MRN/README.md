@@ -16,11 +16,30 @@ PAN의 공간 정보와 MS의 분광 정보를 결합해 고해상도 MS를 복�
 | [K6 재현](docs/experiments/pan_k6.md) | SSAI 내부 차원 4→6 | 평가 완료, 장치도 달라 K만의 효과는 미확정 |
 | [QB 구조 비교](docs/experiments/a6000_architecture_qb.md) | 23탭 확대·LR 보정·고주파 경로 | 평가 완료, 단일 시드에서 23탭을 후속 후보로 선정 |
 | [QB 게이트 고주파](docs/experiments/kaggle_band_gated_hf.md) | PAN 고주파를 MS 밴드·위치별로 게이트 | Kaggle 두 모델 RR/FR 전체 평가 완료, RR 악화로 채택 보류 |
+| [QB 단계적 Haar A0/A1](docs/experiments/kaggle_wavelet_a0_a1.md) | 원본 MS 중심 두 단계 복원·밴드/방향/위치 gate | RR/FR 전체 평가 완료, RR 악화·A1 추가 이득 없어 채택 보류 |
 | [23탭 후속 검증](docs/experiments/a6000_followup_123.md) | QB 3시드·확대 위치·GF2/WV3 | 평가 완료, 모든 센서에 적용하는 최종 채택은 보류 |
 | [GF2 반복·QB 입력 검증](docs/experiments/a6000_gf2_repeat_qb_input.md) | GF2 전체/QB 입력 23탭 각각 3시드 | 전체 평가 완료, GF2 PSNR/QNR 개선 반복·SAM 혼재 |
 | [Windows K·손실 비교](docs/experiments/windows_controlled.md) | 같은 장치의 K4/K6 → 손실 9개 → 후보 연장 | 마지막 확인 시 학습 중, 손실 효과 미확정 |
 | [QB MTF 증강 학습](docs/experiments/kaggle_mtf_pair.md) | 원본 기준선·MTF 변화량 증강의 T4 병렬 비교 | 100에폭 완료·best/latest 보관, RR/FR 평가 대기 |
 | [QB 관측 연산자 검증](docs/experiments/observation_validation.md) | consistency 손실의 MTF·패치 위상 검증 | 구현 검증 완료, 모델 성능 평가와 구분 |
+
+<a id="latest"></a>
+
+## 최신 전체 평가 완료 · QB 단계적 Haar 복원 A0/A1
+
+2026-10-09 06:28 KST부터 다운로드 산출물을 검증했습니다. T4×2에서 A0·A1을 각각100에폭 학습하고 각 RR20장·FR20장 전체를 평가했습니다. A0는 gate=1, A1은 밴드·방향·위치별 gate입니다.
+
+| 비교 | RR ΔPSNR dB | RR ΔSAM ° | RR ΔMSE peak1 | FR ΔQNR · 잠정 |
+|---|---:|---:|---:|---:|
+| A0 − 기존 B0 | −2.799468 | +0.859341 | +2.07106e−4 | +0.022286 |
+| A1 − 기존 B0 | −3.052997 | +0.941778 | +2.33414e−4 | +0.020670 |
+| A1 − A0 | −0.253529 | +0.082437 | +2.63082e−5 | −0.001616 |
+
+**RR가 크게 악화해 현재 구조 채택을 보류합니다.** 학습 gate의 추가 이득도 확인되지 않았습니다. 이전 B0와 데이터·nominal 학습 조건·환경·순서를 사후 대조했지만 구조·MS 입력·용량과 AMP의 실제 업데이트 수는 다릅니다. 단일 시드이며 잠정 FR 상승을 HR 정확도 개선으로 해석하지 않습니다.
+
+[조건·전체 결과·가중치·검증 근거](docs/experiments/kaggle_wavelet_a0_a1.md)에 실제 best/latest4개와 예측80개를 보존했습니다. 왼쪽부터 **LR MS · PAN · A1 예측 · GT**이며 사전 고정한 RR scene1과 공통 MS 대비를 사용했습니다.
+
+![A1 고정 RR scene1](docs/assets/kaggle_wavelet_a0_a1/runs/A1_QB_s42/RR_scene_001.png)
 
 ## 최근 학습 완료 · QB MTF 증강
 
@@ -36,9 +55,7 @@ PAN의 공간 정보와 MS의 분광 정보를 결합해 고해상도 MS를 복�
 
 ![MTF 학습·validation 곡선](docs/assets/kaggle_mtf_pair_20261009/validation_curves.png)
 
-<a id="latest"></a>
-
-## 최신 완료 결과 · GF2 반복 시드·QB 입력 23탭
+## 이전 완료 결과 · GF2 반복 시드·QB 입력 23탭
 
 2026-10-08 23:17 KST에 새 학습 6개와 자동 평가가 완료됐습니다. 기존 9개 포함 15개 모델 각각 RR 20장·FR 20장 전체를 평가했고 best는 validation MSE로 선택했습니다.
 
@@ -89,6 +106,7 @@ GF2 PSNR·QNR은 3/3 개선했지만 SAM은 2/3 악화했습니다. QB 입력은
 |---|---|---|---|
 | Linux · RTX A6000 | 2026-10-08 23:26 KST · SSH 확인 | GF2/QB 추가 6개 100에폭, 15개 모델 평가·해시 검증 완료. GPU 유휴 | FR 구현 검증·Windows 결과 확인 |
 | Windows · RTX 3060 Ti | 2026-10-08 16:24 KST · SSH 확인 | QB K4/K6 각각 100에폭, GF2 K4 49/100에폭 완료 후 학습 중 | 나머지 기준선 → 손실 9개 → 최종 후보 연장 → 평가 |
+| Kaggle · A0/A1 Haar | 2026-10-09 06:28 KST부터 다운로드 검증 | 각각100에폭·best100, 각 RR/FR20장 전체 평가 및 원본 가중치 검증 | RR 악화·A1 추가 이득 없음, 구조 채택 보류 |
 | Kaggle · Tesla T4 ×2 | 2026-10-08 23:20 KST부터 다운로드 산출물 검증 | baseline·gate 각 100에폭, 각 RR/FR 20장 전체 평가 완료 | gate 채택 보류; 다른 seed·독립 장면 반복 필요 |
 
 Windows 계획은 총 **940에폭 직렬 실행**입니다. 각 실행 환경은 장치·환경·micro batch가 달라 자체 기준선과 비교합니다. 구조+손실 결합의 효과는 아직 미확인입니다. 진행 확인 명령과 복구 절차는 아래 실행 안내에 있습니다.
