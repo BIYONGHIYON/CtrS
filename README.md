@@ -6,19 +6,20 @@
 
 ## 지금까지의 결론
 
-23탭 확대는 QB의 PSNR을 반복해서 높였지만 실제 해상도 지표와 다른 센서에서는 일관된 이득이 없어 **전체 적용을 보류**했습니다. Windows의 K·손실 비교는 별도 실험이며, 구조와 손실을 결합한 효과는 아직 확인하지 않았습니다.
+최신 완료 실험은 **QB 밴드별 게이트 고주파**입니다. Kaggle T4 두 대에서 baseline과 band_gated_hf를 같은 seed42·K6·100에폭 조건으로 학습하고, 각 모델의 RR 20장·FR 20장 전체를 평가했습니다. **RR 지표가 전반 악화해 후보 채택을 보류**했습니다.
 
 | 검증 | 같은 센서·시드 기준선 대비 변화 | 판단 |
 |---|---|---|
-| QB · 3시드 | RR PSNR **+0.0421 ± 0.0127 dB**, FR QNR **−0.011602 ± 0.015583** | PSNR은 3/3 개선, QNR은 2/3 악화 |
-| GF2 · 시드 42 | PSNR **+0.1490 dB**, SAM **−0.0242°**, QNR **+0.005198** | 개선 후보, 반복 시드 필요 |
-| WV3 · 시드 42 | PSNR **−0.0368 dB**, SAM **+0.0219°**, QNR **−0.001746** | validation 이득이 test로 이어지지 않음 |
+| QB gate · 시드42 | RR PSNR **−0.174992 dB**, SAM **+0.008829°**, MSE **+7.72165e−6** | RR PSNR·SAM·MSE·ERGAS·SCC·Q2n 모두 악화 |
+| QB gate · 실제 해상도 | FR QNR **+0.000986**, Dλ **−0.004231**, Ds **+0.003302** | 분광 지표 개선·공간 지표 악화, QNR은 잠정 값 |
 
-RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없는 실제 해상도 평가입니다. PSNR·QNR은 높을수록, SAM은 낮을수록 좋습니다. ±는 QB 시드 42·43·44의 기준선 대비 차이의 표본 표준편차이며, FR QNR은 MATLAB 구현과의 일치성 검증이 남은 잠정 값입니다.
+RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없는 실제 해상도 평가입니다. PSNR·QNR은 높을수록, SAM은 낮을수록 좋습니다. 이번 결과는 단일 시드이며 FR QNR은 MATLAB 일치성 미검증인 잠정 값입니다. [완료 보고서](SSA-MRN/docs/experiments/kaggle_band_gated_hf.md)에 조건·전체 지표·가중치 4개와 해시·재현 코드를 보존했습니다.
 
-왼쪽부터 **LR MS · PAN · 예측 · 정답**입니다. GF2 전체 23탭 모델의 고정 장면 예시이며 같은 장면의 MS 패널에 공통 대비를 적용했습니다.
+이전 [23탭 후속 검증](SSA-MRN/docs/experiments/a6000_followup_123.md)도 전체 센서 적용을 보류했습니다. Windows K·손실 비교는 별도 실험이며 구조와 손실을 결합한 효과는 아직 확인하지 않았습니다.
 
-![GF2 전체 23탭 예측](SSA-MRN/docs/assets/a6000_followup_123/GF2_interp23_k6_s42_scene_01.png)
+왼쪽부터 **LR MS · PAN · 예측 · 정답**입니다. QB band_gated_hf의 사전 고정 RR 장면1이며 같은 장면의 MS 패널에 공통 대비를 적용했습니다.
+
+![QB band_gated_hf 예측](SSA-MRN/docs/assets/kaggle_band_gated_hf/runs/pasted_QB_band_gated_hf_k6_s42/RR_scene_01.png)
 
 ## 실험 바로 보기
 
@@ -29,7 +30,7 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 | [K4 재현](SSA-MRN/docs/experiments/pan_k4.md) | 공개 코드의 학습·평가 복원 | RR/FR 평가 완료, 첫 기준 결과 |
 | [K6 재현](SSA-MRN/docs/experiments/pan_k6.md) | SSAI 내부 차원 4→6 | 평가 완료, 장치도 달라 K만의 효과는 미확정 |
 | [QB 구조 비교](SSA-MRN/docs/experiments/a6000_architecture_qb.md) | 23탭 확대·LR 보정·고주파 경로 | 평가 완료, 단일 시드에서 23탭을 후속 후보로 선정 |
-| [QB 게이트 고주파 계획](SSA-MRN/docs/experiments/kaggle_band_gated_hf.md) | 밴드·위치별 PAN 고주파 주입량 학습 | 계획·미실행, baseline·기존 경로와 paired 비교 예정 |
+| [QB 게이트 고주파](SSA-MRN/docs/experiments/kaggle_band_gated_hf.md) | 밴드·위치별 PAN 고주파 주입량 학습 | Kaggle 두 모델 전체 평가 완료, RR 악화로 채택 보류 |
 | [23탭 후속 검증](SSA-MRN/docs/experiments/a6000_followup_123.md) | QB 3시드·확대 위치·GF2/WV3 | 평가 완료, 모든 센서에 적용하는 최종 채택은 보류 |
 | [Windows K·손실 비교](SSA-MRN/docs/experiments/windows_controlled.md) | 같은 장치의 K4/K6 → 손실 9개 → 후보 연장 | 마지막 확인 시 학습 중, 손실 효과 미확정 |
 | [QB 관측 연산자 검증](SSA-MRN/docs/experiments/observation_validation.md) | consistency 손실의 MTF·패치 위상 검증 | 구현 검증 완료, 모델 성능 평가와 구분 |
@@ -38,7 +39,7 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 
 - [연구 전체 보기](SSA-MRN/README.md): 최신 결과, 센서별 이미지, 서버별 마지막 확인 기록
 - [알고리즘과 평가](SSA-MRN/docs/research.md): PAN/MS, K, 23탭, RR·FR 설명
-- 실행: [Windows K·손실 비교](SSA-MRN/docs/operations/controlled_suite.md) · [Linux 후속 검증](SSA-MRN/docs/operations/a6000_followup.md) · [기본 환경·평가](SSA-MRN/docs/operations/pan_ms.md)
+- 실행: [Kaggle 두 모델 비교](SSA-MRN/docs/operations/kaggle_gpu_comparison.md) · [Windows K·손실 비교](SSA-MRN/docs/operations/controlled_suite.md) · [Linux 후속 검증](SSA-MRN/docs/operations/a6000_followup.md) · [기본 환경·평가](SSA-MRN/docs/operations/pan_ms.md)
 
 ## 코드 받기
 
