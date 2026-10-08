@@ -1,0 +1,17 @@
+{
+  "variants": "baseline and band_gated_hf only, per user request",
+  "reference_precision": "FP32",
+  "actual_training_precision": "AMP FP16",
+  "reference_micro_batch": 4,
+  "actual_micro_batch": 32,
+  "test_scene_counts": {
+    "RR": {
+      "planned": 20,
+      "actual": 20
+    },
+    "FR": {
+      "planned": 20,
+      "actual": 20
+    }
+  }
+}

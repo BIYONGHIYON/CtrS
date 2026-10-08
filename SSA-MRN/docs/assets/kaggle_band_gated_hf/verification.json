@@ -1,0 +1,54 @@
+{
+  "input_manifest_verified_files": 149,
+  "runs": {
+    "github_QB_baseline_k6_s42": {
+      "epochs": 100,
+      "best_epoch": 100,
+      "RR_scenes": 20,
+      "FR_scenes": 20,
+      "prediction_arrays": 40,
+      "RR_mean": {
+        "SAM": 4.955442644735034,
+        "ERGAS": 4.117560623875705,
+        "PSNR": 37.45387937776282,
+        "SCC": 0.9770157545380768,
+        "Q2n": 0.9243940024000835,
+        "MSE_peak1": 0.0002151111268957207,
+        "PSNR_sensor_peak": 37.45387937776282
+      },
+      "FR_mean": {
+        "D_lambda": 0.041631319771413475,
+        "D_s": 0.04076465670786119,
+        "QNR": 0.9197563920677817
+      }
+    },
+    "pasted_QB_band_gated_hf_k6_s42": {
+      "epochs": 100,
+      "best_epoch": 99,
+      "RR_scenes": 20,
+      "FR_scenes": 20,
+      "prediction_arrays": 40,
+      "RR_mean": {
+        "SAM": 4.964271642971103,
+        "ERGAS": 4.197870032172892,
+        "PSNR": 37.278887595604104,
+        "SCC": 0.9756575759919175,
+        "Q2n": 0.9215697872323405,
+        "MSE_peak1": 0.00022283278008479492,
+        "PSNR_sensor_peak": 37.278887595604104
+      },
+      "FR_mean": {
+        "D_lambda": 0.037399975782825313,
+        "D_s": 0.044066456999448646,
+        "QNR": 0.9207420429524797
+      }
+    }
+  },
+  "limitations": [
+    "Original H5 data is external; metrics were not recomputed against GT locally.",
+    "Checkpoint tensors were not loaded with PyTorch; ZIP CRC, metadata epoch and hashes were checked."
+  ],
+  "paired_initialization_and_epoch_orders_verified": true,
+  "reproduction_cell_worker_matches_executed_worker": true,
+  "status": "verified saved evidence; not a local training/evaluation rerun"
+}
