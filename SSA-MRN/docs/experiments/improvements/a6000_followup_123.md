@@ -214,7 +214,7 @@ QB 전체23탭의 **시드별 paired 차이 평균 ± 표본 표준편차(ddof=1
 
 [가중치별 epoch·SHA-256·compact 100에폭 기록·전체 장면 지표](../../assets/a6000_followup_123/metrics.json) · [모든 산출물 해시](../../assets/a6000_followup_123/report_manifest.json) · [학습 설정](../../assets/a6000_followup_123/training_plan.json) · [validation 점수](../../assets/a6000_followup_123/validation_scores.json)
 
-검증은 12개 이력의 1~100에폭 연속성, best=min validation MSE, latest=100, strict 모델 로드, 모든 RR/FR 장면 수·유한 지표, paired 차이·평균/표준편차, 35개 고정 이미지, 24개 가중치 및 전체 산출물 해시, 학습 코드 inventory 일치를 확인합니다. [`verify_a6000_followup_report.py`](../../../scripts/verify_a6000_followup_report.py)로 재검증할 수 있습니다. 푸시 이후 원격 commit에서 실제 가중치를 받아 해시를 대조하며, 완료 전에는 원격 복구가 검증됐다고 판단하지 않습니다. 원본 서버 폴더는 유지합니다.
+검증은 12개 이력의 1~100에폭 연속성, best=min validation MSE, latest=100, strict 모델 로드, 모든 RR/FR 장면 수·유한 지표, paired 차이·평균/표준편차, 35개 고정 이미지, 24개 가중치 및 전체 산출물 해시, 학습 코드 inventory 일치를 확인합니다. [`verify_a6000_followup_report.py`](../../../scripts/verify_a6000_followup_report.py)로 재검증할 수 있습니다. **GitHub의 `182e2fa01b39bccd10241810d0cee8faa9c84646` commit을 새로 복제해 실제 원본24개 가중치와 산출물71개의 바이트·SHA-256 일치를 확인했습니다.** [원격 복구 검증 기록](../../operations/a6000_followup_remote_verification.json)에 다운로드 방식·시각·파일별 해시를 남겼습니다. 원본 서버 폴더는 유지합니다.
 
 ## 8. 한계와 다음 판단
 
