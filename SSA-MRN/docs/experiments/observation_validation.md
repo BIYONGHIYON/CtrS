@@ -1,6 +1,6 @@
 # QB 관측 연산자 검증
 
-[실험 계획](../../improvement_plan.md) · [실행 방법](../../operations/controlled_suite.md)
+[실험 목록](../../README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [가중치](#evidence)
 
 | 비교 기준 | 변경 | 관측된 차이 | 판단 |
 |---|---|---|---|
@@ -21,6 +21,8 @@
 
 전체 QB TRAIN 17,139개, GT 64×64×4 / MS 16×16×4의 원시 DN을 CPU float64에서 대조했습니다. 필터·위상 후보는 공식 구현과 증강 방식에서 정했으며, 모델 예측·validation·test는 사용하지 않았습니다. 허용 오차는 사전 고정한 평균 RMSE≤1 DN, 최대 패치 RMSE≤2 DN입니다.
 
+<a id="results"></a>
+
 ## 3. 정량 결과
 
 | 항목 | 결과 |
@@ -38,21 +40,27 @@
 
 이 문서는 관측 연산자 구현 검증입니다. 기존 K4/K6 모델 재현 성능과 직접 비교할 수 없습니다. 모델 성능 차이는 이후 같은 조건의 학습·독립 평가로 확인합니다.
 
+<a id="graphs"></a>
+
 ## 5. 그래프
 
 학습하지 않았으므로 epoch 곡선이나 모델 test 비교 그래프가 없습니다.
+
+<a id="images"></a>
 
 ## 6. 결과 이미지 예시
 
 고정 TRAIN probe 32개의 ID·해시를 프로파일에 기록했습니다. 모델 test 예시 5장은 아직 생성하지 않았습니다.
 
-## 7. 검증 근거와 재실행
+<a id="evidence"></a>
 
-- [전체 위상·검증 프로파일](../../../scripts/observation_profiles/qb.json)
-- [관측 연산자](../../../src/ssamrn/observation.py)
-- [전체 TRAIN 검증 스크립트](../../../scripts/verify_observation.py)
-- [K4·K6 연결 검증](../../../scripts/verify_consistency_loss.py)
-- [SciPy 수치·뒤집기·해시·CUDA 테스트](../../../tests/test_observation.py)
+## 7. 가중치와 검증 근거
+
+- [전체 위상·검증 프로파일](../../scripts/observation_profiles/qb.json)
+- [관측 연산자](../../src/ssamrn/observation.py)
+- [전체 TRAIN 검증 스크립트](../../scripts/verify_observation.py)
+- [K4·K6 연결 검증](../../scripts/verify_consistency_loss.py)
+- [SciPy 수치·뒤집기·해시·CUDA 테스트](../../tests/test_observation.py)
 
 프로파일 SHA-256을 계획에 고정합니다. 연산자 코드 해시, 원본 파일 크기·mtime, 전체 위상 목록을 검사합니다. 네 테스트와 K4/K6의 손실 역전파가 통과했으며 연결 검증의 optimizer step은 0회입니다. 사전 실행기 검증에서 2 epoch 연속 학습과 1 epoch 후 latest 재개의 가중치·DataLoader RNG도 일치했습니다. 모두 성능 평가가 아닙니다.
 
@@ -73,4 +81,4 @@ C:\CtrS\.venv\Scripts\python.exe .\verify_consistency_loss.py
 
 ## 8. 한계와 다음 판단
 
-패치 내부의 RR 관측 대응을 확인한 결과이며 FR 물리 모델이나 성능 개선의 증거가 아닙니다. GF2 측정 MTF 계수는 임의로 가정하지 않습니다. 본 학습은 시작 보류 상태입니다. 코드·데이터·프로파일이 바뀌면 재검증하고, 실행 기록과 계획의 SHA-256을 함께 검토합니다.
+패치 내부의 RR 관측 대응을 확인한 결과이며 FR 물리 모델이나 성능 개선의 증거가 아닙니다. GF2 측정 MTF 계수는 임의로 가정하지 않습니다. 검증 당시에는 본 학습 전이었으며, 이후 계획과 확인된 진행은 [Windows K·손실 비교](windows_controlled.md)에 기록합니다. 코드·데이터·프로파일이 바뀌면 재검증하고, 실행 기록과 계획의 SHA-256을 함께 검토합니다.

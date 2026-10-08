@@ -1,12 +1,10 @@
 # PAN–MS 재현 K4
 
-[재현 연구 목록](../../reproduction.md) · [현재 연구](../../../README.md)
+[실험 목록](../../README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [가중치](#evidence)
 
 | 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
 |---|---|---|---|
 | 첫 PAN–MS 재현 | 공식 K4 코드의 실행·학습·평가 복원 | 센서별 RR/FR 수치는 3절 | 논문 수치와 구현·평가의 남은 차이를 기록했습니다. |
-
-[수치](#3-정량-결과) · [이전 대비](#4-직전-연구와-수치-차이) · [그래프](#5-그래프) · [결과 이미지](#6-결과-이미지-예시)
 
 ## 1. 목적과 상태
 
@@ -15,6 +13,8 @@
 ## 2. 변경 사항과 평가 조건
 
 QB/GF2/WV3/WV2 각각 RR 20장, FR 20장 (총 160장). WV2는 WV3 가중치로 평가했습니다. RR에는 정답 기반 PSNR/SAM/ERGAS/SCC/Q, FR에는 QNR/Dλ/Ds를 사용합니다. 제공 LMS 입력은 23탭 보간 계열이며 네트워크 내부 확대·축소는 Bilinear (`align_corners=True`)입니다.
+
+<a id="results"></a>
 
 ## 3. 정량 결과
 
@@ -46,21 +46,27 @@ QB/GF2/WV3/WV2 각각 RR 20장, FR 20장 (총 160장). WV2는 WV3 가중치로 �
 
 첫 재현 실험이므로 직전 연구와의 차이 없음.
 
+<a id="graphs"></a>
+
 ## 5. 그래프
 
-![센서별 RR PSNR과 SAM](../../assets/pan_k4/metrics.png)
+![센서별 RR PSNR과 SAM](../assets/pan_k4/metrics.png)
 
-![센서별 학습·검증 MSE](../../assets/pan_k4/learning.png)
+![센서별 학습·검증 MSE](../assets/pan_k4/learning.png)
 
 기존 epoch 로그의 학습/검증 MSE 100개를 compact 숫자 기록으로 보존했습니다.
+
+<a id="images"></a>
 
 ## 6. 결과 이미지 예시
 
 왼쪽부터 LR MS, PAN guide, 예측, 정답입니다. 과거 보관된 3개 센서 예시이며 미래 실험의 5장면 필수 규칙과 구분합니다.
 
-![quickbird: LR MS, PAN, 예측, 정답](../../assets/pan_k4/sample_01.png)
-![gaofen2: LR MS, PAN, 예측, 정답](../../assets/pan_k4/sample_02.png)
-![worldview3: LR MS, PAN, 예측, 정답](../../assets/pan_k4/sample_03.png)
+![quickbird: LR MS, PAN, 예측, 정답](../assets/pan_k4/sample_01.png)
+![gaofen2: LR MS, PAN, 예측, 정답](../assets/pan_k4/sample_02.png)
+![worldview3: LR MS, PAN, 예측, 정답](../assets/pan_k4/sample_03.png)
+
+<a id="evidence"></a>
 
 ## 7. 가중치와 검증 근거
 
