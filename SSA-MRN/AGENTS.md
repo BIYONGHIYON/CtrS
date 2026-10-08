@@ -2,12 +2,12 @@
 
 ## 문서 구조
 
-- README에는 최신 완료 연구와 현재 학습만 표시한다.
-- 문서 입구는 `docs/research.md`(연구 설명), `docs/reproduction.md`(재현), `docs/previous_experiments.md`(실험 이력)로 둔다.
-- 보고서는 `docs/experiments/reproduction/`, `improvements/`로 분류한다. 이미지와 숫자 근거는 기존 실험 ID별 경로를 유지한다.
+- README의 상세 결과는 최신 완료 연구 중심으로 쓰고 전체 실험 바로가기와 시각이 명시된 마지막 학습 확인 기록을 제공한다.
+- 저장소 README와 SSA-MRN README에서 모든 실험 보고서로 바로 연결한다. 실험 목록만 담는 중간 안내 문서를 추가하지 않는다. 알고리즘 설명은 `docs/research.md`, 실행 절차는 `docs/operations/`에 둔다.
+- 보고서는 `docs/experiments/실험명.md` 한 단계에 통일한다. 재현·개선·사전 검증은 README 표에서 구분하고 이미지·숫자·가중치 경로는 유지한다.
 - 각 보고서 첫머리에 비교 기준·바꾼 점·관측 차이·판단 표를 넣는다. README에는 대표 이미지와 요약만 두고 5장면·곡선은 상세 보고서에 둔다.
 - RGB–HSI 연구는 개인 RGB-HSI-SR 저장소에서 관리한다.
-- 각 실험은 `docs/experiments/template.md`의 8개 절을 모두 사용한다.
+- 각 실험은 `docs/experiments/template.md`의 8개 절과 동일한 바로가기를 사용한다. 대표 이미지는 본문에 표시하고 나머지 고정 장면은 같은 페이지의 접기 영역에 보존할 수 있다.
 - 첫 연구 외에는 직전 연구와 PSNR/SAM/MSE 수치 차이를 적는다. 조건이 다르면 직접 비교 불가 사유도 적는다.
 - 서로 다른 데이터·장치·평가 타일의 수치 차이로 구조 개선을 확정하지 않는다.
 
@@ -25,7 +25,7 @@
 - 다음 실험 시작 전에는 [공통 용량 정리 규칙](../AGENTS.md)을 적용한다. 완료 결과의 보존은 검증 가능한 원격 보관을 뜻하며, 보관·복구 확인이 끝난 이전 실행 폴더의 로컬 중복본은 삭제한다. 현재/재개 예정 실험은 유지한다.
 
 - 원본 데이터 및 공식 submodule을 수정/삭제하지 않는다. 대용량 데이터를 Git에 넣지 않는다.
-- 실제 학습된 best/latest `.pt`, checksum, 숫자 결과, compact epoch 기록, 정합 manifest, 결과 그래프·예시는 보존한다.
+- 실제 학습된 best/latest 원본 `.pt`도 커밋 대상에 포함하고 checksum, 숫자 결과, compact epoch 기록, 정합 manifest, 결과 그래프·예시를 함께 보존한다. 커밋·푸시는 사용자 요청 시 진행한다.
 - 완료된 실험의 학습 JSON, 원시 실행 로그, smoke/random 가중치·산출물, 코드 캐시는 삭제할 수 있다. checkpoint 안의 config는 기존 가중치 평가에 필요하므로 수정하지 않는다.
 - 현재/재개 예정인 학습 설정, snapshot, controller runtime, 로그, 가중치는 보존한다. 서버에서 active 상태를 확인한 뒤 완료 run만 정리한다.
 - 현재 학습 중인 checkout을 pull하거나 실행 코드를 덮어쓰지 않는다.

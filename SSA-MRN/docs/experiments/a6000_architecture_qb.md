@@ -1,6 +1,6 @@
 # A6000 QB 구조 비교 · 23탭 / LR 보정 / 고주파 경로
 
-[현재 연구](../../../README.md) · [실험 이력](../../previous_experiments.md)
+[실험 목록](../../README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [가중치](#evidence)
 
 | 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
 |---|---|---|---|
@@ -25,6 +25,8 @@ SSA-MRN의 구조 변경을 하나씩 적용해 공간·분광 복원 성능을 
 - **가중치 선택:** test를 보기 전에 validation MSE로 저장한 best를 사용했습니다. 네 모델 모두 best는 98에폭, latest는 100에폭입니다. 최신 에폭 평가와 혼동하지 않습니다.
 - RR 지표는 장면별 계산 후 20장 산술평균입니다. PSNR은 기존 저장소와 동일한 **밴드별 peak 2047 PSNR의 평균**입니다. 정규화 MSE 기반 global PSNR과 다른 정의입니다. 예측값을 지표 계산 전에 0~1로 클리핑하지 않습니다.
 
+<a id="results"></a>
+
 ## 3. 정량 결과
 
 ### RR · 정답 기반 20장 평균
@@ -47,7 +49,7 @@ SSA-MRN의 구조 변경을 하나씩 적용해 공간·분광 복원 성능을 
 
 FR의 PAN resize는 MATLAB `imresize`가 아닌 scikit-image 구현이므로 Ds·QNR은 **잠정 지표**입니다. Q4·SCC도 MATLAB 전체 일치성이 미검증입니다. 논문 수치보다 우수하다는 결론으로 사용하지 않습니다.
 
-[전체 장면별 수치·파일 해시·학습 기록](../../assets/a6000_architecture_qb/metrics.json)
+[전체 장면별 수치·파일 해시·학습 기록](../assets/a6000_architecture_qb/metrics.json)
 
 ## 4. 직전 연구와 수치 차이
 
@@ -67,72 +69,93 @@ LR 보정과 고주파는 SAM 등 일부 지표가 좋아졌으나 PSNR·ERGAS·
 
 과거 Radeon/DirectML K6 재현과는 GPU·PyTorch·best/latest 선택 등 조건이 달라 직접 개선량을 확정하지 않습니다. Windows 손실 탐색 큐도 별도 대조군이며 이 표에 섞지 않습니다.
 
+<a id="graphs"></a>
+
 ## 5. 그래프
 
-![학습·검증 MSE와 파생 global PSNR](../../assets/a6000_architecture_qb/learning.png)
+![학습·검증 MSE와 파생 global PSNR](../assets/a6000_architecture_qb/learning.png)
 
 오른쪽 검증 PSNR은 기록된 전체 validation MSE에서 `−10 log10(MSE)`로 계산한 **global peak=1 파생 곡선**입니다. RR 표의 밴드별 PSNR과 다릅니다. validation SAM은 매 에폭 기록되지 않아 곡선을 만들지 않았습니다. 없는 과거 SAM을 추정하거나 합성하지 않습니다.
 
-![기준선 대비 전체 test 지표 차이](../../assets/a6000_architecture_qb/test_metrics.png)
+![기준선 대비 전체 test 지표 차이](../assets/a6000_architecture_qb/test_metrics.png)
 
 막대는 각 변형−기준선입니다. PSNR·Q4·QNR은 양수가, SAM·ERGAS·MSE는 음수가 개선 방향입니다.
 
+<a id="images"></a>
+
 ## 6. 결과 이미지 예시
 
-수치 평가 전에 seed 42로 고정한 **RR 장면 index 1·8·11·13·19**를 모두 사용합니다. 장면 번호는 0부터 시작하며 타일링·입력 자르기는 없습니다. [선택 기록](../../assets/a6000_architecture_qb/selection.json)
+수치 평가 전에 seed 42로 고정한 **RR 장면 index 1·8·11·13·19**를 모두 사용합니다. 장면 번호는 0부터 시작하며 타일링·입력 자르기는 없습니다. [선택 기록](../assets/a6000_architecture_qb/selection.json)
 
 각 그림은 **LR MS · PAN 입력 · 예측 · 정답** 순서입니다. MS만 표시를 위해 최근접 확대했습니다. RGB는 0-based 밴드 [2,1,0] 가정이며 각 장면의 정답 1~99 percentile 대비를 MS·예측·정답에 동일 적용했습니다. 세 변형 사이에도 같은 장면의 대비 범위를 유지합니다. PAN은 별도 grayscale 범위입니다. FR에 GT 이미지를 만들지 않습니다.
 
 ### 23탭 · 5장면 세트
 
-![23탭 QB RR 장면 1](../../assets/a6000_architecture_qb/interp23_scene_01.png)
+![23탭 QB RR 장면 1](../assets/a6000_architecture_qb/interp23_scene_01.png)
 
-![23탭 QB RR 장면 8](../../assets/a6000_architecture_qb/interp23_scene_08.png)
+<details>
+<summary>같은 조건의 나머지 고정 4장면 보기</summary>
 
-![23탭 QB RR 장면 11](../../assets/a6000_architecture_qb/interp23_scene_11.png)
+![23탭 QB RR 장면 8](../assets/a6000_architecture_qb/interp23_scene_08.png)
 
-![23탭 QB RR 장면 13](../../assets/a6000_architecture_qb/interp23_scene_13.png)
+![23탭 QB RR 장면 11](../assets/a6000_architecture_qb/interp23_scene_11.png)
 
-![23탭 QB RR 장면 19](../../assets/a6000_architecture_qb/interp23_scene_19.png)
+![23탭 QB RR 장면 13](../assets/a6000_architecture_qb/interp23_scene_13.png)
+
+![23탭 QB RR 장면 19](../assets/a6000_architecture_qb/interp23_scene_19.png)
+
+</details>
 
 ### LR 보정 · 5장면 세트
 
-![LR 보정 QB RR 장면 1](../../assets/a6000_architecture_qb/lr_correction_scene_01.png)
+![LR 보정 QB RR 장면 1](../assets/a6000_architecture_qb/lr_correction_scene_01.png)
 
-![LR 보정 QB RR 장면 8](../../assets/a6000_architecture_qb/lr_correction_scene_08.png)
+<details>
+<summary>같은 조건의 나머지 고정 4장면 보기</summary>
 
-![LR 보정 QB RR 장면 11](../../assets/a6000_architecture_qb/lr_correction_scene_11.png)
+![LR 보정 QB RR 장면 8](../assets/a6000_architecture_qb/lr_correction_scene_08.png)
 
-![LR 보정 QB RR 장면 13](../../assets/a6000_architecture_qb/lr_correction_scene_13.png)
+![LR 보정 QB RR 장면 11](../assets/a6000_architecture_qb/lr_correction_scene_11.png)
 
-![LR 보정 QB RR 장면 19](../../assets/a6000_architecture_qb/lr_correction_scene_19.png)
+![LR 보정 QB RR 장면 13](../assets/a6000_architecture_qb/lr_correction_scene_13.png)
+
+![LR 보정 QB RR 장면 19](../assets/a6000_architecture_qb/lr_correction_scene_19.png)
+
+</details>
 
 ### 고주파 경로 · 5장면 세트
 
-![고주파 경로 QB RR 장면 1](../../assets/a6000_architecture_qb/high_frequency_scene_01.png)
+![고주파 경로 QB RR 장면 1](../assets/a6000_architecture_qb/high_frequency_scene_01.png)
 
-![고주파 경로 QB RR 장면 8](../../assets/a6000_architecture_qb/high_frequency_scene_08.png)
+<details>
+<summary>같은 조건의 나머지 고정 4장면 보기</summary>
 
-![고주파 경로 QB RR 장면 11](../../assets/a6000_architecture_qb/high_frequency_scene_11.png)
+![고주파 경로 QB RR 장면 8](../assets/a6000_architecture_qb/high_frequency_scene_08.png)
 
-![고주파 경로 QB RR 장면 13](../../assets/a6000_architecture_qb/high_frequency_scene_13.png)
+![고주파 경로 QB RR 장면 11](../assets/a6000_architecture_qb/high_frequency_scene_11.png)
 
-![고주파 경로 QB RR 장면 19](../../assets/a6000_architecture_qb/high_frequency_scene_19.png)
+![고주파 경로 QB RR 장면 13](../assets/a6000_architecture_qb/high_frequency_scene_13.png)
+
+![고주파 경로 QB RR 장면 19](../assets/a6000_architecture_qb/high_frequency_scene_19.png)
+
+</details>
+
+<a id="evidence"></a>
 
 ## 7. 가중치와 검증 근거
 
 | 모델 | best / latest 에폭 | best 추론 가중치 | latest 추론 가중치 |
 |---|---|---|---|
-| 기준선 | 98 / 100 | [best](../../assets/a6000_architecture_qb/weights/baseline_best.pt) | [latest](../../assets/a6000_architecture_qb/weights/baseline_latest.pt) |
-| 23탭 | 98 / 100 | [best](../../assets/a6000_architecture_qb/weights/interp23_best.pt) | [latest](../../assets/a6000_architecture_qb/weights/interp23_latest.pt) |
-| LR 보정 | 98 / 100 | [best](../../assets/a6000_architecture_qb/weights/lr_correction_best.pt) | [latest](../../assets/a6000_architecture_qb/weights/lr_correction_latest.pt) |
-| 고주파 경로 | 98 / 100 | [best](../../assets/a6000_architecture_qb/weights/high_frequency_best.pt) | [latest](../../assets/a6000_architecture_qb/weights/high_frequency_latest.pt) |
+| 기준선 | 98 / 100 | [best](../assets/a6000_architecture_qb/weights/baseline_best.pt) | [latest](../assets/a6000_architecture_qb/weights/baseline_latest.pt) |
+| 23탭 | 98 / 100 | [best](../assets/a6000_architecture_qb/weights/interp23_best.pt) | [latest](../assets/a6000_architecture_qb/weights/interp23_latest.pt) |
+| LR 보정 | 98 / 100 | [best](../assets/a6000_architecture_qb/weights/lr_correction_best.pt) | [latest](../assets/a6000_architecture_qb/weights/lr_correction_latest.pt) |
+| 고주파 경로 | 98 / 100 | [best](../assets/a6000_architecture_qb/weights/high_frequency_best.pt) | [latest](../assets/a6000_architecture_qb/weights/high_frequency_latest.pt) |
 
 위 링크는 **실제 학습된 모델의 추론용 model/config/epoch/best MSE**를 저장합니다. Adam·RNG가 포함된 원본 best/latest는 학교 서버 `/home/gpu_04/CtrS-a6000/SSA-MRN/experiments/a6000_architecture_qb/QB_{variant}_k6_s42/`에 보존합니다. 추론 파일로 학습 재개를 할 수 있다고 주장하지 않습니다.
 
-- [원본·추론 가중치 epoch와 SHA-256, 평가 데이터 해시, 100에폭 기록](../../assets/a6000_architecture_qb/metrics.json)
-- [자산 파일별 크기·SHA-256 manifest](../../assets/a6000_architecture_qb/report_manifest.json)
-- [실험 구현과 실행 가이드](../../operations/a6000_suite.md)
+- [원본·추론 가중치 epoch와 SHA-256, 평가 데이터 해시, 100에폭 기록](../assets/a6000_architecture_qb/metrics.json)
+- [자산 파일별 크기·SHA-256 manifest](../assets/a6000_architecture_qb/report_manifest.json)
+- [실험 구현과 실행 가이드](../operations/a6000_suite.md)
 - 4종 × RR20/FR20 = 160개 장면 평가 기록, 3종 × 5장면 = 15개 패널, 2개 그래프, best/latest 추론 가중치 8개를 보존합니다. 전송 후 모든 자산 해시를 검증했습니다.
 - 코드 사전 검증은 23탭 SciPy 수치 일치·공통 초기화·결정론 CUDA gradient·고주파 초기 기준선 일치·LR 오차 0 항등성·4개 동시 학습/저장 통과를 확인했습니다.
 

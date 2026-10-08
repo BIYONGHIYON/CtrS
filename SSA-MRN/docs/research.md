@@ -1,6 +1,6 @@
 # PAN–MS 연구 설명
 
-[현재 연구](../README.md) · [재현 결과](reproduction.md)
+[연구 전체](../README.md) · [실험 목록](../README.md#experiments)
 
 고해상도 PAN은 공간 구조를, 저해상도 MS는 밴드별 분광 정보를 제공합니다. 제공 LMS는 MS를 목표 크기로 보간한 입력입니다. QB/GF2는 4밴드, WV3는 8밴드입니다.
 
@@ -14,6 +14,16 @@
 제공 LMS는 23탭 보간 계열이고 재현 모델 내부 resampling은 Bilinear(`align_corners=True`)입니다. 이 경로를 개인 RGB–HSI의 평균 축소/23탭 내부 연산과 혼동하지 않습니다.
 
 공개 코드의 원소별 곱·전치·softmax가 논문 설명의 행렬곱과 같다고 주장하지 않습니다. 공식 submodule을 고정하고 재현 래퍼의 변경을 따로 관리합니다. 후속 attention 변경은 별도 실험으로 검증합니다.
+
+## 무엇을 비교하는가
+
+| 변경 | 쉬운 설명 | 실험 |
+|---|---|---|
+| K4 / K6 | 내부 특징 채널 수를 4 또는 6으로 설정 | [Windows 통제 비교](experiments/windows_controlled.md) |
+| 23탭 확대 | 내부에서 영상을 키울 때 bilinear 대신 23개 계수의 보간 필터 사용 | [구조 비교](experiments/a6000_architecture_qb.md), [후속 검증](experiments/a6000_followup_123.md) |
+| 보조 손실 | 기본 MSE에 분광 방향·관측 일관성·경계 오차 중 하나를 추가 | [Windows 손실 탐색](experiments/windows_controlled.md) |
+
+입력으로 제공되는 LMS의 23탭 보간과 **네트워크 내부 확대를 23탭으로 바꾸는 실험**은 서로 다른 위치의 연산입니다. validation으로 설정과 가중치를 선택하고 test는 성능 보고에 사용합니다.
 
 ## 평가
 

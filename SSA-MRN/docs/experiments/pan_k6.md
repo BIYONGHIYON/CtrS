@@ -1,12 +1,10 @@
 # PAN–MS 재현 K6
 
-[재현 연구 목록](../../reproduction.md) · [현재 연구](../../../README.md)
+[실험 목록](../../README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [가중치](#evidence)
 
 | 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
 |---|---|---|---|
 | PAN K4 | SSAI 차원 K4→K6 | QB/WV3 RR 개선, GF2 RR 악화 | 장치도 달라 K만의 효과로 해석하지 않습니다. |
-
-[수치](#3-정량-결과) · [이전 대비](#4-직전-연구와-수치-차이) · [그래프](#5-그래프) · [결과 이미지](#6-결과-이미지-예시)
 
 ## 1. 목적과 상태
 
@@ -16,15 +14,13 @@
 
 QB/GF2/WV3 각각 RR 20장, FR 20장. RR에는 정답 기반 PSNR/SAM/ERGAS/SCC/Q, FR에는 QNR/Dλ/Ds를 사용합니다. 제공 LMS 입력은 23탭 보간 계열이며 네트워크 내부 확대·축소는 Bilinear (`align_corners=True`)입니다.
 
-### SSA-MRN K=6 로컬 실험
-
-### 목적과 변경 변수
-
 기존 재현 가중치는 공개 `network.py`의 SSAI 차원 K=4로 학습했다. [논문](https://doi.org/10.1109/JSTARS.2025.3543827)은 K=6을 명시한다. 이번 실험은 SSAI 차원을 6으로 바꾸고, 센서별 데이터 분할, MSE, Adam, 배치 32, 초기 학습률 1e-4, 100 epochs, 시드 42를 유지했다. 시드 42는 재현 실험 값이며 논문에 공개된 값은 아니다. K=6은 합성곱의 채널 수를 바꾸므로 기존 K=4 가중치에서 이어 학습할 수 없고 처음부터 학습했다.
 
 K=4는 RTX A6000에서, K=6은 아래 Radeon DirectML 환경에서 학습했다. 모델 차원 외에 실행 장치와 백엔드도 달라, 관측된 성능 차이를 **K 값만의 인과 효과**로 해석할 수 없다. 같은 환경에서 두 설정을 다시 학습·평가해야 통제된 비교가 된다. 여기서는 확보된 결과를 비교 기준으로 기록한다.
 
 이 저장소는 공식 모델 코드를 하위 모듈로 고정해 둔다. K=6 변형은 재현용 래퍼에서 사용되는 SSAI 계층과 융합 계층에만 적용한다. K=4 경로와 기존 체크포인트는 계속 읽을 수 있다. 논문 수식의 어텐션 행렬곱과 공개 코드의 원소별 곱 차이는 이번 실험에서 변경하지 않는다. 따라서 K=6 결과도 논문 구현과 완전히 같다고 주장할 수 없다.
+
+<a id="results"></a>
 
 ## 3. 정량 결과
 
@@ -93,19 +89,25 @@ MSE는 기존 보고서에 동일 기준의 비교값이 없어 차이를 계산
 
 K4는 CUDA/A6000, K6는 DirectML/Radeon이므로 K만 바꾼 통제 실험이 아닙니다.
 
+<a id="graphs"></a>
+
 ## 5. 그래프
 
-![센서별 RR PSNR과 SAM](../../assets/pan_k6/metrics.png)
+![센서별 RR PSNR과 SAM](../assets/pan_k6/metrics.png)
 
 과거 학습 곡선을 일관되게 확보하지 못해 실제 최종 평가 수치의 그래프로 대신합니다.
+
+<a id="images"></a>
 
 ## 6. 결과 이미지 예시
 
 왼쪽부터 LR MS, PAN guide, 예측, 정답입니다. 과거 보관된 3개 센서 예시이며 미래 실험의 5장면 필수 규칙과 구분합니다.
 
-![quickbird: LR MS, PAN, 예측, 정답](../../assets/pan_k6/sample_01.png)
-![gaofen2: LR MS, PAN, 예측, 정답](../../assets/pan_k6/sample_02.png)
-![worldview3: LR MS, PAN, 예측, 정답](../../assets/pan_k6/sample_03.png)
+![quickbird: LR MS, PAN, 예측, 정답](../assets/pan_k6/sample_01.png)
+![gaofen2: LR MS, PAN, 예측, 정답](../assets/pan_k6/sample_02.png)
+![worldview3: LR MS, PAN, 예측, 정답](../assets/pan_k6/sample_03.png)
+
+<a id="evidence"></a>
 
 ## 7. 가중치와 검증 근거
 

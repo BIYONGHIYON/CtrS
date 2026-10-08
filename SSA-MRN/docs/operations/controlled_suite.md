@@ -1,8 +1,8 @@
-# 1~4단계 직렬 학습 실행
+# Windows · K·손실 비교 실행 안내
 
-[실험 계획](../improvement_plan.md) · [관측 연산자 검증](../experiments/improvements/observation_validation.md)
+[실험 계획](../experiments/windows_controlled.md) · [관측 연산자 검증](../experiments/observation_validation.md)
 
-**본 학습 진행 중 / 2~3일 목표의 축소 계획.** 기준선 6회 × 100에폭 → 손실 후보 9회 × 30에폭 → 최종 후보 추가 70에폭, 총 940에폭입니다. 약 53시간은 초기 QB 속도에 근거한 잠정 추정입니다.
+기준선 6회 × 100에폭 → 손실 후보 9회 × 30에폭 → 최종 후보 추가 70에폭, 총 940에폭 직렬 실행입니다. 날짜가 명시된 마지막 확인 상태와 선택 기준은 위 실험 보고서에 모았습니다.
 
 ## 실행 위치
 
@@ -11,12 +11,13 @@
 | 서버 실행 폴더 | `C:\CtrS-budget-suite\SSA-MRN` |
 | Python | `C:\CtrS\.venv\Scripts\python.exe` |
 | 원본 데이터 | `C:\CtrS\SSA-MRN\data\dataset` — 읽기 전용 |
-| 설정 | `scripts/controlled_suite_plan.json` |
+| 계획 원본 | `scripts/controlled_suite_plan.json` |
+| 실제 실행 계획 | `experiments/controlled_suite_v2/plan.json` |
 | 새 결과 | `experiments/controlled_suite_v2/` |
 
 ## 시작과 점검
 
-서버 PowerShell에서 실행합니다. 실행 중에는 `status`와 `logs`로 확인합니다.
+서버 PowerShell에서 실행합니다. 실행 중에는 `status`와 `logs`로 확인합니다. 시작·중단·재개·조건 변경은 사용자 요청이 있을 때만 진행하며 터미널에서 `python train.py`를 직접 실행하지 않습니다.
 
 ```powershell
 cd C:\CtrS-budget-suite\SSA-MRN\scripts
@@ -24,7 +25,7 @@ cd C:\CtrS-budget-suite\SSA-MRN\scripts
 .\run_controlled_suite.ps1 -Command status
 ```
 
-새 실행·중단 후 재개 명령:
+사용자가 새 실행을 요청했을 때만 `start`를 사용합니다. 중단 후 재개는 아래 표의 `resume-latest`를 사용합니다:
 
 ```powershell
 .\run_controlled_suite.ps1 -Command start
@@ -56,4 +57,6 @@ Windows WMI로 SSH 세션과 독립된 프로세스를 만듭니다. 로그 뷰�
 
 각 run은 `config.json`, `history.jsonl`, `train.log`, `best.pt`, `latest.pt`, `complete.json`을 저장합니다. 코드 해시와 계획도 보존합니다. `complete.json`은 **학습 완료**이며 독립 test 평가 완료를 뜻하지 않습니다.
 
-이전에 잠시 실행했다 중지한 기록은 `experiments/controlled_suite/`에 남겨 두었습니다. 축소 큐는 `C:\CtrS-budget-suite`의 별도 `controlled_suite_v2/`를 사용합니다. 기존 첫 학습은 원래 실행 폴더에서 계속 실행하고, 축소 컨트롤러가 완료를 기다린 뒤 결과를 복사하여 활용합니다. 기존 45회 컨트롤러만 중단했으며 원본 학습 코드는 변경하지 않았습니다. 다음 실험 전에 [용량 정리 규칙](../../../AGENTS.md)을 적용합니다.
+실험 완료 후 실제 best/latest 원본을 커밋 대상에 포함하고 SHA-256·에폭·평가 결과를 함께 보관합니다. 커밋·푸시는 사용자 요청 시 진행합니다.
+
+이전에 잠시 실행했다 중지한 기록은 `experiments/controlled_suite/`에 남겨 두었습니다. 축소 큐는 `C:\CtrS-budget-suite`의 별도 `controlled_suite_v2/`를 사용합니다. 첫 QB K4는 원래 실행 폴더에서 완료된 뒤 축소 컨트롤러가 결과를 복사해 인계했습니다. 2026-10-08 16:24 KST 확인 시 복사본 6개 파일의 해시는 인계 기록과 일치했습니다. `C:\CtrS-controlled-suite`는 실제 참조·별도 보관·복구 검증 전 삭제하지 않습니다. 기존 45회 컨트롤러만 중단했으며 원본 학습 코드는 변경하지 않았습니다. 다음 실험 전에 [용량 정리 규칙](../../../AGENTS.md)을 적용합니다.

@@ -1,12 +1,12 @@
 # A6000 후속 1~3단계 실험
 
-[첫 구조 비교 결과](../experiments/improvements/a6000_architecture_qb.md)
+[첫 구조 비교 결과](../experiments/a6000_architecture_qb.md)
 
 ## 목적과 상태
 
 23탭의 작은 개선이 시드를 바꿔도 유지되는지 확인하고, 확대 위치와 센서 의존성을 분석합니다. Windows 손실 탐색은 그대로 유지하며 **4단계 손실 결합은 포함하지 않습니다.**
 
-2026-10-08: **후속10개 본 학습 모두100에폭 완료**, 기존 QB 시드42 두 모델 재사용, best12개 모델 각각 RR20/FR20 전체 평가 완료. [결과 보고서](../experiments/improvements/a6000_followup_123.md)
+2026-10-08: **후속10개 본 학습 모두100에폭 완료**, 기존 QB 시드42 두 모델 재사용, best12개 모델 각각 RR20/FR20 전체 평가 완료. [결과 보고서](../experiments/a6000_followup_123.md)
 
 ## 큐 순서 · 최대 4개 병렬
 
