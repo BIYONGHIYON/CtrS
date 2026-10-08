@@ -1,0 +1,27 @@
+{
+  "server": "dongguk-gpu04",
+  "checkout": "/home/gpu_04/CtrS-a6000-next6h",
+  "branch": "a6000-next6h",
+  "source_base_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56",
+  "started_at_kst": "2026-10-08T19:05:47.360558+09:00",
+  "observed_state": {
+    "pid": 1143852,
+    "status": "running",
+    "started_at": 1791453947.3605578,
+    "active": {
+      "GF2_baseline_k6_s43": 1144191,
+      "GF2_interp23_k6_s43": 1144203,
+      "GF2_baseline_k6_s44": 1144208,
+      "GF2_interp23_k6_s44": 1144210
+    },
+    "pending": 2,
+    "stage": 1,
+    "heartbeat": 1791454085.786133,
+    "deferred": [],
+    "timing_projection": null
+  },
+  "references": "/home/gpu_04/CtrS-a6000-next6h/SSA-MRN/references/next6h_runs",
+  "cleanup_record": "a6000_next6h_cleanup.json",
+  "hardware_verification": "a6000_next6h_hardware_verification.json",
+  "policy": "max4;GF2four then QBinputtwo if budget;best val MSE;automatic complete RR/FR and hashes;no commit/push requested"
+}
