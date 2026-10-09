@@ -1,0 +1,14 @@
+{
+  "variants": "B1/B2 only; B0 previously measured externally and not rerun",
+  "precision": "AMP FP16 training; FP32 sensor/validation/test",
+  "stages": 3,
+  "shared_weights": true,
+  "micro_batch": 32,
+  "schedule": "100 fixed LR epochs, then cosine to 1e-06",
+  "optimizer": "fused Adam",
+  "observation_compute": "FFT with FIR forward/backward checks",
+  "continuation": "fresh pair; restore only matching suite Output; legacy checkpoint import disabled",
+  "boundary": "feedback excludes 5 LR pixels at each patch boundary",
+  "inference_geometry": "LMS/MS selects one phase once before recurrence; no test GT",
+  "FR": "input agreement does not validate high-resolution detail or sensor physics"
+}
