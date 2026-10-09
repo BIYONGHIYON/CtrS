@@ -56,7 +56,7 @@ Windows 계획은 940에폭 직렬 실행이며, 위 시각은 마지막 확인 
 | 구조 진단 | [QB SSA 핵심 융합 A0–A3](docs/experiments/ssa_fusion_local.md) | 6 | 각100에폭·원본 16개 보관, validation A0 최저 MSE·RR/FR 대기 |
 | 구조 탐색 | [QB 3단계 관측 복원](docs/experiments/kaggle_b1_b2.md) | 6 | B1/B2 각100에폭·RR/FR 평가 완료, RR 개선·FR 악화로 채택 보류 |
 | 구조 탐색 | [QB 단계적 Haar A0/A1](docs/experiments/kaggle_wavelet_a0_a1.md) | 6 | 각100에폭·RR/FR 평가 완료, RR 악화·학습 gate 추가 이득 없어 채택 보류 |
-| 구조 검증 | [QB B1/B2 100에폭 재개](docs/experiments/kaggle_b1_b2_100_resume.md) | 6 | RR/FR 각20장 완료, B2 RR PSNR −0.119919 dB·잠정 FR QNR +0.019136, 종합 채택 보류 |
+| 구조 검증 | [QB B0 대비 B1/B2 100에폭 재개](docs/experiments/kaggle_b1_b2_100_resume.md) | 6 | B0 대비 RR PSNR B1 +0.236541 / B2 +0.116622 dB, 잠정 FR QNR 모두 하락. 별도 세션 비교·종합 채택 보류 |
 | 사전 검증 | [QB 관측 연산자](docs/experiments/observation_validation.md) | 해당 없음 | consistency 관측 구현 검증, 학습 성능 결과와 구분 |
 
 <a id="latest"></a>
@@ -114,6 +114,8 @@ Windows 계획은 940에폭 직렬 실행이며, 위 시각은 마지막 확인 
 ### 최근 K6 완료 · B1/B2 100에폭 재개
 
 B1 대비 B2는 RR PSNR **−0.119919 dB**, SAM **+0.009337°**, 잠정 FR QNR **+0.019136**입니다. B2의 RR PSNR은 20/20장에서 낮았습니다. 중간 200 셀에서 가져온 저장 지점부터 총100에폭까지 학습한 결과이며 200에폭 완료가 아닙니다. 이전 B1/B2와 실행 조건·개선 방향이 달라 종합 채택을 보류합니다.
+
+보관된 Kaggle 원본 구조 baseline **B0**와도 비교했습니다. B0 대비 RR PSNR은 B1 **+0.236541 dB**, B2 **+0.116622 dB**지만 잠정 FR QNR은 각각 **−0.037049**, **−0.017912**입니다. B0는 실행만 최적화한 원본 구조이며 23탭·개선 손실을 합친 최종 baseline이나 논문 표의 수치가 아닙니다. 별도 세션 비교로 기록했습니다.
 
 [상세 보고서·원본 가중치·검증](docs/experiments/kaggle_b1_b2_100_resume.md)
 
