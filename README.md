@@ -42,7 +42,16 @@ K는 모델 내부 특징 차원이며 센서 밴드 수와 다릅니다. WV3에
 | 구조 검증 | [GF2 반복·QB 입력 23탭](SSA-MRN/docs/experiments/a6000_gf2_repeat_qb_input.md) | 6 | 3시드 평가 완료, GF2 PSNR/QNR 개선·SAM 혼재 |
 | 구조 탐색 | [QB 밴드별 게이트 고주파](SSA-MRN/docs/experiments/kaggle_band_gated_hf.md) | 6 | RR 악화로 채택 보류 |
 | 증강 탐색 | [QB MTF 변화량 증강](SSA-MRN/docs/experiments/kaggle_mtf_pair.md) | 6 | 100에폭·원본 4개 보관, validation만 확인·RR/FR 대기 |
+| 구조 검증 | [QB B1/B2 100에폭 재개](SSA-MRN/docs/experiments/kaggle_b1_b2_100_resume.md) | 6 | RR/FR 각20장 완료, B2 RR PSNR −0.119919 dB·잠정 FR QNR +0.019136, 종합 채택 보류 |
 | 사전 검증 | [QB 관측 연산자](SSA-MRN/docs/experiments/observation_validation.md) | 해당 없음 | consistency 관측 구현 검증, 학습 성능 결과와 구분 |
+
+## 최근 완료 · QB B1/B2 100에폭 재개
+
+2026-10-09 22:16 KST 다운로드 확인: 중간 200 셀의 B1 12/B2 11에폭 체크포인트를 이어서 각각 **총100에폭** 학습하고 RR·FR 각20장을 평가했습니다. 실제 K6 실험이며 현재 K4 기본값과 구분합니다. B2는 B1보다 RR PSNR **−0.119919 dB**, 잠정 FR QNR **+0.019136**으로 지표 개선이 엇갈렸습니다. 이전 B1/B2 실행과도 방향이 달라 종합 채택을 보류합니다.
+
+왼쪽부터 LR MS · PAN · B2 예측 · 정답입니다. [8절 보고서·전체 지표·재개 이력·원본 가중치](SSA-MRN/docs/experiments/kaggle_b1_b2_100_resume.md)
+
+![QB B2 고정 RR 장면1](SSA-MRN/docs/assets/kaggle_b1_b2_100_resume/runs/B2_QB_B2_k6_s42/RR_scene_01.png)
 
 ## 문서와 실행 안내
 

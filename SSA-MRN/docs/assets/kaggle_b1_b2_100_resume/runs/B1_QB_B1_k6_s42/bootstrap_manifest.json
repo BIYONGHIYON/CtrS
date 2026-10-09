@@ -1,0 +1,196 @@
+{
+  "original_path": "/kaggle/working/ssa_kaggle_B1_B2_200_cosine_v1/runs/B1_QB_B1_k6_s42/latest.pt",
+  "original_sha256": "614b2d70536eab2b0b112fff7877cf87ea3b5e611a2bc63303ea9cd215925a4d",
+  "original_config": {
+    "sensor": "QB",
+    "k": 6,
+    "channels": 4,
+    "mode": "B1",
+    "controlled": true,
+    "epochs": 200,
+    "seed": 42,
+    "variant": "B1",
+    "hold_lr_epochs": 100,
+    "min_lr": 1e-06,
+    "status_seconds": 15,
+    "checkpoint_seconds": 900,
+    "fused_adam": true,
+    "fft_observation": true,
+    "batch_size": 32,
+    "lr": 0.0001,
+    "micro_batch": 32,
+    "auto_micro": false,
+    "eval_batch": 32,
+    "amp": true,
+    "channels_last": true,
+    "gpu_cache": true,
+    "workers": 0,
+    "scale": 2047.0,
+    "save_predictions": true,
+    "data": {
+      "train": {
+        "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+        "bytes": 5194901672,
+        "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+        "shapes": {
+          "pan": [
+            17139,
+            1,
+            64,
+            64
+          ],
+          "lms": [
+            17139,
+            4,
+            64,
+            64
+          ],
+          "ms": [
+            17139,
+            4,
+            16,
+            16
+          ],
+          "gt": [
+            17139,
+            4,
+            64,
+            64
+          ]
+        }
+      },
+      "val": {
+        "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5",
+        "bytes": 577415336,
+        "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+        "shapes": {
+          "pan": [
+            1905,
+            1,
+            64,
+            64
+          ],
+          "lms": [
+            1905,
+            4,
+            64,
+            64
+          ],
+          "ms": [
+            1905,
+            4,
+            16,
+            16
+          ],
+          "gt": [
+            1905,
+            4,
+            64,
+            64
+          ]
+        }
+      },
+      "RR": {
+        "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+        "bytes": 96997376,
+        "sha256": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+        "shapes": {
+          "pan": [
+            20,
+            1,
+            256,
+            256
+          ],
+          "lms": [
+            20,
+            4,
+            256,
+            256
+          ],
+          "ms": [
+            20,
+            4,
+            64,
+            64
+          ],
+          "gt": [
+            20,
+            4,
+            256,
+            256
+          ]
+        }
+      },
+      "FR": {
+        "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5",
+        "bytes": 220202744,
+        "sha256": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f",
+        "shapes": {
+          "pan": [
+            20,
+            1,
+            512,
+            512
+          ],
+          "lms": [
+            20,
+            4,
+            512,
+            512
+          ],
+          "ms": [
+            20,
+            4,
+            128,
+            128
+          ]
+        }
+      }
+    },
+    "cache": "/kaggle/working/ssa_kaggle_B1_B2_200_cosine_v1/_unused_cache",
+    "source": "/kaggle/working/ssa_kaggle_B1_B2_200_cosine_v1/code/CtrS",
+    "run_dir": "/kaggle/working/ssa_kaggle_B1_B2_200_cosine_v1/runs/B1_QB_B1_k6_s42",
+    "selection": {
+      "seed": 42,
+      "protocol": "RR",
+      "tiles": "full scene",
+      "zero_based_scene_indices": [
+        1,
+        8,
+        11,
+        13,
+        19
+      ],
+      "order": "ascending scene index",
+      "rgb_assumed_bands_zero_based": [
+        2,
+        1,
+        0
+      ],
+      "rule": "fixed before training and test scoring"
+    },
+    "repo_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56",
+    "plan_commit": null,
+    "B2_source": "/kaggle/working/ssa_kaggle_B1_B2_200_cosine_v1/code/B2_models.py",
+    "B2_source_sha256": "eed6cca83abc54b530680f4fe8a88a029b25d6ef281a1762f9f2f3bdd016f3ce",
+    "upstream_commit": "a4ca40e407b12bf4c30f804384405ce321d11c51",
+    "worker_sha256": "5103d95cd6d2fff4c82827f8e0cbb4b0ab7d806fa4ce545145ad0669d7bf4a4d",
+    "observation_profile": "/kaggle/working/ssa_kaggle_B1_B2_200_cosine_v1/observation_train.json",
+    "observation_profile_sha256": "3034dbf95635ade4a96742a3efa3f035062e0a14bf374b974be725db05af7a3a",
+    "model_definition": "3 shared SSA-MRN stages; B1 zero error; B2 observed MS residual feedback",
+    "numerics": "Controlled: equal AMP/layout/micro batch, deterministic kernels, no TF32; not legacy bitwise parity",
+    "reference_plan_config": {
+      "variant": "B1",
+      "seed": 42,
+      "stages": 3,
+      "shared_weights": true,
+      "loss": "final_output_MSE",
+      "initial_alpha": 0.1,
+      "train_phase": "audited original TRAIN GT/MS",
+      "inference_phase": "observed LMS/MS, never GT"
+    }
+  },
+  "completed_epochs": 12,
+  "partial_epoch": false,
+  "history_imported": 12
+}

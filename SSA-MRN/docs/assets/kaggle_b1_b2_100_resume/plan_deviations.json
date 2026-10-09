@@ -1,0 +1,14 @@
+{
+  "variants": "B1/B2 only; B0 previously measured externally and not rerun",
+  "precision": "AMP FP16 training; FP32 sensor/validation/test",
+  "stages": 3,
+  "shared_weights": true,
+  "micro_batch": 32,
+  "schedule": "100 epochs, fixed LR 1e-4",
+  "optimizer": "fused Adam",
+  "observation_compute": "FFT with FIR forward/backward checks",
+  "continuation": "batch-level recovery; compatible 200-cell imports use only states at/before epoch 100",
+  "boundary": "feedback excludes 5 LR pixels at each patch boundary",
+  "inference_geometry": "LMS/MS selects one phase once before recurrence; no test GT",
+  "FR": "input agreement does not validate high-resolution detail or sensor physics"
+}

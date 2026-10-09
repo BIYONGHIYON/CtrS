@@ -1,0 +1,27 @@
+{
+  "cell_id": "ssa_b1_b2_100_resume_v1",
+  "repo_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56",
+  "upstream_commit": "a4ca40e407b12bf4c30f804384405ce321d11c51",
+  "sensor": "QB",
+  "k": 6,
+  "epochs": 100,
+  "seeds": [
+    42
+  ],
+  "variants": [
+    "B1",
+    "B2"
+  ],
+  "batch": 32,
+  "micro": 32,
+  "lr": 0.0001,
+  "schedule": "constant",
+  "amp": true,
+  "channels_last": true,
+  "fused_adam": true,
+  "fft_observation": true,
+  "controlled": true,
+  "save_predictions": true,
+  "status_seconds": 15,
+  "checkpoint_seconds": 60
+}
