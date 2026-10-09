@@ -1,0 +1,395 @@
+{
+  "experiment": "windows_k_baselines",
+  "export_time": "2026-10-09T21:13:15.625650+09:00",
+  "source_root": "C:\\CtrS-budget-suite\\SSA-MRN",
+  "source_hashes_verified": true,
+  "test_evaluation": "not performed in this export",
+  "runs": {
+    "01_GF2_k4_s42": {
+      "source": "C:\\CtrS-budget-suite\\SSA-MRN\\experiments\\controlled_suite_v2\\01_GF2_k4_s42",
+      "config": {
+        "epochs": 100,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "GF2",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\Gaofen 2\\Training Dataset\\train_gf2.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\Gaofen 2\\Training Dataset\\valid_gf2.h5",
+        "seed": 42,
+        "k": 4,
+        "loss": "baseline",
+        "weight": 0.0
+      },
+      "best_epoch": 99,
+      "best_validation_mse": 8.038268666551522e-05,
+      "epochs": 100,
+      "checkpoints": {
+        "best": {
+          "epoch": 99,
+          "sha256": "9daabc6ae5e158603e68e83cf172cf378b1461818ae32ae9556e144d9de76617",
+          "bytes": 5502182,
+          "format": "original model/config/Adam/CPU-CUDA-loader RNG checkpoint"
+        },
+        "latest": {
+          "epoch": 100,
+          "sha256": "146b4278e6b550efd0f6b09547f8203c73610065529eb63f53bf2fef2a11a54d",
+          "bytes": 5511912,
+          "format": "original model/config/Adam/CPU-CUDA-loader RNG checkpoint"
+        }
+      }
+    },
+    "01_GF2_k6_s42": {
+      "source": "C:\\CtrS-budget-suite\\SSA-MRN\\experiments\\controlled_suite_v2\\01_GF2_k6_s42",
+      "config": {
+        "epochs": 100,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "GF2",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\Gaofen 2\\Training Dataset\\train_gf2.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\Gaofen 2\\Training Dataset\\valid_gf2.h5",
+        "seed": 42,
+        "k": 6,
+        "loss": "baseline",
+        "weight": 0.0
+      },
+      "best_epoch": 99,
+      "best_validation_mse": 8.220621621372031e-05,
+      "epochs": 100,
+      "checkpoints": {
+        "best": {
+          "epoch": 99,
+          "sha256": "5702d2191b0c239e28cd6d389961302716a5122d3ed7ccb563bac97029e5c795",
+          "bytes": 5554150,
+          "format": "original model/config/Adam/CPU-CUDA-loader RNG checkpoint"
+        },
+        "latest": {
+          "epoch": 100,
+          "sha256": "5805b8c80d9592f8391e65227f567f63a0b7155c77b69f3d700cd07ddce0585f",
+          "bytes": 5562088,
+          "format": "original model/config/Adam/CPU-CUDA-loader RNG checkpoint"
+        }
+      }
+    },
+    "01_QB_k4_s42": {
+      "source": "C:\\CtrS-budget-suite\\SSA-MRN\\experiments\\controlled_suite_v2\\01_QB_k4_s42",
+      "config": {
+        "epochs": 100,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "QB",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+        "seed": 42,
+        "k": 4,
+        "loss": "baseline",
+        "weight": 0.0
+      },
+      "best_epoch": 98,
+      "best_validation_mse": 0.0001718618192271821,
+      "epochs": 100,
+      "checkpoints": {
+        "best": {
+          "epoch": 98,
+          "sha256": "0361e280912ba9cdfdcdfddc399149723217ddc5447a46cc799de71f6b2dfd93",
+          "bytes": 5502182,
+          "format": "original model/config/Adam/CPU-CUDA-loader RNG checkpoint"
+        },
+        "latest": {
+          "epoch": 100,
+          "sha256": "345728c9c2264275bddac671ab8894b29015e6af7febdaf3fb09112a9afd82ee",
+          "bytes": 5511912,
+          "format": "original model/config/Adam/CPU-CUDA-loader RNG checkpoint"
+        }
+      }
+    },
+    "01_QB_k6_s42": {
+      "source": "C:\\CtrS-budget-suite\\SSA-MRN\\experiments\\controlled_suite_v2\\01_QB_k6_s42",
+      "config": {
+        "epochs": 100,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "QB",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+        "seed": 42,
+        "k": 6,
+        "loss": "baseline",
+        "weight": 0.0
+      },
+      "best_epoch": 98,
+      "best_validation_mse": 0.00017216439426722606,
+      "epochs": 100,
+      "checkpoints": {
+        "best": {
+          "epoch": 98,
+          "sha256": "4098520638d846ddb75e94754846bf482339639ef336364e26d51db36a2e0a7d",
+          "bytes": 5554150,
+          "format": "original model/config/Adam/CPU-CUDA-loader RNG checkpoint"
+        },
+        "latest": {
+          "epoch": 100,
+          "sha256": "c4db2813bc5942c9cc5127443ad3f32b8d7c77af04849fc980aaba63e2703139",
+          "bytes": 5562088,
+          "format": "original model/config/Adam/CPU-CUDA-loader RNG checkpoint"
+        }
+      }
+    },
+    "01_WV3_k4_s42": {
+      "source": "C:\\CtrS-budget-suite\\SSA-MRN\\experiments\\controlled_suite_v2\\01_WV3_k4_s42",
+      "config": {
+        "epochs": 100,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "WV3",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Training Dataset\\train_wv3.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Training Dataset\\valid_wv3.h5",
+        "seed": 42,
+        "k": 4,
+        "loss": "baseline",
+        "weight": 0.0
+      },
+      "best_epoch": 100,
+      "best_validation_mse": 0.0003605642251959243,
+      "epochs": 100,
+      "checkpoints": {
+        "best": {
+          "epoch": 100,
+          "sha256": "38de22203cb6d8f529df6886785a8b8e076fd9ea4b0858103e637b5b02ad3576",
+          "bytes": 6113998,
+          "format": "original model/config/Adam/CPU-CUDA-loader RNG checkpoint"
+        },
+        "latest": {
+          "epoch": 100,
+          "sha256": "86d7f05ad63a6c4b605c6b9ab5a00414aafe8ca4c7abcacc28d3c5682dba764f",
+          "bytes": 6126848,
+          "format": "original model/config/Adam/CPU-CUDA-loader RNG checkpoint"
+        }
+      }
+    },
+    "01_WV3_k6_s42": {
+      "source": "C:\\CtrS-budget-suite\\SSA-MRN\\experiments\\controlled_suite_v2\\01_WV3_k6_s42",
+      "config": {
+        "epochs": 100,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "WV3",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Training Dataset\\train_wv3.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Training Dataset\\valid_wv3.h5",
+        "seed": 42,
+        "k": 6,
+        "loss": "baseline",
+        "weight": 0.0
+      },
+      "best_epoch": 99,
+      "best_validation_mse": 0.0003588513696471367,
+      "epochs": 100,
+      "checkpoints": {
+        "best": {
+          "epoch": 99,
+          "sha256": "f236c5b3b9457963761d3f761869b61efe0d682a426c69a30803882937ad1f5d",
+          "bytes": 6261518,
+          "format": "original model/config/Adam/CPU-CUDA-loader RNG checkpoint"
+        },
+        "latest": {
+          "epoch": 100,
+          "sha256": "92ca512d8e1638aebf7f8085831f4c32e148fcfece3aca190f5cae9f7e648505",
+          "bytes": 6270272,
+          "format": "original model/config/Adam/CPU-CUDA-loader RNG checkpoint"
+        }
+      }
+    }
+  },
+  "files": {
+    "runs/01_GF2_k4_s42/best.pt": {
+      "sha256": "9daabc6ae5e158603e68e83cf172cf378b1461818ae32ae9556e144d9de76617",
+      "bytes": 5502182
+    },
+    "runs/01_GF2_k4_s42/latest.pt": {
+      "sha256": "146b4278e6b550efd0f6b09547f8203c73610065529eb63f53bf2fef2a11a54d",
+      "bytes": 5511912
+    },
+    "runs/01_GF2_k4_s42/config.json": {
+      "sha256": "8455282419d1e5c47b29b04eee0293b60c0bfe0a1ab1c9d1cbf6a03f3d926630",
+      "bytes": 345
+    },
+    "runs/01_GF2_k4_s42/complete.json": {
+      "sha256": "9f764a70b0ad64a26d2c035c8467d2a43cdf810f973458d19f7c5ff771a446ae",
+      "bytes": 442
+    },
+    "runs/01_GF2_k4_s42/history.jsonl": {
+      "sha256": "91f55908212adcc1133b9c07f1e99cd8cf68288177d191fbe4358b97ab39be1d",
+      "bytes": 11631
+    },
+    "runs/01_GF2_k6_s42/best.pt": {
+      "sha256": "5702d2191b0c239e28cd6d389961302716a5122d3ed7ccb563bac97029e5c795",
+      "bytes": 5554150
+    },
+    "runs/01_GF2_k6_s42/latest.pt": {
+      "sha256": "5805b8c80d9592f8391e65227f567f63a0b7155c77b69f3d700cd07ddce0585f",
+      "bytes": 5562088
+    },
+    "runs/01_GF2_k6_s42/config.json": {
+      "sha256": "1498cf866556f7a23541e250f31d55a808d0c75e3a8f3e27959ea852e5880099",
+      "bytes": 345
+    },
+    "runs/01_GF2_k6_s42/complete.json": {
+      "sha256": "0cc3d9ee74137416dfffd622bd7369dda93eeffd8f2a448a7eeb04450622309a",
+      "bytes": 442
+    },
+    "runs/01_GF2_k6_s42/history.jsonl": {
+      "sha256": "bc9a909a56f02970231b6430b25787ae4ac345f06d29db919207a4ac4416a5fa",
+      "bytes": 11639
+    },
+    "runs/01_QB_k4_s42/best.pt": {
+      "sha256": "0361e280912ba9cdfdcdfddc399149723217ddc5447a46cc799de71f6b2dfd93",
+      "bytes": 5502182
+    },
+    "runs/01_QB_k4_s42/latest.pt": {
+      "sha256": "345728c9c2264275bddac671ab8894b29015e6af7febdaf3fb09112a9afd82ee",
+      "bytes": 5511912
+    },
+    "runs/01_QB_k4_s42/config.json": {
+      "sha256": "ed9025bc48f0624d76150d83bcaebb9ddfe374c40781ff1caaff33c430ea9200",
+      "bytes": 344
+    },
+    "runs/01_QB_k4_s42/complete.json": {
+      "sha256": "f36589ae69e2c57e2f38ae50d0d5f3a395cb576a3861e9f78c69d778f681cd46",
+      "bytes": 441
+    },
+    "runs/01_QB_k4_s42/history.jsonl": {
+      "sha256": "bdb0b2ee3aaf8947e7822b6307b37c5ff8ba5fa8bccb4335764c63c8cd08b8c4",
+      "bytes": 11687
+    },
+    "runs/01_QB_k6_s42/best.pt": {
+      "sha256": "4098520638d846ddb75e94754846bf482339639ef336364e26d51db36a2e0a7d",
+      "bytes": 5554150
+    },
+    "runs/01_QB_k6_s42/latest.pt": {
+      "sha256": "c4db2813bc5942c9cc5127443ad3f32b8d7c77af04849fc980aaba63e2703139",
+      "bytes": 5562088
+    },
+    "runs/01_QB_k6_s42/config.json": {
+      "sha256": "e2e68df4c46fb79ededefddcc666b0f57db14cb71955f2e40a045494e3077884",
+      "bytes": 344
+    },
+    "runs/01_QB_k6_s42/complete.json": {
+      "sha256": "cf6f3487ff1ceea2e849667613ade27dfcbd8bab4d25a9a3ecf14948e63e6f30",
+      "bytes": 442
+    },
+    "runs/01_QB_k6_s42/history.jsonl": {
+      "sha256": "343a0e8895706f7d31d039fd056cf5319850ac771bedbcdbd9e9528fd1c795a5",
+      "bytes": 11704
+    },
+    "runs/01_WV3_k4_s42/best.pt": {
+      "sha256": "38de22203cb6d8f529df6886785a8b8e076fd9ea4b0858103e637b5b02ad3576",
+      "bytes": 6113998
+    },
+    "runs/01_WV3_k4_s42/latest.pt": {
+      "sha256": "86d7f05ad63a6c4b605c6b9ab5a00414aafe8ca4c7abcacc28d3c5682dba764f",
+      "bytes": 6126848
+    },
+    "runs/01_WV3_k4_s42/config.json": {
+      "sha256": "2920180713615cd12d8e928885e53316232980c925bfb6d410bcc67f3f7c9e3e",
+      "bytes": 351
+    },
+    "runs/01_WV3_k4_s42/complete.json": {
+      "sha256": "4cbaf4e84dc46d30e96aaf6c75928ef42d5afee37a310908df39d2c8c78b0ccb",
+      "bytes": 448
+    },
+    "runs/01_WV3_k4_s42/history.jsonl": {
+      "sha256": "3ad7b56b527b946d324633431c521555df8d766d2a7d51ea90ab7a2ba8780250",
+      "bytes": 11625
+    },
+    "runs/01_WV3_k6_s42/best.pt": {
+      "sha256": "f236c5b3b9457963761d3f761869b61efe0d682a426c69a30803882937ad1f5d",
+      "bytes": 6261518
+    },
+    "runs/01_WV3_k6_s42/latest.pt": {
+      "sha256": "92ca512d8e1638aebf7f8085831f4c32e148fcfece3aca190f5cae9f7e648505",
+      "bytes": 6270272
+    },
+    "runs/01_WV3_k6_s42/config.json": {
+      "sha256": "9aa35e6e0b29431d661855cd3fe9b9d764b541ff3b07c70ef7c178a806184d22",
+      "bytes": 351
+    },
+    "runs/01_WV3_k6_s42/complete.json": {
+      "sha256": "0a12b4c0f46d8f4ad3b88d0d7889f1f925562509fa9fccf96cc754d575ae1d33",
+      "bytes": 448
+    },
+    "runs/01_WV3_k6_s42/history.jsonl": {
+      "sha256": "65f90a6feafd82dab122cb69c8245c493c1dc0782b3ae1dc810521b588d064fe",
+      "bytes": 11611
+    },
+    "plan.json": {
+      "sha256": "38ef14a1532776e671379cd0848a4e97b9f5faaa3b9e2decd4d62aa2cb94e8f5",
+      "bytes": 1237
+    },
+    "baseline_selection.json": {
+      "sha256": "8e3eb2cac193dde1812afaf3a7aaf7ecfe23f50a784bfa625800a4e494005f50",
+      "bytes": 335
+    },
+    "source_hashes.json": {
+      "sha256": "2750ee7c571d75bd4b7cd9d3854da06ac03921a030a01c47efa895ba37e2c4b4",
+      "bytes": 1233
+    },
+    "adoption.json": {
+      "sha256": "6854d92c3f479d7415e9d397c81c32da4799cda4efda102f0eb67ec7be404fcb",
+      "bytes": 1028
+    },
+    "source/src/ssamrn/metrics.py": {
+      "sha256": "c278b0d4057980dec7a943af403611a6657f775cebd0fc88e199a04f9cf19738",
+      "bytes": 7251
+    },
+    "source/src/ssamrn/observation.py": {
+      "sha256": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+      "bytes": 6382
+    },
+    "source/src/ssamrn/preview.py": {
+      "sha256": "0a793bbf5cfb2b5fc157020c3442245c390bdef797ccb9da04d17208caa5b825",
+      "bytes": 2879
+    },
+    "source/src/ssamrn/__init__.py": {
+      "sha256": "05cb248e8c2e68f011cea1b8dd22412eff47c8a556525f2c66853dc7df16bb94",
+      "bytes": 37
+    },
+    "source/src/ssamrn/data/pancollection.py": {
+      "sha256": "0e340600ef7f11436bb412efb0124fbeb38a8cc047e0864a933d0b35a6633286",
+      "bytes": 3077
+    },
+    "source/src/ssamrn/data/__init__.py": {
+      "sha256": "8ce93afe30cf935d3603d00b24649750b48251fd0922f6d998a3adb807cbe3fd",
+      "bytes": 34
+    },
+    "source/src/ssamrn/models/ssa_mrn.py": {
+      "sha256": "0d8bb038d83543c44c5b76a97ea2bd4f989b811446287a803d66e465135944ff",
+      "bytes": 5640
+    },
+    "source/src/ssamrn/models/__init__.py": {
+      "sha256": "2fa52f0d4632d515bb78be4438770a88e9b3e0099d43f98797ca295498e26d71",
+      "bytes": 30
+    },
+    "source/scripts/train.py": {
+      "sha256": "3d68f9eae2073351a260890228b36bd43672c66071d1c0e260c294747f2f38ba",
+      "bytes": 6539
+    },
+    "source/scripts/train_controlled.py": {
+      "sha256": "5f1f32ae3e665cf28088fbeae228a17d3ce50e57085f1889c1efc7fc7945d8ac",
+      "bytes": 6515
+    },
+    "source/scripts/controlled_suite.py": {
+      "sha256": "d6064c3467244664e9cc2a48d14305cdd6394868d2a06526e28765b86bc1a9de",
+      "bytes": 11529
+    },
+    "source/references/upstream/network.py": {
+      "sha256": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a",
+      "bytes": 15726
+    }
+  },
+  "archive_sha256": "6b491f4068d5ae3f68ee153d33daa228bbcc41edd8091326da67d61edbeee794",
+  "checkpoint_validation": "CPU torch.load(weights_only=True) on server: config, epoch, best MSE, full optimizer and RNG keys verified for all 12 checkpoints"
+}
