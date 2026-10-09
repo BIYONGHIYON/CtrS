@@ -27,14 +27,21 @@ K는 모델 내부 특징 차원이며 센서 밴드 수와 다릅니다. WV3에
 
 | 항목 | 확인된 상태 | 다음 단계 |
 |---|---|---|
-| Windows 기준선 | 6개 × 100에폭 완료, K4 선택 | 기준선의 전체 RR/FR 평가 |
-| Windows K4 손실 | 2026-10-09 21:11 KST: spectral·consistency 완료, edge 0.001 실행 중 | 손실 9개 선별 → 후보 30→100에폭 연장 → 기준선 비교 |
+| Windows 기준선 | 6개 × 100에폭 완료, K4 선택; QB K4 RR/FR 각20장 평가 완료 | 다른5개 기준선의 test 평가 |
+| Windows K4 손실 | 2026-10-10: 940에폭 완료, edge0.1 선별·100에폭·QB 전체 RR/FR 완료 | 지표 혼재로 종합 채택 보류; 반복시드·센서 검증은 별도 승인 |
 | 이전 Linux K6 구조 연구 | 저장소 보고서 기준 반복 시드·센서 평가 완료 | 후보의 K4 적용 여부 검토, 필요 시 K4 대조 검증 |
 | Kaggle K6 B1/B2 재개 | 2026-10-09 22:16 KST: 두 모델100에폭·RR/FR 각20장 확인 | RR 악화·FR 개선 혼재, 이전 실행과 비교한 통제 반복 필요 |
 | 이전 Kaggle K6 MTF 증강 | 100에폭·원본 가중치 보관 완료 | 해당 K6 실험의 RR/FR 평가 대기 |
 | 이전 Kaggle K6 SSA 융합 | 2026-10-09: A0–A3 각100에폭, 원본 가중치 보관 완료 | RR/FR 평가와 K4 적용 여부 별도 검토 |
 
-Windows 계획은 940에폭 직렬 실행이며, 위 시각은 마지막 확인 기록입니다. loss 선택은 validation으로 하고 test로 선택을 바꾸지 않습니다. GPU·환경·micro batch가 다른 서버의 결과를 하나의 반복시드 평균으로 합치지 않습니다. 실행 중인 K6 실험을 문서 결정만으로 K4로 변경하거나 재시작하지 않습니다.
+Windows 940에폭 직렬 실행은 완료됐고 위 시각은 확인 기록입니다. loss 선택은 validation으로 하고 test로 선택을 바꾸지 않습니다. GPU·환경·micro batch가 다른 서버의 결과를 하나의 반복시드 평균으로 합치지 않습니다. 실행 중인 K6 실험을 문서 결정만으로 K4로 변경하거나 재시작하지 않습니다.
+
+
+### Windows K4 손실 · 현재 확인한 차이
+
+validation으로 선별한 edge0.1을 같은 QB K4 기준선과 비교했습니다. validation MSE는 약0.226% 낮지만 RR PSNR·MSE는 악화해 K4 기본 MSE 기준선을 유지합니다. SAM·잠정 FR QNR 개선은 후속 검증할 절충 후보로 기록합니다. [전체 수치·원본20개·고정5장면](docs/experiments/windows_controlled.md)
+
+![Windows K4 기준선 대비 edge0.1 전체 test 차이](docs/assets/windows_losses/test_deltas.png)
 
 <a id="experiments"></a>
 
@@ -44,8 +51,8 @@ Windows 계획은 940에폭 직렬 실행이며, 위 시각은 마지막 확인 
 
 | 단계 | 실험 | 실제 K | 확인된 결과·상태 |
 |---|---|---|---|
-| 현재 기준 | [Windows K4/K6 통제 비교](docs/experiments/windows_k_baselines.md) | 4·6 | 6개 × 100에폭 완료, 원본 12개 보관. 다수결로 **K4 확정**, test 평가 대기 |
-| 현재 진행 | [Windows 손실 탐색](docs/experiments/windows_controlled.md) | **4** | spectral·consistency 완료, edge 진행 기록. 최종 손실 효과 미확정 |
+| 현재 기준 | [Windows K4/K6 통제 비교](docs/experiments/windows_k_baselines.md) | 4·6 | 6개 × 100에폭 완료, 원본 12개 보관. 다수결로 **K4 확정**. QB K4 test 평가 완료, 나머지5개 대기 |
+| 완료·판단 | [Windows 손실 탐색](docs/experiments/windows_controlled.md) | **4** | 940에폭·QB RR/FR 전체 평가 완료, 원본20개 보관. RR 정확도 악화·SAM/FR 개선으로 종합 채택 보류 |
 | 이전 재현 | [공개 코드 K4 재현](docs/experiments/pan_k4.md) | 4 | RR/FR 평가 완료, 초기 기준 |
 | 이전 재현 | [논문 설정 K6 재현](docs/experiments/pan_k6.md) | 6 | RR/FR 평가 완료, K4와 장치도 달랐음 |
 | 구조 탐색 | [QB 23탭·LR 보정·고주파](docs/experiments/a6000_architecture_qb.md) | 6 | 단일 시드에서 23탭을 후속 후보로 선정 |
@@ -123,7 +130,7 @@ B1 대비 B2는 RR PSNR **−0.119919 dB**, SAM **+0.009337°**, 잠정 FR QNR *
 
 ### 이전 K6 결과 이미지
 
-다음은 **K6 전체 23탭**의 고정 장면 예시입니다. 왼쪽부터 LR MS · PAN · 예측 · 정답이며 동일 장면의 MS 패널에는 공통 대비를 적용했습니다. 현재 K4 통제 비교의 test 예시는 아직 없습니다.
+다음은 **K6 전체 23탭**의 고정 장면 예시입니다. 왼쪽부터 LR MS · PAN · 예측 · 정답이며 동일 장면의 MS 패널에는 공통 대비를 적용했습니다. 현재 Windows K4 기준선·손실 후보의 test 예시는 [완료 보고서](docs/experiments/windows_controlled.md#images)에 있습니다.
 
 **QB · K6 · 시드 43**
 
