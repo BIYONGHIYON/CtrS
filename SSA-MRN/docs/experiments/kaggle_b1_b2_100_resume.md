@@ -1,15 +1,20 @@
-# QB · B1/B2 100에폭 재개 실행 · Kaggle 결과
+# QB · B0 기준선 대비 B1/B2 100에폭 재개 · Kaggle 결과
 
 [실험 목록](../../README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [가중치·근거](#evidence)
 
 | 비교 기준 | 이번에 바꾼 점 | 관측된 차이 | 판단 |
 |---|---|---|---|
+| 보관된 Kaggle 원본 구조 B0 | B1 3단계 반복 / B2 관측 피드백 | RR PSNR B1 +0.236541 / B2 +0.116622 dB; 잠정 QNR -0.037049 / -0.017912 | 별도 실행의 관측 비교. RR 이득·FR 악화 혼재, 논문 성능 우위 확정 아님 |
 | 같은 실행의 B1 · 3단계 공유 복원 | B2에 MS−MTF(current) 관측 오차 전달 | RR PSNR -0.119919 dB, SAM +0.009337°, MSE +4.78585561e-06; 잠정 FR QNR +0.019136 | RR 악화·FR 개선이 엇갈려 종합 채택 보류 |
 | 이전 B1/B2 100에폭 실행 | Fused Adam·검증한 FFT 관측 계산, 200 셀의 초반 체크포인트 가져오기·배치 재개 | 이전 B2−B1 PSNR +0.115759 dB에서 이번 −0.119919 dB로 방향 변경 | 단순 재현·동일 수치 반복으로 취급하지 않음 |
 
 > **실제 K=6 기록이다.** 현재 연구 기본값 [K4](../../README.md#decision)의 성능 결과로 바꾸지 않는다. 이 보고서는 사용자 제공 Output을 보관·검증한 기록이다.
 
 ## 1. 목적과 상태
+
+**비교 대상 정의:** B0는 이전 Kaggle 실행의 `github_QB_baseline_k6_s42`이며 원본 SSA-MRN 단일 출력 구조·K6·기본 MSE를 사용한다. AMP·channels-last·GPU 데이터 상주 등 **실행 최적화**가 적용됐지만, 23탭·추가 손실·관측 피드백을 합쳐 고른 **성능 최적 baseline은 아니다.** 논문 표에 보고된 값이나 논문을 bitwise 그대로 재현한 결과와도 구분한다. B1은 같은 core를 학습형 α로 3회 공유 반복하고, B2는 그 3단계에 입력 MS−MTF(current) 피드백을 추가한다. B1의 error=0에서도 Conv bias는 학습 가능하므로 단순히 원본 출력을 세 번 내는 것과 다르다.
+
+이번 셀에서 새로 실행한 모델은 **B1·B2 두 개뿐**이었다. 아래 B0 비교는 사용자가 이미 구해 둔 Kaggle 원본 baseline을 재사용한 수치 비교다. B0를 추가로 학습하거나 이번 실행의 동시 대조군으로 표시하지 않는다.
 
 **B1·B2 각각 100에폭 학습, RR 20장·FR 20장 전체 평가 완료.** 마지막 다운로드 근거 확인은 **2026-10-09 22:16 KST**이며 실제 학습 종료 시각이나 실시간 서버 상태를 뜻하지 않는다. Notebook Version ID·정확한 종료 시각은 산출물에 없다. 로컬 재학습이나 원본 H5 재평가는 하지 않았다.
 
@@ -46,6 +51,28 @@
 ## 3. 정량 결과
 
 모두 장면별 계산 후 **20장 산술평균**이다. RR PSNR은 peak2047 밴드 PSNR 평균, MSE는 DN2047로 정규화한 원소 MSE, SAM은 도 단위다. validation PSNR은 peak1의 밴드 평균으로 단일 global MSE 변환과 다르다. FR에는 HR GT가 없으며 QNR·Ds 및 RR Q2n/SCC의 MATLAB parity 한계가 남는다.
+
+
+### 보관된 Kaggle B0와 이번 B1/B2
+
+같은 QB H5 4개 SHA-256·배열 shape, K6·seed42·100에폭·batch/micro32·lr1e−4·AMP가 일치함을 확인했다. **B0는 이전 세션**이고 Adam foreach=True를 사용했으며 이번은 Fused Adam이다. 배치 순서 생성 위치·재개 정책도 달라 B0와 B1/B2의 동일 초기 가중치·샘플 순서는 주장하지 않는다. B1/B2끼리의 초기화·순서 일치 검증과 구분한다. 주 대조 결과 B2−B1을 유지하면서 B0 대비의 관측 차이를 추가한다.
+
+| 모델 | 학습 출처 | Best epoch | RR PSNR ↑ | RR SAM ↓ | RR MSE peak1 ↓ | FR QNR ↑ · 잠정 |
+|---|---|---:|---:|---:|---:|---:|
+| B0 | 보관된 이전 Kaggle | 100 | 37.453879 | 4.955443 | 0.000215111127 | 0.919756 |
+| B1 | 이번 100에폭 재개 | 95 | 37.690421 | 4.822219 | 0.000201435063 | 0.882708 |
+| B2 | 이번 100에폭 재개 | 96 | 37.570502 | 4.831556 | 0.000206220919 | 0.901844 |
+
+| 비교 · 현재−B0 | ΔPSNR ↑ | ΔSAM ↓ | ΔMSE ↓ | ΔQNR ↑ · 잠정 |
+|---|---:|---:|---:|---:|
+| B1−B0 | +0.236541 | -0.133224 | -1.36760636e-05 | -0.037049 |
+| B2−B0 | +0.116622 | -0.123887 | -8.890208e-06 | -0.017912 |
+
+B0에 비해 두 변형의 RR PSNR·SAM·MSE는 개선됐지만 **FR QNR은 모두 악화**했다. 종합 개선을 확정하지 않으며, B1은 B2보다 이번 RR 전 장면 PSNR이 높다는 기존 판단을 유지한다. B0의 전체 ERGAS/SCC/Q2n/Dλ/Ds·checkpoint 해시와 모든 차이는 [비교 JSON](../assets/kaggle_b1_b2_100_resume/b0_comparison.json)에 있다. [B0 원본 결과·20장별 수치](../assets/kaggle_band_gated_hf/results.json) · [B0 보고서](kaggle_band_gated_hf.md) · [B0 best](../assets/kaggle_band_gated_hf/runs/github_QB_baseline_k6_s42/best.pt) · [B0 latest](../assets/kaggle_band_gated_hf/runs/github_QB_baseline_k6_s42/latest.pt)
+
+논문 표의 수치와 비교하려면 [기존 논문 K6 재현 보고서](pan_k6.md)의 논문 인용 열을 별도로 봐야 한다. 그 열을 B0 실측값으로 섞지 않는다. 원본 코드와 논문 수식의 차이·환경·지표 parity 제한이 있어 논문 그대로 재현 또는 논문 전체 성능 우위를 주장하지 않는다.
+
+### 이번 실행의 통제 비교 · B1/B2
 
 | 모델 | Best epoch | Best validation MSE | RR PSNR dB ↑ | RR SAM ° ↓ | RR MSE peak1 ↓ |
 |---|---:|---:|---:|---:|---:|
@@ -87,11 +114,15 @@
 
 직전 B2−B1은 RR PSNR **+0.115759 dB**, FR QNR **−0.018221**였고, 이번에는 RR PSNR **−0.119919 dB**, FR QNR **+0.019136**이다. 방향 변화의 원인을 이번 두 실행만으로 Fused Adam·FFT 또는 재개의 특정 한 항목에 귀속하지 않는다. [이전 숫자 snapshot](../assets/kaggle_b1_b2_100_resume/previous_b1_b2_results.json) · [인용 출처](../assets/kaggle_b1_b2_100_resume/previous_comparison_source.json)
 
-B0 원본 단일 출력 모델은 이번 셀에서 학습·평가하지 않았다. 논문 기준선의 같은 실행 대조군이 없으므로 **논문보다 성능이 높아졌다는 결론은 내리지 않는다.**
+B0는 이번 셀에서 재학습·재평가하지 않았지만, 3절에 **보관된 Kaggle B0 대비 수치 비교를 추가**했다. 이는 별도 세션 결과의 비교이며 논문 기준선의 같은 실행 대조군이 아니므로 **논문보다 성능이 높아졌다는 결론은 내리지 않는다.**
 
 <a id="graphs"></a>
 
 ## 5. 그래프
+
+B0는 보관된 별도 세션, B1/B2는 이번 실행이다. 원본 수치로 그린 세 모델 비교이며 동시 통제 재학습 그래프가 아니다.
+
+![보관된 B0와 이번 B1/B2 비교](../assets/kaggle_b1_b2_100_resume/b0_b1_b2_comparison.png)
 
 실측 100에폭 train MSE·validation MSE/PSNR/SAM이다. 가져온 초반 기록을 포함하고 누락 epoch를 추정하지 않았다.
 
@@ -125,6 +156,8 @@ B0 원본 단일 출력 모델은 이번 셀에서 학습·평가하지 않았�
 <a id="evidence"></a>
 
 ## 7. 가중치와 검증 근거
+
+B0는 기존 보관 위치의 best/latest를 링크하고 원본 SHA-256을 다시 대조했다. B0의 데이터 해시·주요 설정·전체20장 평균과 B0 대비 차이 검증은 [b0_comparison.json](../assets/kaggle_b1_b2_100_resume/b0_comparison.json)에 기록한다. 기존 실행 근거 JSON·가중치·이전 원격 검증 기록은 바꾸지 않았다.
 
 **최종 best/latest 원본4개, latest 이전 복구본2개, 200 셀의 중간 best/latest4개를 Git에 포함한다.** checkpoint 내부 config·optimizer·RNG는 수정하지 않았다. 아래 표는 최종 학습 결과이고 중간본은 별도 [checkpoint manifest](../assets/kaggle_b1_b2_100_resume/recovery_200/checkpoint_manifest.json)로 구분한다. 최종 예측80개·고정 이미지10개·전체 지표·원본 실행 source·compact epoch·정합 manifest를 보관했다.
 
