@@ -178,7 +178,7 @@ PSNR·MSE·ERGAS·SCC·Q2n은 악화했고 SAM은 소폭 개선됐습니다. FR 
 - 전송 ZIP: `C:\Users\trainer\windows_losses_20261010.zip`, SHA-256 `fb84f2033a7ed129fdb34a5fec5e76a556f3fe1bb2531725f530cb7cf051434f`
 - [로컬·원격 검증 스크립트](../../scripts/verify_windows_losses.py) · [독립 평가·복구 실행 안내](../operations/windows_loss_review.md)
 
-기존 실행 폴더·인계 경로 `C:\CtrS-controlled-suite`는 유지했습니다. 이번 작업에서 폴더 삭제·새 학습·서버 종료를 진행하지 않았습니다. 푸시 후 원격 복구 검증 결과는 별도 기록으로 추가합니다.
+기존 실행 폴더·인계 경로 `C:\CtrS-controlled-suite`는 유지했습니다. 이번 작업에서 폴더 삭제·새 학습·서버 종료를 진행하지 않았습니다. GitHub `2dac11df6296ed540c6a3ea2f169f0c28c1fef80` 커밋을 새 폴더에 sparse clone하여 원본 가중치20개·원본88개 및 전체 보관91개 파일의 바이트·SHA-256이 일치함을 확인했습니다. CPU 검증기로 validation 선택·연속 이력·RR/FR 전체 장면·평균·차이도 다시 검사했습니다. [원격 복구 검증 기록](../assets/windows_losses/remote_verification.json)
 
 ## 8. 한계와 다음 판단
 
