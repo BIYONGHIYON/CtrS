@@ -55,6 +55,22 @@ QB K6·seed46에서 네 구조를 각100에폭 학습하고 원본 체크포인�
 
 [완료 보고서](SSA-MRN/docs/experiments/kaggle_b1_b2.md) · [한 셀 재현·복구](SSA-MRN/docs/operations/kaggle_b1_b2.md)
 
+## K6 완료 결과 · QB 단계적 Haar 복원 A0/A1
+
+2026-10-09 06:28 KST부터 다운로드 산출물을 검증했습니다. T4×2에서 A0·A1을 각각100에폭 학습하고 각 RR20장·FR20장 전체를 평가했습니다. A0는 gate=1, A1은 밴드·방향·위치별 gate입니다.
+
+| 비교 | RR ΔPSNR dB | RR ΔSAM ° | RR ΔMSE peak1 | FR ΔQNR · 잠정 |
+|---|---:|---:|---:|---:|
+| A0 − 기존 B0 | −2.799468 | +0.859341 | +2.07106e−4 | +0.022286 |
+| A1 − 기존 B0 | −3.052997 | +0.941778 | +2.33414e−4 | +0.020670 |
+| A1 − A0 | −0.253529 | +0.082437 | +2.63082e−5 | −0.001616 |
+
+**RR가 크게 악화해 현재 구조 채택을 보류합니다.** 학습 gate의 추가 이득도 확인되지 않았습니다. 이전 B0와 데이터·nominal 학습 조건·환경·순서를 사후 대조했지만 구조·MS 입력·용량과 AMP의 실제 업데이트 수는 다릅니다. 단일 시드이며 잠정 FR 상승을 HR 정확도 개선으로 해석하지 않습니다.
+
+[조건·전체 결과·가중치·검증 근거](SSA-MRN/docs/experiments/kaggle_wavelet_a0_a1.md)에 실제 best/latest4개와 예측80개를 보존했습니다. 왼쪽부터 **LR MS · PAN · A1 예측 · GT**이며 사전 고정한 RR scene1과 공통 MS 대비를 사용했습니다.
+
+![A1 고정 RR scene1](SSA-MRN/docs/assets/kaggle_wavelet_a0_a1/runs/A1_QB_s42/RR_scene_001.png)
+
 ## 실험 바로 보기
 
 각 보고서에서 **목적·조건·수치·기준선 대비·그래프·이미지·가중치·판단**을 함께 볼 수 있습니다.
@@ -72,6 +88,7 @@ QB K6·seed46에서 네 구조를 각100에폭 학습하고 원본 체크포인�
 | 증강 탐색 | [QB MTF 변화량 증강](SSA-MRN/docs/experiments/kaggle_mtf_pair.md) | 6 | 100에폭·원본 4개 보관, validation만 확인·RR/FR 대기 |
 | 구조 진단 | [QB SSA 핵심 융합 A0–A3](SSA-MRN/docs/experiments/ssa_fusion_local.md) | 6 | 각100에폭·원본 16개 보관, validation A0 최저 MSE·RR/FR 대기 |
 | 구조 탐색 | [QB 3단계 관측 복원](SSA-MRN/docs/experiments/kaggle_b1_b2.md) | 6 | B1/B2 각100에폭·RR/FR 평가 완료, RR 개선·FR 악화로 채택 보류 |
+| 구조 탐색 | [QB 단계적 Haar A0/A1](SSA-MRN/docs/experiments/kaggle_wavelet_a0_a1.md) | 6 | 각100에폭·RR/FR 평가 완료, RR 악화·학습 gate 추가 이득 없어 채택 보류 |
 | 사전 검증 | [QB 관측 연산자](SSA-MRN/docs/experiments/observation_validation.md) | 해당 없음 | consistency 관측 구현 검증, 학습 성능 결과와 구분 |
 
 ## 문서와 실행 안내

@@ -1,0 +1,124 @@
+{
+  "train": {
+    "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+    "shapes": {
+      "ms": [
+        17139,
+        4,
+        16,
+        16
+      ],
+      "pan": [
+        17139,
+        1,
+        64,
+        64
+      ],
+      "lms": [
+        17139,
+        4,
+        64,
+        64
+      ],
+      "gt": [
+        17139,
+        4,
+        64,
+        64
+      ]
+    },
+    "bytes": 5194901672,
+    "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+    "normalization": "DN / 2047, no clipping"
+  },
+  "val": {
+    "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5",
+    "shapes": {
+      "ms": [
+        1905,
+        4,
+        16,
+        16
+      ],
+      "pan": [
+        1905,
+        1,
+        64,
+        64
+      ],
+      "lms": [
+        1905,
+        4,
+        64,
+        64
+      ],
+      "gt": [
+        1905,
+        4,
+        64,
+        64
+      ]
+    },
+    "bytes": 577415336,
+    "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+    "normalization": "DN / 2047, no clipping"
+  },
+  "RR": {
+    "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+    "shapes": {
+      "ms": [
+        20,
+        4,
+        64,
+        64
+      ],
+      "pan": [
+        20,
+        1,
+        256,
+        256
+      ],
+      "lms": [
+        20,
+        4,
+        256,
+        256
+      ],
+      "gt": [
+        20,
+        4,
+        256,
+        256
+      ]
+    },
+    "bytes": 96997376,
+    "sha256": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+    "normalization": "DN / 2047, no clipping"
+  },
+  "FR": {
+    "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5",
+    "shapes": {
+      "ms": [
+        20,
+        4,
+        128,
+        128
+      ],
+      "pan": [
+        20,
+        1,
+        512,
+        512
+      ],
+      "lms": [
+        20,
+        4,
+        512,
+        512
+      ]
+    },
+    "bytes": 220202744,
+    "sha256": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f",
+    "normalization": "DN / 2047, no clipping"
+  }
+}
