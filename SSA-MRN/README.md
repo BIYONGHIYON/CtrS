@@ -1,111 +1,103 @@
-# SSA-MRN · PAN–MS 재현과 성능 개선
+# SSA-MRN · K4 기준 성능 개선 연구
 
-[저장소 홈](../README.md) · [알고리즘과 평가](docs/research.md)
+[저장소 홈](../README.md) · [알고리즘과 평가](docs/research.md) · [실험 목록](#experiments) · [진행 기록](#status) · [실행·보관](#files)
 
-PAN의 공간 정보와 MS의 분광 정보를 결합해 고해상도 MS를 복원합니다. QB·GF2는 4밴드, WV3는 8밴드이며 **K는 관측 밴드 수가 아니라 모델 내부 특징 차원**입니다.
+고해상도 흑백 위성영상 **PAN**과 저해상도 다중분광영상 **MS**를 결합해 고해상도 MS를 복원합니다. SSA-MRN을 재현하고 구조·손실·학습 데이터 변화가 복원 성능에 미치는 영향을 비교하는 연구입니다.
 
-<a id="experiments"></a>
+<a id="decision"></a>
 
-## 실험 한눈에 보기
+## 1. 현재 연구 기준 · K=4 확정
 
-실험명을 누르면 중간 안내 페이지 없이 보고서가 열립니다. 모든 보고서는 **목적 → 조건 → 수치 → 기준선 대비 → 그래프 → 이미지 → 가중치·근거 → 판단** 순서입니다.
+**2026-10-09 현재 연구의 기본 설정은 K=4로 확정했습니다.** Windows 동일 환경에서 QB·GF2·WV3의 K4/K6를 각각 100에폭 학습하고, 센서별 best validation MSE 다수결 **2:1**로 선택했습니다. 앞으로 별도 승인된 K 비교가 아닌 신규 기준선·개선 비교는 K4를 기준으로 설계합니다.
 
-| 실험 | 바꾼 점 / 확인할 내용 | 상태와 판단 |
-|---|---|---|
-| [K4 재현](docs/experiments/pan_k4.md) | 공개 코드의 학습·평가 복원 | RR/FR 평가 완료, 첫 기준 결과 |
-| [K6 재현](docs/experiments/pan_k6.md) | SSAI 내부 차원 4→6 | 평가 완료, 장치도 달라 K만의 효과는 미확정 |
-| [QB 구조 비교](docs/experiments/a6000_architecture_qb.md) | 23탭 확대·LR 보정·고주파 경로 | 평가 완료, 단일 시드에서 23탭을 후속 후보로 선정 |
-| [QB 게이트 고주파](docs/experiments/kaggle_band_gated_hf.md) | PAN 고주파를 MS 밴드·위치별로 게이트 | Kaggle 두 모델 RR/FR 전체 평가 완료, RR 악화로 채택 보류 |
-| [23탭 후속 검증](docs/experiments/a6000_followup_123.md) | QB 3시드·확대 위치·GF2/WV3 | 평가 완료, 모든 센서에 적용하는 최종 채택은 보류 |
-| [GF2 반복·QB 입력 검증](docs/experiments/a6000_gf2_repeat_qb_input.md) | GF2 전체/QB 입력 23탭 각각 3시드 | 전체 평가 완료, GF2 PSNR/QNR 개선 반복·SAM 혼재 |
-| [Windows K4/K6 기준선](docs/experiments/windows_k_baselines.md) | 3센서 × K4/K6 동일 환경 100에폭 | 학습 완료·원본 12개 보관, validation 다수결 K4·test 평가 대기 |
-| [Windows K·손실 비교](docs/experiments/windows_controlled.md) | 같은 장치의 K4/K6 → 손실 9개 → 후보 연장 | 마지막 확인 시 학습 중, 손실 효과 미확정 |
-| [QB MTF 증강 학습](docs/experiments/kaggle_mtf_pair.md) | 원본 기준선·MTF 변화량 증강의 T4 병렬 비교 | 100에폭 완료·best/latest 보관, RR/FR 평가 대기 |
-| [QB 관측 연산자 검증](docs/experiments/observation_validation.md) | consistency 손실의 MTF·패치 위상 검증 | 구현 검증 완료, 모델 성능 평가와 구분 |
+K는 모델 내부 특징 차원이며 센서 밴드 수와 다릅니다. WV3에서는 K6가 낮았으므로 이 결정은 모든 센서·test 지표에서 K4가 우세하다는 뜻은 아닙니다. K 선택에는 test를 사용하지 않았습니다.
+| 센서 | K4 best validation MSE ↓ | K6 best validation MSE ↓ | 선택 |
+|---|---:|---:|---|
+| QB | 0.000171861819 | 0.000172164394 | K4 |
+| GF2 | 0.000080382687 | 0.000082206216 | K4 |
+| WV3 | 0.000360564225 | 0.000358851370 | K6 |
 
-## 최근 학습 완료 · QB MTF 증강
+공통 조건은 Windows RTX 3060 Ti·시드 42·Adam lr=1e-4·effective batch 32·micro batch 4·100에폭입니다. 원본 best/latest 12개와 600에폭 기록을 보관하고 원격 복구를 검증했습니다. [K4/K6 상세 보고서](docs/experiments/windows_k_baselines.md)
 
-2026-10-09, T4×2에서 baseline·MTF 모델 모두100에폭을 마쳤습니다. validation MSE로 선택한 best는 둘 다99에폭입니다.
-
-| 모델 | Best validation MSE | PSNR (dB) | SAM (°) |
-|---|---:|---:|---:|
-| baseline | 0.000171972981 | 39.310003 | 4.550377 |
-| MTF 증강 | 0.000171249088 | 39.315762 | 4.545383 |
-| MTF − baseline | −0.000000723893 | +0.005759 | −0.004994 |
-
-단일 seed46의 **validation 관측**이며 RR/FR 개선 결론은 아직 없습니다. 원본 best/latest4개와 설정·소스·해시·100에폭 기록을 함께 보관했습니다. [조건·곡선·가중치](docs/experiments/kaggle_mtf_pair.md).
-
-![MTF 학습·validation 곡선](docs/assets/kaggle_mtf_pair_20261009/validation_curves.png)
-
-<a id="latest"></a>
-
-## 최신 완료 결과 · GF2 반복 시드·QB 입력 23탭
-
-2026-10-08 23:17 KST에 새 학습 6개와 자동 평가가 완료됐습니다. 기존 9개 포함 15개 모델 각각 RR 20장·FR 20장 전체를 평가했고 best는 validation MSE로 선택했습니다.
-
-| 검증 | ΔPSNR (dB) | ΔSAM (°) | ΔMSE (peak=1) | ΔQNR | 판단 |
-|---|---:|---:|---:|---:|---|
-| GF2 전체 23탭 · 3시드 | +0.1095 ± 0.0698 | +0.00029 ± 0.02157 | -2.711e-06 | +0.005261 ± 0.002222 | PSNR/QNR 3/3 개선, SAM 2/3 악화 |
-| QB 입력 23탭 · 3시드 | +0.0575 ± 0.0369 | -0.02123 ± 0.02598 | -2.543e-06 | +0.003569 ± 0.011528 | PSNR/SAM 3/3 개선, QNR 2/3 악화 |
-| QB 전체 23탭 · 3시드 (재사용) | +0.0421 ± 0.0127 | -0.01894 ± 0.02250 | -2.116e-06 | -0.011602 ± 0.015583 | PSNR 3/3 개선, QNR 2/3 악화 |
-
-GF2 PSNR·QNR은 3/3 개선했지만 SAM은 2/3 악화했습니다. QB 입력은 PSNR·SAM이 3/3 개선했지만 QNR은 2/3 악화했습니다. 전체 적용은 보류하고 FR 구현 검증과 Windows 손실 결과를 먼저 확인합니다. ±는 시드별 차이의 표본 표준편차이며 유의성을 뜻하지 않습니다. 재사용 test이고 QNR은 MATLAB 일치성 미검증입니다.
-
-![test 변화](docs/assets/a6000_gf2_repeat_qb_input/test_metrics.png)
-
-![GF2 전체 23탭 시드 43](docs/assets/a6000_gf2_repeat_qb_input/GF2_interp23_k6_s43_scene_01.png)
-
-![QB 입력 23탭 시드 43](docs/assets/a6000_gf2_repeat_qb_input/QB_interp23_input_k6_s43_scene_01.png)
-
-[최신 보고서](docs/experiments/a6000_gf2_repeat_qb_input.md)에서 조건·절대 수치·실측 곡선·고정 45개 이미지·원본 가중치 30개를 확인합니다. 없는 과거 QB 시드 42 validation SAM 곡선은 생성하지 않았습니다.
-
-## 병행 완료 · QB 밴드별 게이트 고주파
-
-2026-10-08 다운로드 결과 검증 기준, Kaggle T4 ×2에서 baseline과 band_gated_hf를 같은 **QB K6·seed42·100에폭·AMP·batch32**로 학습하고 각 모델의 **RR 20장·FR 20장 전체**를 FP32로 평가했습니다. best는 validation MSE로 선택했고 baseline epoch100, 후보 epoch99입니다.
-
-| 지표 | baseline | band_gated_hf | 후보−baseline |
-|---|---:|---:|---:|
-| RR PSNR dB ↑ | 37.453879 | 37.278888 | −0.174992 |
-| RR SAM ° ↓ | 4.955443 | 4.964272 | +0.008829 |
-| RR MSE peak1 ↓ | 0.000215111127 | 0.000222832780 | +7.72165e−6 |
-| FR QNR ↑ · 잠정 | 0.919756 | 0.920742 | +0.000986 |
-
-후보는 PAN 고주파와 기준 출력의 밴드별 공간 기울기로 픽셀별 gate를 학습합니다. 두 모델의 본체 초기화와 100에폭 샘플 순서 해시가 일치했고 실제 best/latest 원본 4개·전체 예측 80개·장면별 수치와 재현 소스를 보존했습니다.
-
-**판단:** RR PSNR·SAM·MSE·ERGAS·SCC·Q2n이 모두 악화해 채택을 보류합니다. FR은 Dλ 개선과 Ds 악화가 섞였고 QNR의 작은 상승은 잠정 값입니다. 단일 시드·선행 탐색에 쓰인 QB test·MATLAB 정합성 미검증 제한이 있습니다. 이번에는 고정 high_frequency를 학습하지 않았습니다.
-
-왼쪽부터 **LR MS · PAN · band_gated_hf 예측 · 정답**입니다. seed42로 수치 평가 전에 고정한 RR 장면1이며 RGB [2,1,0]과 공통 GT 대비를 사용했습니다.
-
-![QB band_gated_hf 고정 장면1](docs/assets/kaggle_band_gated_hf/runs/pasted_QB_band_gated_hf_k6_s42/RR_scene_01.png)
-
-[완료 보고서](docs/experiments/kaggle_band_gated_hf.md)에 5장면·학습 곡선·test 비교 그래프·이전 A6000 연구와의 관측 차이·가중치와 검증 근거를 정리했습니다.
+![K4/K6 validation 비교](docs/assets/windows_k_baselines/validation_comparison.png)
 
 <a id="status"></a>
 
-## 서버별 마지막 확인 기록
+## 2. 진행 기록과 다음 판단
 
-아래는 시각이 명시된 기록이며 실시간 상태가 아닙니다.
+| 항목 | 확인된 상태 | 다음 단계 |
+|---|---|---|
+| Windows 기준선 | 6개 × 100에폭 완료, K4 선택 | 기준선의 전체 RR/FR 평가 |
+| Windows K4 손실 | 2026-10-09 21:11 KST: spectral·consistency 완료, edge 0.001 실행 중 | 손실 9개 선별 → 후보 30→100에폭 연장 → 기준선 비교 |
+| 이전 Linux K6 구조 연구 | 저장소 보고서 기준 반복 시드·센서 평가 완료 | 후보의 K4 적용 여부 검토, 필요 시 K4 대조 검증 |
+| 이전 Kaggle K6 MTF 증강 | 100에폭·원본 가중치 보관 완료 | 해당 K6 실험의 RR/FR 평가 대기 |
 
-| 서버 | 마지막 확인 | 확인된 상태 | 남은 판단 |
+Windows 계획은 940에폭 직렬 실행이며, 위 시각은 마지막 확인 기록입니다. loss 선택은 validation으로 하고 test로 선택을 바꾸지 않습니다. GPU·환경·micro batch가 다른 서버의 결과를 하나의 반복시드 평균으로 합치지 않습니다. 실행 중인 K6 실험을 문서 결정만으로 K4로 변경하거나 재시작하지 않습니다.
+
+<a id="experiments"></a>
+
+## 3. 전체 실험 지도
+
+보고서 이름을 누르면 중간 안내 페이지 없이 조건·수치·이미지·가중치에 접근합니다. **실제 K**는 해당 실험이 수행된 설정이며 현재 기본값과 구분합니다.
+
+| 단계 | 실험 | 실제 K | 확인된 결과·상태 |
 |---|---|---|---|
-| Linux · RTX A6000 | 2026-10-08 23:26 KST · SSH 확인 | GF2/QB 추가 6개 100에폭, 15개 모델 평가·해시 검증 완료. GPU 유휴 | FR 구현 검증·Windows 결과 확인 |
-| Windows · RTX 3060 Ti | 2026-10-09 21:11 KST · SSH 확인 | 기준선 6개 모두 100에폭 완료, K4 선택·손실 탐색 중 | 손실 9개 → 최종 후보 연장 → 평가 |
-| Kaggle · Tesla T4 ×2 | 2026-10-08 23:20 KST부터 다운로드 산출물 검증 | baseline·gate 각 100에폭, 각 RR/FR 20장 전체 평가 완료 | gate 채택 보류; 다른 seed·독립 장면 반복 필요 |
+| 현재 기준 | [Windows K4/K6 통제 비교](docs/experiments/windows_k_baselines.md) | 4·6 | 6개 × 100에폭 완료, 원본 12개 보관. 다수결로 **K4 확정**, test 평가 대기 |
+| 현재 진행 | [Windows 손실 탐색](docs/experiments/windows_controlled.md) | **4** | spectral·consistency 완료, edge 진행 기록. 최종 손실 효과 미확정 |
+| 이전 재현 | [공개 코드 K4 재현](docs/experiments/pan_k4.md) | 4 | RR/FR 평가 완료, 초기 기준 |
+| 이전 재현 | [논문 설정 K6 재현](docs/experiments/pan_k6.md) | 6 | RR/FR 평가 완료, K4와 장치도 달랐음 |
+| 구조 탐색 | [QB 23탭·LR 보정·고주파](docs/experiments/a6000_architecture_qb.md) | 6 | 단일 시드에서 23탭을 후속 후보로 선정 |
+| 구조 검증 | [23탭 반복·위치·센서 확장](docs/experiments/a6000_followup_123.md) | 6 | QB RR 이득·FR 혼재, GF2 개선·WV3 악화 |
+| 구조 검증 | [GF2 반복·QB 입력 23탭](docs/experiments/a6000_gf2_repeat_qb_input.md) | 6 | 3시드 평가 완료, GF2 PSNR/QNR 개선·SAM 혼재 |
+| 구조 탐색 | [QB 밴드별 게이트 고주파](docs/experiments/kaggle_band_gated_hf.md) | 6 | RR 악화로 채택 보류 |
+| 증강 탐색 | [QB MTF 변화량 증강](docs/experiments/kaggle_mtf_pair.md) | 6 | 100에폭·원본 4개 보관, validation만 확인·RR/FR 대기 |
+| 사전 검증 | [QB 관측 연산자](docs/experiments/observation_validation.md) | 해당 없음 | consistency 관측 구현 검증, 학습 성능 결과와 구분 |
 
-Windows 계획은 총 **940에폭 직렬 실행**입니다. 각 실행 환경은 장치·환경·micro batch가 달라 자체 기준선과 비교합니다. 구조+손실 결합의 효과는 아직 미확인입니다. 진행 확인 명령과 복구 절차는 아래 실행 안내에 있습니다.
+<a id="latest"></a>
+
+## 4. 이전 K6 연구에서 확인한 점
+
+아래는 K6로 수행한 실험들의 자체 기준선 대비 결과입니다. 현재 K4 모델에서 같은 효과가 확인됐다는 의미는 아닙니다. RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없는 실제 해상도 평가입니다.
+
+| 연구·범위 | 주요 관측 | 현재 해석 |
+|---|---|---|
+| GF2 전체 23탭 · 3시드 | RR PSNR +0.1095 ± 0.0698 dB, QNR +0.005261 ± 0.002222; SAM 2/3 악화 | 센서별 후보, 지표 전체 개선은 아님 |
+| QB 입력 23탭 · 3시드 | PSNR +0.0575 ± 0.0369 dB, SAM −0.02123 ± 0.02598°; QNR 2/3 악화 | 공간·분광 RR 이득과 FR 한계를 함께 기록 |
+| QB 전체 23탭 · 3시드 | PSNR +0.0421 ± 0.0127 dB, QNR 평균 −0.011602 | RR 이득은 반복, FR 개선 불안정 |
+| WV3 전체 23탭 · 시드 42 | PSNR −0.0368 dB, SAM +0.0219°, QNR −0.001746 | 전체 센서 일괄 적용 보류 |
+| QB 게이트 고주파 · 시드 42 | RR PSNR −0.174992 dB | 현재 설정 채택 보류 |
+| QB MTF 증강 · 시드 46 | validation PSNR +0.005759 dB, SAM −0.004994° | validation의 작은 차이, test 평가 대기 |
+
+±는 3시드의 기준선 대비 차이 표본 표준편차이며 유의성 검정이 아닙니다. QNR·Ds 및 일부 RR 지표의 MATLAB 구현 일치성이 미검증이고, test 재사용 이력은 각 보고서에 명시합니다. MTF의 validation PSNR과 RR test PSNR은 평가 대상·기준이 달라 같은 순위표로 비교하지 않습니다.
+
+### 이전 K6 결과 이미지
+
+다음은 **K6 전체 23탭**의 고정 장면 예시입니다. 왼쪽부터 LR MS · PAN · 예측 · 정답이며 동일 장면의 MS 패널에는 공통 대비를 적용했습니다. 현재 K4 통제 비교의 test 예시는 아직 없습니다.
+
+**QB · K6 · 시드 43**
+
+![과거 K6 QB 예측](docs/assets/a6000_followup_123/QB_interp23_k6_s43_scene_01.png)
+
+**GF2 · K6 · 시드 42**
+
+![과거 K6 GF2 예측](docs/assets/a6000_followup_123/GF2_interp23_k6_s42_scene_01.png)
+
+**WV3 · K6 · 시드 42**
+
+![과거 K6 WV3 예측](docs/assets/a6000_followup_123/WV3_interp23_k6_s42_scene_01.png)
 
 <a id="files"></a>
 
-## 실행과 파일 위치
+## 5. 실행·보고·보관 기준
 
-| 필요한 작업 | 안내 |
+| 작업 | 문서 |
 |---|---|
-| 기본 환경·기존 모델 평가 | [PAN–MS 실행](docs/operations/pan_ms.md) |
-| Kaggle 원본·게이트 병렬 실행과 결과 검증 | [Kaggle 두 모델 비교](docs/operations/kaggle_gpu_comparison.md) |
-| Windows 진행 확인·재개 | [K·손실 실행](docs/operations/controlled_suite.md) |
-| Linux GF2 반복·QB 입력·복구 | [최신 A6000 실행](docs/operations/a6000_next_6h.md) |
-| Linux 후속 검증·평가·복구 | [A6000 후속 실행](docs/operations/a6000_followup.md) |
-| 최초 QB 구조 비교 재현 | [A6000 구조 비교 실행](docs/operations/a6000_suite.md) |
-| 새 실험 기록 | [공통 보고서 양식](docs/experiments/template.md) |
+| 현재 Windows K4 손실 학습 확인 | [Windows 실행 안내](docs/operations/controlled_suite.md) |
+| 기본 환경·K4 설정·기존 가중치 평가 | [기본 실행 안내](docs/operations/pan_ms.md) |
+| 과거 Linux K6 실험 재현 | [최초 구조 비교](docs/operations/a6000_suite.md) · [후속 검증](docs/operations/a6000_followup.md) · [GF2 반복·QB 입력](docs/operations/a6000_next_6h.md) |
+| 과거 Kaggle K6 실험 재현 | [게이트 고주파](docs/operations/kaggle_gpu_comparison.md) · [MTF 보고서](docs/experiments/kaggle_mtf_pair.md) |
+| 새 실험 기록 | [8개 절 공통 양식](docs/experiments/template.md) |
 
-보고서는 `docs/experiments/실험명.md`에, 이미지·수치·가중치는 기존 `docs/assets/실험ID/` 또는 `experiments/` 경로에 보관합니다. **새 실험의 실제 best/latest 가중치도 커밋 대상에 포함**하고 에폭·SHA-256을 함께 기록합니다. 원본 데이터·공식 하위 모듈·실행 중인 학습 파일은 별도로 보존합니다.
+신규 실험은 K4 기준선과 변경 모델의 데이터·시드·학습량·환경을 맞춰 설계합니다. 학습 완료 후 실제 best/latest 원본·설정·실측 에폭 기록·전체 평가 JSON·그래프·고정 장면·해시를 보관합니다. 학습량은 실험별 실제 값으로 기록하고, 원격 복구 검증 전에는 유일한 결과를 삭제하지 않습니다.
+
+보고서는 `docs/experiments/실험명.md`, 산출물은 기존 `docs/assets/실험ID/` 또는 `experiments/` 경로에 둡니다. 과거 K6 가중치·보고서·학습 설정은 당시 조건을 유지합니다.
