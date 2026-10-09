@@ -18,6 +18,7 @@ PAN의 공간 정보와 MS의 분광 정보를 결합해 고해상도 MS를 복�
 | [QB 게이트 고주파](docs/experiments/kaggle_band_gated_hf.md) | PAN 고주파를 MS 밴드·위치별로 게이트 | Kaggle 두 모델 RR/FR 전체 평가 완료, RR 악화로 채택 보류 |
 | [23탭 후속 검증](docs/experiments/a6000_followup_123.md) | QB 3시드·확대 위치·GF2/WV3 | 평가 완료, 모든 센서에 적용하는 최종 채택은 보류 |
 | [GF2 반복·QB 입력 검증](docs/experiments/a6000_gf2_repeat_qb_input.md) | GF2 전체/QB 입력 23탭 각각 3시드 | 전체 평가 완료, GF2 PSNR/QNR 개선 반복·SAM 혼재 |
+| [Windows K4/K6 기준선](docs/experiments/windows_k_baselines.md) | 3센서 × K4/K6 동일 환경 100에폭 | 학습 완료·원본 12개 보관, validation 다수결 K4·test 평가 대기 |
 | [Windows K·손실 비교](docs/experiments/windows_controlled.md) | 같은 장치의 K4/K6 → 손실 9개 → 후보 연장 | 마지막 확인 시 학습 중, 손실 효과 미확정 |
 | [QB MTF 증강 학습](docs/experiments/kaggle_mtf_pair.md) | 원본 기준선·MTF 변화량 증강의 T4 병렬 비교 | 100에폭 완료·best/latest 보관, RR/FR 평가 대기 |
 | [QB 관측 연산자 검증](docs/experiments/observation_validation.md) | consistency 손실의 MTF·패치 위상 검증 | 구현 검증 완료, 모델 성능 평가와 구분 |
@@ -88,7 +89,7 @@ GF2 PSNR·QNR은 3/3 개선했지만 SAM은 2/3 악화했습니다. QB 입력은
 | 서버 | 마지막 확인 | 확인된 상태 | 남은 판단 |
 |---|---|---|---|
 | Linux · RTX A6000 | 2026-10-08 23:26 KST · SSH 확인 | GF2/QB 추가 6개 100에폭, 15개 모델 평가·해시 검증 완료. GPU 유휴 | FR 구현 검증·Windows 결과 확인 |
-| Windows · RTX 3060 Ti | 2026-10-08 16:24 KST · SSH 확인 | QB K4/K6 각각 100에폭, GF2 K4 49/100에폭 완료 후 학습 중 | 나머지 기준선 → 손실 9개 → 최종 후보 연장 → 평가 |
+| Windows · RTX 3060 Ti | 2026-10-09 21:11 KST · SSH 확인 | 기준선 6개 모두 100에폭 완료, K4 선택·손실 탐색 중 | 손실 9개 → 최종 후보 연장 → 평가 |
 | Kaggle · Tesla T4 ×2 | 2026-10-08 23:20 KST부터 다운로드 산출물 검증 | baseline·gate 각 100에폭, 각 RR/FR 20장 전체 평가 완료 | gate 채택 보류; 다른 seed·독립 장면 반복 필요 |
 
 Windows 계획은 총 **940에폭 직렬 실행**입니다. 각 실행 환경은 장치·환경·micro batch가 달라 자체 기준선과 비교합니다. 구조+손실 결합의 효과는 아직 미확인입니다. 진행 확인 명령과 복구 절차는 아래 실행 안내에 있습니다.
