@@ -32,6 +32,7 @@ K는 모델 내부 특징 차원이며 센서 밴드 수와 다릅니다. WV3에
 | 이전 Linux K6 구조 연구 | 저장소 보고서 기준 반복 시드·센서 평가 완료 | 후보의 K4 적용 여부 검토, 필요 시 K4 대조 검증 |
 | Kaggle K6 B1/B2 재개 | 2026-10-09 22:16 KST: 두 모델100에폭·RR/FR 각20장 확인 | RR 악화·FR 개선 혼재, 이전 실행과 비교한 통제 반복 필요 |
 | 이전 Kaggle K6 MTF 증강 | 100에폭·원본 가중치 보관 완료 | 해당 K6 실험의 RR/FR 평가 대기 |
+| 이전 Kaggle K6 SSA 융합 | 2026-10-09: A0–A3 각100에폭, 원본 가중치 보관 완료 | RR/FR 평가와 K4 적용 여부 별도 검토 |
 
 Windows 계획은 940에폭 직렬 실행이며, 위 시각은 마지막 확인 기록입니다. loss 선택은 validation으로 하고 test로 선택을 바꾸지 않습니다. GPU·환경·micro batch가 다른 서버의 결과를 하나의 반복시드 평균으로 합치지 않습니다. 실행 중인 K6 실험을 문서 결정만으로 K4로 변경하거나 재시작하지 않습니다.
 
@@ -52,10 +53,48 @@ Windows 계획은 940에폭 직렬 실행이며, 위 시각은 마지막 확인 
 | 구조 검증 | [GF2 반복·QB 입력 23탭](docs/experiments/a6000_gf2_repeat_qb_input.md) | 6 | 3시드 평가 완료, GF2 PSNR/QNR 개선·SAM 혼재 |
 | 구조 탐색 | [QB 밴드별 게이트 고주파](docs/experiments/kaggle_band_gated_hf.md) | 6 | RR 악화로 채택 보류 |
 | 증강 탐색 | [QB MTF 변화량 증강](docs/experiments/kaggle_mtf_pair.md) | 6 | 100에폭·원본 4개 보관, validation만 확인·RR/FR 대기 |
+| 구조 진단 | [QB SSA 핵심 융합 A0–A3](docs/experiments/ssa_fusion_local.md) | 6 | 각100에폭·원본 16개 보관, validation A0 최저 MSE·RR/FR 대기 |
+| 구조 탐색 | [QB 3단계 관측 복원](docs/experiments/kaggle_b1_b2.md) | 6 | B1/B2 각100에폭·RR/FR 평가 완료, RR 개선·FR 악화로 채택 보류 |
+| 구조 탐색 | [QB 단계적 Haar A0/A1](docs/experiments/kaggle_wavelet_a0_a1.md) | 6 | 각100에폭·RR/FR 평가 완료, RR 악화·학습 gate 추가 이득 없어 채택 보류 |
 | 구조 검증 | [QB B1/B2 100에폭 재개](docs/experiments/kaggle_b1_b2_100_resume.md) | 6 | RR/FR 각20장 완료, B2 RR PSNR −0.119919 dB·잠정 FR QNR +0.019136, 종합 채택 보류 |
 | 사전 검증 | [QB 관측 연산자](docs/experiments/observation_validation.md) | 해당 없음 | consistency 관측 구현 검증, 학습 성능 결과와 구분 |
 
 <a id="latest"></a>
+
+## K6 완료 결과 · QB 3단계 공유 복원 B1/B2
+
+**2026-10-09 05:59 KST 다운로드 검증 기준**, T4×2에서 B1·B2 각각100에폭과 RR20장·FR20장 전체 평가를 마쳤습니다. B2는 관측 오차를 전달하며, B1은 같은 3단계 공유 복원을 오차 없이 실행합니다. best는 validation MSE로 선택했고 B1은90에폭, B2는99에폭입니다.
+
+| 지표 | B1 | B2 | B2−B1 |
+|---|---:|---:|---:|
+| RR PSNR dB ↑ | 37.604745 | 37.720504 | +0.115759 |
+| RR SAM ° ↓ | 4.832698 | 4.814416 | -0.018282 |
+| RR MSE peak1 ↓ | 0.000205615557702 | 0.00020025117562 | -5.36438208154e-06 |
+| FR QNR ↑ · 잠정 | 0.904310 | 0.886089 | -0.018221 |
+
+**RR 개선 후보 유지, FR 포함 최종 채택 보류.** RR 지표는 전반 개선됐지만 FR 왜곡과 입력 MS 일치도는 악화했습니다. 단일seed42이며 기존 B0은 재실행하지 않았습니다. 초기 가중치·100에폭 샘플 순서 일치, 원본 best/latest4개·전체 예측80개·원본 manifest152개 해시를 검증했습니다.
+
+왼쪽부터 **LR MS · PAN · B2 예측 · 정답**입니다. 사전 고정 RR index1이며 같은 장면의 MS 패널에는 공통 대비를 적용했습니다.
+
+![B2 고정 RR 장면1](docs/assets/kaggle_b1_b2/runs/B2_QB_B2_k6_s42/RR_scene_01.png)
+
+[완료 보고서](docs/experiments/kaggle_b1_b2.md) · [한 셀 재현·복구](docs/operations/kaggle_b1_b2.md)
+
+## K6 완료 결과 · QB 단계적 Haar 복원 A0/A1
+
+2026-10-09 06:28 KST부터 다운로드 산출물을 검증했습니다. T4×2에서 A0·A1을 각각100에폭 학습하고 각 RR20장·FR20장 전체를 평가했습니다. A0는 gate=1, A1은 밴드·방향·위치별 gate입니다.
+
+| 비교 | RR ΔPSNR dB | RR ΔSAM ° | RR ΔMSE peak1 | FR ΔQNR · 잠정 |
+|---|---:|---:|---:|---:|
+| A0 − 기존 B0 | −2.799468 | +0.859341 | +2.07106e−4 | +0.022286 |
+| A1 − 기존 B0 | −3.052997 | +0.941778 | +2.33414e−4 | +0.020670 |
+| A1 − A0 | −0.253529 | +0.082437 | +2.63082e−5 | −0.001616 |
+
+**RR가 크게 악화해 현재 구조 채택을 보류합니다.** 학습 gate의 추가 이득도 확인되지 않았습니다. 이전 B0와 데이터·nominal 학습 조건·환경·순서를 사후 대조했지만 구조·MS 입력·용량과 AMP의 실제 업데이트 수는 다릅니다. 단일 시드이며 잠정 FR 상승을 HR 정확도 개선으로 해석하지 않습니다.
+
+[조건·전체 결과·가중치·검증 근거](docs/experiments/kaggle_wavelet_a0_a1.md)에 실제 best/latest4개와 예측80개를 보존했습니다. 왼쪽부터 **LR MS · PAN · A1 예측 · GT**이며 사전 고정한 RR scene1과 공통 MS 대비를 사용했습니다.
+
+![A1 고정 RR scene1](docs/assets/kaggle_wavelet_a0_a1/runs/A1_QB_s42/RR_scene_001.png)
 
 ## 4. 이전 K6 연구에서 확인한 점
 

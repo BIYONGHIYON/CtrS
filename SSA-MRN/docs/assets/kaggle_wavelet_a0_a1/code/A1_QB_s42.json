@@ -1,0 +1,174 @@
+{
+  "variant": "A1",
+  "seed": 42,
+  "epochs": 100,
+  "width": 64,
+  "blocks": 3,
+  "batch": 32,
+  "micro": 32,
+  "lr": 0.0001,
+  "amp": true,
+  "compile": false,
+  "compile_mode": "reduce-overhead",
+  "deterministic": true,
+  "adam_impl": "foreach",
+  "order_mode": "legacy_cpu_precomputed",
+  "save_every": 5,
+  "save_predictions": true,
+  "run_dir": "/kaggle/working/qb_wavelet_A0_A1_v1/runs/A1_QB_s42",
+  "data": {
+    "train": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+      "shapes": {
+        "ms": [
+          17139,
+          4,
+          16,
+          16
+        ],
+        "pan": [
+          17139,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          17139,
+          4,
+          64,
+          64
+        ],
+        "gt": [
+          17139,
+          4,
+          64,
+          64
+        ]
+      },
+      "bytes": 5194901672,
+      "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "normalization": "DN / 2047, no clipping"
+    },
+    "val": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5",
+      "shapes": {
+        "ms": [
+          1905,
+          4,
+          16,
+          16
+        ],
+        "pan": [
+          1905,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          1905,
+          4,
+          64,
+          64
+        ],
+        "gt": [
+          1905,
+          4,
+          64,
+          64
+        ]
+      },
+      "bytes": 577415336,
+      "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "normalization": "DN / 2047, no clipping"
+    },
+    "RR": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+      "shapes": {
+        "ms": [
+          20,
+          4,
+          64,
+          64
+        ],
+        "pan": [
+          20,
+          1,
+          256,
+          256
+        ],
+        "lms": [
+          20,
+          4,
+          256,
+          256
+        ],
+        "gt": [
+          20,
+          4,
+          256,
+          256
+        ]
+      },
+      "bytes": 96997376,
+      "sha256": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "normalization": "DN / 2047, no clipping"
+    },
+    "FR": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5",
+      "shapes": {
+        "ms": [
+          20,
+          4,
+          128,
+          128
+        ],
+        "pan": [
+          20,
+          1,
+          512,
+          512
+        ],
+        "lms": [
+          20,
+          4,
+          512,
+          512
+        ]
+      },
+      "bytes": 220202744,
+      "sha256": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f",
+      "normalization": "DN / 2047, no clipping"
+    }
+  },
+  "selection": {
+    "seed": 42,
+    "zero_based_scene_indices": [
+      1,
+      8,
+      11,
+      13,
+      19
+    ],
+    "protocol": "RR",
+    "tile": "whole scene",
+    "order": "ascending index",
+    "rgb_bands_zero_based": [
+      2,
+      1,
+      0
+    ],
+    "fixed_before_training": true
+  },
+  "source_hashes": {
+    "model.py": "4159ceef29e5a64fe3024d8555d5f6087aa19c4de56c99da8464c91247eb9f3d",
+    "worker.py": "a45ca31b57f9a05382eb45acd7aad3cef834ebcd3d05b59caf40222211c7c9b0",
+    "metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef"
+  },
+  "physical_gpu": 1,
+  "loss": "final HR MSE",
+  "input": "original LR MS + PAN",
+  "stages": 2,
+  "scale": 4,
+  "bands": 4,
+  "metrics_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56"
+}
