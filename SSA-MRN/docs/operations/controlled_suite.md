@@ -1,5 +1,7 @@
 # Windows · K·손실 비교 실행 안내
 
+**K 선택 완료:** 기준선 6개 validation 다수결로 K4가 확정됐으며 후속 손실 탐색은 K4를 사용합니다. [기준선 결과](../experiments/windows_k_baselines.md)
+
 [실험 계획](../experiments/windows_controlled.md) · [관측 연산자 검증](../experiments/observation_validation.md)
 
 기준선 6회 × 100에폭 → 손실 후보 9회 × 30에폭 → 최종 후보 추가 70에폭, 총 940에폭 직렬 실행입니다. 날짜가 명시된 마지막 확인 상태와 선택 기준은 위 실험 보고서에 모았습니다.
