@@ -1,0 +1,187 @@
+{
+  "winner": {
+    "name": "04_edge_w0.1_s42",
+    "config": {
+      "epochs": 30,
+      "batch_size": 32,
+      "micro_batch": 4,
+      "lr": 0.0001,
+      "sensor": "QB",
+      "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+      "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+      "seed": 42,
+      "k": 4,
+      "loss": "edge",
+      "weight": 0.1
+    },
+    "best_mse": 0.00021133237518981254
+  },
+  "candidates": [
+    {
+      "name": "02_spectral_w0.001_s42",
+      "config": {
+        "epochs": 30,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "QB",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+        "seed": 42,
+        "k": 4,
+        "loss": "spectral",
+        "weight": 0.001
+      },
+      "best_mse": 0.0002171583737221026
+    },
+    {
+      "name": "02_spectral_w0.01_s42",
+      "config": {
+        "epochs": 30,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "QB",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+        "seed": 42,
+        "k": 4,
+        "loss": "spectral",
+        "weight": 0.01
+      },
+      "best_mse": 0.00022197493056832688
+    },
+    {
+      "name": "02_spectral_w0.1_s42",
+      "config": {
+        "epochs": 30,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "QB",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+        "seed": 42,
+        "k": 4,
+        "loss": "spectral",
+        "weight": 0.1
+      },
+      "best_mse": 0.00024003213753659777
+    },
+    {
+      "name": "03_consistency_w0.001_s42",
+      "config": {
+        "epochs": 30,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "QB",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+        "seed": 42,
+        "k": 4,
+        "loss": "consistency",
+        "weight": 0.001,
+        "observation": {
+          "profile": "scripts/observation_profiles/qb.json",
+          "sha256": "76f6169d85a210a47cd19452035e2c274e7a975683f699f9982a9ecf65f92f6b"
+        }
+      },
+      "best_mse": 0.0002149793565373506
+    },
+    {
+      "name": "03_consistency_w0.01_s42",
+      "config": {
+        "epochs": 30,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "QB",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+        "seed": 42,
+        "k": 4,
+        "loss": "consistency",
+        "weight": 0.01,
+        "observation": {
+          "profile": "scripts/observation_profiles/qb.json",
+          "sha256": "76f6169d85a210a47cd19452035e2c274e7a975683f699f9982a9ecf65f92f6b"
+        }
+      },
+      "best_mse": 0.00021569570168220926
+    },
+    {
+      "name": "03_consistency_w0.1_s42",
+      "config": {
+        "epochs": 30,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "QB",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+        "seed": 42,
+        "k": 4,
+        "loss": "consistency",
+        "weight": 0.1,
+        "observation": {
+          "profile": "scripts/observation_profiles/qb.json",
+          "sha256": "76f6169d85a210a47cd19452035e2c274e7a975683f699f9982a9ecf65f92f6b"
+        }
+      },
+      "best_mse": 0.0002142370288294503
+    },
+    {
+      "name": "04_edge_w0.001_s42",
+      "config": {
+        "epochs": 30,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "QB",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+        "seed": 42,
+        "k": 4,
+        "loss": "edge",
+        "weight": 0.001
+      },
+      "best_mse": 0.00021529283627850587
+    },
+    {
+      "name": "04_edge_w0.01_s42",
+      "config": {
+        "epochs": 30,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "QB",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+        "seed": 42,
+        "k": 4,
+        "loss": "edge",
+        "weight": 0.01
+      },
+      "best_mse": 0.00021155238075315063
+    },
+    {
+      "name": "04_edge_w0.1_s42",
+      "config": {
+        "epochs": 30,
+        "batch_size": 32,
+        "micro_batch": 4,
+        "lr": 0.0001,
+        "sensor": "QB",
+        "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+        "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+        "seed": 42,
+        "k": 4,
+        "loss": "edge",
+        "weight": 0.1
+      },
+      "best_mse": 0.00021133237518981254
+    }
+  ],
+  "rule": "lowest best QB validation MSE during 30 epochs; ties by run name; no test selection"
+}
