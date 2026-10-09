@@ -31,6 +31,7 @@ K는 모델 내부 특징 차원이며 센서 밴드 수와 다릅니다. WV3에
 | Windows K4 손실 | 2026-10-09 21:11 KST: spectral·consistency 완료, edge 0.001 실행 중 | 손실 9개 선별 → 후보 30→100에폭 연장 → 기준선 비교 |
 | 이전 Linux K6 구조 연구 | 저장소 보고서 기준 반복 시드·센서 평가 완료 | 후보의 K4 적용 여부 검토, 필요 시 K4 대조 검증 |
 | 이전 Kaggle K6 MTF 증강 | 100에폭·원본 가중치 보관 완료 | 해당 K6 실험의 RR/FR 평가 대기 |
+| 이전 Kaggle K6 SSA 융합 | 2026-10-09: A0–A3 각100에폭, 원본 가중치 보관 완료 | RR/FR 평가와 K4 적용 여부 별도 검토 |
 
 Windows 계획은 940에폭 직렬 실행이며, 위 시각은 마지막 확인 기록입니다. loss 선택은 validation으로 하고 test로 선택을 바꾸지 않습니다. GPU·환경·micro batch가 다른 서버의 결과를 하나의 반복시드 평균으로 합치지 않습니다. 실행 중인 K6 실험을 문서 결정만으로 K4로 변경하거나 재시작하지 않습니다.
 
@@ -51,6 +52,7 @@ Windows 계획은 940에폭 직렬 실행이며, 위 시각은 마지막 확인 
 | 구조 검증 | [GF2 반복·QB 입력 23탭](docs/experiments/a6000_gf2_repeat_qb_input.md) | 6 | 3시드 평가 완료, GF2 PSNR/QNR 개선·SAM 혼재 |
 | 구조 탐색 | [QB 밴드별 게이트 고주파](docs/experiments/kaggle_band_gated_hf.md) | 6 | RR 악화로 채택 보류 |
 | 증강 탐색 | [QB MTF 변화량 증강](docs/experiments/kaggle_mtf_pair.md) | 6 | 100에폭·원본 4개 보관, validation만 확인·RR/FR 대기 |
+| 구조 진단 | [QB SSA 핵심 융합 A0–A3](docs/experiments/ssa_fusion_local.md) | 6 | 각100에폭·원본 16개 보관, validation A0 최저 MSE·RR/FR 대기 |
 | 사전 검증 | [QB 관측 연산자](docs/experiments/observation_validation.md) | 해당 없음 | consistency 관측 구현 검증, 학습 성능 결과와 구분 |
 
 <a id="latest"></a>
