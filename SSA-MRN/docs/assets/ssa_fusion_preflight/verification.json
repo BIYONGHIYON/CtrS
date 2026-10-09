@@ -1,0 +1,281 @@
+{
+  "scope": "synthetic engineering checks; no research performance claim",
+  "device": "cpu",
+  "torch": "2.14.1",
+  "models": {
+    "A0": {
+      "parameters_total": 431046,
+      "shapes": [
+        {
+          "shape": [
+            32,
+            48
+          ],
+          "single_forward_seconds": 0.030594166979426518,
+          "peak_cuda_bytes": null
+        },
+        {
+          "shape": [
+            64,
+            64
+          ],
+          "single_forward_seconds": 0.0127219169808086,
+          "peak_cuda_bytes": null
+        },
+        {
+          "shape": [
+            256,
+            256
+          ],
+          "single_forward_seconds": 0.3893627089855727,
+          "peak_cuda_bytes": null
+        },
+        {
+          "shape": [
+            512,
+            512
+          ],
+          "single_forward_seconds": 2.9827292500121985,
+          "peak_cuda_bytes": null
+        }
+      ],
+      "full_vs_crop_interior_mae": 0.003440477652475238,
+      "overlapping_tiles_interior_mae": [
+        0.006136399693787098,
+        0.005596423987299204,
+        0.0057950448244810104,
+        0.005725949537009001
+      ],
+      "ssa_block_crop_interior_max_abs": 0.000245372619247064,
+      "constant_feature_size_probe": [
+        {
+          "size": 64,
+          "center_output": 0.000244140625,
+          "weight_mean": 0.000244140625
+        },
+        {
+          "size": 256,
+          "center_output": 1.52587890625e-05,
+          "weight_mean": 1.52587890625e-05
+        },
+        {
+          "size": 512,
+          "center_output": 3.814697265625e-06,
+          "weight_mean": 3.814697265625e-06
+        }
+      ]
+    },
+    "A1": {
+      "parameters_total": 431046,
+      "shapes": [
+        {
+          "shape": [
+            32,
+            48
+          ],
+          "single_forward_seconds": 0.007830291986465454,
+          "peak_cuda_bytes": null
+        },
+        {
+          "shape": [
+            64,
+            64
+          ],
+          "single_forward_seconds": 0.015509249991737306,
+          "peak_cuda_bytes": null
+        },
+        {
+          "shape": [
+            256,
+            256
+          ],
+          "single_forward_seconds": 0.3705205830046907,
+          "peak_cuda_bytes": null
+        },
+        {
+          "shape": [
+            512,
+            512
+          ],
+          "single_forward_seconds": 1.762741083977744,
+          "peak_cuda_bytes": null
+        }
+      ],
+      "full_vs_crop_interior_mae": 0.0034405409824103117,
+      "overlapping_tiles_interior_mae": [
+        0.006136281415820122,
+        0.00559635367244482,
+        0.005794997792690992,
+        0.005725956987589598
+      ],
+      "ssa_block_crop_interior_max_abs": 0.00021499491413123906,
+      "constant_feature_size_probe": [
+        {
+          "size": 64,
+          "center_output": 0.000244140625,
+          "weight_mean": 0.000244140625
+        },
+        {
+          "size": 256,
+          "center_output": 1.52587890625e-05,
+          "weight_mean": 1.52587890625e-05
+        },
+        {
+          "size": 512,
+          "center_output": 3.814697265625e-06,
+          "weight_mean": 3.814697265625e-06
+        }
+      ]
+    },
+    "A2": {
+      "parameters_total": 431046,
+      "shapes": [
+        {
+          "shape": [
+            32,
+            48
+          ],
+          "single_forward_seconds": 0.007509291986934841,
+          "peak_cuda_bytes": null
+        },
+        {
+          "shape": [
+            64,
+            64
+          ],
+          "single_forward_seconds": 0.008417250006459653,
+          "peak_cuda_bytes": null
+        },
+        {
+          "shape": [
+            256,
+            256
+          ],
+          "single_forward_seconds": 0.26705162500729784,
+          "peak_cuda_bytes": null
+        },
+        {
+          "shape": [
+            512,
+            512
+          ],
+          "single_forward_seconds": 1.524994041013997,
+          "peak_cuda_bytes": null
+        }
+      ],
+      "full_vs_crop_interior_mae": 0.003980864305049181,
+      "overlapping_tiles_interior_mae": [
+        0.00603873748332262,
+        0.005633348133414984,
+        0.005985403433442116,
+        0.005819996818900108
+      ],
+      "ssa_block_crop_interior_max_abs": 4.470348358154297e-08,
+      "constant_feature_size_probe": [
+        {
+          "size": 64,
+          "center_output": 0.7310585975646973,
+          "weight_mean": 0.7310584187507629
+        },
+        {
+          "size": 256,
+          "center_output": 0.7310585975646973,
+          "weight_mean": 0.7310583591461182
+        },
+        {
+          "size": 512,
+          "center_output": 0.7310585975646973,
+          "weight_mean": 0.7310582995414734
+        }
+      ]
+    },
+    "A3": {
+      "parameters_total": 431550,
+      "shapes": [
+        {
+          "shape": [
+            32,
+            48
+          ],
+          "single_forward_seconds": 0.019808499986538664,
+          "peak_cuda_bytes": null
+        },
+        {
+          "shape": [
+            64,
+            64
+          ],
+          "single_forward_seconds": 0.01769062498351559,
+          "peak_cuda_bytes": null
+        },
+        {
+          "shape": [
+            256,
+            256
+          ],
+          "single_forward_seconds": 0.38521437501185574,
+          "peak_cuda_bytes": null
+        },
+        {
+          "shape": [
+            512,
+            512
+          ],
+          "single_forward_seconds": 1.8509617919917218,
+          "peak_cuda_bytes": null
+        }
+      ],
+      "full_vs_crop_interior_mae": 0.0036689999978989363,
+      "overlapping_tiles_interior_mae": [
+        0.0061575984582304955,
+        0.005610328167676926,
+        0.005814381875097752,
+        0.005678698420524597
+      ],
+      "ssa_block_crop_interior_max_abs": 5.960464477539063e-08,
+      "constant_feature_size_probe": [
+        {
+          "size": 64,
+          "center_output": 0.04688902571797371,
+          "weight_mean": 0.03999999910593033
+        },
+        {
+          "size": 256,
+          "center_output": 0.04688902571797371,
+          "weight_mean": 0.03999999910593033
+        },
+        {
+          "size": 512,
+          "center_output": 0.04688902571797371,
+          "weight_mean": 0.03999999165534973
+        }
+      ]
+    }
+  },
+  "resume": {
+    "A0": {
+      "mid_epoch_exact": true,
+      "mismatch_rejected": true,
+      "corrupted_latest_fallback": true
+    },
+    "A1": {
+      "mid_epoch_exact": true,
+      "mismatch_rejected": true,
+      "corrupted_latest_fallback": true
+    },
+    "A2": {
+      "mid_epoch_exact": true,
+      "mismatch_rejected": true,
+      "corrupted_latest_fallback": true
+    },
+    "A3": {
+      "mid_epoch_exact": true,
+      "mismatch_rejected": true,
+      "corrupted_latest_fallback": true
+    }
+  },
+  "source_sha256": {
+    "src/ssamrn/models/ssa_fusion.py": "ec160d435e624aaaeec7d7f6ff8b02da7944007934af6bdd043a5ff7c2538839",
+    "scripts/kaggle_ssa_fusion_cell.py": "08ce0e6f41e03acb2330ccef64ee35601da0229350e93a202e1ca4112420d49f"
+  }
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "variant": "B2",
+    "seed": 42,
+    "B1_epoch_seconds": 9346.513111328004,
+    "B2_epoch_seconds": 11330.382506960985,
+    "epoch_time_ratio_B1_over_B2": 0.8249071119695949,
+    "common_core_initialization_verified": true,
+    "epoch_sample_order_verified": true,
+    "timing_scope": "training + validation; checkpoint/bootstrap/test excluded",
+    "metric_delta_B2_minus_B1": {
+      "RR": {
+        "SAM": -0.018282408771923997,
+        "ERGAS": -0.053797405001653864,
+        "PSNR": 0.1157588975378232,
+        "SCC": 0.0009773064219460448,
+        "Q2n": 0.0020307118119385903,
+        "MSE_peak1": -5.364382081538932e-06,
+        "PSNR_sensor_peak": 0.1157588975378232,
+        "MS_consistency_MSE_peak1_interior": -1.2917917473487267e-07,
+        "inference_ms": 1.708601951599121
+      },
+      "FR": {
+        "D_lambda": 0.004487814012771596,
+        "D_s": 0.014507195027034153,
+        "QNR": -0.018221344245799465,
+        "MS_consistency_MSE_peak1_interior": 2.9017501583439303e-05,
+        "inference_ms": 47.74614715576175
+      }
+    }
+  }
+]

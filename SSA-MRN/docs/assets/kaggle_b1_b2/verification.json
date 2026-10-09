@@ -1,0 +1,66 @@
+{
+  "verified_at": "2026-10-09 05:59 KST",
+  "source_artifact_manifest_count": 152,
+  "retained_source_files": 142,
+  "excluded_bytecode_files": [
+    "code/__pycache__/B2_models.cpython-313.pyc",
+    "code/CtrS/SSA-MRN/references/upstream/__pycache__/network.cpython-313.pyc",
+    "code/CtrS/SSA-MRN/src/ssamrn/__pycache__/metrics.cpython-313.pyc",
+    "code/CtrS/SSA-MRN/src/ssamrn/__pycache__/observation.cpython-313.pyc",
+    "code/CtrS/SSA-MRN/src/ssamrn/__pycache__/__init__.cpython-313.pyc",
+    "code/CtrS/SSA-MRN/src/ssamrn/data/__pycache__/pancollection.cpython-313.pyc",
+    "code/CtrS/SSA-MRN/src/ssamrn/data/__pycache__/__init__.cpython-313.pyc",
+    "code/CtrS/SSA-MRN/src/ssamrn/models/__pycache__/interp23.cpython-313.pyc",
+    "code/CtrS/SSA-MRN/src/ssamrn/models/__pycache__/pan_variants.cpython-313.pyc",
+    "code/CtrS/SSA-MRN/src/ssamrn/models/__pycache__/ssa_mrn.cpython-313.pyc",
+    "code/CtrS/SSA-MRN/src/ssamrn/models/__pycache__/__init__.cpython-313.pyc"
+  ],
+  "all_source_manifest_hashes_verified": true,
+  "all_retained_copy_hashes_verified": true,
+  "complete_epochs_each": 100,
+  "RR_scenes_each": 20,
+  "FR_scenes_each": 20,
+  "weights": [
+    {
+      "run": "B1_QB_B1_k6_s42",
+      "kind": "best",
+      "epoch": 90,
+      "path": "runs/B1_QB_B1_k6_s42/best.pt",
+      "bytes": 5617133,
+      "sha256": "e89c367db3300db97672ff5fac9cd3ed0f19553800679e68028fdca01e875b44"
+    },
+    {
+      "run": "B1_QB_B1_k6_s42",
+      "kind": "latest",
+      "epoch": 100,
+      "path": "runs/B1_QB_B1_k6_s42/latest.pt",
+      "bytes": 5620811,
+      "sha256": "587c30f3fbf9e1ff068ef5c6b0845aedc3e45b735c8a42449ab8c3df19ed340f"
+    },
+    {
+      "run": "B2_QB_B2_k6_s42",
+      "kind": "best",
+      "epoch": 99,
+      "path": "runs/B2_QB_B2_k6_s42/best.pt",
+      "bytes": 5619245,
+      "sha256": "352648c01a08c621ae09a81c00e348ab6607a6afe93d413b89006d25d73420ba"
+    },
+    {
+      "run": "B2_QB_B2_k6_s42",
+      "kind": "latest",
+      "epoch": 100,
+      "path": "runs/B2_QB_B2_k6_s42/latest.pt",
+      "bytes": 5620811,
+      "sha256": "6bef8460631908043dca5071a6bba898bbe8b2698b34ccb38f35e67c26f5bc6f"
+    }
+  ],
+  "checkpoint_zip_crc_verified": true,
+  "predictions_zip_crc_verified": true,
+  "core_initialization_matches": true,
+  "epoch_sample_order_matches": true,
+  "source_data_hashes_match_prior_B0": true,
+  "code_commit": "f0c97568e9285ea671d33b734ca43f27a17234cd",
+  "actual_worker_sha256": "9a378c448131859727875e5ab28f7494de4f1d27c57cb5be1147a2f85ce9c479",
+  "actual_model_sha256": "16a5bcc54acb55654a5d1a425e1c35208b5c5f98b285a294a212004bb035b7d3",
+  "scope": "Downloaded artifacts inspected; no local retraining or H5 metric rerun; no local torch state_dict deserialization"
+}
