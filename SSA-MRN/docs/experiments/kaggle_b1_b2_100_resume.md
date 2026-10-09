@@ -137,6 +137,8 @@ B0 원본 단일 출력 모델은 이번 셀에서 학습·평가하지 않았�
 
 [검증 기록](../assets/kaggle_b1_b2_100_resume/verification.json) · [원본 manifest](../assets/kaggle_b1_b2_100_resume/artifact_manifest.json) · [실제 보관 manifest](../assets/kaggle_b1_b2_100_resume/repository_manifest.json) · [compact epochs](../assets/kaggle_b1_b2_100_resume/compact_epochs.json) · [중간 복구본](../assets/kaggle_b1_b2_100_resume/recovery_200/) · [검증 코드](../../scripts/verify_b1_b2_100_results.py) · [재개 절차](../operations/kaggle_b1_b2_100_resume.md)
 
+원격 보관은 최초 결과 commit `689303c1769a5819f9c9f729ec9705635a9990df`에서 GitHub tree의 근거199개 blob ID·크기를 대조하고, **가중치10개를 GitHub에서 다시 내려받아 SHA-256 일치**를 확인했다. 해당 검증 시점은 verification의 remote_verification에 기록했다. 이후 추가 커밋은 이 검증 기록·문서·보관 manifest만 추가한다.
+
 최종 manifest153개 파일 크기·SHA-256, checkpoint ZIP CRC·metadata epoch, best 선택, 공통 core 초기화·100에폭 순서, 장면별 RR/FR 평균, 전체80개 NPZ의 shape·유한값, PNG10개의 1024×296 4패널 형태를 확인했다. 중간 latest 원본 해시와 가져온 초반 history도 대조했다. PyTorch tensor 로딩·실제 forward·원본 H5에 대한 GT 지표 재산출은 하지 않았다. 다운로드 폴더·이전 실험 폴더는 삭제하지 않는다.
 
 ## 8. 한계와 다음 판단
