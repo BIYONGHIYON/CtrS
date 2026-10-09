@@ -1,0 +1,113 @@
+{
+  "parameters_total": 431046,
+  "parameters_trainable": 431046,
+  "config": {
+    "protocol": "qb_ssa_fusion_v1",
+    "pair": [
+      "A2",
+      "A3"
+    ],
+    "window": 5,
+    "chunk_rows": 32,
+    "seed": 46,
+    "k": 6,
+    "epochs": 100,
+    "batch_size": 32,
+    "micro_batch": 16,
+    "lr": 0.0001,
+    "amp": true,
+    "deterministic": false,
+    "smoke": false,
+    "augmentation": "none",
+    "data": {
+      "train": {
+        "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+        "bytes": 5194901672,
+        "shapes": {
+          "gt": [
+            17139,
+            4,
+            64,
+            64
+          ],
+          "pan": [
+            17139,
+            1,
+            64,
+            64
+          ],
+          "lms": [
+            17139,
+            4,
+            64,
+            64
+          ],
+          "ms": [
+            17139,
+            4,
+            16,
+            16
+          ]
+        }
+      },
+      "val": {
+        "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+        "bytes": 577415336,
+        "shapes": {
+          "gt": [
+            1905,
+            4,
+            64,
+            64
+          ],
+          "pan": [
+            1905,
+            1,
+            64,
+            64
+          ],
+          "lms": [
+            1905,
+            4,
+            64,
+            64
+          ],
+          "ms": [
+            1905,
+            4,
+            16,
+            16
+          ]
+        }
+      }
+    },
+    "code": {
+      "SSA-MRN/src/ssamrn/models/ssa_mrn.py": "c140c1fee05a7958b924c6058e14b31daab7ded51c1aae7122c3287c7afd8891",
+      "SSA-MRN/src/ssamrn/models/ssa_fusion.py": "ec160d435e624aaaeec7d7f6ff8b02da7944007934af6bdd043a5ff7c2538839",
+      "SSA-MRN/references/upstream/network.py": "b263d99eb88715a8835ca44c33f6820eb02ee7a8314e31982e73fbb5c8bc1816",
+      "pair_worker.py": "ef1b5412ce443136702761d5bd2c0a8e89456a28e68cdbc0a8ee3a2944368b3a"
+    },
+    "torch": "2.11.0+cu128",
+    "cuda": "12.8",
+    "fingerprint": "3a93986e4e6a285d9c28695fd25f5f3444d2f12d08de48aa72e7b32a87c6f7d6",
+    "accepted_fingerprints": [
+      "3a93986e4e6a285d9c28695fd25f5f3444d2f12d08de48aa72e7b32a87c6f7d6"
+    ],
+    "gpu_resident": true,
+    "output": "/kaggle/working/ssa_fusion_A2_A3_qb_k6_s46",
+    "cache": "/tmp/ctrs_qb_cache_3a93986e4e6a285d",
+    "code_root": "/tmp/ssa_fusion_A2_A3_qb_k6_s46_code",
+    "workers": 2,
+    "checkpoint_steps": 200,
+    "epochs_this_session": 100,
+    "deadline": 1791580297.3166382,
+    "input_paths": {
+      "train": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+      "val": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5"
+    },
+    "base_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56"
+  },
+  "initial_model_sha256": "d71b563ec06515cf062b63e5b0327268c80d09a41617f4dc85dfa40d72d92cbd",
+  "torch": "2.11.0+cu128",
+  "gpu": "Tesla T4"
+}

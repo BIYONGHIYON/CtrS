@@ -51,6 +51,14 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 
 ![MTF 학습·validation 곡선](SSA-MRN/docs/assets/kaggle_mtf_pair_20261009/validation_curves.png)
 
+## 최근 학습 완료 · SSA 핵심 융합 A0–A3
+
+QB K6·seed46에서 네 구조를 각100에폭 학습하고 원본 체크포인트·이력·설정·해시를 보관했습니다. validation 최저 MSE는 A0 **0.000171331**, A1 0.000172063, A2 0.000171955, A3 0.000171885입니다. 이 단일 시드에서는 기존 A0가 가장 낮았고, RR/FR 평가 전이므로 구조 채택을 보류합니다. [구조·전체 지표·가중치·보관 검증](SSA-MRN/docs/experiments/ssa_fusion_local.md).
+
+![SSA A0/A1 학습·validation 곡선](SSA-MRN/docs/assets/ssa_fusion_A0_A1_qb_k6_s46/validation_curves.png)
+
+![SSA A2/A3 학습·validation 곡선](SSA-MRN/docs/assets/ssa_fusion_A2_A3_qb_k6_s46/validation_curves.png)
+
 ## 실험 바로 보기
 
 각 보고서 한 페이지에서 **조건·결과·비교·그래프·이미지·가중치**를 볼 수 있습니다.
@@ -65,6 +73,7 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 | [GF2 반복·QB 입력 검증](SSA-MRN/docs/experiments/a6000_gf2_repeat_qb_input.md) | GF2 전체/QB 입력 23탭 각각 3시드 | 전체 평가 완료, GF2 PSNR/QNR 개선 반복·SAM 혼재 |
 | [Windows K·손실 비교](SSA-MRN/docs/experiments/windows_controlled.md) | 같은 장치의 K4/K6 → 손실 9개 → 후보 연장 | 마지막 확인 시 학습 중, 손실 효과 미확정 |
 | [QB MTF 증강 학습](SSA-MRN/docs/experiments/kaggle_mtf_pair.md) | 원본 기준선·MTF 변화량 증강의 T4 병렬 비교 | 100에폭 완료·best/latest 보관, RR/FR 평가 대기 |
+| [SSA 핵심 융합 A0–A3](SSA-MRN/docs/experiments/ssa_fusion_local.md) | 전치 제거·sigmoid·5×5 국소 교차 어텐션 비교 | 각100에폭 완료·네 모델 가중치 보관; RR/FR 평가 전 |
 | [QB 관측 연산자 검증](SSA-MRN/docs/experiments/observation_validation.md) | consistency 손실의 MTF·패치 위상 검증 | 구현 검증 완료, 모델 성능 평가와 구분 |
 
 ## 연구와 실행 안내
