@@ -1,0 +1,178 @@
+{
+  "baseline_id": "github_QB_baseline_k6_s42",
+  "baseline_source": "SSA-MRN/docs/assets/kaggle_band_gated_hf/results.json",
+  "baseline_source_sha256": "364c13c6efdb5ddc99a02dcd2d4f143347cb78b9e017bf173476d7b640514682",
+  "baseline_source_commit": "ac5d8467e6b1e5fdbe72518d81a590c448120305",
+  "baseline_definition": "Original SSA-MRN single-output structure, K6 and MSE; execution optimizations only, not the best combined research variant.",
+  "scope": "Historical Kaggle B0 versus current B1/B2. B0 was not newly trained or evaluated in this suite. Not a controlled three-arm rerun or published-paper numbers.",
+  "models": {
+    "B0": {
+      "run_id": "github_QB_baseline_k6_s42",
+      "best_epoch": 100,
+      "best_validation_mse": 0.00017308905080426484,
+      "checkpoints": {
+        "best": {
+          "sha256": "40cee3e0bd1eb085b2fc3511df795ec28333fa8b5d761227b2049cc84761854c",
+          "bytes": 5586185
+        },
+        "latest": {
+          "sha256": "228b334c9c2c8dae58aec0e757e7490a3e3709fb5a2a742285ae0391a29e08c0",
+          "bytes": 5587595
+        }
+      },
+      "metrics": {
+        "RR": {
+          "SAM": 4.955442644735034,
+          "ERGAS": 4.117560623875705,
+          "PSNR": 37.45387937776282,
+          "SCC": 0.9770157545380768,
+          "Q2n": 0.9243940024000835,
+          "MSE_peak1": 0.0002151111268957207,
+          "PSNR_sensor_peak": 37.45387937776282
+        },
+        "FR": {
+          "D_lambda": 0.041631319771413475,
+          "D_s": 0.04076465670786119,
+          "QNR": 0.9197563920677817
+        }
+      },
+      "delta_from_historical_B0": {
+        "RR": {
+          "SAM": 0.0,
+          "ERGAS": 0.0,
+          "PSNR": 0.0,
+          "SCC": 0.0,
+          "Q2n": 0.0,
+          "MSE_peak1": 0.0,
+          "PSNR_sensor_peak": 0.0
+        },
+        "FR": {
+          "D_lambda": 0.0,
+          "D_s": 0.0,
+          "QNR": 0.0
+        }
+      }
+    },
+    "B1": {
+      "run_id": "B1_QB_B1_k6_s42",
+      "best_epoch": 95,
+      "best_validation_mse": 0.00016338829300366342,
+      "checkpoints": {
+        "best": {
+          "sha256": "a5a397058d0e8fee46259dccf02e446c16186c0a2d900d3888ed874851f4ab2e",
+          "bytes": 5620013
+        },
+        "latest": {
+          "sha256": "6646d1e7b58392a39905d81b1cef737acc91252087912476d21eb7a3a67b2e0e",
+          "bytes": 5622603
+        }
+      },
+      "metrics": {
+        "RR": {
+          "SAM": 4.822219011619271,
+          "ERGAS": 3.989427785626283,
+          "PSNR": 37.69042061791462,
+          "SCC": 0.9787135500884041,
+          "Q2n": 0.9248776356349662,
+          "MSE_peak1": 0.00020143506328618266,
+          "PSNR_sensor_peak": 37.69042061791462,
+          "MS_consistency_MSE_peak1_interior": 1.917111288207707e-06,
+          "inference_ms": 73.06347942352295
+        },
+        "FR": {
+          "D_lambda": 0.044631925591889596,
+          "D_s": 0.07593486721832945,
+          "QNR": 0.8827078694042194,
+          "MS_consistency_MSE_peak1_interior": 0.0001667141947109485,
+          "inference_ms": 215.38977127075196
+        }
+      },
+      "delta_from_historical_B0": {
+        "RR": {
+          "SAM": -0.13322363311576257,
+          "ERGAS": -0.1281328382494218,
+          "PSNR": 0.23654124015180145,
+          "SCC": 0.0016977955503273412,
+          "Q2n": 0.0004836332348826522,
+          "MSE_peak1": -1.367606360953803e-05,
+          "PSNR_sensor_peak": 0.23654124015180145
+        },
+        "FR": {
+          "D_lambda": 0.003000605820476121,
+          "D_s": 0.035170210510468265,
+          "QNR": -0.03704852266356229
+        }
+      }
+    },
+    "B2": {
+      "run_id": "B2_QB_B2_k6_s42",
+      "best_epoch": 96,
+      "best_validation_mse": 0.00016357308777514845,
+      "checkpoints": {
+        "best": {
+          "sha256": "915ac71b6c10f942f8db249e8b9ac919f80e00cc07f1f437f465b38a8ba2b63c",
+          "bytes": 5620269
+        },
+        "latest": {
+          "sha256": "c7aa2b8fb21e6f7d6ba8dad25105fe1e546a41feb85a8904fc032d764c1e2571",
+          "bytes": 5622603
+        }
+      },
+      "metrics": {
+        "RR": {
+          "SAM": 4.831555822622462,
+          "ERGAS": 4.047418196430732,
+          "PSNR": 37.57050186740667,
+          "SCC": 0.977766662093338,
+          "Q2n": 0.9239306079738373,
+          "MSE_peak1": 0.00020622091889520755,
+          "PSNR_sensor_peak": 37.57050186740667,
+          "MS_consistency_MSE_peak1_interior": 1.7779351011881772e-06,
+          "inference_ms": 72.77850131988525
+        },
+        "FR": {
+          "D_lambda": 0.03783759196611896,
+          "D_s": 0.06265293899095786,
+          "QNR": 0.9018442861174127,
+          "MS_consistency_MSE_peak1_interior": 0.0001328055925114313,
+          "inference_ms": 226.55952377319335
+        }
+      },
+      "delta_from_historical_B0": {
+        "RR": {
+          "SAM": -0.12388682211257152,
+          "ERGAS": -0.07014242744497334,
+          "PSNR": 0.11662248964385213,
+          "SCC": 0.0007509075552611932,
+          "Q2n": -0.00046339442624621086,
+          "MSE_peak1": -8.89020800051314e-06,
+          "PSNR_sensor_peak": 0.11662248964385213
+        },
+        "FR": {
+          "D_lambda": -0.0037937278052945153,
+          "D_s": 0.021888282283096673,
+          "QNR": -0.01791210595036896
+        }
+      }
+    }
+  },
+  "data_hashes_match": true,
+  "shared_settings_match": {
+    "sensor": "QB",
+    "k": 6,
+    "seed": 42,
+    "epochs": 100,
+    "batch_size": 32,
+    "micro_batch": 32,
+    "lr": 0.0001,
+    "amp": true,
+    "channels_last": true
+  },
+  "limitations": [
+    "Separate sessions and CPU/GPU permutation generation differ.",
+    "B0 Adam foreach=True; B1/B2 fused=True, and B2 uses checked FFT sensor observation.",
+    "No claim of identical initial tensors or sample order between B0 and B1/B2.",
+    "Current study default K4 is separate; these archived models all use K6.",
+    "FR QNR/Ds and Q2n/SCC MATLAB parity is not established."
+  ]
+}
