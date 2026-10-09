@@ -9,6 +9,7 @@
 **2026-10-09 현재 연구의 기본 설정은 K=4로 확정했습니다.** Windows 동일 환경에서 QB·GF2·WV3의 K4/K6를 각각 100에폭 학습하고, 센서별 best validation MSE 다수결 **2:1**로 선택했습니다. 앞으로 별도 승인된 K 비교가 아닌 신규 기준선·개선 비교는 K4를 기준으로 설계합니다.
 
 K는 모델 내부 특징 차원이며 센서 밴드 수와 다릅니다. WV3에서는 K6가 낮았으므로 이 결정은 모든 센서·test 지표에서 K4가 우세하다는 뜻은 아닙니다. K 선택에는 test를 사용하지 않았습니다.
+
 | 센서 | K4 best validation MSE ↓ | K6 best validation MSE ↓ | 선택 |
 |---|---:|---:|---|
 | QB | 0.000171861819 | 0.000172164394 | K4 |
@@ -27,6 +28,14 @@ K는 모델 내부 특징 차원이며 센서 밴드 수와 다릅니다. WV3에
 
 이전 K6 구조·증강 연구는 후보와 한계를 파악한 근거입니다. 그 결과를 K4 성능으로 바꾸어 해석하지 않으며, K4에 적용할 후보는 K4 기준선과 다시 비교해야 합니다.
 
+## 최근 학습 완료 · SSA 핵심 융합 A0–A3
+
+QB K6·seed46에서 네 구조를 각100에폭 학습하고 원본 체크포인트·이력·설정·해시를 보관했습니다. validation 최저 MSE는 A0 **0.000171331**, A1 0.000172063, A2 0.000171955, A3 0.000171885입니다. 이 단일 시드에서는 기존 A0가 가장 낮았고, RR/FR 평가 전이므로 구조 채택을 보류합니다. [구조·전체 지표·가중치·보관 검증](SSA-MRN/docs/experiments/ssa_fusion_local.md).
+
+![SSA A0/A1 학습·validation 곡선](SSA-MRN/docs/assets/ssa_fusion_A0_A1_qb_k6_s46/validation_curves.png)
+
+![SSA A2/A3 학습·validation 곡선](SSA-MRN/docs/assets/ssa_fusion_A2_A3_qb_k6_s46/validation_curves.png)
+
 ## 실험 바로 보기
 
 각 보고서에서 **목적·조건·수치·기준선 대비·그래프·이미지·가중치·판단**을 함께 볼 수 있습니다.
@@ -42,6 +51,7 @@ K는 모델 내부 특징 차원이며 센서 밴드 수와 다릅니다. WV3에
 | 구조 검증 | [GF2 반복·QB 입력 23탭](SSA-MRN/docs/experiments/a6000_gf2_repeat_qb_input.md) | 6 | 3시드 평가 완료, GF2 PSNR/QNR 개선·SAM 혼재 |
 | 구조 탐색 | [QB 밴드별 게이트 고주파](SSA-MRN/docs/experiments/kaggle_band_gated_hf.md) | 6 | RR 악화로 채택 보류 |
 | 증강 탐색 | [QB MTF 변화량 증강](SSA-MRN/docs/experiments/kaggle_mtf_pair.md) | 6 | 100에폭·원본 4개 보관, validation만 확인·RR/FR 대기 |
+| 구조 진단 | [QB SSA 핵심 융합 A0–A3](SSA-MRN/docs/experiments/ssa_fusion_local.md) | 6 | 각100에폭·원본 16개 보관, validation A0 최저 MSE·RR/FR 대기 |
 | 사전 검증 | [QB 관측 연산자](SSA-MRN/docs/experiments/observation_validation.md) | 해당 없음 | consistency 관측 구현 검증, 학습 성능 결과와 구분 |
 
 ## 문서와 실행 안내
