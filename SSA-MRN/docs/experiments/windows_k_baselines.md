@@ -83,7 +83,7 @@ RR/FR PSNR·SAM·test MSE 차이는 **평가 전이므로 N/A**입니다. valida
 
 [파일별 크기·SHA-256·체크포인트 검증 기록](../assets/windows_k_baselines/manifest.json) · [가중치와 기록 검증 스크립트](../../scripts/verify_windows_k_baselines.py)
 
-서버에서 CPU `torch.load(weights_only=True)`로 12개 모두 설정·에폭·최저 validation MSE·원본 상태 키를 확인했고, 내려받은 46개 파일을 서버 SHA-256과 대조했습니다. 코드·데이터·공용 환경을 수정하지 않았습니다. 원본 서버 결과와 `C:\CtrS-controlled-suite` 인계 경로는 유지합니다. 원격 푸시 후 복구 검증은 별도 기록으로 남깁니다.
+서버에서 CPU `torch.load(weights_only=True)`로 12개 모두 설정·에폭·최저 validation MSE·원본 상태 키를 확인했고, 내려받은 46개 파일을 서버 SHA-256과 대조했습니다. 코드·데이터·공용 환경을 수정하지 않았습니다. 원본 서버 결과와 `C:\CtrS-controlled-suite` 인계 경로는 유지합니다. GitHub `e107963cb3d4f25f77f812f8c1ed16245c04c065` 커밋을 새 폴더에 복제해 원본 가중치 12개와 보관 파일 50개를 다시 내려받았으며, 모든 바이트·SHA-256이 일치했습니다. [원격 복구 검증 기록](../assets/windows_k_baselines/remote_verification.json)에 방법·시각·파일별 해시를 남겼습니다.
 
 ## 8. 한계와 다음 판단
 
