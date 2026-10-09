@@ -1,0 +1,162 @@
+{
+  "verified_manifest_files": 153,
+  "runs": {
+    "B1_QB_B1_k6_s42": {
+      "completed_epochs": 100,
+      "best_epoch": 95,
+      "best_validation_mse": 0.00016338829300366342,
+      "checkpoints": {
+        "best": {
+          "epoch": 95,
+          "sha256": "a5a397058d0e8fee46259dccf02e446c16186c0a2d900d3888ed874851f4ab2e",
+          "bytes": 5620013
+        },
+        "latest": {
+          "epoch": 100,
+          "sha256": "6646d1e7b58392a39905d81b1cef737acc91252087912476d21eb7a3a67b2e0e",
+          "bytes": 5622603
+        }
+      },
+      "imported_epochs": 12,
+      "source_checkpoint_sha256": "614b2d70536eab2b0b112fff7877cf87ea3b5e611a2bc63303ea9cd215925a4d",
+      "RR": {
+        "SAM": 4.822219011619271,
+        "ERGAS": 3.989427785626283,
+        "PSNR": 37.69042061791462,
+        "SCC": 0.9787135500884041,
+        "Q2n": 0.9248776356349662,
+        "MSE_peak1": 0.00020143506328618266,
+        "PSNR_sensor_peak": 37.69042061791462,
+        "MS_consistency_MSE_peak1_interior": 1.917111288207707e-06,
+        "inference_ms": 73.06347942352295
+      },
+      "FR": {
+        "D_lambda": 0.044631925591889596,
+        "D_s": 0.07593486721832945,
+        "QNR": 0.8827078694042194,
+        "MS_consistency_MSE_peak1_interior": 0.0001667141947109485,
+        "inference_ms": 215.38977127075196
+      },
+      "prediction_arrays": 40,
+      "epoch_seconds": 8399.15061101,
+      "this_session": {
+        "training_wall_seconds_this_session": 7500.881412056,
+        "total_wall_seconds_this_session": 7521.620893026,
+        "scope": "cache load + benchmark + completed/replayed training + checkpoint saves + test; resumed session is not whole-experiment time"
+      }
+    },
+    "B2_QB_B2_k6_s42": {
+      "completed_epochs": 100,
+      "best_epoch": 96,
+      "best_validation_mse": 0.00016357308777514845,
+      "checkpoints": {
+        "best": {
+          "epoch": 96,
+          "sha256": "915ac71b6c10f942f8db249e8b9ac919f80e00cc07f1f437f465b38a8ba2b63c",
+          "bytes": 5620269
+        },
+        "latest": {
+          "epoch": 100,
+          "sha256": "c7aa2b8fb21e6f7d6ba8dad25105fe1e546a41feb85a8904fc032d764c1e2571",
+          "bytes": 5622603
+        }
+      },
+      "imported_epochs": 11,
+      "source_checkpoint_sha256": "265b8fc448dc09e1581bb4dc9d16ec0fdd1e8cacdc287da30d729e83c19b5e95",
+      "RR": {
+        "SAM": 4.831555822622462,
+        "ERGAS": 4.047418196430732,
+        "PSNR": 37.57050186740667,
+        "SCC": 0.977766662093338,
+        "Q2n": 0.9239306079738373,
+        "MSE_peak1": 0.00020622091889520755,
+        "PSNR_sensor_peak": 37.57050186740667,
+        "MS_consistency_MSE_peak1_interior": 1.7779351011881772e-06,
+        "inference_ms": 72.77850131988525
+      },
+      "FR": {
+        "D_lambda": 0.03783759196611896,
+        "D_s": 0.06265293899095786,
+        "QNR": 0.9018442861174127,
+        "MS_consistency_MSE_peak1_interior": 0.0001328055925114313,
+        "inference_ms": 226.55952377319335
+      },
+      "prediction_arrays": 40,
+      "epoch_seconds": 9458.630112633995,
+      "this_session": {
+        "training_wall_seconds_this_session": 8517.571264621001,
+        "total_wall_seconds_this_session": 8537.088517012,
+        "scope": "cache load + benchmark + completed/replayed training + checkpoint saves + test; resumed session is not whole-experiment time"
+      }
+    }
+  },
+  "checkpoint_scope": "ZIP CRC, metadata epoch and byte hashes; tensors not loaded",
+  "limitations": [
+    "No local training or H5/GT metric recomputation.",
+    "Saved predictions checked for shape and finite values; no forward inference rerun.",
+    "FR QNR/Ds and Q2n/SCC MATLAB parity remains unverified."
+  ],
+  "paired_initialization_and_100_epoch_orders_verified": true,
+  "B2_better_RR_PSNR_scenes": 0,
+  "reproduction_cell_worker_and_model_match_saved_runtime": true,
+  "status": "saved evidence verified; original tensors and H5 not re-evaluated",
+  "verified_at_kst": "2026-10-09T22:16:40+09:00",
+  "remote_verification": {
+    "verified_commit": "689303c1769a5819f9c9f729ec9705635a9990df",
+    "verified_at_kst": "2026-10-09T22:22:04+09:00",
+    "remote_archive_blob_hashes_verified": 199,
+    "checkpoints_downloaded_and_sha256_verified": [
+      {
+        "path": "recovery_200/runs/B1_QB_B1_k6_s42/best.pt",
+        "sha256": "3d0dc27a5164781116be54a5ea158065ad942a0f2b4c913f2261cbc9adac3588",
+        "bytes": 5598893
+      },
+      {
+        "path": "recovery_200/runs/B1_QB_B1_k6_s42/latest.pt",
+        "sha256": "614b2d70536eab2b0b112fff7877cf87ea3b5e611a2bc63303ea9cd215925a4d",
+        "bytes": 5600203
+      },
+      {
+        "path": "recovery_200/runs/B2_QB_B2_k6_s42/best.pt",
+        "sha256": "53fa646f269df5aa75f2b4da9db27cd92550f608e66fee2e0f5e0f181a2e49af",
+        "bytes": 5598637
+      },
+      {
+        "path": "recovery_200/runs/B2_QB_B2_k6_s42/latest.pt",
+        "sha256": "265b8fc448dc09e1581bb4dc9d16ec0fdd1e8cacdc287da30d729e83c19b5e95",
+        "bytes": 5599947
+      },
+      {
+        "path": "runs/B1_QB_B1_k6_s42/best.pt",
+        "sha256": "a5a397058d0e8fee46259dccf02e446c16186c0a2d900d3888ed874851f4ab2e",
+        "bytes": 5620013
+      },
+      {
+        "path": "runs/B1_QB_B1_k6_s42/latest.prev.pt",
+        "sha256": "1614779b2d7be3e0ea735694f848c7a14bfb7b9e6782e8147c20e0dda3e24dfc",
+        "bytes": 5760139
+      },
+      {
+        "path": "runs/B1_QB_B1_k6_s42/latest.pt",
+        "sha256": "6646d1e7b58392a39905d81b1cef737acc91252087912476d21eb7a3a67b2e0e",
+        "bytes": 5622603
+      },
+      {
+        "path": "runs/B2_QB_B2_k6_s42/best.pt",
+        "sha256": "915ac71b6c10f942f8db249e8b9ac919f80e00cc07f1f437f465b38a8ba2b63c",
+        "bytes": 5620269
+      },
+      {
+        "path": "runs/B2_QB_B2_k6_s42/latest.prev.pt",
+        "sha256": "564b565c245c2da5fd1f5024a3c79a3ac6baabe7345e6628597d6bc1459fd807",
+        "bytes": 5760139
+      },
+      {
+        "path": "runs/B2_QB_B2_k6_s42/latest.pt",
+        "sha256": "c7aa2b8fb21e6f7d6ba8dad25105fe1e546a41feb85a8904fc032d764c1e2571",
+        "bytes": 5622603
+      }
+    ],
+    "scope": "GitHub recursive tree blob IDs match local original bytes; all 10 actual checkpoints re-downloaded and SHA-256 checked."
+  }
+}

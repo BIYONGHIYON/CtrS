@@ -30,6 +30,7 @@ K는 모델 내부 특징 차원이며 센서 밴드 수와 다릅니다. WV3에
 | Windows 기준선 | 6개 × 100에폭 완료, K4 선택 | 기준선의 전체 RR/FR 평가 |
 | Windows K4 손실 | 2026-10-09 21:11 KST: spectral·consistency 완료, edge 0.001 실행 중 | 손실 9개 선별 → 후보 30→100에폭 연장 → 기준선 비교 |
 | 이전 Linux K6 구조 연구 | 저장소 보고서 기준 반복 시드·센서 평가 완료 | 후보의 K4 적용 여부 검토, 필요 시 K4 대조 검증 |
+| Kaggle K6 B1/B2 재개 | 2026-10-09 22:16 KST: 두 모델100에폭·RR/FR 각20장 확인 | RR 악화·FR 개선 혼재, 이전 실행과 비교한 통제 반복 필요 |
 | 이전 Kaggle K6 MTF 증강 | 100에폭·원본 가중치 보관 완료 | 해당 K6 실험의 RR/FR 평가 대기 |
 | 이전 Kaggle K6 SSA 융합 | 2026-10-09: A0–A3 각100에폭, 원본 가중치 보관 완료 | RR/FR 평가와 K4 적용 여부 별도 검토 |
 
@@ -55,6 +56,7 @@ Windows 계획은 940에폭 직렬 실행이며, 위 시각은 마지막 확인 
 | 구조 진단 | [QB SSA 핵심 융합 A0–A3](docs/experiments/ssa_fusion_local.md) | 6 | 각100에폭·원본 16개 보관, validation A0 최저 MSE·RR/FR 대기 |
 | 구조 탐색 | [QB 3단계 관측 복원](docs/experiments/kaggle_b1_b2.md) | 6 | B1/B2 각100에폭·RR/FR 평가 완료, RR 개선·FR 악화로 채택 보류 |
 | 구조 탐색 | [QB 단계적 Haar A0/A1](docs/experiments/kaggle_wavelet_a0_a1.md) | 6 | 각100에폭·RR/FR 평가 완료, RR 악화·학습 gate 추가 이득 없어 채택 보류 |
+| 구조 검증 | [QB B1/B2 100에폭 재개](docs/experiments/kaggle_b1_b2_100_resume.md) | 6 | RR/FR 각20장 완료, B2 RR PSNR −0.119919 dB·잠정 FR QNR +0.019136, 종합 채택 보류 |
 | 사전 검증 | [QB 관측 연산자](docs/experiments/observation_validation.md) | 해당 없음 | consistency 관측 구현 검증, 학습 성능 결과와 구분 |
 
 <a id="latest"></a>
@@ -108,6 +110,14 @@ Windows 계획은 940에폭 직렬 실행이며, 위 시각은 마지막 확인 
 | QB MTF 증강 · 시드 46 | validation PSNR +0.005759 dB, SAM −0.004994° | validation의 작은 차이, test 평가 대기 |
 
 ±는 3시드의 기준선 대비 차이 표본 표준편차이며 유의성 검정이 아닙니다. QNR·Ds 및 일부 RR 지표의 MATLAB 구현 일치성이 미검증이고, test 재사용 이력은 각 보고서에 명시합니다. MTF의 validation PSNR과 RR test PSNR은 평가 대상·기준이 달라 같은 순위표로 비교하지 않습니다.
+
+### 최근 K6 완료 · B1/B2 100에폭 재개
+
+B1 대비 B2는 RR PSNR **−0.119919 dB**, SAM **+0.009337°**, 잠정 FR QNR **+0.019136**입니다. B2의 RR PSNR은 20/20장에서 낮았습니다. 중간 200 셀에서 가져온 저장 지점부터 총100에폭까지 학습한 결과이며 200에폭 완료가 아닙니다. 이전 B1/B2와 실행 조건·개선 방향이 달라 종합 채택을 보류합니다.
+
+[상세 보고서·원본 가중치·검증](docs/experiments/kaggle_b1_b2_100_resume.md)
+
+![QB B2 고정 RR 장면1](docs/assets/kaggle_b1_b2_100_resume/runs/B2_QB_B2_k6_s42/RR_scene_01.png)
 
 ### 이전 K6 결과 이미지
 
