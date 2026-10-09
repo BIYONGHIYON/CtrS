@@ -53,9 +53,29 @@ Windows 계획은 940에폭 직렬 실행이며, 위 시각은 마지막 확인 
 | 구조 탐색 | [QB 밴드별 게이트 고주파](docs/experiments/kaggle_band_gated_hf.md) | 6 | RR 악화로 채택 보류 |
 | 증강 탐색 | [QB MTF 변화량 증강](docs/experiments/kaggle_mtf_pair.md) | 6 | 100에폭·원본 4개 보관, validation만 확인·RR/FR 대기 |
 | 구조 진단 | [QB SSA 핵심 융합 A0–A3](docs/experiments/ssa_fusion_local.md) | 6 | 각100에폭·원본 16개 보관, validation A0 최저 MSE·RR/FR 대기 |
+| 구조 탐색 | [QB 3단계 관측 복원](docs/experiments/kaggle_b1_b2.md) | 6 | B1/B2 각100에폭·RR/FR 평가 완료, RR 개선·FR 악화로 채택 보류 |
 | 사전 검증 | [QB 관측 연산자](docs/experiments/observation_validation.md) | 해당 없음 | consistency 관측 구현 검증, 학습 성능 결과와 구분 |
 
 <a id="latest"></a>
+
+## K6 완료 결과 · QB 3단계 공유 복원 B1/B2
+
+**2026-10-09 05:59 KST 다운로드 검증 기준**, T4×2에서 B1·B2 각각100에폭과 RR20장·FR20장 전체 평가를 마쳤습니다. B2는 관측 오차를 전달하며, B1은 같은 3단계 공유 복원을 오차 없이 실행합니다. best는 validation MSE로 선택했고 B1은90에폭, B2는99에폭입니다.
+
+| 지표 | B1 | B2 | B2−B1 |
+|---|---:|---:|---:|
+| RR PSNR dB ↑ | 37.604745 | 37.720504 | +0.115759 |
+| RR SAM ° ↓ | 4.832698 | 4.814416 | -0.018282 |
+| RR MSE peak1 ↓ | 0.000205615557702 | 0.00020025117562 | -5.36438208154e-06 |
+| FR QNR ↑ · 잠정 | 0.904310 | 0.886089 | -0.018221 |
+
+**RR 개선 후보 유지, FR 포함 최종 채택 보류.** RR 지표는 전반 개선됐지만 FR 왜곡과 입력 MS 일치도는 악화했습니다. 단일seed42이며 기존 B0은 재실행하지 않았습니다. 초기 가중치·100에폭 샘플 순서 일치, 원본 best/latest4개·전체 예측80개·원본 manifest152개 해시를 검증했습니다.
+
+왼쪽부터 **LR MS · PAN · B2 예측 · 정답**입니다. 사전 고정 RR index1이며 같은 장면의 MS 패널에는 공통 대비를 적용했습니다.
+
+![B2 고정 RR 장면1](docs/assets/kaggle_b1_b2/runs/B2_QB_B2_k6_s42/RR_scene_01.png)
+
+[완료 보고서](docs/experiments/kaggle_b1_b2.md) · [한 셀 재현·복구](docs/operations/kaggle_b1_b2.md)
 
 ## 4. 이전 K6 연구에서 확인한 점
 
