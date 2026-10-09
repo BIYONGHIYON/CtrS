@@ -1,0 +1,21 @@
+{
+  "config": {
+    "epochs": 30,
+    "batch_size": 32,
+    "micro_batch": 4,
+    "lr": 0.0001,
+    "sensor": "QB",
+    "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+    "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+    "seed": 42,
+    "k": 4,
+    "loss": "consistency",
+    "weight": 0.01,
+    "observation": {
+      "profile": "scripts/observation_profiles/qb.json",
+      "sha256": "76f6169d85a210a47cd19452035e2c274e7a975683f699f9982a9ecf65f92f6b"
+    }
+  },
+  "best_mse": 0.00021569570168220926,
+  "epoch": 30
+}

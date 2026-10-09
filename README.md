@@ -24,9 +24,16 @@ K는 모델 내부 특징 차원이며 센서 밴드 수와 다릅니다. WV3에
 
 **K4/K6 통제 비교 완료 → K4 확정 → K4 손실 탐색 → 최종 후보 연장 → 같은 조건의 기준선과 RR/FR 평가** 순서입니다.
 
-2026-10-09 21:11 KST Windows 확인 기록에서는 spectral·consistency 6개가 완료되고 edge 0.001이 학습 중이었습니다. 이는 마지막 확인 기록이며 실시간 진행률이 아닙니다. 최종 손실 선택과 구조+손실 결합 효과는 아직 미확정입니다.
+2026-10-10 05:28 KST에 Windows **940에폭 학습을 모두 완료**했고, 08:26에 QB K4 기준선·edge0.1 최종 후보의 전체 RR20장·FR20장 평가를 마쳤습니다. 기준선 대비 **RR PSNR −0.066057dB, SAM −0.011856°, 잠정 FR QNR +0.009828**으로 지표가 엇갈려 손실의 종합 채택을 보류합니다. 구조+손실 결합 효과는 아직 미확정입니다.
 
 이전 K6 구조·증강 연구는 후보와 한계를 파악한 근거입니다. 그 결과를 K4 성능으로 바꾸어 해석하지 않으며, K4에 적용할 후보는 K4 기준선과 다시 비교해야 합니다.
+
+
+### Windows K4 손실 · 현재 확인한 차이
+
+validation으로 선별한 edge0.1을 같은 QB K4 기준선과 비교했습니다. validation MSE는 약0.226% 낮지만 RR PSNR·MSE는 악화해 K4 기본 MSE 기준선을 유지합니다. SAM·잠정 FR QNR 개선은 후속 검증할 절충 후보로 기록합니다. [전체 수치·원본20개·고정5장면](SSA-MRN/docs/experiments/windows_controlled.md)
+
+![Windows K4 기준선 대비 edge0.1 전체 test 차이](SSA-MRN/docs/assets/windows_losses/test_deltas.png)
 
 ## 최근 학습 완료 · SSA 핵심 융합 A0–A3
 
@@ -87,8 +94,8 @@ QB K6·seed46에서 네 구조를 각100에폭 학습하고 원본 체크포인�
 
 | 단계 | 실험 | 실제 K | 확인된 결과·상태 |
 |---|---|---|---|
-| 현재 기준 | [Windows K4/K6 통제 비교](SSA-MRN/docs/experiments/windows_k_baselines.md) | 4·6 | 6개 × 100에폭 완료, 원본 12개 보관. 다수결로 **K4 확정**, test 평가 대기 |
-| 현재 진행 | [Windows 손실 탐색](SSA-MRN/docs/experiments/windows_controlled.md) | **4** | spectral·consistency 완료, edge 진행 기록. 최종 손실 효과 미확정 |
+| 현재 기준 | [Windows K4/K6 통제 비교](SSA-MRN/docs/experiments/windows_k_baselines.md) | 4·6 | 6개 × 100에폭 완료, 원본 12개 보관. 다수결로 **K4 확정**. QB K4 test 평가 완료, 나머지5개 대기 |
+| 완료·판단 | [Windows 손실 탐색](SSA-MRN/docs/experiments/windows_controlled.md) | **4** | 940에폭·QB RR/FR 전체 평가 완료, 원본20개 보관. RR 정확도 악화·SAM/FR 개선으로 종합 채택 보류 |
 | 이전 재현 | [공개 코드 K4 재현](SSA-MRN/docs/experiments/pan_k4.md) | 4 | RR/FR 평가 완료, 초기 기준 |
 | 이전 재현 | [논문 설정 K6 재현](SSA-MRN/docs/experiments/pan_k6.md) | 6 | RR/FR 평가 완료, K4와 장치도 달랐음 |
 | 구조 탐색 | [QB 23탭·LR 보정·고주파](SSA-MRN/docs/experiments/a6000_architecture_qb.md) | 6 | 단일 시드에서 23탭을 후속 후보로 선정 |
