@@ -1,5 +1,7 @@
 # Kaggle 원본·변경 모델 비교
 
+> **과거 K6 실험 재현 안내입니다.** 현재 신규 연구 기본값은 [K4](../../README.md#decision)입니다. 아래 고정 계획은 당시 실험 재현용이며 신규 K4 계획으로 혼용하지 않습니다.
+
 [한 셀 노트북](../../scripts/kaggle_band_gated_hf.ipynb) · [동일한 Python 셀](../../scripts/kaggle_one_cell.py) · [완료 결과](../experiments/kaggle_band_gated_hf.md)
 
 Kaggle에서 GPU T4 x2와 Internet을 켜고 PanCollection H5 데이터셋을 연결한 후 노트북의 한 셀을 실행한다. 이전 학습을 중지하고 커널을 재시작한 뒤 실행한다. GPU가 하나면 두 실험은 순차 실행한다.
