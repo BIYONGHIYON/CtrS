@@ -1,0 +1,28 @@
+{
+  "cell_id": "ssa_bandlimit_k4_v1",
+  "repo_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56",
+  "upstream_commit": "a4ca40e407b12bf4c30f804384405ce321d11c51",
+  "sensor": "QB",
+  "k": 4,
+  "epochs": 200,
+  "seeds": [
+    42
+  ],
+  "variants": [
+    "B1",
+    "B1_AA"
+  ],
+  "batch": 32,
+  "micro": 32,
+  "lr": 0.0001,
+  "hold": 100,
+  "min_lr": 1e-06,
+  "amp": true,
+  "channels_last": true,
+  "fused_adam": true,
+  "fft_observation": false,
+  "controlled": true,
+  "save_predictions": true,
+  "status_seconds": 15,
+  "checkpoint_seconds": 60
+}

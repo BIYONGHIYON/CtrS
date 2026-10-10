@@ -35,6 +35,14 @@ validation으로 선별한 edge0.1을 같은 QB K4 기준선과 비교했습니�
 
 ![Windows K4 기준선 대비 edge0.1 전체 test 차이](SSA-MRN/docs/assets/windows_losses/test_deltas.png)
 
+## 최근 완료 · QB K4 대역 제한 축소 B1/B1_AA
+
+T4×2·seed42에서 같은 공유3단계 구조를 각각200에폭 학습하고 RR·FR 각20장을 평가했습니다. 고정 저역통과 필터 후보 B1_AA는 validation MSE **−0.186%**지만 B1 대비 **RR PSNR −0.019598dB, SAM +0.002197°, 잠정 FR QNR −0.068594**로 전체 복원 향상은 확인되지 않았습니다. 후보 채택을 보류하고 B1 기준을 유지합니다. best는 validation MSE로 선택했으며 원본 checkpoint6개·400에폭·코드·지표·이미지·해시를 보관했습니다.
+
+[조건·전체 지표·원본 가중치·복구 검증](SSA-MRN/docs/experiments/kaggle_bandlimit_k4.md)
+
+![200에폭 학습·validation 곡선](SSA-MRN/docs/assets/kaggle_bandlimit_k4/validation_curves.png)
+
 ## 최근 학습 완료 · SSA 핵심 융합 A0–A3
 
 QB K6·seed46에서 네 구조를 각100에폭 학습하고 원본 체크포인트·이력·설정·해시를 보관했습니다. validation 최저 MSE는 A0 **0.000171331**, A1 0.000172063, A2 0.000171955, A3 0.000171885입니다. 이 단일 시드에서는 기존 A0가 가장 낮았고, RR/FR 평가 전이므로 구조 채택을 보류합니다. [구조·전체 지표·가중치·보관 검증](SSA-MRN/docs/experiments/ssa_fusion_local.md).

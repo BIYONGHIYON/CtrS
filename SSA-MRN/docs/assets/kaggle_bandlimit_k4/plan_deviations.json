@@ -1,0 +1,16 @@
+{
+  "baseline": "existing shared-three-stage B1, zero error plus encoder bias",
+  "candidate": "same B1; only four core downsample modules replaced",
+  "k": 4,
+  "upsampling": "unchanged original bilinear",
+  "QB_band_gains": [
+    0.34,
+    0.32,
+    0.3,
+    0.22
+  ],
+  "PAN_gain": 0.5,
+  "physical_status": "Gaussian feature-space proxy hypothesis; PAN gain generic, not calibrated",
+  "coordinate": "j*(N-1)/(M-1); align_corners=True; replicate boundary; separable normalized positive Gaussian",
+  "learned_kernel": "not enabled; deferred until fixed-filter comparison"
+}
