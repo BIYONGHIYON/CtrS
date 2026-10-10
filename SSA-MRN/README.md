@@ -43,6 +43,14 @@ validation으로 선별한 edge0.1을 같은 QB K4 기준선과 비교했습니�
 
 ![Windows K4 기준선 대비 edge0.1 전체 test 차이](docs/assets/windows_losses/test_deltas.png)
 
+## 최근 완료 · QB K4 대역 제한 축소 B1/B1_AA
+
+T4×2·seed42에서 같은 공유3단계 구조를 각각200에폭 학습하고 RR·FR 각20장을 평가했습니다. 고정 저역통과 필터 후보 B1_AA는 validation MSE **−0.186%**지만 B1 대비 **RR PSNR −0.019598dB, SAM +0.002197°, 잠정 FR QNR −0.068594**로 전체 복원 향상은 확인되지 않았습니다. 후보 채택을 보류하고 B1 기준을 유지합니다. best는 validation MSE로 선택했으며 원본 checkpoint6개·400에폭·코드·지표·이미지·해시를 보관했습니다.
+
+[조건·전체 지표·원본 가중치·복구 검증](docs/experiments/kaggle_bandlimit_k4.md)
+
+![200에폭 학습·validation 곡선](docs/assets/kaggle_bandlimit_k4/validation_curves.png)
+
 <a id="experiments"></a>
 
 ## 3. 전체 실험 지도
@@ -51,6 +59,7 @@ validation으로 선별한 edge0.1을 같은 QB K4 기준선과 비교했습니�
 
 | 단계 | 실험 | 실제 K | 확인된 결과·상태 |
 |---|---|---|---|
+| 완료·판단 | [QB K4 대역 제한 축소](docs/experiments/kaggle_bandlimit_k4.md) | **4** | B1/B1_AA 각200에폭·RR/FR 완료; validation 소폭 개선, RR/FR 악화로 고정 필터 채택 보류 |
 | 현재 기준 | [Windows K4/K6 통제 비교](docs/experiments/windows_k_baselines.md) | 4·6 | 6개 × 100에폭 완료, 원본 12개 보관. 다수결로 **K4 확정**. QB K4 test 평가 완료, 나머지5개 대기 |
 | 완료·판단 | [Windows 손실 탐색](docs/experiments/windows_controlled.md) | **4** | 940에폭·QB RR/FR 전체 평가 완료, 원본20개 보관. RR 정확도 악화·SAM/FR 개선으로 종합 채택 보류 |
 | 이전 재현 | [공개 코드 K4 재현](docs/experiments/pan_k4.md) | 4 | RR/FR 평가 완료, 초기 기준 |
