@@ -11,12 +11,12 @@ sys.path.insert(0,str(ROOT/"src"))
 from ssamrn.observation import load_profile
 from ssamrn.data.pancollection import PanCollectionH5
 from ssamrn.models.ssa_mrn import RestoredPansharpeningNet
-from train_controlled import auxiliary
+from train_auxiliary_losses import auxiliary
 
 
 def main():
     torch.use_deterministic_algorithms(True)
-    plan=json.loads((ROOT/"scripts/controlled_suite_plan.json").read_text())
+    plan=json.loads((ROOT/"scripts/feature_dimension_losses_plan.json").read_text())
     config=plan["observations"]["QB"]
     operator,profile=load_profile(ROOT/config["profile"],config["sha256"],"QB",plan["data"]["QB"]["train"])
     operator=operator.float().cuda();data=PanCollectionH5(Path(plan["data"]["QB"]["train"]),"QB")

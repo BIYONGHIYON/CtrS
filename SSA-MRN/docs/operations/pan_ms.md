@@ -26,8 +26,8 @@ python SSA-MRN/scripts/train.py --train /data/train.h5 --val /data/val.h5 --sens
 python SSA-MRN/scripts/evaluate_paper.py --sensor QB --protocol both --checkpoint-root SSA-MRN/experiments/checkpoints --data-root /data/pancollection --output-dir SSA-MRN/experiments/results/local/new_qb_k4_eval --device cuda
 ```
 
-데이터 하위 구조와 요구 파일명은 `evaluate_paper.py`의 센서별 경로를 확인하세요. 기본 값만으로 원격 데이터가 존재한다고 가정하지 않습니다. 위 예시는 기존 K4 재현 가중치 형식용입니다. K6 재현은 `SSA-MRN/experiments/checkpoints/k6`를 사용합니다. 새 Windows `train_controlled.py` 체크포인트는 메타데이터 형식이 달라 이 명령에 경로만 바꾸어 넣지 않습니다. 해당 기준선의 RR/FR 평가는 아직 대기 상태입니다.
+데이터 하위 구조와 요구 파일명은 `evaluate_paper.py`의 센서별 경로를 확인하세요. 기본 값만으로 원격 데이터가 존재한다고 가정하지 않습니다. 위 예시는 기존 K4 재현 가중치 형식용입니다. K6 재현은 `SSA-MRN/experiments/checkpoints/k6`를 사용합니다. 새 Windows `train_auxiliary_losses.py` 체크포인트는 메타데이터 형식이 달라 이 명령에 경로만 바꾸어 넣지 않습니다. 해당 기준선의 RR/FR 평가는 아직 대기 상태입니다.
 
 ## VS Code
 
-원하는 Python 인터프리터를 선택하고 실행 및 디버그에서 `PAN-MS: train K4/K6` 또는 `PAN-MS: evaluate RR + FR`을 선택합니다. 입력 경로·센서·장치·출력 경로는 실행 시 묻습니다. Python 학습을 VS Code 터미널에서 시작하면 연결 종료 이후 생존을 보장하지 않습니다. Windows의 장시간 학습은 `run_controlled_suite.ps1` 관리 스크립트로 실행합니다.
+원하는 Python 인터프리터를 선택하고 실행 및 디버그에서 `PAN-MS: train K4/K6` 또는 `PAN-MS: evaluate RR + FR`을 선택합니다. 입력 경로·센서·장치·출력 경로는 실행 시 묻습니다. Python 학습을 VS Code 터미널에서 시작하면 연결 종료 이후 생존을 보장하지 않습니다. Windows의 장시간 학습은 `run_feature_dimension_losses.ps1` 관리 스크립트로 실행합니다.

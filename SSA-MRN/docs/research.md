@@ -6,7 +6,7 @@
 
 ## 현재 기본 설정: K=4
 
-2026-10-09부터 신규 기준선·개선 비교의 연구 기본값은 **K=4**입니다. Windows 동일 환경의 3센서 K4/K6 비교에서 QB·GF2는 K4, WV3는 K6가 낮아 사전 validation 다수결로 K4를 확정했습니다. [선택 근거와 원본 가중치](experiments/windows_k_baselines.md)
+2026-10-09부터 신규 기준선·개선 비교의 연구 기본값은 **K=4**입니다. Windows 동일 환경의 3센서 K4/K6 비교에서 QB·GF2는 K4, WV3는 K6가 낮아 사전 validation 다수결로 K4를 확정했습니다. [선택 근거와 원본 가중치](experiments/feature_dimension.md)
 
 K는 센서 밴드 수와 독립적인 내부 투영 차원입니다. 과거 구조·증강 실험 대부분은 K6로 수행됐으며 해당 수치와 가중치를 K4 결과로 바꾸어 표기하지 않습니다. K6에서 찾은 후보를 현재 기준에 적용하려면 K4 대조군과 비교해야 합니다.
 
@@ -25,9 +25,9 @@ K는 센서 밴드 수와 독립적인 내부 투영 차원입니다. 과거 구
 
 | 변경 | 쉬운 설명 | 실험 |
 |---|---|---|
-| K4 / K6 | 내부 특징 채널 수를 4 또는 6으로 설정 | [Windows 통제 비교](experiments/windows_controlled.md) |
-| 23탭 확대 | 내부에서 영상을 키울 때 bilinear 대신 23개 계수의 보간 필터 사용 | [구조 비교](experiments/a6000_architecture_qb.md), [후속 검증](experiments/a6000_followup_123.md) |
-| 보조 손실 | 기본 MSE에 분광 방향·관측 일관성·경계 오차 중 하나를 추가 | [Windows 손실 탐색](experiments/windows_controlled.md) |
+| K4 / K6 | 내부 특징 채널 수를 4 또는 6으로 설정 | [Windows 통제 비교](experiments/auxiliary_losses.md) |
+| 23탭 확대 | 내부에서 영상을 키울 때 bilinear 대신 23개 계수의 보간 필터 사용 | [구조 비교](experiments/interpolation_correction_detail.md), [후속 검증](experiments/interpolation_scope_sensors.md) |
+| 보조 손실 | 기본 MSE에 분광 방향·관측 일관성·경계 오차 중 하나를 추가 | [Windows 손실 탐색](experiments/auxiliary_losses.md) |
 
 입력으로 제공되는 LMS의 23탭 보간과 **네트워크 내부 확대를 23탭으로 바꾸는 실험**은 서로 다른 위치의 연산입니다. validation으로 설정과 가중치를 선택하고 test는 성능 보고에 사용합니다.
 

@@ -2,13 +2,13 @@
 
 > **과거 K6 실험 재현 안내입니다.** 현재 신규 연구 기본값은 [K4](../../README.md#decision)입니다. 아래 고정 계획은 당시 실험 재현용이며 신규 K4 계획으로 혼용하지 않습니다.
 
-[한 셀 노트북](../../scripts/kaggle_band_gated_hf.ipynb) · [동일한 Python 셀](../../scripts/kaggle_one_cell.py) · [완료 결과](../experiments/kaggle_band_gated_hf.md)
+[한 셀 노트북](../../scripts/band_gated_detail.ipynb) · [동일한 Python 셀](../../scripts/band_gated_detail_cell.py) · [완료 결과](../experiments/band_gated_detail.md)
 
 Kaggle에서 GPU T4 x2와 Internet을 켜고 PanCollection H5 데이터셋을 연결한 후 노트북의 한 셀을 실행한다. 이전 학습을 중지하고 커널을 재시작한 뒤 실행한다. GPU가 하나면 두 실험은 순차 실행한다.
 
 ## 비교 대상
 
-GPU 0은 GitHub의 `RestoredPansharpeningNet` 원본 baseline, GPU 1은 [지정된 실험 계획](https://github.com/BIYONGHIYON/CtrS/blob/ssa-band-gated-hf-plan/SSA-MRN/docs/experiments/kaggle_band_gated_hf.md)의 `band_gated_hf`를 실행한다. 사용자 요청에 따라 기존 고정 `high_frequency`는 실행 대상에서 제외한다. `SWAP_GPUS=True`로 새 출력 폴더에서 반복하면 두 물리 GPU 배정을 바꿀 수 있다.
+GPU 0은 GitHub의 `RestoredPansharpeningNet` 원본 baseline, GPU 1은 [지정된 실험 계획](https://github.com/BIYONGHIYON/CtrS/blob/ssa-band-gated-hf-plan/SSA-MRN/docs/experiments/band_gated_detail.md)의 `band_gated_hf`를 실행한다. 사용자 요청에 따라 기존 고정 `high_frequency`는 실행 대상에서 제외한다. `SWAP_GPUS=True`로 새 출력 폴더에서 반복하면 두 물리 GPU 배정을 바꿀 수 있다.
 
 원본은 be02b7cbf03fe00681194ae9fc9419661f24cd56, 후보 정의는 계획 브랜치의 1b56efb54e9c200d5b497e719bb0857b25f750bf에 고정한다. 후보 클래스와 builder/config 함수는 해당 노트북의 AST에서 정의만 추출한다. 노트북의 학습 셀을 실행하거나 임의의 gate를 만들어 대체하지 않는다. SSA-MRN adapter는 공식 upstream의 미정의 `ms`를 복구한 저장소 로직이며, 공식 submodule은 수정하지 않는다.
 
@@ -51,5 +51,5 @@ epoch 시간 비교는 학습+validation만 포함한다. 캐시 구축·checkpo
 Kaggle에서 두 모델 모두 100에폭 학습 및 RR/FR 각 20장 평가를 완료했다. 다운로드한 149개 산출물의 해시·checkpoint epoch·장면별 숫자·예측 80개·본체 초기화와 데이터 순서를 로컬에서 검증했다. 이 환경에는 PyTorch/CUDA와 원본 H5가 없어 로컬 재학습·GT 지표 재산출은 하지 않았다.
 
 ```bash
-python SSA-MRN/scripts/verify_kaggle_result.py --input SSA-MRN/docs/assets/kaggle_band_gated_hf --cell SSA-MRN/scripts/kaggle_one_cell.py
+python SSA-MRN/scripts/verify_experiment.py --input SSA-MRN/docs/assets/kaggle_band_gated_hf --cell SSA-MRN/scripts/band_gated_detail_cell.py
 ```
