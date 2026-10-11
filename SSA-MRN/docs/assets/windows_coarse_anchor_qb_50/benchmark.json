@@ -1,0 +1,83 @@
+{
+  "batch": 64,
+  "pairs": [
+    {
+      "workers": 0,
+      "rows": [
+        {
+          "variant": "N3",
+          "micro": 64,
+          "patches_per_second": 452.96372751405823,
+          "workers": 0,
+          "peak_mib": 620.0,
+          "loss": 0.002294213743880391,
+          "parameters": 427380
+        },
+        {
+          "variant": "N5",
+          "micro": 64,
+          "patches_per_second": 452.96372751405823,
+          "workers": 0,
+          "peak_mib": 620.0,
+          "loss": 0.002293986501172185,
+          "parameters": 427381
+        }
+      ],
+      "aggregate_patch_s": 905.9274550281165,
+      "whole_gpu_peak_mib": 1864
+    },
+    {
+      "workers": 1,
+      "rows": [
+        {
+          "variant": "N3",
+          "micro": 64,
+          "patches_per_second": 455.1111111111111,
+          "workers": 1,
+          "peak_mib": 620.0,
+          "loss": 0.002294394187629223,
+          "parameters": 427380
+        },
+        {
+          "variant": "N5",
+          "micro": 64,
+          "patches_per_second": 457.2789520692643,
+          "workers": 1,
+          "peak_mib": 622.0,
+          "loss": 0.002294078003615141,
+          "parameters": 427381
+        }
+      ],
+      "aggregate_patch_s": 912.3900631803754,
+      "whole_gpu_peak_mib": 1856
+    },
+    {
+      "workers": 2,
+      "rows": [
+        {
+          "variant": "N3",
+          "micro": 64,
+          "patches_per_second": 450.9688784496808,
+          "workers": 2,
+          "peak_mib": 620.0,
+          "loss": 0.0022944179363548756,
+          "parameters": 427380
+        },
+        {
+          "variant": "N5",
+          "micro": 64,
+          "patches_per_second": 448.86031560484645,
+          "workers": 2,
+          "peak_mib": 622.0,
+          "loss": 0.002294043079018593,
+          "parameters": 427381
+        }
+      ],
+      "aggregate_patch_s": 899.8291940545273,
+      "whole_gpu_peak_mib": 1908
+    }
+  ],
+  "selected_workers": 1,
+  "criterion": "largest measured two-process aggregate throughput; fixed common batch64",
+  "note": "short preflight, no completion time guarantee"
+}

@@ -1,0 +1,71 @@
+{
+  "initial_parity": true,
+  "gate_gradients": true,
+  "amp_adam_resume_close": true,
+  "resume_rtol": 1e-06,
+  "resume_atol": 1e-08,
+  "resume_max_abs": 0.0,
+  "persistent_worker_epoch_resume_order": true,
+  "rows": [
+    {
+      "variant": "N0",
+      "parameters": 426654,
+      "gates": {}
+    },
+    {
+      "variant": "N1",
+      "parameters": 426078,
+      "gates": {}
+    },
+    {
+      "variant": "N2",
+      "parameters": 427379,
+      "gates": {}
+    },
+    {
+      "variant": "N3",
+      "parameters": 427380,
+      "gates": {
+        "coarse_gain": 0.0
+      }
+    },
+    {
+      "variant": "N4",
+      "parameters": 426655,
+      "gates": {
+        "lrpan_gain": 1.0
+      }
+    },
+    {
+      "variant": "N5",
+      "parameters": 427381,
+      "gates": {
+        "coarse_gain": 0.0,
+        "lrpan_gain": 1.0
+      }
+    }
+  ],
+  "conditional_queue": [
+    {
+      "eligible": false,
+      "launched": [
+        "N0",
+        "N1",
+        "N2",
+        "N3",
+        "N4"
+      ]
+    },
+    {
+      "eligible": true,
+      "launched": [
+        "N0",
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5"
+      ]
+    }
+  ]
+}
