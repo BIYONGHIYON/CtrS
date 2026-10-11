@@ -1,0 +1,157 @@
+{
+  "id": "ssa_b0_b1_k4_controlled_v1",
+  "k": 4,
+  "seed": 42,
+  "epochs": 100,
+  "batch": 32,
+  "micro": 32,
+  "optimizer": "Adam fused=True; default betas/eps/weight_decay",
+  "lr": 0.0001,
+  "loss": "final output MSE",
+  "amp": "float16 + GradScaler",
+  "layout": "channels_last",
+  "deterministic": true,
+  "tf32": false,
+  "data": {
+    "train": {
+      "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "shapes": {
+        "pan": [
+          17139,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          17139,
+          4,
+          64,
+          64
+        ],
+        "ms": [
+          17139,
+          4,
+          16,
+          16
+        ],
+        "gt": [
+          17139,
+          4,
+          64,
+          64
+        ]
+      }
+    },
+    "val": {
+      "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "shapes": {
+        "pan": [
+          1905,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          1905,
+          4,
+          64,
+          64
+        ],
+        "ms": [
+          1905,
+          4,
+          16,
+          16
+        ],
+        "gt": [
+          1905,
+          4,
+          64,
+          64
+        ]
+      }
+    },
+    "RR": {
+      "sha256": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "shapes": {
+        "pan": [
+          20,
+          1,
+          256,
+          256
+        ],
+        "lms": [
+          20,
+          4,
+          256,
+          256
+        ],
+        "ms": [
+          20,
+          4,
+          64,
+          64
+        ],
+        "gt": [
+          20,
+          4,
+          256,
+          256
+        ]
+      }
+    },
+    "FR": {
+      "sha256": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f",
+      "shapes": {
+        "pan": [
+          20,
+          1,
+          512,
+          512
+        ],
+        "lms": [
+          20,
+          4,
+          512,
+          512
+        ],
+        "ms": [
+          20,
+          4,
+          128,
+          128
+        ]
+      }
+    }
+  },
+  "sources": {
+    "controlled_models.py": "1eeab7afd8c8ec328ebb0f86fef13b90df9984f95730019e10649a708d08f650",
+    "controlled_worker.py": "ba82deaaeac11b7d42f618cae8f0552d0fe1c1dc95477384c716d10cfebb0b7a",
+    "SSA-MRN/src/ssamrn/__init__.py": "4068ee713442b7896609dffeeb5c1a54d22cd19abfb31da1202b3ca45d3ca08a",
+    "SSA-MRN/src/ssamrn/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "SSA-MRN/src/ssamrn/models/ssa_mrn.py": "c140c1fee05a7958b924c6058e14b31daab7ded51c1aae7122c3287c7afd8891",
+    "SSA-MRN/src/ssamrn/models/__init__.py": "8f3d7aaa5ff196e99a95c2c2926e11131f1814dd1cb235929c0cfb3124de4b88",
+    "SSA-MRN/references/upstream/network.py": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a"
+  },
+  "selection": {
+    "seed": 42,
+    "scene_ids": [
+      1,
+      8,
+      11,
+      13,
+      19
+    ],
+    "indexing": "zero-based H5 row",
+    "tile": "whole scene",
+    "order": "ascending",
+    "rgb_bands": [
+      2,
+      1,
+      0
+    ],
+    "selected_before_training": true
+  },
+  "repo_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56",
+  "upstream_commit": "a4ca40e407b12bf4c30f804384405ce321d11c51"
+}
