@@ -5,7 +5,7 @@ import numpy as np
 import torch
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'src'))
 from ssamrn.models.coarse_anchor import CoarseAnchorNet,VARIANTS
-from windows_coarse_anchor_suite import checkpoint,seed,Cached,Remaining,loader
+from coarse_feature_fusion_suite import checkpoint,seed,Cached,Remaining,loader
 
 def main():
     seed();torch.backends.cudnn.benchmark=False
@@ -48,7 +48,7 @@ def main():
         del dl
     from types import SimpleNamespace
     from unittest.mock import patch
-    import windows_coarse_anchor_suite as suite
+    import coarse_feature_fusion_suite as suite
     decisions=[]
     for eligible in (False,True):
         with tempfile.TemporaryDirectory() as directory:

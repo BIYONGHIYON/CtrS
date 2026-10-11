@@ -10,7 +10,7 @@ import subprocess
 import sys
 import json
 
-CELL = pathlib.Path(__file__).with_name("kaggle_b0_b1_k4_controlled_one_cell.py")
+CELL = pathlib.Path(__file__).with_name("shared_reconstruction_cell.py")
 TREE = ast.parse(CELL.read_text(encoding="utf-8"))
 STRINGS = {n.targets[0].id:n.value.value for n in TREE.body if isinstance(n,ast.Assign)
            and isinstance(n.value,ast.Constant) and isinstance(n.value.value,str)}

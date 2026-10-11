@@ -5,7 +5,7 @@ import torch
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'src'))
 from ssamrn.models.ssa_mrn import RestoredPansharpeningNet
 from ssamrn.models.windows_structure import StructureNet,VARIANTS
-from windows_structure_suite import checkpoint,seed
+from structural_ablation_suite import checkpoint,seed
 
 def main():
     seed();torch.backends.cudnn.benchmark=False
