@@ -63,7 +63,14 @@ validation PSNR은global MSE 기반이고 RR PSNR은밴드별 산술평균으로
 
 ## 4. 직전 연구와 수치 차이
 
-직전batch256은50에폭3350updates, 이번batch64는약13400updates다. 배치와 학습량이 다르므로 직전 순위와 직접 구조 개선량을 계산하지 않는다. 이번 cohort의 N0를 기준으로 해석한다.
+직전 batch256은 50에폭 3,350updates, 이번 batch64는 약13,400updates다. 배치와 학습량이 다르므로 아래 차이를 구조 개선의 효과로 해석하지 않는다. 이번 후보의 구조 효과는 동일 조건 N0와 비교한다.
+
+| 기준선 관측치 | 직전 S0·batch256 | 이번 N0·batch64 | 관측 차이 |
+|---|---:|---:|---:|
+| RR PSNR dB | 34.542074 | 36.404333 | +1.862259 |
+| RR SAM ° | 6.190862 | 5.404534 | −0.786328 |
+| RR MSE peak1 | 0.000432411069 | 0.000278513827 | −0.000153897242 |
+| FR QNR·잠정 | 0.864486805 | 0.885286225 | +0.020799420 |
 
 ## 5. 그래프
 
@@ -99,7 +106,7 @@ run별 best/latest/previous, model·Adam·GradScaler·RNG·epoch·next batch·pa
 
 서버 runtime의 plan/data manifest·source SHA·preflight·benchmark·cleanup 기록을 유지한다. **실제 학습된 원본 best/latest12개**를 `docs/assets/windows_coarse_anchor_qb_50/runs/`에 보관한다. 원본 79개 파일이 서버 inventory와 SHA가 일치하며 가중치를 재저장하지 않았다. 원시 실행 source_snapshot은 CRLF까지 보존한다. 전달 코드는 LF로 고정하고 원시 snapshot과 개행을 정규화한 내용이 일치한다. [서버 inventory](../assets/windows_coarse_anchor_qb_50/server_inventory.json) · [전체 보관 manifest](../assets/windows_coarse_anchor_qb_50/report_manifest.json).
 
-검증: `python SSA-MRN/scripts/verify_coarse_anchor_results.py --check-torch --data C:/CtrS/SSA-MRN/data/dataset/QuickBird`. 원격 독립 clone 복구 결과는 전달 완료 시 운영 기록에 반영한다.
+검증: `python SSA-MRN/scripts/verify_coarse_anchor_results.py --check-torch --data C:/CtrS/SSA-MRN/data/dataset/QuickBird`. 원격 커밋 `6221914`를 새 Windows clone에서 복구해 전체 해시·12개 strict load·6개 best 추론·실제 RR 재추론을 통과했다. [복구 기록](../operations/windows_coarse_anchor_recovery.json).
 
 ## 8. 한계와 다음 판단
 

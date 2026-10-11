@@ -47,3 +47,7 @@ WMI 컨트롤러로 실행되어 SSH 종료와 독립적이다. latest는 매에
 본 학습 시작: **2026-10-11T20:56:57+09:00**. 확인: **2026-10-11T20:58:39+09:00**. 컨트롤러 PID17240; N0 실제 학습 PID10804/N1 PID14628, 두 run 모두3/50에폭·오류0개다. GPU100%·1928MiB, 당시 여유RAM 약4.9GiB였다. 첫2에폭의 validation 및best/latest 저장, SSH가 종료된 뒤 독립 실행을 확인했다. 이 수치는 해당 시각의 snapshot이며 완료 결과가 아니다. 서버 runtime은 현재 실행·재개용이며 원격 영구 보관 완료를 뜻하지 않는다.
 
 [소스·설정](../assets/windows_coarse_anchor_preflight/plan.json) · [구조/복구 검사](../assets/windows_coarse_anchor_preflight/preflight.json) · [병렬 측정](../assets/windows_coarse_anchor_preflight/benchmark.json) · [실제 시작 확인](../assets/windows_coarse_anchor_preflight/launch_verification.json) · [정리 기록](../assets/windows_coarse_anchor_preflight/cleanup.json)
+
+## 원격 보관·복구 확인
+
+원격 커밋 `6221914`를 독립 `C:\CtrS-coarse-recovery-20261011`에 clone하여 원본79개 해시·12개 strict load·6개 best 추론·N0/N3 실제 RR 장면0 CPU 재추론을 검증했다(rtol1e-4). [복구 기록](windows_coarse_anchor_recovery.json). 원본 데이터와 완료 runtime은 결과 전달 후 자동 삭제하지 않았다.
