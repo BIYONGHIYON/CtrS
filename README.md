@@ -47,6 +47,16 @@ validation으로 선별한 edge0.1을 같은 QB K4 기준선과 비교했습니�
 
 ![I1 고정 RR 장면1 · LR MS/PAN/예측/GT](SSA-MRN/docs/assets/windows_structure_qb_50/evaluation/I1_scene_01.png)
 
+## 최근 완료 · QB K4 B0/B1 통제 재학습
+
+T4×2·seed42·K4에서 원본 B0와 공유3단계 B1을 각각 처음부터100에포크 학습하고 RR/FR 각20장을 평가했습니다. 동일 fused Adam·초기 core·100에포크 배치 순서를 확인했으며 B1−B0는 **RR PSNR +0.300014dB, SAM −0.107839°, 잠정 FR QNR −0.039261**입니다. RR PSNR은20/20장 개선됐지만 FR 악화로 종합 채택을 보류합니다. best는 validation MSE로 선택한 B0 97/B1 94에포크입니다.
+
+[조건·K6와의 차이·실측곡선·고정5장면·원본 가중치](SSA-MRN/docs/experiments/kaggle_b0_b1_k4_controlled.md). 과거 K6와 데이터·B1 복원식·평가 구현은 같지만 K·B0 optimizer·새 학습/재개 조건이 달라 동일 실험으로 합치지 않습니다.
+
+왼쪽부터 **LR MS · PAN · B1 예측 · GT**이며 사전 고정 RR index1입니다.
+
+![K4 B1 고정 RR index1](SSA-MRN/docs/assets/kaggle_b0_b1_k4_controlled/B1/RR_scene_01.png)
+
 ## 최근 완료 · QB K4 대역 제한 축소 B1/B1_AA
 
 T4×2·seed42에서 같은 공유3단계 구조를 각각200에폭 학습하고 RR·FR 각20장을 평가했습니다. 고정 저역통과 필터 후보 B1_AA는 validation MSE **−0.186%**지만 B1 대비 **RR PSNR −0.019598dB, SAM +0.002197°, 잠정 FR QNR −0.068594**로 전체 복원 향상은 확인되지 않았습니다. 후보 채택을 보류하고 B1 기준을 유지합니다. best는 validation MSE로 선택했으며 원본 checkpoint6개·400에폭·코드·지표·이미지·해시를 보관했습니다.
@@ -115,6 +125,7 @@ QB K6·seed46에서 네 구조를 각100에폭 학습하고 원본 체크포인�
 | 단계 | 실험 | 실제 K | 확인된 결과·상태 |
 |---|---|---|---|
 | 완료·판단 | [Windows QB K4 구조9개](SSA-MRN/docs/experiments/windows_structure_qb_50.md) | **4** | 각50에폭·원본18개·S0/I1 RR/FR 완료; I1 RR 개선·FR 악화로 종합 채택 보류 |
+| 구조 검증 | [QB B0/B1 통제 재학습](SSA-MRN/docs/experiments/kaggle_b0_b1_k4_controlled.md) | **4** | 각100에폭·RR/FR 완료; RR PSNR +0.300014dB·잠정 FR QNR −0.039261, 종합 채택 보류 |
 | 현재 기준 | [Windows K4/K6 통제 비교](SSA-MRN/docs/experiments/windows_k_baselines.md) | 4·6 | 6개 × 100에폭 완료, 원본 12개 보관. 다수결로 **K4 확정**. QB K4 test 평가 완료, 나머지5개 대기 |
 | 완료·판단 | [Windows 손실 탐색](SSA-MRN/docs/experiments/windows_controlled.md) | **4** | 940에폭·QB RR/FR 전체 평가 완료, 원본20개 보관. RR 정확도 악화·SAM/FR 개선으로 종합 채택 보류 |
 | 이전 재현 | [공개 코드 K4 재현](SSA-MRN/docs/experiments/pan_k4.md) | 4 | RR/FR 평가 완료, 초기 기준 |

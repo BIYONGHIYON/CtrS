@@ -1,0 +1,200 @@
+{
+  "source_manifest_files": 129,
+  "all_source_manifest_hashes_valid": true,
+  "predictions_checked": 80,
+  "RR_panels_checked": 10,
+  "completed_epochs_per_arm": 100,
+  "initial_core_sha256": "4efb4367e985d49f043a1014bb10f9e249415e5db2e96f0774df525575088e34",
+  "within_K4_epoch_orders_equal": true,
+  "checkpoints": {
+    "B0": {
+      "best": {
+        "epoch": 97,
+        "mid_epoch_batches": null,
+        "sha256": "1b3aeacba79071f17809a83554f4673ee4cc3a726169f8d1bc033d74c153f86a",
+        "bytes": 5535753,
+        "alpha": null,
+        "model_tensor_count": 206,
+        "optimizer_state_count": 110
+      },
+      "latest": {
+        "epoch": 100,
+        "mid_epoch_batches": null,
+        "sha256": "a5545785f2e301a806cd6aa15e8b856d02200e5ed69de3a38fdd072e1fdf1816",
+        "bytes": 5537675,
+        "alpha": null,
+        "model_tensor_count": 206,
+        "optimizer_state_count": 110
+      },
+      "latest.prev": {
+        "epoch": 99,
+        "mid_epoch_batches": 536,
+        "sha256": "2107cb2c871cf7689f639c7b6a014d61e4a065d3204b927fa17e40d4d5f74717",
+        "bytes": 5675275,
+        "alpha": null,
+        "model_tensor_count": 206,
+        "optimizer_state_count": 110
+      }
+    },
+    "B1": {
+      "best": {
+        "epoch": 94,
+        "mid_epoch_batches": null,
+        "sha256": "366328247b2a82203e298109906787b280b29dce8bb21094bcc8174969108cfa",
+        "bytes": 5541297,
+        "alpha": 0.11427521705627441,
+        "model_tensor_count": 209,
+        "optimizer_state_count": 113
+      },
+      "latest": {
+        "epoch": 100,
+        "mid_epoch_batches": null,
+        "sha256": "7fd93cce26c3bc45bcbf667dc1082574b55275ba0b20227c359d5da441bb643a",
+        "bytes": 5543755,
+        "alpha": 0.11120785027742386,
+        "model_tensor_count": 209,
+        "optimizer_state_count": 113
+      },
+      "latest.prev": {
+        "epoch": 99,
+        "mid_epoch_batches": 536,
+        "sha256": "e79bd4c40f4d995b0c2975e0156637b408effd32278cad876799fc03ba78470a",
+        "bytes": 5681291,
+        "alpha": 0.11120785027742386,
+        "model_tensor_count": 209,
+        "optimizer_state_count": 113
+      }
+    }
+  },
+  "summary": {
+    "B0": {
+      "best_epoch": 97,
+      "best_validation_mse": 0.00017209636280313134,
+      "RR": {
+        "SAM": 4.946089315488171,
+        "ERGAS": 4.147542295083452,
+        "PSNR": 37.371083518845644,
+        "SCC": 0.9766485542572972,
+        "Q2n": 0.9225431445233399,
+        "MSE_peak1": 0.00021816068221513046
+      },
+      "FR": {
+        "D_lambda": 0.04995126030653236,
+        "D_s": 0.0427459162089613,
+        "QNR": 0.9097223526267657
+      },
+      "train_minutes": 43.04573645635003,
+      "validation_minutes": 4.4670191750166435,
+      "RR_psnr_wins": null
+    },
+    "B1": {
+      "best_epoch": 94,
+      "best_validation_mse": 0.0001645548763917759,
+      "RR": {
+        "SAM": 4.8382503691055,
+        "ERGAS": 3.9998877912014663,
+        "PSNR": 37.671097053793424,
+        "SCC": 0.9785580439448827,
+        "Q2n": 0.9254542476021965,
+        "MSE_peak1": 0.0002026379286269326
+      },
+      "FR": {
+        "D_lambda": 0.052135662439394395,
+        "D_s": 0.08134484104606281,
+        "QNR": 0.8704616489457351
+      },
+      "train_minutes": 127.51789501908327,
+      "validation_minutes": 14.207968350083313,
+      "RR_psnr_wins": null
+    }
+  },
+  "delta_B1_minus_B0": {
+    "RR": {
+      "SAM": -0.107838946382671,
+      "ERGAS": -0.1476545038819861,
+      "PSNR": 0.30001353494778016,
+      "SCC": 0.0019094896875854195,
+      "Q2n": 0.0029111030788566694,
+      "MSE_peak1": -1.5522753588197857e-05
+    },
+    "FR": {
+      "D_lambda": 0.002184402132862036,
+      "D_s": 0.038598924837101506,
+      "QNR": -0.03926070368103063
+    }
+  },
+  "B1_RR_PSNR_scene_wins": 20,
+  "k6_comparison": {
+    "completely_identical_experiment": false,
+    "data_sha_and_shapes_equal": {
+      "train": true,
+      "val": true,
+      "RR": true,
+      "FR": true
+    },
+    "shared_B1_update_AST_equal": true,
+    "adapter_metrics_upstream_bytes_equal": {
+      "SSA-MRN/src/ssamrn/__init__.py": true,
+      "SSA-MRN/src/ssamrn/metrics.py": true,
+      "SSA-MRN/src/ssamrn/models/ssa_mrn.py": true,
+      "SSA-MRN/src/ssamrn/models/__init__.py": true,
+      "SSA-MRN/references/upstream/network.py": true
+    },
+    "K4_B1_vs_K6_B1_epoch_orders_equal": true,
+    "K4_minus_K6_observed_deltas": {
+      "B0": {
+        "RR": {
+          "SAM": -0.009353329246862607,
+          "ERGAS": 0.029981671207747418,
+          "PSNR": -0.0827958589171729,
+          "SCC": -0.0003672002807795227,
+          "Q2n": -0.0018508578767436612,
+          "MSE_peak1": 3.049555319409764e-06
+        },
+        "FR": {
+          "D_lambda": 0.008319940535118885,
+          "D_s": 0.001981259501100112,
+          "QNR": -0.010034039441015996
+        }
+      },
+      "B1": {
+        "RR": {
+          "SAM": 0.01603135748622897,
+          "ERGAS": 0.010460005575183118,
+          "PSNR": -0.01932356412119418,
+          "SCC": -0.00015550614352144443,
+          "Q2n": 0.000576611967230356,
+          "MSE_peak1": 1.2028653407499359e-06
+        },
+        "FR": {
+          "D_lambda": 0.007503736847504799,
+          "D_s": 0.0054099738277333526,
+          "QNR": -0.012246220458484336
+        }
+      }
+    },
+    "differences": [
+      "K4 versus K6",
+      "fresh controlled B0/B1 versus external B0 and resumed B1/B2",
+      "B0 fused Adam versus historical foreach Adam",
+      "different full model/worker and checkpoint formats",
+      "observation diagnostics removed from zero-error B1; RR/FR metric implementation unchanged"
+    ]
+  },
+  "checkpoint_validation": "Restricted PyTorch ZIP metadata + NumPy storage, CRC and finite tensors; not torch.load or forward",
+  "limitations": [
+    "No local training, model forward or original H5/GT metric recalculation",
+    "FR lacks GT; QNR/D_s and Q2n/SCC MATLAB parity limitations remain",
+    "Archive ZIP/SHA sidecar was not supplied; extracted artifact manifest checked instead"
+  ],
+  "local_review": {
+    "date_KST": "2026-10-11",
+    "notebook_contract_tests_passed": 15,
+    "local_document_links_checked": 177,
+    "report_sections": 8,
+    "launcher_embedded_model_worker_identical_to_snapshot": true,
+    "author_github_login": "kimrose1015-max",
+    "author_email": "246468538+kimrose1015-max@users.noreply.github.com",
+    "rebased_main": "423c8431e1954e13eb928680014b051a68f70ed8"
+  }
+}
