@@ -1,4 +1,11 @@
-# A6000 후속 검증 · 반복 시드·확대 위치·센서 확장
+# 23탭 확대 위치와 센서 확장
+
+**변경 내용:** 23탭 적용 위치를 분리하고 시드·센서를 확장했습니다.
+
+| 확인된 결과 | 상태 | 개선 여부 |
+|---|---|---|
+| RR 이득이 있으나 FR·센서별 결과가 엇갈림 | 평가 완료 | **부분 개선** |
+
 
 > **이력 구분:** 이 보고서는 당시 **K=6**으로 수행한 실험입니다. 현재 연구 기본값은 [K=4](../../README.md#decision)로 확정했으며, 아래 실제 설정·수치·가중치는 당시 K6 기록을 유지합니다.
 
@@ -12,9 +19,9 @@
 
 새 주제 대신 SSA-MRN 내부 확대를 개선하는 실험입니다. 기존 QB 시드42에서 보인 작은 이득이 반복되는지, 어느 확대 위치와 센서에서 유지되는지 확인했습니다. 새 학습 **10개 모두 100에폭 완료**, 2026-10-08 18:05 KST경 관리 큐 종료를 확인했습니다. 기존 QB 기준선/전체23탭 시드42 2개를 재사용해 **12개 모델 각각 RR20장·FR20장 전체**를 best 가중치로 평가했습니다. 학습 완료와 전체 test 평가 완료를 구분해 검증했습니다.
 
-run ID는 `a6000_followup_123`입니다. 학습의 기반 commit은 `c5e92796bd0ade9518bdd663dd2fe499161d4a2d`이며, 학습 당시 미커밋 후속 코드도 이번 결과와 함께 보관합니다. [학습 코드 해시](../assets/a6000_followup_123/training_inventory.json)와 [평가 코드·산출물 해시](../assets/a6000_followup_123/report_manifest.json)로 실제 사용 코드를 확인할 수 있습니다. 이 보고서·코드·가중치를 포함한 Git commit이 전달 버전입니다.
+run ID는 `a6000_followup_123`입니다.[학습 코드 해시](../assets/a6000_followup_123/training_inventory.json)와 [평가 코드·산출물 해시](../assets/a6000_followup_123/report_manifest.json)로 실제 사용 코드를 확인할 수 있습니다. 이 보고서·코드·가중치를 포함한 Git commit이 전달 버전입니다.
 
-## 2. 변경 사항과 평가 조건
+## 2. 변경한 구조와 비교 조건
 
 - 기준선은 복구된 SSA-MRN입니다. 전체23탭은 `upsample1` ×4와 `upsample100/101/102` ×2를 바꿉니다. 입력만은 `upsample1/100`, 출력만은 `upsample101/102`입니다. 제공 LMS, bilinear 축소, SSA 내부 연산은 유지합니다.
 - K=6, Adam lr=1e-4, batch=micro batch=32, 기본 MSE, 100에폭, CUDA FP32·결정론입니다. 같은 센서·시드 쌍은 공통 계층 초기화와 데이터 순서를 맞췄습니다. GPU는 RTX A6000 48GB입니다.
@@ -69,7 +76,7 @@ run ID는 `a6000_followup_123`입니다. 학습의 기반 commit은 `c5e92796bd0
 
 *Q4/Q8는 밴드 수에 따라 정한 Q2n이며 MATLAB 대조 검증이 남아 있습니다. FR의 PAN resize가 MATLAB과 일치하는지 미검증이므로 QNR·Ds도 잠정 값입니다. 장면별 SCC·Q2n·Dλ·Ds·정규화 MSE 등 전체 지표는 [metrics.json](../assets/a6000_followup_123/metrics.json)에 보관했습니다. 센서 간 절대 PSNR의 순위로 구조 우열을 판단하지 않습니다. GF2의 peak1023 RR PSNR은 기준선 40.3961dB, 전체23탭 40.5450dB이며 peak2047 표와 차이는 약 6.0248dB입니다.
 
-## 4. 직전 연구와 수치 차이
+## 4. 기준선 대비 차이와 해석
 
 차이는 **현재 변형 − 같은 센서·시드 기준선**입니다. QB 시드42는 직전 연구의 실제 가중치를 그대로 재평가했으며 기존 수치와 일치합니다. GF2/WV3를 QB의 절대값과 직접 비교하지 않고 각각 새로 학습한 자체 기준선과 비교합니다.
 
@@ -95,7 +102,7 @@ QB 전체23탭의 **시드별 paired 차이 평균 ± 표본 표준편차(ddof=1
 
 <a id="graphs"></a>
 
-## 5. 그래프
+## 5. 학습·평가 그래프
 
 새 10개 학습의 실제 100에폭 train MSE·validation MSE·band-mean PSNR·SAM 곡선입니다. 기존 시드42 기준선/전체23탭에는 validation SAM과 측정 band-mean PSNR 기록이 없으므로 곡선을 만들어 넣지 않았습니다. 위치 분석 그림은 새 입력만/출력만 모델의 실제 기록만 보여 줍니다.
 
@@ -113,9 +120,9 @@ QB 전체23탭의 **시드별 paired 차이 평균 ± 표본 표준편차(ddof=1
 
 <a id="images"></a>
 
-## 6. 결과 이미지 예시
+## 6. 결과 이미지
 
-평가 전에 seed42로 센서별 서로 다른 RR 장면5개를 고정했습니다. 모든 변형에서 같은 센서의 동일 index·순서를 사용하며 전체 장면을 표시합니다. 선택 seed·H5 index·full-scene tile·순서는 [selection.json](../assets/a6000_followup_123/selection.json)에 있습니다. 패널은 **LR MS · PAN 입력 · 예측 · 정답** 순서이며 기준선은 수치 비교에만 남겼습니다. MS의 RGB 밴드 [2,1,0]은 표시 가정입니다. 같은 장면의 GT 1~99% 대비를 LR·예측·GT에 공통 적용했고, LR은 최근접 확대로 표시했습니다. PAN은 회색조 자체 대비입니다. 표시된 대비와 원래 값으로 계산한 지표는 구분됩니다. FR에는 GT 패널을 만들지 않았습니다.
+평가 전에 seed42로 센서별 서로 다른 RR 장면5개를 고정했습니다. 모든 변형에서 같은 센서의 동일 index·순서를 사용하며 전체 장면을 표시합니다. 선택 seed·H5 index·full-scene tile·순서는 [selection.json](../assets/a6000_followup_123/selection.json)에 있습니다. 패널은 **LR MS · PAN 입력 · 예측 · 정답** 순서이며 기준선은 수치 비교에만 남겼습니다. MS의 RGB 밴드 [2,1,0]은 표시 가정입니다. 같은 장면의 GT 1–99% 대비를 LR·예측·GT에 공통 적용했고, LR은 최근접 확대로 표시했습니다. PAN은 회색조 자체 대비입니다. 표시된 대비와 원래 값으로 계산한 지표는 구분됩니다. FR에는 GT 패널을 만들지 않았습니다.
 
 ### QB · 전체 23탭 · s42
 
@@ -238,9 +245,9 @@ QB 전체23탭의 **시드별 paired 차이 평균 ± 표본 표준편차(ddof=1
 
 <a id="evidence"></a>
 
-## 7. 가중치와 검증 근거
+## 7. 재현 자료
 
-**12개 모델의 원본 best/latest 총24개를 Git에 포함**했습니다. 새 학습10개뿐 아니라 재사용 QB 시드42 두 모델의 원본도 포함합니다. 모델·config·epoch·best MSE·Adam·CPU/CUDA/loader RNG가 담긴 재개 체크포인트이며 추론용으로 축약하거나 변환하지 않았습니다. 각 파일은 약5~6MB이고 전체 약129.9MiB입니다. 원본 서버 파일과 복사본의 SHA-256 일치를 확인했습니다. 데이터와 Python 환경은 Git에 포함하지 않으며 config의 서버 경로는 복구 환경에 맞춰 준비해야 합니다. 코드/환경 전체의 이동을 보장하는 의미는 아닙니다.
+**12개 모델의 원본 best/latest 총24개를 Git에 포함**했습니다. 새 학습10개뿐 아니라 재사용 QB 시드42 두 모델의 원본도 포함합니다. 모델·config·epoch·best MSE·Adam·CPU/CUDA/loader RNG가 담긴 재개 체크포인트이며 추론용으로 축약하거나 변환하지 않았습니다. 각 파일은 약5–6MB이고 전체 약129.9MiB입니다. 원본 서버 파일과 복사본의 SHA-256 일치를 확인했습니다. 데이터와 Python 환경은 Git에 포함하지 않으며 config의 서버 경로는 복구 환경에 맞춰 준비해야 합니다. 코드/환경 전체의 이동을 보장하는 의미는 아닙니다.
 
 | 모델 | best epoch | best 원본 | latest 원본 |
 | --- | --- | --- | --- |
@@ -259,9 +266,11 @@ QB 전체23탭의 **시드별 paired 차이 평균 ± 표본 표준편차(ddof=1
 
 [가중치별 epoch·SHA-256·compact 100에폭 기록·전체 장면 지표](../assets/a6000_followup_123/metrics.json) · [모든 산출물 해시](../assets/a6000_followup_123/report_manifest.json) · [학습 설정](../assets/a6000_followup_123/training_plan.json) · [validation 점수](../assets/a6000_followup_123/validation_scores.json)
 
-검증은 12개 이력의 1~100에폭 연속성, best=min validation MSE, latest=100, strict 모델 로드, 모든 RR/FR 장면 수·유한 지표, paired 차이·평균/표준편차, 35개 고정 이미지, 24개 가중치 및 전체 산출물 해시, 학습 코드 inventory 일치를 확인합니다. [`verify_a6000_followup_report.py`](../../scripts/verify_a6000_followup_report.py)로 재검증할 수 있습니다. **GitHub의 `182e2fa01b39bccd10241810d0cee8faa9c84646` commit을 새로 복제해 실제 원본24개 가중치와 산출물71개의 바이트·SHA-256 일치를 확인했습니다.** [원격 복구 검증 기록](../operations/a6000_followup_remote_verification.json)에 다운로드 방식·시각·파일별 해시를 남겼습니다. 원본 서버 폴더는 유지합니다.
+검증은 12개 이력의 1–100에폭 연속성, best=min validation MSE, latest=100, strict 모델 로드, 모든 RR/FR 장면 수·유한 지표, paired 차이·평균/표준편차, 35개 고정 이미지, 24개 가중치 및 전체 산출물 해시, 학습 코드 inventory 일치를 확인합니다. [`verify_a6000_followup_report.py`](../../scripts/verify_a6000_followup_report.py)로 재검증할 수 있습니다. **GitHub의 `182e2fa01b39bccd10241810d0cee8faa9c84646` commit을 새로 복제해 실제 원본24개 가중치와 산출물71개의 바이트·SHA-256 일치를 확인했습니다.** [원격 복구 검증 기록](../operations/a6000_followup_remote_verification.json)에 다운로드 방식·시각·파일별 해시를 남겼습니다. 원본 서버 폴더는 유지합니다.
 
-## 8. 한계와 다음 판단
+## 8. 개선 여부와 다음 단계
+
+**판정: 부분 개선.** 위 결과는 해당 보고서의 비교 조건에 한정합니다. 지표 일부의 개선을 최종 모델 채택으로 해석하지 않습니다.
 
 전체23탭은 QB 세 시드와 GF2·WV3 각각에서 best validation MSE를 낮췄습니다. 그러나 QB의 RR SAM은 시드43에서 악화했고, FR QNR은 두 반복시드에서 악화했습니다. GF2는 시드42에서 RR/FR이 함께 좋아졌지만 WV3는 RR PSNR·SAM과 FR QNR이 모두 악화했습니다. 따라서 **센서 전체에 적용하는 최종 채택은 보류**합니다.
 
