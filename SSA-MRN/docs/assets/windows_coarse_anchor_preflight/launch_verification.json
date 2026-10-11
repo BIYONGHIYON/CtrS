@@ -1,0 +1,95 @@
+{
+  "checked_at": 1791719919.6088407,
+  "source_hashes_match": true,
+  "queue": {
+    "active": {
+      "N0": 3604,
+      "N1": 2568
+    },
+    "completed": [],
+    "skipped": [],
+    "failed": [],
+    "updated": 1791719917.2608893
+  },
+  "states": {
+    "N0": {
+      "pid": 10804,
+      "state": "training",
+      "variant": "N0",
+      "epoch": 3,
+      "epochs": 50,
+      "batch": 69,
+      "batches": 268,
+      "percent": 25.746268656716417,
+      "patches_per_second": 429.530201342246,
+      "allocated_mib": 17.5546875,
+      "peak_mib": 536.19189453125,
+      "updated": 1791719918.7833152,
+      "elapsed_seconds": 98.67200000000048
+    },
+    "N1": {
+      "pid": 14628,
+      "state": "training",
+      "variant": "N1",
+      "epoch": 3,
+      "epochs": 50,
+      "batch": 75,
+      "batches": 268,
+      "percent": 27.98507462686567,
+      "patches_per_second": 453.77197958028154,
+      "allocated_mib": 17.54248046875,
+      "peak_mib": 534.68798828125,
+      "updated": 1791719916.4147692,
+      "elapsed_seconds": 96.29700000000048
+    }
+  },
+  "first_epochs": {
+    "N0": [
+      {
+        "epoch": 1,
+        "train_mse": 0.001455268686924955,
+        "val_mse": 0.0007026114645279611,
+        "val_sam": 8.434766732354571,
+        "val_global_psnr": 31.53284768092798,
+        "best_mse": 0.0007026114645279611,
+        "seconds": 46.84400000000096,
+        "gates": {}
+      },
+      {
+        "epoch": 2,
+        "train_mse": 0.0005780568612535453,
+        "val_mse": 0.0005242896146505211,
+        "val_sam": 7.111467817538054,
+        "val_global_psnr": 32.804287448890655,
+        "best_mse": 0.0005242896146505211,
+        "seconds": 88.3130000000001,
+        "gates": {}
+      }
+    ],
+    "N1": [
+      {
+        "epoch": 1,
+        "train_mse": 0.0014222920894278509,
+        "val_mse": 0.0007003309278506932,
+        "val_sam": 8.541945209617628,
+        "val_global_psnr": 31.546966940171334,
+        "best_mse": 0.0007003309278506932,
+        "seconds": 45.71900000000096,
+        "gates": {}
+      },
+      {
+        "epoch": 2,
+        "train_mse": 0.0005751675130348722,
+        "val_mse": 0.0005188371096383242,
+        "val_sam": 7.069066196783332,
+        "val_global_psnr": 32.84968968719854,
+        "best_mse": 0.0005188371096383242,
+        "seconds": 85.64099999999962,
+        "gates": {}
+      }
+    ]
+  },
+  "gpu": "100 %, 1928 MiB, 62",
+  "detach_verified": true,
+  "training_completed": false
+}
