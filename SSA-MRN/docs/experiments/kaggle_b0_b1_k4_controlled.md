@@ -136,7 +136,7 @@ B1의 validation MSE는 B0보다 **4.382% 감소**했다. RR PSNR은 **20/20장 
 
 원본 manifest129개 크기·SHA-256, 코드7개 hash·문법, 장면별 평균·B1−B0 차이, validation 최저best, 초기화·100개순서, checkpoint6개 ZIP CRC·metadata·NumPy tensor storage 유한값, 예측80개 shape·유한값, 패널10개의1024×296 크기를 확인했다. 신뢰되지 않는 pickle global은 제한 reader가 거부하며 산출물의 모델/worker를 실행하지 않았다. PyTorch `torch.load`/모델 forward/원본 H5로 지표를 다시 계산한 검증은 아니다.
 
-사용자가 ZIP/SHA sidecar가 아니라 추출 폴더를 제공했으므로 원래 ZIP 전체 해시는 미검증이다. 파일별 원본 manifest를 검증하고 보관했다. 원격 push 후 Git blob 대조와 best/latest 재다운로드 SHA-256 확인을 별도 기록하며, 원격 보관 상태는 그 검증 근거를 따른다. 다운로드 원본·이전 실험 폴더·공용 환경은 삭제하지 않는다.
+사용자가 ZIP/SHA sidecar가 아니라 추출 폴더를 제공했으므로 원래 ZIP 전체 해시는 미검증이다. 파일별 원본 manifest를 검증하고 보관했다. 최초 보관 commit [`155312a4f5cf588b27891063f0b3e88268152683`](https://github.com/BIYONGHIYON/CtrS/commit/155312a4f5cf588b27891063f0b3e88268152683)의 **변경142개 GitHub tree blob·크기**를 로컬 Git 바이트와 대조했고, **best/latest4개를 원격에서 다시 다운로드해 SHA-256 일치**를 확인했다. 검증 기록은 verification.json의 `remote_verification`에 보존하며 후속 commit은 이 기록·문서만 추가한다. 작업 중 main에 병합된 `423c843`의 다른 연구 요약·실험표도 유지했다. 다운로드 원본·이전 실험 폴더·공용 환경은 삭제하지 않는다.
 
 ## 8. 한계와 다음 판단
 
