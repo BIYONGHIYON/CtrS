@@ -1,0 +1,37 @@
+{
+  "variants": [
+    "C0",
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5"
+  ],
+  "epochs": 50,
+  "effective_batch": 96,
+  "micro": 96,
+  "workers": 1,
+  "K": 4,
+  "seed": 42,
+  "lr": 0.0001,
+  "loss": "MSE",
+  "amp": true,
+  "max_parallel": 2,
+  "data": "C:/CtrS/SSA-MRN/data/dataset",
+  "source_base_commit": "383a7263a6c5703793949872d40224534ffbec30",
+  "source_hashes": {
+    "scripts/windows_dual_stream_suite.py": "48f742234bcbe141baf65548ef37f520ec734bf3018fa78471c8d6b12c290217",
+    "src/ssamrn/models/dual_stream.py": "f82af9d0d04f6c53af90ba69667346e45af2dbd795b26b5bafdb3172a2446ed4",
+    "src/ssamrn/models/ssa_mrn.py": "c140c1fee05a7958b924c6058e14b31daab7ded51c1aae7122c3287c7afd8891",
+    "references/upstream/network.py": "b263d99eb88715a8835ca44c33f6820eb02ee7a8314e31982e73fbb5c8bc1816",
+    "src/ssamrn/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "scripts/evaluate_a6000.py": "6f7adbc5ced113559e9e535165caf6e4054b1d5b9debb9086eab3c4dccbb43c8"
+  },
+  "selection": "validation MSE; SAM only exact tie",
+  "data_hashes": {
+    "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+    "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470"
+  },
+  "model_width": 48,
+  "architecture": "dual streams / full-resolution path / shared feature refinement"
+}

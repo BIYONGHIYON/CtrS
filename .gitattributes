@@ -29,3 +29,11 @@ SSA-MRN/scripts/windows_coarse_anchor_suite.py text eol=lf
 SSA-MRN/scripts/verify_coarse_anchor.py text eol=lf
 SSA-MRN/scripts/verify_coarse_anchor_results.py text eol=lf
 SSA-MRN/src/ssamrn/models/coarse_anchor.py text eol=lf
+
+# Preserve original dual-stream evidence and checkpoint/source hashes.
+SSA-MRN/docs/assets/windows_dual_stream_qb_50/** -text -whitespace
+SSA-MRN/docs/assets/dual_stream_preflight/** -text -whitespace
+SSA-MRN/scripts/windows_dual_stream_suite.py text eol=lf
+SSA-MRN/scripts/verify_dual_stream.py text eol=lf
+SSA-MRN/scripts/verify_dual_stream_results.py text eol=lf
+SSA-MRN/src/ssamrn/models/dual_stream.py text eol=lf
