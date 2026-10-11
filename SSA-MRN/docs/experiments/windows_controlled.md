@@ -1,4 +1,11 @@
-# Windows K4 손실 탐색 · QB 완료 결과
+# 분광·관측 일치·경계 손실 추가
+
+**변경 내용:** 기본 MSE에 보조 손실을 하나씩 추가했습니다.
+
+| 확인된 결과 | 상태 | 개선 여부 |
+|---|---|---|
+| edge 0.1: PSNR −0.0661 dB, SAM −0.0119°, 잠정 QNR +0.0098 | 평가 완료 | **부분 개선** |
+
 
 [실험 목록](../../README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [가중치](#evidence)
 
@@ -12,7 +19,7 @@
 
 별도 WMI 평가 프로세스에서 QB K4 기준선·최종 후보의 **RR20장·FR20장 전체**를 각각 평가했고, 08:26:52 KST 종료를 확인했습니다. 원본 best/latest20개, 실제 학습 이력·코드·선택 근거·전체 지표·고정 장면 이미지를 함께 보관합니다. **GF2·WV3와 K6 기준선의 test 평가는 이번 범위에 포함하지 않았습니다.**
 
-## 2. 변경 사항과 평가 조건
+## 2. 변경한 구조와 비교 조건
 
 | 항목 | 조건 |
 |---|---|
@@ -78,7 +85,7 @@ K4는 [3센서 K4/K6 통제 비교](windows_k_baselines.md)의 validation 다수
 
 PSNR·MSE·ERGAS·SCC·Q2n은 악화했고 SAM은 소폭 개선됐습니다. FR Dλ·Ds는 감소하고 QNR은 증가했습니다. **FR는 MATLAB PAN resize 일치성이 미검증인 잠정값이며, 고해상도 정답 정확도의 직접 증거가 아닙니다.** 전체 장면별 원본·데이터 H5 해시·형상은 [metrics.json](../assets/windows_losses/metrics.json)에 있습니다.
 
-## 4. 직전 연구와 수치 차이
+## 4. 기준선 대비 차이와 해석
 
 같은 서버·QB·K4·seed42·100에폭의 자체 기준선 대비 **RR PSNR −0.066057dB, SAM −0.011856°, MSE +3.576221e-6**, **잠정 FR QNR +0.009828**입니다. validation MSE의 약0.226% 개선이 RR test 정확도 개선으로 이어지지 않았습니다.
 
@@ -86,9 +93,9 @@ PSNR·MSE·ERGAS·SCC·Q2n은 악화했고 SAM은 소폭 개선됐습니다. FR 
 
 <a id="graphs"></a>
 
-## 5. 그래프
+## 5. 학습·평가 그래프
 
-원본 학습·validation MSE와 **MSE에서 유도한 global validation PSNR**입니다. 유도 PSNR은 실제 밴드별 PSNR 측정값과 구분합니다. 매에폭 validation SAM을 기록하지 않았으므로 SAM 곡선을 만들지 않았습니다. 최종 후보 이력은 선별1~30과 이어 학습31~100을 합쳤고 중복 에폭을 제외했습니다.
+원본 학습·validation MSE와 **MSE에서 유도한 global validation PSNR**입니다. 유도 PSNR은 실제 밴드별 PSNR 측정값과 구분합니다. 매에폭 validation SAM을 기록하지 않았으므로 SAM 곡선을 만들지 않았습니다. 최종 후보 이력은 선별1–30과 이어 학습31–100을 합쳤고 중복 에폭을 제외했습니다.
 
 ![100에폭 기준선·edge 학습과 validation 곡선](../assets/windows_losses/learning.png)
 
@@ -100,9 +107,9 @@ PSNR·MSE·ERGAS·SCC·Q2n은 악화했고 SAM은 소폭 개선됐습니다. FR 
 
 <a id="images"></a>
 
-## 6. 결과 이미지 예시
+## 6. 결과 이미지
 
-고정 RR index1·8·11·13·19의 전체 장면입니다. 왼쪽부터 **LR MS · PAN · 예측 · GT**이며 LR은 최근접 확대, MS 패널은 GT의 밴드별1~99백분위 공통 대비입니다. 시각화용 RGB는0기준 밴드2·1·0이고 추론은 모든4밴드입니다. 원래 획득 장면 ID는 제공되지 않아 H5 index로 기록했습니다. FR에는 GT를 생성하지 않았습니다.
+고정 RR index1·8·11·13·19의 전체 장면입니다. 왼쪽부터 **LR MS · PAN · 예측 · GT**이며 LR은 최근접 확대, MS 패널은 GT의 밴드별1–99백분위 공통 대비입니다. 시각화용 RGB는0기준 밴드2·1·0이고 추론은 모든4밴드입니다. 원래 획득 장면 ID는 제공되지 않아 H5 index로 기록했습니다. FR에는 GT를 생성하지 않았습니다.
 
 **장면1 · 기준선**
 
@@ -152,7 +159,7 @@ PSNR·MSE·ERGAS·SCC·Q2n은 악화했고 SAM은 소폭 개선됐습니다. FR 
 
 <a id="evidence"></a>
 
-## 7. 가중치와 검증 근거
+## 7. 재현 자료
 
 **원본 best/latest20개**를 아래 Git 경로에 포함합니다. model·config·epoch·best MSE·Adam·CPU/CUDA/DataLoader RNG를 유지했고 추론 전용 파일로 변환하지 않았습니다. 각파일의 원본 SHA-256·크기·에폭은 [metrics.json](../assets/windows_losses/metrics.json), 실행 캐시5개를 제외한 원본88개 inventory는 [report_manifest.json](../assets/windows_losses/report_manifest.json)에 있습니다.
 
@@ -180,7 +187,9 @@ PSNR·MSE·ERGAS·SCC·Q2n은 악화했고 SAM은 소폭 개선됐습니다. FR 
 
 기존 실행 폴더·인계 경로 `C:\CtrS-controlled-suite`는 유지했습니다. 이번 작업에서 폴더 삭제·새 학습·서버 종료를 진행하지 않았습니다. GitHub `2dac11df6296ed540c6a3ea2f169f0c28c1fef80` 커밋을 새 폴더에 sparse clone하여 원본 가중치20개·원본88개 및 전체 보관91개 파일의 바이트·SHA-256이 일치함을 확인했습니다. CPU 검증기로 validation 선택·연속 이력·RR/FR 전체 장면·평균·차이도 다시 검사했습니다. [원격 복구 검증 기록](../assets/windows_losses/remote_verification.json)
 
-## 8. 한계와 다음 판단
+## 8. 개선 여부와 다음 단계
+
+**판정: 부분 개선.** 위 결과는 해당 보고서의 비교 조건에 한정합니다. 지표 일부의 개선을 최종 모델 채택으로 해석하지 않습니다.
 
 **K4 기본 MSE 기준선을 유지하고 edge0.1의 종합 채택은 보류합니다.** 반복시드·다른 센서에서 SAM·FR 개선이 재현되는지, RR 정확도 손실을 줄일 수 있는지는 별도 실험 대상입니다. 이번 결과만으로 구조+손실의 결합 효과를 확정하지 않습니다.
 

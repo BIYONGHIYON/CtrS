@@ -1,179 +1,62 @@
-<p align="center"><img src="icon/CtrS-icon-circle.png" alt="CtrS" width="120" /></p>
+<p align="center"><img src="icon/CtrS-icon-circle.png" alt="CtrS" width="100" /></p>
 
-# CtrS · SSA-MRN 성능 개선
+# CtrS · SSA-MRN 성능 개선 연구
 
-고해상도 흑백 위성영상 **PAN**과 저해상도 다중분광영상 **MS**를 결합해 고해상도 MS를 복원합니다. SSA-MRN을 재현하고 구조·손실·학습 데이터 변화가 복원 성능에 미치는 영향을 비교하는 연구입니다.
+## 연구 소개
 
-## 현재 결정 · K=4
+고해상도 흑백 위성영상 **PAN**의 공간 정보와 저해상도 다중분광영상 **MS**의 색·분광 정보를 결합해 고해상도 MS를 복원하는 팬샤프닝 연구입니다. SSA-MRN을 재현하고 구조·손실·데이터 증강을 바꿔 복원 성능을 개선합니다.
 
-**2026-10-09 현재 연구의 기본 설정은 K=4로 확정했습니다.** Windows 동일 환경에서 QB·GF2·WV3의 K4/K6를 각각 100에폭 학습하고, 센서별 best validation MSE 다수결 **2:1**로 선택했습니다. 앞으로 별도 승인된 K 비교가 아닌 신규 기준선·개선 비교는 K4를 기준으로 설계합니다.
+## 현재 연구 기준
 
-K는 모델 내부 특징 차원이며 센서 밴드 수와 다릅니다. WV3에서는 K6가 낮았으므로 이 결정은 모든 센서·test 지표에서 K4가 우세하다는 뜻은 아닙니다. K 선택에는 test를 사용하지 않았습니다.
+기준 모델은 **원본 SSA-MRN, 내부 특징 차원 K=4, 기본 MSE 손실**입니다. 동일 환경의 세 센서 validation 비교에서 다수결로 선택했습니다. 모든 센서에서 우세하다는 뜻은 아닙니다.
 
-| 센서 | K4 best validation MSE ↓ | K6 best validation MSE ↓ | 선택 |
-|---|---:|---:|---|
-| QB | 0.000171861819 | 0.000172164394 | K4 |
-| GF2 | 0.000080382687 | 0.000082206216 | K4 |
-| WV3 | 0.000360564225 | 0.000358851370 | K6 |
+최근 **3단계 공유 복원 C1**은 같은 조건의 원본 대비 PSNR **+0.2442 dB**, SAM **−0.1883°**, 잠정 QNR **+0.0250**을 기록했습니다. 다른 조건의 반복 복원에서는 FR이 악화한 결과도 있어, 현재는 후속 검증 후보로 유지합니다.
 
-![Windows K4/K6 validation 비교](SSA-MRN/docs/assets/windows_k_baselines/validation_comparison.png)
+## SSA-MRN 구조
 
-[선택 근거·100에폭 곡선·원본 가중치 12개](SSA-MRN/docs/experiments/windows_k_baselines.md)
+PAN·축소 후 재확대한 PAN(LRPAN)·확대한 MS(LMS)에서 특징을 추출합니다. 전체·절반·1/4 크기에서 밴드별 SSAI로 융합하고, 작은 크기부터 복원하며 이전 크기의 특징을 결합합니다. 아래는 **원본 SSA-MRN의 단일 복원 구조**입니다.
 
-## 연구 흐름과 남은 일
+<img src="SSA-MRN/docs/assets/architecture/ssa-mrn.png" alt="SSA-MRN 입력·다중 크기 SSAI·단계별 복원 구조" width="620" />
 
-**K4/K6 통제 비교 완료 → K4 확정 → K4 손실 탐색 → 최종 후보 연장 → 같은 조건의 기준선과 RR/FR 평가** 순서입니다.
+## 결과 이미지
 
-2026-10-10 05:28 KST에 Windows **940에폭 학습을 모두 완료**했고, 08:26에 QB K4 기준선·edge0.1 최종 후보의 전체 RR20장·FR20장 평가를 마쳤습니다. 기준선 대비 **RR PSNR −0.066057dB, SAM −0.011856°, 잠정 FR QNR +0.009828**으로 지표가 엇갈려 손실의 종합 채택을 보류합니다. 구조+손실 결합 효과는 아직 미확정입니다.
+같은 QB 장면의 **LR MS · PAN · 예측 · 정답** 순서입니다. 확대·대비 조정된 시각화이며, 수치 평가는 원래 값으로 수행했습니다.
 
-이전 K6 구조·증강 연구는 후보와 한계를 파악한 근거입니다. 그 결과를 K4 성능으로 바꾸어 해석하지 않으며, K4에 적용할 후보는 K4 기준선과 다시 비교해야 합니다.
+### 원본 SSA-MRN · C0
 
+![원본 SSA-MRN 결과](SSA-MRN/docs/assets/windows_dual_stream_qb_50/evaluation/C0_scene_08.png)
 
-### Windows K4 손실 · 현재 확인한 차이
+### 3단계 공유 복원 · C1
 
-validation으로 선별한 edge0.1을 같은 QB K4 기준선과 비교했습니다. validation MSE는 약0.226% 낮지만 RR PSNR·MSE는 악화해 K4 기본 MSE 기준선을 유지합니다. SAM·잠정 FR QNR 개선은 후속 검증할 절충 후보로 기록합니다. [전체 수치·원본20개·고정5장면](SSA-MRN/docs/experiments/windows_controlled.md)
+![3단계 공유 복원 결과](SSA-MRN/docs/assets/windows_dual_stream_qb_50/evaluation/C1_scene_08.png)
 
-![Windows K4 기준선 대비 edge0.1 전체 test 차이](SSA-MRN/docs/assets/windows_losses/test_deltas.png)
+## 다른 실험
 
-## 최근 완료 · 분리 특징 경로·반복 융합
+RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없는 원래 해상도 평가입니다. 수치 차이는 각 실험의 대조군 대비이며, 서로 다른 조건의 실험끼리 순위를 매기지 않습니다.
 
-2026-10-12에 C0~C5 **각 50에포크·총 300에포크**와 C0/C1/C5의 전체 RR·FR 각 20장 평가를 완료했습니다. **C1 기존 3단계 공유 복원**이 기준선 대비 RR PSNR **+0.244200dB**, SAM **−0.188318°**, 잠정 FR QNR **+0.024991**로 함께 개선되어 후속 검증 후보로 유지합니다. 새 분리 경로 중 validation 1위 C5는 RR PSNR **−0.921344dB**로 악화되어 C2~C5는 이번 조건에서 채택을 보류합니다.
+| 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
+|---|---|---|---|---|
+| [반복 복원과 PAN·MS 분리 경로](SSA-MRN/docs/experiments/windows_dual_stream_qb_50.md) | 3단계 공유 복원과 분리 특징 경로를 비교했습니다. | C1: PSNR +0.2442 dB, SAM −0.1883°, 잠정 QNR +0.0250. 새 분리 경로 C5는 RR 악화 | 평가 완료 | 부분 개선 |
+| [작은 크기 특징 보존과 PAN 기여량 조절](SSA-MRN/docs/experiments/windows_coarse_anchor_qb_50.md) | 작은 특징을 병렬 전달하고 PAN 기여량을 학습했습니다. | N3: PSNR +0.1875 dB, SAM −0.0134°, 잠정 QNR −0.0147 | 평가 완료 | 부분 개선 |
+| [SSAI 단계·잔차 복원·초기 입력 변경](SSA-MRN/docs/experiments/windows_structure_qb_50.md) | SSAI 단계, 복원 잔차, LRPAN 입력을 분리해 비교했습니다. | LRPAN 제거: PSNR +0.1297 dB, SAM −0.0704°, 잠정 QNR −0.0111 | 평가 완료 | 부분 개선 |
+| [단일 복원과 3단계 공유 복원](SSA-MRN/docs/experiments/kaggle_b0_b1_k4_controlled.md) | 동일 초기값과 학습 조건에서 복원 횟수를 변경했습니다. | 반복 복원: PSNR +0.3000 dB, SAM −0.1078°, 잠정 QNR −0.0393 | 평가 완료 | 부분 개선 |
+| [반복 복원의 축소 전 저역통과 필터](SSA-MRN/docs/experiments/kaggle_bandlimit_k4.md) | 축소 전에 고정 Gaussian 필터를 추가했습니다. | PSNR −0.0196 dB, SAM +0.0022°, 잠정 QNR −0.0686 | 평가 완료 | 개선 없음 |
+| [SSAI 내부 특징 차원 비교](SSA-MRN/docs/experiments/windows_k_baselines.md) | 같은 환경에서 내부 특징 차원 4와 6을 비교했습니다. | 센서별 validation 다수결 2:1로 차원 4 선택; test는 일부만 평가 | 학습 완료·일부 평가 | 비교 기준 |
+| [분광·관측 일치·경계 손실 추가](SSA-MRN/docs/experiments/windows_controlled.md) | 기본 MSE에 보조 손실을 하나씩 추가했습니다. | edge 0.1: PSNR −0.0661 dB, SAM −0.0119°, 잠정 QNR +0.0098 | 평가 완료 | 부분 개선 |
+| [공개 코드 재현](SSA-MRN/docs/experiments/pan_k4.md) | 공개 코드 설정을 재현해 초기 기준을 확보했습니다. | RR·FR 재현 결과 확보; 구조 개선 실험이 아님 | 평가 완료 | 비교 기준 |
+| [논문 설정 재현](SSA-MRN/docs/experiments/pan_k6.md) | 논문의 내부 특징 차원 설정으로 재현했습니다. | RR·FR 재현 결과 확보; 공개 코드 재현과 장치 조건이 다름 | 평가 완료 | 비교 기준 |
+| [23탭 확대·저해상도 보정·고주파 경로](SSA-MRN/docs/experiments/a6000_architecture_qb.md) | 확대 연산, 출력 보정, PAN 고주파 경로를 개별 변경했습니다. | 23탭: PSNR +0.0557 dB, SAM −0.0429°, 잠정 QNR +0.0031; 다른 후보 이득 혼재 | 평가 완료 | 부분 개선 |
+| [23탭 확대 위치와 센서 확장](SSA-MRN/docs/experiments/a6000_followup_123.md) | 23탭 적용 위치를 분리하고 시드·센서를 확장했습니다. | RR 이득이 있으나 FR·센서별 결과가 엇갈림 | 평가 완료 | 부분 개선 |
+| [23탭 확대의 반복 시드 비교](SSA-MRN/docs/experiments/a6000_gf2_repeat_qb_input.md) | 전체 확대 및 입력 확대 후보를 추가 시드로 반복했습니다. | 전체 확대의 GF2 PSNR·QNR 개선 반복; SAM 및 QB QNR 혼재 | 평가 완료 | 부분 개선 |
+| [밴드별 게이트 고주파 주입](SSA-MRN/docs/experiments/kaggle_band_gated_hf.md) | 밴드별 게이트로 PAN 고주파 주입량을 조절했습니다. | RR 악화로 후보 채택 보류 | 평가 완료 | 개선 없음 |
+| [MTF 변화량 데이터 증강](SSA-MRN/docs/experiments/kaggle_mtf_pair.md) | 센서 열화 특성의 변화량을 학습 데이터에 추가했습니다. | 100에폭 validation 기록 확보; 이 보고서의 RR·FR 결과는 미확정 | 학습 완료·평가 대기 | 판단 보류 |
+| [SSAI 내부 융합 연산 변경](SSA-MRN/docs/experiments/ssa_fusion_local.md) | SSAI 핵심 융합 연산을 네 구조로 비교했습니다. | validation MSE는 기존 A0가 최저; RR·FR 평가 대기 | 학습 완료·평가 대기 | 판단 보류 |
+| [반복 복원에 MS 관측 오차 전달](SSA-MRN/docs/experiments/kaggle_b1_b2.md) | 반복 단계에 입력 MS와 관측한 출력의 차이를 전달했습니다. | PSNR +0.1158 dB, SAM −0.0183°, 잠정 QNR −0.0182 | 평가 완료 | 부분 개선 |
+| [Haar 대역별 단계 복원과 게이트](SSA-MRN/docs/experiments/kaggle_wavelet_a0_a1.md) | Haar 대역별 복원에 밴드·방향·위치 게이트를 적용했습니다. | 원본 대비 RR 큰 폭 악화; 학습 게이트의 추가 이득도 없음 | 평가 완료 | 개선 없음 |
+| [반복 복원·관측 오차 전달의 재개 학습](SSA-MRN/docs/experiments/kaggle_b1_b2_100_resume.md) | 반복 복원과 관측 오차 후보를 재개해 기준선과 비교했습니다. | 기준선 대비 RR 개선·잠정 QNR 하락; 별도 세션 비교 | 평가 완료 | 부분 개선 |
+| [MS 관측 연산자 구현](SSA-MRN/docs/experiments/observation_validation.md) | 센서 MTF·샘플링 위상·경계 처리를 구성했습니다. | 관측 구현 대응 확인; 학습 성능 비교가 아님 | 사전 검증 완료 | 성능 비교 아님 |
 
-[상세 보고서](SSA-MRN/docs/experiments/windows_dual_stream_qb_50.md)
-
-![C1 · QB 고정 장면 8: LR MS · PAN · 예측 · GT](SSA-MRN/docs/assets/windows_dual_stream_qb_50/evaluation/C1_scene_08.png)
-
-## 최근 완료 · 작은 특징 보존·PAN 기여량 조절
-
-QB K4·batch64에서6개 구조를 각 50에폭 비교했습니다. validation 1위 N3는 기준선 N0 대비 **RR PSNR +0.187482dB·SAM −0.013421°**, 잠정 **FR QNR −0.014702**로 기본 구조 채택을 보류합니다. 원본 best/latest 12개·전체 RR20/FR20·고정 5장면을 보관했습니다. [전체 결과·한계·가중치](SSA-MRN/docs/experiments/windows_coarse_anchor_qb_50.md).
-
-![N3 LR MS/PAN/예측/GT](SSA-MRN/docs/assets/windows_coarse_anchor_qb_50/evaluation/N3_scene_01.png)
-
-## 최근 완료 · Windows QB K4 구조 9개 선별
-
-2026-10-11에 S0~S3/R1/R2/M1/I1/I2 **각50에폭·합계450에폭**을 완료했습니다. validation1위는 **I1 · 초기 LRPAN 제거**로 기준선보다MSE **−3.180%**입니다. 같은 조건의 S0와 RR·FR 각20장을 평가한 결과 **RR PSNR +0.129676dB, SAM −0.070382°, 잠정 FR QNR −0.011093**였습니다. RR PSNR·SAM은20/20장 개선, FR QNR은20/20장 악화해 **후속 후보 유지·종합 채택 보류**입니다.
-
-공통 조건은QB·K4·seed42·Adam1e-4·batch256·AMP입니다. 이전batch32/100에폭과 직접 비교하지 않습니다. 7/9개가50에폭에서best라 충분히 수렴한 최종 순위로 해석하지 않습니다. 원본best/latest18개·전체 기록·이미지·해시를 보관했습니다.
-
-[9개 순위·전체 test·원본 가중치·한계](SSA-MRN/docs/experiments/windows_structure_qb_50.md)
-
-![9개 구조450에폭 곡선](SSA-MRN/docs/assets/windows_structure_qb_50/evaluation/curves.png)
-
-![I1 고정 RR 장면1 · LR MS/PAN/예측/GT](SSA-MRN/docs/assets/windows_structure_qb_50/evaluation/I1_scene_01.png)
-
-## 최근 완료 · QB K4 B0/B1 통제 재학습
-
-T4×2·seed42·K4에서 원본 B0와 공유3단계 B1을 각각 처음부터100에포크 학습하고 RR/FR 각20장을 평가했습니다. 동일 fused Adam·초기 core·100에포크 배치 순서를 확인했으며 B1−B0는 **RR PSNR +0.300014dB, SAM −0.107839°, 잠정 FR QNR −0.039261**입니다. RR PSNR은20/20장 개선됐지만 FR 악화로 종합 채택을 보류합니다. best는 validation MSE로 선택한 B0 97/B1 94에포크입니다.
-
-[조건·K6와의 차이·실측곡선·고정5장면·원본 가중치](SSA-MRN/docs/experiments/kaggle_b0_b1_k4_controlled.md). 과거 K6와 데이터·B1 복원식·평가 구현은 같지만 K·B0 optimizer·새 학습/재개 조건이 달라 동일 실험으로 합치지 않습니다.
-
-왼쪽부터 **LR MS · PAN · B1 예측 · GT**이며 사전 고정 RR index1입니다.
-
-![K4 B1 고정 RR index1](SSA-MRN/docs/assets/kaggle_b0_b1_k4_controlled/B1/RR_scene_01.png)
-
-## 최근 완료 · QB K4 대역 제한 축소 B1/B1_AA
-
-T4×2·seed42에서 같은 공유3단계 구조를 각각200에폭 학습하고 RR·FR 각20장을 평가했습니다. 고정 저역통과 필터 후보 B1_AA는 validation MSE **−0.186%**지만 B1 대비 **RR PSNR −0.019598dB, SAM +0.002197°, 잠정 FR QNR −0.068594**로 전체 복원 향상은 확인되지 않았습니다. 후보 채택을 보류하고 B1 기준을 유지합니다. best는 validation MSE로 선택했으며 원본 checkpoint6개·400에폭·코드·지표·이미지·해시를 보관했습니다.
-
-[조건·전체 지표·원본 가중치·복구 검증](SSA-MRN/docs/experiments/kaggle_bandlimit_k4.md)
-
-![200에폭 학습·validation 곡선](SSA-MRN/docs/assets/kaggle_bandlimit_k4/validation_curves.png)
-
-## 최근 학습 완료 · SSA 핵심 융합 A0–A3
-
-QB K6·seed46에서 네 구조를 각100에폭 학습하고 원본 체크포인트·이력·설정·해시를 보관했습니다. validation 최저 MSE는 A0 **0.000171331**, A1 0.000172063, A2 0.000171955, A3 0.000171885입니다. 이 단일 시드에서는 기존 A0가 가장 낮았고, RR/FR 평가 전이므로 구조 채택을 보류합니다. [구조·전체 지표·가중치·보관 검증](SSA-MRN/docs/experiments/ssa_fusion_local.md).
-
-![SSA A0/A1 학습·validation 곡선](SSA-MRN/docs/assets/ssa_fusion_A0_A1_qb_k6_s46/validation_curves.png)
-
-![SSA A2/A3 학습·validation 곡선](SSA-MRN/docs/assets/ssa_fusion_A2_A3_qb_k6_s46/validation_curves.png)
-
-## K6 완료 결과 · QB 3단계 공유 복원 B1/B2
-
-**2026-10-09 05:59 KST 다운로드 검증 기준**, T4×2에서 B1·B2 각각100에폭과 RR20장·FR20장 전체 평가를 마쳤습니다. B2는 관측 오차를 전달하며, B1은 같은 3단계 공유 복원을 오차 없이 실행합니다. best는 validation MSE로 선택했고 B1은90에폭, B2는99에폭입니다.
-
-| 지표 | B1 | B2 | B2−B1 |
-|---|---:|---:|---:|
-| RR PSNR dB ↑ | 37.604745 | 37.720504 | +0.115759 |
-| RR SAM ° ↓ | 4.832698 | 4.814416 | -0.018282 |
-| RR MSE peak1 ↓ | 0.000205615557702 | 0.00020025117562 | -5.36438208154e-06 |
-| FR QNR ↑ · 잠정 | 0.904310 | 0.886089 | -0.018221 |
-
-**RR 개선 후보 유지, FR 포함 최종 채택 보류.** RR 지표는 전반 개선됐지만 FR 왜곡과 입력 MS 일치도는 악화했습니다. 단일seed42이며 기존 B0은 재실행하지 않았습니다. 초기 가중치·100에폭 샘플 순서 일치, 원본 best/latest4개·전체 예측80개·원본 manifest152개 해시를 검증했습니다.
-
-왼쪽부터 **LR MS · PAN · B2 예측 · 정답**입니다. 사전 고정 RR index1이며 같은 장면의 MS 패널에는 공통 대비를 적용했습니다.
-
-![B2 고정 RR 장면1](SSA-MRN/docs/assets/kaggle_b1_b2/runs/B2_QB_B2_k6_s42/RR_scene_01.png)
-
-[완료 보고서](SSA-MRN/docs/experiments/kaggle_b1_b2.md) · [한 셀 재현·복구](SSA-MRN/docs/operations/kaggle_b1_b2.md)
-
-## K6 완료 결과 · QB 단계적 Haar 복원 A0/A1
-
-2026-10-09 06:28 KST부터 다운로드 산출물을 검증했습니다. T4×2에서 A0·A1을 각각100에폭 학습하고 각 RR20장·FR20장 전체를 평가했습니다. A0는 gate=1, A1은 밴드·방향·위치별 gate입니다.
-
-| 비교 | RR ΔPSNR dB | RR ΔSAM ° | RR ΔMSE peak1 | FR ΔQNR · 잠정 |
-|---|---:|---:|---:|---:|
-| A0 − 기존 B0 | −2.799468 | +0.859341 | +2.07106e−4 | +0.022286 |
-| A1 − 기존 B0 | −3.052997 | +0.941778 | +2.33414e−4 | +0.020670 |
-| A1 − A0 | −0.253529 | +0.082437 | +2.63082e−5 | −0.001616 |
-
-**RR가 크게 악화해 현재 구조 채택을 보류합니다.** 학습 gate의 추가 이득도 확인되지 않았습니다. 이전 B0와 데이터·nominal 학습 조건·환경·순서를 사후 대조했지만 구조·MS 입력·용량과 AMP의 실제 업데이트 수는 다릅니다. 단일 시드이며 잠정 FR 상승을 HR 정확도 개선으로 해석하지 않습니다.
-
-[조건·전체 결과·가중치·검증 근거](SSA-MRN/docs/experiments/kaggle_wavelet_a0_a1.md)에 실제 best/latest4개와 예측80개를 보존했습니다. 왼쪽부터 **LR MS · PAN · A1 예측 · GT**이며 사전 고정한 RR scene1과 공통 MS 대비를 사용했습니다.
-
-![A1 고정 RR scene1](SSA-MRN/docs/assets/kaggle_wavelet_a0_a1/runs/A1_QB_s42/RR_scene_001.png)
-
-## 최근 완료 · QB B0 대비 B1/B2 100에폭 재개
-
-2026-10-09 22:16 KST 다운로드 확인: 중간 200 셀의 B1 12/B2 11에폭 체크포인트를 이어서 각각 **총100에폭** 학습하고 RR·FR 각20장을 평가했습니다. 실제 K6 실험이며 현재 K4 기본값과 구분합니다. B2는 B1보다 RR PSNR **−0.119919 dB**, 잠정 FR QNR **+0.019136**으로 지표 개선이 엇갈렸습니다. 이전 B1/B2 실행과도 방향이 달라 종합 채택을 보류합니다.
-
-보관된 Kaggle 원본 구조 baseline **B0**와도 비교했습니다. B0 대비 RR PSNR은 B1 **+0.236541 dB**, B2 **+0.116622 dB**지만 잠정 FR QNR은 각각 **−0.037049**, **−0.017912**입니다. B0는 실행만 최적화한 원본 구조이며 23탭·개선 손실을 합친 최종 baseline이나 논문 표의 수치가 아닙니다. 별도 세션 비교로 기록했습니다.
-
-왼쪽부터 LR MS · PAN · B2 예측 · 정답입니다. [8절 보고서·전체 지표·재개 이력·원본 가중치](SSA-MRN/docs/experiments/kaggle_b1_b2_100_resume.md)
-
-![QB B2 고정 RR 장면1](SSA-MRN/docs/assets/kaggle_b1_b2_100_resume/runs/B2_QB_B2_k6_s42/RR_scene_01.png)
-
-## 실험 바로 보기
-
-각 보고서에서 **목적·조건·수치·기준선 대비·그래프·이미지·가중치·판단**을 함께 볼 수 있습니다.
-
-| 단계 | 실험 | 실제 K | 확인된 결과·상태 |
-|---|---|---|---|
-| 완료·판단 | [Windows QB K4 구조9개](SSA-MRN/docs/experiments/windows_structure_qb_50.md) | **4** | 각50에폭·원본18개·S0/I1 RR/FR 완료; I1 RR 개선·FR 악화로 종합 채택 보류 |
-| 완료·판단 | [QB 분리 특징 경로·반복 융합](SSA-MRN/docs/experiments/windows_dual_stream_qb_50.md) | 대조군4 / 신규N/A | 6개×50에포크·원본12개·C0/C1/C5 RR/FR 완료. C1 +0.244200dB / 잠정 QNR +0.024991, 신규 C5 −0.921344dB |
-| 완료·판단 | [QB K4 작은 특징 보존·PAN 조절](SSA-MRN/docs/experiments/windows_coarse_anchor_qb_50.md) | **4** | 6개×50에폭·원본12개·전체RR/FR 완료. N3 RR PSNR +0.187482dB / SAM −0.013421°, 잠정 FR QNR −0.014702로채택보류 |
-| 구조 검증 | [QB B0/B1 통제 재학습](SSA-MRN/docs/experiments/kaggle_b0_b1_k4_controlled.md) | **4** | 각100에폭·RR/FR 완료; RR PSNR +0.300014dB·잠정 FR QNR −0.039261, 종합 채택 보류 |
-| 현재 기준 | [Windows K4/K6 통제 비교](SSA-MRN/docs/experiments/windows_k_baselines.md) | 4·6 | 6개 × 100에폭 완료, 원본 12개 보관. 다수결로 **K4 확정**. QB K4 test 평가 완료, 나머지5개 대기 |
-| 완료·판단 | [Windows 손실 탐색](SSA-MRN/docs/experiments/windows_controlled.md) | **4** | 940에폭·QB RR/FR 전체 평가 완료, 원본20개 보관. RR 정확도 악화·SAM/FR 개선으로 종합 채택 보류 |
-| 이전 재현 | [공개 코드 K4 재현](SSA-MRN/docs/experiments/pan_k4.md) | 4 | RR/FR 평가 완료, 초기 기준 |
-| 이전 재현 | [논문 설정 K6 재현](SSA-MRN/docs/experiments/pan_k6.md) | 6 | RR/FR 평가 완료, K4와 장치도 달랐음 |
-| 구조 탐색 | [QB 23탭·LR 보정·고주파](SSA-MRN/docs/experiments/a6000_architecture_qb.md) | 6 | 단일 시드에서 23탭을 후속 후보로 선정 |
-| 구조 검증 | [23탭 반복·위치·센서 확장](SSA-MRN/docs/experiments/a6000_followup_123.md) | 6 | QB RR 이득·FR 혼재, GF2 개선·WV3 악화 |
-| 구조 검증 | [GF2 반복·QB 입력 23탭](SSA-MRN/docs/experiments/a6000_gf2_repeat_qb_input.md) | 6 | 3시드 평가 완료, GF2 PSNR/QNR 개선·SAM 혼재 |
-| 구조 탐색 | [QB 밴드별 게이트 고주파](SSA-MRN/docs/experiments/kaggle_band_gated_hf.md) | 6 | RR 악화로 채택 보류 |
-| 증강 탐색 | [QB MTF 변화량 증강](SSA-MRN/docs/experiments/kaggle_mtf_pair.md) | 6 | 100에폭·원본 4개 보관, validation만 확인·RR/FR 대기 |
-| 구조 진단 | [QB SSA 핵심 융합 A0–A3](SSA-MRN/docs/experiments/ssa_fusion_local.md) | 6 | 각100에폭·원본 16개 보관, validation A0 최저 MSE·RR/FR 대기 |
-| 구조 탐색 | [QB 3단계 관측 복원](SSA-MRN/docs/experiments/kaggle_b1_b2.md) | 6 | B1/B2 각100에폭·RR/FR 평가 완료, RR 개선·FR 악화로 채택 보류 |
-| 구조 탐색 | [QB 단계적 Haar A0/A1](SSA-MRN/docs/experiments/kaggle_wavelet_a0_a1.md) | 6 | 각100에폭·RR/FR 평가 완료, RR 악화·학습 gate 추가 이득 없어 채택 보류 |
-| 구조 검증 | [QB B0 대비 B1/B2 100에폭 재개](SSA-MRN/docs/experiments/kaggle_b1_b2_100_resume.md) | 6 | B0 대비 RR PSNR B1 +0.236541 / B2 +0.116622 dB, 잠정 FR QNR 모두 하락. 별도 세션 비교·종합 채택 보류 |
-| 사전 검증 | [QB 관측 연산자](SSA-MRN/docs/experiments/observation_validation.md) | 해당 없음 | consistency 관측 구현 검증, 학습 성능 결과와 구분 |
-
-## 문서와 실행 안내
-
-| 필요한 내용 | 바로가기 |
-|---|---|
-| 현재 기준·이전 연구의 결론·다음 판단 | [SSA-MRN 연구 안내](SSA-MRN/README.md) |
-| PAN/MS·K·23탭·평가 지표 설명 | [알고리즘과 평가](SSA-MRN/docs/research.md) |
-| Windows 상태 확인·로그·재개 | [Windows 관리 스크립트](SSA-MRN/docs/operations/controlled_suite.md) |
-| 환경 설정·기존 모델 재평가 | [기본 실행 안내](SSA-MRN/docs/operations/pan_ms.md) |
-
-## 코드와 결과 받기
-
-```bash
-git clone --recurse-submodules https://github.com/BIYONGHIYON/CtrS.git
-cd CtrS
-```
-
-실제 학습된 best/latest 원본과 에폭·SHA-256·복구 검증은 각 보고서 **7절**에 있습니다. 학습 완료·test 평가 완료·가중치 보관을 구분합니다. 원본 데이터는 Git에 포함하지 않습니다. RGB–HSI 연구는 [별도 저장소](https://github.com/BIYONGHIYON/RGB-HSI-SR)에서 관리합니다.
+**판정 기준:** 개선 = 같은 조건에서 주요 RR·FR 지표가 함께 개선, 부분 개선 = 지표·후보·센서별 결과 혼재, 개선 없음 = 평가에서 향상을 확인하지 못함, 판단 보류 = 최종 평가 부족입니다. 비교 기준·성능 비교 아님은 개선 판정 대상에서 제외합니다. 모든 FR QNR은 구현 대응 검증이 끝나지 않은 잠정 지표이며, 단일 실험의 개선은 최종 채택을 뜻하지 않습니다.
 
 ## 팀원
 

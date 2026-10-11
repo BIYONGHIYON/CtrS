@@ -1,4 +1,11 @@
-# Windows K4/K6 기준선 · 3센서 통제 비교
+# SSAI 내부 특징 차원 비교
+
+**변경 내용:** 같은 환경에서 내부 특징 차원 4와 6을 비교했습니다.
+
+| 확인된 결과 | 상태 | 개선 여부 |
+|---|---|---|
+| 센서별 validation 다수결 2:1로 차원 4 선택; test는 일부만 평가 | 학습 완료·일부 평가 | **비교 기준** |
+
 
 [실험 목록](../../README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [가중치](#evidence)
 
@@ -12,7 +19,7 @@
 
 이번 보고서는 **학습 완료·validation 선택·원본 가중치 보관**의 중간 전달입니다. 기준선 전체6개 중 QB K4는 후속 손실 평가에서 RR/FR 각20장 전체를 평가했습니다. [QB 비교 결과](windows_controlled.md#results). 나머지5개 기준선의 test 평가는 아직 수행하지 않았습니다. GPU를 사용하는 추가 평가를 실행 중인 손실 학습에 겹쳐 시작하지 않았습니다.
 
-## 2. 변경 사항과 평가 조건
+## 2. 변경한 구조와 비교 조건
 
 | 항목 | 조건 |
 |---|---|
@@ -42,7 +49,7 @@ K에 따라 모수 배열의 크기가 다르므로 같은 시드가 모든 초�
 
 사전에 고정한 센서별 다수결 규칙으로 **현재 연구 기본값을 K=4로 확정**했습니다. 동률은 K4이며 test는 선택에 사용하지 않았습니다. [컨트롤러 선택 원본](../assets/windows_k_baselines/baseline_selection.json)
 
-## 4. 직전 연구와 수치 차이
+## 4. 기준선 대비 차이와 해석
 
 위 표는 같은 서버에서 K를 비교한 validation 차이입니다. 과거 K4/CUDA A6000와 K6/DirectML Radeon 재현은 장치가 달라 이번 대조군으로 사용하지 않습니다. Linux K6 구조 연구와도 환경·micro batch가 달라 하나의 반복시드 평균으로 묶지 않습니다.
 
@@ -50,9 +57,9 @@ K4/K6 간 RR/FR PSNR·SAM·test MSE 차이는 **두 K의 test 비교 전이므�
 
 <a id="graphs"></a>
 
-## 5. 그래프
+## 5. 학습·평가 그래프
 
-각 run의 실제 `history.jsonl` 1~100에폭 기록으로 만든 MSE 곡선입니다. 센서별 y축 범위를 구분하고 로그 축을 사용했습니다. validation PSNR·SAM은 매 에폭 측정하지 않았으므로 곡선을 만들지 않았습니다.
+각 run의 실제 `history.jsonl` 1–100에폭 기록으로 만든 MSE 곡선입니다. 센서별 y축 범위를 구분하고 로그 축을 사용했습니다. validation PSNR·SAM은 매 에폭 측정하지 않았으므로 곡선을 만들지 않았습니다.
 
 ![K4/K6 실제 학습·검증 MSE](../assets/windows_k_baselines/learning.png)
 
@@ -62,13 +69,13 @@ K4/K6 간 RR/FR PSNR·SAM·test MSE 차이는 **두 K의 test 비교 전이므�
 
 <a id="images"></a>
 
-## 6. 결과 이미지 예시
+## 6. 결과 이미지
 
 QB K4의 전체 RR/FR 평가·고정5장면 이미지는 [손실 완료 보고서](windows_controlled.md#images)에 있습니다. 다른5개 기준선의 이미지는 아직 생성하지 않았습니다. 후속 평가 때 각 센서의 장면 ID·순서·seed를 고정하고 LR MS · PAN · 예측 · 정답을 공통 대비로 표시합니다. FR에는 고해상도 GT를 만들지 않습니다.
 
 <a id="evidence"></a>
 
-## 7. 가중치와 검증 근거
+## 7. 재현 자료
 
 **실제 학습된 원본 best/latest 12개를 Git에 포함**했습니다. 추론용으로 변환하지 않았으며 model·config·epoch·best MSE·Adam·CPU/CUDA RNG·DataLoader RNG를 포함하는 재개 체크포인트입니다. 모든 run의 원본 설정·완료 JSON·100에폭 기록과 실제 학습 소스도 함께 보관했습니다.
 
@@ -85,7 +92,9 @@ QB K4의 전체 RR/FR 평가·고정5장면 이미지는 [손실 완료 보고�
 
 서버에서 CPU `torch.load(weights_only=True)`로 12개 모두 설정·에폭·최저 validation MSE·원본 상태 키를 확인했고, 내려받은 46개 파일을 서버 SHA-256과 대조했습니다. 코드·데이터·공용 환경을 수정하지 않았습니다. 원본 서버 결과와 `C:\CtrS-controlled-suite` 인계 경로는 유지합니다. GitHub `e107963cb3d4f25f77f812f8c1ed16245c04c065` 커밋을 새 폴더에 복제해 원본 가중치 12개와 보관 파일 50개를 다시 내려받았으며, 모든 바이트·SHA-256이 일치했습니다. [원격 복구 검증 기록](../assets/windows_k_baselines/remote_verification.json)에 방법·시각·파일별 해시를 남겼습니다.
 
-## 8. 한계와 다음 판단
+## 8. 개선 여부와 다음 단계
+
+**판정: 비교 기준.** 위 결과는 해당 보고서의 비교 조건에 한정합니다. 지표 일부의 개선을 최종 모델 채택으로 해석하지 않습니다.
 
 단일 시드 42의 validation 결과입니다. K4는 이번 3센서 선택 규칙에 따른 손실 탐색 설정이며 모든 센서·지표의 최종 우승 모델을 뜻하지 않습니다.
 

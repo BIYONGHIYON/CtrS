@@ -1,4 +1,11 @@
-# QB 관측 연산자 검증
+# MS 관측 연산자 구현
+
+**변경 내용:** 센서 MTF·샘플링 위상·경계 처리를 구성했습니다.
+
+| 확인된 결과 | 상태 | 개선 여부 |
+|---|---|---|
+| 관측 구현 대응 확인; 학습 성능 비교가 아님 | 사전 검증 완료 | **성능 비교 아님** |
+
 
 [실험 목록](../../README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [가중치](#evidence)
 
@@ -10,7 +17,7 @@
 
 2026-10-08 사전 관측 검증 완료. 본 학습·RR/FR 모델 평가는 수행하지 않았습니다. 검증 코드는 이 문서와 같은 커밋의 `verify_observation.py`이며, 공식 참조 버전은 `a34f884af88967580e3ef4f61a89e12fdfe4cda5`입니다.
 
-## 2. 변경 사항과 평가 조건
+## 2. 변경한 구조와 비교 조건
 
 `MSE(관측연산자(예측), 입력 MS)`를 추가합니다. 임의 bicubic 대신 공식 MATLAB 프로토콜의 QB 밴드별 Nyquist MTF 계수 `[0.34, 0.32, 0.30, 0.22]`, 41×41 FIR, radial Kaiser window, x4 decimation을 사용합니다. FIR의 부호와 DC gain을 보존하며 clipping이나 재정규화를 하지 않습니다.
 
@@ -36,25 +43,25 @@
 
 모델 PSNR/SAM, 독립 RR/FR test 지표는 N/A — 본 학습과 모델 평가 전입니다.
 
-## 4. 직전 연구와 수치 차이
+## 4. 기준선 대비 차이와 해석
 
 이 문서는 관측 연산자 구현 검증입니다. 기존 K4/K6 모델 재현 성능과 직접 비교할 수 없습니다. 모델 성능 차이는 이후 같은 조건의 학습·독립 평가로 확인합니다.
 
 <a id="graphs"></a>
 
-## 5. 그래프
+## 5. 학습·평가 그래프
 
 학습하지 않았으므로 epoch 곡선이나 모델 test 비교 그래프가 없습니다.
 
 <a id="images"></a>
 
-## 6. 결과 이미지 예시
+## 6. 결과 이미지
 
 고정 TRAIN probe 32개의 ID·해시를 프로파일에 기록했습니다. 모델 test 예시 5장은 아직 생성하지 않았습니다.
 
 <a id="evidence"></a>
 
-## 7. 가중치와 검증 근거
+## 7. 재현 자료
 
 - [전체 위상·검증 프로파일](../../scripts/observation_profiles/qb.json)
 - [관측 연산자](../../src/ssamrn/observation.py)
@@ -79,6 +86,8 @@ C:\CtrS\.venv\Scripts\python.exe .\verify_consistency_loss.py
 - [MathWorks fwind1 수식](https://www.mathworks.com/help/images/ref/fwind1.html)
 
 
-## 8. 한계와 다음 판단
+## 8. 개선 여부와 다음 단계
+
+**판정: 성능 비교 아님.** 위 결과는 해당 보고서의 비교 조건에 한정합니다. 지표 일부의 개선을 최종 모델 채택으로 해석하지 않습니다.
 
 패치 내부의 RR 관측 대응을 확인한 결과이며 FR 물리 모델이나 성능 개선의 증거가 아닙니다. GF2 측정 MTF 계수는 임의로 가정하지 않습니다. 검증 당시에는 본 학습 전이었으며, 이후 계획과 확인된 진행은 [Windows K·손실 비교](windows_controlled.md)에 기록합니다. 코드·데이터·프로파일이 바뀌면 재검증하고, 실행 기록과 계획의 SHA-256을 함께 검토합니다.
