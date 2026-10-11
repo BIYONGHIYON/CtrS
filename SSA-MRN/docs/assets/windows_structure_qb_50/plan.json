@@ -1,0 +1,42 @@
+{
+  "epochs": 50,
+  "micro": 256,
+  "effective_batch": 256,
+  "workers": 2,
+  "seed": 42,
+  "k": 4,
+  "lr": 0.0001,
+  "loss": "GT MSE",
+  "train_precision": "AMP FP16 GradScaler",
+  "validation_precision": "FP32",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "channels_last": false,
+  "data": "C:/CtrS/SSA-MRN/data/dataset/QuickBird",
+  "base_commit": "128e28470ec094988633fe55fd5d242770ec7a57",
+  "source_hashes": {
+    "scripts/windows_structure_suite.py": "7613e2d6e858c2222cc6a6b0c54e2177caaa33b27c6cc00e82f7d6c535b69a58",
+    "src/ssamrn/models/windows_structure.py": "71fb0a0f1e0422d0601fc54a7c0471d254f1a5f5e43c29c841d84879c403900e",
+    "src/ssamrn/models/ssa_mrn.py": "0d8bb038d83543c44c5b76a97ea2bd4f989b811446287a803d66e465135944ff",
+    "references/upstream/network.py": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a"
+  },
+  "data_manifest_sha256": "71f2cbd3392e5b2901d2b85443989359cbff17d7680f8cbef6d64e216dea50b2",
+  "environment": {
+    "python": "3.10.6",
+    "torch": "2.7.1+cu128",
+    "gpu": "NVIDIA GeForce RTX 3060 Ti"
+  },
+  "evaluation_selection": {
+    "seed": 42,
+    "indices": [
+      1,
+      8,
+      11,
+      13,
+      19
+    ],
+    "full_scene": true
+  },
+  "batch_change": "User authorized speed-first large common batch;32/64/128/256 tested with real DataLoader",
+  "benchmark_file": "benchmark_data.json"
+}
