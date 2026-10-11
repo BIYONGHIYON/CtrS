@@ -1,6 +1,7 @@
 """Verify frozen dual-stream checkpoints, validation selection and full-scene evidence."""
 import argparse,hashlib,json,math,sys
 from pathlib import Path
+sys.dont_write_bytecode=True
 ROOT=Path(__file__).resolve().parents[1]
 VARIANTS=('C0','C1','C2','C3','C4','C5')
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
