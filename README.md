@@ -35,6 +35,14 @@ validation으로 선별한 edge0.1을 같은 QB K4 기준선과 비교했습니�
 
 ![Windows K4 기준선 대비 edge0.1 전체 test 차이](SSA-MRN/docs/assets/windows_losses/test_deltas.png)
 
+## 최근 완료 · 분리 특징 경로·반복 융합
+
+2026-10-12에 C0~C5 **각 50에포크·총 300에포크**와 C0/C1/C5의 전체 RR·FR 각 20장 평가를 완료했습니다. **C1 기존 3단계 공유 복원**이 기준선 대비 RR PSNR **+0.244200dB**, SAM **−0.188318°**, 잠정 FR QNR **+0.024991**로 함께 개선되어 후속 검증 후보로 유지합니다. 새 분리 경로 중 validation 1위 C5는 RR PSNR **−0.921344dB**로 악화되어 C2~C5는 이번 조건에서 채택을 보류합니다.
+
+[상세 보고서](SSA-MRN/docs/experiments/windows_dual_stream_qb_50.md)
+
+![C1 · QB 고정 장면 8: LR MS · PAN · 예측 · GT](SSA-MRN/docs/assets/windows_dual_stream_qb_50/evaluation/C1_scene_08.png)
+
 ## 최근 완료 · 작은 특징 보존·PAN 기여량 조절
 
 QB K4·batch64에서6개 구조를 각 50에폭 비교했습니다. validation 1위 N3는 기준선 N0 대비 **RR PSNR +0.187482dB·SAM −0.013421°**, 잠정 **FR QNR −0.014702**로 기본 구조 채택을 보류합니다. 원본 best/latest 12개·전체 RR20/FR20·고정 5장면을 보관했습니다. [전체 결과·한계·가중치](SSA-MRN/docs/experiments/windows_coarse_anchor_qb_50.md).
@@ -131,6 +139,7 @@ QB K6·seed46에서 네 구조를 각100에폭 학습하고 원본 체크포인�
 | 단계 | 실험 | 실제 K | 확인된 결과·상태 |
 |---|---|---|---|
 | 완료·판단 | [Windows QB K4 구조9개](SSA-MRN/docs/experiments/windows_structure_qb_50.md) | **4** | 각50에폭·원본18개·S0/I1 RR/FR 완료; I1 RR 개선·FR 악화로 종합 채택 보류 |
+| 완료·판단 | [QB 분리 특징 경로·반복 융합](SSA-MRN/docs/experiments/windows_dual_stream_qb_50.md) | 대조군4 / 신규N/A | 6개×50에포크·원본12개·C0/C1/C5 RR/FR 완료. C1 +0.244200dB / 잠정 QNR +0.024991, 신규 C5 −0.921344dB |
 | 완료·판단 | [QB K4 작은 특징 보존·PAN 조절](SSA-MRN/docs/experiments/windows_coarse_anchor_qb_50.md) | **4** | 6개×50에폭·원본12개·전체RR/FR 완료. N3 RR PSNR +0.187482dB / SAM −0.013421°, 잠정 FR QNR −0.014702로채택보류 |
 | 구조 검증 | [QB B0/B1 통제 재학습](SSA-MRN/docs/experiments/kaggle_b0_b1_k4_controlled.md) | **4** | 각100에폭·RR/FR 완료; RR PSNR +0.300014dB·잠정 FR QNR −0.039261, 종합 채택 보류 |
 | 현재 기준 | [Windows K4/K6 통제 비교](SSA-MRN/docs/experiments/windows_k_baselines.md) | 4·6 | 6개 × 100에폭 완료, 원본 12개 보관. 다수결로 **K4 확정**. QB K4 test 평가 완료, 나머지5개 대기 |
