@@ -1,0 +1,125 @@
+{
+  "pair": [
+    {
+      "micro": 32,
+      "exitcodes": [
+        0,
+        0
+      ],
+      "wall_seconds": 8.75,
+      "total_gpu_peak_mib": 1390,
+      "rows": [
+        {
+          "variant": "S0",
+          "micro": 32,
+          "patches_per_second": 389.9466869764272,
+          "peak_mib": 314.0,
+          "loss": 0.003945527598261833,
+          "parameters": 426654
+        },
+        {
+          "variant": "I2",
+          "micro": 32,
+          "patches_per_second": 468.4354986275984,
+          "peak_mib": 416.0,
+          "loss": 0.004930826835334301,
+          "parameters": 426878
+        }
+      ],
+      "aggregate_patch_s": 858.3821856040256
+    },
+    {
+      "micro": 64,
+      "exitcodes": [
+        0,
+        0
+      ],
+      "wall_seconds": 10.5,
+      "total_gpu_peak_mib": 1980,
+      "rows": [
+        {
+          "variant": "S0",
+          "micro": 64,
+          "patches_per_second": 439.8625429552883,
+          "peak_mib": 606.0,
+          "loss": 0.003070293692871928,
+          "parameters": 426654
+        },
+        {
+          "variant": "I2",
+          "micro": 64,
+          "patches_per_second": 500.244259892575,
+          "peak_mib": 648.0,
+          "loss": 0.00366393243893981,
+          "parameters": 426878
+        }
+      ],
+      "aggregate_patch_s": 940.1068028478633
+    },
+    {
+      "micro": 128,
+      "exitcodes": [
+        0,
+        0
+      ],
+      "wall_seconds": 14.79600000000005,
+      "total_gpu_peak_mib": 3034,
+      "rows": [
+        {
+          "variant": "S0",
+          "micro": 128,
+          "patches_per_second": 431.1578947368421,
+          "peak_mib": 1178.0,
+          "loss": 0.0030333097092807293,
+          "parameters": 426654
+        },
+        {
+          "variant": "I2",
+          "micro": 128,
+          "patches_per_second": 464.71522577718054,
+          "peak_mib": 1258.0,
+          "loss": 0.003683382412418723,
+          "parameters": 426878
+        }
+      ],
+      "aggregate_patch_s": 895.8731205140226
+    },
+    {
+      "micro": 256,
+      "exitcodes": [
+        0,
+        0
+      ],
+      "wall_seconds": 22.906999999999925,
+      "total_gpu_peak_mib": 4908,
+      "rows": [
+        {
+          "variant": "S0",
+          "micro": 256,
+          "patches_per_second": 471.4548802946661,
+          "peak_mib": 2294.0,
+          "loss": 0.0033789898734539747,
+          "parameters": 426654
+        },
+        {
+          "variant": "I2",
+          "micro": 256,
+          "patches_per_second": 493.67241171507624,
+          "peak_mib": 2482.0,
+          "loss": 0.004117435310035944,
+          "parameters": 426878
+        }
+      ],
+      "aggregate_patch_s": 965.1272920097424
+    }
+  ],
+  "selected_micro": 256,
+  "single_R2": {
+    "variant": "R2",
+    "micro": 256,
+    "patches_per_second": 1387.0640027090146,
+    "peak_mib": 2324.0,
+    "loss": 0.005672899074852467,
+    "parameters": 426654
+  }
+}

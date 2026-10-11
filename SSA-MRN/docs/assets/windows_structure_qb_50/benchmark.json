@@ -1,0 +1,97 @@
+{
+  "pair": [
+    {
+      "micro": 8,
+      "exitcodes": [
+        0,
+        0
+      ],
+      "wall_seconds": 4.9529999999999745,
+      "total_gpu_peak_mib": 934,
+      "rows": [
+        {
+          "variant": "S0",
+          "micro": 8,
+          "patches_per_second": 243.90243902440918,
+          "peak_mib": 100.0,
+          "loss": 0.004243343137204647,
+          "parameters": 426654
+        },
+        {
+          "variant": "I2",
+          "micro": 8,
+          "patches_per_second": 269.36026936024626,
+          "peak_mib": 102.0,
+          "loss": 0.00478855986148119,
+          "parameters": 426878
+        }
+      ],
+      "aggregate_patch_s": 513.2627083846554
+    },
+    {
+      "micro": 16,
+      "exitcodes": [
+        0,
+        0
+      ],
+      "wall_seconds": 5.4529999999999745,
+      "total_gpu_peak_mib": 1100,
+      "rows": [
+        {
+          "variant": "S0",
+          "micro": 16,
+          "patches_per_second": 353.2008830022274,
+          "peak_mib": 168.0,
+          "loss": 0.004243370145559311,
+          "parameters": 426654
+        },
+        {
+          "variant": "I2",
+          "micro": 16,
+          "patches_per_second": 426.6666666666667,
+          "peak_mib": 228.0,
+          "loss": 0.004788456484675407,
+          "parameters": 426878
+        }
+      ],
+      "aggregate_patch_s": 779.8675496688941
+    },
+    {
+      "micro": 32,
+      "exitcodes": [
+        0,
+        0
+      ],
+      "wall_seconds": 5.469000000000051,
+      "total_gpu_peak_mib": 1346,
+      "rows": [
+        {
+          "variant": "S0",
+          "micro": 32,
+          "patches_per_second": 445.062586926255,
+          "peak_mib": 314.0,
+          "loss": 0.004243373870849609,
+          "parameters": 426654
+        },
+        {
+          "variant": "I2",
+          "micro": 32,
+          "patches_per_second": 569.3950177934671,
+          "peak_mib": 404.0,
+          "loss": 0.004788347519934177,
+          "parameters": 426878
+        }
+      ],
+      "aggregate_patch_s": 1014.4576047197221
+    }
+  ],
+  "selected_micro": 32,
+  "single_R2": {
+    "variant": "R2",
+    "micro": 32,
+    "patches_per_second": 891.3649025065889,
+    "peak_mib": 334.0,
+    "loss": 0.009123423136770725,
+    "parameters": 426654
+  }
+}
