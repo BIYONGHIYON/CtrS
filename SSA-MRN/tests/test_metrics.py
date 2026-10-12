@@ -6,8 +6,8 @@ from pathlib import Path
 
 import numpy as np
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from ssamrn.metrics import fr_metrics, q2n, rr_metrics  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from common.metrics import fr_metrics, q2n, rr_metrics  # noqa: E402
 
 
 class MetricTests(unittest.TestCase):

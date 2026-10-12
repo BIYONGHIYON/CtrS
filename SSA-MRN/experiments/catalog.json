@@ -1,146 +1,128 @@
 {
-  "public_code_reproduction": {
-    "report": "docs/experiments/public_code_reproduction.md",
-    "archives": [
-      "docs/assets/pan_k4",
-      "experiments/checkpoints/qb_full",
-      "experiments/checkpoints/gf2_full",
-      "experiments/checkpoints/wv3_full"
-    ],
-    "entrypoint": "scripts/evaluate_paper.py"
+  "1_public_code_reproduction": {
+    "report": "experiments/1_public_code_reproduction/README.md",
+    "entrypoint": "common/evaluate.py",
+    "checkpoints": "experiments/1_public_code_reproduction/checkpoints",
+    "results": "experiments/1_public_code_reproduction/results"
   },
-  "paper_setting_reproduction": {
-    "report": "docs/experiments/paper_setting_reproduction.md",
-    "archives": [
-      "docs/assets/pan_k6",
-      "experiments/checkpoints/k6"
-    ],
-    "entrypoint": "scripts/evaluate_paper.py"
+  "2_paper_setting_reproduction": {
+    "report": "experiments/2_paper_setting_reproduction/README.md",
+    "entrypoint": "common/evaluate.py",
+    "checkpoints": "experiments/2_paper_setting_reproduction/checkpoints",
+    "results": "experiments/2_paper_setting_reproduction/results"
   },
-  "interpolation_correction_detail": {
-    "report": "docs/experiments/interpolation_correction_detail.md",
-    "archives": [
-      "docs/assets/a6000_architecture_qb"
-    ],
-    "entrypoint": "scripts/interpolation_correction_detail_suite.py"
+  "3_ms_observation": {
+    "report": "experiments/3_ms_observation/README.md",
+    "entrypoint": "experiments/3_ms_observation/run.py",
+    "checkpoints": "experiments/3_ms_observation/checkpoints",
+    "results": "experiments/3_ms_observation/results"
   },
-  "interpolation_scope_sensors": {
-    "report": "docs/experiments/interpolation_scope_sensors.md",
-    "archives": [
-      "docs/assets/a6000_followup_123"
-    ],
-    "entrypoint": "scripts/interpolation_scope_sensors_suite.py"
+  "4_interpolation_correction_detail": {
+    "report": "experiments/4_interpolation_correction_detail/README.md",
+    "entrypoint": "experiments/4_interpolation_correction_detail/run.py",
+    "checkpoints": "experiments/4_interpolation_correction_detail/checkpoints",
+    "results": "experiments/4_interpolation_correction_detail/results"
   },
-  "interpolation_seed_repeat": {
-    "report": "docs/experiments/interpolation_seed_repeat.md",
-    "archives": [
-      "docs/assets/a6000_gf2_repeat_qb_input"
-    ],
-    "entrypoint": "scripts/interpolation_seed_repeat_suite.py"
+  "5_interpolation_scope_sensors": {
+    "report": "experiments/5_interpolation_scope_sensors/README.md",
+    "entrypoint": "experiments/5_interpolation_scope_sensors/run.py",
+    "checkpoints": "experiments/5_interpolation_scope_sensors/checkpoints",
+    "results": "experiments/5_interpolation_scope_sensors/results"
   },
-  "feature_dimension": {
-    "report": "docs/experiments/feature_dimension.md",
-    "archives": [
-      "docs/assets/windows_k_baselines"
-    ],
-    "entrypoint": "scripts/feature_dimension_losses_suite.py"
+  "6_interpolation_seed_repeat": {
+    "report": "experiments/6_interpolation_seed_repeat/README.md",
+    "entrypoint": "experiments/6_interpolation_seed_repeat/run.py",
+    "checkpoints": "experiments/6_interpolation_seed_repeat/checkpoints",
+    "results": "experiments/6_interpolation_seed_repeat/results"
   },
-  "auxiliary_losses": {
-    "report": "docs/experiments/auxiliary_losses.md",
-    "archives": [
-      "docs/assets/windows_losses"
-    ],
-    "entrypoint": "scripts/feature_dimension_losses_suite.py"
+  "7_band_gated_detail": {
+    "report": "experiments/7_band_gated_detail/README.md",
+    "entrypoint": "experiments/7_band_gated_detail/run.py",
+    "checkpoints": "experiments/7_band_gated_detail/checkpoints",
+    "results": "experiments/7_band_gated_detail/results"
   },
-  "band_gated_detail": {
-    "report": "docs/experiments/band_gated_detail.md",
-    "archives": [
-      "docs/assets/kaggle_band_gated_hf"
-    ],
-    "entrypoint": "scripts/band_gated_detail_cell.py"
+  "8_mtf_augmentation": {
+    "report": "experiments/8_mtf_augmentation/README.md",
+    "entrypoint": "experiments/8_mtf_augmentation/run.py",
+    "checkpoints": "experiments/8_mtf_augmentation/checkpoints",
+    "results": "experiments/8_mtf_augmentation/results"
   },
-  "mtf_augmentation": {
-    "report": "docs/experiments/mtf_augmentation.md",
-    "archives": [
-      "docs/assets/kaggle_mtf_pair_20261009"
-    ],
-    "entrypoint": "scripts/mtf_augmentation_cell.py"
+  "9_ssai_fusion": {
+    "report": "experiments/9_ssai_fusion/README.md",
+    "entrypoint": "experiments/9_ssai_fusion/run.py",
+    "checkpoints": "experiments/9_ssai_fusion/checkpoints",
+    "results": "experiments/9_ssai_fusion/results"
   },
-  "recurrent_observation": {
-    "report": "docs/experiments/recurrent_observation.md",
-    "archives": [
-      "docs/assets/kaggle_b1_b2"
-    ],
-    "entrypoint": "scripts/recurrent_observation_cell.py"
+  "10_recurrent_observation": {
+    "report": "experiments/10_recurrent_observation/README.md",
+    "entrypoint": "experiments/10_recurrent_observation/run.py",
+    "checkpoints": "experiments/10_recurrent_observation/checkpoints",
+    "results": "experiments/10_recurrent_observation/results"
   },
-  "haar_reconstruction": {
-    "report": "docs/experiments/haar_reconstruction.md",
-    "archives": [
-      "docs/assets/kaggle_wavelet_a0_a1"
-    ],
-    "entrypoint": "scripts/haar_reconstruction_cell.py"
+  "11_haar_reconstruction": {
+    "report": "experiments/11_haar_reconstruction/README.md",
+    "entrypoint": "experiments/11_haar_reconstruction/run.py",
+    "checkpoints": "experiments/11_haar_reconstruction/checkpoints",
+    "results": "experiments/11_haar_reconstruction/results"
   },
-  "recurrent_observation_resume": {
-    "report": "docs/experiments/recurrent_observation_resume.md",
-    "archives": [
-      "docs/assets/kaggle_b1_b2_100_resume"
-    ],
-    "entrypoint": "scripts/recurrent_observation_resume_cell.py"
+  "12_feature_dimension": {
+    "report": "experiments/12_feature_dimension/README.md",
+    "entrypoint": "experiments/12_feature_dimension/run.py",
+    "checkpoints": "experiments/12_feature_dimension/checkpoints",
+    "results": "experiments/12_feature_dimension/results"
   },
-  "shared_reconstruction": {
-    "report": "docs/experiments/shared_reconstruction.md",
-    "archives": [
-      "docs/assets/kaggle_b0_b1_k4_controlled"
-    ],
-    "entrypoint": "scripts/shared_reconstruction_cell.py"
+  "13_recurrent_observation_resume": {
+    "report": "experiments/13_recurrent_observation_resume/README.md",
+    "entrypoint": "experiments/13_recurrent_observation_resume/run.py",
+    "checkpoints": "experiments/13_recurrent_observation_resume/checkpoints",
+    "results": "experiments/13_recurrent_observation_resume/results"
   },
-  "bandlimited_downsampling": {
-    "report": "docs/experiments/bandlimited_downsampling.md",
-    "archives": [
-      "docs/assets/kaggle_bandlimit_k4"
-    ],
-    "entrypoint": "scripts/bandlimited_downsampling_cell.py"
+  "14_auxiliary_losses": {
+    "report": "experiments/14_auxiliary_losses/README.md",
+    "entrypoint": "experiments/12_feature_dimension/run.py",
+    "checkpoints": "experiments/14_auxiliary_losses/checkpoints",
+    "results": "experiments/14_auxiliary_losses/results"
   },
-  "structural_ablation": {
-    "report": "docs/experiments/structural_ablation.md",
-    "archives": [
-      "docs/assets/windows_structure_qb_50"
-    ],
-    "entrypoint": "scripts/structural_ablation_suite.py"
+  "15_shared_reconstruction": {
+    "report": "experiments/15_shared_reconstruction/README.md",
+    "entrypoint": "experiments/15_shared_reconstruction/run.py",
+    "checkpoints": "experiments/15_shared_reconstruction/checkpoints",
+    "results": "experiments/15_shared_reconstruction/results"
   },
-  "coarse_feature_fusion": {
-    "report": "docs/experiments/coarse_feature_fusion.md",
-    "archives": [
-      "docs/assets/windows_coarse_anchor_qb_50"
-    ],
-    "entrypoint": "scripts/coarse_feature_fusion_suite.py"
+  "16_bandlimited_downsampling": {
+    "report": "experiments/16_bandlimited_downsampling/README.md",
+    "entrypoint": "experiments/16_bandlimited_downsampling/run.py",
+    "checkpoints": "experiments/16_bandlimited_downsampling/checkpoints",
+    "results": "experiments/16_bandlimited_downsampling/results"
   },
-  "dual_stream_reconstruction": {
-    "report": "docs/experiments/dual_stream_reconstruction.md",
-    "archives": [
-      "docs/assets/windows_dual_stream_qb_50"
-    ],
-    "entrypoint": "scripts/dual_stream_reconstruction_suite.py"
+  "17_structural_ablation": {
+    "report": "experiments/17_structural_ablation/README.md",
+    "entrypoint": "experiments/17_structural_ablation/run.py",
+    "checkpoints": "experiments/17_structural_ablation/checkpoints",
+    "results": "experiments/17_structural_ablation/results"
   },
-  "ssai_fusion": {
-    "report": "docs/experiments/ssai_fusion.md",
-    "archives": [
-      "docs/assets/ssa_fusion_A0_A1_qb_k6_s46",
-      "docs/assets/ssa_fusion_A2_A3_qb_k6_s46"
-    ],
-    "entrypoint": "scripts/ssai_fusion_cell.py"
+  "18_coarse_feature_fusion": {
+    "report": "experiments/18_coarse_feature_fusion/README.md",
+    "entrypoint": "experiments/18_coarse_feature_fusion/run.py",
+    "checkpoints": "experiments/18_coarse_feature_fusion/checkpoints",
+    "results": "experiments/18_coarse_feature_fusion/results"
   },
-  "ms_observation": {
-    "report": "docs/experiments/ms_observation.md",
-    "archives": [],
-    "profile": "scripts/observation_profiles/qb.json",
-    "entrypoint": "scripts/verify_observation.py"
+  "19_dual_stream_reconstruction": {
+    "report": "experiments/19_dual_stream_reconstruction/README.md",
+    "entrypoint": "experiments/19_dual_stream_reconstruction/run.py",
+    "checkpoints": "experiments/19_dual_stream_reconstruction/checkpoints",
+    "results": "experiments/19_dual_stream_reconstruction/results"
   },
-  "recurrent_guidance": {
-    "report": "docs/experiments/recurrent_guidance.md",
-    "archives": [
-      "docs/assets/windows_recurrent_guidance_qb_50"
-    ],
-    "entrypoint": "scripts/recurrent_guidance_suite.py"
+  "20_recurrent_guidance": {
+    "report": "experiments/20_recurrent_guidance/README.md",
+    "entrypoint": "experiments/20_recurrent_guidance/run.py",
+    "checkpoints": "experiments/20_recurrent_guidance/checkpoints",
+    "results": "experiments/20_recurrent_guidance/results"
+  },
+  "21_guidance_refinement": {
+    "report": "experiments/21_guidance_refinement/README.md",
+    "entrypoint": "experiments/21_guidance_refinement/run.py",
+    "checkpoints": "experiments/21_guidance_refinement/checkpoints",
+    "results": "experiments/21_guidance_refinement/results"
   }
 }
