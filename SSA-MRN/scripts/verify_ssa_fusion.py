@@ -132,8 +132,8 @@ def verify(output, device='cpu'):
         del model
     with tempfile.TemporaryDirectory(prefix='ssa-fusion-') as directory:
         folder = Path(directory)
-        script = ROOT/'scripts/kaggle_ssa_fusion_cell.py'
-        notebook = json.loads(script.with_suffix('.ipynb').read_text()) if script.with_suffix('.ipynb').exists() else json.loads((ROOT/'scripts/kaggle_ssa_fusion.ipynb').read_text())
+        script = ROOT/'scripts/ssai_fusion_cell.py'
+        notebook = json.loads(script.with_suffix('.ipynb').read_text()) if script.with_suffix('.ipynb').exists() else json.loads((ROOT/'scripts/ssai_fusion.ipynb').read_text())
         assert len(notebook['cells']) == 1 and ''.join(notebook['cells'][0]['source']) == script.read_text()
         worker_path = folder/'worker.py'; worker_path.write_text(embedded_worker(script))
         spec = importlib.util.spec_from_file_location('fusion_worker_test',worker_path)
@@ -162,7 +162,7 @@ def verify(output, device='cpu'):
             (folder/'resumed'/variant/'latest.pt').write_bytes(b'corrupt')
             assert worker.load_checkpoint(folder/'resumed'/variant) is not None
             resume[variant] = dict(mid_epoch_exact=True, mismatch_rejected=True, corrupted_latest_fallback=True)
-    result = dict(scope='synthetic engineering checks; no research performance claim', device=device,torch=str(torch.__version__),models=rows,resume=resume,source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (ROOT/'src/ssamrn/models/ssa_fusion.py',ROOT/'scripts/kaggle_ssa_fusion_cell.py')})
+    result = dict(scope='synthetic engineering checks; no research performance claim', device=device,torch=str(torch.__version__),models=rows,resume=resume,source_sha256={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (ROOT/'src/ssamrn/models/ssa_fusion.py',ROOT/'scripts/ssai_fusion_cell.py')})
     output.parent.mkdir(parents=True,exist_ok=True); output.write_text(json.dumps(result,indent=2)+'\n')
     print('Verified:', output)
 
