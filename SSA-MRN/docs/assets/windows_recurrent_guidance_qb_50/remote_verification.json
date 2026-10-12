@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "verified_at": "2026-10-12T10:17:22.446159+09:00",
+  "remote": "https://github.com/BIYONGHIYON/CtrS.git",
+  "branch": "recurrent-guidance-results",
+  "verified_commit": "75438be2eeee597fc51a960da7a49cf5f5619c6f",
+  "method": "Independent depth-1 blob-filtered sparse clone from GitHub; no shared local object database",
+  "restored_files": 120,
+  "all_asset_bytes_equal_local": true,
+  "checkpoints": 14,
+  "epochs": 350,
+  "test_rows": 120,
+  "fixed_panels": 15,
+  "checks": [
+    "original and report manifest SHA256/size",
+    "validation selection and 20 RR / 20 FR means per selected model",
+    "all best/latest strict model loads, Adam state restoration and finite moments",
+    "all 14 CPU finite forwards",
+    "verify_experiment retained inventory",
+    "all 120 archived files byte-identical to local originals"
+  ],
+  "python_environment": "/tmp/ctrs-bandlimit-verify-venv",
+  "torch_version": "2.14.1",
+  "scope": "Verifies the evidence commit above; this record and its inventory entry are added in a subsequent metadata commit. Original server runtime is unchanged."
+}
