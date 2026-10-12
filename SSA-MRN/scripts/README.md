@@ -23,6 +23,7 @@
 | 반복 복원과 PAN·MS 분리 경로 | [dual_stream_reconstruction_suite.py](dual_stream_reconstruction_suite.py) | [dual_stream_reconstruction](../docs/experiments/dual_stream_reconstruction.md) |
 | SSAI 내부 융합 연산 변경 | [ssai_fusion_cell.py](ssai_fusion_cell.py) | [ssai_fusion](../docs/experiments/ssai_fusion.md) |
 | MS 관측 연산자 구현 | [verify_observation.py](verify_observation.py) | [ms_observation](../docs/experiments/ms_observation.md) |
+| 반복 복원의 단계 간 특징 전달과 관측·PAN 차이 | [recurrent_guidance_suite.py](recurrent_guidance_suite.py) | [recurrent_guidance](../docs/experiments/recurrent_guidance.md) |
 
 ## 보관 파일 확인
 

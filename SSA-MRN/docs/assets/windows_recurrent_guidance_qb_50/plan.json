@@ -1,0 +1,49 @@
+{
+  "variants": [
+    "D0",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "D6"
+  ],
+  "epochs": 50,
+  "effective_batch": 96,
+  "micro": 96,
+  "workers": 1,
+  "K": 4,
+  "seed": 43,
+  "lr": 0.0001,
+  "loss": "MSE",
+  "amp": true,
+  "max_parallel": 2,
+  "data": "C:\\CtrS\\SSA-MRN\\data\\dataset",
+  "source_base_commit": "ce74e0380a99ba449f970c420eb19ae10008a032",
+  "source_hashes": {
+    "scripts/windows_recurrent_guidance_suite.py": "290eccd8ff48a46b58ab235be4349fa29c6c37a3312ac07a6e90a8179e038970",
+    "scripts/prepare_recurrent_guidance.py": "8e3360886aa0613c210910b051f066107e684cad0d8a4c067f9d977cccd2b206",
+    "scripts/verify_recurrent_guidance.py": "eb6a3d4781f889eed0b0998bc96e0584481013ca4dc6082830886ed415a6cd9e",
+    "src/ssamrn/models/recurrent_guidance.py": "bb0b6925d0aa1cc6be4558f4e222f436ce75e35a22b04db85cc2c67f76dab897",
+    "src/ssamrn/models/ssa_mrn.py": "0d8bb038d83543c44c5b76a97ea2bd4f989b811446287a803d66e465135944ff",
+    "references/upstream/network.py": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a",
+    "src/ssamrn/metrics.py": "c278b0d4057980dec7a943af403611a6657f775cebd0fc88e199a04f9cf19738",
+    "scripts/evaluate_a6000.py": "022e23565c02dbaedca0852f734d54a7beb3606e4e41acf177135a2db36385bb"
+  },
+  "selection": "validation MSE; SAM only exact tie; earlier best epoch",
+  "data_hashes": {
+    "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+    "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470"
+  },
+  "architecture": "per-band SSAI retained; shared stages / differentiable memory / observation error / PAN feature difference",
+  "observation": "fixed bilinear scale4 align_corners=True, not sensor-calibrated MTF",
+  "queue_order": [
+    "D0",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5",
+    "D6"
+  ]
+}
