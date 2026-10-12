@@ -1,1 +1,0 @@
-"""PanCollection data access."""
