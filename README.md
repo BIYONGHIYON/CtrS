@@ -6,6 +6,15 @@
 
 고해상도 흑백 위성영상 **PAN**의 공간 정보와 저해상도 다중분광영상 **MS**의 색·분광 정보를 결합해 고해상도 MS를 복원하는 팬샤프닝 연구입니다. SSA-MRN을 재현하고 구조·손실·데이터 증강을 바꿔 복원 성능을 개선합니다.
 
+## 팀원
+
+| 이름 | GitHub | 전공 | 역할 |
+|---|---|---|---|
+| 이병현 | [BIYONGHIYON](https://github.com/BIYONGHIYON) | 멀티미디어공학과 | 팀장 |
+| 김경찬 | [erickks2y-jpg](https://github.com/erickks2y-jpg) | 멀티미디어공학과 | 팀원 |
+| 송준현 | [choco-ssalbbang](https://github.com/choco-ssalbbang) | 멀티미디어공학과 | 팀원 |
+| 김윤지 | [kimrose1015-max](https://github.com/kimrose1015-max) | 데이터사이언스전공 | 팀원 |
+
 ## 현재 연구 기준
 
 기준 모델은 **원본 SSA-MRN, 내부 특징 차원 K=4, 기본 MSE 손실**입니다. 동일 환경의 세 센서 validation 비교에서 다수결로 선택했습니다. 모든 센서에서 우세하다는 뜻은 아닙니다.
@@ -71,12 +80,3 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 | [21. 특징 선택·복원 후 관측 보정·고주파 PAN 차이](SSA-MRN/experiments/21_guidance_refinement/README.md) | 공간·밴드별 특징 gate, 복원 후 관측 보정, 고주파 PAN 차이를 비교합니다. | E1: PSNR +0.3345 dB, SAM -0.2219°; E7: 잠정 QNR +0.0437, 지표별 이득 상이 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
 
 **판정 기준:** 개선 = 같은 조건에서 주요 RR·FR 지표가 함께 개선, 부분 개선 = 지표·후보·센서별 결과 혼재, 개선 없음 = 평가에서 향상을 확인하지 못함, 판단 보류 = 최종 평가 부족입니다. 비교 기준·성능 비교 아님은 개선 판정 대상에서 제외합니다. 모든 FR QNR은 구현 대응 검증이 끝나지 않은 잠정 지표이며, 단일 실험의 개선은 최종 채택을 뜻하지 않습니다.
-
-## 팀원
-
-| 이름 | GitHub | 전공 | 역할 |
-|---|---|---|---|
-| 이병현 | [BIYONGHIYON](https://github.com/BIYONGHIYON) | 멀티미디어공학과 | 팀장 |
-| 김경찬 | [erickks2y-jpg](https://github.com/erickks2y-jpg) | 멀티미디어공학과 | 팀원 |
-| 송준현 | [choco-ssalbbang](https://github.com/choco-ssalbbang) | 멀티미디어공학과 | 팀원 |
-| 김윤지 | [kimrose1015-max](https://github.com/kimrose1015-max) | 데이터사이언스전공 | 팀원 |
