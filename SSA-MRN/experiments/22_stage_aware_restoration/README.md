@@ -77,7 +77,14 @@ QB 전체 train 17,139·validation 1,905 패치, K4, seed45, 50에포크, Adam l
 
 ![갱신량·gate 변화](results/evaluation/gate_curves.png)
 
-![동일 조건 F5 대비 평가 차이](results/evaluation/test_comparison.png)
+![이번 실험 기준선 F0 대비 평가 차이](results/evaluation/baseline_comparison.png)
+
+<details>
+<summary>원본 모델 F5 참고 비교</summary>
+
+![원본 모델 F5 대비 참고 평가 차이](results/evaluation/test_comparison.png)
+
+</details>
 
 ## 6. 결과 이미지
 
