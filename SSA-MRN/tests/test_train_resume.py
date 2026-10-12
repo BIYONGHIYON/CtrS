@@ -27,7 +27,7 @@ class TrainResumeTests(unittest.TestCase):
 
             checkpoint = root / "checkpoints/latest.pt"
             command = [
-                sys.executable, str(Path(__file__).resolve().parents[1] / "scripts/train.py"),
+                sys.executable, str(Path(__file__).resolve().parents[1] / "common/train.py"),
                 "--train", str(root / "train.h5"),
                 "--val", str(root / "val.h5"),
                 "--batch-size", "1",

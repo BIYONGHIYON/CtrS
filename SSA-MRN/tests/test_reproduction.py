@@ -9,10 +9,10 @@ import h5py
 import numpy as np
 import torch
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from ssamrn.data.pancollection import PanCollectionH5
-from ssamrn.models.ssa_mrn import DirectMLPReLU, RestoredPansharpeningNet
+from common.data import PanCollectionH5
+from common.model import DirectMLPReLU, RestoredPansharpeningNet
 
 
 class ReproductionTests(unittest.TestCase):

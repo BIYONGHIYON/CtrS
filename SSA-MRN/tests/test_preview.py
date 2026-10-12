@@ -9,9 +9,9 @@ import numpy as np
 import torch
 from PIL import Image
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from ssamrn.preview import save_ms_rgb_preview, save_pan_preview, save_prediction
+from common.preview import save_ms_rgb_preview, save_pan_preview, save_prediction
 
 
 class PreviewTests(unittest.TestCase):
