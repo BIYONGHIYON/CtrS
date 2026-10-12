@@ -169,7 +169,7 @@ validation 밴드 평균 PSNR과 전체 MSE에서 유도한 global PSNR은 다�
 
 [모델](../../src/ssamrn/models/recurrent_guidance.py) · [관리 코드](../../scripts/recurrent_guidance_suite.py) · [운영·재개 명령](../operations/recurrent_guidance.md) · [결과·복구 검증](../../scripts/verify_recurrent_guidance_results.py)
 
-검증기는 350개 epoch 기록, validation 선택, 120개 장면별 RR·FR 결과와 평균, 15개 이미지, 14개 best/latest의 해시·strict load·유한한 forward를 확인합니다. 실제 QB RR index 0을 CPU FP32로 다시 추론해 D0·D1·D3의 저장된 GPU MSE와 일치함을 확인했습니다([실제 장면 검증](../assets/windows_recurrent_guidance_qb_50/real_scene_verification.json)). 원격 복구 검증 기록은 푸시 후 이 절에 연결합니다.
+검증기는 350개 epoch 기록, validation 선택, 120개 장면별 RR·FR 결과와 평균, 15개 이미지, 14개 best/latest의 해시·strict load·유한한 forward를 확인합니다. 실제 QB RR index 0을 CPU FP32로 다시 추론해 D0·D1·D3의 저장된 GPU MSE와 일치함을 확인했습니다([실제 장면 검증](../assets/windows_recurrent_guidance_qb_50/real_scene_verification.json)). GitHub 브랜치의 별도 새 clone에서 전체 보관 파일 120개가 원본과 byte 단위로 일치했고, 14개 가중치·Adam 상태 복구와 CPU 추론을 다시 확인했습니다([원격 복구 검증](../assets/windows_recurrent_guidance_qb_50/remote_verification.json)). 검증 대상은 기록에 명시된 근거 커밋이며 이 기록은 후속 메타데이터 커밋으로 추가했습니다.
 
 ```bash
 python SSA-MRN/scripts/verify_recurrent_guidance_results.py --check-torch
