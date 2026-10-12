@@ -1,0 +1,49 @@
+{
+  "variants": [
+    "F0",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5"
+  ],
+  "epochs": 50,
+  "effective_batch": 96,
+  "micro": 96,
+  "workers": 1,
+  "K": 4,
+  "seed": 45,
+  "lr": 0.0001,
+  "loss": "MSE",
+  "amp": true,
+  "max_parallel": 2,
+  "data": "C:\\CtrS\\SSA-MRN\\data\\dataset",
+  "cache_root": "C:\\CtrS-stage-aware\\runtime\\qb_stage_aware_seed45\\cache",
+  "source_base_commit": "bdfaf2ca46175cd33bf79647fc975dfd7a65e1ad",
+  "source_hashes": {
+    "experiments/22_stage_aware_restoration/run.py": "7f450b6faea787778427736a4a123ca7c4b1eb1637e851db46d6998427627aaa",
+    "experiments/22_stage_aware_restoration/model.py": "f735704d9d6519eef11e1a6cca419e9d5549035464b036c92284bbb26a008d17",
+    "experiments/22_stage_aware_restoration/prepare.py": "d2dfccd434bdd6f478b87cc6fd04a1704bb3b38777a14bb1012575ebc248571d",
+    "experiments/22_stage_aware_restoration/verify.py": "05da3a729ef34888b2c06ec8b8d2a3e7d04b8f4667d721bb3cd10447d734cf30",
+    "experiments/20_recurrent_guidance/model.py": "dbe1a0b3a76c3499905e4dc646d935a9e03f31c0a2e864bd7d2f3001b677cac9",
+    "common/model.py": "2baf71d9bba152cc05aa54aff62f2ba72c31bd66900a0cef3587777c967e21cf",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/preview.py": "53294d75e356e7dc9b4187e634ae2bc0b32027a29c2cca4ef5494180a6769160",
+    "references/upstream/network.py": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a"
+  },
+  "selection": "validation MSE; SAM only exact tie; earlier best epoch",
+  "data_hashes": {
+    "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+    "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470"
+  },
+  "architecture": "F0 E1 control; F1 stage alpha; F2 zero-init stage affine; F3 both; F4 F3 plus final-only high-pass PAN; F5 single restoration",
+  "observation": "no new observation correction; bilinear FR diagnostic only",
+  "queue_order": [
+    "F0",
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5"
+  ]
+}

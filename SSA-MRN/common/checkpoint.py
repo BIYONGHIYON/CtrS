@@ -46,8 +46,8 @@ def load_model(number, checkpoint):
         net = model_module(11).WaveletMS(variant, channels, cfg['width'], cfg['blocks'])
     elif number == 15:
         net = model_module(15).build(ck['arm'])
-    elif number in (17, 18, 19, 20, 21):
-        cls = {17:'StructureNet',18:'CoarseAnchorNet',19:'DualStreamNet',20:'GuidanceNet',21:'RefinementNet'}[number]
+    elif number in (17, 18, 19, 20, 21, 22):
+        cls = {17:'StructureNet',18:'CoarseAnchorNet',19:'DualStreamNet',20:'GuidanceNet',21:'RefinementNet',22:'StageAwareNet'}[number]
         net = getattr(model_module(number), cls)(variant)
     else:
         raise ValueError('This experiment has no trained checkpoint')
