@@ -29,11 +29,11 @@
 | [5. 23탭 확대 위치와 센서 확장](experiments/5_interpolation_scope_sensors/README.md) | 23탭 적용 위치를 분리하고 시드·센서를 확장했습니다. | RR 이득이 있으나 FR·센서별 결과가 엇갈림 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
 | [6. 23탭 확대의 반복 시드 비교](experiments/6_interpolation_seed_repeat/README.md) | 전체 확대 및 입력 확대 후보를 추가 시드로 반복했습니다. | 전체 확대의 GF2 PSNR·QNR 개선 반복; SAM 및 QB QNR 혼재 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
 | [7. 밴드별 게이트 고주파 주입](experiments/7_band_gated_detail/README.md) | 밴드별 게이트로 PAN 고주파 주입량을 조절했습니다. | RR 악화로 후보 채택 보류 | 평⁠가⁠ ⁠완⁠료 | 개⁠선⁠ ⁠없⁠음 |
-| [8. MTF 변화량 데이터 증강](experiments/8_mtf_augmentation/README.md) | 센서 열화 특성의 변화량을 학습 데이터에 추가했습니다. | 100에폭 validation 기록 확보; 이 보고서의 RR·FR 결과는 미확정 | 학⁠습⁠ ⁠완⁠료<br>평⁠가⁠ ⁠대⁠기 | 판⁠단⁠ ⁠보⁠류 |
-| [9. SSAI 내부 융합 연산 변경](experiments/9_ssai_fusion/README.md) | SSAI 핵심 융합 연산을 네 구조로 비교했습니다. | validation MSE는 기존 A0가 최저; RR·FR 평가 대기 | 학⁠습⁠ ⁠완⁠료<br>평⁠가⁠ ⁠대⁠기 | 판⁠단⁠ ⁠보⁠류 |
+| [8. MTF 변화량 데이터 증강](experiments/8_mtf_augmentation/README.md) | 센서 열화 특성의 변화량을 학습 데이터에 추가했습니다. | MTF: PSNR -0.0064 dB, SAM -0.0061°; 잠정 QNR -0.0014 | 평가⁠ ⁠완료 | 부분⁠ ⁠개선 |
+| [9. SSAI 내부 융합 연산 변경](experiments/9_ssai_fusion/README.md) | SSAI 핵심 융합 연산을 네 구조로 비교했습니다. | A1: SAM -0.0058°, 잠정 QNR +0.0127; 모든 후보의 PSNR은 하락 | 평가⁠ ⁠완료 | 부분⁠ ⁠개선 |
 | [10. 반복 복원에 MS 관측 오차 전달](experiments/10_recurrent_observation/README.md) | 반복 단계에 입력 MS와 관측한 출력의 차이를 전달했습니다. | PSNR +0.1158 dB, SAM −0.0183°, 잠정 QNR −0.0182 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
 | [11. Haar 대역별 단계 복원과 게이트](experiments/11_haar_reconstruction/README.md) | Haar 대역별 복원에 밴드·방향·위치 게이트를 적용했습니다. | 원본 대비 RR 큰 폭 악화; 학습 게이트의 추가 이득도 없음 | 평⁠가⁠ ⁠완⁠료 | 개⁠선⁠ ⁠없⁠음 |
-| [12. SSAI 내부 특징 차원 비교](experiments/12_feature_dimension/README.md) | 같은 환경에서 내부 특징 차원 4와 6을 비교했습니다. | 센서별 validation 다수결 2:1로 차원 4 선택; test는 일부만 평가 | 학⁠습⁠ ⁠완⁠료<br>일⁠부⁠ ⁠평⁠가 | 비⁠교⁠ ⁠기⁠준 |
+| [12. SSAI 내부 특징 차원 비교](experiments/12_feature_dimension/README.md) | 같은 환경에서 내부 특징 차원 4와 6을 비교했습니다. | K4: 세 센서 RR PSNR·SAM 우세; WV3 잠정 QNR은 K6 우세 | 평가⁠ ⁠완료 | 비교⁠ ⁠기준 |
 | [13. 반복 복원·관측 오차 전달의 재개 학습](experiments/13_recurrent_observation_resume/README.md) | 반복 복원과 관측 오차 후보를 재개해 기준선과 비교했습니다. | 기준선 대비 RR 개선·잠정 QNR 하락; 별도 세션 비교 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
 | [14. 분광·관측 일치·경계 손실 추가](experiments/14_auxiliary_losses/README.md) | 기본 MSE에 보조 손실을 하나씩 추가했습니다. | edge 0.1: PSNR −0.0661 dB, SAM −0.0119°, 잠정 QNR +0.0098 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
 | [15. 단일 복원과 3단계 공유 복원](experiments/15_shared_reconstruction/README.md) | 동일 초기값과 학습 조건에서 복원 횟수를 변경했습니다. | 반복 복원: PSNR +0.3000 dB, SAM −0.1078°, 잠정 QNR −0.0393 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
