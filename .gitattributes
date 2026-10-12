@@ -1,47 +1,5 @@
-# Preserve observation hashes on Windows and macOS.
-SSA-MRN/src/ssamrn/observation.py text eol=lf
-SSA-MRN/scripts/observation_profiles/*.json text eol=lf
-SSA-MRN/scripts/verify_observation.py text eol=lf
-SSA-MRN/scripts/controlled_suite_plan.json text eol=lf
-
-# Byte-preserve downloaded B1/B2 evidence, checkpoint and prediction hashes.
-SSA-MRN/docs/assets/kaggle_b1_b2/** -text
-
-# Keep archived resumed Kaggle evidence bytes identical to the recorded SHA-256.
-SSA-MRN/docs/assets/kaggle_b1_b2_100_resume/** -text -whitespace
-
-# Byte-preserve original Kaggle K4 weights, source, metrics and hashes.
-SSA-MRN/docs/assets/kaggle_bandlimit_k4/** -text -whitespace
-
-# Keep structure-suite executable hashes identical across platforms.
-SSA-MRN/scripts/windows_structure_suite.py text eol=lf
-SSA-MRN/scripts/verify_windows_structure.py text eol=lf
-SSA-MRN/scripts/verify_windows_structure_results.py text eol=lf
-SSA-MRN/src/ssamrn/models/windows_structure.py text eol=lf
-
-# Preserve original K4 controlled B0/B1 evidence and recorded SHA-256 values.
-SSA-MRN/docs/assets/kaggle_b0_b1_k4_controlled/** -text -whitespace
-
-# Preserve original coarse-anchor evidence and cross-platform executable hashes.
-SSA-MRN/docs/assets/windows_coarse_anchor_qb_50/** -text -whitespace
-SSA-MRN/docs/assets/windows_coarse_anchor_preflight/** -text -whitespace
-SSA-MRN/scripts/windows_coarse_anchor_suite.py text eol=lf
-SSA-MRN/scripts/verify_coarse_anchor.py text eol=lf
-SSA-MRN/scripts/verify_coarse_anchor_results.py text eol=lf
-SSA-MRN/src/ssamrn/models/coarse_anchor.py text eol=lf
-
-# Preserve original dual-stream evidence and checkpoint/source hashes.
-SSA-MRN/docs/assets/windows_dual_stream_qb_50/** -text -whitespace
-SSA-MRN/docs/assets/dual_stream_preflight/** -text -whitespace
-SSA-MRN/scripts/windows_dual_stream_suite.py text eol=lf
-SSA-MRN/scripts/verify_dual_stream.py text eol=lf
-SSA-MRN/scripts/verify_dual_stream_results.py text eol=lf
-SSA-MRN/src/ssamrn/models/dual_stream.py text eol=lf
-
-# Preserve recurrent-guidance evidence and executable source hashes.
-SSA-MRN/docs/assets/windows_recurrent_guidance_qb_50/** -text -whitespace
-SSA-MRN/scripts/recurrent_guidance_suite.py text eol=lf
-SSA-MRN/scripts/prepare_recurrent_guidance.py text eol=lf
-SSA-MRN/scripts/verify_recurrent_guidance.py text eol=lf
-SSA-MRN/scripts/verify_recurrent_guidance_results.py text eol=lf
-SSA-MRN/src/ssamrn/models/recurrent_guidance.py text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+SSA-MRN/experiments/**/checkpoints/** -text
+SSA-MRN/experiments/**/provenance/** -text
+SSA-MRN/experiments/**/results/** -text

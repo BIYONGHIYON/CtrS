@@ -13,8 +13,8 @@ from scipy.ndimage import correlate
 import torch
 
 ROOT=Path(__file__).resolve().parents[1]
-sys.path.insert(0,str(ROOT/"src"))
-from ssamrn.observation import SensorObservation,load_profile,module_hash
+sys.path.insert(0,str(ROOT))
+from common.observation import SensorObservation, load_profile, module_hash
 
 
 class ObservationTests(unittest.TestCase):

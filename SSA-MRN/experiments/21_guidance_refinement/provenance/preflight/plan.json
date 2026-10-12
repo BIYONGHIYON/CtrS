@@ -1,0 +1,52 @@
+{
+  "variants": [
+    "E0",
+    "E1",
+    "E5",
+    "E3",
+    "E6",
+    "E4",
+    "E7",
+    "E2"
+  ],
+  "epochs": 50,
+  "effective_batch": 96,
+  "micro": 96,
+  "workers": 1,
+  "K": 4,
+  "seed": 44,
+  "lr": 0.0001,
+  "loss": "MSE",
+  "amp": true,
+  "max_parallel": 2,
+  "data": "C:\\CtrS\\SSA-MRN\\data\\dataset",
+  "source_base_commit": "54678464a559d3dabdccda8c12e9a8533bdcfeb1",
+  "source_hashes": {
+    "scripts/guidance_refinement_suite.py": "e4b85796492a41437ab8170a3b9b047635bd15cd5d019fa58b6627415335883e",
+    "scripts/prepare_guidance_refinement.py": "24d810ad1023e7f590d9605026bae488ac4f0e0d3f29a831598ce431c0f39ecc",
+    "scripts/verify_guidance_refinement.py": "d71f04b06fd26fa6c03a5acb537c0e980dec8cccccc3180b61e050fb2959942c",
+    "src/ssamrn/models/guidance_refinement.py": "5001fa3272ddf3d4f9bf13e27aa5da6dbc0e775e5db09d8cfc3eef1100627537",
+    "src/ssamrn/models/recurrent_guidance.py": "bb0b6925d0aa1cc6be4558f4e222f436ce75e35a22b04db85cc2c67f76dab897",
+    "src/ssamrn/models/ssa_mrn.py": "0d8bb038d83543c44c5b76a97ea2bd4f989b811446287a803d66e465135944ff",
+    "references/upstream/network.py": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a",
+    "src/ssamrn/metrics.py": "c278b0d4057980dec7a943af403611a6657f775cebd0fc88e199a04f9cf19738",
+    "scripts/evaluate_paper.py": "846bc3a063eb0039773a1a992e48817424ca6f893b04a679b8481173f5e6e332"
+  },
+  "selection": "validation MSE; SAM only exact tie; earlier best epoch",
+  "data_hashes": {
+    "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+    "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470"
+  },
+  "architecture": "E0 original; E1=D3; E2=D4; E3=D5; E4=D6; E5 spatial-band memory gate; E6 post-restoration observation scaled by alpha; E7 reflect box5 high-pass PAN difference",
+  "observation": "fixed bilinear scale4 align_corners=True, not sensor-calibrated MTF",
+  "queue_order": [
+    "E0",
+    "E1",
+    "E5",
+    "E3",
+    "E6",
+    "E4",
+    "E7",
+    "E2"
+  ]
+}

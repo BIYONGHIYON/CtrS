@@ -14,17 +14,6 @@ build/
 dist/
 backups/
 output/
-**/data/dataset/
-**/data/raw/**
-**/data/processed/**
-!**/data/raw/.gitkeep
-!**/data/processed/.gitkeep
-**/experiments/checkpoints/**
-**/experiments/logs/**
-**/experiments/results/**
-!**/experiments/checkpoints/.gitkeep
-!**/experiments/logs/.gitkeep
-!**/experiments/results/.gitkeep
 *.pt
 *.pth
 *.ckpt
@@ -32,10 +21,7 @@ output/
 *.npz
 *.mat
 .ipynb_checkpoints/
-SSA-MRN/scripts/oracleJdk-*/
 
-# Detached controlled-suite runtime (profiles in scripts remain versioned)
-SSA-MRN/experiments/controlled_suite*/
 
 # 개인 편집기 설정·로컬 캐시
 .vscode/
@@ -48,3 +34,10 @@ Desktop.ini
 # 재생성 가능한 예측 배열·실행 로그
 **/predictions/
 *.log
+
+# 실험별 보존 가중치만 추적합니다. 임시 학습 출력은 runtime에 둡니다.
+!SSA-MRN/experiments/*/checkpoints/**/*.pt
+!SSA-MRN/experiments/*/checkpoints/**/*.pth
+!SSA-MRN/experiments/*/checkpoints/**/*.ckpt
+SSA-MRN/runtime/
+SSA-MRN/**/*.ipynb
