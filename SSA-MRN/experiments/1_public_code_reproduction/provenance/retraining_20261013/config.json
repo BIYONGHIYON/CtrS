@@ -1,0 +1,424 @@
+{
+  "seed": 42,
+  "epochs": 150,
+  "batch": 32,
+  "precision": "FP32",
+  "max_parallel": 2,
+  "lr_schedule": {
+    "1-100": 0.0001,
+    "101-150": 1e-05
+  },
+  "selection": "minimum validation MSE",
+  "sensors": {
+    "QB": {
+      "cache": "C:\\CtrS-multi-sensor\\runtime\\seed46\\QB\\cache",
+      "data_manifest": {
+        "train": {
+          "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+          "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+          "shapes": {
+            "pan": [
+              17139,
+              1,
+              64,
+              64
+            ],
+            "lms": [
+              17139,
+              4,
+              64,
+              64
+            ],
+            "ms": [
+              17139,
+              4,
+              16,
+              16
+            ],
+            "gt": [
+              17139,
+              4,
+              64,
+              64
+            ]
+          },
+          "normalization": 2047.0,
+          "cache_hashes": {
+            "pan": "2d27eb539ebdd19c6bc58a33c0291d413c51f1d8d5711f7e38b66f44e97b4d39",
+            "lms": "262f878cb024c3ca05887ae28a15f7bfe757d82245d8da922c617d742167a45e",
+            "ms": "1fde47d03e8a22b605f6a93aa62591ce83ea4b9763da2c241cc783808ac633c3",
+            "gt": "3c792adcfae16f074c81a8fcd82679628081f497e9dc9a586fc866c25b80a1d0"
+          }
+        },
+        "val": {
+          "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+          "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+          "shapes": {
+            "pan": [
+              1905,
+              1,
+              64,
+              64
+            ],
+            "lms": [
+              1905,
+              4,
+              64,
+              64
+            ],
+            "ms": [
+              1905,
+              4,
+              16,
+              16
+            ],
+            "gt": [
+              1905,
+              4,
+              64,
+              64
+            ]
+          },
+          "normalization": 2047.0,
+          "cache_hashes": {
+            "pan": "95d66b9e94a75bfcbec9c4de62ec0062a70344fe184c1297432df3cee22700a7",
+            "lms": "34e30bfffdf67bc54cbf0db4d4ccc886dc9b0f8a5f9479a6e070a837e09a646e",
+            "ms": "386b1bb30f9986131cc12bb0122f63a8f099f6fe6b27ec149d5924b850593bfe",
+            "gt": "baf3cb6c0ff76d95a8ca49d8bd360296f827af6ed23138275da7fb6c822e1b01"
+          }
+        },
+        "RR": {
+          "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Testing Dataset (ReducedData, H5 Format)\\test_qb_multiExm1.h5",
+          "shapes": {
+            "gt": [
+              20,
+              4,
+              256,
+              256
+            ],
+            "lms": [
+              20,
+              4,
+              256,
+              256
+            ],
+            "ms": [
+              20,
+              4,
+              64,
+              64
+            ],
+            "pan": [
+              20,
+              1,
+              256,
+              256
+            ]
+          },
+          "count": 20,
+          "sha256": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35"
+        },
+        "FR": {
+          "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Testing Dataset (FullData, H5 Format)\\test_qb_OrigScale_multiExm1.h5",
+          "shapes": {
+            "lms": [
+              20,
+              4,
+              512,
+              512
+            ],
+            "ms": [
+              20,
+              4,
+              128,
+              128
+            ],
+            "pan": [
+              20,
+              1,
+              512,
+              512
+            ]
+          },
+          "count": 20,
+          "sha256": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+        }
+      }
+    },
+    "GF2": {
+      "cache": "C:\\CtrS-multi-sensor\\runtime\\seed46\\GF2\\cache",
+      "data_manifest": {
+        "train": {
+          "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\Gaofen 2\\Training Dataset\\train_gf2.h5",
+          "sha256": "243a0bc8a4cc0a2740ed24409f9e87afe531d87e9d57524c6bcbec2b5f937621",
+          "shapes": {
+            "pan": [
+              19809,
+              1,
+              64,
+              64
+            ],
+            "lms": [
+              19809,
+              4,
+              64,
+              64
+            ],
+            "ms": [
+              19809,
+              4,
+              16,
+              16
+            ],
+            "gt": [
+              19809,
+              4,
+              64,
+              64
+            ]
+          },
+          "normalization": 1023.0,
+          "cache_hashes": {
+            "pan": "0cfaa2dd267bc465240f4c9d6e1fe8b19ff005c46265986338166b348097b17a",
+            "lms": "4d0b6f5757b04571c9fe1c5775f39aed50cf4e363f259b47259e4a8b60160f07",
+            "ms": "b64ea09dfa6d0f24880d44fd1db3e2c83af1b7430b36c47ee4f033f928919250",
+            "gt": "dd8d305cc26c2dd0ba065b16eca9ace463885daf5611ab7faf19132e477e1713"
+          }
+        },
+        "val": {
+          "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\Gaofen 2\\Training Dataset\\valid_gf2.h5",
+          "sha256": "ae15b19ccc6ece799ebfeb3fb374b1a333238226397441e3d523b0195dff4f43",
+          "shapes": {
+            "pan": [
+              2201,
+              1,
+              64,
+              64
+            ],
+            "lms": [
+              2201,
+              4,
+              64,
+              64
+            ],
+            "ms": [
+              2201,
+              4,
+              16,
+              16
+            ],
+            "gt": [
+              2201,
+              4,
+              64,
+              64
+            ]
+          },
+          "normalization": 1023.0,
+          "cache_hashes": {
+            "pan": "05c9bf2092976eb471596c6b8517e9c0fe1f4683d7af1230baa45bc365ca4e02",
+            "lms": "d79fb0aebc5961d3d0aa798b6987ddeedf8f2742ddc696c1841abefb473ff484",
+            "ms": "b9c3993dc0260f51d511a43b8d90d2166e06c1c3f3fcd50f36a6304d2f209881",
+            "gt": "f24845df79942397ff9c574717e1891ee66f1d21d81801514c5b06f5778e52d8"
+          }
+        },
+        "RR": {
+          "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\Gaofen 2\\Testing Dataset (ReducedData, H5 Format)\\test_gf2_multiExm1.h5",
+          "shapes": {
+            "gt": [
+              20,
+              4,
+              256,
+              256
+            ],
+            "lms": [
+              20,
+              4,
+              256,
+              256
+            ],
+            "ms": [
+              20,
+              4,
+              64,
+              64
+            ],
+            "pan": [
+              20,
+              1,
+              256,
+              256
+            ]
+          },
+          "count": 20,
+          "sha256": "709a9a53b2e0f29d3dcd5c6ca4410c2913b62cc03c104fed6c049911dbe1c8ea"
+        },
+        "FR": {
+          "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\Gaofen 2\\Testing Dataset (FullData, H5 Format)\\test_gf2_OrigScale_multiExm1.h5",
+          "shapes": {
+            "lms": [
+              20,
+              4,
+              512,
+              512
+            ],
+            "ms": [
+              20,
+              4,
+              128,
+              128
+            ],
+            "pan": [
+              20,
+              1,
+              512,
+              512
+            ]
+          },
+          "count": 20,
+          "sha256": "840698f9b3de181de9f665ca88e562fb7783dcd93045a136ace2110d414989ad"
+        }
+      }
+    },
+    "WV3": {
+      "cache": "C:\\CtrS-multi-sensor\\runtime\\seed46\\WV3\\cache",
+      "data_manifest": {
+        "train": {
+          "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Training Dataset\\train_wv3.h5",
+          "sha256": "f9e7ec381390ff36ddffd0714df7af07a3c5f456078b219a25f3e18372228f82",
+          "shapes": {
+            "pan": [
+              9714,
+              1,
+              64,
+              64
+            ],
+            "lms": [
+              9714,
+              8,
+              64,
+              64
+            ],
+            "ms": [
+              9714,
+              8,
+              16,
+              16
+            ],
+            "gt": [
+              9714,
+              8,
+              64,
+              64
+            ]
+          },
+          "normalization": 2047.0,
+          "cache_hashes": {
+            "pan": "580c8c5b922f63c865b8739ae35bbfc1015d78315e65d9bd9960db07386ac8ba",
+            "lms": "f29979d4f8e93d33bdf4bbb6fe2e3d18b0c13aad267dec827b2d1c24251ece64",
+            "ms": "b941acfd3139bc211b363625a80251e3ba027f02d593b7c2253402e11ca6cfe5",
+            "gt": "ad67657d0c1918b95547af52a519d13d56a8cfc62052a8b584e52cb0500f932b"
+          }
+        },
+        "val": {
+          "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Training Dataset\\valid_wv3.h5",
+          "sha256": "ba883e57408d1f3c2263cc2818a9fbbf2dbe8e62554c531288f9e8bf9f59dc87",
+          "shapes": {
+            "pan": [
+              1080,
+              1,
+              64,
+              64
+            ],
+            "lms": [
+              1080,
+              8,
+              64,
+              64
+            ],
+            "ms": [
+              1080,
+              8,
+              16,
+              16
+            ],
+            "gt": [
+              1080,
+              8,
+              64,
+              64
+            ]
+          },
+          "normalization": 2047.0,
+          "cache_hashes": {
+            "pan": "1de68736e45f6d22f3b6fb1d9c0156e5f2b2a4f473491ab40eb3ee9c49184804",
+            "lms": "81f719c7a668ff3e14003945d0a70391545f3f6169238c02929b2e91179cc8f6",
+            "ms": "a7d21d14aa142a725cb613ab97abffd6974258624826def84b718d54409d5cd8",
+            "gt": "d3fde58a0d07fb820267c07c40e20b5cc79da042bc752fd5873503e008e428b2"
+          }
+        },
+        "RR": {
+          "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Testing Dataset (ReducedData, H5 Format)\\test_wv3_multiExm1.h5",
+          "shapes": {
+            "gt": [
+              20,
+              8,
+              256,
+              256
+            ],
+            "lms": [
+              20,
+              8,
+              256,
+              256
+            ],
+            "ms": [
+              20,
+              8,
+              64,
+              64
+            ],
+            "pan": [
+              20,
+              1,
+              256,
+              256
+            ]
+          },
+          "count": 20,
+          "sha256": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a"
+        },
+        "FR": {
+          "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Testing Dataset (FullData, H5 Format)\\test_wv3_OrigScale_multiExm1.h5",
+          "shapes": {
+            "lms": [
+              20,
+              8,
+              512,
+              512
+            ],
+            "ms": [
+              20,
+              8,
+              128,
+              128
+            ],
+            "pan": [
+              20,
+              1,
+              512,
+              512
+            ]
+          },
+          "count": 20,
+          "sha256": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+        }
+      }
+    }
+  },
+  "source_hashes": {
+    "common/model.py": "2baf71d9bba152cc05aa54aff62f2ba72c31bd66900a0cef3587777c967e21cf",
+    "references/upstream/network.py": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a",
+    "experiments/24_public_reproduction_continuation/run.py": "ca3c862d3445fd74f7c1a0c72ff1911bb1584506c28d2598a3fac766a7b96b6b"
+  }
+}
