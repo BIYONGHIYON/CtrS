@@ -83,5 +83,6 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 | [24. 3단계 공유 복원의 보정 계수 범위 제한](SSA-MRN/experiments/24_alpha_bounded_shared_reconstruction/README.md)<br>[김윤지] | 공유 scalar α의 표현만 sigmoid(a)로 바꿨습니다. | PSNR −0.0849 dB, SAM +0.0101°; 잠정 QNR +0.0159, RR 유지 목표 미달 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [25. 중간 해상도 복원 목표와 보조 손실](SSA-MRN/experiments/25_multiscale_supervision/README.md)<br>[김윤지] | 기존 복원 지점에 GT 기반 보조 L1을 추가했습니다. | 중간 head L1 감소; PSNR −0.0425 dB, SAM +0.0264°; 잠정 QNR +0.0101 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [26. 평가 가중치의 지수 이동 평균](SSA-MRN/experiments/26_ema_weight_averaging/README.md)<br>[송준현] | 일반 MSE 학습을 유지하고 평가 가중치에 EMA를 적용했습니다. | seed42: PSNR +0.0893 dB, SAM −0.0244°; 잠정 QNR −0.0018 | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
+| [27. Backbone 채널 어텐션 추가](SSA-MRN/experiments/27_backbone_channel_attention/README.md)<br>[김경찬] | Backbone 잔차 블록 4개에 채널 어텐션을 추가했습니다. | seed42: RR PSNR +0.4803 dB, SAM −0.1369°; 잠정 FR QNR −0.0226 | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 
 **판정 기준:** 개선 = 같은 조건에서 주요 RR·FR 지표가 함께 개선, 부분 개선 = 지표·후보·센서별 결과 혼재, 개선 없음 = 평가에서 향상을 확인하지 못함, 판단 보류 = 최종 평가 부족입니다. 비교 기준·성능 비교 아님은 개선 판정 대상에서 제외합니다. 모든 FR QNR은 구현 대응 검증이 끝나지 않은 잠정 지표이며, 단일 실험의 개선은 최종 채택을 뜻하지 않습니다.
