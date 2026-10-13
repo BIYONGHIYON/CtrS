@@ -40,7 +40,7 @@ def load_model(number, checkpoint):
         net = RestoredPansharpeningNet(channels, k)
     elif number in (4, 5, 6):
         net = model_module(4).make_model(cfg)
-    elif number in (7, 10, 13, 16):
+    elif number in (7, 10, 13, 16, 25):
         net = model_module(number).build_model(variant, channels, k)
     elif number == 9:
         net = model_module(9).FusionPansharpeningNet(channels, k, variant, cfg.get('chunk_rows', 32))

@@ -1,0 +1,14 @@
+{
+  "baseline": "single original restored SSA-MRN forward, final MSE only",
+  "candidate": "same core and auxiliary heads; final MSE + weighted auxiliary L1",
+  "head_sites": [
+    "conv2ctc1",
+    "conv2ctc2",
+    "conv2ctc3"
+  ],
+  "heads": "three identity-initialized 1x1 C-to-C readouts, training only",
+  "k": 4,
+  "backbone_resampling": "original endpoint-aligned bilinear unchanged",
+  "feedback": "none",
+  "historical_comparison": "B1/B2/k6 runs not directly comparable"
+}
