@@ -1,6 +1,6 @@
 # 변경한 구조·연산을 설명하는 실험 이름
 
-`experiments/<번호>_<실험명>/README.md`에 작성합니다. 실험 등록 시 catalog의 `research_track`·`experimenter`와 해당 연구 페이지·두 README의 표를 함께 갱신합니다. 결과 보관 시 해당 폴더의 manifest.json을 갱신합니다.
+`research/<분야>/<번호>_<실험명>/README.md`에 작성합니다. 복사한 보고서의 전체 실험 목록 링크는 `../../../README.md#experiments`로 맞춥니다. 실험 등록 시 catalog의 `research_track`·`experimenter`와 해당 연구 페이지·두 README의 표를 함께 갱신합니다. 결과 보관 시 해당 폴더의 manifest.json을 갱신합니다.
 
 **연구 분야:** SSAI 개선 / 가변 배율 확장 / 기존 성능 개선 중 하나를 적습니다.
 
@@ -12,7 +12,7 @@
 |---|---|---|
 | 아직 평가하지 않았습니다. | 계획 | 판단 보류 |
 
-[실험 목록](../../README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [재현 자료](#evidence)
+[실험 목록](../README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [재현 자료](#evidence)
 
 ## 1. 목적과 상태
 
