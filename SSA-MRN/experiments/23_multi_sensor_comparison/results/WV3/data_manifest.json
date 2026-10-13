@@ -1,0 +1,132 @@
+{
+  "train": {
+    "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Training Dataset\\train_wv3.h5",
+    "sha256": "f9e7ec381390ff36ddffd0714df7af07a3c5f456078b219a25f3e18372228f82",
+    "shapes": {
+      "pan": [
+        9714,
+        1,
+        64,
+        64
+      ],
+      "lms": [
+        9714,
+        8,
+        64,
+        64
+      ],
+      "ms": [
+        9714,
+        8,
+        16,
+        16
+      ],
+      "gt": [
+        9714,
+        8,
+        64,
+        64
+      ]
+    },
+    "normalization": 2047.0,
+    "cache_hashes": {
+      "pan": "580c8c5b922f63c865b8739ae35bbfc1015d78315e65d9bd9960db07386ac8ba",
+      "lms": "f29979d4f8e93d33bdf4bbb6fe2e3d18b0c13aad267dec827b2d1c24251ece64",
+      "ms": "b941acfd3139bc211b363625a80251e3ba027f02d593b7c2253402e11ca6cfe5",
+      "gt": "ad67657d0c1918b95547af52a519d13d56a8cfc62052a8b584e52cb0500f932b"
+    }
+  },
+  "val": {
+    "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Training Dataset\\valid_wv3.h5",
+    "sha256": "ba883e57408d1f3c2263cc2818a9fbbf2dbe8e62554c531288f9e8bf9f59dc87",
+    "shapes": {
+      "pan": [
+        1080,
+        1,
+        64,
+        64
+      ],
+      "lms": [
+        1080,
+        8,
+        64,
+        64
+      ],
+      "ms": [
+        1080,
+        8,
+        16,
+        16
+      ],
+      "gt": [
+        1080,
+        8,
+        64,
+        64
+      ]
+    },
+    "normalization": 2047.0,
+    "cache_hashes": {
+      "pan": "1de68736e45f6d22f3b6fb1d9c0156e5f2b2a4f473491ab40eb3ee9c49184804",
+      "lms": "81f719c7a668ff3e14003945d0a70391545f3f6169238c02929b2e91179cc8f6",
+      "ms": "a7d21d14aa142a725cb613ab97abffd6974258624826def84b718d54409d5cd8",
+      "gt": "d3fde58a0d07fb820267c07c40e20b5cc79da042bc752fd5873503e008e428b2"
+    }
+  },
+  "RR": {
+    "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Testing Dataset (ReducedData, H5 Format)\\test_wv3_multiExm1.h5",
+    "shapes": {
+      "gt": [
+        20,
+        8,
+        256,
+        256
+      ],
+      "lms": [
+        20,
+        8,
+        256,
+        256
+      ],
+      "ms": [
+        20,
+        8,
+        64,
+        64
+      ],
+      "pan": [
+        20,
+        1,
+        256,
+        256
+      ]
+    },
+    "count": 20,
+    "sha256": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a"
+  },
+  "FR": {
+    "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Testing Dataset (FullData, H5 Format)\\test_wv3_OrigScale_multiExm1.h5",
+    "shapes": {
+      "lms": [
+        20,
+        8,
+        512,
+        512
+      ],
+      "ms": [
+        20,
+        8,
+        128,
+        128
+      ],
+      "pan": [
+        20,
+        1,
+        512,
+        512
+      ]
+    },
+    "count": 20,
+    "sha256": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+  }
+}

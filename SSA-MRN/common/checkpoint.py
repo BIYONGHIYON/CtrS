@@ -30,6 +30,8 @@ def load_model(number, checkpoint):
     from common.model import RestoredPansharpeningNet
     ck = torch.load(checkpoint, map_location='cpu', weights_only=False)
     cfg = ck.get('config', {})
+    if number == 23:
+        cfg = {**cfg.get('plan', {}), **cfg}
     sensor = cfg.get('sensor', ck.get('sensor', 'QB'))
     channels = cfg.get('channels', ck.get('channels', 8 if sensor in ('WV2', 'WV3') else 4))
     k = cfg.get('k', ck.get('ssai_dimension', 4))
@@ -46,6 +48,8 @@ def load_model(number, checkpoint):
         net = model_module(11).WaveletMS(variant, channels, cfg['width'], cfg['blocks'])
     elif number == 15:
         net = model_module(15).build(ck['arm'])
+    elif number == 23:
+        net = model_module(number).ComparisonNet(variant, channels)
     elif number in (17, 18, 19, 20, 21, 22):
         cls = {17:'StructureNet',18:'CoarseAnchorNet',19:'DualStreamNet',20:'GuidanceNet',21:'RefinementNet',22:'StageAwareNet'}[number]
         net = getattr(model_module(number), cls)(variant)
@@ -77,6 +81,8 @@ def main():
     net.to(args.device)
     if args.h5 is None:
         cfg = ck.get('config', {})
+        if args.experiment == 23:
+            cfg = {**cfg.get('plan', {}), **cfg}
         sensor = cfg.get('sensor', ck.get('sensor', 'QB'))
         channels = cfg.get('channels', ck.get('channels', 8 if sensor in ('WV2','WV3') else 4))
         with torch.inference_mode():
@@ -96,7 +102,10 @@ def main():
     import numpy as np
     from common.data import SENSOR_MAX
     from common.metrics import rr_metrics, fr_metrics
-    cfg=ck.get('config',{});sensor=cfg.get('sensor',ck.get('sensor','QB'));scale=SENSOR_MAX[sensor]
+    cfg=ck.get('config',{})
+    if args.experiment == 23:
+        cfg = {**cfg.get('plan', {}), **cfg}
+    sensor=cfg.get('sensor',ck.get('sensor','QB'));scale=SENSOR_MAX[sensor]
     rows=[]
     with h5py.File(args.h5,'r') as f, torch.inference_mode():
         count=min(len(f['pan']),args.max_samples or len(f['pan']))
@@ -105,7 +114,7 @@ def main():
             a={key:np.asarray(f[key][i],dtype=np.float32) for key in keys}
             x=[torch.from_numpy(a[key]/scale).unsqueeze(0).to(args.device) for key in ('pan','lms','ms')]
             pred=predict(args.experiment,net,*x)[0].cpu().numpy().astype(np.float64)*scale
-            metrics=rr_metrics(a['gt'].astype(np.float64),pred) if args.protocol=='RR' else fr_metrics(pred,a['lms'],a['ms'],a['pan'])
+            metrics=rr_metrics(a['gt'].astype(np.float64)*(2047./scale if args.experiment==23 else 1),pred*(2047./scale if args.experiment==23 else 1)) if args.protocol=='RR' else fr_metrics(pred,a['lms'],a['ms'],a['pan'])
             if not all(np.isfinite(v) for v in metrics.values()):raise ValueError(f'Non-finite metrics: {i}')
             rows.append(dict(index=i,metrics=metrics));print(f'{i+1}/{count}',flush=True)
     report=dict(experiment=args.experiment,checkpoint=str(path),checkpoint_sha256=hashlib.sha256(path.read_bytes()).hexdigest(),epoch=ck.get('epoch'),protocol=args.protocol,samples=count,rows=rows,mean={k:float(np.mean([x['metrics'][k] for x in rows])) for k in rows[0]['metrics']},limits='FP32 portable re-evaluation. QNR/Q2n/SCC MATLAB parity is unverified. Historical evaluations may use additional metrics or a different implementation; this output does not replace them.')
