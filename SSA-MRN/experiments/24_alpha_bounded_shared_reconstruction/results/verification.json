@@ -1,0 +1,167 @@
+{
+  "status": "passed",
+  "source_run": "ssa_B1_alpha_K4_s42_20261013T064751290366Z",
+  "source_manifest_files_checked": 65,
+  "source_manifest_sha256": "95e998123f9dcad4cc9d9c2345dd7fbe6012aa3f6725c87f065073911f4d9719",
+  "source_bytes": 64963217,
+  "reviewed_source_bytes_equal": true,
+  "full_executed_cell_AST_equal": true,
+  "original_checkpoint_ZIP_CRC_verified": true,
+  "recorded_H5_hashes_match": true,
+  "actual_H5_files_rehashed": false,
+  "fresh_paired_run_declared": true,
+  "initial_core_encoder_equal": true,
+  "saved_initial_GPU_outputs_equal": true,
+  "all_100_epoch_orders_equal": true,
+  "earliest_validation_MSE_best_verified": true,
+  "checkpoint_history_curve_csv_equal": true,
+  "strict_CPU_load_and_finite_forward_count": 4,
+  "synthetic_forward_is_not_test_reevaluation": true,
+  "independent_test_scenes_per_arm": {
+    "RR": 20,
+    "FR": 20
+  },
+  "RR_four_panel_images_checked": 10,
+  "arms": {
+    "B1": {
+      "best_epoch": 94,
+      "best_validation_mse": 0.0001645548763917759,
+      "weights": {
+        "best": {
+          "epoch": 94,
+          "sha256": "909bded04a1e1e91b9142429a0381adad55cc4092ab796377f507173ebf61479",
+          "bytes": 5564708,
+          "alpha": 0.11427521705627441,
+          "model_state_sha256": "ae8cd48a85e1b62a87e3fc59d6068f29f86bd709dfe614530ef541b01a1ef4e8"
+        },
+        "latest": {
+          "epoch": 100,
+          "sha256": "221f5d7e271862a5f226c93b333e0da488e7a303a728880d488228882cc8e6db",
+          "bytes": 5565924,
+          "alpha": 0.11120785027742386,
+          "model_state_sha256": "3c2dc624e5f3a21faaa5ba2673f31e6523d656e4d9d86bd1f457986345c69e80"
+        }
+      },
+      "epoch_alpha": {
+        "minimum": 0.10156139731407166,
+        "minimum_epoch": 1,
+        "maximum": 0.15791407227516174,
+        "maximum_epoch": 27,
+        "latest": 0.11120785027742386,
+        "out_of_unit_interval_count": 0,
+        "sampling": "epoch end only; intra-batch extrema unavailable"
+      },
+      "train_minutes": 122.78435183279993,
+      "validation_minutes": 13.351959519933258
+    },
+    "B1_alpha_bounded": {
+      "best_epoch": 96,
+      "best_validation_mse": 0.0001643456780584529,
+      "weights": {
+        "best": {
+          "epoch": 96,
+          "sha256": "3bfe4a2acf3bca349ee0fc133f56c0ce87d93d0bc379354568641fe2766f1107",
+          "bytes": 5565412,
+          "alpha": 0.10880418121814728,
+          "model_state_sha256": "e8cb516c261a27937cc53c32019bce56517e381d5352541064a6509dc4d3512c"
+        },
+        "latest": {
+          "epoch": 100,
+          "sha256": "a23ed1f460f34474e3b29cc0e35d64d0c88d77924ba2dc1ddf007d0857fbed45",
+          "bytes": 5566244,
+          "alpha": 0.1081753596663475,
+          "model_state_sha256": "3c0d6a2812523e21188eabc824d7458d0fe8c32272894372e519529a3411d8f7"
+        }
+      },
+      "epoch_alpha": {
+        "minimum": 0.10013994574546814,
+        "minimum_epoch": 1,
+        "maximum": 0.11632494628429413,
+        "maximum_epoch": 40,
+        "latest": 0.1081753596663475,
+        "out_of_unit_interval_count": 0,
+        "sampling": "epoch end only; intra-batch extrema unavailable"
+      },
+      "train_minutes": 127.65786922598335,
+      "validation_minutes": 14.095767185616587
+    }
+  },
+  "delta_candidate_minus_B1": {
+    "RR": {
+      "SAM": 0.010119087053693576,
+      "ERGAS": 0.040149237596606824,
+      "PSNR": -0.08486138414480138,
+      "SCC": -0.0006970229075204948,
+      "Q2n": -0.0007614476811870219,
+      "MSE_peak1": 3.845912420273465e-06
+    },
+    "FR": {
+      "D_lambda": -0.00598545393763953,
+      "D_s": -0.010820362230811426,
+      "QNR": 0.015906790611065147
+    }
+  },
+  "scene_comparison_counts": {
+    "RR": {
+      "SAM": {
+        "better": 7,
+        "worse": 13,
+        "equal": 0
+      },
+      "ERGAS": {
+        "better": 1,
+        "worse": 19,
+        "equal": 0
+      },
+      "PSNR": {
+        "better": 1,
+        "worse": 19,
+        "equal": 0
+      },
+      "SCC": {
+        "better": 1,
+        "worse": 19,
+        "equal": 0
+      },
+      "Q2n": {
+        "better": 3,
+        "worse": 17,
+        "equal": 0
+      },
+      "MSE_peak1": {
+        "better": 1,
+        "worse": 19,
+        "equal": 0
+      }
+    },
+    "FR": {
+      "D_lambda": {
+        "better": 20,
+        "worse": 0,
+        "equal": 0
+      },
+      "D_s": {
+        "better": 20,
+        "worse": 0,
+        "equal": 0
+      },
+      "QNR": {
+        "better": 20,
+        "worse": 0,
+        "equal": 0
+      }
+    }
+  },
+  "previous_B1_comparison": {
+    "current_B1_best_tensors_equal": true,
+    "current_B1_latest_tensors_equal": true,
+    "all_100_epoch_values_equal": true,
+    "old_checkpoint_bytes_preserved": true
+  },
+  "decision": "부분 개선",
+  "rr_preservation_target_met": false,
+  "FR_metrics_provisional": true,
+  "actual_H5_GT_metrics_recomputed": false,
+  "CUDA_training_or_replay_rerun": false,
+  "remote_archive_verified": false
+}

@@ -1,0 +1,87 @@
+{
+  "id": "ssa_b1_alpha_bounded_k4_v1",
+  "arms": [
+    "B1",
+    "B1_alpha_bounded"
+  ],
+  "seed": 42,
+  "k": 4,
+  "stages": 3,
+  "epochs": 100,
+  "batch": 32,
+  "micro": 32,
+  "drop_last": false,
+  "lr": 0.0001,
+  "optimizer": {
+    "name": "Adam",
+    "fused": true,
+    "foreach": false,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0,
+    "amsgrad": false
+  },
+  "loss": "final output MSE",
+  "amp": "float16 + GradScaler",
+  "layout": "channels_last",
+  "deterministic": true,
+  "cudnn_benchmark": false,
+  "tf32": false,
+  "cublas": ":4096:8",
+  "alpha": {
+    "B1": "unconstrained scalar 0.1",
+    "B1_alpha_bounded": "sigmoid(a); a=log(0.1/0.9)"
+  },
+  "validation": "FP32; minimum MSE; earliest epoch on ties",
+  "evaluation": "best; FP32; full RR20 and FR20; no test-based selection; no output clipping",
+  "selection": {
+    "seed": 42,
+    "scene_ids": [
+      1,
+      8,
+      11,
+      13,
+      19
+    ],
+    "indexing": "zero-based H5 row",
+    "tile": "whole scene",
+    "order": "ascending",
+    "rgb_bands": [
+      2,
+      1,
+      0
+    ],
+    "selected_before_training": true,
+    "policy": "fixed in source; never changed by metrics"
+  },
+  "source_repo_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56",
+  "upstream_commit": "a4ca40e407b12bf4c30f804384405ce321d11c51",
+  "data_paths": {
+    "train": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+    "val": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5",
+    "RR": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+    "FR": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5"
+  },
+  "expected_data_sha256": {
+    "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+    "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+    "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+    "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+  },
+  "checkpoint_interval_seconds": 60,
+  "checkpoint_boundary": "completed batch",
+  "resume_required_on_request": true,
+  "initial_alpha_atol": 1e-07,
+  "initial_fp32_atol": 1e-06,
+  "initial_fp32_rtol": 1e-05,
+  "initial_amp_atol": 0.001,
+  "initial_amp_rtol": 0.001,
+  "reuse_predecessor_B1": false,
+  "training_started": true,
+  "training_completed": true,
+  "full_rr_fr_evaluation_completed": true,
+  "source_run": "ssa_B1_alpha_K4_s42_20261013T064751290366Z"
+}
