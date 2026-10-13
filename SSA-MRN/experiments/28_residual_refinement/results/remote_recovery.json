@@ -1,0 +1,69 @@
+{
+  "export_files": 53,
+  "checkpoints": [
+    {
+      "variant": "G3",
+      "file": "best.pt",
+      "epoch": 99,
+      "best_epoch": 99,
+      "strict_load": true,
+      "frozen_current_output_identical": true,
+      "skipped_steps": 4
+    },
+    {
+      "variant": "G3",
+      "file": "latest.pt",
+      "epoch": 100,
+      "best_epoch": 99,
+      "strict_load": true,
+      "frozen_current_output_identical": true,
+      "skipped_steps": 4
+    },
+    {
+      "variant": "G4",
+      "file": "best.pt",
+      "epoch": 99,
+      "best_epoch": 99,
+      "strict_load": true,
+      "frozen_current_output_identical": true,
+      "skipped_steps": 3
+    },
+    {
+      "variant": "G4",
+      "file": "latest.pt",
+      "epoch": 100,
+      "best_epoch": 99,
+      "strict_load": true,
+      "frozen_current_output_identical": true,
+      "skipped_steps": 3
+    },
+    {
+      "variant": "G5",
+      "file": "best.pt",
+      "epoch": 99,
+      "best_epoch": 99,
+      "strict_load": true,
+      "frozen_current_output_identical": true,
+      "skipped_steps": 3
+    },
+    {
+      "variant": "G5",
+      "file": "latest.pt",
+      "epoch": 100,
+      "best_epoch": 99,
+      "strict_load": true,
+      "frozen_current_output_identical": true,
+      "skipped_steps": 3
+    }
+  ],
+  "metric_runs": 6,
+  "scene_rows": 240,
+  "valid_pngs": 17,
+  "source_hashes": 6,
+  "scope": "hashes, checkpoint load/optimizer/RNG integrity, synthetic CPU inference equivalence; not a new full test evaluation",
+  "remote": "https://github.com/BIYONGHIYON/CtrS",
+  "branch": "residual-refinement-results",
+  "verified_commit": "f002bb6c4d46f689935dc70af1b5e141f17c3e87",
+  "independent_clone": true,
+  "recovered_files_byte_identical": 78
+}

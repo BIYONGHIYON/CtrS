@@ -156,11 +156,11 @@ RR 장면 1·8·11·13·19를 사전 고정했습니다. 각 패널은 왼쪽부
 
 ## 7. 재현 자료
 
-[실행 코드](run.py) · [모델](model.py) · [설정](config.json) · [원본 실행 소스](provenance/source_snapshot/) · [관측 설정과 원본 계획](results/QB/plan.json) · [데이터 manifest](results/QB/data_manifest.json) · [장면별 지표](results/QB/evaluation/100/metrics.json) · [재사용 대조군](results/QB/controls.json) · [복구 검증](results/verification.json)
+[실행 코드](run.py) · [모델](model.py) · [설정](config.json) · [원본 실행 소스](provenance/source_snapshot/) · [관측 설정과 원본 계획](results/QB/plan.json) · [데이터 manifest](results/QB/data_manifest.json) · [장면별 지표](results/QB/evaluation/100/metrics.json) · [재사용 대조군](results/QB/controls.json) · [복구 검증](results/verification.json) · [원격 복구 확인](results/remote_recovery.json)
 
 G3·G4·G5의 원본 best/latest를 후보별 `checkpoints/`에 보존했습니다. G0-G2는 [23번 가중치](../23_multi_sensor_comparison/checkpoints/)의 `best_at_100.pt`이며 controls의 해시와 일치합니다. 학습 당시 소스·내부 설정·경로는 원본 그대로 보존했습니다. 현행 실행 코드는 같은 실험 폴더의 모델을 가져오도록 경로를 맞췄으며 기존 runtime을 현행 코드로 재개하지 않습니다.
 
-53개 내보낸 원본 파일의 크기·해시, 소스 해시, 세 후보의 100에포크 기록, 원본 체크포인트 6개의 strict load와 optimizer/RNG 상태, 현행 모델과 원본 모델의 CPU 추론 일치를 확인했습니다. 지표의 장면 수·평균과 PNG 17개도 확인했습니다. 이 검증은 새로운 전체 test 재평가와 구분합니다.
+53개 내보낸 원본 파일의 크기·해시, 소스 해시, 세 후보의 100에포크 기록, 원본 체크포인트 6개의 strict load와 optimizer/RNG 상태, 현행 모델과 원본 모델의 CPU 추론 일치를 확인했습니다. 지표의 장면 수·평균과 PNG 17개도 확인했습니다. 독립적인 GitHub clone에서 원격 보관본을 복구하여 원본 파일의 바이트 일치와 동일 체크포인트 검증을 다시 확인했습니다. 이 검증은 새로운 전체 test 재평가와 구분합니다.
 
 ```bash
 python SSA-MRN/common/verify.py --experiment 28
