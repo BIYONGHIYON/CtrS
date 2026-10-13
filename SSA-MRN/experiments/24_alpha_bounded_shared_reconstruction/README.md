@@ -176,7 +176,9 @@ history에 누적된 학습/validation 시간은 B1 **122.78/13.35분**, 후보 
 python SSA-MRN/common/verify.py --experiment 24
 ```
 
-제공된 파일의 해시·초기 출력·history·best 선택·전체 장면별 평균·고정 이미지·가중치 strict load를 검증했습니다. 원본 H5에 대한 GT 지표 재계산과 T4에서의 학습·배치 재개 재실행은 하지 않았습니다. 원격 보관 검증은 결과 commit을 push한 뒤 GitHub blob과 원본 가중치를 대조하여 별도 기록합니다. 다운로드 원본과 다른 실험 폴더는 삭제하지 않았습니다.
+제공된 파일의 해시·초기 출력·history·best 선택·전체 장면별 평균·고정 이미지·가중치 strict load를 검증했습니다. 원본 H5에 대한 GT 지표 재계산과 T4에서의 학습·배치 재개 재실행은 하지 않았습니다.
+
+원격 결과 commit의 **작업 파일80개 Git blob ID·크기가 일치**했습니다. 보관한13개 `.pt`에 해당하는9개 서로 다른 원본 blob을 GitHub에서 다시 내려받아 SHA-256·ZIP CRC·CPU tensor 로딩을 확인했습니다. best/latest와 recovery 원본은 동일 blob을 공유할 수 있어 파일 수와 다운로드 수가 다릅니다. 복원 사본에서 두 모델의 checkpoint pointer·protocol·optimizer/scaler/RNG/history·best 선택 정합성도 확인했습니다. [원격 보관 검증](results/remote_verification.json)에 대상 결과 commit과 검증 범위를 기록했습니다. 후속 metadata commit은 이 기록을 추가하며 T4의 실제 학습 재개까지 검증했다고 주장하지 않습니다. 다운로드 원본과 다른 실험 폴더는 삭제하지 않았습니다.
 
 ## 8. 개선 여부와 다음 단계
 
