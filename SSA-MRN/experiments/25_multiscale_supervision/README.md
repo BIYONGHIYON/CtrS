@@ -14,7 +14,7 @@
 
 이 실험은 Haar 구조 교체나 B1/B2 반복 피드백을 추가하는 실험이 아닙니다. 원래 피라미드에서 복원 결과를 읽는 작은 head와 학습 신호만 추가했습니다. 목표가 너무 강하면 최종 디테일을 제한할 수 있어 보조 계수를 작게 시작했지만, 작은 계수가 실제 영향도 작다는 것을 보장하지는 않습니다.
 
-제공된 원본 147개 파일의 크기·SHA-256, ZIP CRC, 실제 200개 에포크 기록, validation best 선택, 장면별 평균·차이를 대조했습니다. 원본 best/latest와 첫 100에포크 best를 합친 **6개 checkpoint의 strict load·CPU 유한값 추론**도 확인했습니다. 현행 import를 사용하는 모델과 학습 당시 원본 모델의 출력은 각 가중치에서 bitwise로 일치했습니다. 이 검사는 제공된 증거의 정합성 확인이며, 원본 H5의 전체 지표를 다시 계산한 검사는 아닙니다. [검증 기록](results/verification.json)에 범위를 구분했습니다.
+제공된 원본 147개 파일의 크기·SHA-256, ZIP CRC, 실제 200개 에포크 기록, validation best 선택, 장면별 평균·차이를 대조했습니다. 원본 best/latest와 첫 100에포크 best를 합친 **6개 checkpoint의 strict load·CPU 유한값 추론**도 확인했습니다. 합성 64×64 입력에서 현행 import를 사용하는 모델과 학습 당시 원본 모델의 출력은 각 가중치에서 bitwise로 일치했습니다. 이 검사는 제공된 증거의 정합성 확인이며, 원본 H5의 전체 지표를 다시 계산한 검사는 아닙니다. [검증 기록](results/verification.json)에 범위를 구분했습니다.
 
 ## 2. 변경한 구조와 비교 조건
 
@@ -210,7 +210,9 @@ python SSA-MRN/common/checkpoint.py --experiment 25 --checkpoint checkpoints/B0_
 python SSA-MRN/experiments/25_multiscale_supervision/prepare.py --output /new/path/verification.json
 ```
 
-해시 확인, 원본 가중치 load, 저장된 수치의 대조는 실제 H5 성능 재평가와 별개입니다. CPU 검사를 T4의 학습·AMP·중단 재개 일치 검사로 확대하지 않습니다. 원격 보관 확인 결과는 검증 완료 후 별도 기록으로 연결합니다.
+해시 확인, 원본 가중치 load, 저장된 수치의 대조는 실제 H5 성능 재평가와 별개입니다. CPU 검사를 T4의 학습·AMP·중단 재개 일치 검사로 확대하지 않습니다.
+
+원격 결과 commit의 **변경 파일 83개 Git blob ID·크기가 일치**했습니다. 원본 checkpoint 6개를 GitHub에서 다시 내려받아 SHA-256·ZIP CRC·strict load·합성 입력의 CPU 유한값 추론을 확인했습니다. 다운로드한 latest의 best recovery bytes도 원래 best와 일치했습니다. [원격 보관 검증](results/remote_verification.json)에 대상 결과 commit과 검증 범위를 기록했습니다. 후속 metadata commit은 이 기록을 추가하며, 실제 T4 학습 재개까지 확인했다고 주장하지 않습니다. 다운로드 원본과 다른 실험 폴더는 유지했습니다.
 
 ## 8. 개선 여부와 다음 단계
 
