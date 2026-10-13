@@ -1,0 +1,42 @@
+{
+  "cell_id": "ssa_pyramid_supervision_k4_v1",
+  "repo_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56",
+  "upstream_commit": "a4ca40e407b12bf4c30f804384405ce321d11c51",
+  "sensor": "QB",
+  "k": 4,
+  "epochs": 200,
+  "seeds": [
+    42
+  ],
+  "variants": [
+    "B0",
+    "B0_DS"
+  ],
+  "batch": 32,
+  "micro": 32,
+  "lr": 0.0001,
+  "hold": 100,
+  "min_lr": 1e-06,
+  "amp": true,
+  "channels_last": true,
+  "torch": "2.11.0+cu128",
+  "cuda": "12.8",
+  "fused_adam": true,
+  "controlled": true,
+  "save_predictions": true,
+  "status_seconds": 15,
+  "checkpoint_seconds": 60,
+  "aux_weights": {
+    "quarter": 0.005,
+    "half": 0.005,
+    "full": 0.001
+  },
+  "experimenter": "김윤지",
+  "comparison": "single original core; identical training-only 1x1 heads; auxiliary weights only",
+  "best_selection": "minimum FP32 final-output validation MSE; strict improvement",
+  "RR_scenes": 20,
+  "FR_scenes": 20,
+  "original_code": "provenance/code",
+  "current_inference_model": "model.py",
+  "run_policy": "standalone original pinned Kaggle cell; separate runtime"
+}
