@@ -48,7 +48,7 @@ def format_progress(state,config,last):
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument("--run-dir",type=Path,default=ROOT/"experiments/controlled_suite_v2");p.add_argument("--once",action="store_true");a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument("--run-dir",type=Path,default=ROOT.parent/"runtime/controlled_suite_v2");p.add_argument("--once",action="store_true");a=p.parse_args()
     current=None;offset=None;last={}
     try:
         while True:

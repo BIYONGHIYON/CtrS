@@ -33,7 +33,7 @@ def main():
             path=a.artifact_root/name
             if path.stat().st_size!=e['bytes'] or digest(path)!=e['sha256']:raise ValueError(name)
         print(f'PASS: {len(files)} export hashes');return
-    folders=sorted((ROOT/'experiments').glob('[0-9]*_*'),key=lambda x:int(x.name.split('_')[0]))
+    folders=sorted((ROOT/'research').glob('*/[0-9]*_*'),key=lambda x:int(x.name.split('_')[0]))
     if a.experiment!='all':folders=[f for f in folders if a.experiment in (f.name,f.name.split('_',1)[0],f.name.split('_',1)[1])]
     if not folders:p.error('Unknown experiment')
     total=weights=0

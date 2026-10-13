@@ -15,14 +15,14 @@ sys.path.insert(0, str(ROOT))
 
 
 def experiment(number):
-    matches = list((ROOT / 'experiments').glob(f'{number}_*'))
+    matches = list((ROOT / 'research').glob(f'*/{number}_*'))
     if len(matches) != 1:
         raise ValueError(f'Unknown experiment number: {number}')
     return matches[0]
 
 
 def model_module(number):
-    return importlib.import_module('experiments.' + experiment(number).name + '.model')
+    return importlib.import_module('.'.join(experiment(number).relative_to(ROOT).parts) + '.model')
 
 
 def load_model(number, checkpoint):
