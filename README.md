@@ -81,5 +81,6 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 | [22. 단계별 갱신량·특징 변환·마지막 단계 PAN 주입](SSA-MRN/experiments/22_stage_aware_restoration/README.md)<br>[이병현] | 공유 복원기의 단계별 조절과 마지막 단계 PAN 차이를 비교했습니다. | F0 기준 F4: PSNR -0.0009 dB, SAM +0.0064°, 잠정 QNR +0.0018; 추가 이득 혼재 | 평⁠가⁠ ⁠완료 | 부⁠분⁠ ⁠개선 |
 | [23. 반복 복원·단계 간 특징 전달의 센서별 수렴 비교](SSA-MRN/experiments/23_multi_sensor_comparison/README.md)<br>[이병현] | 원본·3단계 공유 복원·특징 전달을 세 센서에서 150에포크 비교했습니다. | F0: QB PSNR +0.1271 dB, GF2 +0.8291 dB; WV3 잠정 QNR 하락. QB·GF2 RR은 repeat 우세 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [24. 3단계 공유 복원의 보정 계수 범위 제한](SSA-MRN/experiments/24_alpha_bounded_shared_reconstruction/README.md)<br>[김윤지] | 공유 scalar α의 표현만 sigmoid(a)로 바꿨습니다. | PSNR −0.0849 dB, SAM +0.0101°; 잠정 QNR +0.0159, RR 유지 목표 미달 | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [25. 중간 해상도 복원 목표와 보조 손실](SSA-MRN/experiments/25_multiscale_supervision/README.md)<br>[김윤지] | 기존 복원 지점에 GT 기반 보조 L1을 추가했습니다. | 중간 head L1 감소; PSNR −0.0425 dB, SAM +0.0264°; 잠정 QNR +0.0101 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 
 **판정 기준:** 개선 = 같은 조건에서 주요 RR·FR 지표가 함께 개선, 부분 개선 = 지표·후보·센서별 결과 혼재, 개선 없음 = 평가에서 향상을 확인하지 못함, 판단 보류 = 최종 평가 부족입니다. 비교 기준·성능 비교 아님은 개선 판정 대상에서 제외합니다. 모든 FR QNR은 구현 대응 검증이 끝나지 않은 잠정 지표이며, 단일 실험의 개선은 최종 채택을 뜻하지 않습니다.
