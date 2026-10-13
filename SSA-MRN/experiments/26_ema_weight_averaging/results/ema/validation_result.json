@@ -1,0 +1,50 @@
+{
+  "best_epoch": 100,
+  "best_validation": {
+    "mse": 0.00017032519965542582,
+    "psnr": 39.35788939468504,
+    "sam": 4.539735352523683,
+    "ergas": 4.486516566966662,
+    "scc": 0.9606045129724751,
+    "q2n": 0.8265962295022459
+  },
+  "last_validation": {
+    "epoch": 100,
+    "train_mse": 0.00017017032887892367,
+    "val_mse": 0.00017032519965542582,
+    "val_psnr": 39.35788939468504,
+    "val_sam": 4.539735352523683,
+    "skipped_amp_steps": 0,
+    "order_sha256": "3e1cc378ee3059134bd80900d4ae388be9d3bd5b00643b3eacff7ccbb430be53",
+    "train_segment_seconds": 53.820872939000765,
+    "validation_seconds": 20.452492956999777,
+    "resumed_mid_epoch": false,
+    "val_ergas": 4.486516566966662,
+    "val_scc": 0.9606045129724751,
+    "val_q2n": 0.8265962295022459,
+    "online_validation": {
+      "mse": 0.00017208868143908933,
+      "psnr": 39.30905832205545,
+      "sam": 4.557102513751333,
+      "ergas": 4.50914263348883,
+      "scc": 0.9602442600079828,
+      "q2n": 0.8242521628941534
+    },
+    "ema_validation": {
+      "0.99": {
+        "mse": 0.00017032519965542582,
+        "psnr": 39.35788939468504,
+        "sam": 4.539735352523683,
+        "ergas": 4.486516566966662,
+        "scc": 0.9606045129724751,
+        "q2n": 0.8265962295022459
+      }
+    },
+    "ema_updates": 53600
+  },
+  "last_epoch": 100,
+  "peak_gpu_gib": 3.1669511795043945,
+  "train_seconds_measured_segments": 5217.411420232998,
+  "train_active_seconds": 5217.411469288003,
+  "timing_limit": "active train timer includes within-epoch checkpoint overhead; excludes data loading/validation; preserved across resume"
+}
