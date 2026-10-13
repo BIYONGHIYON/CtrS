@@ -65,34 +65,34 @@
 
 | 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
 |---|---|---|:---:|:---:|
-| [1. 공개 코드 재현](experiments/1_public_code_reproduction/README.md)<br>[이병현] | 공개 코드 설정을 재현해 초기 기준을 확보했습니다. | RR·FR 재현 결과 확보; 구조 개선 실험이 아님 | 평⁠가⁠ ⁠완⁠료 | 비⁠교⁠ ⁠기⁠준 |
-| [2. 논문 설정 재현](experiments/2_paper_setting_reproduction/README.md)<br>[김경찬] | 논문의 내부 특징 차원 설정으로 재현했습니다. | RR·FR 재현 결과 확보; 공개 코드 재현과 장치 조건이 다름 | 평⁠가⁠ ⁠완⁠료 | 비⁠교⁠ ⁠기⁠준 |
-| [3. MS 관측 연산자 구현](experiments/3_ms_observation/README.md)<br>[이병현] | 센서 MTF·샘플링 위상·경계 처리를 구성했습니다. | 관측 구현 대응 확인; 학습 성능 비교가 아님 | 사⁠전⁠ ⁠검⁠증⁠ ⁠완⁠료 | 성⁠능⁠ ⁠비⁠교⁠ ⁠아⁠님 |
-| [4. 23탭 확대·저해상도 보정·고주파 경로](experiments/4_interpolation_correction_detail/README.md)<br>[이병현] | 확대 연산, 출력 보정, PAN 고주파 경로를 개별 변경했습니다. | 23탭: PSNR +0.0557 dB, SAM −0.0429°, 잠정 QNR +0.0031; 다른 후보 이득 혼재 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
-| [5. 23탭 확대 위치와 센서 확장](experiments/5_interpolation_scope_sensors/README.md)<br>[이병현] | 23탭 적용 위치를 분리하고 시드·센서를 확장했습니다. | RR 이득이 있으나 FR·센서별 결과가 엇갈림 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
-| [6. 23탭 확대의 반복 시드 비교](experiments/6_interpolation_seed_repeat/README.md)<br>[이병현] | 전체 확대 및 입력 확대 후보를 추가 시드로 반복했습니다. | 전체 확대의 GF2 PSNR·QNR 개선 반복; SAM 및 QB QNR 혼재 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
-| [7. 밴드별 게이트 고주파 주입](experiments/7_band_gated_detail/README.md)<br>[김윤지] | 밴드별 게이트로 PAN 고주파 주입량을 조절했습니다. | RR 악화로 후보 채택 보류 | 평⁠가⁠ ⁠완⁠료 | 개⁠선⁠ ⁠없⁠음 |
-| [8. MTF 변화량 데이터 증강](experiments/8_mtf_augmentation/README.md)<br>[이병현] | 센서 열화 특성의 변화량을 학습 데이터에 추가했습니다. | MTF: PSNR -0.0064 dB, SAM -0.0061°; 잠정 QNR -0.0014 | 평가⁠ ⁠완료 | 부분⁠ ⁠개선 |
-| [9. SSAI 내부 융합 연산 변경](experiments/9_ssai_fusion/README.md)<br>[이병현] | SSAI 핵심 융합 연산을 네 구조로 비교했습니다. | A1: SAM -0.0058°, 잠정 QNR +0.0127; 모든 후보의 PSNR은 하락 | 평가⁠ ⁠완료 | 부분⁠ ⁠개선 |
-| [10. 반복 복원에 MS 관측 오차 전달](experiments/10_recurrent_observation/README.md)<br>[김윤지] | 반복 단계에 입력 MS와 관측한 출력의 차이를 전달했습니다. | PSNR +0.1158 dB, SAM −0.0183°, 잠정 QNR −0.0182 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
-| [11. Haar 대역별 단계 복원과 게이트](experiments/11_haar_reconstruction/README.md)<br>[김윤지] | Haar 대역별 복원에 밴드·방향·위치 게이트를 적용했습니다. | 원본 대비 RR 큰 폭 악화; 학습 게이트의 추가 이득도 없음 | 평⁠가⁠ ⁠완⁠료 | 개⁠선⁠ ⁠없⁠음 |
-| [12. SSAI 내부 특징 차원 비교](experiments/12_feature_dimension/README.md)<br>[이병현] | 같은 환경에서 내부 특징 차원 4와 6을 비교했습니다. | K4: 세 센서 RR PSNR·SAM 우세; WV3 잠정 QNR은 K6 우세 | 평가⁠ ⁠완료 | 비교⁠ ⁠기준 |
-| [13. 반복 복원·관측 오차 전달의 재개 학습](experiments/13_recurrent_observation_resume/README.md)<br>[김윤지] | 반복 복원과 관측 오차 후보를 재개해 기준선과 비교했습니다. | 기준선 대비 RR 개선·잠정 QNR 하락; 별도 세션 비교 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
-| [14. 분광·관측 일치·경계 손실 추가](experiments/14_auxiliary_losses/README.md)<br>[이병현] | 기본 MSE에 보조 손실을 하나씩 추가했습니다. | edge 0.1: PSNR −0.0661 dB, SAM −0.0119°, 잠정 QNR +0.0098 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
-| [15. 단일 복원과 3단계 공유 복원](experiments/15_shared_reconstruction/README.md)<br>[김윤지] | 동일 초기값과 학습 조건에서 복원 횟수를 변경했습니다. | 반복 복원: PSNR +0.3000 dB, SAM −0.1078°, 잠정 QNR −0.0393 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
-| [16. 반복 복원의 축소 전 저역통과 필터](experiments/16_bandlimited_downsampling/README.md)<br>[이병현] | 축소 전에 고정 Gaussian 필터를 추가했습니다. | PSNR −0.0196 dB, SAM +0.0022°, 잠정 QNR −0.0686 | 평⁠가⁠ ⁠완⁠료 | 개⁠선⁠ ⁠없⁠음 |
-| [17. SSAI 단계·잔차 복원·초기 입력 변경](experiments/17_structural_ablation/README.md)<br>[이병현] | SSAI 단계, 복원 잔차, LRPAN 입력을 분리해 비교했습니다. | LRPAN 제거: PSNR +0.1297 dB, SAM −0.0704°, 잠정 QNR −0.0111 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
-| [18. 작은 크기 특징 보존과 PAN 기여량 조절](experiments/18_coarse_feature_fusion/README.md)<br>[이병현] | 작은 특징을 병렬 전달하고 PAN 기여량을 학습했습니다. | N3: PSNR +0.1875 dB, SAM −0.0134°, 잠정 QNR −0.0147 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
-| [19. 반복 복원과 PAN·MS 분리 경로](experiments/19_dual_stream_reconstruction/README.md)<br>[이병현] | 3단계 공유 복원과 분리 특징 경로를 비교했습니다. | C1: PSNR +0.2442 dB, SAM −0.1883°, 잠정 QNR +0.0250. 새 분리 경로 C5는 RR 악화 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
-| [20. 반복 복원의 단계 간 특징 전달과 관측·PAN 차이](experiments/20_recurrent_guidance/README.md)<br>[이병현] | 밴드별 SSAI를 유지하며 단계 간 정보 전달을 비교했습니다. | D3: PSNR +0.0956 dB; D4·D5 관측 오차 감소; D6 잠정 QNR +0.0166, RR 악화 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
-| [21. 특징 선택·복원 후 관측 보정·고주파 PAN 차이](experiments/21_guidance_refinement/README.md)<br>[이병현] | 공간·밴드별 특징 gate, 복원 후 관측 보정, 고주파 PAN 차이를 비교합니다. | E1: PSNR +0.3345 dB, SAM -0.2219°; E7: 잠정 QNR +0.0437, 지표별 이득 상이 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
-| [22. 단계별 갱신량·특징 변환·마지막 단계 PAN 주입](experiments/22_stage_aware_restoration/README.md)<br>[이병현] | 공유 복원기의 단계별 조절과 마지막 단계 PAN 차이를 비교했습니다. | F0 기준 F4: PSNR -0.0009 dB, SAM +0.0064°, 잠정 QNR +0.0018; 추가 이득 혼재 | 평⁠가⁠ ⁠완료 | 부⁠분⁠ ⁠개선 |
-| [23. 반복 복원·단계 간 특징 전달의 센서별 수렴 비교](experiments/23_multi_sensor_comparison/README.md)<br>[이병현] | 원본·3단계 공유 복원·특징 전달을 세 센서에서 150에포크 비교했습니다. | F0: QB PSNR +0.1271 dB, GF2 +0.8291 dB; WV3 잠정 QNR 하락. QB·GF2 RR은 repeat 우세 | 평가&nbsp;완료 | 부분&nbsp;개선 |
-| [24. 3단계 공유 복원의 보정 계수 범위 제한](experiments/24_alpha_bounded_shared_reconstruction/README.md)<br>[김윤지] | 공유 scalar α의 표현만 sigmoid(a)로 바꿨습니다. | PSNR −0.0849 dB, SAM +0.0101°; 잠정 QNR +0.0159, RR 유지 목표 미달 | 평가&nbsp;완료 | 부분&nbsp;개선 |
-| [25. 중간 해상도 복원 목표와 보조 손실](experiments/25_multiscale_supervision/README.md)<br>[김윤지] | 기존 복원 지점에 GT 기반 보조 L1을 추가했습니다. | 중간 head L1 감소; PSNR −0.0425 dB, SAM +0.0264°; 잠정 QNR +0.0101 | 평가&nbsp;완료 | 부분&nbsp;개선 |
-| [26. 평가 가중치의 지수 이동 평균](experiments/26_ema_weight_averaging/README.md)<br>[송준현] | 일반 MSE 학습을 유지하고 평가 가중치에 EMA를 적용했습니다. | seed42: PSNR +0.0893 dB, SAM −0.0244°; 잠정 QNR −0.0018 | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
-| [27. Backbone 채널 어텐션 추가](experiments/27_backbone_channel_attention/README.md)<br>[김경찬] | Backbone 잔차 블록 4개에 채널 어텐션을 추가했습니다. | seed42: RR PSNR +0.4803 dB, SAM −0.1369°; 잠정 FR QNR −0.0226 | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
-| [28. 원본 복원 후 관측 오차 기반 잔차 보정](experiments/28_residual_refinement/README.md)<br>[이병현] | 원본 복원 후 두 번의 잔차 보정·오차 입력·가중치 공유를 비교했습니다. | 기존 G2 대비 G5: PSNR +0.1317 dB, SAM -0.0391°; 잠정 QNR -0.0020. G4는 QNR +0.0079 | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [1. 공개 코드 재현](research/performance/1_public_code_reproduction/README.md)<br>[이병현] | 공개 코드 설정을 재현해 초기 기준을 확보했습니다. | RR·FR 재현 결과 확보; 구조 개선 실험이 아님 | 평⁠가⁠ ⁠완⁠료 | 비⁠교⁠ ⁠기⁠준 |
+| [2. 논문 설정 재현](research/performance/2_paper_setting_reproduction/README.md)<br>[김경찬] | 논문의 내부 특징 차원 설정으로 재현했습니다. | RR·FR 재현 결과 확보; 공개 코드 재현과 장치 조건이 다름 | 평⁠가⁠ ⁠완⁠료 | 비⁠교⁠ ⁠기⁠준 |
+| [3. MS 관측 연산자 구현](research/performance/3_ms_observation/README.md)<br>[이병현] | 센서 MTF·샘플링 위상·경계 처리를 구성했습니다. | 관측 구현 대응 확인; 학습 성능 비교가 아님 | 사⁠전⁠ ⁠검⁠증⁠ ⁠완⁠료 | 성⁠능⁠ ⁠비⁠교⁠ ⁠아⁠님 |
+| [4. 23탭 확대·저해상도 보정·고주파 경로](research/performance/4_interpolation_correction_detail/README.md)<br>[이병현] | 확대 연산, 출력 보정, PAN 고주파 경로를 개별 변경했습니다. | 23탭: PSNR +0.0557 dB, SAM −0.0429°, 잠정 QNR +0.0031; 다른 후보 이득 혼재 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
+| [5. 23탭 확대 위치와 센서 확장](research/performance/5_interpolation_scope_sensors/README.md)<br>[이병현] | 23탭 적용 위치를 분리하고 시드·센서를 확장했습니다. | RR 이득이 있으나 FR·센서별 결과가 엇갈림 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
+| [6. 23탭 확대의 반복 시드 비교](research/performance/6_interpolation_seed_repeat/README.md)<br>[이병현] | 전체 확대 및 입력 확대 후보를 추가 시드로 반복했습니다. | 전체 확대의 GF2 PSNR·QNR 개선 반복; SAM 및 QB QNR 혼재 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
+| [7. 밴드별 게이트 고주파 주입](research/performance/7_band_gated_detail/README.md)<br>[김윤지] | 밴드별 게이트로 PAN 고주파 주입량을 조절했습니다. | RR 악화로 후보 채택 보류 | 평⁠가⁠ ⁠완⁠료 | 개⁠선⁠ ⁠없⁠음 |
+| [8. MTF 변화량 데이터 증강](research/performance/8_mtf_augmentation/README.md)<br>[이병현] | 센서 열화 특성의 변화량을 학습 데이터에 추가했습니다. | MTF: PSNR -0.0064 dB, SAM -0.0061°; 잠정 QNR -0.0014 | 평가⁠ ⁠완료 | 부분⁠ ⁠개선 |
+| [9. SSAI 내부 융합 연산 변경](research/performance/9_ssai_fusion/README.md)<br>[이병현] | SSAI 핵심 융합 연산을 네 구조로 비교했습니다. | A1: SAM -0.0058°, 잠정 QNR +0.0127; 모든 후보의 PSNR은 하락 | 평가⁠ ⁠완료 | 부분⁠ ⁠개선 |
+| [10. 반복 복원에 MS 관측 오차 전달](research/performance/10_recurrent_observation/README.md)<br>[김윤지] | 반복 단계에 입력 MS와 관측한 출력의 차이를 전달했습니다. | PSNR +0.1158 dB, SAM −0.0183°, 잠정 QNR −0.0182 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
+| [11. Haar 대역별 단계 복원과 게이트](research/performance/11_haar_reconstruction/README.md)<br>[김윤지] | Haar 대역별 복원에 밴드·방향·위치 게이트를 적용했습니다. | 원본 대비 RR 큰 폭 악화; 학습 게이트의 추가 이득도 없음 | 평⁠가⁠ ⁠완⁠료 | 개⁠선⁠ ⁠없⁠음 |
+| [12. SSAI 내부 특징 차원 비교](research/performance/12_feature_dimension/README.md)<br>[이병현] | 같은 환경에서 내부 특징 차원 4와 6을 비교했습니다. | K4: 세 센서 RR PSNR·SAM 우세; WV3 잠정 QNR은 K6 우세 | 평가⁠ ⁠완료 | 비교⁠ ⁠기준 |
+| [13. 반복 복원·관측 오차 전달의 재개 학습](research/performance/13_recurrent_observation_resume/README.md)<br>[김윤지] | 반복 복원과 관측 오차 후보를 재개해 기준선과 비교했습니다. | 기준선 대비 RR 개선·잠정 QNR 하락; 별도 세션 비교 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
+| [14. 분광·관측 일치·경계 손실 추가](research/performance/14_auxiliary_losses/README.md)<br>[이병현] | 기본 MSE에 보조 손실을 하나씩 추가했습니다. | edge 0.1: PSNR −0.0661 dB, SAM −0.0119°, 잠정 QNR +0.0098 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
+| [15. 단일 복원과 3단계 공유 복원](research/performance/15_shared_reconstruction/README.md)<br>[김윤지] | 동일 초기값과 학습 조건에서 복원 횟수를 변경했습니다. | 반복 복원: PSNR +0.3000 dB, SAM −0.1078°, 잠정 QNR −0.0393 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
+| [16. 반복 복원의 축소 전 저역통과 필터](research/performance/16_bandlimited_downsampling/README.md)<br>[이병현] | 축소 전에 고정 Gaussian 필터를 추가했습니다. | PSNR −0.0196 dB, SAM +0.0022°, 잠정 QNR −0.0686 | 평⁠가⁠ ⁠완⁠료 | 개⁠선⁠ ⁠없⁠음 |
+| [17. SSAI 단계·잔차 복원·초기 입력 변경](research/performance/17_structural_ablation/README.md)<br>[이병현] | SSAI 단계, 복원 잔차, LRPAN 입력을 분리해 비교했습니다. | LRPAN 제거: PSNR +0.1297 dB, SAM −0.0704°, 잠정 QNR −0.0111 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
+| [18. 작은 크기 특징 보존과 PAN 기여량 조절](research/performance/18_coarse_feature_fusion/README.md)<br>[이병현] | 작은 특징을 병렬 전달하고 PAN 기여량을 학습했습니다. | N3: PSNR +0.1875 dB, SAM −0.0134°, 잠정 QNR −0.0147 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
+| [19. 반복 복원과 PAN·MS 분리 경로](research/performance/19_dual_stream_reconstruction/README.md)<br>[이병현] | 3단계 공유 복원과 분리 특징 경로를 비교했습니다. | C1: PSNR +0.2442 dB, SAM −0.1883°, 잠정 QNR +0.0250. 새 분리 경로 C5는 RR 악화 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
+| [20. 반복 복원의 단계 간 특징 전달과 관측·PAN 차이](research/performance/20_recurrent_guidance/README.md)<br>[이병현] | 밴드별 SSAI를 유지하며 단계 간 정보 전달을 비교했습니다. | D3: PSNR +0.0956 dB; D4·D5 관측 오차 감소; D6 잠정 QNR +0.0166, RR 악화 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
+| [21. 특징 선택·복원 후 관측 보정·고주파 PAN 차이](research/performance/21_guidance_refinement/README.md)<br>[이병현] | 공간·밴드별 특징 gate, 복원 후 관측 보정, 고주파 PAN 차이를 비교합니다. | E1: PSNR +0.3345 dB, SAM -0.2219°; E7: 잠정 QNR +0.0437, 지표별 이득 상이 | 평⁠가⁠ ⁠완⁠료 | 부⁠분⁠ ⁠개⁠선 |
+| [22. 단계별 갱신량·특징 변환·마지막 단계 PAN 주입](research/performance/22_stage_aware_restoration/README.md)<br>[이병현] | 공유 복원기의 단계별 조절과 마지막 단계 PAN 차이를 비교했습니다. | F0 기준 F4: PSNR -0.0009 dB, SAM +0.0064°, 잠정 QNR +0.0018; 추가 이득 혼재 | 평⁠가⁠ ⁠완료 | 부⁠분⁠ ⁠개선 |
+| [23. 반복 복원·단계 간 특징 전달의 센서별 수렴 비교](research/performance/23_multi_sensor_comparison/README.md)<br>[이병현] | 원본·3단계 공유 복원·특징 전달을 세 센서에서 150에포크 비교했습니다. | F0: QB PSNR +0.1271 dB, GF2 +0.8291 dB; WV3 잠정 QNR 하락. QB·GF2 RR은 repeat 우세 | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [24. 3단계 공유 복원의 보정 계수 범위 제한](research/performance/24_alpha_bounded_shared_reconstruction/README.md)<br>[김윤지] | 공유 scalar α의 표현만 sigmoid(a)로 바꿨습니다. | PSNR −0.0849 dB, SAM +0.0101°; 잠정 QNR +0.0159, RR 유지 목표 미달 | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [25. 중간 해상도 복원 목표와 보조 손실](research/performance/25_multiscale_supervision/README.md)<br>[김윤지] | 기존 복원 지점에 GT 기반 보조 L1을 추가했습니다. | 중간 head L1 감소; PSNR −0.0425 dB, SAM +0.0264°; 잠정 QNR +0.0101 | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [26. 평가 가중치의 지수 이동 평균](research/performance/26_ema_weight_averaging/README.md)<br>[송준현] | 일반 MSE 학습을 유지하고 평가 가중치에 EMA를 적용했습니다. | seed42: PSNR +0.0893 dB, SAM −0.0244°; 잠정 QNR −0.0018 | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
+| [27. Backbone 채널 어텐션 추가](research/performance/27_backbone_channel_attention/README.md)<br>[김경찬] | Backbone 잔차 블록 4개에 채널 어텐션을 추가했습니다. | seed42: RR PSNR +0.4803 dB, SAM −0.1369°; 잠정 FR QNR −0.0226 | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
+| [28. 원본 복원 후 관측 오차 기반 잔차 보정](research/performance/28_residual_refinement/README.md)<br>[이병현] | 원본 복원 후 두 번의 잔차 보정·오차 입력·가중치 공유를 비교했습니다. | 기존 G2 대비 G5: PSNR +0.1317 dB, SAM -0.0391°; 잠정 QNR -0.0020. G4는 QNR +0.0079 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 
 </details>
 
@@ -104,27 +104,26 @@
 
 ```text
 SSA-MRN/
-├── research/                연구별 목적·담당·실험 표
-│   ├── catalog.json         연구 분야와 현재 담당자
-│   ├── ssai/README.md       SSAI 개선 · 이병현
-│   ├── variable_scale/README.md  가변 배율 확장 · 김윤지
-│   └── performance/README.md     기존 성능 개선 · 김경찬·송준현
-├── experiments/             모든 연구의 실험 원본을 한 곳에 보관
-│   ├── catalog.json         실험별 research_track·experimenter·보고서 경로
-│   └── <번호>_<변경한 구조>/
-│       ├── README.md         8절 실험 보고서
-│       ├── model.py, run.py  필요한 실험 코드
-│       ├── config.json      실제 실행 조건
-│       ├── checkpoints/     원본 best/latest
-│       ├── results/         수치·compact 기록·그래프·예시
-│       ├── provenance/      학습 당시 소스·설정
-│       └── manifest.json    보존 파일의 크기·SHA-256
-├── common/                  여러 실험이 재사용하는 모델·데이터·평가 코드
-├── data/                    로컬 H5 데이터
-├── docs/                    연구 설명·보고서 양식·구조도
-├── references/              공식 코드·논문
-└── tests/                   공통 연산·학습 재개 검증
+├── research/
+│   ├── catalog.json          연구 분야·담당자
+│   ├── experiments.json      전체 실험 목록·경로
+│   ├── ssai/
+│   │   ├── README.md         SSAI 개선 안내·실험 표
+│   │   └── <번호>_<변경명>/   새 SSAI 실험
+│   ├── variable_scale/
+│   │   ├── README.md         가변 배율 안내·실험 표
+│   │   └── <번호>_<변경명>/   새 가변 배율 실험
+│   └── performance/
+│       ├── README.md         성능 개선 안내·실험 표
+│       ├── 1_public_code_reproduction/
+│       └── ...               기존 1-28번 실험
+├── common/                   여러 실험이 공유하는 도구
+├── data/                     외부 학습·평가 데이터
+├── docs/                     설명·보고서 양식·구조도
+└── references/               공식 원본
 ```
+
+실험 폴더마다 `README.md`, 필요한 실행 코드·설정, `checkpoints/`, `results/`, `provenance/`를 함께 둡니다. 필요하지 않은 빈 파일은 만들지 않습니다.
 
 실험 번호는 과거부터 최근 순서이며 새 실험은 마지막 번호 다음에 추가합니다. 완료된 실험 번호는 바꾸지 않습니다. 폴더에 실제로 필요한 파일만 두며, 공통 모델만 쓰는 실험에는 중복 `model.py`를 만들지 않습니다. 가중치 종류는 `best.pt`, `latest.pt`로 통일하고 후보·센서·시드는 상위 폴더와 설정으로 구분합니다.
 
@@ -133,9 +132,9 @@ SSA-MRN/
 ## 새 실험 등록
 
 1. 연구 분야를 `ssai`, `variable_scale`, `performance` 중 하나로 정하고 실제 실험자를 기록합니다. 분야 담당자와 과거 실험자는 별도로 관리합니다.
-2. 최신 main과 열린 PR에서 번호 사용 여부를 확인한 뒤 전체 실험의 마지막 번호 다음으로 폴더를 만듭니다. 분야별로 번호를 다시 시작하지 않습니다.
+2. 최신 main과 열린 PR에서 번호 사용 여부를 확인한 뒤 전체 실험의 마지막 번호 다음으로 `research/<분야>/<번호>_<소문자 snake_case 변경명>/` 폴더를 만듭니다. 분야별로 번호를 다시 시작하지 않습니다.
 3. [8절 보고서 양식](docs/experiment_template.md)으로 목적·변경 구조·대조군·실제 배율·선택 기준을 작성합니다. 미실행 실험은 계획으로 표시합니다.
-4. `experiments/catalog.json`에 `research_track`, `experimenter`, `report`를 등록하고, 해당 연구 페이지와 두 README의 같은 분야 표에 보고서 링크를 추가합니다. 표 첫 열은 `실험명 링크<br>[실험자]`입니다.
+4. `research/experiments.json`에 `research_track`, `experimenter`, `report`를 등록하고, 해당 연구 페이지와 두 README의 같은 분야 표에 보고서 링크를 추가합니다. 표 첫 열은 `실험명 링크<br>[실험자]`입니다.
 5. 실행·평가 후 세 표의 상태·확인된 결과를 함께 갱신하고 원본 가중치·결과·manifest를 검증합니다. 새 연구의 실험을 등록하지 않은 상태에서는 빈 표를 유지합니다.
 
 가변 배율 실험은 학습 배율·평가 배율·입력/출력 크기·관측 연산과 배율별 대조군을 먼저 명시합니다. 각 배율의 RR·FR 결과를 구분하고 고정 4배 결과와 조건 없이 합치지 않습니다.
@@ -176,4 +175,4 @@ python SSA-MRN/common/verify.py --experiment 20
 
 실행 중인 서버 작업은 기존 checkout과 명령을 유지합니다. 새 폴더의 코드를 실행 중인 checkout에 덮어쓰거나 기존 runtime에 재개하지 않습니다. 재개 fingerprint가 달라질 수 있습니다.
 
-[실험 보고서 양식](docs/experiment_template.md) · [실험 목록](experiments/catalog.json) · [관리 규칙](AGENTS.md)
+[실험 보고서 양식](docs/experiment_template.md) · [실험 목록](research/experiments.json) · [관리 규칙](AGENTS.md)
