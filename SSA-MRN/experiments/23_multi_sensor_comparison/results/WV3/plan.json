@@ -1,0 +1,32 @@
+{
+  "seed": 46,
+  "epochs": 150,
+  "milestones": [
+    50,
+    100,
+    150
+  ],
+  "effective_batch": 64,
+  "micro": 64,
+  "workers": 1,
+  "max_parallel": 2,
+  "data": "C:\\CtrS\\SSA-MRN\\data\\dataset",
+  "selection": "validation MSE, exact tie SAM",
+  "variants": [
+    "original",
+    "repeat",
+    "F0"
+  ],
+  "source_hashes": {
+    "common/model.py": "2baf71d9bba152cc05aa54aff62f2ba72c31bd66900a0cef3587777c967e21cf",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/preview.py": "53294d75e356e7dc9b4187e634ae2bc0b32027a29c2cca4ef5494180a6769160",
+    "references/upstream/network.py": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a",
+    "experiments/23_multi_sensor_comparison/run.py": "a259f7fed24750756c33a15009b2dc992f2a501d42db62603afc87f7a66e1530",
+    "experiments/23_multi_sensor_comparison/model.py": "ce93947258afda55a0ba8384d98f47e30a261ba7bfcf918429ccffd243b30836"
+  },
+  "sensor": "WV3",
+  "channels": 8,
+  "peak": 2047.0,
+  "cache_root": "C:\\CtrS-multi-sensor\\runtime\\seed46\\WV3\\cache"
+}
