@@ -244,7 +244,7 @@
 - `checkpoints/<모델>_<센서>_s46/`에 최종 best/latest와 best_at_50·best_at_100·best_at_150를 보존했습니다. 9개 모델, 총 45개 가중치입니다. 이전 임시 복구용 previous는 최종 보관 대상에서 제외했습니다.
 - `results/`에 150에포크 compact 이력, 초기값 확인, 완료 기록, 데이터 manifest, 27개 모델·시점 평가와 고정 이미지를 보존했습니다. 상세 로그·데이터 캐시·예측 배열은 추가하지 않았습니다.
 - [45개 가중치 strict load·FP32 4/8밴드 순전파 확인](results/checkpoint_verification.json)을 완료했습니다. 최신 가중치 9개의 optimizer·GradScaler·RNG·150에포크 재개 상태도 확인했습니다. 새 전체 test 재추론은 수행하지 않았습니다.
-- [실제 실행 소스](provenance/code/), [실제 실행 설정](provenance/runtime/suite_plan.json), [보관 검증 범위](results/archive_verification.json), [파일 manifest](manifest.json)를 보존했습니다. 원본 소스와 가중치 내부 설정은 변경하지 않았습니다.
+- [실제 실행 소스](provenance/code/), [실제 실행 설정](provenance/settings/suite_plan.json), [보관 검증 범위](results/archive_verification.json), [파일 manifest](manifest.json)를 보존했습니다. 원본 소스와 가중치 내부 설정은 변경하지 않았습니다.
 
 보관 해시는 다음 명령으로 확인합니다. 해시 확인은 새 성능 재평가가 아닙니다.
 
