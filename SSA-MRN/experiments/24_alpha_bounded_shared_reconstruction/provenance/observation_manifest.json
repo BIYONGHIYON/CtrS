@@ -1,0 +1,120 @@
+{
+  "error": "zero tensor at each of three stages",
+  "error_encoder": "shared Conv2d(4,4,3,padding=1,bias=True)",
+  "bias_trainable": true,
+  "additional_observation_operator": null,
+  "registration": "H5 LMS/PAN/MS as supplied; no crop/realignment",
+  "normalization_peak": 2047,
+  "train_val_rr_fr_data": {
+    "train": {
+      "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "shapes": {
+        "pan": [
+          17139,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          17139,
+          4,
+          64,
+          64
+        ],
+        "ms": [
+          17139,
+          4,
+          16,
+          16
+        ],
+        "gt": [
+          17139,
+          4,
+          64,
+          64
+        ]
+      }
+    },
+    "val": {
+      "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "shapes": {
+        "pan": [
+          1905,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          1905,
+          4,
+          64,
+          64
+        ],
+        "ms": [
+          1905,
+          4,
+          16,
+          16
+        ],
+        "gt": [
+          1905,
+          4,
+          64,
+          64
+        ]
+      }
+    },
+    "RR": {
+      "sha256": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "shapes": {
+        "pan": [
+          20,
+          1,
+          256,
+          256
+        ],
+        "lms": [
+          20,
+          4,
+          256,
+          256
+        ],
+        "ms": [
+          20,
+          4,
+          64,
+          64
+        ],
+        "gt": [
+          20,
+          4,
+          256,
+          256
+        ]
+      }
+    },
+    "FR": {
+      "sha256": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f",
+      "shapes": {
+        "pan": [
+          20,
+          1,
+          512,
+          512
+        ],
+        "lms": [
+          20,
+          4,
+          512,
+          512
+        ],
+        "ms": [
+          20,
+          4,
+          128,
+          128
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,250 @@
+{
+  "root": "/kaggle/working/ssa_B1_alpha_K4_s42_20261013T064751290366Z",
+  "arm": "B1_alpha_bounded",
+  "physical_gpu": 1,
+  "protocol": {
+    "id": "ssa_b1_alpha_bounded_k4_v1",
+    "arms": [
+      "B1",
+      "B1_alpha_bounded"
+    ],
+    "seed": 42,
+    "k": 4,
+    "stages": 3,
+    "epochs": 100,
+    "batch": 32,
+    "micro": 32,
+    "drop_last": false,
+    "lr": 0.0001,
+    "optimizer": {
+      "name": "Adam",
+      "fused": true,
+      "foreach": false,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0,
+      "amsgrad": false
+    },
+    "loss": "final output MSE",
+    "amp": "float16 + GradScaler",
+    "layout": "channels_last",
+    "deterministic": true,
+    "cudnn_benchmark": false,
+    "tf32": false,
+    "cublas": ":4096:8",
+    "alpha": {
+      "B1": "unconstrained scalar 0.1",
+      "B1_alpha_bounded": "sigmoid(a); a=log(0.1/0.9)"
+    },
+    "validation": "FP32; minimum MSE; earliest epoch on ties",
+    "evaluation": "best; FP32; full RR20 and FR20; no test-based selection; no output clipping",
+    "data": {
+      "train": {
+        "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+        "shapes": {
+          "pan": [
+            17139,
+            1,
+            64,
+            64
+          ],
+          "lms": [
+            17139,
+            4,
+            64,
+            64
+          ],
+          "ms": [
+            17139,
+            4,
+            16,
+            16
+          ],
+          "gt": [
+            17139,
+            4,
+            64,
+            64
+          ]
+        }
+      },
+      "val": {
+        "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+        "shapes": {
+          "pan": [
+            1905,
+            1,
+            64,
+            64
+          ],
+          "lms": [
+            1905,
+            4,
+            64,
+            64
+          ],
+          "ms": [
+            1905,
+            4,
+            16,
+            16
+          ],
+          "gt": [
+            1905,
+            4,
+            64,
+            64
+          ]
+        }
+      },
+      "RR": {
+        "sha256": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+        "shapes": {
+          "pan": [
+            20,
+            1,
+            256,
+            256
+          ],
+          "lms": [
+            20,
+            4,
+            256,
+            256
+          ],
+          "ms": [
+            20,
+            4,
+            64,
+            64
+          ],
+          "gt": [
+            20,
+            4,
+            256,
+            256
+          ]
+        }
+      },
+      "FR": {
+        "sha256": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f",
+        "shapes": {
+          "pan": [
+            20,
+            1,
+            512,
+            512
+          ],
+          "lms": [
+            20,
+            4,
+            512,
+            512
+          ],
+          "ms": [
+            20,
+            4,
+            128,
+            128
+          ]
+        }
+      }
+    },
+    "sources": {
+      "SSA-MRN/references/upstream/network.py": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a",
+      "SSA-MRN/src/ssamrn/__init__.py": "4068ee713442b7896609dffeeb5c1a54d22cd19abfb31da1202b3ca45d3ca08a",
+      "SSA-MRN/src/ssamrn/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+      "SSA-MRN/src/ssamrn/models/__init__.py": "8f3d7aaa5ff196e99a95c2c2926e11131f1814dd1cb235929c0cfb3124de4b88",
+      "SSA-MRN/src/ssamrn/models/ssa_mrn.py": "c140c1fee05a7958b924c6058e14b31daab7ded51c1aae7122c3287c7afd8891",
+      "alpha_init.py": "d796585e1bee9f423ce9146e087cf33d3b447ed185ebc49395975434a4dd7bb5",
+      "alpha_models.py": "097f53148b1272254dfb2b6e9514d79a743ee1de1b75d7f0b411d3b350b9c898",
+      "alpha_support.py": "59288ec26226b9cdf755af7d4e1d88a576c545442a060c9fa2b0142c9aa956e2",
+      "alpha_worker.py": "b847147a6d45f44412298b0f861946edbada5ae3cdb0c2e1d551931617ec6505"
+    },
+    "initialization": {
+      "seed": 42,
+      "core_sha256": "4efb4367e985d49f043a1014bb10f9e249415e5db2e96f0774df525575088e34",
+      "encoder_sha256": "8766e582a7b908f0533c9452a5f633919264c19c9279d1f2c57b9caf37df6ff7",
+      "common_sha256": "e571f34bdc1d1f6638c4d01f3e07ed9407ced07ec7c6448accaa0d514c8b094e",
+      "alpha": {
+        "B1": 0.10000000149011612,
+        "B1_alpha_bounded": 0.10000000149011612
+      },
+      "output_max_abs": 0.0,
+      "output_atol": 1e-06,
+      "output_rtol": 1e-05,
+      "alpha_atol": 1e-07,
+      "input": "first two validation patches; normalized peak2047; FP32 CPU",
+      "initial_states_sha256": "c7679d1bf7278d9327e34756b539164805a6a8567579c370e31428d51bea632c"
+    },
+    "environment": {
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "cudnn": 91900,
+      "python": "3.13.15",
+      "packages": {
+        "numpy": "2.1.3",
+        "h5py": "3.16.0",
+        "scipy": "1.16.3",
+        "scikit-image": "0.25.2",
+        "matplotlib": "3.10.0",
+        "Pillow": "12.3.0"
+      },
+      "gpu": "Tesla T4",
+      "capability": [
+        7,
+        5
+      ]
+    },
+    "selection": {
+      "seed": 42,
+      "scene_ids": [
+        1,
+        8,
+        11,
+        13,
+        19
+      ],
+      "indexing": "zero-based H5 row",
+      "tile": "whole scene",
+      "order": "ascending",
+      "rgb_bands": [
+        2,
+        1,
+        0
+      ],
+      "selected_before_training": true,
+      "policy": "fixed in source; never changed by metrics"
+    },
+    "source_repo_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56",
+    "upstream_commit": "a4ca40e407b12bf4c30f804384405ce321d11c51"
+  },
+  "initialization": {
+    "seed": 42,
+    "core_sha256": "4efb4367e985d49f043a1014bb10f9e249415e5db2e96f0774df525575088e34",
+    "encoder_sha256": "8766e582a7b908f0533c9452a5f633919264c19c9279d1f2c57b9caf37df6ff7",
+    "common_sha256": "e571f34bdc1d1f6638c4d01f3e07ed9407ced07ec7c6448accaa0d514c8b094e",
+    "alpha": {
+      "B1": 0.10000000149011612,
+      "B1_alpha_bounded": 0.10000000149011612
+    },
+    "output_max_abs": 0.0,
+    "output_atol": 1e-06,
+    "output_rtol": 1e-05,
+    "alpha_atol": 1e-07,
+    "input": "first two validation patches; normalized peak2047; FP32 CPU",
+    "initial_states_sha256": "c7679d1bf7278d9327e34756b539164805a6a8567579c370e31428d51bea632c"
+  },
+  "paths": {
+    "train": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+    "val": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5",
+    "RR": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+    "FR": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5"
+  },
+  "session_nonce": "20e81e40697d47b4862c9c582fc0f5c9",
+  "resume": false,
+  "resume_sha256": null
+}
