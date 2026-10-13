@@ -4,43 +4,57 @@
     "entrypoint": "common/evaluate.py",
     "checkpoints": "experiments/1_public_code_reproduction/checkpoints",
     "results": "experiments/1_public_code_reproduction/results",
-    "retraining": "experiments/1_public_code_reproduction/results/retraining_20261013/summary.json"
+    "retraining": "experiments/1_public_code_reproduction/results/retraining_20261013/summary.json",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "2_paper_setting_reproduction": {
     "report": "experiments/2_paper_setting_reproduction/README.md",
     "entrypoint": "common/evaluate.py",
     "checkpoints": "experiments/2_paper_setting_reproduction/checkpoints",
-    "results": "experiments/2_paper_setting_reproduction/results"
+    "results": "experiments/2_paper_setting_reproduction/results",
+    "research_track": "performance",
+    "experimenter": "김경찬"
   },
   "3_ms_observation": {
     "report": "experiments/3_ms_observation/README.md",
     "entrypoint": "experiments/3_ms_observation/run.py",
     "checkpoints": "experiments/3_ms_observation/checkpoints",
-    "results": "experiments/3_ms_observation/results"
+    "results": "experiments/3_ms_observation/results",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "4_interpolation_correction_detail": {
     "report": "experiments/4_interpolation_correction_detail/README.md",
     "entrypoint": "experiments/4_interpolation_correction_detail/run.py",
     "checkpoints": "experiments/4_interpolation_correction_detail/checkpoints",
-    "results": "experiments/4_interpolation_correction_detail/results"
+    "results": "experiments/4_interpolation_correction_detail/results",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "5_interpolation_scope_sensors": {
     "report": "experiments/5_interpolation_scope_sensors/README.md",
     "entrypoint": "experiments/5_interpolation_scope_sensors/run.py",
     "checkpoints": "experiments/5_interpolation_scope_sensors/checkpoints",
-    "results": "experiments/5_interpolation_scope_sensors/results"
+    "results": "experiments/5_interpolation_scope_sensors/results",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "6_interpolation_seed_repeat": {
     "report": "experiments/6_interpolation_seed_repeat/README.md",
     "entrypoint": "experiments/6_interpolation_seed_repeat/run.py",
     "checkpoints": "experiments/6_interpolation_seed_repeat/checkpoints",
-    "results": "experiments/6_interpolation_seed_repeat/results"
+    "results": "experiments/6_interpolation_seed_repeat/results",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "7_band_gated_detail": {
     "report": "experiments/7_band_gated_detail/README.md",
     "entrypoint": "experiments/7_band_gated_detail/run.py",
     "checkpoints": "experiments/7_band_gated_detail/checkpoints",
-    "results": "experiments/7_band_gated_detail/results"
+    "results": "experiments/7_band_gated_detail/results",
+    "research_track": "performance",
+    "experimenter": "김윤지"
   },
   "8_mtf_augmentation": {
     "report": "experiments/8_mtf_augmentation/README.md",
@@ -48,7 +62,9 @@
     "checkpoints": "experiments/8_mtf_augmentation/checkpoints",
     "results": "experiments/8_mtf_augmentation/results",
     "evaluation": "common/evaluate_retained.py",
-    "status": "평가 완료"
+    "status": "평가 완료",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "9_ssai_fusion": {
     "report": "experiments/9_ssai_fusion/README.md",
@@ -56,19 +72,25 @@
     "checkpoints": "experiments/9_ssai_fusion/checkpoints",
     "results": "experiments/9_ssai_fusion/results",
     "evaluation": "common/evaluate_retained.py",
-    "status": "평가 완료"
+    "status": "평가 완료",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "10_recurrent_observation": {
     "report": "experiments/10_recurrent_observation/README.md",
     "entrypoint": "experiments/10_recurrent_observation/run.py",
     "checkpoints": "experiments/10_recurrent_observation/checkpoints",
-    "results": "experiments/10_recurrent_observation/results"
+    "results": "experiments/10_recurrent_observation/results",
+    "research_track": "performance",
+    "experimenter": "김윤지"
   },
   "11_haar_reconstruction": {
     "report": "experiments/11_haar_reconstruction/README.md",
     "entrypoint": "experiments/11_haar_reconstruction/run.py",
     "checkpoints": "experiments/11_haar_reconstruction/checkpoints",
-    "results": "experiments/11_haar_reconstruction/results"
+    "results": "experiments/11_haar_reconstruction/results",
+    "research_track": "performance",
+    "experimenter": "김윤지"
   },
   "12_feature_dimension": {
     "report": "experiments/12_feature_dimension/README.md",
@@ -76,73 +98,97 @@
     "checkpoints": "experiments/12_feature_dimension/checkpoints",
     "results": "experiments/12_feature_dimension/results",
     "evaluation": "common/evaluate_retained.py",
-    "status": "평가 완료"
+    "status": "평가 완료",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "13_recurrent_observation_resume": {
     "report": "experiments/13_recurrent_observation_resume/README.md",
     "entrypoint": "experiments/13_recurrent_observation_resume/run.py",
     "checkpoints": "experiments/13_recurrent_observation_resume/checkpoints",
-    "results": "experiments/13_recurrent_observation_resume/results"
+    "results": "experiments/13_recurrent_observation_resume/results",
+    "research_track": "performance",
+    "experimenter": "김윤지"
   },
   "14_auxiliary_losses": {
     "report": "experiments/14_auxiliary_losses/README.md",
     "entrypoint": "experiments/12_feature_dimension/run.py",
     "checkpoints": "experiments/14_auxiliary_losses/checkpoints",
-    "results": "experiments/14_auxiliary_losses/results"
+    "results": "experiments/14_auxiliary_losses/results",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "15_shared_reconstruction": {
     "report": "experiments/15_shared_reconstruction/README.md",
     "entrypoint": "experiments/15_shared_reconstruction/run.py",
     "checkpoints": "experiments/15_shared_reconstruction/checkpoints",
-    "results": "experiments/15_shared_reconstruction/results"
+    "results": "experiments/15_shared_reconstruction/results",
+    "research_track": "performance",
+    "experimenter": "김윤지"
   },
   "16_bandlimited_downsampling": {
     "report": "experiments/16_bandlimited_downsampling/README.md",
     "entrypoint": "experiments/16_bandlimited_downsampling/run.py",
     "checkpoints": "experiments/16_bandlimited_downsampling/checkpoints",
-    "results": "experiments/16_bandlimited_downsampling/results"
+    "results": "experiments/16_bandlimited_downsampling/results",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "17_structural_ablation": {
     "report": "experiments/17_structural_ablation/README.md",
     "entrypoint": "experiments/17_structural_ablation/run.py",
     "checkpoints": "experiments/17_structural_ablation/checkpoints",
-    "results": "experiments/17_structural_ablation/results"
+    "results": "experiments/17_structural_ablation/results",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "18_coarse_feature_fusion": {
     "report": "experiments/18_coarse_feature_fusion/README.md",
     "entrypoint": "experiments/18_coarse_feature_fusion/run.py",
     "checkpoints": "experiments/18_coarse_feature_fusion/checkpoints",
-    "results": "experiments/18_coarse_feature_fusion/results"
+    "results": "experiments/18_coarse_feature_fusion/results",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "19_dual_stream_reconstruction": {
     "report": "experiments/19_dual_stream_reconstruction/README.md",
     "entrypoint": "experiments/19_dual_stream_reconstruction/run.py",
     "checkpoints": "experiments/19_dual_stream_reconstruction/checkpoints",
-    "results": "experiments/19_dual_stream_reconstruction/results"
+    "results": "experiments/19_dual_stream_reconstruction/results",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "20_recurrent_guidance": {
     "report": "experiments/20_recurrent_guidance/README.md",
     "entrypoint": "experiments/20_recurrent_guidance/run.py",
     "checkpoints": "experiments/20_recurrent_guidance/checkpoints",
-    "results": "experiments/20_recurrent_guidance/results"
+    "results": "experiments/20_recurrent_guidance/results",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "21_guidance_refinement": {
     "report": "experiments/21_guidance_refinement/README.md",
     "entrypoint": "experiments/21_guidance_refinement/run.py",
     "checkpoints": "experiments/21_guidance_refinement/checkpoints",
     "results": "experiments/21_guidance_refinement/results",
-    "status": "evaluation_complete"
+    "status": "evaluation_complete",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "22_stage_aware_restoration": {
     "report": "experiments/22_stage_aware_restoration/README.md",
     "entrypoint": "experiments/22_stage_aware_restoration/run.py",
     "checkpoints": "experiments/22_stage_aware_restoration/checkpoints",
     "results": "experiments/22_stage_aware_restoration/results",
-    "status": "평가 완료"
+    "status": "평가 완료",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "23_multi_sensor_comparison": {
     "report": "experiments/23_multi_sensor_comparison/README.md",
-    "status": "평가 완료"
+    "status": "평가 완료",
+    "research_track": "performance",
+    "experimenter": "이병현"
   },
   "24_alpha_bounded_shared_reconstruction": {
     "report": "experiments/24_alpha_bounded_shared_reconstruction/README.md",
@@ -153,7 +199,8 @@
     "status": "평가 완료",
     "improvement": "부분 개선",
     "experimenter": "김윤지",
-    "rr_preservation_target_met": false
+    "rr_preservation_target_met": false,
+    "research_track": "performance"
   },
   "25_multiscale_supervision": {
     "report": "experiments/25_multiscale_supervision/README.md",
@@ -164,7 +211,8 @@
     "status": "평가 완료",
     "improvement": "부분 개선",
     "experimenter": "김윤지",
-    "final_RR_improved": false
+    "final_RR_improved": false,
+    "research_track": "performance"
   },
   "26_ema_weight_averaging": {
     "report": "experiments/26_ema_weight_averaging/README.md",
@@ -181,7 +229,8 @@
     "pending_seeds": [
       43,
       44
-    ]
+    ],
+    "research_track": "performance"
   },
   "27_backbone_channel_attention": {
     "report": "experiments/27_backbone_channel_attention/README.md",
@@ -192,7 +241,8 @@
     "experimenter": "김경찬",
     "evaluated_seeds": [
       42
-    ]
+    ],
+    "research_track": "performance"
   },
   "28_residual_refinement": {
     "report": "experiments/28_residual_refinement/README.md",
@@ -201,6 +251,7 @@
     "results": "experiments/28_residual_refinement/results",
     "status": "평가 완료",
     "improvement": "부분 개선",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "research_track": "performance"
   }
 }
