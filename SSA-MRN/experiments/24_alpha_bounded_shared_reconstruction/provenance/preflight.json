@@ -1,0 +1,38 @@
+{
+  "status": "passed",
+  "tests": 21,
+  "failures": 0,
+  "errors": 0,
+  "torch": "2.14.1+cpu",
+  "device": "CPU",
+  "evidence": {
+    "baseline_matches_archived_K4_model_state_and_forward": true,
+    "common_initial_sha256": "be32cb644b2f165146ec6b53550329fee35771eabc68907b0db3341881ad7caf",
+    "core_sha256": "cd35b868bbc9b5ed8aa466f45846d728b70b4235f76811f72b247937fbec189c",
+    "encoder_sha256": "2b32245539d5a1932f7b516c9496174e995670aa217fb94560976243b26e5c83",
+    "initial_alpha": {
+      "B1": 0.10000000149011612,
+      "B1_alpha_bounded": 0.10000000149011612
+    },
+    "synthetic_64px_initial_output_max_abs": 0.0
+  },
+  "source_hashes": {
+    "alpha_init.py": "d796585e1bee9f423ce9146e087cf33d3b447ed185ebc49395975434a4dd7bb5",
+    "alpha_models.py": "097f53148b1272254dfb2b6e9514d79a743ee1de1b75d7f0b411d3b350b9c898",
+    "alpha_support.py": "59288ec26226b9cdf755af7d4e1d88a576c545442a060c9fa2b0142c9aa956e2",
+    "alpha_worker.py": "b847147a6d45f44412298b0f861946edbada5ae3cdb0c2e1d551931617ec6505",
+    "SSA-MRN/references/upstream/network.py": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a",
+    "SSA-MRN/src/ssamrn/__init__.py": "4068ee713442b7896609dffeeb5c1a54d22cd19abfb31da1202b3ca45d3ca08a",
+    "SSA-MRN/src/ssamrn/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "SSA-MRN/src/ssamrn/models/__init__.py": "8f3d7aaa5ff196e99a95c2c2926e11131f1814dd1cb235929c0cfb3124de4b88",
+    "SSA-MRN/src/ssamrn/models/ssa_mrn.py": "c140c1fee05a7958b924c6058e14b31daab7ded51c1aae7122c3287c7afd8891"
+  },
+  "verified": "syntax, archived B1 parity, initial outputs/gradients, download resolver, CPU replay and crash recovery",
+  "not_verified": [
+    "actual QB training",
+    "T4x2 GPU residency/AMP/fused optimizer",
+    "Kaggle dataset download on live service",
+    "actual full RR/FR evaluation",
+    "Saved Output remote recovery"
+  ]
+}
