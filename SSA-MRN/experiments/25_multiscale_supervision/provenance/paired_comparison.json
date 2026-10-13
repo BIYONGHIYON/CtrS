@@ -1,0 +1,30 @@
+[
+  {
+    "variant": "B0_DS",
+    "seed": 42,
+    "B0_epoch_seconds": 5359.103165185028,
+    "B0_DS_epoch_seconds": 5784.722299929004,
+    "epoch_time_ratio_B0_over_B0_DS": 0.9264235839377805,
+    "common_core_initialization_verified": true,
+    "epoch_sample_order_verified": true,
+    "timing_scope": "training phase including periodic recovery checkpoints + validation; epoch-end checkpoint/bootstrap/test excluded",
+    "metric_delta_B0_DS_minus_B0": {
+      "RR": {
+        "SAM": 0.02640726223024803,
+        "ERGAS": 0.018742796372435144,
+        "PSNR": -0.0425137263596298,
+        "SCC": -0.00018176009519477176,
+        "Q2n": -0.000791164893716223,
+        "MSE_peak1": 1.6735583537457756e-06,
+        "PSNR_sensor_peak": -0.0425137263596298,
+        "inference_ms": -1.6589327812194838
+      },
+      "FR": {
+        "D_lambda": -0.007880773955195694,
+        "D_s": -0.002553463363588665,
+        "QNR": 0.010130004473977827,
+        "inference_ms": -0.7679176330566406
+      }
+    }
+  }
+]

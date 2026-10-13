@@ -13,7 +13,7 @@ def digest(path):
     return h.hexdigest()
 
 def verify(folder):
-    manifest=json.loads((folder/'manifest.json').read_text())
+    manifest=json.loads((folder/'manifest.json').read_text(encoding='utf-8'))
     for name,expected in manifest['files'].items():
         path=folder/name
         if not path.is_file() or path.stat().st_size!=expected['bytes'] or digest(path)!=expected['sha256']:
@@ -26,7 +26,7 @@ def main():
     p.add_argument('--artifact-root',type=Path,help='Verify a new export report_manifest.json')
     a=p.parse_args()
     if a.artifact_root:
-        data=json.loads((a.artifact_root/'report_manifest.json').read_text())
+        data=json.loads((a.artifact_root/'report_manifest.json').read_text(encoding='utf-8'))
         files=data.get('artifacts',data.get('files'))
         if not files:raise ValueError('No export files')
         for name,e in files.items():

@@ -1,0 +1,1764 @@
+{
+  "B0_QB_B0_k4_s42": {
+    "config": {
+      "sensor": "QB",
+      "k": 4,
+      "channels": 4,
+      "mode": "B0",
+      "controlled": true,
+      "epochs": 200,
+      "seed": 42,
+      "variant": "B0",
+      "hold_lr_epochs": 100,
+      "min_lr": 1e-06,
+      "status_seconds": 15,
+      "checkpoint_seconds": 60,
+      "fused_adam": true,
+      "batch_size": 32,
+      "lr": 0.0001,
+      "micro_batch": 32,
+      "auto_micro": false,
+      "eval_batch": 32,
+      "amp": true,
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "channels_last": true,
+      "gpu_cache": true,
+      "workers": 0,
+      "scale": 2047.0,
+      "save_predictions": true,
+      "data": {
+        "train": {
+          "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+          "bytes": 5194901672,
+          "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+          "shapes": {
+            "pan": [
+              17139,
+              1,
+              64,
+              64
+            ],
+            "lms": [
+              17139,
+              4,
+              64,
+              64
+            ],
+            "ms": [
+              17139,
+              4,
+              16,
+              16
+            ],
+            "gt": [
+              17139,
+              4,
+              64,
+              64
+            ]
+          },
+          "ranges": {
+            "pan": {
+              "raw_min": 0.0,
+              "raw_max": 1917.2325893393565,
+              "normalized_min": 0.0,
+              "normalized_max": 0.9366060524373994
+            },
+            "lms": {
+              "raw_min": -99.9723020204939,
+              "raw_max": 1659.9496147035165,
+              "normalized_min": -0.04883844749413478,
+              "normalized_max": 0.8109182289709411
+            },
+            "ms": {
+              "raw_min": -9.118218560999747e-09,
+              "raw_max": 1510.233314226248,
+              "normalized_min": -4.454430171470321e-12,
+              "normalized_max": 0.7377788540431109
+            },
+            "gt": {
+              "raw_min": 0.0,
+              "raw_max": 2047.0,
+              "normalized_min": 0.0,
+              "normalized_max": 1.0
+            }
+          }
+        },
+        "val": {
+          "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5",
+          "bytes": 577415336,
+          "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+          "shapes": {
+            "pan": [
+              1905,
+              1,
+              64,
+              64
+            ],
+            "lms": [
+              1905,
+              4,
+              64,
+              64
+            ],
+            "ms": [
+              1905,
+              4,
+              16,
+              16
+            ],
+            "gt": [
+              1905,
+              4,
+              64,
+              64
+            ]
+          },
+          "ranges": {
+            "pan": {
+              "raw_min": 0.0,
+              "raw_max": 1889.794570125629,
+              "normalized_min": 0.0,
+              "normalized_max": 0.923202037188876
+            },
+            "lms": {
+              "raw_min": -96.95726876989049,
+              "raw_max": 1636.7507041336712,
+              "normalized_min": -0.0473655440986275,
+              "normalized_max": 0.7995851021659361
+            },
+            "ms": {
+              "raw_min": -7.351043832579706e-09,
+              "raw_max": 1509.9582513913758,
+              "normalized_min": -3.5911303529944827e-12,
+              "normalized_max": 0.7376444804061435
+            },
+            "gt": {
+              "raw_min": 0.0,
+              "raw_max": 2047.0,
+              "normalized_min": 0.0,
+              "normalized_max": 1.0
+            }
+          }
+        },
+        "RR": {
+          "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+          "bytes": 96997376,
+          "sha256": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+          "shapes": {
+            "pan": [
+              20,
+              1,
+              256,
+              256
+            ],
+            "lms": [
+              20,
+              4,
+              256,
+              256
+            ],
+            "ms": [
+              20,
+              4,
+              64,
+              64
+            ],
+            "gt": [
+              20,
+              4,
+              256,
+              256
+            ]
+          },
+          "ranges": {
+            "pan": {
+              "raw_min": 54.040407419612485,
+              "raw_max": 1878.973613985974,
+              "normalized_min": 0.026399808216713477,
+              "normalized_max": 0.9179157860214822
+            },
+            "lms": {
+              "raw_min": -42.168352894326034,
+              "raw_max": 1487.4173129416745,
+              "normalized_min": -0.02060007469190329,
+              "normalized_max": 0.7266327859998409
+            },
+            "ms": {
+              "raw_min": 24.025781397001143,
+              "raw_max": 1390.1010748662075,
+              "normalized_min": 0.011737069563752391,
+              "normalized_max": 0.6790918782932133
+            },
+            "gt": {
+              "raw_min": 1.0,
+              "raw_max": 2047.0,
+              "normalized_min": 0.0004885197850512946,
+              "normalized_max": 1.0
+            }
+          }
+        },
+        "FR": {
+          "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5",
+          "bytes": 220202744,
+          "sha256": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f",
+          "shapes": {
+            "pan": [
+              20,
+              1,
+              512,
+              512
+            ],
+            "lms": [
+              20,
+              4,
+              512,
+              512
+            ],
+            "ms": [
+              20,
+              4,
+              128,
+              128
+            ]
+          },
+          "ranges": {
+            "pan": {
+              "raw_min": 1.0,
+              "raw_max": 2047.0,
+              "normalized_min": 0.0004885197850512946,
+              "normalized_max": 1.0
+            },
+            "lms": {
+              "raw_min": -206.99482859539307,
+              "raw_max": 2319.8881522010593,
+              "normalized_min": -0.10112106917215098,
+              "normalized_max": 1.1333112614563063
+            },
+            "ms": {
+              "raw_min": 1.0,
+              "raw_max": 2047.0,
+              "normalized_min": 0.0004885197850512946,
+              "normalized_max": 1.0
+            }
+          }
+        }
+      },
+      "cache": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/_unused_cache",
+      "source": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/code/CtrS",
+      "run_dir": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/runs/B0_QB_B0_k4_s42",
+      "selection": {
+        "seed": 42,
+        "protocol": "RR",
+        "tiles": "full scene",
+        "zero_based_scene_indices": [
+          1,
+          8,
+          11,
+          13,
+          19
+        ],
+        "order": "ascending scene index",
+        "rgb_assumed_bands_zero_based": [
+          2,
+          1,
+          0
+        ],
+        "rule": "fixed before training and test scoring"
+      },
+      "repo_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56",
+      "plan_commit": null,
+      "B0_DS_source": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/code/B0_DS_models.py",
+      "B0_DS_source_sha256": "f09b905ba891732d3177afba19737db2e59757f5f4c69d8f56c1783c55908a38",
+      "upstream_commit": "a4ca40e407b12bf4c30f804384405ce321d11c51",
+      "worker_sha256": "024b01e1eb4d6d0c8607dd4ce6fa92ef0edc4afa42b47c8329e2e148de51fc21",
+      "gt_target_profile": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/gt_target_spec.json",
+      "gt_target_profile_sha256": "b441c69b09ad90de68d0a3fc0043da8f896f9951cd30dd62197457eb0c497844",
+      "model_definition": "single original core; identical three training-only heads; loss-only contrast",
+      "aux_weights": {
+        "quarter": 0.0,
+        "half": 0.0,
+        "full": 0.0
+      },
+      "candidate_aux_weights": {
+        "quarter": 0.005,
+        "half": 0.005,
+        "full": 0.001
+      },
+      "numerics": "Controlled: equal AMP/layout/micro batch, deterministic kernels, no TF32; not legacy bitwise parity",
+      "reference_plan_config": {
+        "variant": "B0",
+        "seed": 42,
+        "core_passes": 1,
+        "head_sites": [
+          "conv2ctc1",
+          "conv2ctc2",
+          "conv2ctc3"
+        ],
+        "loss": "final MSE + weighted mean auxiliary L1",
+        "final_output": "original conv2ctc3 output; auxiliary heads training only",
+        "target_spec": {
+          "source": "normalized GT only; never observed LRMS or Haar LL",
+          "ratios": {
+            "quarter": 4,
+            "half": 2,
+            "full": 1
+          },
+          "filter": "separable positive unit-sum binomial FIR",
+          "binomial_orders": {
+            "quarter": 16,
+            "half": 4
+          },
+          "coefficients": {
+            "quarter": [
+              1.52587890625e-05,
+              0.000244140625,
+              0.0018310546875,
+              0.008544921875,
+              0.02777099609375,
+              0.066650390625,
+              0.1221923828125,
+              0.174560546875,
+              0.196380615234375,
+              0.174560546875,
+              0.1221923828125,
+              0.066650390625,
+              0.02777099609375,
+              0.008544921875,
+              0.0018310546875,
+              0.000244140625,
+              1.52587890625e-05
+            ],
+            "half": [
+              0.0625,
+              0.25,
+              0.375,
+              0.25,
+              0.0625
+            ]
+          },
+          "boundary": "replicate on both axes",
+          "coordinates": "j*(N-1)/(M-1), M=N/ratio; bilinear align_corners=True",
+          "full": "identity",
+          "precision": "FP32",
+          "interpretation": "explicit synthetic GT targets, not a calibrated sensor MTF"
+        },
+        "aux_weights": {
+          "quarter": 0.0,
+          "half": 0.0,
+          "full": 0.0
+        }
+      }
+    },
+    "best_epoch": 199,
+    "best_mse": 0.00016315867833327502,
+    "checkpoints": {
+      "best": {
+        "sha256": "ccbc645298000c34ef08ac374e677e9d37e8b46e758e86abcd92161083348b77",
+        "bytes": 5610557,
+        "epoch": 199,
+        "original_path": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/runs/B0_QB_B0_k4_s42/best.pt"
+      },
+      "latest": {
+        "sha256": "e05aa158da4f57a95d3403fc79b316b7e699afed413509862df7863f0f449f63",
+        "bytes": 13759947,
+        "epoch": 200,
+        "original_path": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/runs/B0_QB_B0_k4_s42/latest.pt"
+      }
+    },
+    "metrics": {
+      "RR": {
+        "count": 20,
+        "rows": [
+          {
+            "scene_index": 0,
+            "SAM": 2.709810072431522,
+            "ERGAS": 4.219672137616362,
+            "PSNR": 41.97182352218426,
+            "SCC": 0.9560505711208709,
+            "Q2n": 0.610883801648199,
+            "MSE_peak1": 6.925605845405047e-05,
+            "PSNR_sensor_peak": 41.97182352218426,
+            "inference_ms": 26.571168899536133
+          },
+          {
+            "scene_index": 1,
+            "SAM": 3.114519472243007,
+            "ERGAS": 3.821070729369056,
+            "PSNR": 42.62896832354999,
+            "SCC": 0.9535372690489194,
+            "Q2n": 0.670755741282697,
+            "MSE_peak1": 6.192574644152391e-05,
+            "PSNR_sensor_peak": 42.62896832354999,
+            "inference_ms": 17.387744903564453
+          },
+          {
+            "scene_index": 2,
+            "SAM": 4.239455495719207,
+            "ERGAS": 3.9467191450428,
+            "PSNR": 36.04243423328785,
+            "SCC": 0.9799973883098481,
+            "Q2n": 0.9608470066909602,
+            "MSE_peak1": 0.00027237988398100607,
+            "PSNR_sensor_peak": 36.04243423328785,
+            "inference_ms": 16.022144317626953
+          },
+          {
+            "scene_index": 3,
+            "SAM": 3.9597437332568832,
+            "ERGAS": 3.619920569982961,
+            "PSNR": 36.8208575859491,
+            "SCC": 0.9738172066162325,
+            "Q2n": 0.9518252825745303,
+            "MSE_peak1": 0.00022921393533127646,
+            "PSNR_sensor_peak": 36.8208575859491,
+            "inference_ms": 18.122079849243164
+          },
+          {
+            "scene_index": 4,
+            "SAM": 4.78206872161991,
+            "ERGAS": 3.9679596382638676,
+            "PSNR": 37.260394563485335,
+            "SCC": 0.9835883557963574,
+            "Q2n": 0.9656161018394825,
+            "MSE_peak1": 0.0002054645554211658,
+            "PSNR_sensor_peak": 37.260394563485335,
+            "inference_ms": 20.033536911010742
+          },
+          {
+            "scene_index": 5,
+            "SAM": 4.743952284449765,
+            "ERGAS": 3.972626189363033,
+            "PSNR": 36.40296221293167,
+            "SCC": 0.9833625868651696,
+            "Q2n": 0.9653211192609354,
+            "MSE_peak1": 0.0002481835883563831,
+            "PSNR_sensor_peak": 36.40296221293167,
+            "inference_ms": 23.781375885009766
+          },
+          {
+            "scene_index": 6,
+            "SAM": 4.845503310927095,
+            "ERGAS": 3.9359691809835957,
+            "PSNR": 36.76420569748173,
+            "SCC": 0.985621978246462,
+            "Q2n": 0.9697167625237104,
+            "MSE_peak1": 0.00022683478939923283,
+            "PSNR_sensor_peak": 36.76420569748173,
+            "inference_ms": 26.57472038269043
+          },
+          {
+            "scene_index": 7,
+            "SAM": 4.87757650743276,
+            "ERGAS": 4.092835366000728,
+            "PSNR": 39.02747903673719,
+            "SCC": 0.982585638685318,
+            "Q2n": 0.9288156759101035,
+            "MSE_peak1": 0.00014530828332910275,
+            "PSNR_sensor_peak": 39.02747903673719,
+            "inference_ms": 27.378047943115234
+          },
+          {
+            "scene_index": 8,
+            "SAM": 5.172873460087664,
+            "ERGAS": 3.942693862145377,
+            "PSNR": 37.07408569646607,
+            "SCC": 0.983842564109807,
+            "Q2n": 0.9680671474897379,
+            "MSE_peak1": 0.00021845011588860963,
+            "PSNR_sensor_peak": 37.07408569646607,
+            "inference_ms": 28.597951889038086
+          },
+          {
+            "scene_index": 9,
+            "SAM": 4.73090450944199,
+            "ERGAS": 3.6825945540734684,
+            "PSNR": 36.61124094915388,
+            "SCC": 0.9843006340197784,
+            "Q2n": 0.965788717525069,
+            "MSE_peak1": 0.00023678284159242002,
+            "PSNR_sensor_peak": 36.61124094915388,
+            "inference_ms": 29.685983657836914
+          },
+          {
+            "scene_index": 10,
+            "SAM": 5.5172342183709535,
+            "ERGAS": 4.259498330074247,
+            "PSNR": 36.45515052410067,
+            "SCC": 0.9815489344433609,
+            "Q2n": 0.9581891177870961,
+            "MSE_peak1": 0.0002536601043051137,
+            "PSNR_sensor_peak": 36.45515052410067,
+            "inference_ms": 27.58016014099121
+          },
+          {
+            "scene_index": 11,
+            "SAM": 5.088296047677449,
+            "ERGAS": 3.9800901937205575,
+            "PSNR": 36.20846450692714,
+            "SCC": 0.9837854994812302,
+            "Q2n": 0.9697550806163904,
+            "MSE_peak1": 0.00026271808332617414,
+            "PSNR_sensor_peak": 36.20846450692714,
+            "inference_ms": 27.512800216674805
+          },
+          {
+            "scene_index": 12,
+            "SAM": 5.182619112783843,
+            "ERGAS": 4.021672860318501,
+            "PSNR": 37.908346256441575,
+            "SCC": 0.9828756834075139,
+            "Q2n": 0.9662509071971679,
+            "MSE_peak1": 0.0001809384027279905,
+            "PSNR_sensor_peak": 37.908346256441575,
+            "inference_ms": 27.38387107849121
+          },
+          {
+            "scene_index": 13,
+            "SAM": 5.369731766892527,
+            "ERGAS": 3.9846293291683827,
+            "PSNR": 37.24470218009447,
+            "SCC": 0.9804546795438688,
+            "Q2n": 0.9632152634374976,
+            "MSE_peak1": 0.0002130113031898709,
+            "PSNR_sensor_peak": 37.24470218009447,
+            "inference_ms": 27.66873550415039
+          },
+          {
+            "scene_index": 14,
+            "SAM": 4.946187535097263,
+            "ERGAS": 3.831499529741916,
+            "PSNR": 37.84362864211653,
+            "SCC": 0.9780276450666177,
+            "Q2n": 0.9447498102333666,
+            "MSE_peak1": 0.00018728216803306488,
+            "PSNR_sensor_peak": 37.84362864211653,
+            "inference_ms": 27.55583953857422
+          },
+          {
+            "scene_index": 15,
+            "SAM": 5.476701988078161,
+            "ERGAS": 4.307335212761579,
+            "PSNR": 37.18323213576882,
+            "SCC": 0.9784637351221906,
+            "Q2n": 0.9596567607054618,
+            "MSE_peak1": 0.00021793847352227997,
+            "PSNR_sensor_peak": 37.18323213576882,
+            "inference_ms": 28.995391845703125
+          },
+          {
+            "scene_index": 16,
+            "SAM": 5.474681470737207,
+            "ERGAS": 4.138448517366769,
+            "PSNR": 37.03995967515669,
+            "SCC": 0.9794313721924468,
+            "Q2n": 0.9605504042996652,
+            "MSE_peak1": 0.00022141912583982558,
+            "PSNR_sensor_peak": 37.03995967515669,
+            "inference_ms": 27.66339111328125
+          },
+          {
+            "scene_index": 17,
+            "SAM": 4.641834847132186,
+            "ERGAS": 3.7586726821655065,
+            "PSNR": 38.889597268489744,
+            "SCC": 0.9758459655168447,
+            "Q2n": 0.9290876027444855,
+            "MSE_peak1": 0.00015342943507046277,
+            "PSNR_sensor_peak": 38.889597268489744,
+            "inference_ms": 27.765792846679688
+          },
+          {
+            "scene_index": 18,
+            "SAM": 5.949477485328682,
+            "ERGAS": 4.484723358462536,
+            "PSNR": 36.1900955483736,
+            "SCC": 0.9744885404740696,
+            "Q2n": 0.9503302413741563,
+            "MSE_peak1": 0.0002726699308656166,
+            "PSNR_sensor_peak": 36.1900955483736,
+            "inference_ms": 27.611488342285156
+          },
+          {
+            "scene_index": 19,
+            "SAM": 5.867615294979417,
+            "ERGAS": 4.525334742835001,
+            "PSNR": 37.016965673514974,
+            "SCC": 0.981282352367464,
+            "Q2n": 0.9585441029818158,
+            "MSE_peak1": 0.0002254351956181881,
+            "PSNR_sensor_peak": 37.016965673514974,
+            "inference_ms": 27.673471450805664
+          }
+        ],
+        "mean": {
+          "SAM": 4.834539366734374,
+          "ERGAS": 4.024698306472812,
+          "PSNR": 37.62922971161056,
+          "SCC": 0.9781454300217185,
+          "Q2n": 0.9258983324061264,
+          "MSE_peak1": 0.0002051151010346679,
+          "PSNR_sensor_peak": 37.62922971161056,
+          "inference_ms": 25.57828483581543
+        },
+        "seconds": 4.261708318997989
+      },
+      "FR": {
+        "count": 20,
+        "rows": [
+          {
+            "scene_index": 0,
+            "D_lambda": 0.13191315178883486,
+            "D_s": 0.07623604087702956,
+            "QNR": 0.801907343766127,
+            "inference_ms": 92.89692687988281
+          },
+          {
+            "scene_index": 1,
+            "D_lambda": 0.041513808473405,
+            "D_s": 0.04564831834389749,
+            "QNR": 0.9147329087275591,
+            "inference_ms": 94.29750061035156
+          },
+          {
+            "scene_index": 2,
+            "D_lambda": 0.048908306684305625,
+            "D_s": 0.04540412538117178,
+            "QNR": 0.9079082068233976,
+            "inference_ms": 84.44960021972656
+          },
+          {
+            "scene_index": 3,
+            "D_lambda": 0.06059787085531284,
+            "D_s": 0.0345415639773019,
+            "QNR": 0.9069537104004223,
+            "inference_ms": 84.60198211669922
+          },
+          {
+            "scene_index": 4,
+            "D_lambda": 0.07053443973302148,
+            "D_s": 0.03190433181763197,
+            "QNR": 0.8998115826191597,
+            "inference_ms": 81.24211120605469
+          },
+          {
+            "scene_index": 5,
+            "D_lambda": 0.03455670718068904,
+            "D_s": 0.04371930503331317,
+            "QNR": 0.9232347830081773,
+            "inference_ms": 82.58153533935547
+          },
+          {
+            "scene_index": 6,
+            "D_lambda": 0.0336739187431499,
+            "D_s": 0.052370827037779594,
+            "QNR": 0.9157187851932522,
+            "inference_ms": 80.03593444824219
+          },
+          {
+            "scene_index": 7,
+            "D_lambda": 0.057460500091790455,
+            "D_s": 0.04228467153458049,
+            "QNR": 0.9026845267462231,
+            "inference_ms": 81.57622528076172
+          },
+          {
+            "scene_index": 8,
+            "D_lambda": 0.06209310989936731,
+            "D_s": 0.03328918868455891,
+            "QNR": 0.9066847306675249,
+            "inference_ms": 80.06227111816406
+          },
+          {
+            "scene_index": 9,
+            "D_lambda": 0.02354957383960658,
+            "D_s": 0.04530768436988444,
+            "QNR": 0.9322097184490792,
+            "inference_ms": 81.51705932617188
+          },
+          {
+            "scene_index": 10,
+            "D_lambda": 0.04219512246327256,
+            "D_s": 0.04719023260427321,
+            "QNR": 0.9126058425762618,
+            "inference_ms": 85.58544158935547
+          },
+          {
+            "scene_index": 11,
+            "D_lambda": 0.035796412054936444,
+            "D_s": 0.048280379779610166,
+            "QNR": 0.9176514725342131,
+            "inference_ms": 92.74332427978516
+          },
+          {
+            "scene_index": 12,
+            "D_lambda": 0.03753158424023869,
+            "D_s": 0.05117435161188874,
+            "QNR": 0.9132147186363337,
+            "inference_ms": 84.74224090576172
+          },
+          {
+            "scene_index": 13,
+            "D_lambda": 0.036650529648415364,
+            "D_s": 0.05289105844616185,
+            "QNR": 0.9123968972111399,
+            "inference_ms": 85.80204772949219
+          },
+          {
+            "scene_index": 14,
+            "D_lambda": 0.03418908704394443,
+            "D_s": 0.050285991414544956,
+            "QNR": 0.9172441536790735,
+            "inference_ms": 82.3562240600586
+          },
+          {
+            "scene_index": 15,
+            "D_lambda": 0.0612905183691776,
+            "D_s": 0.0393131096221947,
+            "QNR": 0.9018058928760763,
+            "inference_ms": 81.20646667480469
+          },
+          {
+            "scene_index": 16,
+            "D_lambda": 0.05581849317653706,
+            "D_s": 0.0511919892005428,
+            "QNR": 0.8958469773228039,
+            "inference_ms": 82.83548736572266
+          },
+          {
+            "scene_index": 17,
+            "D_lambda": 0.06635351578793468,
+            "D_s": 0.04608331775378152,
+            "QNR": 0.8906209566104197,
+            "inference_ms": 81.75411224365234
+          },
+          {
+            "scene_index": 18,
+            "D_lambda": 0.0726212957401929,
+            "D_s": 0.036475308759883904,
+            "QNR": 0.8935522796845895,
+            "inference_ms": 80.28352355957031
+          },
+          {
+            "scene_index": 19,
+            "D_lambda": 0.06428268684995227,
+            "D_s": 0.03906746361392788,
+            "QNR": 0.8991612110656358,
+            "inference_ms": 80.13868713378906
+          }
+        ],
+        "mean": {
+          "D_lambda": 0.05357653163320425,
+          "D_s": 0.045632962993197954,
+          "QNR": 0.9032973349298734,
+          "inference_ms": 84.03543510437012
+        },
+        "seconds": 9.529579422000097
+      }
+    },
+    "images": [
+      {
+        "scene_index": 1,
+        "file": "RR_scene_01.png",
+        "display": {
+          "lo": [
+            40.0,
+            112.0,
+            112.0
+          ],
+          "hi": [
+            302.0,
+            408.0,
+            267.0
+          ],
+          "pan_lo_hi": [
+            58.11653385162354,
+            339.7254440307619
+          ]
+        }
+      },
+      {
+        "scene_index": 8,
+        "file": "RR_scene_08.png",
+        "display": {
+          "lo": [
+            28.0,
+            94.0,
+            100.0
+          ],
+          "hi": [
+            774.0,
+            1019.0,
+            637.6500000000015
+          ],
+          "pan_lo_hi": [
+            68.61924476623535,
+            773.4201080322266
+          ]
+        }
+      },
+      {
+        "scene_index": 11,
+        "file": "RR_scene_11.png",
+        "display": {
+          "lo": [
+            30.0,
+            94.0,
+            99.0
+          ],
+          "hi": [
+            905.0,
+            1183.0,
+            734.0
+          ],
+          "pan_lo_hi": [
+            69.85092391967774,
+            905.0090270996099
+          ]
+        }
+      },
+      {
+        "scene_index": 13,
+        "file": "RR_scene_13.png",
+        "display": {
+          "lo": [
+            30.0,
+            98.0,
+            102.0
+          ],
+          "hi": [
+            682.0,
+            908.0,
+            573.6500000000015
+          ],
+          "pan_lo_hi": [
+            71.55320205688477,
+            690.091397094727
+          ]
+        }
+      },
+      {
+        "scene_index": 19,
+        "file": "RR_scene_19.png",
+        "display": {
+          "lo": [
+            25.0,
+            89.0,
+            95.0
+          ],
+          "hi": [
+            649.0,
+            855.9500000000044,
+            543.6500000000015
+          ],
+          "pan_lo_hi": [
+            64.01956481933594,
+            647.7097290039065
+          ]
+        }
+      }
+    ],
+    "test_precision": "FP32",
+    "full_scene": true,
+    "delta_from_same_seed_B0": {
+      "RR": {
+        "SAM": 0.0,
+        "ERGAS": 0.0,
+        "PSNR": 0.0,
+        "SCC": 0.0,
+        "Q2n": 0.0,
+        "MSE_peak1": 0.0,
+        "PSNR_sensor_peak": 0.0,
+        "inference_ms": 0.0
+      },
+      "FR": {
+        "D_lambda": 0.0,
+        "D_s": 0.0,
+        "QNR": 0.0,
+        "inference_ms": 0.0
+      }
+    }
+  },
+  "B0_DS_QB_B0_DS_k4_s42": {
+    "config": {
+      "sensor": "QB",
+      "k": 4,
+      "channels": 4,
+      "mode": "B0_DS",
+      "controlled": true,
+      "epochs": 200,
+      "seed": 42,
+      "variant": "B0_DS",
+      "hold_lr_epochs": 100,
+      "min_lr": 1e-06,
+      "status_seconds": 15,
+      "checkpoint_seconds": 60,
+      "fused_adam": true,
+      "batch_size": 32,
+      "lr": 0.0001,
+      "micro_batch": 32,
+      "auto_micro": false,
+      "eval_batch": 32,
+      "amp": true,
+      "torch": "2.11.0+cu128",
+      "cuda": "12.8",
+      "channels_last": true,
+      "gpu_cache": true,
+      "workers": 0,
+      "scale": 2047.0,
+      "save_predictions": true,
+      "data": {
+        "train": {
+          "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+          "bytes": 5194901672,
+          "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+          "shapes": {
+            "pan": [
+              17139,
+              1,
+              64,
+              64
+            ],
+            "lms": [
+              17139,
+              4,
+              64,
+              64
+            ],
+            "ms": [
+              17139,
+              4,
+              16,
+              16
+            ],
+            "gt": [
+              17139,
+              4,
+              64,
+              64
+            ]
+          },
+          "ranges": {
+            "pan": {
+              "raw_min": 0.0,
+              "raw_max": 1917.2325893393565,
+              "normalized_min": 0.0,
+              "normalized_max": 0.9366060524373994
+            },
+            "lms": {
+              "raw_min": -99.9723020204939,
+              "raw_max": 1659.9496147035165,
+              "normalized_min": -0.04883844749413478,
+              "normalized_max": 0.8109182289709411
+            },
+            "ms": {
+              "raw_min": -9.118218560999747e-09,
+              "raw_max": 1510.233314226248,
+              "normalized_min": -4.454430171470321e-12,
+              "normalized_max": 0.7377788540431109
+            },
+            "gt": {
+              "raw_min": 0.0,
+              "raw_max": 2047.0,
+              "normalized_min": 0.0,
+              "normalized_max": 1.0
+            }
+          }
+        },
+        "val": {
+          "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5",
+          "bytes": 577415336,
+          "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+          "shapes": {
+            "pan": [
+              1905,
+              1,
+              64,
+              64
+            ],
+            "lms": [
+              1905,
+              4,
+              64,
+              64
+            ],
+            "ms": [
+              1905,
+              4,
+              16,
+              16
+            ],
+            "gt": [
+              1905,
+              4,
+              64,
+              64
+            ]
+          },
+          "ranges": {
+            "pan": {
+              "raw_min": 0.0,
+              "raw_max": 1889.794570125629,
+              "normalized_min": 0.0,
+              "normalized_max": 0.923202037188876
+            },
+            "lms": {
+              "raw_min": -96.95726876989049,
+              "raw_max": 1636.7507041336712,
+              "normalized_min": -0.0473655440986275,
+              "normalized_max": 0.7995851021659361
+            },
+            "ms": {
+              "raw_min": -7.351043832579706e-09,
+              "raw_max": 1509.9582513913758,
+              "normalized_min": -3.5911303529944827e-12,
+              "normalized_max": 0.7376444804061435
+            },
+            "gt": {
+              "raw_min": 0.0,
+              "raw_max": 2047.0,
+              "normalized_min": 0.0,
+              "normalized_max": 1.0
+            }
+          }
+        },
+        "RR": {
+          "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+          "bytes": 96997376,
+          "sha256": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+          "shapes": {
+            "pan": [
+              20,
+              1,
+              256,
+              256
+            ],
+            "lms": [
+              20,
+              4,
+              256,
+              256
+            ],
+            "ms": [
+              20,
+              4,
+              64,
+              64
+            ],
+            "gt": [
+              20,
+              4,
+              256,
+              256
+            ]
+          },
+          "ranges": {
+            "pan": {
+              "raw_min": 54.040407419612485,
+              "raw_max": 1878.973613985974,
+              "normalized_min": 0.026399808216713477,
+              "normalized_max": 0.9179157860214822
+            },
+            "lms": {
+              "raw_min": -42.168352894326034,
+              "raw_max": 1487.4173129416745,
+              "normalized_min": -0.02060007469190329,
+              "normalized_max": 0.7266327859998409
+            },
+            "ms": {
+              "raw_min": 24.025781397001143,
+              "raw_max": 1390.1010748662075,
+              "normalized_min": 0.011737069563752391,
+              "normalized_max": 0.6790918782932133
+            },
+            "gt": {
+              "raw_min": 1.0,
+              "raw_max": 2047.0,
+              "normalized_min": 0.0004885197850512946,
+              "normalized_max": 1.0
+            }
+          }
+        },
+        "FR": {
+          "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5",
+          "bytes": 220202744,
+          "sha256": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f",
+          "shapes": {
+            "pan": [
+              20,
+              1,
+              512,
+              512
+            ],
+            "lms": [
+              20,
+              4,
+              512,
+              512
+            ],
+            "ms": [
+              20,
+              4,
+              128,
+              128
+            ]
+          },
+          "ranges": {
+            "pan": {
+              "raw_min": 1.0,
+              "raw_max": 2047.0,
+              "normalized_min": 0.0004885197850512946,
+              "normalized_max": 1.0
+            },
+            "lms": {
+              "raw_min": -206.99482859539307,
+              "raw_max": 2319.8881522010593,
+              "normalized_min": -0.10112106917215098,
+              "normalized_max": 1.1333112614563063
+            },
+            "ms": {
+              "raw_min": 1.0,
+              "raw_max": 2047.0,
+              "normalized_min": 0.0004885197850512946,
+              "normalized_max": 1.0
+            }
+          }
+        }
+      },
+      "cache": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/_unused_cache",
+      "source": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/code/CtrS",
+      "run_dir": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/runs/B0_DS_QB_B0_DS_k4_s42",
+      "selection": {
+        "seed": 42,
+        "protocol": "RR",
+        "tiles": "full scene",
+        "zero_based_scene_indices": [
+          1,
+          8,
+          11,
+          13,
+          19
+        ],
+        "order": "ascending scene index",
+        "rgb_assumed_bands_zero_based": [
+          2,
+          1,
+          0
+        ],
+        "rule": "fixed before training and test scoring"
+      },
+      "repo_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56",
+      "plan_commit": null,
+      "B0_DS_source": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/code/B0_DS_models.py",
+      "B0_DS_source_sha256": "f09b905ba891732d3177afba19737db2e59757f5f4c69d8f56c1783c55908a38",
+      "upstream_commit": "a4ca40e407b12bf4c30f804384405ce321d11c51",
+      "worker_sha256": "024b01e1eb4d6d0c8607dd4ce6fa92ef0edc4afa42b47c8329e2e148de51fc21",
+      "gt_target_profile": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/gt_target_spec.json",
+      "gt_target_profile_sha256": "b441c69b09ad90de68d0a3fc0043da8f896f9951cd30dd62197457eb0c497844",
+      "model_definition": "single original core; identical three training-only heads; loss-only contrast",
+      "aux_weights": {
+        "quarter": 0.005,
+        "half": 0.005,
+        "full": 0.001
+      },
+      "candidate_aux_weights": {
+        "quarter": 0.005,
+        "half": 0.005,
+        "full": 0.001
+      },
+      "numerics": "Controlled: equal AMP/layout/micro batch, deterministic kernels, no TF32; not legacy bitwise parity",
+      "reference_plan_config": {
+        "variant": "B0_DS",
+        "seed": 42,
+        "core_passes": 1,
+        "head_sites": [
+          "conv2ctc1",
+          "conv2ctc2",
+          "conv2ctc3"
+        ],
+        "loss": "final MSE + weighted mean auxiliary L1",
+        "final_output": "original conv2ctc3 output; auxiliary heads training only",
+        "target_spec": {
+          "source": "normalized GT only; never observed LRMS or Haar LL",
+          "ratios": {
+            "quarter": 4,
+            "half": 2,
+            "full": 1
+          },
+          "filter": "separable positive unit-sum binomial FIR",
+          "binomial_orders": {
+            "quarter": 16,
+            "half": 4
+          },
+          "coefficients": {
+            "quarter": [
+              1.52587890625e-05,
+              0.000244140625,
+              0.0018310546875,
+              0.008544921875,
+              0.02777099609375,
+              0.066650390625,
+              0.1221923828125,
+              0.174560546875,
+              0.196380615234375,
+              0.174560546875,
+              0.1221923828125,
+              0.066650390625,
+              0.02777099609375,
+              0.008544921875,
+              0.0018310546875,
+              0.000244140625,
+              1.52587890625e-05
+            ],
+            "half": [
+              0.0625,
+              0.25,
+              0.375,
+              0.25,
+              0.0625
+            ]
+          },
+          "boundary": "replicate on both axes",
+          "coordinates": "j*(N-1)/(M-1), M=N/ratio; bilinear align_corners=True",
+          "full": "identity",
+          "precision": "FP32",
+          "interpretation": "explicit synthetic GT targets, not a calibrated sensor MTF"
+        },
+        "aux_weights": {
+          "quarter": 0.005,
+          "half": 0.005,
+          "full": 0.001
+        }
+      }
+    },
+    "best_epoch": 199,
+    "best_mse": 0.0001646126329433173,
+    "checkpoints": {
+      "best": {
+        "sha256": "d8e4412dfcd88d6af6a649223a661b3b1a4b83607da7858cf0a29be4de74f9ee",
+        "bytes": 5615833,
+        "epoch": 199,
+        "original_path": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/runs/B0_DS_QB_B0_DS_k4_s42/best.pt"
+      },
+      "latest": {
+        "sha256": "55161744126a5c648c16ed8b92b7733119733a396efede76fcbd966231d01ebb",
+        "bytes": 13776587,
+        "epoch": 200,
+        "original_path": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/runs/B0_DS_QB_B0_DS_k4_s42/latest.pt"
+      }
+    },
+    "metrics": {
+      "RR": {
+        "count": 20,
+        "rows": [
+          {
+            "scene_index": 0,
+            "SAM": 2.7363128315832417,
+            "ERGAS": 4.2469547223989546,
+            "PSNR": 41.954243748911914,
+            "SCC": 0.9553921970606336,
+            "Q2n": 0.6065797257284307,
+            "MSE_peak1": 6.973739303668612e-05,
+            "PSNR_sensor_peak": 41.954243748911914,
+            "inference_ms": 17.47235107421875
+          },
+          {
+            "scene_index": 1,
+            "SAM": 3.116927640713666,
+            "ERGAS": 3.826845741817518,
+            "PSNR": 42.595548553589325,
+            "SCC": 0.9536698154451682,
+            "Q2n": 0.6655352678969346,
+            "MSE_peak1": 6.223493339271495e-05,
+            "PSNR_sensor_peak": 42.595548553589325,
+            "inference_ms": 16.15667152404785
+          },
+          {
+            "scene_index": 2,
+            "SAM": 4.292832714417184,
+            "ERGAS": 3.941141561582979,
+            "PSNR": 36.057184090027995,
+            "SCC": 0.9804033627154636,
+            "Q2n": 0.9609987565483222,
+            "MSE_peak1": 0.0002708703226421559,
+            "PSNR_sensor_peak": 36.057184090027995,
+            "inference_ms": 16.349536895751953
+          },
+          {
+            "scene_index": 3,
+            "SAM": 4.002155705761124,
+            "ERGAS": 3.673583816426872,
+            "PSNR": 36.69287139198614,
+            "SCC": 0.9732114754975789,
+            "Q2n": 0.9507823252210859,
+            "MSE_peak1": 0.0002353484223953202,
+            "PSNR_sensor_peak": 36.69287139198614,
+            "inference_ms": 16.168928146362305
+          },
+          {
+            "scene_index": 4,
+            "SAM": 4.812930763929648,
+            "ERGAS": 3.991623110088739,
+            "PSNR": 37.206806260762164,
+            "SCC": 0.9833519638988122,
+            "Q2n": 0.9653400550037865,
+            "MSE_peak1": 0.0002075555797021603,
+            "PSNR_sensor_peak": 37.206806260762164,
+            "inference_ms": 16.157024383544922
+          },
+          {
+            "scene_index": 5,
+            "SAM": 4.772801218313119,
+            "ERGAS": 3.984530835036329,
+            "PSNR": 36.37940840130177,
+            "SCC": 0.9831996861795413,
+            "Q2n": 0.9652519927696237,
+            "MSE_peak1": 0.000249103922060505,
+            "PSNR_sensor_peak": 36.37940840130177,
+            "inference_ms": 16.2043514251709
+          },
+          {
+            "scene_index": 6,
+            "SAM": 4.887448625553232,
+            "ERGAS": 3.956092738346631,
+            "PSNR": 36.71785101501025,
+            "SCC": 0.9854617101420848,
+            "Q2n": 0.9692154925492572,
+            "MSE_peak1": 0.0002288803383442481,
+            "PSNR_sensor_peak": 36.71785101501025,
+            "inference_ms": 24.065120697021484
+          },
+          {
+            "scene_index": 7,
+            "SAM": 4.897154545993532,
+            "ERGAS": 4.117639449134013,
+            "PSNR": 38.96837071113269,
+            "SCC": 0.9821652400841693,
+            "Q2n": 0.9281723008462739,
+            "MSE_peak1": 0.00014682340439958,
+            "PSNR_sensor_peak": 38.96837071113269,
+            "inference_ms": 25.274688720703125
+          },
+          {
+            "scene_index": 8,
+            "SAM": 5.217692657838015,
+            "ERGAS": 3.970892638230178,
+            "PSNR": 37.01484206961519,
+            "SCC": 0.9836259961236423,
+            "Q2n": 0.9675285958884298,
+            "MSE_peak1": 0.00022143199072880587,
+            "PSNR_sensor_peak": 37.01484206961519,
+            "inference_ms": 26.10860824584961
+          },
+          {
+            "scene_index": 9,
+            "SAM": 4.760673334331665,
+            "ERGAS": 3.713544888507793,
+            "PSNR": 36.5320395226918,
+            "SCC": 0.983994799401626,
+            "Q2n": 0.9653645724401005,
+            "MSE_peak1": 0.0002406499217177875,
+            "PSNR_sensor_peak": 36.5320395226918,
+            "inference_ms": 27.847232818603516
+          },
+          {
+            "scene_index": 10,
+            "SAM": 5.53800906737739,
+            "ERGAS": 4.287680684151305,
+            "PSNR": 36.39200059035913,
+            "SCC": 0.9812532320502986,
+            "Q2n": 0.9575603023892809,
+            "MSE_peak1": 0.00025666749587617614,
+            "PSNR_sensor_peak": 36.39200059035913,
+            "inference_ms": 27.45961570739746
+          },
+          {
+            "scene_index": 11,
+            "SAM": 5.126528769872499,
+            "ERGAS": 4.002997841667464,
+            "PSNR": 36.15227674715062,
+            "SCC": 0.9835463492300475,
+            "Q2n": 0.9696305851425226,
+            "MSE_peak1": 0.00026547037775903186,
+            "PSNR_sensor_peak": 36.15227674715062,
+            "inference_ms": 27.662336349487305
+          },
+          {
+            "scene_index": 12,
+            "SAM": 5.192525009533154,
+            "ERGAS": 4.038626063764319,
+            "PSNR": 37.85468031881118,
+            "SCC": 0.982633457323304,
+            "Q2n": 0.9659136368117832,
+            "MSE_peak1": 0.00018240447146081602,
+            "PSNR_sensor_peak": 37.85468031881118,
+            "inference_ms": 27.72172737121582
+          },
+          {
+            "scene_index": 13,
+            "SAM": 5.394519649153286,
+            "ERGAS": 3.9941399115802834,
+            "PSNR": 37.21668947579499,
+            "SCC": 0.9804410882686608,
+            "Q2n": 0.962956676770977,
+            "MSE_peak1": 0.00021375242450362347,
+            "PSNR_sensor_peak": 37.21668947579499,
+            "inference_ms": 27.54159927368164
+          },
+          {
+            "scene_index": 14,
+            "SAM": 4.974713088007616,
+            "ERGAS": 3.8492800893172063,
+            "PSNR": 37.80528477694155,
+            "SCC": 0.9778996325720386,
+            "Q2n": 0.9445584790026864,
+            "MSE_peak1": 0.00018852673132998675,
+            "PSNR_sensor_peak": 37.80528477694155,
+            "inference_ms": 27.516096115112305
+          },
+          {
+            "scene_index": 15,
+            "SAM": 5.498437044070287,
+            "ERGAS": 4.327671937214187,
+            "PSNR": 37.13851446903133,
+            "SCC": 0.9782743244711256,
+            "Q2n": 0.9594047366646181,
+            "MSE_peak1": 0.00021983108149521423,
+            "PSNR_sensor_peak": 37.13851446903133,
+            "inference_ms": 28.001855850219727
+          },
+          {
+            "scene_index": 16,
+            "SAM": 5.5035143633575005,
+            "ERGAS": 4.152166599278005,
+            "PSNR": 37.01560887022551,
+            "SCC": 0.9791682269153014,
+            "Q2n": 0.9603878926651205,
+            "MSE_peak1": 0.00022259860939837834,
+            "PSNR_sensor_peak": 37.01560887022551,
+            "inference_ms": 28.081695556640625
+          },
+          {
+            "scene_index": 17,
+            "SAM": 4.641502864694657,
+            "ERGAS": 3.749836383368002,
+            "PSNR": 38.906284964353,
+            "SCC": 0.9761398866504717,
+            "Q2n": 0.9286366357034838,
+            "MSE_peak1": 0.00015265161556794377,
+            "PSNR_sensor_peak": 38.906284964353,
+            "inference_ms": 27.568159103393555
+          },
+          {
+            "scene_index": 18,
+            "SAM": 5.956560071886738,
+            "ERGAS": 4.490888455131764,
+            "PSNR": 36.17019973093849,
+            "SCC": 0.9744854362554091,
+            "Q2n": 0.9503125955628688,
+            "MSE_peak1": 0.0002730748220548795,
+            "PSNR_sensor_peak": 36.17019973093849,
+            "inference_ms": 27.602624893188477
+          },
+          {
+            "scene_index": 19,
+            "SAM": 5.895692612904889,
+            "ERGAS": 4.5526845898624,
+            "PSNR": 36.96361399638364,
+            "SCC": 0.9809555182450969,
+            "Q2n": 0.9580127246426151,
+            "MSE_peak1": 0.00022815932990226026,
+            "PSNR_sensor_peak": 36.96361399638364,
+            "inference_ms": 27.426816940307617
+          }
+        ],
+        "mean": {
+          "SAM": 4.860946628964622,
+          "ERGAS": 4.0434411028452475,
+          "PSNR": 37.58671598525093,
+          "SCC": 0.9779636699265237,
+          "Q2n": 0.9251071675124102,
+          "MSE_peak1": 0.00020678865938841368,
+          "PSNR_sensor_peak": 37.58671598525093,
+          "inference_ms": 23.919352054595947
+        },
+        "seconds": 4.178686834002292
+      },
+      "FR": {
+        "count": 20,
+        "rows": [
+          {
+            "scene_index": 0,
+            "D_lambda": 0.13103663293161003,
+            "D_s": 0.09887079397791183,
+            "QNR": 0.7830482690286186,
+            "inference_ms": 92.96578979492188
+          },
+          {
+            "scene_index": 1,
+            "D_lambda": 0.033261484091146064,
+            "D_s": 0.03922328517047877,
+            "QNR": 0.9288198554140755,
+            "inference_ms": 92.79376220703125
+          },
+          {
+            "scene_index": 2,
+            "D_lambda": 0.03940181940988596,
+            "D_s": 0.04116458435562664,
+            "QNR": 0.9210555557533509,
+            "inference_ms": 84.44723510742188
+          },
+          {
+            "scene_index": 3,
+            "D_lambda": 0.05337742807996703,
+            "D_s": 0.03553057864477552,
+            "QNR": 0.9129885241815086,
+            "inference_ms": 82.39923095703125
+          },
+          {
+            "scene_index": 4,
+            "D_lambda": 0.06492772150254843,
+            "D_s": 0.03472158153378094,
+            "QNR": 0.902605090139624,
+            "inference_ms": 82.16780853271484
+          },
+          {
+            "scene_index": 5,
+            "D_lambda": 0.02539035075932931,
+            "D_s": 0.036811789971902265,
+            "QNR": 0.9387325235282338,
+            "inference_ms": 81.29888153076172
+          },
+          {
+            "scene_index": 6,
+            "D_lambda": 0.02485597843514566,
+            "D_s": 0.044559598157828256,
+            "QNR": 0.9316919958179158,
+            "inference_ms": 80.06253051757812
+          },
+          {
+            "scene_index": 7,
+            "D_lambda": 0.052355350888822705,
+            "D_s": 0.036897593454985944,
+            "QNR": 0.9126788421084803,
+            "inference_ms": 80.20553588867188
+          },
+          {
+            "scene_index": 8,
+            "D_lambda": 0.05638811986462236,
+            "D_s": 0.04836143239423152,
+            "QNR": 0.8979774579878169,
+            "inference_ms": 80.19149017333984
+          },
+          {
+            "scene_index": 9,
+            "D_lambda": 0.014671144416424605,
+            "D_s": 0.03885935982914954,
+            "QNR": 0.9470396070344091,
+            "inference_ms": 81.15782165527344
+          },
+          {
+            "scene_index": 10,
+            "D_lambda": 0.03225646882530958,
+            "D_s": 0.03905217110781639,
+            "QNR": 0.929951045206774,
+            "inference_ms": 92.84009552001953
+          },
+          {
+            "scene_index": 11,
+            "D_lambda": 0.027918280516057842,
+            "D_s": 0.04112999257300934,
+            "QNR": 0.9321000055812095,
+            "inference_ms": 84.2778549194336
+          },
+          {
+            "scene_index": 12,
+            "D_lambda": 0.028874077227535416,
+            "D_s": 0.04445565834809059,
+            "QNR": 0.9279538805367177,
+            "inference_ms": 82.24797058105469
+          },
+          {
+            "scene_index": 13,
+            "D_lambda": 0.027652427230665595,
+            "D_s": 0.0439944162067504,
+            "QNR": 0.9295697089552968,
+            "inference_ms": 82.23632049560547
+          },
+          {
+            "scene_index": 14,
+            "D_lambda": 0.02538104115444016,
+            "D_s": 0.04304428618176792,
+            "QNR": 0.9326671814628349,
+            "inference_ms": 81.14790344238281
+          },
+          {
+            "scene_index": 15,
+            "D_lambda": 0.048940437409058686,
+            "D_s": 0.03853569014658542,
+            "QNR": 0.9144098259759897,
+            "inference_ms": 80.0072021484375
+          },
+          {
+            "scene_index": 16,
+            "D_lambda": 0.046433704129260615,
+            "D_s": 0.040273130430290544,
+            "QNR": 0.9151631960632081,
+            "inference_ms": 79.94982147216797
+          },
+          {
+            "scene_index": 17,
+            "D_lambda": 0.056785788216048454,
+            "D_s": 0.03807340306782628,
+            "QNR": 0.9073028369193992,
+            "inference_ms": 80.17021179199219
+          },
+          {
+            "scene_index": 18,
+            "D_lambda": 0.06653710578335942,
+            "D_s": 0.03799656865315797,
+            "QNR": 0.8979945072713624,
+            "inference_ms": 80.21443176269531
+          },
+          {
+            "scene_index": 19,
+            "D_lambda": 0.057469792688933284,
+            "D_s": 0.040034078386219724,
+            "QNR": 0.9047968791101956,
+            "inference_ms": 84.56845092773438
+          }
+        ],
+        "mean": {
+          "D_lambda": 0.045695757678008556,
+          "D_s": 0.04307949962960929,
+          "QNR": 0.9134273394038512,
+          "inference_ms": 83.26751747131348
+        },
+        "seconds": 9.291778426002566
+      }
+    },
+    "images": [
+      {
+        "scene_index": 1,
+        "file": "RR_scene_01.png",
+        "display": {
+          "lo": [
+            40.0,
+            112.0,
+            112.0
+          ],
+          "hi": [
+            302.0,
+            408.0,
+            267.0
+          ],
+          "pan_lo_hi": [
+            58.11653385162354,
+            339.7254440307619
+          ]
+        }
+      },
+      {
+        "scene_index": 8,
+        "file": "RR_scene_08.png",
+        "display": {
+          "lo": [
+            28.0,
+            94.0,
+            100.0
+          ],
+          "hi": [
+            774.0,
+            1019.0,
+            637.6500000000015
+          ],
+          "pan_lo_hi": [
+            68.61924476623535,
+            773.4201080322266
+          ]
+        }
+      },
+      {
+        "scene_index": 11,
+        "file": "RR_scene_11.png",
+        "display": {
+          "lo": [
+            30.0,
+            94.0,
+            99.0
+          ],
+          "hi": [
+            905.0,
+            1183.0,
+            734.0
+          ],
+          "pan_lo_hi": [
+            69.85092391967774,
+            905.0090270996099
+          ]
+        }
+      },
+      {
+        "scene_index": 13,
+        "file": "RR_scene_13.png",
+        "display": {
+          "lo": [
+            30.0,
+            98.0,
+            102.0
+          ],
+          "hi": [
+            682.0,
+            908.0,
+            573.6500000000015
+          ],
+          "pan_lo_hi": [
+            71.55320205688477,
+            690.091397094727
+          ]
+        }
+      },
+      {
+        "scene_index": 19,
+        "file": "RR_scene_19.png",
+        "display": {
+          "lo": [
+            25.0,
+            89.0,
+            95.0
+          ],
+          "hi": [
+            649.0,
+            855.9500000000044,
+            543.6500000000015
+          ],
+          "pan_lo_hi": [
+            64.01956481933594,
+            647.7097290039065
+          ]
+        }
+      }
+    ],
+    "test_precision": "FP32",
+    "full_scene": true,
+    "delta_from_same_seed_B0": {
+      "RR": {
+        "SAM": 0.02640726223024803,
+        "ERGAS": 0.018742796372435144,
+        "PSNR": -0.0425137263596298,
+        "SCC": -0.00018176009519477176,
+        "Q2n": -0.000791164893716223,
+        "MSE_peak1": 1.6735583537457756e-06,
+        "PSNR_sensor_peak": -0.0425137263596298,
+        "inference_ms": -1.6589327812194838
+      },
+      "FR": {
+        "D_lambda": -0.007880773955195694,
+        "D_s": -0.002553463363588665,
+        "QNR": 0.010130004473977827,
+        "inference_ms": -0.7679176330566406
+      }
+    }
+  }
+}

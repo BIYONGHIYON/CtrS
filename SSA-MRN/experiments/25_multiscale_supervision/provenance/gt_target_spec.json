@@ -1,0 +1,44 @@
+{
+  "source": "GT only, never observed MS or wavelet LL",
+  "filter": "separable normalized binomial FIR; replicate boundary; FP32",
+  "orders": {
+    "quarter": 16,
+    "half": 4
+  },
+  "coefficients": {
+    "quarter": [
+      1.52587890625e-05,
+      0.000244140625,
+      0.0018310546875,
+      0.008544921875,
+      0.02777099609375,
+      0.066650390625,
+      0.1221923828125,
+      0.174560546875,
+      0.196380615234375,
+      0.174560546875,
+      0.1221923828125,
+      0.066650390625,
+      0.02777099609375,
+      0.008544921875,
+      0.0018310546875,
+      0.000244140625,
+      1.52587890625e-05
+    ],
+    "half": [
+      0.0625,
+      0.25,
+      0.375,
+      0.25,
+      0.0625
+    ]
+  },
+  "coordinates": "j*(N-1)/(M-1); M=N/ratio; bilinear align_corners=True",
+  "full": "identity",
+  "aux_weights": {
+    "quarter": 0.005,
+    "half": 0.005,
+    "full": 0.001
+  },
+  "physical_status": "synthetic GT supervision, not a calibrated sensor model"
+}

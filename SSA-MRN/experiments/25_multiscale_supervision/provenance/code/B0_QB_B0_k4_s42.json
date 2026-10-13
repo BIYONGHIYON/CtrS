@@ -1,0 +1,288 @@
+{
+  "sensor": "QB",
+  "k": 4,
+  "channels": 4,
+  "mode": "B0",
+  "controlled": true,
+  "epochs": 200,
+  "seed": 42,
+  "variant": "B0",
+  "hold_lr_epochs": 100,
+  "min_lr": 1e-06,
+  "status_seconds": 15,
+  "checkpoint_seconds": 60,
+  "fused_adam": true,
+  "batch_size": 32,
+  "lr": 0.0001,
+  "micro_batch": 32,
+  "auto_micro": false,
+  "eval_batch": 32,
+  "amp": true,
+  "torch": "2.11.0+cu128",
+  "cuda": "12.8",
+  "channels_last": true,
+  "gpu_cache": true,
+  "workers": 0,
+  "scale": 2047.0,
+  "save_predictions": true,
+  "data": {
+    "train": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+      "bytes": 5194901672,
+      "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "shapes": {
+        "pan": [
+          17139,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          17139,
+          4,
+          64,
+          64
+        ],
+        "ms": [
+          17139,
+          4,
+          16,
+          16
+        ],
+        "gt": [
+          17139,
+          4,
+          64,
+          64
+        ]
+      },
+      "ranges": {
+        "pan": {
+          "raw_min": 0.0,
+          "raw_max": 1917.2325893393565,
+          "normalized_min": 0.0,
+          "normalized_max": 0.9366060524373994
+        },
+        "lms": {
+          "raw_min": -99.9723020204939,
+          "raw_max": 1659.9496147035165,
+          "normalized_min": -0.04883844749413478,
+          "normalized_max": 0.8109182289709411
+        },
+        "ms": {
+          "raw_min": -9.118218560999747e-09,
+          "raw_max": 1510.233314226248,
+          "normalized_min": -4.454430171470321e-12,
+          "normalized_max": 0.7377788540431109
+        },
+        "gt": {
+          "raw_min": 0.0,
+          "raw_max": 2047.0,
+          "normalized_min": 0.0,
+          "normalized_max": 1.0
+        }
+      }
+    },
+    "val": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5",
+      "bytes": 577415336,
+      "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "shapes": {
+        "pan": [
+          1905,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          1905,
+          4,
+          64,
+          64
+        ],
+        "ms": [
+          1905,
+          4,
+          16,
+          16
+        ],
+        "gt": [
+          1905,
+          4,
+          64,
+          64
+        ]
+      },
+      "ranges": {
+        "pan": {
+          "raw_min": 0.0,
+          "raw_max": 1889.794570125629,
+          "normalized_min": 0.0,
+          "normalized_max": 0.923202037188876
+        },
+        "lms": {
+          "raw_min": -96.95726876989049,
+          "raw_max": 1636.7507041336712,
+          "normalized_min": -0.0473655440986275,
+          "normalized_max": 0.7995851021659361
+        },
+        "ms": {
+          "raw_min": -7.351043832579706e-09,
+          "raw_max": 1509.9582513913758,
+          "normalized_min": -3.5911303529944827e-12,
+          "normalized_max": 0.7376444804061435
+        },
+        "gt": {
+          "raw_min": 0.0,
+          "raw_max": 2047.0,
+          "normalized_min": 0.0,
+          "normalized_max": 1.0
+        }
+      }
+    },
+    "RR": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+      "bytes": 96997376,
+      "sha256": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "shapes": {
+        "pan": [
+          20,
+          1,
+          256,
+          256
+        ],
+        "lms": [
+          20,
+          4,
+          256,
+          256
+        ],
+        "ms": [
+          20,
+          4,
+          64,
+          64
+        ],
+        "gt": [
+          20,
+          4,
+          256,
+          256
+        ]
+      },
+      "ranges": {
+        "pan": {
+          "raw_min": 54.040407419612485,
+          "raw_max": 1878.973613985974,
+          "normalized_min": 0.026399808216713477,
+          "normalized_max": 0.9179157860214822
+        },
+        "lms": {
+          "raw_min": -42.168352894326034,
+          "raw_max": 1487.4173129416745,
+          "normalized_min": -0.02060007469190329,
+          "normalized_max": 0.7266327859998409
+        },
+        "ms": {
+          "raw_min": 24.025781397001143,
+          "raw_max": 1390.1010748662075,
+          "normalized_min": 0.011737069563752391,
+          "normalized_max": 0.6790918782932133
+        },
+        "gt": {
+          "raw_min": 1.0,
+          "raw_max": 2047.0,
+          "normalized_min": 0.0004885197850512946,
+          "normalized_max": 1.0
+        }
+      }
+    },
+    "FR": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5",
+      "bytes": 220202744,
+      "sha256": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f",
+      "shapes": {
+        "pan": [
+          20,
+          1,
+          512,
+          512
+        ],
+        "lms": [
+          20,
+          4,
+          512,
+          512
+        ],
+        "ms": [
+          20,
+          4,
+          128,
+          128
+        ]
+      },
+      "ranges": {
+        "pan": {
+          "raw_min": 1.0,
+          "raw_max": 2047.0,
+          "normalized_min": 0.0004885197850512946,
+          "normalized_max": 1.0
+        },
+        "lms": {
+          "raw_min": -206.99482859539307,
+          "raw_max": 2319.8881522010593,
+          "normalized_min": -0.10112106917215098,
+          "normalized_max": 1.1333112614563063
+        },
+        "ms": {
+          "raw_min": 1.0,
+          "raw_max": 2047.0,
+          "normalized_min": 0.0004885197850512946,
+          "normalized_max": 1.0
+        }
+      }
+    }
+  },
+  "cache": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/_unused_cache",
+  "source": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/code/CtrS",
+  "run_dir": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/runs/B0_QB_B0_k4_s42",
+  "selection": {
+    "seed": 42,
+    "protocol": "RR",
+    "tiles": "full scene",
+    "zero_based_scene_indices": [
+      1,
+      8,
+      11,
+      13,
+      19
+    ],
+    "order": "ascending scene index",
+    "rgb_assumed_bands_zero_based": [
+      2,
+      1,
+      0
+    ],
+    "rule": "fixed before training and test scoring"
+  },
+  "repo_commit": "be02b7cbf03fe00681194ae9fc9419661f24cd56",
+  "plan_commit": null,
+  "B0_DS_source": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/code/B0_DS_models.py",
+  "B0_DS_source_sha256": "f09b905ba891732d3177afba19737db2e59757f5f4c69d8f56c1783c55908a38",
+  "upstream_commit": "a4ca40e407b12bf4c30f804384405ce321d11c51",
+  "worker_sha256": "024b01e1eb4d6d0c8607dd4ce6fa92ef0edc4afa42b47c8329e2e148de51fc21",
+  "gt_target_profile": "/kaggle/working/ssa_kaggle_pyramid_supervision_k4_v1/gt_target_spec.json",
+  "gt_target_profile_sha256": "b441c69b09ad90de68d0a3fc0043da8f896f9951cd30dd62197457eb0c497844",
+  "model_definition": "single original core; identical three training-only heads; loss-only contrast",
+  "aux_weights": {
+    "quarter": 0.0,
+    "half": 0.0,
+    "full": 0.0
+  },
+  "candidate_aux_weights": {
+    "quarter": 0.005,
+    "half": 0.005,
+    "full": 0.001
+  },
+  "numerics": "Controlled: equal AMP/layout/micro batch, deterministic kernels, no TF32; not legacy bitwise parity"
+}
