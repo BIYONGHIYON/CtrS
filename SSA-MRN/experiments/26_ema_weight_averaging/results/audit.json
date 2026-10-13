@@ -1,0 +1,54 @@
+{
+  "checks": {
+    "zip_crc": true,
+    "all_177_original_artifacts_hash_verified": true,
+    "beta_selected_from_validation_only": true,
+    "smoke_passed": true,
+    "initial_hashes_equal": true,
+    "batch_orders_equal": true,
+    "online_weights_exact_equal": true,
+    "EMA_best_matches_final_shadow": true,
+    "both_100_epochs_best_100_and_hashes_valid": true,
+    "all_RR_FR_means_recomputed_from_20_scenes": true,
+    "five_prespecified_scene_images_per_arm": true,
+    "only_seed42_in_final": true,
+    "both_best_strict_load_and_synthetic_forward": true
+  },
+  "original_archive_sha256": "83bd6b92e2eb7cf2728509be41cd15b01b3971329519be25d458fd2c03c00df3",
+  "original_artifacts": 177,
+  "checkpoints": {
+    "baseline": {
+      "best": {
+        "epoch": 100,
+        "file_sha256": "2de712c7121cab85de69a6f866573e46b1529ddd2f72927117c26aff01fa620b",
+        "state_sha256": "d150556cc5b24e19b259b2646c3e9f1257f86eb314f7880a0225c850c512bfc7"
+      },
+      "latest": {
+        "epoch": 100,
+        "file_sha256": "5f744ae6a2decd6934ea329e9796da0559f69ecaf70fd98c3f65e64db7397f43",
+        "state_sha256": "d150556cc5b24e19b259b2646c3e9f1257f86eb314f7880a0225c850c512bfc7"
+      },
+      "EMA_updates": 53600,
+      "best_kind": "online"
+    },
+    "ema": {
+      "best": {
+        "epoch": 100,
+        "file_sha256": "3e82de9eb90e7e92faf54ab809292d926cd6514ad14b16ee73136c3009ee65d8",
+        "state_sha256": "9af8ef1c3b3377047e39f5824993b3fec74983cbbe01b285d304145bb31c142a"
+      },
+      "latest": {
+        "epoch": 100,
+        "file_sha256": "017037319fb5c883fd733f86f603f58643ab9af9aad2e5bc1f2816421e821a9e",
+        "state_sha256": "d150556cc5b24e19b259b2646c3e9f1257f86eb314f7880a0225c850c512bfc7"
+      },
+      "EMA_updates": 53600,
+      "best_kind": "EMA"
+    }
+  },
+  "verification_scope": "Original archive/evidence/weights/means audited; original H5 inference not rerun; no seed43/44",
+  "storage": {
+    "original_archive": "EMA_1st_v1_final_test_seed_42_results.zip",
+    "scope": "retained publication artifacts; original archive remains local; future seed runtime untouched"
+  }
+}
