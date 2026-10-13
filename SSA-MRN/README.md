@@ -49,6 +49,7 @@
 | [25. 중간 해상도 복원 목표와 보조 손실](experiments/25_multiscale_supervision/README.md)<br>[김윤지] | 기존 복원 지점에 GT 기반 보조 L1을 추가했습니다. | 중간 head L1 감소; PSNR −0.0425 dB, SAM +0.0264°; 잠정 QNR +0.0101 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [26. 평가 가중치의 지수 이동 평균](experiments/26_ema_weight_averaging/README.md)<br>[송준현] | 일반 MSE 학습을 유지하고 평가 가중치에 EMA를 적용했습니다. | seed42: PSNR +0.0893 dB, SAM −0.0244°; 잠정 QNR −0.0018 | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 | [27. Backbone 채널 어텐션 추가](experiments/27_backbone_channel_attention/README.md)<br>[김경찬] | Backbone 잔차 블록 4개에 채널 어텐션을 추가했습니다. | seed42: RR PSNR +0.4803 dB, SAM −0.1369°; 잠정 FR QNR −0.0226 | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
+| [28. 원본 복원 후 관측 오차 기반 잔차 보정](experiments/28_residual_refinement/README.md)<br>[이병현] | 원본 복원 후 두 번의 잔차 보정·오차 입력·가중치 공유를 비교했습니다. | 기존 G2 대비 G5: PSNR +0.1317 dB, SAM -0.0391°; 잠정 QNR -0.0020. G4는 QNR +0.0079 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 
 **판정 기준:** 개선 = 같은 조건에서 주요 RR·FR 지표가 함께 개선, 부분 개선 = 지표·후보·센서별 결과 혼재, 개선 없음 = 평가에서 향상을 확인하지 못함, 판단 보류 = 최종 평가 부족입니다. 비교 기준·성능 비교 아님은 개선 판정 대상에서 제외합니다. 모든 FR QNR은 구현 대응 검증이 끝나지 않은 잠정 지표이며, 단일 실험의 개선은 최종 채택을 뜻하지 않습니다.
 
