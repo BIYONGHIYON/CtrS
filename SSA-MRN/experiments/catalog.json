@@ -1,0 +1,62 @@
+{
+  "ssai/1_spatial_alignment": {
+    "report": "experiments/ssai/1_spatial_alignment/README.md",
+    "research_track": "ssai",
+    "experiment": 1,
+    "display_name": "SSAI 1",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "개선",
+    "checkpoints": "experiments/ssai/1_spatial_alignment/checkpoints",
+    "results": "experiments/ssai/1_spatial_alignment/results",
+    "manifest": "experiments/ssai/1_spatial_alignment/manifest.json",
+    "model": "experiments/ssai/1_spatial_alignment/model.py",
+    "config": "experiments/ssai/1_spatial_alignment/config.json",
+    "evaluated_seeds": [
+      42
+    ],
+    "sensor": "QB",
+    "selected_best_epoch": 98,
+    "limits": "A0·A1은 같은 시드·초기값·샘플 순서와 같은 micro batch 변경 시점을 유지했습니다. 같은 조건에서 RR PSNR·SAM·ERGAS·SCC·Q2n과 잠정 FR QNR·Dλ·Ds가 함께 개선했습니다. 단일 QB seed42 결과이며 반복 시드·센서 확장과 독립 holdout은 아직 없습니다. 이 판정은 현재 비교의 관측 개선이며 기준 모델의 최종 채택을 뜻하지 않습니다."
+  },
+  "ssai/2_reference_area_normalization": {
+    "report": "experiments/ssai/2_reference_area_normalization/README.md",
+    "research_track": "ssai",
+    "experiment": 2,
+    "display_name": "SSAI 2",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "checkpoints": "experiments/ssai/2_reference_area_normalization/checkpoints",
+    "results": "experiments/ssai/2_reference_area_normalization/results",
+    "manifest": "experiments/ssai/2_reference_area_normalization/manifest.json",
+    "model": "experiments/ssai/2_reference_area_normalization/model.py",
+    "config": "experiments/ssai/2_reference_area_normalization/config.json",
+    "evaluated_seeds": [
+      42
+    ],
+    "sensor": "QB",
+    "selected_best_epoch": 98,
+    "limits": "RR PSNR·SAM·ERGAS·SCC·Q2n과 잠정 QNR은 아주 작게 악화했습니다. FR Ds만 아주 작게 개선해 종합 향상은 확인하지 못했습니다. 64×64 patch validation의 출력·gradient는 원본과 같아 이 계수를 validation으로 우열 선택할 수 없습니다. 현재 test는 사전 고정 계수의 진단이며 test로 계수나 후보를 다시 고르지 않았습니다. 최종 채택에는 독립 전체 장면 validation이 필요합니다."
+  },
+  "ssai/3_calibrated_sigmoid_gating": {
+    "report": "experiments/ssai/3_calibrated_sigmoid_gating/README.md",
+    "research_track": "ssai",
+    "experiment": 3,
+    "display_name": "SSAI 3",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "판단 보류",
+    "checkpoints": "experiments/ssai/3_calibrated_sigmoid_gating/checkpoints",
+    "results": "experiments/ssai/3_calibrated_sigmoid_gating/results",
+    "manifest": "experiments/ssai/3_calibrated_sigmoid_gating/manifest.json",
+    "model": "experiments/ssai/3_calibrated_sigmoid_gating/model.py",
+    "config": "experiments/ssai/3_calibrated_sigmoid_gating/config.json",
+    "evaluated_seeds": [
+      42
+    ],
+    "sensor": "QB",
+    "selected_best_epoch": 98,
+    "limits": "RR·잠정 FR의 관측 지표는 나아졌지만 A0는 처음3에폭 micro4, A2는 처음부터 micro32입니다. 시드·초기값·샘플 순서·유효 배치가 같아도 FP32 합산 경로 차이가 포함되므로 SSAI만의 효과로 확정하지 않습니다. 처음부터 같은 micro batch 경로의 새 대조군과 반복 비교하기 전 판단을 보류합니다."
+  }
+}

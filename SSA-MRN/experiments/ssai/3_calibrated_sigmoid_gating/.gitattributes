@@ -1,0 +1,4 @@
+# Preserve server-exported evidence bytes and Windows line endings.
+results/** -text whitespace=cr-at-eol
+provenance/** -text whitespace=cr-at-eol
+checkpoints/** -text -diff
