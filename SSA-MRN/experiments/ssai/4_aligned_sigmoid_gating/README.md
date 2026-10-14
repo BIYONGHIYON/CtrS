@@ -4,11 +4,11 @@
 
 | 확인된 결과 | 상태 | 개선 여부 |
 |---|:---:|:---:|
-| A0·A1 학습 중이며 A2·A3는 대기합니다. 성능 평가 전입니다. | 학습 중<br>2026-10-14 10:34 KST | 판단 보류 |
+| A0·A1 학습 중이며 A2·A3는 대기합니다. 성능 평가 전입니다. | 학습 중<br>2026-10-14 15:58 KST | 판단 보류 |
 
 ## 1. 목적과 상태
 
-실험자는 이병현입니다. 2026-10-14 10:34 KST에 A0·A1이 첫 에폭의 학습·validation을 완료하고 2에폭으로 진행하는 것을 확인했습니다. 두 후보의 실제 best/latest를 strict load하고 CPU 추론으로 검증했습니다. 실패한 작업은 없습니다. 좌표 정렬과 sigmoid 변경의 결합 효과를 검증합니다. 이전 실험의 배치 경로 차이를 제거하기 위해 네 후보 모두 처음부터 같은 micro batch로 학습합니다.
+실험자는 이병현입니다. 2026-10-14 15:58 KST에 A0는 74에폭, A1은 75에폭을 진행합니다. GPU 응답 정지 후 저장된 A0 72에폭·A1 73에폭에서 optimizer·난수 상태를 복원했습니다. 미완료 에폭을 다시 계산했으며 학습 소스·설정·배치·정밀도는 유지했습니다. 재개한 73·74에폭의 학습·validation·latest 저장과 strict load·추론을 확인했습니다. 장애의 근본 원인은 미확정입니다. 좌표 정렬과 sigmoid 변경의 결합 효과를 검증합니다. 이전 실험의 배치 경로 차이를 제거하기 위해 네 후보 모두 처음부터 같은 micro batch로 학습합니다.
 
 ## 2. 변경한 구조와 비교 조건
 
@@ -57,7 +57,7 @@ RR의 사전 고정 장면 인덱스 1·8·11·13·19를 전체 장면으로 표
 
 ## 7. 재현 자료
 
-[설정](config.json), [모델](model.py), [원본 실행 소스](provenance/launch_source.zip), [실제 실행 계획](provenance/plan.json), [병렬 사전 시험](results/benchmark.json), [모델 사전 검증](results/preflight.json), [첫 에폭 저장·진행 확인](results/launch_check.json)을 제공합니다. 실행은 공통 `common/ssai_suite.py`를 사용합니다. 실제 소스·설정은 provenance에 보존하며 best/latest와 compact 학습 기록은 학습 후 보관합니다. manifest 해시 검증과 성능 재평가는 별개입니다.
+[설정](config.json), [모델](model.py), [원본 실행 소스](provenance/launch_source.zip), [실제 실행 계획](provenance/plan.json), [병렬 사전 시험](results/benchmark.json), [모델 사전 검증](results/preflight.json), [첫 에폭 저장·진행 확인](results/launch_check.json), [복구 체크포인트 검증](provenance/recovery_20261014/checkpoint_check.json), [재개 후 저장·진행 확인](results/resumed_check.json)을 제공합니다. 실행은 공통 `common/ssai_suite.py`를 사용합니다. 실제 소스·설정은 provenance에 보존하며 best/latest와 compact 학습 기록은 학습 후 보관합니다. manifest 해시 검증과 성능 재평가는 별개입니다.
 
 ## 8. 개선 여부와 다음 단계
 
