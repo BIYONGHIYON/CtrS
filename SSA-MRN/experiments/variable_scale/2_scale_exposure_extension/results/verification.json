@@ -1,0 +1,36 @@
+{
+  "zip_sha256": "888bf1894917bf50fde230e938b5b0df4addc1a6b808d876069eba1fa7e8ecff",
+  "zip_bytes": 13027384,
+  "zip_crc": "pass",
+  "internal_files_verified": 42,
+  "latest_retained": {
+    "C_mixed": {
+      "available": true,
+      "sha256": "9f80921a6e110bded540dc88c4a3203baa8b7af0577a3506b8d513baa93e555d"
+    },
+    "D_mixed": {
+      "available": false,
+      "reason": "No matching downloaded recovery checkpoint"
+    }
+  },
+  "strict_load": [
+    {
+      "job": "C_mixed",
+      "scales": [
+        2,
+        3,
+        4
+      ],
+      "synthetic_cpu_forward": "pass"
+    },
+    {
+      "job": "D_mixed",
+      "scales": [
+        2,
+        3,
+        4
+      ],
+      "synthetic_cpu_forward": "pass"
+    }
+  ]
+}

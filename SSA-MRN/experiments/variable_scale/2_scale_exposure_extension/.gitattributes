@@ -1,0 +1,8 @@
+checkpoints/**/*.pt filter=lfs diff=lfs merge=lfs -text
+provenance/** -text -whitespace
+run.py -text -whitespace
+results/** -text -whitespace
+config.json -text -whitespace
+.gitattributes text eol=lf
+README.md text eol=lf
+manifest.json -text -whitespace
