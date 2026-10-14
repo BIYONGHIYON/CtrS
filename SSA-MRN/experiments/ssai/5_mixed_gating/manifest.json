@@ -1,0 +1,230 @@
+{
+  "research_track": "ssai",
+  "experiment": 5,
+  "display_name": "5. softmax와 sigmoid 혼합 게이트",
+  "experimenter": "이병현",
+  "status": "평가 완료",
+  "last_checked": "2026-10-15T00:39:29.253901+09:00",
+  "files": {
+    "run.py": {
+      "bytes": 3177,
+      "sha256": "ba3aec307ef90b15f54fb24916c0d3e2d99cb1b9b0c5a91c1fa707ef36440229"
+    },
+    "config.json": {
+      "bytes": 4639,
+      "sha256": "164221e56fade8c83b48f8e028c37fd240a4daa8f5086e7773d78b1d852e4bf4"
+    },
+    "model.py": {
+      "bytes": 1641,
+      "sha256": "9f42368352994b7d2b19eb940596e9cd4e458ee598fddbff545547fb9f1730a9"
+    },
+    "README.md": {
+      "bytes": 14457,
+      "sha256": "48eab8379967fb3bf94c0037f388b15011e310dbaad56f987a30af859e131845"
+    },
+    ".gitattributes": {
+      "bytes": 156,
+      "sha256": "88dac9fd910fee78c2065ee43d53ff8bdcbedff1786eac7e94da66c1d32cf18b"
+    },
+    "verify.py": {
+      "bytes": 4537,
+      "sha256": "7f881464cc7d0aefb70a2c8e9b847379d971403412e238e9d8c024a25ab3f774"
+    },
+    "results/implementation_check.txt": {
+      "bytes": 179,
+      "sha256": "d36c64ee076cb1a9d25bbb4b7cba25478004731eeedebdcfe4e733040a5672c7"
+    },
+    "results/learning.png": {
+      "bytes": 146698,
+      "sha256": "f5fe3d9ed03416e15a13b129aff0f94bcdfc593029a088a7268ff8be233295e5"
+    },
+    "results/checkpoint_verification.json": {
+      "bytes": 1446,
+      "sha256": "9722a6700009a2e12380e6a3247816f5d045824d550b970ea89b6d3b7a836125"
+    },
+    "results/scene_counts.json": {
+      "bytes": 1626,
+      "sha256": "7ccd214b774a4d53269ac665f4c07580197aec5116db167a0e5c1efdf2f3823d"
+    },
+    "results/startup_check.json": {
+      "bytes": 2785,
+      "sha256": "08c6d05ce671a04c3aeb35877bbd8febf4b5bfbf027c2bf4ab33598e9041960d"
+    },
+    "results/comparison.png": {
+      "bytes": 69600,
+      "sha256": "cbb68522656b4430ac1bd5499a53ad3f346fa8aef98769b7fd6ee0e7460e9812"
+    },
+    "results/reused_conditions_check.json": {
+      "bytes": 421,
+      "sha256": "ec52d0b191624e9477ed481eaeb8bbe30d6f070980fc7f4363998714165f3f3b"
+    },
+    "results/local_recovery_check.json": {
+      "bytes": 729,
+      "sha256": "fb4fba77164a480aa7768a5747d4d948a6b8312f902fee706ab73f7f57b4c607"
+    },
+    "results/scene_differences.png": {
+      "bytes": 96514,
+      "sha256": "eab3ef1c914e35dd46cb0d191df828f24cf6d38c5cb95208f1a483401a0d6d50"
+    },
+    "provenance/launch_source.zip": {
+      "bytes": 49213,
+      "sha256": "9be7add8b950e80daa8386b7d7ed20ae843c3ad3e5d7b581ca3343898ea058c8"
+    },
+    "provenance/startup_checker.py": {
+      "bytes": 980,
+      "sha256": "9acf1756dce993c811bbbe0ae925c502ab1dc9a23f295e6c14bc18410111e794"
+    },
+    "provenance/plan.json": {
+      "bytes": 6182,
+      "sha256": "cb60586c4aa4cdbc36047f23c1be7bffd0f77faecabf84c59875e30bfcf0a298"
+    },
+    "provenance/exporter.py": {
+      "bytes": 3253,
+      "sha256": "3ebf39a9014dcf5b63d0ff62080bb68266bf0777d18a3049bfc5ed5a8e5757f6"
+    },
+    "provenance/benchmark.json": {
+      "bytes": 1475,
+      "sha256": "8414bc6b46cefde5137cc6aa2e348aa65e6b99ddf65334863e9e5ba023b4aaec"
+    },
+    "provenance/training_complete.json": {
+      "bytes": 129,
+      "sha256": "0487049f1937f61025b106905762d1b52515d40797b61c15c0075b5a1a1ddd4c"
+    },
+    "provenance/training_source.zip": {
+      "bytes": 49360,
+      "sha256": "ae254080c4ec6884a49c2e66a19ad41b5264b10410642a4c1459b7b01609c142"
+    },
+    "provenance/queue.json": {
+      "bytes": 180,
+      "sha256": "f61daa4fe50a3027c199c404724ee0fea802770a54ced5c60b53431853732ed3"
+    },
+    "provenance/reference_assets.json": {
+      "bytes": 2199,
+      "sha256": "4948ee765ba2a6a59a839f06fff4c2e8d61bab8e1bdb2a05a1e37fe90772b737"
+    },
+    "provenance/launch.json": {
+      "bytes": 288,
+      "sha256": "5c2bf2efd2e72f3192261b53852fd06ac82ff5092f41ba837c21be0f06346992"
+    },
+    "provenance/evaluator.py": {
+      "bytes": 10043,
+      "sha256": "22516aaee4a34247590f87705d20c94904acf1d739d5075d1e70d46bbd294578"
+    },
+    "provenance/export_manifest.json": {
+      "bytes": 5987,
+      "sha256": "c67c51d5fb8f1ba7fd2140d8eadbbafdc6ee385292a5b6f2ce0e7cd905289011"
+    },
+    "results/evaluation/summary.json": {
+      "bytes": 30912,
+      "sha256": "b02cc4c07033b2df559a8929b1ba21b6be2c45d8505792e403ce41ac61182617"
+    },
+    "results/evaluation/references.json": {
+      "bytes": 925,
+      "sha256": "f0e1f38b25ee9460fcd94992c68276ab1466c87b740b1c0a7125282401f5a88c"
+    },
+    "results/evaluation/complete.json": {
+      "bytes": 191,
+      "sha256": "97cb5f9c30424b9e7605400528146c5856ad2b2d1e94c6b36101982dc3c93fd2"
+    },
+    "results/evaluation/selection.json": {
+      "bytes": 751,
+      "sha256": "3b8d3d984b9ca967f1f46ed19f892906a6b705a38c104ec37af9076bd6b10dea"
+    },
+    "results/evaluation/M25/RR.json": {
+      "bytes": 9591,
+      "sha256": "e0e50609105c837023490a3c52513c43114ce5270fb363718fe81f43a5a13887"
+    },
+    "results/evaluation/M25/scene_08.png": {
+      "bytes": 396265,
+      "sha256": "ae3014e7379b76c5b3fa76d0d205c04a0c8b655ce95ac93b95bf53e4836b1db7"
+    },
+    "results/evaluation/M25/scene_19.png": {
+      "bytes": 421521,
+      "sha256": "a6f664ae24ea3dc1656ac7e7f1bbcbef1cbcbbd3f724ef49965691da16c79a0e"
+    },
+    "results/evaluation/M25/scene_01.png": {
+      "bytes": 385846,
+      "sha256": "b9712a9cf950a25e95fdb7675e66673b6a283d6ec9a4e26226ca6b355eedbed5"
+    },
+    "results/evaluation/M25/FR.json": {
+      "bytes": 6019,
+      "sha256": "d8f86e0b37dfe2345d3b901b8544cb1031189a6544ae4b09f81aaddff2114752"
+    },
+    "results/evaluation/M25/scene_13.png": {
+      "bytes": 411687,
+      "sha256": "9776cdd470c22810a133dabd45dc807c894e2f970b99fcc2975956f3e12b1d7e"
+    },
+    "results/evaluation/M25/scene_11.png": {
+      "bytes": 389654,
+      "sha256": "7b9678241a99f6b3d13d2b25e6b0b9e6640ea98f1052ed31da8ab26d80f8a4ab"
+    },
+    "results/evaluation/M25/profile.json": {
+      "bytes": 909,
+      "sha256": "d5ecc81454ec61915a85c3f463425e98b452a72388b2721077d8be6a9c7c3be2"
+    },
+    "results/evaluation/M50/RR.json": {
+      "bytes": 9577,
+      "sha256": "e715750c00d66688a5e81bd5374e6a4df398234ffeab05370d4ae0d3df3f5ba7"
+    },
+    "results/evaluation/M50/scene_08.png": {
+      "bytes": 396164,
+      "sha256": "9ead09d495edf922bb3a538bb82c61b899b94fbe0cf5dfdeb00d051c4e349634"
+    },
+    "results/evaluation/M50/scene_19.png": {
+      "bytes": 421230,
+      "sha256": "0ced132224613af2495e119bf18251a90b7d952a5e350d8fb2f5ddcd81d3dcb4"
+    },
+    "results/evaluation/M50/scene_01.png": {
+      "bytes": 384837,
+      "sha256": "22f23f7d41733b43edc91825a848c248b2d15a7e8dc528937822b8f8f6f1bac5"
+    },
+    "results/evaluation/M50/FR.json": {
+      "bytes": 6008,
+      "sha256": "54b800e46f378a7dc405d4c664f1fa9b4da9ad2412aac6c932b1fe53bc7c202a"
+    },
+    "results/evaluation/M50/scene_13.png": {
+      "bytes": 411557,
+      "sha256": "a2bde889265c4c71a40b7d7b72eeca35c32258d8c05f2568218a7bc19a667c8e"
+    },
+    "results/evaluation/M50/scene_11.png": {
+      "bytes": 389497,
+      "sha256": "388b1f0387c76dfcff15ff037f17d6915f3eaf1d067014fbde85caaca6ecce8b"
+    },
+    "results/evaluation/M50/profile.json": {
+      "bytes": 909,
+      "sha256": "c1052ebe3f0996e38d7ad75855afb6b91589e8f2feadb95ba74563e825fdd985"
+    },
+    "results/training/M25/history.json": {
+      "bytes": 26206,
+      "sha256": "d25b0640ccc8060c444b7d954e220b8320860b429a5d413c34f97a62eecf79f1"
+    },
+    "results/training/M25/complete.json": {
+      "bytes": 374,
+      "sha256": "a10e7e524575cad185266b234da8374745a08d890fd0ad3468b3c6b0ff590c54"
+    },
+    "results/training/M50/history.json": {
+      "bytes": 26263,
+      "sha256": "2fefd5db515b8d6d2af0c8c99044fec36a769f7c1f7eeca0ffe49454f7382727"
+    },
+    "results/training/M50/complete.json": {
+      "bytes": 375,
+      "sha256": "b669c40fed5b4f79bd2c3d14180411da38665c8f40b8956d5ce5671f4c0b8dda"
+    },
+    "checkpoints/M50_QB_s42/latest.pt": {
+      "bytes": 5527113,
+      "sha256": "c45b7fec1d7b093ddfa297aa029b9042ff8ecc7405ab84b9ad00b59fbdb8870d"
+    },
+    "checkpoints/M50_QB_s42/best.pt": {
+      "bytes": 5527113,
+      "sha256": "438da33476b6c101e43b83d4ff099e86a7a905eace413b830e1f3f710faafbc6"
+    },
+    "checkpoints/M25_QB_s42/latest.pt": {
+      "bytes": 5527113,
+      "sha256": "9ef008f0df996b8db07c5f059b59ea24eaaa83892925770bee4cee1bd9da1526"
+    },
+    "checkpoints/M25_QB_s42/best.pt": {
+      "bytes": 5527113,
+      "sha256": "ea6e111cb45cee6fdc867758bb2467299c0381c137b4deb2bc2339666bdfe774"
+    }
+  }
+}

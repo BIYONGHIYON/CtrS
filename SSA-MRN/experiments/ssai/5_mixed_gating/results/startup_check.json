@@ -1,0 +1,101 @@
+{
+  "checked": 1791980615.2706418,
+  "queue": {
+    "controller_pid": 2304,
+    "active": {
+      "M25": 3880,
+      "M50": 13488
+    },
+    "completed": [],
+    "failed": [],
+    "pending": [],
+    "slots": 2,
+    "updated": 1791980611.0766237
+  },
+  "arms": {
+    "M25": {
+      "status": {
+        "pid": 13956,
+        "state": "training",
+        "arm": "M25",
+        "epoch": 2,
+        "epochs": 100,
+        "batch": 261,
+        "batches": 536,
+        "train_mse": 0.0004975999219537537,
+        "patches_per_second": 183.81495257170045,
+        "updated": 1791980612.6727355,
+        "peak_reserved_mib": 2976.0
+      },
+      "checkpoints": {
+        "best": {
+          "epoch": 1,
+          "sha256": "f427724b1b51656a22ea62b4b6fd7f173a31e7bf8d3d3732bb8212b39ac4c712",
+          "strict_load": true,
+          "finite": true,
+          "optimizer_restored": true
+        },
+        "latest": {
+          "epoch": 1,
+          "sha256": "f427724b1b51656a22ea62b4b6fd7f173a31e7bf8d3d3732bb8212b39ac4c712",
+          "strict_load": true,
+          "finite": true,
+          "optimizer_restored": true
+        }
+      },
+      "history": [
+        {
+          "epoch": 1,
+          "train_mse": 0.0010277438169242884,
+          "val_mse": 0.0005665192502310006,
+          "val_sam": 7.255730074013059,
+          "val_global_psnr": 32.467853282947466,
+          "best_mse": 0.0005665192502310006,
+          "seconds": 107.15599999999904
+        }
+      ]
+    },
+    "M50": {
+      "status": {
+        "pid": 8588,
+        "state": "training",
+        "arm": "M50",
+        "epoch": 2,
+        "epochs": 100,
+        "batch": 201,
+        "batches": 536,
+        "train_mse": 0.00050344477397209,
+        "patches_per_second": 169.12518734716843,
+        "updated": 1791980613.8911817,
+        "peak_reserved_mib": 2976.0
+      },
+      "checkpoints": {
+        "best": {
+          "epoch": 1,
+          "sha256": "d042578d84f14b18eb581dd1237ec30272f6362e5f40dd986650fc8d177379b1",
+          "strict_load": true,
+          "finite": true,
+          "optimizer_restored": true
+        },
+        "latest": {
+          "epoch": 1,
+          "sha256": "d042578d84f14b18eb581dd1237ec30272f6362e5f40dd986650fc8d177379b1",
+          "strict_load": true,
+          "finite": true,
+          "optimizer_restored": true
+        }
+      },
+      "history": [
+        {
+          "epoch": 1,
+          "train_mse": 0.0010274725221121922,
+          "val_mse": 0.0005404970382390363,
+          "val_sam": 7.300270992016958,
+          "val_global_psnr": 32.672066815070956,
+          "best_mse": 0.0005404970382390363,
+          "seconds": 110.56299999999828
+        }
+      ]
+    }
+  }
+}

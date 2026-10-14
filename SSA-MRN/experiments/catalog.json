@@ -94,5 +94,28 @@
     "limits": "FR 미평가·원본 장면 분할 미검증·합성 proxy·단일 시드입니다. 공동 모델은 각 배율 학습 노출이 전용의 약1/3입니다.",
     "scene_split_verified": false,
     "fr_evaluated": false
+  },
+  "ssai/5_mixed_gating": {
+    "report": "experiments/ssai/5_mixed_gating/README.md",
+    "entrypoint": "experiments/ssai/5_mixed_gating/run.py",
+    "model": "experiments/ssai/5_mixed_gating/model.py",
+    "config": "experiments/ssai/5_mixed_gating/config.json",
+    "manifest": "experiments/ssai/5_mixed_gating/manifest.json",
+    "results": "experiments/ssai/5_mixed_gating/results",
+    "checkpoints": "experiments/ssai/5_mixed_gating/checkpoints",
+    "research_track": "ssai",
+    "experiment": 5,
+    "display_name": "5. softmax와 sigmoid 혼합 게이트",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "baseline_reference": "experiments/ssai/4_aligned_sigmoid_gating",
+    "limits": "M25 개선 없음·M50 FR 개선/RR 악화. 두 후보 모두 validation 후속 기준 미통과. 신규80개 예측, 실험4 A0·A2 기존80개 참조; 단일QB seed42·탐색test·MATLAB parity 미검증. 원본 유지.",
+    "last_checked": "2026-10-15T00:39:29.253901+09:00",
+    "evaluated_seeds": [
+      42
+    ],
+    "sensor": "QB",
+    "selected_best_epoch": 98
   }
 }
