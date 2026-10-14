@@ -98,6 +98,7 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 | 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
 |---|---|---|:---:|:---:|
 | [1. 가변 배율 복원과 배율 조건](SSA-MRN/experiments/variable_scale/1_scale_conditioned_restoration/README.md)<br>[김윤지] | 입력 배율과 피라미드를 분리하고 전용·공동 학습 및 FiLM을 비교했습니다. | 공동 모델은 전용 대비PSNR0.40-0.98dB 하락; FiLM3·4배 소폭 개선 | 학습&nbsp;완료·일부&nbsp;평가 | 판단&nbsp;보류 |
+| [2. 배율별 학습 노출량 확장](SSA-MRN/experiments/variable_scale/2_scale_exposure_extension/README.md)<br>[김윤지] | 공동 C/D를100에서200에포크로 연장 | 모든 배율의 RR 개선, 전용 PSNR 격차 유지 | 학습&nbsp;완료·일부&nbsp;평가 | 판단&nbsp;보류 |
 
 </details>
 
