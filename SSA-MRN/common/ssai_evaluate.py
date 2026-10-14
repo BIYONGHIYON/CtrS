@@ -19,7 +19,7 @@ def write(p,data):
 
 
 def main():
- parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--source-root',type=Path,required=True);parser.add_argument('--runtime',type=Path,required=True);parser.add_argument('--data',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);parser.add_argument('--device',choices=('cuda','cpu'),default='cuda');parser.add_argument('--arms',nargs='+',choices=('A0','A1','A2','R1'),default=['A0','A1','A2','R1']);a=parser.parse_args()
+ parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--source-root',type=Path,required=True);parser.add_argument('--runtime',type=Path,required=True);parser.add_argument('--data',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);parser.add_argument('--device',choices=('cuda','cpu'),default='cuda');parser.add_argument('--arms',nargs='+',choices=('A0','A1','A2','A3','R1'),default=['A0','A1','A2','R1']);a=parser.parse_args()
  if 'A0' not in a.arms:parser.error('--arms must include A0')
  arms=list(dict.fromkeys(a.arms))
  if a.output.exists():raise FileExistsError('Use fresh output; original reports are never overwritten')
@@ -30,7 +30,7 @@ def main():
  torch.set_num_threads(1);torch.use_deterministic_algorithms(True);torch.backends.cudnn.benchmark=False;torch.backends.cuda.matmul.allow_tf32=False;torch.backends.cudnn.allow_tf32=False
  def model(arm):
   if arm=='A0':return RestoredPansharpeningNet(4,4)
-  name,cls={'A1':('1_spatial_alignment','SpatialAlignmentNet'),'R1':('2_reference_area_normalization','ReferenceAreaNet'),'A2':('3_calibrated_sigmoid_gating','CalibratedSigmoidNet')}[arm]
+  name,cls={'A1':('1_spatial_alignment','SpatialAlignmentNet'),'R1':('2_reference_area_normalization','ReferenceAreaNet'),'A2':('3_calibrated_sigmoid_gating','CalibratedSigmoidNet'),'A3':('4_aligned_sigmoid_gating','AlignedSigmoidNet')}[arm]
   bases=[base for base in ('experiments','research')if(a.source_root/base/'ssai'/name/'model.py').exists()]
   if len(bases)!=1:raise ValueError('Ambiguous or missing experiment model path')
   return getattr(importlib.import_module(f'{bases[0]}.ssai.{name}.model'),cls)(4,4)

@@ -1,4 +1,4 @@
-# SSAI 3 · SSAI 기준 크기 sigmoid 게이트
+# 3. 기준 크기 sigmoid 게이트
 
 **연구 분야:** SSAI 개선 (`ssai`)<br>
 **실험자:** 이병현<br>

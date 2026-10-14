@@ -1,0 +1,132 @@
+{
+  "seed": 42,
+  "sensor": "QB",
+  "k": 4,
+  "epochs": 100,
+  "effective_batch": 32,
+  "micro_batch": 32,
+  "lr": 0.0001,
+  "precision": "FP32",
+  "amp": false,
+  "deterministic": true,
+  "tf32": false,
+  "data_root": "C:\\CtrS\\SSA-MRN\\data\\dataset",
+  "data": {
+    "train": {
+      "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+      "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "shapes": {
+        "pan": [
+          17139,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          17139,
+          4,
+          64,
+          64
+        ],
+        "ms": [
+          17139,
+          4,
+          16,
+          16
+        ],
+        "gt": [
+          17139,
+          4,
+          64,
+          64
+        ]
+      },
+      "cache": {
+        "pan": "2d27eb539ebdd19c6bc58a33c0291d413c51f1d8d5711f7e38b66f44e97b4d39",
+        "lms": "262f878cb024c3ca05887ae28a15f7bfe757d82245d8da922c617d742167a45e",
+        "ms": "1fde47d03e8a22b605f6a93aa62591ce83ea4b9763da2c241cc783808ac633c3",
+        "gt": "3c792adcfae16f074c81a8fcd82679628081f497e9dc9a586fc866c25b80a1d0"
+      }
+    },
+    "val": {
+      "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+      "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "shapes": {
+        "pan": [
+          1905,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          1905,
+          4,
+          64,
+          64
+        ],
+        "ms": [
+          1905,
+          4,
+          16,
+          16
+        ],
+        "gt": [
+          1905,
+          4,
+          64,
+          64
+        ]
+      },
+      "cache": {
+        "pan": "95d66b9e94a75bfcbec9c4de62ec0062a70344fe184c1297432df3cee22700a7",
+        "lms": "34e30bfffdf67bc54cbf0db4d4ccc886dc9b0f8a5f9479a6e070a837e09a646e",
+        "ms": "386b1bb30f9986131cc12bb0122f63a8f099f6fe6b27ec149d5924b850593bfe",
+        "gt": "baf3cb6c0ff76d95a8ca49d8bd360296f827af6ed23138275da7fb6c822e1b01"
+      }
+    }
+  },
+  "source_hashes": {
+    "common/ssai_suite.py": "601bb8132cf928490dedf5e495aaf49d0d7ab89bf59f62e82198d386c0e23c84",
+    "common/model.py": "2baf71d9bba152cc05aa54aff62f2ba72c31bd66900a0cef3587777c967e21cf",
+    "common/data.py": "0c33a99af200505184a5e47874d27d82539c906fbf929ac2d53293e6c9a7750b",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/preview.py": "53294d75e356e7dc9b4187e634ae2bc0b32027a29c2cca4ef5494180a6769160",
+    "references/upstream/network.py": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a",
+    "experiments/ssai/1_spatial_alignment/model.py": "f4b133a0d6cc64bef39745d120f6ea31f813d4a0791e4c454a9d0dab29128b8e",
+    "experiments/ssai/2_reference_area_normalization/model.py": "6cb3d84a4fdf5d64cb795c39fbd579feb75212b8fcbcd2eafe41cae67dc46b23",
+    "experiments/ssai/3_calibrated_sigmoid_gating/model.py": "86e101c6b6b974d3f76b301115956186eecb2bb66de6e1fc4db114aa7a19e490",
+    "experiments/ssai/4_aligned_sigmoid_gating/model.py": "0cf7c675097732d8a7c98aaae96d83aff5ade4034114fbd877df63d0f4268c6b",
+    "experiments/ssai/1_spatial_alignment/config.json": "4f220de8584af9dbdeddcc0d3a5bc1a1931d93b1512580cd4f1b6ccffb845017",
+    "experiments/ssai/2_reference_area_normalization/config.json": "e90006a1a0489c554d75e22385a7ca339327aee2efbbc1c1e0b9dbfb79286bbd",
+    "experiments/ssai/3_calibrated_sigmoid_gating/config.json": "f3bbc7bded44001628c55179701992c20c7151c8c7b7749449c9986ce8bbb193",
+    "experiments/ssai/4_aligned_sigmoid_gating/config.json": "92046758a8fa6ceee2307a980e6899bfb3add23d9fd778451cb3d55e2e746f00"
+  },
+  "environment": {
+    "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+    "executable": "C:\\CtrS\\.venv\\Scripts\\python.exe",
+    "torch": "2.7.1+cu128",
+    "numpy": "2.2.6",
+    "cuda": "12.8",
+    "cudnn": 90701,
+    "gpu": "NVIDIA GeForce RTX 3060 Ti"
+  },
+  "arms": [
+    "A0",
+    "A1",
+    "A2",
+    "A3"
+  ],
+  "cache_mode": "gpu",
+  "reference_area_candidate": "same A0 best, no separate training",
+  "selection": "min validation MSE, earliest exact tie; no test selection",
+  "resume": "exact epoch-boundary state; interruption replays only incomplete epoch",
+  "created_utc": 1791941345.388335,
+  "optimization_benchmark": "benchmark.json",
+  "vram_safety": {
+    "worker_budget_mib": 3146.0,
+    "minimum_headroom_mib": 512,
+    "wait_before_launch": true,
+    "oom_stops_further_launch": true,
+    "automatic_batch_change": false
+  }
+}

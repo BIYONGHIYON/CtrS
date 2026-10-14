@@ -73,11 +73,17 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 
 [연구 페이지](SSA-MRN/research/ssai/README.md) · 담당: **이병현**
 
+<details>
+<summary>SSAI 개선 실험 표 펼치기</summary>
+
 | 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
 |---|---|---|:---:|:---:|
-| [SSAI 1. SSAI 공간 좌표 정렬](SSA-MRN/experiments/ssai/1_spatial_alignment/README.md)<br>[이병현] | 원본의 두 공간 전치를 제거해 같은 위치의 PAN·MS 특징을 결합했습니다. | PSNR +0.0545dB, SAM -0.0351°, 잠정QNR +0.0077 | 평가&nbsp;완료 | 개선 |
-| [SSAI 2. SSAI 기준 면적 정규화](SSA-MRN/experiments/ssai/2_reference_area_normalization/README.md)<br>[이병현] | 원본 SSAI 출력에 현재 면적/학습 기준 면적을 곱했습니다. | PSNR -0.0002dB, SAM +0.0009°, 잠정QNR -0.0000 | 평가&nbsp;완료 | 개선&nbsp;없음 |
-| [SSAI 3. SSAI 기준 크기 sigmoid 게이트](SSA-MRN/experiments/ssai/3_calibrated_sigmoid_gating/README.md)<br>[이병현] | 원본 전치를 유지하고 공간 softmax를 기준 크기 sigmoid 게이트로 교체했습니다. | PSNR +0.0226dB, SAM -0.0250°, 잠정QNR +0.0090 | 평가&nbsp;완료 | 판단&nbsp;보류 |
+| [1. 공간 좌표 정렬](SSA-MRN/experiments/ssai/1_spatial_alignment/README.md)<br>[이병현] | 원본의 두 공간 전치를 제거해 같은 위치의 PAN·MS 특징을 결합했습니다. | PSNR +0.0545dB, SAM -0.0351°, 잠정QNR +0.0077 | 평가&nbsp;완료 | 개선 |
+| [2. 기준 면적 정규화](SSA-MRN/experiments/ssai/2_reference_area_normalization/README.md)<br>[이병현] | 원본 SSAI 출력에 현재 면적/학습 기준 면적을 곱했습니다. | PSNR -0.0002dB, SAM +0.0009°, 잠정QNR -0.0000 | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [3. 기준 크기 sigmoid 게이트](SSA-MRN/experiments/ssai/3_calibrated_sigmoid_gating/README.md)<br>[이병현] | 원본 전치를 유지하고 공간 softmax를 기준 크기 sigmoid 게이트로 교체했습니다. | PSNR +0.0226dB, SAM -0.0250°, 잠정QNR +0.0090 | 평가&nbsp;완료 | 판단&nbsp;보류 |
+| [4. 공간 좌표 정렬과 sigmoid 게이트 결합](SSA-MRN/experiments/ssai/4_aligned_sigmoid_gating/README.md)<br>[이병현] | 좌표 정렬과 기준 크기 sigmoid를 결합하고 네 후보를 동일 조건으로 비교합니다. | A3: PSNR -0.0158dB, SAM +0.0226°, 잠정 QNR +0.0099 | 평가&nbsp;완료 | 부분&nbsp;개선 |
+
+</details>
 
 <a id="variable_scale-experiments"></a>
 
@@ -85,8 +91,13 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 
 [연구 페이지](SSA-MRN/research/variable_scale/README.md) · 담당: **김윤지**
 
+<details>
+<summary>가변 배율 확장 실험 표 펼치기</summary>
+
 | 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
 |---|---|---|:---:|:---:|
+
+</details>
 
 <a id="performance-experiments"></a>
 
