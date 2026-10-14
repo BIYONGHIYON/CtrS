@@ -38,7 +38,7 @@
 | [1. 공간 좌표 정렬](experiments/ssai/1_spatial_alignment/README.md)<br>[이병현] | 원본의 두 공간 전치를 제거해 같은 위치의 PAN·MS 특징을 결합했습니다. | PSNR +0.0545dB, SAM -0.0351°, 잠정QNR +0.0077 | 평가&nbsp;완료 | 개선 |
 | [2. 기준 면적 정규화](experiments/ssai/2_reference_area_normalization/README.md)<br>[이병현] | 원본 SSAI 출력에 현재 면적/학습 기준 면적을 곱했습니다. | PSNR -0.0002dB, SAM +0.0009°, 잠정QNR -0.0000 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 | [3. 기준 크기 sigmoid 게이트](experiments/ssai/3_calibrated_sigmoid_gating/README.md)<br>[이병현] | 원본 전치를 유지하고 공간 softmax를 기준 크기 sigmoid 게이트로 교체했습니다. | PSNR +0.0226dB, SAM -0.0250°, 잠정QNR +0.0090 | 평가&nbsp;완료 | 판단&nbsp;보류 |
-| [4. 공간 좌표 정렬과 sigmoid 게이트 결합](experiments/ssai/4_aligned_sigmoid_gating/README.md)<br>[이병현] | 좌표 정렬과 기준 크기 sigmoid를 결합하고 네 후보를 동일 조건으로 비교합니다. | A0·A1 학습 중, A2·A3 대기 | 학습&nbsp;중<br>2026-10-14 10:34 KST | 판단&nbsp;보류 |
+| [4. 공간 좌표 정렬과 sigmoid 게이트 결합](experiments/ssai/4_aligned_sigmoid_gating/README.md)<br>[이병현] | 좌표 정렬과 기준 크기 sigmoid를 결합하고 네 후보를 동일 조건으로 비교합니다. | A0 74·A1 75에폭 진행, A2·A3 대기 | 학습&nbsp;중<br>2026-10-14 15:58 KST | 판단&nbsp;보류 |
 
 </details>
 

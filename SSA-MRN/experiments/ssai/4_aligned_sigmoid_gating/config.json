@@ -49,7 +49,19 @@
     "controller": "detached Windows WMI",
     "benchmark_minimum_free_mib": 776,
     "worker_budget_mib": 3146,
-    "actual_phase": "A0/A1 epoch2 training; epoch1 best/latest strict-load and finite inference passed; A2/A3 queued"
+    "actual_phase": "A0 epoch74 and A1 epoch75 training; resumed epoch73/74 saved and strict-load inference verified; A2/A3 queued",
+    "recovery": {
+      "reason": "GPU calls and nvidia-smi unresponsive; root cause unconfirmed",
+      "manual_reboot_completed": true,
+      "resume_from_latest_epoch": {
+        "A0": 72,
+        "A1": 73
+      },
+      "source_plan_unchanged": true,
+      "optimizer_rng_restored": true,
+      "incomplete_epoch_replayed": true,
+      "verified": "results/resumed_check.json"
+    }
   },
   "evaluation": {
     "test_used_for_selection": false,
@@ -87,5 +99,5 @@
     "conditional_on_validation": true,
     "automatic_launch": false
   },
-  "last_checked": "2026-10-14T10:34:12+09:00"
+  "last_checked": "2026-10-14T15:58:01+09:00"
 }
