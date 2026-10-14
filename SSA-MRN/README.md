@@ -4,11 +4,11 @@
 
 ## 연구 분담
 
-연구 분야를 선택하면 해당 분야의 목적과 실험 표를 바로 확인할 수 있습니다. SSAI 개선과 가변 배율 확장은 아직 실험을 시작하지 않았습니다.
+연구 분야를 선택하면 해당 분야의 목적과 실험 표를 바로 확인할 수 있습니다. SSAI 개선은 QB 단일 시드의 세 가설 평가를 마쳤습니다. 가변 배율 확장은 실험 미착수입니다.
 
 | 연구 | 담당 | 목표 | 현재 단계 |
 |---|---|---|---|
-| [SSAI 개선](research/ssai/README.md) | 이병현 | 밴드별 공간·분광 특징을 결합하는 SSAI의 연산과 구조를 개선합니다. | 계획 · 실험 미착수 |
+| [SSAI 개선](research/ssai/README.md) | 이병현 | 밴드별 공간·분광 특징을 결합하는 SSAI의 연산과 구조를 개선합니다. | SSAI 1-3 평가 완료 |
 | [가변 배율 확장](research/variable_scale/README.md) | 김윤지 | 기존 고정 4배 복원을 여러 배율에서 동작하도록 확장합니다. | 계획 · 실험 미착수 |
 | [기존 성능 개선](research/performance/README.md) | 김경찬·송준현 | 기존 연구의 구조·학습·손실 변경을 이어서 비교합니다. | 기존 결과 보유 · 후속 연구 계속 |
 
@@ -32,6 +32,9 @@
 
 | 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
 |---|---|---|:---:|:---:|
+| [SSAI 1. SSAI 공간 좌표 정렬](experiments/ssai/1_spatial_alignment/README.md)<br>[이병현] | 원본의 두 공간 전치를 제거해 같은 위치의 PAN·MS 특징을 결합했습니다. | PSNR +0.0545dB, SAM -0.0351°, 잠정QNR +0.0077 | 평가&nbsp;완료 | 개선 |
+| [SSAI 2. SSAI 기준 면적 정규화](experiments/ssai/2_reference_area_normalization/README.md)<br>[이병현] | 원본 SSAI 출력에 현재 면적/학습 기준 면적을 곱했습니다. | PSNR -0.0002dB, SAM +0.0009°, 잠정QNR -0.0000 | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [SSAI 3. SSAI 기준 크기 sigmoid 게이트](experiments/ssai/3_calibrated_sigmoid_gating/README.md)<br>[이병현] | 원본 전치를 유지하고 공간 softmax를 기준 크기 sigmoid 게이트로 교체했습니다. | PSNR +0.0226dB, SAM -0.0250°, 잠정QNR +0.0090 | 평가&nbsp;완료 | 판단&nbsp;보류 |
 
 <a id="variable_scale-experiments"></a>
 
@@ -164,3 +167,11 @@ python SSA-MRN/common/verify.py --experiment 20
 실행 중인 서버 작업은 기존 checkout과 명령을 유지합니다. 새 폴더의 코드를 실행 중인 checkout에 덮어쓰거나 기존 runtime에 재개하지 않습니다. 재개 fingerprint가 달라질 수 있습니다.
 
 [실험 보고서 양식](docs/experiment_template.md) · [실험 목록](research/experiments.json) · [관리 규칙](AGENTS.md)
+
+## 신규 계열별 결과 보관
+
+앞으로의 새 실험은 `experiments/ssai`, `experiments/variable_scale`, `experiments/performance`의 각 계열에서 독립 번호를 사용합니다. 기존 `research/performance`의 실험 번호·자료는 그대로 보존합니다. SSAI 결과는 [새catalog](experiments/catalog.json)와 [기존연구목록](research/experiments.json)에 같은 경로로 등록했습니다.
+
+```bash
+python SSA-MRN/common/verify.py --research-track ssai --experiment all
+```

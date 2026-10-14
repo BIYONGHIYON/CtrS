@@ -17,11 +17,11 @@
 
 ## 연구 분담
 
-연구 분야를 선택하면 해당 분야의 목적과 실험 표를 바로 확인할 수 있습니다. SSAI 개선과 가변 배율 확장은 아직 실험을 시작하지 않았습니다.
+연구 분야를 선택하면 해당 분야의 목적과 실험 표를 바로 확인할 수 있습니다. SSAI 개선은 QB 단일 시드의 세 가설 평가를 마쳤습니다. 가변 배율 확장은 실험 미착수입니다.
 
 | 연구 | 담당 | 목표 | 현재 단계 |
 |---|---|---|---|
-| [SSAI 개선](SSA-MRN/research/ssai/README.md) | 이병현 | 밴드별 공간·분광 특징을 결합하는 SSAI의 연산과 구조를 개선합니다. | 계획 · 실험 미착수 |
+| [SSAI 개선](SSA-MRN/research/ssai/README.md) | 이병현 | 밴드별 공간·분광 특징을 결합하는 SSAI의 연산과 구조를 개선합니다. | SSAI 1-3 평가 완료 |
 | [가변 배율 확장](SSA-MRN/research/variable_scale/README.md) | 김윤지 | 기존 고정 4배 복원을 여러 배율에서 동작하도록 확장합니다. | 계획 · 실험 미착수 |
 | [기존 성능 개선](SSA-MRN/research/performance/README.md) | 김경찬·송준현 | 기존 연구의 구조·학습·손실 변경을 이어서 비교합니다. | 기존 결과 보유 · 후속 연구 계속 |
 
@@ -75,6 +75,9 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 
 | 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
 |---|---|---|:---:|:---:|
+| [SSAI 1. SSAI 공간 좌표 정렬](SSA-MRN/experiments/ssai/1_spatial_alignment/README.md)<br>[이병현] | 원본의 두 공간 전치를 제거해 같은 위치의 PAN·MS 특징을 결합했습니다. | PSNR +0.0545dB, SAM -0.0351°, 잠정QNR +0.0077 | 평가&nbsp;완료 | 개선 |
+| [SSAI 2. SSAI 기준 면적 정규화](SSA-MRN/experiments/ssai/2_reference_area_normalization/README.md)<br>[이병현] | 원본 SSAI 출력에 현재 면적/학습 기준 면적을 곱했습니다. | PSNR -0.0002dB, SAM +0.0009°, 잠정QNR -0.0000 | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [SSAI 3. SSAI 기준 크기 sigmoid 게이트](SSA-MRN/experiments/ssai/3_calibrated_sigmoid_gating/README.md)<br>[이병현] | 원본 전치를 유지하고 공간 softmax를 기준 크기 sigmoid 게이트로 교체했습니다. | PSNR +0.0226dB, SAM -0.0250°, 잠정QNR +0.0090 | 평가&nbsp;완료 | 판단&nbsp;보류 |
 
 <a id="variable_scale-experiments"></a>
 

@@ -23,6 +23,7 @@ def verify(folder):
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--experiment',default='all',help='Number, numbered folder name, or all')
+    p.add_argument('--research-track', choices=('ssai','variable_scale','performance'), help='Disambiguate independent research numbering')
     p.add_argument('--artifact-root',type=Path,help='Verify a new export report_manifest.json')
     a=p.parse_args()
     if a.artifact_root:
@@ -33,9 +34,11 @@ def main():
             path=a.artifact_root/name
             if path.stat().st_size!=e['bytes'] or digest(path)!=e['sha256']:raise ValueError(name)
         print(f'PASS: {len(files)} export hashes');return
-    folders=sorted((ROOT/'research').glob('*/[0-9]*_*'),key=lambda x:int(x.name.split('_')[0]))
+    folders=sorted(list((ROOT/'research').glob('*/[0-9]*_*'))+list((ROOT/'experiments').glob('*/[0-9]*_*')),key=lambda x:(x.parent.name,int(x.name.split('_')[0])))
+    if a.research_track:folders=[f for f in folders if f.parent.name==a.research_track]
     if a.experiment!='all':folders=[f for f in folders if a.experiment in (f.name,f.name.split('_',1)[0],f.name.split('_',1)[1])]
     if not folders:p.error('Unknown experiment')
+    if a.experiment!='all' and a.experiment.isdigit() and len(folders)>1:p.error('Ambiguous number: specify --research-track')
     total=weights=0
     for folder in folders:
         count,pts=verify(folder);total+=count;weights+=pts
