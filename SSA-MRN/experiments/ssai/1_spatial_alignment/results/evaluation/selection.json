@@ -1,0 +1,42 @@
+{
+  "frozen_before_evaluation": true,
+  "rule": "minimum validation MSE, earliest tie; test not used",
+  "selected": {
+    "A0": {
+      "checkpoint": "C:\\CtrS-ssai-vram\\runtime\\qb_s42_100\\A0\\best.pt",
+      "sha256": "03d6bffd8132bf33cfe6437bdbfc552c2d610505dad307296e2032a67acb0f8b",
+      "epoch": 98,
+      "validation_mse": 0.00017212558345376634
+    },
+    "A1": {
+      "checkpoint": "C:\\CtrS-ssai-vram\\runtime\\qb_s42_100\\A1\\best.pt",
+      "sha256": "62352eb7bf32acbb7b6c57e0f488e1240aded389e531893c4e15ad040e146488",
+      "epoch": 98,
+      "validation_mse": 0.0001715698837225626
+    },
+    "A2": {
+      "checkpoint": "C:\\CtrS-ssai-vram\\runtime\\qb_s42_100\\A2\\best.pt",
+      "sha256": "9446d5fedb0f26084d0cb4139cbcfdf261d2f262feb8150715cea3227482a87b",
+      "epoch": 98,
+      "validation_mse": 0.00017170199268531748
+    },
+    "R1": {
+      "checkpoint": "C:\\CtrS-ssai-vram\\runtime\\qb_s42_100\\A0\\best.pt",
+      "sha256": "03d6bffd8132bf33cfe6437bdbfc552c2d610505dad307296e2032a67acb0f8b",
+      "epoch": 98,
+      "validation_mse": 0.00017212558345376634,
+      "same_checkpoint_as": "A0",
+      "coefficient": "current stage area / fixed training stage area [4096,1024,256]",
+      "tuning": "none; not selectable from 64x64 patch validation"
+    }
+  },
+  "examples_zero_based": [
+    1,
+    8,
+    11,
+    13,
+    19
+  ],
+  "precision": "FP32",
+  "no_clipping": true
+}

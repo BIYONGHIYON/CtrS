@@ -1,0 +1,160 @@
+{
+  "experiment": 3,
+  "kind": "synthetic_preflight_not_performance",
+  "torch_version": "2.14.1",
+  "device": "cpu",
+  "precision": "float32_model_float64_formula",
+  "training_started": false,
+  "optimizer_steps": 0,
+  "dataset_used": false,
+  "records": [
+    {
+      "sensor": "QB",
+      "checkpoint": "research/performance/12_feature_dimension/checkpoints/runs/01_QB_k4_s42/best.pt",
+      "checkpoint_sha256": "0361e280912ba9cdfdcdfddc399149723217ddc5447a46cc799de71f6b2dfd93",
+      "epoch": 98,
+      "strict_load": true,
+      "same_initial_state_and_rng": true,
+      "non_ssai_state_unchanged": true,
+      "parameters": 426654,
+      "finite_gradients_without_optimizer_step": true,
+      "gradient_equal_to_baseline_at_64": null,
+      "unused_parameters_without_gradient": 118308,
+      "executed_conv_macs_64": 1243975680,
+      "shapes": [
+        {
+          "pan_hw": [
+            64,
+            64
+          ],
+          "output_shape": [
+            1,
+            4,
+            64,
+            64
+          ],
+          "finite": true,
+          "baseline_max_absolute_difference": 3.2186508178710938e-06
+        },
+        {
+          "pan_hw": [
+            32,
+            48
+          ],
+          "output_shape": [
+            1,
+            4,
+            32,
+            48
+          ],
+          "finite": true,
+          "baseline_max_absolute_difference": 6.286799907684326e-05
+        }
+      ]
+    },
+    {
+      "sensor": "GF2",
+      "checkpoint": "research/performance/12_feature_dimension/checkpoints/runs/01_GF2_k4_s42/best.pt",
+      "checkpoint_sha256": "9daabc6ae5e158603e68e83cf172cf378b1461818ae32ae9556e144d9de76617",
+      "epoch": 99,
+      "strict_load": true,
+      "same_initial_state_and_rng": true,
+      "non_ssai_state_unchanged": true,
+      "parameters": 426654,
+      "finite_gradients_without_optimizer_step": true,
+      "gradient_equal_to_baseline_at_64": null,
+      "unused_parameters_without_gradient": 118308,
+      "executed_conv_macs_64": 1243975680,
+      "shapes": [
+        {
+          "pan_hw": [
+            64,
+            64
+          ],
+          "output_shape": [
+            1,
+            4,
+            64,
+            64
+          ],
+          "finite": true,
+          "baseline_max_absolute_difference": 2.2649765014648438e-06
+        },
+        {
+          "pan_hw": [
+            32,
+            48
+          ],
+          "output_shape": [
+            1,
+            4,
+            32,
+            48
+          ],
+          "finite": true,
+          "baseline_max_absolute_difference": 0.00014084577560424805
+        }
+      ]
+    },
+    {
+      "sensor": "WV3",
+      "checkpoint": "research/performance/12_feature_dimension/checkpoints/runs/01_WV3_k4_s42/best.pt",
+      "checkpoint_sha256": "38de22203cb6d8f529df6886785a8b8e076fd9ea4b0858103e637b5b02ad3576",
+      "epoch": 100,
+      "strict_load": true,
+      "same_initial_state_and_rng": true,
+      "non_ssai_state_unchanged": true,
+      "parameters": 518830,
+      "finite_gradients_without_optimizer_step": true,
+      "gradient_equal_to_baseline_at_64": null,
+      "unused_parameters_without_gradient": 190152,
+      "executed_conv_macs_64": 1290719232,
+      "shapes": [
+        {
+          "pan_hw": [
+            64,
+            64
+          ],
+          "output_shape": [
+            1,
+            8,
+            64,
+            64
+          ],
+          "finite": true,
+          "baseline_max_absolute_difference": 1.9431114196777344e-05
+        },
+        {
+          "pan_hw": [
+            32,
+            48
+          ],
+          "output_shape": [
+            1,
+            8,
+            32,
+            48
+          ],
+          "finite": true,
+          "baseline_max_absolute_difference": 0.0002541542053222656
+        }
+      ]
+    }
+  ],
+  "analytical_checks": {
+    "square_original_formula_error": 0.0,
+    "feature_periodic_shift_original_max_error": 0.8874582790977917,
+    "feature_periodic_shift_aligned_max_error": 1.1102230246251565e-16,
+    "scope": "Projected synthetic features only; not whole-model translation equivariance or performance.",
+    "calibrated_gate_min": 1.2248834895694173e-06,
+    "calibrated_gate_max": 0.0004873309436105896,
+    "gate_upper_bound": 0.00048828125
+  },
+  "source_hashes": {
+    "common/ssai_preflight.py": "cb0141d57003a56d299e8e064c0e4621575235fadea0f483ce1a8affab1016c5",
+    "common/model.py": "2baf71d9bba152cc05aa54aff62f2ba72c31bd66900a0cef3587777c967e21cf",
+    "references/upstream/network.py": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a",
+    "research/ssai/3_calibrated_sigmoid_gating/model.py": "86e101c6b6b974d3f76b301115956186eecb2bb66de6e1fc4db114aa7a19e490"
+  },
+  "limits": "No real-data validation/RR/FR, GPU throughput or peak memory measurements. Conv MACs exclude interpolation, softmax/sigmoid and memory traffic."
+}

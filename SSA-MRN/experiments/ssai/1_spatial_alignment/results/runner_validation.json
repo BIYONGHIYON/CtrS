@@ -1,0 +1,10 @@
+{
+  "legacy_fp32_gradient_accumulation": "exact parameter equality, including partial final batch",
+  "atomic_checkpoint_and_fingerprint": "passed",
+  "completed_restart_noop": "passed",
+  "interrupted_epoch_boundary_resume": "exact parameter and loader RNG equality to continuous run",
+  "candidate_initial_state_equality": "passed",
+  "optimizer_probe_outputs_retained": false,
+  "training_started_by_local_checks": false,
+  "scope": "CPU synthetic lifecycle only; server benchmark separate"
+}

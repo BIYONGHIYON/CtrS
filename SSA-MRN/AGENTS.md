@@ -74,3 +74,7 @@
 - 새 결과를 보관할 때 `research/experiments.json`과 해당 실험의 `manifest.json`을 갱신합니다. manifest에는 현재 파일 경로·크기·SHA-256을 기록합니다. 보존 해시는 `python SSA-MRN/common/verify.py --experiment <번호>`로 확인합니다. 해시 확인과 실제 성능 재평가는 별개입니다.
 - 학습·평가·예시 선택 기준은 유지하고 실제 확인한 결과만 작성합니다. validation 선택을 test 결과로 바꾸지 않습니다. README의 8개 절·시간순 표·합니다체를 계속 사용합니다.
 - 큰 폴더 이동은 별도 checkout에서 수행합니다. 실행 중 checkout은 pull·이동·덮어쓰기하지 않습니다. 기존 runtime을 새 코드로 재개하지 않으며 새 실행은 별도 runtime을 사용합니다.
+
+## 신규 계열별 실험 보관
+
+- 사용자 지시에 따라 신규 실험은 `SSA-MRN/experiments/<ssai|variable_scale|performance>/<계열 내 번호>_<변경명>/`에 모읍니다. 각 계열은 독립적으로1부터 증가하며 기존 단일번호 실험과 서버 runtime은 이동하지 않습니다. 보고서·catalog·manifest는 계열과번호를 함께 표시합니다. 새 결과는 `experiments/catalog.json`과 기존 연구목록의 참조를 함께 갱신하며 번호가 겹치는 검증은 `--research-track`을 명시합니다.

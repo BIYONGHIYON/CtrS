@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "research_track": "ssai",
+  "experimenter": "이병현",
+  "status": "평가 완료",
+  "improvement": "개선 없음",
+  "baseline": {
+    "model": "common.model.RestoredPansharpeningNet",
+    "ssai_dimension": 4,
+    "spatial_scale": 4,
+    "guide_channels": 1,
+    "restoration": "original_single",
+    "loss": "MSE",
+    "historical_reference_experiment": 12,
+    "fresh_control_required_for_training_comparison": true
+  },
+  "training": {
+    "epochs": 100,
+    "optimizer": "Adam",
+    "lr": 0.0001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0,
+    "scheduler": null,
+    "effective_batch": 32,
+    "micro_batch": 32,
+    "precision": "FP32",
+    "amp": false,
+    "deterministic_algorithms": true,
+    "cudnn_benchmark": false,
+    "seed_screening": 42,
+    "seed_confirmation": [
+      43,
+      44
+    ],
+    "selection": "minimum validation MSE; exact ties retain earliest epoch",
+    "early_stopping": false,
+    "warm_start": true,
+    "original_h5_train_validation_split": true,
+    "normalization": {
+      "QB": 2047,
+      "GF2": 1023,
+      "WV3": 2047
+    },
+    "train_pan_hw": [
+      64,
+      64
+    ],
+    "train_ms_hw": [
+      16,
+      16
+    ],
+    "augmentation": "none added",
+    "shuffle": "dedicated generator seeded with run seed; same order in paired runs",
+    "drop_last": false,
+    "num_workers": 0,
+    "tf32": false,
+    "required_for_candidate": false,
+    "historical_phase": {
+      "A0_A1_epochs_1_3": "micro4, host mmap; original metadata retained",
+      "A0_A1_epochs_4_100": "micro32, GPU training cache",
+      "A2_epochs_1_100": "micro32, GPU training cache"
+    },
+    "initial_continuation": "no separate R1 training"
+  },
+  "execution": {
+    "server": "ctrs-server",
+    "data_paths": {
+      "train": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+      "val": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5"
+    },
+    "runtime_root": "C:\\CtrS-ssai-vram\\runtime\\qb_s42_100",
+    "environment": {
+      "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+      "executable": "C:\\CtrS\\.venv\\Scripts\\python.exe",
+      "torch": "2.7.1+cu128",
+      "numpy": "2.2.6",
+      "cuda": "12.8",
+      "cudnn": 90701,
+      "gpu": "NVIDIA GeForce RTX 3060 Ti"
+    },
+    "launch_authorized": true,
+    "parallel_allowed": true,
+    "desired_max_training_jobs": 3,
+    "effective_concurrency": "set after process/GPU/memory/disk checks; reduce concurrency, never batch/precision",
+    "controller": "common/ssai_suite.py WMI detached controller",
+    "shared_control_owner_experiment": 1,
+    "shared_control_reuse": "only same seed/sensor/data hashes/config/source/environment; copy exact control artifacts and record SHA-256 per experiment",
+    "selected_training_slots": 2,
+    "arm_status": "R1 awaits A0 validation-selected best",
+    "gpu_train_cache": true,
+    "selected_micro_batch": 32,
+    "optimization_change": "micro4->32; effective32 FP32 preserved; GPU-resident training tensors; old checkpoints retained",
+    "cache_root": "C:\\CtrS-ssai\\runtime\\qb_s42_100\\cache",
+    "cache_dependency": "Owned historical runtime cache reused read-only; preserve until no active references remain"
+  },
+  "evaluation": {
+    "checkpoint_selection_uses_test": false,
+    "checkpoint_selection": "validation MSE only",
+    "test_evaluation": "predeclared arms, full RR and FR scenes; no post-test hyperparameter search",
+    "rr_metrics": [
+      "PSNR",
+      "SAM",
+      "ERGAS",
+      "SCC",
+      "Q2n"
+    ],
+    "fr_metrics": [
+      "D_lambda",
+      "D_s",
+      "QNR"
+    ],
+    "fr_status": "provisional; MATLAB parity unverified",
+    "psnr_convention": "common.metrics band mean, peak 2047; GF2 absolute PSNR differs from peak 1023 reports",
+    "clipping": false,
+    "performance_evaluation_completed": true,
+    "examples": {
+      "protocol": "RR",
+      "indices_zero_based": [
+        1,
+        8,
+        11,
+        13,
+        19
+      ],
+      "seed": 42,
+      "tile": "whole scene",
+      "order": "ascending",
+      "panels": [
+        "LR MS",
+        "PAN",
+        "prediction",
+        "GT"
+      ],
+      "fr_has_gt": false
+    },
+    "resources": [
+      "registered and executed parameters",
+      "executed convolution MACs",
+      "non-convolution operations",
+      "isolated GPU latency median/p95",
+      "peak GPU memory"
+    ],
+    "measurement_shapes_full": [
+      64,
+      256,
+      512
+    ],
+    "paired_weights": "exact same A0 best checkpoint for A0 and R1; coefficients fixed from train geometry",
+    "actual_checkpoint_epoch": 98,
+    "actual_scene_counts": {
+      "RR": 20,
+      "FR": 20
+    },
+    "same_A0_checkpoint_used": true
+  },
+  "selection": {
+    "screening_sensor": "QB",
+    "training_candidates": [
+      "A1",
+      "A2"
+    ],
+    "promotion": "not eligible from identical 64x64 patch validation; preregistered diagnostic only; require independent full-scene validation or a new data-approved validation protocol before adoption",
+    "confirmation": "freeze variant; pair A0/candidate on QB seeds43,44; then GF2/WV3 seeds42,43,44 if QB mean validation delta <0 and at least 2 of 3 seeds improve",
+    "rr_fr_role": "characterize predeclared frozen arms after validation selection; never select checkpoints, tune coefficients or choose examples using test",
+    "adoption": "joint RR/FR improvement under same conditions and reproducibility; mixed metrics => partial improvement; no automatic baseline replacement",
+    "multiple_hypotheses": "report every arm, seed and failure; exploratory evidence, no uncorrected significance claim"
+  },
+  "preservation": {
+    "checkpoints": [
+      "best.pt",
+      "latest.pt"
+    ],
+    "include_original_training_config": true,
+    "include_rng_optimizer": true,
+    "runtime_source_snapshot": "provenance/",
+    "remote_preservation": "commit/push only on user request; verify recovery and hashes before runtime cleanup"
+  },
+  "experiment": 2,
+  "title": "SSAI 기준 면적 정규화",
+  "model": "experiments.ssai.2_reference_area_normalization.model.ReferenceAreaNet",
+  "variant": "reference_area",
+  "operation": {
+    "description": "원본 SSAI 출력에 현재 면적/학습 기준 면적을 곱합니다.",
+    "reference_areas": [
+      4096,
+      1024,
+      256
+    ],
+    "original_spatial_permutations_preserved": true
+  },
+  "comparison_arms": [
+    "A0",
+    "R1"
+  ],
+  "last_checked": "2026-10-14T09:52:26.491194+09:00",
+  "experiment_display": "SSAI 2",
+  "results_summary": {
+    "rr_delta": {
+      "SAM": 0.0009100396363042051,
+      "ERGAS": 0.00010946977237402677,
+      "PSNR": -0.00018633588491923092,
+      "SCC": -5.8962501769954656e-08,
+      "Q2n": -1.6221259786508568e-06
+    },
+    "fr_delta": {
+      "D_lambda": 1.323672867597353e-05,
+      "D_s": -4.84555043018392e-06,
+      "QNR": -7.347290082337921e-06
+    },
+    "limitation": "RR PSNR·SAM·ERGAS·SCC·Q2n과 잠정 QNR은 아주 작게 악화했습니다. FR Ds만 아주 작게 개선해 종합 향상은 확인하지 못했습니다. 64×64 patch validation의 출력·gradient는 원본과 같아 이 계수를 validation으로 우열 선택할 수 없습니다. 현재 test는 사전 고정 계수의 진단이며 test로 계수나 후보를 다시 고르지 않았습니다. 최종 채택에는 독립 전체 장면 validation이 필요합니다."
+  }
+}
