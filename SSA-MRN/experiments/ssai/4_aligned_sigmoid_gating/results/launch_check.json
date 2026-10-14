@@ -1,0 +1,89 @@
+{
+  "checked_utc_timestamp": 1791941652.0689545,
+  "checkpoint_checks": [
+    {
+      "arm": "A0",
+      "checkpoint": "best.pt",
+      "epoch": 1,
+      "bytes": 5525833,
+      "sha256": "e3c37800de6c6e88acf6c445c25bb38b3d1e418ecdedf8c62014f9bd06fe0e89",
+      "strict_load": true,
+      "finite_cpu_inference": true,
+      "validation_mse": 0.0005396270163826586
+    },
+    {
+      "arm": "A0",
+      "checkpoint": "latest.pt",
+      "epoch": 1,
+      "bytes": 5525833,
+      "sha256": "e3c37800de6c6e88acf6c445c25bb38b3d1e418ecdedf8c62014f9bd06fe0e89",
+      "strict_load": true,
+      "finite_cpu_inference": true,
+      "validation_mse": 0.0005396270163826586
+    },
+    {
+      "arm": "A1",
+      "checkpoint": "best.pt",
+      "epoch": 1,
+      "bytes": 5525833,
+      "sha256": "66ff78ee9e7e08ecae6af7cfc18a4a9bb951a33c82e7386de929f54e67bc6638",
+      "strict_load": true,
+      "finite_cpu_inference": true,
+      "validation_mse": 0.0005533281781251134
+    },
+    {
+      "arm": "A1",
+      "checkpoint": "latest.pt",
+      "epoch": 1,
+      "bytes": 5525833,
+      "sha256": "66ff78ee9e7e08ecae6af7cfc18a4a9bb951a33c82e7386de929f54e67bc6638",
+      "strict_load": true,
+      "finite_cpu_inference": true,
+      "validation_mse": 0.0005533281781251134
+    }
+  ],
+  "queue": {
+    "controller_pid": 3172,
+    "active": {
+      "A0": 24500,
+      "A1": 21852
+    },
+    "completed": [],
+    "failed": [],
+    "pending": [
+      "A2",
+      "A3"
+    ],
+    "slots": 2,
+    "updated": 1791941648.4827147
+  },
+  "status": {
+    "A0": {
+      "pid": 15380,
+      "state": "training",
+      "arm": "A0",
+      "epoch": 2,
+      "epochs": 100,
+      "batch": 261,
+      "batches": 536,
+      "train_mse": 0.0004970560948029018,
+      "patches_per_second": 183.68558798297343,
+      "updated": 1791941648.6713507,
+      "peak_reserved_mib": 2952.0
+    },
+    "A1": {
+      "pid": 20428,
+      "state": "training",
+      "arm": "A1",
+      "epoch": 2,
+      "epochs": 100,
+      "batch": 201,
+      "batches": 536,
+      "train_mse": 0.0005036434875418947,
+      "patches_per_second": 170.87750059786978,
+      "updated": 1791941648.5591247,
+      "peak_reserved_mib": 2952.0
+    }
+  },
+  "gpu": "99 %, 7247 MiB, 778 MiB"
+}

@@ -1,0 +1,91 @@
+{
+  "research_track": "ssai",
+  "experiment": 4,
+  "experiment_display": "4. 공간 좌표 정렬과 sigmoid 게이트 결합",
+  "title": "공간 좌표 정렬과 sigmoid 게이트 결합",
+  "experimenter": "이병현",
+  "status": "학습 중",
+  "improvement": "판단 보류",
+  "comparison_arms": {
+    "A0": "원본",
+    "A1": "공간 좌표 정렬",
+    "A2": "기준 크기 sigmoid 게이트",
+    "A3": "공간 좌표 정렬과 sigmoid 게이트 결합"
+  },
+  "training": {
+    "sensor": "QB",
+    "seed": 42,
+    "epochs": 100,
+    "effective_batch": 32,
+    "micro_batch": 32,
+    "precision": "FP32",
+    "amp": false,
+    "tf32": false,
+    "optimizer": "Adam",
+    "lr": 0.0001,
+    "loss": "MSE",
+    "initialization": "fresh identical seeded initialization; no warm start",
+    "selection": "minimum validation MSE; earliest exact ties",
+    "k": 4,
+    "spatial_scale": 4
+  },
+  "operation": {
+    "formula": "P * (2/reference_area) * sigmoid(P*Q)",
+    "reference_areas": [
+      4096,
+      1024,
+      256
+    ],
+    "new_parameters": 0
+  },
+  "execution": {
+    "runtime_root": "C:\\CtrS-ssai4\\runtime\\qb_s42_100",
+    "source_root": "C:\\CtrS-ssai4\\SSA-MRN",
+    "slots": 2,
+    "micro_batch_fixed": 32,
+    "headroom_mib": 512,
+    "cache_mode": "gpu",
+    "launch_authorized": true,
+    "controller": "detached Windows WMI",
+    "benchmark_minimum_free_mib": 776,
+    "worker_budget_mib": 3146,
+    "actual_phase": "A0/A1 epoch2 training; epoch1 best/latest strict-load and finite inference passed; A2/A3 queued"
+  },
+  "evaluation": {
+    "test_used_for_selection": false,
+    "rr": [
+      "PSNR",
+      "SAM",
+      "ERGAS",
+      "SCC",
+      "Q2n"
+    ],
+    "fr": [
+      "D_lambda",
+      "D_s",
+      "QNR"
+    ],
+    "scene_indices_zero_based": [
+      1,
+      8,
+      11,
+      13,
+      19
+    ],
+    "fr_has_gt": false,
+    "metric_matlab_parity": "unverified"
+  },
+  "followup": {
+    "seeds": [
+      43,
+      44
+    ],
+    "sensors": [
+      "GF2",
+      "WV3"
+    ],
+    "conditional_on_validation": true,
+    "automatic_launch": false
+  },
+  "last_checked": "2026-10-14T10:34:12+09:00"
+}
