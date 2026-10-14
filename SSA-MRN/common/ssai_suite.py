@@ -12,7 +12,7 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset,DataLoader
 from common.model import RestoredPansharpeningNet
-ARMS=('A0','A1','A2')
+ARMS=('A0','A1','A2','A3')
 KEYS=('pan','lms','ms','gt')
 
 
@@ -78,7 +78,7 @@ def configure(seed,device):
 
 def model(arm,channels=4):
     if arm=='A0':return RestoredPansharpeningNet(channels,4)
-    name,cls={'A1':('1_spatial_alignment','SpatialAlignmentNet'),'R1':('2_reference_area_normalization','ReferenceAreaNet'),'A2':('3_calibrated_sigmoid_gating','CalibratedSigmoidNet')}[arm]
+    name,cls={'A1':('1_spatial_alignment','SpatialAlignmentNet'),'R1':('2_reference_area_normalization','ReferenceAreaNet'),'A2':('3_calibrated_sigmoid_gating','CalibratedSigmoidNet'),'A3':('4_aligned_sigmoid_gating','AlignedSigmoidNet')}[arm]
     return getattr(importlib.import_module(f'experiments.ssai.{name}.model'),cls)(channels,4)
 
 
@@ -151,7 +151,7 @@ def prepare(a):
     for p in files:
         dst=a.runtime/'provenance/source'/p.relative_to(ROOT);dst.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,dst)
     environment={'python':sys.version,'executable':sys.executable,'torch':torch.__version__,'numpy':np.__version__,'cuda':torch.version.cuda,'cudnn':torch.backends.cudnn.version(),'gpu':torch.cuda.get_device_name(0)if torch.cuda.is_available()else None}
-    p={'seed':42,'sensor':'QB','k':4,'epochs':100,'effective_batch':32,'micro_batch':4,'lr':1e-4,'precision':'FP32','amp':False,'deterministic':True,'tf32':False,'data_root':str(a.data),'data':metadata,'source_hashes':hashes,'environment':environment,'arms':list(ARMS),'cache_mode':'host','reference_area_candidate':'same A0 best, no separate training','selection':'min validation MSE, earliest exact tie; no test selection','resume':'exact epoch-boundary state; interruption replays only incomplete epoch','created_utc':time.time()}
+    p={'seed':42,'sensor':'QB','k':4,'epochs':100,'effective_batch':32,'micro_batch':32,'lr':1e-4,'precision':'FP32','amp':False,'deterministic':True,'tf32':False,'data_root':str(a.data),'data':metadata,'source_hashes':hashes,'environment':environment,'arms':list(ARMS),'cache_mode':'gpu','reference_area_candidate':'same A0 best, no separate training','selection':'min validation MSE, earliest exact tie; no test selection','resume':'exact epoch-boundary state; interruption replays only incomplete epoch','created_utc':time.time()}
     write(a.runtime/'plan.json',p);write(a.runtime/'provenance/plan.json',p)
     print(json.dumps({'prepared':True,'train':17139,'val':1905,'environment':environment}),flush=True)
 
@@ -242,40 +242,56 @@ def probe(a):
         if idx==7:torch.cuda.synchronize();start=time.monotonic()
         elif idx>=8:count+=32
     torch.cuda.synchronize();seconds=time.monotonic()-start
+    # Validate and exercise the real Windows atomic checkpoint save/load path.
+    va=Cached(Path(p.get('cache_root',str(a.runtime/'cache')))/'val')
+    vl=DataLoader(va,batch_size=4,shuffle=False,num_workers=0)
+    validate(m,[next(iter(vl))],'cuda')
+    tmp=a.runtime/'benchmark'/a.trial/(a.arm+'.probe.pt')
+    save(tmp,{'model':m.state_dict(),'optimizer':opt.state_dict()})
+    ck=torch.load(tmp,map_location='cpu',weights_only=False);m.load_state_dict(ck['model'],strict=True);tmp.unlink()
     write(a.runtime/'benchmark'/a.trial/f'{a.slots}_{a.arm}.json',{'arm':a.arm,'slots':a.slots,'seconds':seconds,'patches':count,'patches_per_second':count/seconds,'peak_reserved_mib':torch.cuda.max_memory_reserved()/1024**2,'probe_discarded':True,'checkpoint_saved':False,'micro_batch':a.micro,'cache_mode':a.cache_mode})
 
 
+def gpu_free_mib():
+    result=subprocess.run(['nvidia-smi','--query-gpu=memory.free','--format=csv,noheader,nounits'],capture_output=True,text=True,check=True)
+    return float(result.stdout.strip().splitlines()[0])
+
+
 def benchmark(a):
-    plan(a);root=a.runtime/'benchmark';root.mkdir(exist_ok=False);rows=[]
-    configs=[('host4',4,'host'),('host8',8,'host'),('host16',16,'host'),('host32',32,'host'),('gpu16',16,'gpu'),('gpu32',32,'gpu')]
-    for trial,micro,cache_mode in configs:
-        folder=root/trial;folder.mkdir();active=[]
-        for arm in ('A0','A1'):
-            log=(folder/(arm+'.log')).open('w')
-            cmd=[sys.executable,__file__,'probe','--runtime',str(a.runtime),'--arm',arm,'--slots','2','--micro',str(micro),'--cache-mode',cache_mode,'--trial',trial]
-            proc=subprocess.Popen(cmd,stdout=log,stderr=subprocess.STDOUT);active.append((arm,proc,log))
-        deadline=time.monotonic()+180
-        while not all((folder/f'2_{arm}.ready').exists()for arm,_,_ in active):
-            if any(proc.poll()is not None for _,proc,_ in active)or time.monotonic()>deadline:break
-            time.sleep(.1)
-        (folder/'2.go').touch();codes=[]
-        for arm,proc,log in active:codes.append(proc.wait());log.close()
-        if any(codes):rows.append({'trial':trial,'micro_batch':micro,'cache_mode':cache_mode,'safe':False,'exitcodes':codes});continue
-        probes=[json.loads((folder/f'2_{arm}.json').read_text())for arm,_,_ in active]
-        row={'trial':trial,'micro_batch':micro,'cache_mode':cache_mode,'slots':2,'safe':True,'aggregate_patches_per_second':sum(x['patches_per_second']for x in probes),'summed_peak_reserved_mib':sum(x['peak_reserved_mib']for x in probes),'probes':probes}
-        rows.append(row);print(json.dumps(row),flush=True)
-    safe=[r for r in rows if r['safe']]
-    if not safe:raise RuntimeError('No safe benchmark configuration')
-    peak=max(r['aggregate_patches_per_second']for r in safe)
-    # Near the fastest rate, prefer beneficial GPU caching and larger micro batches.
-    chosen=max((r for r in safe if r['aggregate_patches_per_second']>=peak*.98),key=lambda r:(r['cache_mode']=='gpu',r['micro_batch']))
-    result={'rows':rows,'selected_slots':2,'selected_micro_batch':chosen['micro_batch'],'selected_cache_mode':chosen['cache_mode'],'rule':'within 2% of peak throughput, then prefer GPU cache and larger micro batch; effective32/FP32 unchanged','probe_only_no_retained_weights':True}
-    write(a.runtime/'benchmark.json',result)
-    p=json.loads((a.runtime/'plan.json').read_text());p['micro_batch']=chosen['micro_batch'];p['cache_mode']=chosen['cache_mode'];p['optimization_benchmark']='benchmark.json';write(a.runtime/'plan.json',p);write(a.runtime/'provenance/plan.json',p)
+    import itertools
+    p=plan(a);root=a.runtime/'benchmark';root.mkdir(exist_ok=False);rows=[]
+    # Fixed micro32 for all arms. Only the common cache placement may change before training.
+    for cache_mode in ('gpu','host'):
+        mode_rows=[]
+        for pair in itertools.combinations(ARMS,2):
+            trial=cache_mode+'32_'+'_'.join(pair);folder=root/trial;folder.mkdir();active=[]
+            for arm in pair:
+                log=(folder/(arm+'.log')).open('w')
+                cmd=[sys.executable,__file__,'probe','--runtime',str(a.runtime),'--arm',arm,'--slots','2','--micro','32','--cache-mode',cache_mode,'--trial',trial]
+                proc=subprocess.Popen(cmd,stdout=log,stderr=subprocess.STDOUT);active.append((arm,proc,log))
+            deadline=time.monotonic()+180
+            while not all((folder/f'2_{arm}.ready').exists()for arm,_,_ in active):
+                if any(proc.poll()is not None for _,proc,_ in active)or time.monotonic()>deadline:break
+                time.sleep(.1)
+            (folder/'2.go').touch();minimum_free=gpu_free_mib()
+            while any(proc.poll()is None for _,proc,_ in active):
+                minimum_free=min(minimum_free,gpu_free_mib());time.sleep(.5)
+            codes=[]
+            for arm,proc,log in active:codes.append(proc.wait());log.close()
+            probes=[json.loads((folder/f'2_{arm}.json').read_text())for arm in pair] if not any(codes) else []
+            row={'trial':trial,'pair':pair,'cache_mode':cache_mode,'micro_batch':32,'slots':2,'safe':not any(codes) and minimum_free>=512,'minimum_free_mib':minimum_free,'exitcodes':codes,'probes':probes,'aggregate_patches_per_second':sum(x['patches_per_second']for x in probes)}
+            rows.append(row);mode_rows.append(row);print(json.dumps(row),flush=True)
+        if all(row['safe']for row in mode_rows):
+            required=max(x['peak_reserved_mib']for row in mode_rows for x in row['probes'])+192
+            result={'rows':rows,'selected_slots':2,'selected_micro_batch':32,'selected_cache_mode':cache_mode,'worker_budget_mib':required,'minimum_headroom_mib':512,'probe_only_no_retained_weights':True,'rule':'every arm pair passes training, validation and atomic checkpoint reload with at least 512 MiB observed headroom; GPU cache preferred'}
+            write(a.runtime/'benchmark.json',result)
+            p['micro_batch']=32;p['cache_mode']=cache_mode;p['optimization_benchmark']='benchmark.json';p['vram_safety']={'worker_budget_mib':required,'minimum_headroom_mib':512,'wait_before_launch':True,'oom_stops_further_launch':True,'automatic_batch_change':False}
+            write(a.runtime/'plan.json',p);write(a.runtime/'provenance/plan.json',p);return
+    raise RuntimeError('No two-worker configuration passed headroom and save/validation checks; training not started')
 
 
 def controller(a):
-    p=plan(a);slots=json.loads((a.runtime/'benchmark.json').read_text())['selected_slots']
+    p=plan(a);bench=json.loads((a.runtime/'benchmark.json').read_text());slots=bench['selected_slots']
     with lock(a.runtime/'controller.lock'):
         write(a.runtime/'controller.json',{'pid':os.getpid(),'started':time.time(),'slots':slots})
         active={};failed=[]
@@ -290,6 +306,10 @@ def controller(a):
             pending=[v for v in ARMS if v not in active and v not in done and v not in failed]
             if not failed and not stopping:
                 for arm in pending[:max(0,slots-len(active))]:
+                    if active and not all((a.runtime/v/'status.json').exists() for v in active):break
+                    free=gpu_free_mib();required=bench['worker_budget_mib']+bench['minimum_headroom_mib']
+                    if free<required:
+                        write(a.runtime/'vram_wait.json',{'free_mib':free,'required_mib':required,'time':time.time()});break
                     out=a.runtime/arm;out.mkdir(exist_ok=True)
                     if(out/'status.json').exists():
                         old=json.loads((out/'status.json').read_text())
@@ -299,6 +319,7 @@ def controller(a):
             if not active:
                 if stopping:return
                 if failed:raise RuntimeError('Failure recorded; other runs were not interrupted')
+                if pending:time.sleep(5);continue
                 write(a.runtime/'training_complete.json',{'arms':list(ARMS),'epochs':100,'evaluation_complete':False,'time':time.time()});return
             time.sleep(5)
 

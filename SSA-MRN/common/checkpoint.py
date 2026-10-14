@@ -39,8 +39,12 @@ def load_model(number, checkpoint):
     k = cfg.get('k', ck.get('ssai_dimension', 4))
     variant = ck.get('variant', cfg.get('variant'))
     if RESEARCH_TRACK == 'ssai':
-        cls = {1:'SpatialAlignmentNet',2:'ReferenceAreaNet',3:'CalibratedSigmoidNet'}[number]
-        net = RestoredPansharpeningNet(channels, k) if variant in ('B0', 'A0') and number != 2 else getattr(model_module(number), cls)(channels, k)
+        cls = {1:'SpatialAlignmentNet',2:'ReferenceAreaNet',3:'CalibratedSigmoidNet',4:'AlignedSigmoidNet'}[number]
+        if number == 4 and variant in ('A1','A2'):
+            source = { 'A1':1, 'A2':3 }[variant]
+            net = getattr(model_module(source), {1:'SpatialAlignmentNet',3:'CalibratedSigmoidNet'}[source])(channels,k)
+        else:
+            net = RestoredPansharpeningNet(channels, k) if variant in ('B0', 'A0') and number != 2 else getattr(model_module(number), cls)(channels, k)
     elif number in (1, 2, 8, 12, 14):
         net = RestoredPansharpeningNet(channels, k)
     elif number in (4, 5, 6):

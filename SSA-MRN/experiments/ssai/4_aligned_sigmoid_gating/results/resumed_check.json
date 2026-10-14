@@ -1,0 +1,67 @@
+{
+  "checked_timestamp": 1791961081.0192409,
+  "checks": [
+    {
+      "arm": "A0",
+      "resumed_epoch_completed": 73,
+      "latest_epoch": 73,
+      "sha256": "c606b03cd36057f8ac8e46f1bcd1bf4cfe816091ab242853deeb1f0a86f160cf",
+      "strict_load": true,
+      "finite_inference": true,
+      "source_plan_unchanged": true
+    },
+    {
+      "arm": "A1",
+      "resumed_epoch_completed": 74,
+      "latest_epoch": 74,
+      "sha256": "a2a332a593e6c2de35c08b137963b11104406a01944041d4a3bffe07c05f5238",
+      "strict_load": true,
+      "finite_inference": true,
+      "source_plan_unchanged": true
+    }
+  ],
+  "queue": {
+    "controller_pid": 4596,
+    "active": {
+      "A0": 4612,
+      "A1": 11220
+    },
+    "completed": [],
+    "failed": [],
+    "pending": [
+      "A2",
+      "A3"
+    ],
+    "slots": 2,
+    "updated": 1791961079.542241
+  },
+  "status": {
+    "A0": {
+      "pid": 5500,
+      "state": "training",
+      "arm": "A0",
+      "epoch": 74,
+      "epochs": 100,
+      "batch": 241,
+      "batches": 536,
+      "train_mse": 0.00017690146643826855,
+      "patches_per_second": 170.66855511540925,
+      "updated": 1791961080.5172386,
+      "peak_reserved_mib": 2952.0
+    },
+    "A1": {
+      "pid": 7552,
+      "state": "training",
+      "arm": "A1",
+      "epoch": 75,
+      "epochs": 100,
+      "batch": 241,
+      "batches": 536,
+      "train_mse": 0.0001763542897900744,
+      "patches_per_second": 170.43093922651934,
+      "updated": 1791961080.5912378,
+      "peak_reserved_mib": 2952.0
+    }
+  },
+  "gpu": "100 %, 6998 MiB, 1026 MiB"
+}

@@ -256,7 +256,7 @@
     "report": "experiments/ssai/1_spatial_alignment/README.md",
     "research_track": "ssai",
     "experiment": 1,
-    "display_name": "SSAI 1",
+    "display_name": "1. 공간 좌표 정렬",
     "experimenter": "이병현",
     "status": "평가 완료",
     "improvement": "개선",
@@ -276,7 +276,7 @@
     "report": "experiments/ssai/2_reference_area_normalization/README.md",
     "research_track": "ssai",
     "experiment": 2,
-    "display_name": "SSAI 2",
+    "display_name": "2. 기준 면적 정규화",
     "experimenter": "이병현",
     "status": "평가 완료",
     "improvement": "개선 없음",
@@ -296,7 +296,7 @@
     "report": "experiments/ssai/3_calibrated_sigmoid_gating/README.md",
     "research_track": "ssai",
     "experiment": 3,
-    "display_name": "SSAI 3",
+    "display_name": "3. 기준 크기 sigmoid 게이트",
     "experimenter": "이병현",
     "status": "평가 완료",
     "improvement": "판단 보류",
@@ -311,5 +311,18 @@
     "sensor": "QB",
     "selected_best_epoch": 98,
     "limits": "RR·잠정 FR의 관측 지표는 나아졌지만 A0는 처음3에폭 micro4, A2는 처음부터 micro32입니다. 시드·초기값·샘플 순서·유효 배치가 같아도 FP32 합산 경로 차이가 포함되므로 SSAI만의 효과로 확정하지 않습니다. 처음부터 같은 micro batch 경로의 새 대조군과 반복 비교하기 전 판단을 보류합니다."
+  },
+  "ssai/4_aligned_sigmoid_gating": {
+    "report": "experiments/ssai/4_aligned_sigmoid_gating/README.md",
+    "research_track": "ssai",
+    "experiment": 4,
+    "display_name": "4. 공간 좌표 정렬과 sigmoid 게이트 결합",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "checkpoints": "experiments/ssai/4_aligned_sigmoid_gating/checkpoints",
+    "results": "experiments/ssai/4_aligned_sigmoid_gating/results",
+    "manifest": "experiments/ssai/4_aligned_sigmoid_gating/manifest.json",
+    "last_checked": "2026-10-14T20:48:10+09:00"
   }
 }
