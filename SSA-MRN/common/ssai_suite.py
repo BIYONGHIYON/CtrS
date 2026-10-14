@@ -12,7 +12,7 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset,DataLoader
 from common.model import RestoredPansharpeningNet
-ARMS=('A0','A1','A2','A3')
+ARMS=('A0','A1','A2','A3','M25','M50')
 KEYS=('pan','lms','ms','gt')
 
 
@@ -78,6 +78,9 @@ def configure(seed,device):
 
 def model(arm,channels=4):
     if arm=='A0':return RestoredPansharpeningNet(channels,4)
+    if arm in ('M25','M50'):
+        cls=importlib.import_module('experiments.ssai.5_mixed_gating.model').MixedGatingNet
+        return cls(channels,4,alpha={'M25':0.25,'M50':0.5}[arm])
     name,cls={'A1':('1_spatial_alignment','SpatialAlignmentNet'),'R1':('2_reference_area_normalization','ReferenceAreaNet'),'A2':('3_calibrated_sigmoid_gating','CalibratedSigmoidNet'),'A3':('4_aligned_sigmoid_gating','AlignedSigmoidNet')}[arm]
     return getattr(importlib.import_module(f'experiments.ssai.{name}.model'),cls)(channels,4)
 
@@ -151,7 +154,7 @@ def prepare(a):
     for p in files:
         dst=a.runtime/'provenance/source'/p.relative_to(ROOT);dst.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,dst)
     environment={'python':sys.version,'executable':sys.executable,'torch':torch.__version__,'numpy':np.__version__,'cuda':torch.version.cuda,'cudnn':torch.backends.cudnn.version(),'gpu':torch.cuda.get_device_name(0)if torch.cuda.is_available()else None}
-    p={'seed':42,'sensor':'QB','k':4,'epochs':100,'effective_batch':32,'micro_batch':32,'lr':1e-4,'precision':'FP32','amp':False,'deterministic':True,'tf32':False,'data_root':str(a.data),'data':metadata,'source_hashes':hashes,'environment':environment,'arms':list(ARMS),'cache_mode':'gpu','reference_area_candidate':'same A0 best, no separate training','selection':'min validation MSE, earliest exact tie; no test selection','resume':'exact epoch-boundary state; interruption replays only incomplete epoch','created_utc':time.time()}
+    p={'seed':42,'sensor':'QB','k':4,'epochs':100,'effective_batch':32,'micro_batch':32,'lr':1e-4,'precision':'FP32','amp':False,'deterministic':True,'tf32':False,'data_root':str(a.data),'data':metadata,'source_hashes':hashes,'environment':environment,'arms':['A0','A1','A2','A3'],'cache_mode':'gpu','reference_area_candidate':'same A0 best, no separate training','selection':'min validation MSE, earliest exact tie; no test selection','resume':'exact epoch-boundary state; interruption replays only incomplete epoch','created_utc':time.time()}
     write(a.runtime/'plan.json',p);write(a.runtime/'provenance/plan.json',p)
     print(json.dumps({'prepared':True,'train':17139,'val':1905,'environment':environment}),flush=True)
 
@@ -253,7 +256,7 @@ def probe(a):
 
 
 def gpu_free_mib():
-    result=subprocess.run(['nvidia-smi','--query-gpu=memory.free','--format=csv,noheader,nounits'],capture_output=True,text=True,check=True)
+    result=subprocess.run(['nvidia-smi','--query-gpu=memory.free','--format=csv,noheader,nounits'],capture_output=True,text=True,check=True,timeout=15)
     return float(result.stdout.strip().splitlines()[0])
 
 
@@ -263,7 +266,7 @@ def benchmark(a):
     # Fixed micro32 for all arms. Only the common cache placement may change before training.
     for cache_mode in ('gpu','host'):
         mode_rows=[]
-        for pair in itertools.combinations(ARMS,2):
+        for pair in itertools.combinations(p['arms'],2):
             trial=cache_mode+'32_'+'_'.join(pair);folder=root/trial;folder.mkdir();active=[]
             for arm in pair:
                 log=(folder/(arm+'.log')).open('w')
@@ -302,8 +305,8 @@ def controller(a):
                 log.close();del active[arm]
                 if proc.returncode or not(a.runtime/arm/'complete.json').exists():
                     failed.append(arm);write(a.runtime/arm/'failed.json',{'exitcode':proc.returncode,'time':time.time()})
-            done=[v for v in ARMS if(a.runtime/v/'complete.json').exists()]
-            pending=[v for v in ARMS if v not in active and v not in done and v not in failed]
+            done=[v for v in p['arms'] if(a.runtime/v/'complete.json').exists()]
+            pending=[v for v in p['arms'] if v not in active and v not in done and v not in failed]
             if not failed and not stopping:
                 for arm in pending[:max(0,slots-len(active))]:
                     if active and not all((a.runtime/v/'status.json').exists() for v in active):break
@@ -320,7 +323,7 @@ def controller(a):
                 if stopping:return
                 if failed:raise RuntimeError('Failure recorded; other runs were not interrupted')
                 if pending:time.sleep(5);continue
-                write(a.runtime/'training_complete.json',{'arms':list(ARMS),'epochs':100,'evaluation_complete':False,'time':time.time()});return
+                write(a.runtime/'training_complete.json',{'arms':p['arms'],'epochs':100,'evaluation_complete':False,'time':time.time()});return
             time.sleep(5)
 
 
