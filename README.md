@@ -83,6 +83,8 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 | [3. 기준 크기 sigmoid 게이트](SSA-MRN/experiments/ssai/3_calibrated_sigmoid_gating/README.md)<br>[이병현] | 원본 전치를 유지하고 공간 softmax를 기준 크기 sigmoid 게이트로 교체했습니다. | PSNR +0.0226dB, SAM -0.0250°, 잠정QNR +0.0090 | 평가&nbsp;완료 | 판단&nbsp;보류 |
 | [4. 공간 좌표 정렬과 sigmoid 게이트 결합](SSA-MRN/experiments/ssai/4_aligned_sigmoid_gating/README.md)<br>[이병현] | 좌표 정렬과 기준 크기 sigmoid를 결합하고 네 후보를 동일 조건으로 비교합니다. | A3: PSNR -0.0158dB, SAM +0.0226°, 잠정 QNR +0.0099 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [5. softmax와 sigmoid 혼합 게이트](SSA-MRN/experiments/ssai/5_mixed_gating/README.md)<br>[이병현] | 원본 좌표에서 softmax와 기준 크기 sigmoid를 고정 비율로 혼합합니다. | M25 개선 없음; M50 PSNR -0.0710dB·잠정 QNR +0.0043 | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [6. MS 조건부 공간 세부정보 보정](SSA-MRN/experiments/ssai/6_ms_conditioned_detail/README.md)<br>[이병현] | MS가 선택한 PAN 세부정보를 원본 출력에 잔차 보정합니다. | PSNR -0.0017dB·SAM +0.0038°·잠정QNR -0.0046 | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [7. MS–PAN 채널 관계 기반 세부정보 보정](SSA-MRN/experiments/ssai/7_channel_relation_detail/README.md)<br>[이병현] | 4×4 MS–PAN 채널 관계로 PAN 세부정보를 선택·보정합니다. | PSNR -0.0061dB·SAM +0.0158°·잠정QNR -0.0030 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 
 </details>
 

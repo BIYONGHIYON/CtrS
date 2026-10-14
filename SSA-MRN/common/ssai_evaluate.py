@@ -19,7 +19,7 @@ def write(p,data):
 
 
 def main():
- parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--source-root',type=Path,required=True);parser.add_argument('--runtime',type=Path,required=True);parser.add_argument('--data',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);parser.add_argument('--device',choices=('cuda','cpu'),default='cuda');parser.add_argument('--arms',nargs='+',choices=('A0','A1','A2','A3','R1','M25','M50'),default=['A0','A1','A2','R1']);parser.add_argument('--reference-evaluation',type=Path);a=parser.parse_args()
+ parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--source-root',type=Path,required=True);parser.add_argument('--runtime',type=Path,required=True);parser.add_argument('--data',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);parser.add_argument('--device',choices=('cuda','cpu'),default='cuda');parser.add_argument('--arms',nargs='+',choices=('A0','A1','A2','A3','R1','M25','M50','D6','D7'),default=['A0','A1','A2','R1']);parser.add_argument('--reference-evaluation',type=Path);a=parser.parse_args()
  if 'A0' not in a.arms and a.reference_evaluation is None:parser.error('A0 or --reference-evaluation required')
  arms=list(dict.fromkeys(a.arms))
  if a.output.exists():raise FileExistsError('Use fresh output; original reports are never overwritten')
@@ -30,6 +30,9 @@ def main():
  torch.set_num_threads(1);torch.use_deterministic_algorithms(True);torch.backends.cudnn.benchmark=False;torch.backends.cuda.matmul.allow_tf32=False;torch.backends.cudnn.allow_tf32=False
  def model(arm):
   if arm=='A0':return RestoredPansharpeningNet(4,4)
+  if arm in ('D6','D7'):
+   name,cls={'D6':('6_ms_conditioned_detail','MSConditionedDetailNet'),'D7':('7_channel_relation_detail','ChannelRelationDetailNet')}[arm]
+   return getattr(importlib.import_module(f'experiments.ssai.{name}.model'),cls)(4,4)
   if arm in ('M25','M50'):
    cls=importlib.import_module('experiments.ssai.5_mixed_gating.model').MixedGatingNet
    return cls(4,4,alpha={'M25':.25,'M50':.5}[arm])

@@ -383,5 +383,51 @@
     "results": "experiments/variable_scale/2_scale_exposure_extension/results",
     "manifest": "experiments/variable_scale/2_scale_exposure_extension/manifest.json",
     "limits": "장면 분할 미검증·FR 미평가·단일 seed·배율별 노출량 전용의2/3; latest 확보 상태는 verification.json 참조"
+  },
+  "ssai/6_ms_conditioned_detail": {
+    "report": "experiments/ssai/6_ms_conditioned_detail/README.md",
+    "model": "experiments/ssai/6_ms_conditioned_detail/model.py",
+    "config": "experiments/ssai/6_ms_conditioned_detail/config.json",
+    "manifest": "experiments/ssai/6_ms_conditioned_detail/manifest.json",
+    "results": "experiments/ssai/6_ms_conditioned_detail/results",
+    "checkpoints": "experiments/ssai/6_ms_conditioned_detail/checkpoints",
+    "entrypoint": "common/ssai_detail_prepare.py",
+    "research_track": "ssai",
+    "experiment": 6,
+    "display_name": "6. MS 조건부 공간 세부정보 보정",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "baseline_reference": "experiments/ssai/4_aligned_sigmoid_gating",
+    "evaluated_seeds": [
+      42
+    ],
+    "sensor": "QB",
+    "selected_best_epoch": 98,
+    "last_checked": "2026-10-15T05:37:11.618083+09:00",
+    "limits": "PSNR -0.001706dB·SAM +0.003811°·잠정QNR -0.004606; 단일QBseed42·기존탐색test·MATLABparity미검증. 캐시동등성짧은경로검증. 원본유지."
+  },
+  "ssai/7_channel_relation_detail": {
+    "report": "experiments/ssai/7_channel_relation_detail/README.md",
+    "model": "experiments/ssai/7_channel_relation_detail/model.py",
+    "config": "experiments/ssai/7_channel_relation_detail/config.json",
+    "manifest": "experiments/ssai/7_channel_relation_detail/manifest.json",
+    "results": "experiments/ssai/7_channel_relation_detail/results",
+    "checkpoints": "experiments/ssai/7_channel_relation_detail/checkpoints",
+    "entrypoint": "common/ssai_detail_prepare.py",
+    "research_track": "ssai",
+    "experiment": 7,
+    "display_name": "7. MS–PAN 채널 관계 기반 세부정보 보정",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "baseline_reference": "experiments/ssai/4_aligned_sigmoid_gating",
+    "evaluated_seeds": [
+      42
+    ],
+    "sensor": "QB",
+    "selected_best_epoch": 98,
+    "last_checked": "2026-10-15T05:37:11.618083+09:00",
+    "limits": "PSNR -0.006145dB·SAM +0.015805°·잠정QNR -0.002991; 단일QBseed42·기존탐색test·MATLABparity미검증. 캐시동등성짧은경로검증. 원본유지."
   }
 }
