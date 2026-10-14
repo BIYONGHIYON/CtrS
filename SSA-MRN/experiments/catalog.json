@@ -71,5 +71,28 @@
     "results": "experiments/ssai/4_aligned_sigmoid_gating/results",
     "manifest": "experiments/ssai/4_aligned_sigmoid_gating/manifest.json",
     "last_checked": "2026-10-14T20:48:10+09:00"
+  },
+  "variable_scale/1_scale_conditioned_restoration": {
+    "report": "experiments/variable_scale/1_scale_conditioned_restoration/README.md",
+    "research_track": "variable_scale",
+    "experiment": 1,
+    "display_name": "1. 가변 배율 복원과 배율 조건",
+    "experimenter": "김윤지",
+    "status": "학습 완료·일부 평가",
+    "improvement": "판단 보류",
+    "checkpoints": "experiments/variable_scale/1_scale_conditioned_restoration/checkpoints",
+    "results": "experiments/variable_scale/1_scale_conditioned_restoration/results",
+    "manifest": "experiments/variable_scale/1_scale_conditioned_restoration/manifest.json",
+    "model": "experiments/variable_scale/1_scale_conditioned_restoration/model.py",
+    "entrypoint": "experiments/variable_scale/1_scale_conditioned_restoration/run.py",
+    "config": "experiments/variable_scale/1_scale_conditioned_restoration/config.json",
+    "evaluated_seeds": [
+      42
+    ],
+    "sensor": "QB",
+    "last_checked": "2026-10-14T20:29:28+09:00",
+    "limits": "FR 미평가·원본 장면 분할 미검증·합성 proxy·단일 시드입니다. 공동 모델은 각 배율 학습 노출이 전용의 약1/3입니다.",
+    "scene_split_verified": false,
+    "fr_evaluated": false
   }
 }
