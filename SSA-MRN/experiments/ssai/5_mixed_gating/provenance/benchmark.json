@@ -1,0 +1,54 @@
+{
+  "rows": [
+    {
+      "trial": "gpu32_M25_M50",
+      "pair": [
+        "M25",
+        "M50"
+      ],
+      "cache_mode": "gpu",
+      "micro_batch": 32,
+      "slots": 2,
+      "safe": true,
+      "minimum_free_mib": 1324.0,
+      "exitcodes": [
+        0,
+        0
+      ],
+      "probes": [
+        {
+          "arm": "M25",
+          "slots": 2,
+          "seconds": 6.110000000000582,
+          "patches": 1024,
+          "patches_per_second": 167.59410801962397,
+          "peak_reserved_mib": 2976.0,
+          "probe_discarded": true,
+          "checkpoint_saved": false,
+          "micro_batch": 32,
+          "cache_mode": "gpu"
+        },
+        {
+          "arm": "M50",
+          "slots": 2,
+          "seconds": 6.078000000001339,
+          "patches": 1024,
+          "patches_per_second": 168.4764725238194,
+          "peak_reserved_mib": 2976.0,
+          "probe_discarded": true,
+          "checkpoint_saved": false,
+          "micro_batch": 32,
+          "cache_mode": "gpu"
+        }
+      ],
+      "aggregate_patches_per_second": 336.0705805434434
+    }
+  ],
+  "selected_slots": 2,
+  "selected_micro_batch": 32,
+  "selected_cache_mode": "gpu",
+  "worker_budget_mib": 3168.0,
+  "minimum_headroom_mib": 512,
+  "probe_only_no_retained_weights": true,
+  "rule": "every arm pair passes training, validation and atomic checkpoint reload with at least 512 MiB observed headroom; GPU cache preferred"
+}

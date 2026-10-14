@@ -19,8 +19,8 @@ def write(p,data):
 
 
 def main():
- parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--source-root',type=Path,required=True);parser.add_argument('--runtime',type=Path,required=True);parser.add_argument('--data',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);parser.add_argument('--device',choices=('cuda','cpu'),default='cuda');parser.add_argument('--arms',nargs='+',choices=('A0','A1','A2','A3','R1'),default=['A0','A1','A2','R1']);a=parser.parse_args()
- if 'A0' not in a.arms:parser.error('--arms must include A0')
+ parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--source-root',type=Path,required=True);parser.add_argument('--runtime',type=Path,required=True);parser.add_argument('--data',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);parser.add_argument('--device',choices=('cuda','cpu'),default='cuda');parser.add_argument('--arms',nargs='+',choices=('A0','A1','A2','A3','R1','M25','M50'),default=['A0','A1','A2','R1']);parser.add_argument('--reference-evaluation',type=Path);a=parser.parse_args()
+ if 'A0' not in a.arms and a.reference_evaluation is None:parser.error('A0 or --reference-evaluation required')
  arms=list(dict.fromkeys(a.arms))
  if a.output.exists():raise FileExistsError('Use fresh output; original reports are never overwritten')
  a.output.mkdir(parents=True);sys.path.insert(0,str(a.source_root))
@@ -30,6 +30,9 @@ def main():
  torch.set_num_threads(1);torch.use_deterministic_algorithms(True);torch.backends.cudnn.benchmark=False;torch.backends.cuda.matmul.allow_tf32=False;torch.backends.cudnn.allow_tf32=False
  def model(arm):
   if arm=='A0':return RestoredPansharpeningNet(4,4)
+  if arm in ('M25','M50'):
+   cls=importlib.import_module('experiments.ssai.5_mixed_gating.model').MixedGatingNet
+   return cls(4,4,alpha={'M25':.25,'M50':.5}[arm])
   name,cls={'A1':('1_spatial_alignment','SpatialAlignmentNet'),'R1':('2_reference_area_normalization','ReferenceAreaNet'),'A2':('3_calibrated_sigmoid_gating','CalibratedSigmoidNet'),'A3':('4_aligned_sigmoid_gating','AlignedSigmoidNet')}[arm]
   bases=[base for base in ('experiments','research')if(a.source_root/base/'ssai'/name/'model.py').exists()]
   if len(bases)!=1:raise ValueError('Ambiguous or missing experiment model path')
@@ -46,7 +49,29 @@ def main():
   selected[arm]={'checkpoint':str(cp),'sha256':sha(cp),'epoch':ck['epoch'],'validation_mse':minimum}
  if 'R1' in arms:selected['R1']={**selected['A0'],'same_checkpoint_as':'A0','coefficient':'current stage area / fixed training stage area [4096,1024,256]','tuning':'none; not selectable from 64x64 patch validation'}
  write(a.output/'selection.json',{'frozen_before_evaluation':True,'rule':'minimum validation MSE, earliest tie; test not used','selected':selected,'examples_zero_based':[1,8,11,13,19],'precision':'FP32','no_clipping':True})
- allrows={};profiles={}
+ allrows={};profiles={};references={}
+ if a.reference_evaluation is not None:
+  previous=json.loads((a.reference_evaluation/'summary.json').read_text())
+  oldplan=json.loads((a.runtime/'plan.json').read_text())
+  # Existing reference predictions are reused only with identical data and metric/preview code.
+  for name in ('common/model.py','common/metrics.py','common/preview.py','references/upstream/network.py'):
+   original=Path(oldplan['reference_runs']['A0']['best']['path']).parents[1]/'provenance/source'/name
+   if sha(a.source_root/name)!=sha(original):raise ValueError('Reference implementation differs: '+name)
+  for arm in ('A0','A2'):
+   if arm in arms:raise ValueError('Do not rerun a reused reference')
+   ref=oldplan['reference_runs'][arm]['best']
+   if sha(ref['path'])!=ref['sha256'] or previous['selection'][arm]['sha256']!=ref['sha256']:raise ValueError('Reference checkpoint mismatch')
+   allrows[arm]={}
+   for protocol,filename in [('RR','test_qb_multiExm1.h5'),('FR','test_qb_OrigScale_multiExm1.h5')]:
+    report=a.reference_evaluation/arm/(protocol+'.json');row=json.loads(report.read_text())
+    paths=list(a.data.rglob(filename))
+    if len(paths)!=1 or sha(paths[0])!=row['data_sha256']:raise ValueError('Reference evaluation data differs')
+    if row['samples']!=20 or len(row['rows'])!=20:raise ValueError('Incomplete reference evaluation')
+    allrows[arm][protocol]=row
+    references[arm+'_'+protocol]={'path':str(report),'sha256':sha(report),'reused_without_new_predictions':True}
+   profiles[arm]=previous['profiles'][arm];selected[arm]=previous['selection'][arm]
+  write(a.output/'references.json',references)
+
  for arm in arms:
   cp=Path(selected[arm]['checkpoint']);ck=torch.load(cp,map_location='cpu',weights_only=False);net=model(arm);net.load_state_dict(ck['model'],strict=True);net.to(a.device).eval();dest=a.output/arm;dest.mkdir();record={}
   for protocol,filename in [('RR','test_qb_multiExm1.h5'),('FR','test_qb_OrigScale_multiExm1.h5')]:
@@ -90,7 +115,7 @@ def main():
   for protocol in ('RR','FR'):
    base=allrows['A0'][protocol];candidate=allrows[arm][protocol]
    differences[arm][protocol]={'mean_delta':{k:candidate['mean'][k]-base['mean'][k]for k in base['mean']},'scenes':[{ 'index':b['index'],'delta':{k:c['metrics'][k]-b['metrics'][k]for k in b['metrics']}}for b,c in zip(base['rows'],candidate['rows'])]}
- summary={'means':{arm:{p:d['mean']for p,d in rows.items()}for arm,rows in allrows.items()},'differences':differences,'profiles':profiles,'selection':selected,'scene_counts':{'RR':20,'FR':20},'total_scene_predictions':40*len(arms),'torch':torch.__version__,'gpu':torch.cuda.get_device_name(0) if a.device=='cuda' else None,'evaluator_sha256':sha(__file__)}
+ summary={'means':{arm:{p:d['mean']for p,d in rows.items()}for arm,rows in allrows.items()},'differences':differences,'profiles':profiles,'selection':selected,'scene_counts':{'RR':20,'FR':20},'total_scene_predictions':40*len(arms),'reused_reference_predictions':40*(len(allrows)-len(arms)),'references':references,'torch':torch.__version__,'gpu':torch.cuda.get_device_name(0) if a.device=='cuda' else None,'evaluator_sha256':sha(__file__)}
  write(a.output/'summary.json',summary);write(a.output/'complete.json',{'full_evaluation_complete':True,'scene_predictions':40*len(arms),'training_started':False,'evaluator_sha256':sha(__file__)})
 
 if __name__=='__main__':main()

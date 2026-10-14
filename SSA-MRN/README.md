@@ -39,6 +39,7 @@
 | [2. 기준 면적 정규화](experiments/ssai/2_reference_area_normalization/README.md)<br>[이병현] | 원본 SSAI 출력에 현재 면적/학습 기준 면적을 곱했습니다. | PSNR -0.0002dB, SAM +0.0009°, 잠정QNR -0.0000 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 | [3. 기준 크기 sigmoid 게이트](experiments/ssai/3_calibrated_sigmoid_gating/README.md)<br>[이병현] | 원본 전치를 유지하고 공간 softmax를 기준 크기 sigmoid 게이트로 교체했습니다. | PSNR +0.0226dB, SAM -0.0250°, 잠정QNR +0.0090 | 평가&nbsp;완료 | 판단&nbsp;보류 |
 | [4. 공간 좌표 정렬과 sigmoid 게이트 결합](experiments/ssai/4_aligned_sigmoid_gating/README.md)<br>[이병현] | 좌표 정렬과 기준 크기 sigmoid를 결합하고 네 후보를 동일 조건으로 비교합니다. | A3: PSNR -0.0158dB, SAM +0.0226°, 잠정 QNR +0.0099 | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [5. softmax와 sigmoid 혼합 게이트](experiments/ssai/5_mixed_gating/README.md)<br>[이병현] | 원본 좌표에서 softmax와 기준 크기 sigmoid를 고정 비율로 혼합합니다. | M25 개선 없음; M50 PSNR -0.0710dB·잠정 QNR +0.0043 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 
 </details>
 
