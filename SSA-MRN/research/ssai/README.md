@@ -8,7 +8,7 @@ SSAI의 PAN 공간정보와 MS 분광정보를 결합하는 연산을 개선합�
 
 ## 현재 결과
 
-SSAI 1-3의QB seed42 결과를 보관했습니다. A0 원본·A1 좌표 정렬·A2 sigmoid는 각 100에폭 학습했고, R1 면적 보정은A0의 같은 best를 사용했습니다. validation으로 고정한 98에폭 best에서 모든 연산의 RR·FR 각 20개 전체 장면을 평가했습니다. 기존 세 실험의 원본 결과는 유지합니다. 4번에서는 새로운 seed42 대조군과 세 후보를 동일 micro32 조건으로 처음부터 비교합니다.
+SSAI 1-3의QB seed42 결과를 보관했습니다. A0 원본·A1 좌표 정렬·A2 sigmoid는 각 100에폭 학습했고, R1 면적 보정은A0의 같은 best를 사용했습니다. validation으로 고정한 98에폭 best에서 모든 연산의 RR·FR 각 20개 전체 장면을 평가했습니다. 기존 세 실험의 원본 결과는 유지합니다. 4번에서는 새로운 seed42 대조군과 세 후보를 동일 micro32 조건으로 처음부터 비교했습니다.
 
 ## SSAI를 읽는 방법
 
@@ -25,7 +25,7 @@ SSAI 1-3의QB seed42 결과를 보관했습니다. A0 원본·A1 좌표 정렬·
 | [1. 공간 좌표 정렬](../../experiments/ssai/1_spatial_alignment/README.md)<br>[이병현] | 원본의 두 공간 전치를 제거해 같은 위치의 PAN·MS 특징을 결합했습니다. | PSNR +0.0545dB, SAM -0.0351°, 잠정QNR +0.0077 | 평가&nbsp;완료 | 개선 |
 | [2. 기준 면적 정규화](../../experiments/ssai/2_reference_area_normalization/README.md)<br>[이병현] | 원본 SSAI 출력에 현재 면적/학습 기준 면적을 곱했습니다. | PSNR -0.0002dB, SAM +0.0009°, 잠정QNR -0.0000 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 | [3. 기준 크기 sigmoid 게이트](../../experiments/ssai/3_calibrated_sigmoid_gating/README.md)<br>[이병현] | 원본 전치를 유지하고 공간 softmax를 기준 크기 sigmoid 게이트로 교체했습니다. | PSNR +0.0226dB, SAM -0.0250°, 잠정QNR +0.0090 | 평가&nbsp;완료 | 판단&nbsp;보류 |
-| [4. 공간 좌표 정렬과 sigmoid 게이트 결합](../../experiments/ssai/4_aligned_sigmoid_gating/README.md)<br>[이병현] | 좌표 정렬과 기준 크기 sigmoid를 결합하고 네 후보를 동일 조건으로 비교합니다. | A0 74·A1 75에폭 진행, A2·A3 대기 | 학습&nbsp;중<br>2026-10-14 15:58 KST | 판단&nbsp;보류 |
+| [4. 공간 좌표 정렬과 sigmoid 게이트 결합](../../experiments/ssai/4_aligned_sigmoid_gating/README.md)<br>[이병현] | 좌표 정렬과 기준 크기 sigmoid를 결합하고 네 후보를 동일 조건으로 비교합니다. | A3: PSNR -0.0158dB, SAM +0.0226°, 잠정 QNR +0.0099 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 
 ## 비교 조건과 한계
 
@@ -39,6 +39,6 @@ A1의 단일 시드 RR·잠정 FR 동반 개선은 반복 검증과 기준 모�
 
 새 SSAI 결과는 `SSA-MRN/experiments/ssai/<번호>_<변경명>/`에 모으며 계열 내 번호를 1부터 독립적으로 사용합니다. 보고서·catalog·manifest는 계열과 번호를 함께 표시합니다. 새 실험 등록 전에 최신 main과 열린 PR을 확인합니다.
 
-4번의 새 실행은 독립 데이터 캐시를 사용합니다. 여섯 병렬 후보 조합은 최소 VRAM 여유 776MiB로 사전 검증됐으며, 작업 시작 전 512MiB 여유를 검사합니다. 현재 반복 seed43·44와 센서 확장은 시작하지 않았습니다.
 
-4번은 GPU 응답 정지 후 저장된 체크포인트에서 동일 조건으로 재개했습니다. optimizer·난수 상태와 실제 소스·설정은 유지했고 미완료 에폭을 다시 계산했습니다. 재개 후 학습·validation·latest 저장 검증을 통과했으며 성능 평가는 아직 완료하지 않았습니다.
+
+4번의 네 후보는 처음부터 동일 micro32·FP32 조건으로 각 100에폭 학습하고 RR·FR 각 20장면을 평가했습니다. A3는 FR 개선·RR 악화로 부분 개선이며, 세 후보 모두 validation 후속 기준을 통과하지 못했습니다. 원본 기준 모델을 유지합니다. 실제 best/latest 8개와 학습 소스·설정·전체 숫자·그래프·고정 예시를 4번 폴더에 보관했습니다.

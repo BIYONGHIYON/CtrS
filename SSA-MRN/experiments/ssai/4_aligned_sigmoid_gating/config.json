@@ -4,8 +4,8 @@
   "experiment_display": "4. 공간 좌표 정렬과 sigmoid 게이트 결합",
   "title": "공간 좌표 정렬과 sigmoid 게이트 결합",
   "experimenter": "이병현",
-  "status": "학습 중",
-  "improvement": "판단 보류",
+  "status": "평가 완료",
+  "improvement": "부분 개선",
   "comparison_arms": {
     "A0": "원본",
     "A1": "공간 좌표 정렬",
@@ -49,7 +49,7 @@
     "controller": "detached Windows WMI",
     "benchmark_minimum_free_mib": 776,
     "worker_budget_mib": 3146,
-    "actual_phase": "A0 epoch74 and A1 epoch75 training; resumed epoch73/74 saved and strict-load inference verified; A2/A3 queued",
+    "actual_phase": "A0-A3 100 epochs complete; full RR/FR evaluation complete",
     "recovery": {
       "reason": "GPU calls and nvidia-smi unresponsive; root cause unconfirmed",
       "manual_reboot_completed": true,
@@ -85,7 +85,12 @@
       19
     ],
     "fr_has_gt": false,
-    "metric_matlab_parity": "unverified"
+    "metric_matlab_parity": "unverified",
+    "performance_evaluation_completed": true,
+    "scene_counts": {
+      "RR": 20,
+      "FR": 20
+    }
   },
   "followup": {
     "seeds": [
@@ -99,5 +104,33 @@
     "conditional_on_validation": true,
     "automatic_launch": false
   },
-  "last_checked": "2026-10-14T15:58:01+09:00"
+  "last_checked": "2026-10-14T20:48:10+09:00",
+  "results_summary": {
+    "rr_delta": {
+      "SAM": 0.022619897965742375,
+      "ERGAS": 0.009338359947481223,
+      "PSNR": -0.01576061196405476,
+      "SCC": -3.4372082823419525e-05,
+      "Q2n": -0.00019742377677089973
+    },
+    "fr_delta": {
+      "D_lambda": -0.007518442721625752,
+      "D_s": -0.0026670637137730935,
+      "QNR": 0.009931751550196877
+    },
+    "arm_judgments": {
+      "A1": "개선 없음",
+      "A2": "부분 개선",
+      "A3": "부분 개선"
+    },
+    "best_epochs": {
+      "A0": 98,
+      "A1": 98,
+      "A2": 98,
+      "A3": 98
+    },
+    "validation_promotion_passed": [],
+    "scene_predictions": 160,
+    "limitation": "single QB seed42, reused exploratory test; no independent holdout or repeat seeds; metric MATLAB parity unverified"
+  }
 }
