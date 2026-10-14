@@ -12,7 +12,7 @@ import numpy as np
 import torch
 from torch.utils.data import Dataset,DataLoader
 from common.model import RestoredPansharpeningNet
-ARMS=('A0','A1','A2','A3','M25','M50')
+ARMS=('A0','A1','A2','A3','M25','M50','D6','D7')
 KEYS=('pan','lms','ms','gt')
 
 
@@ -78,6 +78,9 @@ def configure(seed,device):
 
 def model(arm,channels=4):
     if arm=='A0':return RestoredPansharpeningNet(channels,4)
+    if arm in ('D6','D7'):
+        name,cls={'D6':('6_ms_conditioned_detail','MSConditionedDetailNet'),'D7':('7_channel_relation_detail','ChannelRelationDetailNet')}[arm]
+        return getattr(importlib.import_module(f'experiments.ssai.{name}.model'),cls)(channels,4)
     if arm in ('M25','M50'):
         cls=importlib.import_module('experiments.ssai.5_mixed_gating.model').MixedGatingNet
         return cls(channels,4,alpha={'M25':0.25,'M50':0.5}[arm])
@@ -104,12 +107,37 @@ class GPUCachedLoader:
             order=torch.randperm(self.n,generator=self.generator)
         for off in range(0,self.n,self.batch_size):
             ids=order[off:off+self.batch_size].to(next(iter(self.arrays.values())).device)
-            yield tuple(self.arrays[k].index_select(0,ids)for k in KEYS)
+            yield tuple(self.fetch(k,ids)for k in KEYS)
         if self.generator is not None:torch.randperm(self.n,generator=self.generator)
+
+    def fetch(self,key,ids):
+        return self.arrays[key].index_select(0,ids)
+
+
+class PartialGPUCachedLoader(GPUCachedLoader):
+    """Cache85% on GPU, gather the identical FP32 remaining values from mmap."""
+    def __init__(self,ds,batch_size,generator,device):
+        self.host=ds.arrays
+        self.n=len(ds);self.cut=int(self.n*0.85)
+        self.arrays={k:torch.from_numpy(np.array(v[:self.cut],copy=True)).to(device)for k,v in ds.arrays.items()}
+        self.batch_size=batch_size;self.generator=generator
+    def fetch(self,key,ids):
+        cpu_ids=ids.cpu();warm=cpu_ids<self.cut
+        warm_pos=torch.nonzero(warm,as_tuple=True)[0]
+        cold_pos=torch.nonzero(~warm,as_tuple=True)[0]
+        output=torch.empty((len(ids),*self.host[key].shape[1:]),device=ids.device,dtype=torch.float32)
+        if len(warm_pos):
+            value=self.arrays[key].index_select(0,cpu_ids[warm].to(ids.device))
+            output.index_copy_(0,warm_pos.to(ids.device),value)
+        if len(cold_pos):
+            value=torch.from_numpy(np.array(self.host[key][cpu_ids[~warm].numpy()],copy=True)).to(ids.device)
+            output.index_copy_(0,cold_pos.to(ids.device),value)
+        return output
 
 
 def make_loader(ds,cache_mode,batch_size,generator,device):
     if cache_mode=='gpu':return GPUCachedLoader(ds,batch_size,generator,device)
+    if cache_mode=='gpu_partial':return PartialGPUCachedLoader(ds,batch_size,generator,device)
     return DataLoader(ds,batch_size=batch_size,shuffle=generator is not None,generator=generator,num_workers=0,pin_memory=device=='cuda')
 
 
@@ -264,7 +292,7 @@ def benchmark(a):
     import itertools
     p=plan(a);root=a.runtime/'benchmark';root.mkdir(exist_ok=False);rows=[]
     # Fixed micro32 for all arms. Only the common cache placement may change before training.
-    for cache_mode in ('gpu','host'):
+    for cache_mode in ('gpu','gpu_partial','host'):
         mode_rows=[]
         for pair in itertools.combinations(p['arms'],2):
             trial=cache_mode+'32_'+'_'.join(pair);folder=root/trial;folder.mkdir();active=[]
@@ -347,7 +375,7 @@ def status(a):
 
 
 def main():
-    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('mode',choices=['prepare','probe','benchmark','train','controller','start','status']);parser.add_argument('--runtime',type=Path,required=True);parser.add_argument('--data',type=Path);parser.add_argument('--arm',choices=ARMS,default='A0');parser.add_argument('--slots',type=int,default=2);parser.add_argument('--micro',type=int,choices=(4,8,16,32),default=4);parser.add_argument('--cache-mode',choices=('host','gpu'),default='host');parser.add_argument('--trial',default='host4');parser.add_argument('--device',choices=['cuda','cpu'],default='cuda');a=parser.parse_args();a.runtime.mkdir(parents=True,exist_ok=True);globals()[a.mode](a)
+    parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('mode',choices=['prepare','probe','benchmark','train','controller','start','status']);parser.add_argument('--runtime',type=Path,required=True);parser.add_argument('--data',type=Path);parser.add_argument('--arm',choices=ARMS,default='A0');parser.add_argument('--slots',type=int,default=2);parser.add_argument('--micro',type=int,choices=(4,8,16,32),default=4);parser.add_argument('--cache-mode',choices=('host','gpu','gpu_partial'),default='host');parser.add_argument('--trial',default='host4');parser.add_argument('--device',choices=['cuda','cpu'],default='cuda');a=parser.parse_args();a.runtime.mkdir(parents=True,exist_ok=True);globals()[a.mode](a)
 
 
 if __name__=='__main__':main()
