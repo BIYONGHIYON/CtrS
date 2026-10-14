@@ -1,0 +1,147 @@
+{
+  "checks": [
+    {
+      "job": "A_x4",
+      "strict_load": true,
+      "best_epoch": 100,
+      "cpu_synthetic_inference": [
+        {
+          "scale": 4,
+          "output_shape": [
+            1,
+            4,
+            64,
+            64
+          ],
+          "finite": true
+        }
+      ]
+    },
+    {
+      "job": "B_x2",
+      "strict_load": true,
+      "best_epoch": 97,
+      "cpu_synthetic_inference": [
+        {
+          "scale": 2,
+          "output_shape": [
+            1,
+            4,
+            60,
+            60
+          ],
+          "finite": true
+        }
+      ]
+    },
+    {
+      "job": "B_x3",
+      "strict_load": true,
+      "best_epoch": 100,
+      "cpu_synthetic_inference": [
+        {
+          "scale": 3,
+          "output_shape": [
+            1,
+            4,
+            60,
+            60
+          ],
+          "finite": true
+        }
+      ]
+    },
+    {
+      "job": "B_x4",
+      "strict_load": true,
+      "best_epoch": 99,
+      "cpu_synthetic_inference": [
+        {
+          "scale": 4,
+          "output_shape": [
+            1,
+            4,
+            60,
+            60
+          ],
+          "finite": true
+        }
+      ]
+    },
+    {
+      "job": "C_mixed",
+      "strict_load": true,
+      "best_epoch": 100,
+      "cpu_synthetic_inference": [
+        {
+          "scale": 2,
+          "output_shape": [
+            1,
+            4,
+            60,
+            60
+          ],
+          "finite": true
+        },
+        {
+          "scale": 3,
+          "output_shape": [
+            1,
+            4,
+            60,
+            60
+          ],
+          "finite": true
+        },
+        {
+          "scale": 4,
+          "output_shape": [
+            1,
+            4,
+            60,
+            60
+          ],
+          "finite": true
+        }
+      ]
+    },
+    {
+      "job": "D_mixed",
+      "strict_load": true,
+      "best_epoch": 100,
+      "cpu_synthetic_inference": [
+        {
+          "scale": 2,
+          "output_shape": [
+            1,
+            4,
+            60,
+            60
+          ],
+          "finite": true
+        },
+        {
+          "scale": 3,
+          "output_shape": [
+            1,
+            4,
+            60,
+            60
+          ],
+          "finite": true
+        },
+        {
+          "scale": 4,
+          "output_shape": [
+            1,
+            4,
+            60,
+            60
+          ],
+          "finite": true
+        }
+      ]
+    }
+  ],
+  "scope": "strict load and CPU synthetic forward only; not H5 performance reevaluation"
+}
