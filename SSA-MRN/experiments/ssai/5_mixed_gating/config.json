@@ -1,0 +1,169 @@
+{
+  "research_track": "ssai",
+  "experiment": 5,
+  "display_name": "5. softmax와 sigmoid 혼합 게이트",
+  "experimenter": "이병현",
+  "status": "평가 완료",
+  "improvement": "부분 개선",
+  "candidates": {
+    "M25": 0.25,
+    "M50": 0.5
+  },
+  "baseline_reference": "../4_aligned_sigmoid_gating",
+  "training": {
+    "sensor": "QB",
+    "seed": 42,
+    "epochs": 100,
+    "effective_batch": 32,
+    "micro_batch": 32,
+    "precision": "FP32",
+    "amp": false,
+    "tf32": false,
+    "k": 4,
+    "spatial_scale": 4,
+    "lr": 0.0001,
+    "loss": "MSE",
+    "initialization": "fresh same seeded parameters; no warm start",
+    "selection": "minimum validation MSE, earliest tie"
+  },
+  "runtime_root": "C:/CtrS-ssai5/runtime/qb_s42_100",
+  "reference_areas": [
+    4096,
+    1024,
+    256
+  ],
+  "new_parameters": 0,
+  "followup": {
+    "automatic_launch": false,
+    "validation_threshold": 0.0001715509279241805
+  },
+  "execution": {
+    "source_root": "C:/CtrS-ssai5/SSA-MRN",
+    "runtime_root": "C:/CtrS-ssai5/runtime/qb_s42_100",
+    "slots": 2,
+    "cache_mode": "gpu",
+    "worker_budget_mib": 3168,
+    "headroom_mib": 512,
+    "probe_minimum_free_mib": 1324,
+    "probe_aggregate_patches_per_second": 336.0705805434434,
+    "controller_pid": 2304,
+    "training_pids": {
+      "M25": 13956,
+      "M50": 8588
+    },
+    "vram_observed_used_mib": 6697,
+    "gpu_observed_percent": 99,
+    "actual_phase": "M25/M50 100 epochs complete; RR/FR evaluation complete"
+  },
+  "last_checked": "2026-10-15T00:39:29.253901+09:00",
+  "arm_judgments": {
+    "M25": "개선 없음",
+    "M50": "부분 개선"
+  },
+  "evaluation": {
+    "checkpoint_selection": "minimum validation MSE, earliest exact tie; best98/latest100",
+    "test_used_for_selection": false,
+    "scene_counts": {
+      "RR": 20,
+      "FR": 20
+    },
+    "new_scene_predictions": 80,
+    "reused_reference_predictions": 80,
+    "references": "../4_aligned_sigmoid_gating/results/evaluation",
+    "metric_matlab_parity": "unverified",
+    "independent_holdout": false,
+    "performance_evaluation_completed": true
+  },
+  "results_summary": {
+    "means": {
+      "A0": {
+        "RR": {
+          "SAM": 4.928274390619155,
+          "ERGAS": 4.110100185806998,
+          "PSNR": 37.453589066314706,
+          "SCC": 0.9769483265244674,
+          "Q2n": 0.9232389945473625
+        },
+        "FR": {
+          "D_lambda": 0.04516672273229319,
+          "D_s": 0.039613654633621,
+          "QNR": 0.9174105843313989
+        }
+      },
+      "A2": {
+        "RR": {
+          "SAM": 4.9398209934672925,
+          "ERGAS": 4.120005165899266,
+          "PSNR": 37.44057766164033,
+          "SCC": 0.9767584131546228,
+          "Q2n": 0.9224454189632292
+        },
+        "FR": {
+          "D_lambda": 0.03972781349869423,
+          "D_s": 0.03977335990547985,
+          "QNR": 0.9225142895441417
+        }
+      },
+      "M25": {
+        "RR": {
+          "SAM": 4.95103539835741,
+          "ERGAS": 4.129482056196282,
+          "PSNR": 37.41852693938135,
+          "SCC": 0.9767408901712191,
+          "Q2n": 0.9228278880395303
+        },
+        "FR": {
+          "D_lambda": 0.04712009632993167,
+          "D_s": 0.04038941345317985,
+          "QNR": 0.9146993869503698
+        }
+      },
+      "M50": {
+        "RR": {
+          "SAM": 4.95562070174725,
+          "ERGAS": 4.147605523021978,
+          "PSNR": 37.38254956033954,
+          "SCC": 0.97633547249243,
+          "Q2n": 0.9213169257476459
+        },
+        "FR": {
+          "D_lambda": 0.041898773599402195,
+          "D_s": 0.038463686116593815,
+          "QNR": 0.921755634551042
+        }
+      }
+    },
+    "deltas": {
+      "M25": {
+        "RR": {
+          "SAM": 0.0227610077382554,
+          "ERGAS": 0.019381870389283407,
+          "PSNR": -0.03506212693335442,
+          "SCC": -0.00020743635324826926,
+          "Q2n": -0.00041110650783215963
+        },
+        "FR": {
+          "D_lambda": 0.0019533735976384817,
+          "D_s": 0.0007757588195588458,
+          "QNR": -0.0027111973810290957
+        }
+      },
+      "M50": {
+        "RR": {
+          "SAM": 0.02734631112809538,
+          "ERGAS": 0.03750533721497984,
+          "PSNR": -0.07103950597516473,
+          "SCC": -0.0006128540320373688,
+          "Q2n": -0.0019220687997165697
+        },
+        "FR": {
+          "D_lambda": -0.003267949132890996,
+          "D_s": -0.0011499685170271862,
+          "QNR": 0.004345050219643154
+        }
+      }
+    },
+    "validation_promotion_passed": []
+  },
+  "decision": "Keep original A0; fixed mixing did not preserve RR while improving FR. No repeat-seed/sensor launch."
+}
