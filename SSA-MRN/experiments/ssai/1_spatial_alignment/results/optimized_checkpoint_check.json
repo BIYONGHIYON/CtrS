@@ -1,0 +1,63 @@
+{
+  "checked_unix": 1791918369.6273522,
+  "checkpoints_saved_and_reload_verified": true,
+  "queue": {
+    "controller_pid": 26744,
+    "active": {
+      "A0": 4056,
+      "A1": 15108
+    },
+    "completed": [],
+    "failed": [],
+    "pending": [
+      "A2"
+    ],
+    "slots": 2,
+    "updated": 1791918367.0752914
+  },
+  "records": [
+    {
+      "arm": "A0",
+      "saved_epoch": 4,
+      "micro_batch": 32,
+      "effective_batch": 32,
+      "cache_mode": "gpu",
+      "latest_sha256": "165221435ebfcfa65d9d024f39a1af42ef6a7d2d8f0847349bb7217a00d840d3",
+      "status": {
+        "pid": 5376,
+        "state": "training",
+        "arm": "A0",
+        "epoch": 5,
+        "epochs": 100,
+        "batch": 441,
+        "batches": 536,
+        "train_mse": 0.00037039216847239217,
+        "patches_per_second": 171.31411229135054,
+        "updated": 1791918368.6259274,
+        "peak_reserved_mib": 2952.0
+      }
+    },
+    {
+      "arm": "A1",
+      "saved_epoch": 4,
+      "micro_batch": 32,
+      "effective_batch": 32,
+      "cache_mode": "gpu",
+      "latest_sha256": "bd7f3e552a678e7d19aa081b6aea2fdca9dd26d884b84ce3aaf886faddf8d497",
+      "status": {
+        "pid": 13548,
+        "state": "training",
+        "arm": "A1",
+        "epoch": 5,
+        "epochs": 100,
+        "batch": 441,
+        "batches": 536,
+        "train_mse": 0.0003711869531652157,
+        "patches_per_second": 171.99897619658833,
+        "updated": 1791918367.9612622,
+        "peak_reserved_mib": 2952.0
+      }
+    }
+  ],
+  "gpu": "99 %, 7360 MiB, 8192 MiB"
+}

@@ -1,0 +1,41 @@
+{
+  "windows_save_probe_passed": true,
+  "training_conditions_changed": false,
+  "selected_slots": 2,
+  "records": [
+    {
+      "arm": "B0",
+      "recovered_epoch": 1,
+      "strict_load": true,
+      "original_tmp_sha256": "9da001280207c7b2130619d2ed81de284cfbf893ef1fd9f6c8a62245bc6852d9",
+      "best_sha256": "93ccd7486393c269e8ef4590d31de315127ed48f2b5839cfaa1d54816db0c5f4",
+      "latest_sha256": "93ccd7486393c269e8ef4590d31de315127ed48f2b5839cfaa1d54816db0c5f4",
+      "validation_mse": 0.0005647004925428335,
+      "fingerprint_unchanged": true,
+      "next_epoch": 2
+    },
+    {
+      "arm": "A1",
+      "recovered_epoch": 1,
+      "strict_load": true,
+      "original_tmp_sha256": "a1c296a290e5d87bbfc34b138eaace589e6ebdc9cd0f7d270013c34eb5d6263e",
+      "best_sha256": "4a1258575ad2e755837b69c3c69feeea4fb0d5d11da3a18ffdbf514c86173b48",
+      "latest_sha256": "4a1258575ad2e755837b69c3c69feeea4fb0d5d11da3a18ffdbf514c86173b48",
+      "validation_mse": 0.0005530854441889188,
+      "fingerprint_unchanged": true,
+      "next_epoch": 2
+    }
+  ],
+  "source_repair": {
+    "reason": "Windows read-only handle fsync failure; writable save handle with flush/fsync before atomic replace",
+    "time": 1791917080.506029,
+    "training_conditions_changed": false,
+    "original_plan_sha256": "05397ff66e6d3d123584edc614acaa5dffc1322af364598c59e456420e5a6420",
+    "files": {
+      "common/ssai_suite.py": {
+        "original_sha256": "d8721d9b4d56b16bde203926dcea8da63b398a2907fab44d42743b9651624b83",
+        "repaired_sha256": "4d32d3d948aea2dea965c6f315545367b8c04053c372f511ee1854546489b557"
+      }
+    }
+  }
+}

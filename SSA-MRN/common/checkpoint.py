@@ -14,8 +14,10 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 
+RESEARCH_TRACK = "performance"
+
 def experiment(number):
-    matches = list((ROOT / 'research').glob(f'*/{number}_*'))
+    matches = list((ROOT / 'research' / RESEARCH_TRACK).glob(f'{number}_*')) + list((ROOT / 'experiments' / RESEARCH_TRACK).glob(f'{number}_*'))
     if len(matches) != 1:
         raise ValueError(f'Unknown experiment number: {number}')
     return matches[0]
@@ -36,7 +38,10 @@ def load_model(number, checkpoint):
     channels = cfg.get('channels', ck.get('channels', 8 if sensor in ('WV2', 'WV3') else 4))
     k = cfg.get('k', ck.get('ssai_dimension', 4))
     variant = ck.get('variant', cfg.get('variant'))
-    if number in (1, 2, 8, 12, 14):
+    if RESEARCH_TRACK == 'ssai':
+        cls = {1:'SpatialAlignmentNet',2:'ReferenceAreaNet',3:'CalibratedSigmoidNet'}[number]
+        net = RestoredPansharpeningNet(channels, k) if variant in ('B0', 'A0') and number != 2 else getattr(model_module(number), cls)(channels, k)
+    elif number in (1, 2, 8, 12, 14):
         net = RestoredPansharpeningNet(channels, k)
     elif number in (4, 5, 6):
         net = model_module(4).make_model(cfg)
@@ -61,11 +66,12 @@ def load_model(number, checkpoint):
 
 
 def predict(number, model, pan, lms, ms):
-    return model(pan, ms) if number == 11 else model(pan, lms, ms)
+    return model(pan, ms) if RESEARCH_TRACK == 'performance' and number == 11 else model(pan, lms, ms)
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--research-track', choices=('ssai','variable_scale','performance'), default='performance')
     p.add_argument('--experiment', type=int, required=True)
     p.add_argument('--checkpoint', type=Path, required=True, help='Path relative to experiment folder, or absolute')
     p.add_argument('--h5', type=Path, help='Explicit RR or FR H5, including flattened Kaggle filenames')
@@ -74,6 +80,8 @@ def main():
     p.add_argument('--output', type=Path, help='Fresh metrics JSON path; existing files are never overwritten')
     p.add_argument('--max-samples', type=int, help='Omit to evaluate the entire H5')
     args = p.parse_args()
+    global RESEARCH_TRACK
+    RESEARCH_TRACK = args.research_track
     import torch
     torch.set_num_threads(1)
     path = args.checkpoint if args.checkpoint.is_absolute() else experiment(args.experiment) / args.checkpoint
