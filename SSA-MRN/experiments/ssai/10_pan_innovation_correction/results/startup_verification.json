@@ -1,0 +1,134 @@
+{
+  "verified": true,
+  "checked_utc": 1792057596.2722027,
+  "source_files_verified": 26,
+  "checkpoint_verification_is_not_performance_evaluation": true,
+  "arms": {
+    "A1": {
+      "completed_epochs": 1,
+      "status": {
+        "pid": 1484,
+        "state": "training",
+        "arm": "A1",
+        "epoch": 2,
+        "epochs": 100,
+        "batch": 361,
+        "batches": 536,
+        "train_mse": 0.0004893469034405193,
+        "patches_per_second": 179.7976653696498,
+        "peak_reserved_mib": 2614.0,
+        "updated": 1792057595.7729614
+      },
+      "latest_history": {
+        "epoch": 1,
+        "train_mse": 0.0010265280860807394,
+        "val_mse": 0.0005427112352173883,
+        "val_sam": 7.300823658299349,
+        "val_global_psnr": 32.65431187555575,
+        "best_mse": 0.0005427112352173883,
+        "seconds": 107.51499999999987,
+        "gamma": {
+          "SSA_blocks.0": 0.14503514766693115,
+          "SSA_blocks.1": 0.16140756011009216,
+          "SSA_blocks.2": 0.125928595662117,
+          "SSA_blocks.3": 0.1361471712589264,
+          "SSA_blocks1.0": 0.127839133143425,
+          "SSA_blocks1.1": 0.1417173594236374,
+          "SSA_blocks1.2": 0.11710824072360992,
+          "SSA_blocks1.3": 0.14508424699306488,
+          "SSA_blocks2.0": 0.12013942748308182,
+          "SSA_blocks2.1": 0.1221238225698471,
+          "SSA_blocks2.2": 0.10681915283203125,
+          "SSA_blocks2.3": 0.12478978931903839
+        },
+        "active_convolution_weight_relative_change": {
+          "SSA_blocks": 0.1983866063376985,
+          "SSA_blocks1": 0.11751414355850144,
+          "SSA_blocks2": 0.05846349973680006
+        }
+      },
+      "mean_recent_epoch_seconds": 107.51499999999987,
+      "eta_epoch_seconds": 1792068240.2572026,
+      "eta_kst": "2026-10-15T21:44:00.257203+09:00",
+      "checkpoints": {
+        "best": {
+          "epoch": 1,
+          "bytes": 5524257,
+          "strict_load": true,
+          "finite_cpu_forward": true,
+          "optimizer_rng_preserved": true
+        },
+        "latest": {
+          "epoch": 1,
+          "bytes": 5524257,
+          "strict_load": true,
+          "finite_cpu_forward": true,
+          "optimizer_rng_preserved": true
+        }
+      }
+    },
+    "A2": {
+      "completed_epochs": 1,
+      "status": {
+        "pid": 4568,
+        "state": "training",
+        "arm": "A2",
+        "epoch": 2,
+        "epochs": 100,
+        "batch": 181,
+        "batches": 536,
+        "train_mse": 0.0005015411384619813,
+        "patches_per_second": 153.04936053271302,
+        "peak_reserved_mib": 2618.0,
+        "updated": 1792057593.7396176
+      },
+      "latest_history": {
+        "epoch": 1,
+        "train_mse": 0.0010258270047290522,
+        "val_mse": 0.0005394048843529134,
+        "val_sam": 7.318607797081765,
+        "val_global_psnr": 32.680851252952266,
+        "best_mse": 0.0005394048843529134,
+        "seconds": 121.625,
+        "gamma": {
+          "SSA_blocks.0": 0.14524412155151367,
+          "SSA_blocks.1": 0.15231996774673462,
+          "SSA_blocks.2": 0.1296994537115097,
+          "SSA_blocks.3": 0.13860231637954712,
+          "SSA_blocks1.0": 0.15346866846084595,
+          "SSA_blocks1.1": 0.16238343715667725,
+          "SSA_blocks1.2": 0.14646947383880615,
+          "SSA_blocks1.3": 0.16345706582069397,
+          "SSA_blocks2.0": 0.14508040249347687,
+          "SSA_blocks2.1": 0.14562463760375977,
+          "SSA_blocks2.2": 0.11841577291488647,
+          "SSA_blocks2.3": 0.14457859098911285
+        },
+        "active_convolution_weight_relative_change": {
+          "SSA_blocks": 0.19331047758495157,
+          "SSA_blocks1": 0.21521798405917192,
+          "SSA_blocks2": 0.10113256151586598
+        }
+      },
+      "mean_recent_epoch_seconds": 121.625,
+      "eta_epoch_seconds": 1792069637.1472027,
+      "eta_kst": "2026-10-15T22:07:17.147203+09:00",
+      "checkpoints": {
+        "best": {
+          "epoch": 1,
+          "bytes": 5524257,
+          "strict_load": true,
+          "finite_cpu_forward": true,
+          "optimizer_rng_preserved": true
+        },
+        "latest": {
+          "epoch": 1,
+          "bytes": 5524257,
+          "strict_load": true,
+          "finite_cpu_forward": true,
+          "optimizer_rng_preserved": true
+        }
+      }
+    }
+  }
+}

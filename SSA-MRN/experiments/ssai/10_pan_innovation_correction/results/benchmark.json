@@ -1,0 +1,38 @@
+{
+  "selected_slots": 2,
+  "selected_micro_batch": 32,
+  "selected_cache_mode": "gpu_partial",
+  "worker_budget_mib": 2810.0,
+  "minimum_headroom_mib": 512,
+  "observed_minimum_free_mib": 2089.0,
+  "aggregate_patches_per_second": 328.11553770014064,
+  "probes": [
+    {
+      "arm": "A1",
+      "slots": 2,
+      "seconds": 6.1720000000000255,
+      "patches": 1024,
+      "patches_per_second": 165.9105638366811,
+      "peak_reserved_mib": 2614.0,
+      "probe_discarded": true,
+      "checkpoint_saved": false,
+      "micro_batch": 32,
+      "cache_mode": "gpu_partial"
+    },
+    {
+      "arm": "A2",
+      "slots": 2,
+      "seconds": 6.3129999999998745,
+      "patches": 1024,
+      "patches_per_second": 162.20497386345957,
+      "peak_reserved_mib": 2618.0,
+      "probe_discarded": true,
+      "checkpoint_saved": false,
+      "micro_batch": 32,
+      "cache_mode": "gpu_partial"
+    }
+  ],
+  "probe_only_no_retained_weights": true,
+  "safe": true,
+  "automatic_batch_or_cache_change": false
+}
