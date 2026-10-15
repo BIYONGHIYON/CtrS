@@ -1,0 +1,88 @@
+{
+  "research_track": "ssai",
+  "experiment": 11,
+  "display_name": "11. SSAI 경로 제거 분해와 PAN 기저 결합 상한·FR 대리 지표 검증",
+  "experimenter": "이병현",
+  "status": "사전 검증 완료",
+  "improvement": "성능 비교 아님",
+  "baseline_reference": "../4_aligned_sigmoid_gating",
+  "weights": {
+    "model": "A0",
+    "epoch": 98,
+    "sensor": "QB",
+    "seed": 42,
+    "retraining": false
+  },
+  "ablation": {
+    "variants": {
+      "A0": "original forward",
+      "Z_SSA": "SSA block outputs zeroed; fusion conv bias and PReLU kept",
+      "Z_STAGE": "three SSAI stage outputs zeroed (no fusion conv, bias or PReLU)",
+      "Z_COARSE": "decoder coarse path input to conv2ctc3 zeroed",
+      "Z_BACKBONE": "backbone residual conv64t48 zeroed; res = LMS"
+    },
+    "data": {
+      "validation": 1905,
+      "RR": 20,
+      "FR": 20
+    },
+    "metrics": {
+      "RR": [
+        "PSNR",
+        "SAM",
+        "ERGAS",
+        "SCC",
+        "Q2n"
+      ],
+      "FR": [
+        "D_lambda",
+        "D_s",
+        "QNR"
+      ],
+      "peak": 2047,
+      "provisional": [
+        "SCC",
+        "Q2n",
+        "QNR"
+      ]
+    }
+  },
+  "D6_oracle_headroom": {
+    "target": "A0 validation error GT - A0 (LMS error as method reference)",
+    "fit": "per band, per cell least squares on PAN bases; coefficients from GT",
+    "bases": {
+      "S1": [
+        "1",
+        "PAN-LP4"
+      ],
+      "S2": [
+        "1",
+        "PAN-LP4",
+        "PAN-LP2",
+        "LP2-LP4",
+        "grad_x",
+        "grad_y"
+      ]
+    },
+    "lowpass": "bicubic antialias down by 2 or 4, bicubic up",
+    "cells": [
+      4,
+      8,
+      16,
+      64
+    ],
+    "null_control": "PAN of the neighbouring patch (torch.roll by 1)",
+    "gate": {
+      "pass": "S2 cell8 >= 0.15",
+      "stop": "S2 cell8 <= 0.05"
+    }
+  },
+  "D7_fr_proxy": {
+    "patches": 256,
+    "models": 15,
+    "proxy": "reduced-scale FR metrics on validation 64x64 patches",
+    "target": "FR test 20 scenes D_s and QNR",
+    "gate": "Spearman D_s >= 0.7"
+  },
+  "device": "RTX 3060 Ti 8GB, PyTorch 2.7.1+cu128, CUDA FP32, deterministic"
+}
