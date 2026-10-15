@@ -27,6 +27,10 @@ SSAI 1-3의QB seed42 결과를 보관했습니다. A0 원본·A1 좌표 정렬·
 | [3. 기준 크기 sigmoid 게이트](../../experiments/ssai/3_calibrated_sigmoid_gating/README.md)<br>[이병현] | 원본 전치를 유지하고 공간 softmax를 기준 크기 sigmoid 게이트로 교체했습니다. | PSNR +0.0226dB, SAM -0.0250°, 잠정QNR +0.0090 | 평가&nbsp;완료 | 판단&nbsp;보류 |
 | [4. 공간 좌표 정렬과 sigmoid 게이트 결합](../../experiments/ssai/4_aligned_sigmoid_gating/README.md)<br>[이병현] | 좌표 정렬과 기준 크기 sigmoid를 결합하고 네 후보를 동일 조건으로 비교합니다. | A3: PSNR -0.0158dB, SAM +0.0226°, 잠정 QNR +0.0099 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [5. softmax와 sigmoid 혼합 게이트](../../experiments/ssai/5_mixed_gating/README.md)<br>[이병현] | 원본 좌표에서 softmax와 기준 크기 sigmoid를 고정 비율로 혼합합니다. | M25 개선 없음; M50 PSNR -0.0710dB·잠정 QNR +0.0043 | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [6. MS 조건부 공간 세부정보 보정](../../experiments/ssai/6_ms_conditioned_detail/README.md)<br>[이병현] | MS가 선택한 PAN 세부정보를 원본 출력에 잔차 보정합니다. | PSNR -0.0017dB·SAM +0.0038°·잠정QNR -0.0046 | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [7. MS–PAN 채널 관계 기반 세부정보 보정](../../experiments/ssai/7_channel_relation_detail/README.md)<br>[이병현] | 4×4 MS–PAN 채널 관계로 PAN 세부정보를 선택·보정합니다. | PSNR -0.0061dB·SAM +0.0158°·잠정QNR -0.0030 | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [8. 공간 가중치 평균 정규화](../../experiments/ssai/8_spatial_mean_normalization/README.md)<br>[이병현] | 원본 공간 softmax 평균을1로 맞추고 고정·학습 gamma를 비교합니다. | N1 개선 없음; N2 PSNR +0.0104dB·SAM +0.0036°·잠정QNR -0.0019; 두 후보 학습 가능화 성공 | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [9. 채널 축 교차 어텐션](../../experiments/ssai/9_channel_cross_attention/README.md)<br>[이병현] | 정규화 기준에서 채널 어텐션 교체·병렬 추가·용량 대조를 비교합니다. | 8번 완료·학습 가능화·원격 보관이 선행 조건 | 계획 | 미확인 |
 
 ## 비교 조건과 한계
 
@@ -45,3 +49,5 @@ A1의 단일 시드 RR·잠정 FR 동반 개선은 반복 검증과 기준 모�
 4번의 네 후보는 처음부터 동일 micro32·FP32 조건으로 각 100에폭 학습하고 RR·FR 각 20장면을 평가했습니다. A3는 FR 개선·RR 악화로 부분 개선이며, 세 후보 모두 validation 후속 기준을 통과하지 못했습니다. 원본 기준 모델을 유지합니다. 실제 best/latest 8개와 학습 소스·설정·전체 숫자·그래프·고정 예시를 4번 폴더에 보관했습니다.
 
 5번은 신규 혼합 후보 두 개만100에폭 학습하고 실험4의 동일조건 A0·A2를 참조했습니다. M25는 개선 없음, M50은 FR 개선·RR 악화이며 두 후보 모두 validation 기준을 통과하지 못했습니다. 새80개 RR/FR 예측·실제 best/latest4개·학습소스·설정·그래프·고정 예시를5번에 보관했습니다. 원본 기준 모델을 유지합니다.
+
+6·7번은원본SSA기반의MS조건부세부정보보정을각100에폭학습했습니다. 7번validation은0.116%좋아졌지만RR주요지표·잠정FR은악화했고두실험모두개선없음입니다. 실제신규80개예측·best/latest4개·원본소스/설정·그래프·사전고정예시를보존하고원본을유지합니다. 다음우선검토는1번좌표정렬의반복시드재현성이며새학습은시작하지않았습니다.

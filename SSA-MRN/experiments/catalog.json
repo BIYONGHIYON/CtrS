@@ -150,5 +150,83 @@
     ],
     "sensor": "QB",
     "limits": "150에폭 AMP 동일 조건 R0 대비 W2 RR PSNR +0.7234 dB, SAM -0.3542도; 잠정 QNR -0.0922로 FR 악화. 단일 시드·센서이며 기준 모델 승격 없음."
+  },
+  "ssai/6_ms_conditioned_detail": {
+    "report": "experiments/ssai/6_ms_conditioned_detail/README.md",
+    "model": "experiments/ssai/6_ms_conditioned_detail/model.py",
+    "config": "experiments/ssai/6_ms_conditioned_detail/config.json",
+    "manifest": "experiments/ssai/6_ms_conditioned_detail/manifest.json",
+    "results": "experiments/ssai/6_ms_conditioned_detail/results",
+    "checkpoints": "experiments/ssai/6_ms_conditioned_detail/checkpoints",
+    "entrypoint": "common/ssai_detail_prepare.py",
+    "research_track": "ssai",
+    "experiment": 6,
+    "display_name": "6. MS 조건부 공간 세부정보 보정",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "baseline_reference": "experiments/ssai/4_aligned_sigmoid_gating",
+    "evaluated_seeds": [
+      42
+    ],
+    "sensor": "QB",
+    "selected_best_epoch": 98,
+    "last_checked": "2026-10-15T05:37:11.618083+09:00",
+    "limits": "PSNR -0.001706dB·SAM +0.003811°·잠정QNR -0.004606; 단일QBseed42·기존탐색test·MATLABparity미검증. 캐시동등성짧은경로검증. 원본유지."
+  },
+  "ssai/7_channel_relation_detail": {
+    "report": "experiments/ssai/7_channel_relation_detail/README.md",
+    "model": "experiments/ssai/7_channel_relation_detail/model.py",
+    "config": "experiments/ssai/7_channel_relation_detail/config.json",
+    "manifest": "experiments/ssai/7_channel_relation_detail/manifest.json",
+    "results": "experiments/ssai/7_channel_relation_detail/results",
+    "checkpoints": "experiments/ssai/7_channel_relation_detail/checkpoints",
+    "entrypoint": "common/ssai_detail_prepare.py",
+    "research_track": "ssai",
+    "experiment": 7,
+    "display_name": "7. MS–PAN 채널 관계 기반 세부정보 보정",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "baseline_reference": "experiments/ssai/4_aligned_sigmoid_gating",
+    "evaluated_seeds": [
+      42
+    ],
+    "sensor": "QB",
+    "selected_best_epoch": 98,
+    "last_checked": "2026-10-15T05:37:11.618083+09:00",
+    "limits": "PSNR -0.006145dB·SAM +0.015805°·잠정QNR -0.002991; 단일QBseed42·기존탐색test·MATLABparity미검증. 캐시동등성짧은경로검증. 원본유지."
+  },
+  "ssai/8_spatial_mean_normalization": {
+    "research_track": "ssai",
+    "experiment": 8,
+    "display_name": "8. 공간 가중치 평균 정규화",
+    "experimenter": "이병현",
+    "report": "experiments/ssai/8_spatial_mean_normalization/README.md",
+    "manifest": "experiments/ssai/8_spatial_mean_normalization/manifest.json",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "limits": "두후보 학습가능화성공; N1개선없음,N2부분개선. 원본A0유지. 단일QB seed42,드라이버변경,잠정지표MATLAB parity미검증.",
+    "model": "experiments/ssai/8_spatial_mean_normalization/model.py",
+    "config": "experiments/ssai/8_spatial_mean_normalization/config.json",
+    "entrypoint": "experiments/ssai/8_spatial_mean_normalization/run.py",
+    "results": "experiments/ssai/8_spatial_mean_normalization/results",
+    "checkpoints": "experiments/ssai/8_spatial_mean_normalization/checkpoints",
+    "selected_followup_candidate": "N2",
+    "learning_success": {
+      "N1": true,
+      "N2": true
+    }
+  },
+  "ssai/9_channel_cross_attention": {
+    "research_track": "ssai",
+    "experiment": 9,
+    "display_name": "9. 채널 축 교차 어텐션",
+    "experimenter": "이병현",
+    "report": "experiments/ssai/9_channel_cross_attention/README.md",
+    "manifest": "experiments/ssai/9_channel_cross_attention/manifest.json",
+    "status": "계획",
+    "improvement": "미확인",
+    "limits": "단일 QB seed42 예정; 학습·평가 결과 미측정"
   }
 }

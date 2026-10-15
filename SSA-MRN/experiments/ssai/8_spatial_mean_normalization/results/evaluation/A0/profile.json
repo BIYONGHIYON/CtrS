@@ -1,0 +1,30 @@
+{
+  "registered_parameters": 426654,
+  "timing": "cuda isolated full forward; synthetic normalized random inputs; 3 warmups / 10 repetitions",
+  "shapes": [
+    {
+      "size": 64,
+      "executed_conv_macs": 1243975680,
+      "latency_median_ms": 15.765299999998206,
+      "latency_p95_ms": 17.192775000003735,
+      "peak_allocated_mib": 6.90283203125,
+      "peak_reserved_mib": 438.0
+    },
+    {
+      "size": 256,
+      "executed_conv_macs": 19903610880,
+      "latency_median_ms": 15.581000000004508,
+      "latency_p95_ms": 15.700444999994545,
+      "peak_allocated_mib": 85.00830078125,
+      "peak_reserved_mib": 438.0
+    },
+    {
+      "size": 512,
+      "executed_conv_macs": 79614443520,
+      "latency_median_ms": 28.54149999999578,
+      "latency_p95_ms": 28.779984999993502,
+      "peak_allocated_mib": 334.94580078125,
+      "peak_reserved_mib": 438.0
+    }
+  ]
+}

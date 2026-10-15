@@ -39,8 +39,14 @@ def load_model(number, checkpoint):
     k = cfg.get('k', ck.get('ssai_dimension', 4))
     variant = ck.get('variant', cfg.get('variant'))
     if RESEARCH_TRACK == 'ssai':
-        cls = {1:'SpatialAlignmentNet',2:'ReferenceAreaNet',3:'CalibratedSigmoidNet',4:'AlignedSigmoidNet',5:'MixedGatingNet'}[number]
-        if number == 5:
+        if number in (6,7) and variant != {6:'D6',7:'D7'}[number]:
+            raise ValueError('Checkpoint belongs to a different detail hypothesis')
+        cls = {1:'SpatialAlignmentNet',2:'ReferenceAreaNet',3:'CalibratedSigmoidNet',4:'AlignedSigmoidNet',5:'MixedGatingNet',6:'MSConditionedDetailNet',7:'ChannelRelationDetailNet',8:'MeanNormalizedNet'}[number]
+        if number == 8:
+            if variant not in ('N1','N2'):
+                raise ValueError('Unknown mean-normalized checkpoint variant')
+            net = model_module(8).MeanNormalizedNet(channels,k,learn_gamma=variant=='N2')
+        elif number == 5:
             if variant not in ('M25','M50'):
                 raise ValueError('Unknown mixed-gating checkpoint variant')
             net = model_module(5).MixedGatingNet(channels,k,alpha={'M25':.25,'M50':.5}[variant])
