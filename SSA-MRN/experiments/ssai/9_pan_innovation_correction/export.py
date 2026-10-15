@@ -5,7 +5,7 @@ p=argparse.ArgumentParser();p.add_argument('--source-root',type=Path,required=Tr
 sys.path.insert(0,str(a.source_root))
 from common import ssai_suite as s
 import torch
-cls=importlib.import_module('experiments.ssai.10_pan_innovation_correction.model').PanInnovationNet
+cls=importlib.import_module('experiments.ssai.9_pan_innovation_correction.model').PanInnovationNet
 D=a.runtime/'final_delivery'
 if D.exists():raise FileExistsError('Fresh export required')
 D.mkdir();plan=json.loads((a.runtime/'plan.json').read_text());records={}

@@ -1,4 +1,4 @@
-# 10. PAN 재구성 오차 기반 보정
+# 9. PAN 재구성 오차 기반 보정
 
 **연구 분야:** SSAI 개선<br>**연구 담당자·실험자:** 이병현
 
@@ -10,7 +10,7 @@
 
 ## 1. 목적과 상태
 
-현재 복원에 부족하거나 과한 PAN 구조를 수정하면 단순 PAN 세부정보 주입보다 복원 성능을 높일 수 있는지 검증했습니다. 9번 채널 축 교차 어텐션은 사용자 요청으로 진행을 생략했으며 이 실험으로 대체 실행하지 않았습니다. 10번의 별도 가설을 새로 비교했습니다.
+현재 복원에 부족하거나 과한 PAN 구조를 수정하면 단순 PAN 세부정보 주입보다 복원 성능을 높일 수 있는지 검증했습니다.
 
 A1·A2를 각각100에폭 학습하고 최소 validation MSE의98에폭 best로 RR20·FR20 전체를 평가했습니다. A0도 같은 평가 환경에서 다시 추론해 총120개 장면 예측을 기록했습니다. 두 후보 모두 개선 없음이며 기준은 실험4 원본 A0입니다. 추가 학습을 시작하지 않았습니다.
 
@@ -181,14 +181,14 @@ A1은2026-10-15 21:54:07, A2는21:59:01 KST에100에폭을 마쳤습니다. 에�
 
 ## 7. 재현 자료
 
-실제 best/latest4개·학습 당시 소스/설정·원본 초기값·전체 compact 기록·RR/FR 지표와 예시를 보존합니다. 현재 config에는 완료 상태를 추가했으므로 실제 학습 설정은 [training_source.zip](provenance/training_source.zip)과 checkpoint 내부 plan을 기준으로 합니다. 원본 snapshot과 내부 설정은 바꾸지 않았습니다. 초기값은 실제 서버 환경에서 생성해 학습 전 A0 텐서 해시와 일치시켰습니다.
+실제 best/latest4개·학습 당시 소스/설정·원본 초기값·전체 compact 기록·RR/FR 지표와 예시를 보존합니다. 현재 config에는 완료 상태를 추가했으므로 실제 학습 설정은 [training_source.zip](provenance/training_source.zip)과 checkpoint 내부 plan을 기준으로 합니다. 원본 snapshot과 체크포인트 내부 설정·식별자는 바꾸지 않았으며 현행 로더가 해당 가중치를 읽도록 연결합니다. 초기값은 실제 서버 환경에서 생성해 학습 전 A0 텐서 해시와 일치시켰습니다.
 
 최종 evaluator는 실험8의 RR/FR 장면 루프·지표·전처리·미리보기 코드와 AST가 같습니다. 변경은 후보 dispatch·A0 경로·새로운 functional PAN convolution의 MAC 계수입니다. [evaluator_equivalence.json](results/evaluator_equivalence.json)을 확인합니다. A0도 동일 CUDA FP32 환경에서 재평가했고 기존 RR/FR 평균과 정확히 일치했습니다. 원본 A0의 학습 당시 driver는 checkpoint plan에서 확인하지 못했으므로 모든 학습 궤적의 환경 일치까지 주장하지 않습니다.
 
-공통 체크포인트 로더에10번 후보 판별을 추가했습니다. 기존6·7·8번 실제 가중치 로드와 유한 CPU추론, 다른 실험 체크포인트의10번 오인 방지를 확인했습니다. 기존 학습 소스는 그대로 보존하고6·7 manifest의 현행 공유 로더 해시만 갱신합니다.
+공통 체크포인트 로더에9번 후보 판별을 추가했습니다. 기존6·7·8번 실제 가중치 로드와 유한 CPU추론, 다른 실험 체크포인트의9번 오인 방지를 확인했습니다. 기존 학습 소스는 그대로 보존하고6·7 manifest의 현행 공유 로더 해시만 갱신합니다.
 
 ```bash
-python SSA-MRN/experiments/ssai/10_pan_innovation_correction/verify.py --root SSA-MRN
+python SSA-MRN/experiments/ssai/9_pan_innovation_correction/verify.py --root SSA-MRN
 ```
 
 검증기는 manifest·원본 source ZIP·참조 A0 파일3개·실제 가중치4개·optimizer/RNG·strict load·유한 CPU추론·최종 가중치 변화량을 검증합니다. **파일 무결성·복구 검증이며 RR/FR 성능 재평가가 아닙니다.** 원격 fresh clone에서 이 검증을 다시 실행해 복구 가능 여부를 확인합니다.
@@ -197,4 +197,4 @@ python SSA-MRN/experiments/ssai/10_pan_innovation_correction/verify.py --root SS
 
 **A1·A2 모두 개선 없음**입니다. 사전 도전 목표PSNR +0.3dB에 도달하지 못했고 주요 RR 지표와 잠정 QNR이 악화했습니다. 기준 모델은 원본 A0를 유지하며 A2를 자동 승격하지 않습니다.
 
-단일 QB seed42·반복 사용한 탐색 test·독립 holdout 없음·잠정 지표의 MATLAB parity 미검증 한계가 있습니다. 이번 결과는 SSAI의 모든 오차 보정 방식이 무효라는 결론이 아닙니다. 기존 backbone과 SSAI의 중복 역할, 실제 오류의 성격을 먼저 진단하는 후속 설계가 필요하며 추가 학습이나9번 실행은 시작하지 않았습니다.
+단일 QB seed42·반복 사용한 탐색 test·독립 holdout 없음·잠정 지표의 MATLAB parity 미검증 한계가 있습니다. 이번 결과는 SSAI의 모든 오차 보정 방식이 무효라는 결론이 아닙니다. 기존 backbone과 SSAI의 중복 역할, 실제 오류의 성격을 먼저 진단하는 후속 설계가 필요하며 추가 학습은 시작하지 않았습니다.

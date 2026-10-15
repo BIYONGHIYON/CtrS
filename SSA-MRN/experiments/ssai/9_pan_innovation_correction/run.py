@@ -5,7 +5,7 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT))
 from common import ssai_suite as suite
 
-PACKAGE = 'experiments.ssai.10_pan_innovation_correction'
+PACKAGE = 'experiments.ssai.9_pan_innovation_correction'
 original_model = suite.model
 
 
