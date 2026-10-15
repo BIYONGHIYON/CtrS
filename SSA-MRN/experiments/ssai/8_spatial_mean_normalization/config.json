@@ -1,0 +1,153 @@
+{
+  "research_track": "ssai",
+  "experiment": 8,
+  "display_name": "8. 공간 가중치 평균 정규화",
+  "experimenter": "이병현",
+  "status": "평가 완료",
+  "improvement": "부분 개선",
+  "arms": [
+    "N1",
+    "N2"
+  ],
+  "baseline_reference": "../4_aligned_sigmoid_gating",
+  "training": {
+    "sensor": "QB",
+    "seed": 42,
+    "epochs": 100,
+    "micro_batch": 32,
+    "effective_batch": 32,
+    "precision": "FP32",
+    "amp": false,
+    "tf32": false,
+    "deterministic": true,
+    "k": 4,
+    "spatial_scale": 4,
+    "lr": 0.0001,
+    "loss": "MSE",
+    "cache_mode": "gpu_partial",
+    "cache_fraction": 0.85,
+    "selection": "minimum validation MSE, earliest exact tie",
+    "initialization": "same experiment4 A0 common initial state; no warm start"
+  },
+  "operation": {
+    "coordinates": "original two transposes and rectangular reshape",
+    "weight": "softmax(original logits over HW) * H * W",
+    "N1_gamma": 1.0,
+    "N2_gamma_initial": 0.1,
+    "N2_gamma_parameters": 12,
+    "geometry_restriction": null
+  },
+  "diagnostics": {
+    "validation_indices": "0..511",
+    "train_batches": "first20 batches of original seed42 permutation,32 each,no optimizer steps",
+    "test_scene_index": 0,
+    "rms_epochs": [
+      1,
+      10,
+      50,
+      100
+    ],
+    "weight_change_epochs": "every epoch; convolution weights only, no gamma",
+    "gamma_epochs": "every epoch"
+  },
+  "learning_success": {
+    "epoch": 100,
+    "minimum_change_all_three_stages": 0.1,
+    "minimum_ratio_to_A0_latest_all_three_stages": 2.0,
+    "scope": "operational criterion; not proof of useful learning",
+    "exclude_unused_conv6t12": true
+  },
+  "divergence": {
+    "first_epoch_mse_limit": 0.0010792540327653171,
+    "reference": "2 * experiment4 A0 epoch1 val MSE, verified again on server",
+    "nonfinite": "stop candidate; no automatic restart or hyperparameter change"
+  },
+  "evaluation": {
+    "RR_scenes": 20,
+    "FR_scenes": 20,
+    "peak": 2047,
+    "provisional_metrics": [
+      "QNR",
+      "Q2n",
+      "SCC"
+    ],
+    "reuse_A0": true,
+    "actual_predictions": 120,
+    "reevaluated_A0": true,
+    "final_device": "CUDA FP32",
+    "gpu_profile_measured": true
+  },
+  "followup": {
+    "experiment": 9,
+    "B_selection": "lowest validation MSE among N1,N2; exact tie N1",
+    "selected_B_must_pass_learning_success": true,
+    "requires_completed_RR_FR_and_remote_preservation": true,
+    "automatic_launch_in_controller": false
+  },
+  "execution": {
+    "source_root": "C:/CtrS-ssai8/SSA-MRN",
+    "runtime_root": "C:/CtrS-ssai8/runtime/qb_s42_100_verified",
+    "requested_slots": 2,
+    "minimum_headroom_mib": 512,
+    "conditions_change_on_OOM": false,
+    "controller_pid": 8236,
+    "worker_pids": {
+      "N1": 27328,
+      "N2": 12044
+    },
+    "probe_aggregate_patches_per_second": 333.0942373060696,
+    "probe_minimum_free_mib": 1329,
+    "worker_budget_mib": 2798,
+    "actual_phase": "100epochs, full RR20/FR20, best/latest preserved"
+  },
+  "results_summary": {
+    "learning_success": {
+      "N1": true,
+      "N2": true
+    },
+    "selected_followup_B": "N2",
+    "selection_basis": "validation MSE only; exact tie N1",
+    "improvement": {
+      "N1": "개선 없음",
+      "N2": "부분 개선"
+    },
+    "baseline_maintained": "A0",
+    "validation_delta_percent": {
+      "N1": 0.6437001166715861,
+      "N2": 0.03927397642236041
+    },
+    "rr_fr_difference": {
+      "N1": {
+        "RR": {
+          "SAM": 0.05120363719459853,
+          "ERGAS": 0.03279262844206077,
+          "PSNR": -0.053448433502751413,
+          "SCC": -0.0003676872944862186,
+          "Q2n": -0.0008313067957195219
+        },
+        "FR": {
+          "D_lambda": 0.003827400440859635,
+          "D_s": 0.0011583496043123809,
+          "QNR": -0.0047402178734099465
+        }
+      },
+      "N2": {
+        "RR": {
+          "SAM": 0.00363400567369343,
+          "ERGAS": -0.0006869078158091568,
+          "PSNR": 0.010435369180271437,
+          "SCC": 3.2677396947233817e-05,
+          "Q2n": -0.00030445336721141025
+        },
+        "FR": {
+          "D_lambda": 0.000919972883780068,
+          "D_s": 0.0009911691756210733,
+          "QNR": -0.0018641008163676753
+        }
+      }
+    },
+    "single_seed": true,
+    "test_used_for_selection": false,
+    "experiment9_launched": false
+  }
+}

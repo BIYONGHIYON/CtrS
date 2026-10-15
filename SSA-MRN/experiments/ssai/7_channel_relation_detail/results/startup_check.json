@@ -1,0 +1,106 @@
+{
+  "checked": 1791996763.8038833,
+  "queue": {
+    "controller_pid": 19736,
+    "active": {
+      "D6": 3484,
+      "D7": 13668
+    },
+    "completed": [],
+    "failed": [],
+    "pending": [],
+    "slots": 2,
+    "updated": 1791996760.0867512
+  },
+  "arms": {
+    "D6": {
+      "status": {
+        "pid": 21748,
+        "state": "training",
+        "arm": "D6",
+        "epoch": 2,
+        "epochs": 100,
+        "batch": 381,
+        "batches": 536,
+        "train_mse": 0.0004883635308064295,
+        "patches_per_second": 169.9612457133203,
+        "updated": 1791996763.6088803,
+        "peak_reserved_mib": 2680.0
+      },
+      "checkpoints": {
+        "best": {
+          "epoch": 1,
+          "sha256": "e6044a2b860c4c556d3ab548537d9dace82e42738463ebc02a8bf7927257aace",
+          "strict_load": true,
+          "finite": true,
+          "optimizer_state_present": true,
+          "detail_weight_abs_sum": 0.07493758824421093
+        },
+        "latest": {
+          "epoch": 1,
+          "sha256": "e6044a2b860c4c556d3ab548537d9dace82e42738463ebc02a8bf7927257aace",
+          "strict_load": true,
+          "finite": true,
+          "optimizer_state_present": true,
+          "detail_weight_abs_sum": 0.07493758824421093
+        }
+      },
+      "history": [
+        {
+          "epoch": 1,
+          "train_mse": 0.001027753265261498,
+          "val_mse": 0.0005505707695789323,
+          "val_sam": 7.246387123313723,
+          "val_global_psnr": 32.59186849512891,
+          "best_mse": 0.0005505707695789323,
+          "seconds": 123.13999999999942
+        }
+      ]
+    },
+    "D7": {
+      "status": {
+        "pid": 21196,
+        "state": "training",
+        "arm": "D7",
+        "epoch": 2,
+        "epochs": 100,
+        "batch": 221,
+        "batches": 536,
+        "train_mse": 0.000502691835842445,
+        "patches_per_second": 137.52868422076511,
+        "updated": 1791996762.9998717,
+        "peak_reserved_mib": 2776.0
+      },
+      "checkpoints": {
+        "best": {
+          "epoch": 1,
+          "sha256": "0782acb5da96d1c0f23cdb4f69a51a3d4c80dc4b2733c01f69fe3e4194015d94",
+          "strict_load": true,
+          "finite": true,
+          "optimizer_state_present": true,
+          "detail_weight_abs_sum": 0.04019675511517562
+        },
+        "latest": {
+          "epoch": 1,
+          "sha256": "0782acb5da96d1c0f23cdb4f69a51a3d4c80dc4b2733c01f69fe3e4194015d94",
+          "strict_load": true,
+          "finite": true,
+          "optimizer_state_present": true,
+          "detail_weight_abs_sum": 0.04019675511517562
+        }
+      },
+      "history": [
+        {
+          "epoch": 1,
+          "train_mse": 0.001027429082046285,
+          "val_mse": 0.000540432314482564,
+          "val_sam": 7.312601007455991,
+          "val_global_psnr": 32.67258690771617,
+          "best_mse": 0.000540432314482564,
+          "seconds": 137.60899999999674
+        }
+      ]
+    }
+  },
+  "gpu_observed": "6943, 1082, 99"
+}
