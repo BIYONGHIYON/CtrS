@@ -298,18 +298,26 @@
     "experiment": 10,
     "display_name": "10. 국소 창 교차 어텐션 SSAI",
     "experimenter": "이병현",
-    "status": "학습 중",
+    "status": "학습 중단",
     "improvement": "판단 보류",
     "config": "experiments/ssai/10_local_window_cross_attention/config.json",
     "model": "experiments/ssai/10_local_window_cross_attention/model.py",
     "entrypoint": "experiments/ssai/10_local_window_cross_attention/run.py",
-    "last_checked": "2026-10-16T00:10:02+09:00",
+    "last_checked": "2026-10-16T01:21:00+09:00",
     "sensor": "QB",
     "arms": [
       "L2",
       "C",
       "L1"
     ],
-    "limits": "단일QB seed42·exploratory test·QNR/Q2n/SCC MATLAB parity 미검증"
+    "limits": "단일QB seed42·exploratory test·QNR/Q2n/SCC MATLAB parity 미검증",
+    "manifest": "experiments/ssai/10_local_window_cross_attention/manifest.json",
+    "checkpoints": "experiments/ssai/10_local_window_cross_attention/checkpoints",
+    "results": "experiments/ssai/10_local_window_cross_attention/results",
+    "completed_epochs_at_check": {
+      "L2": 21,
+      "C": 45
+    },
+    "stopped_by_user": true
   }
 }
