@@ -481,5 +481,31 @@
     "status": "계획",
     "improvement": "미확인",
     "limits": "단일 QB seed42 예정; 학습·평가 결과 미측정"
+  },
+  "performance/30_focal_frequency_loss": {
+    "report": "experiments/performance/30_focal_frequency_loss/README.md",
+    "research_track": "performance",
+    "experiment": 30,
+    "display_name": "30. Focal Frequency Loss 추가",
+    "experimenter": "송준현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "checkpoints": "experiments/performance/30_focal_frequency_loss/checkpoints",
+    "results": "experiments/performance/30_focal_frequency_loss/results",
+    "manifest": "experiments/performance/30_focal_frequency_loss/manifest.json",
+    "entrypoint": "experiments/performance/30_focal_frequency_loss/run.py",
+    "verification": "experiments/performance/30_focal_frequency_loss/prepare.py",
+    "config": "experiments/performance/30_focal_frequency_loss/config.json",
+    "evaluated_seeds": [
+      42
+    ],
+    "pending_seeds": [
+      43,
+      44
+    ],
+    "sensor": "QB",
+    "selected_lambda": 0.013491834,
+    "last_checked": "2026-10-15T08:45:40.836855+09:00",
+    "limits": "seed42: PSNR -0.0553 dB, SAM -0.0073°, 잠정 QNR -0.0022. 세 FFL λ 모두 baseline validation MSE보다 나쁨. 단일 시드·MATLAB parity 미검증, 원본 유지."
   }
 }
