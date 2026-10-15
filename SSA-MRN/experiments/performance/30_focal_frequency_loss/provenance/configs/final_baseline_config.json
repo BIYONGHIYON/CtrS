@@ -1,0 +1,339 @@
+{
+  "output": "/kaggle/working/FFL_1st_v1/final/seed_42",
+  "code_root": "/kaggle/working/FFL_1st_v1/source",
+  "conditions": {
+    "basis": "7966c81081df5c8b515c1b4a7c98c84426b44f49ce9a04e2008101aadcd60e52",
+    "family": "final",
+    "seed": 42,
+    "label": "baseline",
+    "epochs": 100,
+    "lambda": 0.0,
+    "catalogue_sha256": "b2331c6d5e5b5b539cd37af113ea5a647dd82bc65852063945fb8740408333e0",
+    "initial_sha256": "e8fda5298d7cc9aa7edb58be3384170746392ad6214a98c45bd2c71626d27d14",
+    "seal_sha256": "937812fbae116900bdbd0cc99805a23c93d8943806fb866dadc41aeab3442a40",
+    "samples": {
+      "train": 17139,
+      "val": 1905
+    }
+  },
+  "fingerprint": "1c9e37ce237e950d861b9ec423ec432d08a7bbeedd2d21c9a10849189532374d",
+  "data": {
+    "train": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+      "file_name": "QuickBird__Training_Dataset__train_qb.h5",
+      "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "bytes": 5194901672,
+      "arrays": {
+        "pan": {
+          "shape": [
+            17139,
+            1,
+            64,
+            64
+          ],
+          "dtype": "float64",
+          "raw_min": 0.0,
+          "raw_max": 1917.2325439453125,
+          "normalized_min": 0.0,
+          "normalized_max": 0.9366060302615108,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": false
+        },
+        "lms": {
+          "shape": [
+            17139,
+            4,
+            64,
+            64
+          ],
+          "dtype": "float64",
+          "raw_min": -99.97230529785156,
+          "raw_max": 1659.9495849609375,
+          "normalized_min": -0.04883844909518884,
+          "normalized_max": 0.8109182144411028,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": true
+        },
+        "ms": {
+          "shape": [
+            17139,
+            4,
+            16,
+            16
+          ],
+          "dtype": "float64",
+          "raw_min": -9.118218180503845e-09,
+          "raw_max": 1510.2332763671875,
+          "normalized_min": -4.454429985590545e-12,
+          "normalized_max": 0.7377788355482108,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": true
+        },
+        "gt": {
+          "shape": [
+            17139,
+            4,
+            64,
+            64
+          ],
+          "dtype": "float64",
+          "raw_min": 0.0,
+          "raw_max": 2047.0,
+          "normalized_min": 0.0,
+          "normalized_max": 1.0,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": false
+        }
+      },
+      "used_samples": 17139,
+      "subset_rule": "all samples",
+      "resident_fp32_bytes": 2597449728
+    },
+    "val": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5",
+      "file_name": "QuickBird__Training_Dataset__valid_qb.h5",
+      "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "bytes": 577415336,
+      "arrays": {
+        "pan": {
+          "shape": [
+            1905,
+            1,
+            64,
+            64
+          ],
+          "dtype": "float64",
+          "raw_min": 0.0,
+          "raw_max": 1889.7945556640625,
+          "normalized_min": 0.0,
+          "normalized_max": 0.9232020301241145,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": false
+        },
+        "lms": {
+          "shape": [
+            1905,
+            4,
+            64,
+            64
+          ],
+          "dtype": "float64",
+          "raw_min": -96.95726776123047,
+          "raw_max": 1636.750732421875,
+          "normalized_min": -0.04736554360587712,
+          "normalized_max": 0.7995851159852834,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": true
+        },
+        "ms": {
+          "shape": [
+            1905,
+            4,
+            16,
+            16
+          ],
+          "dtype": "float64",
+          "raw_min": -7.351043773695665e-09,
+          "raw_max": 1509.958251953125,
+          "normalized_min": -3.5911303242284635e-12,
+          "normalized_max": 0.7376444806805691,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": true
+        },
+        "gt": {
+          "shape": [
+            1905,
+            4,
+            64,
+            64
+          ],
+          "dtype": "float64",
+          "raw_min": 0.0,
+          "raw_max": 2047.0,
+          "normalized_min": 0.0,
+          "normalized_max": 1.0,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": false
+        }
+      },
+      "used_samples": 1905,
+      "subset_rule": "all samples",
+      "resident_fp32_bytes": 288706560
+    },
+    "RR": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+      "file_name": "QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+      "sha256": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "bytes": 96997376,
+      "arrays": {
+        "pan": {
+          "shape": [
+            20,
+            1,
+            256,
+            256
+          ],
+          "dtype": "float64",
+          "raw_min": 54.040409088134766,
+          "raw_max": 1878.9736328125,
+          "normalized_min": 0.026399809031819623,
+          "normalized_max": 0.9179157952186126,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": false
+        },
+        "lms": {
+          "shape": [
+            20,
+            4,
+            256,
+            256
+          ],
+          "dtype": "float64",
+          "raw_min": -42.16835403442383,
+          "raw_max": 1487.4173583984375,
+          "normalized_min": -0.02060007524886362,
+          "normalized_max": 0.7266328082063691,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": true
+        },
+        "ms": {
+          "shape": [
+            20,
+            4,
+            64,
+            64
+          ],
+          "dtype": "float64",
+          "raw_min": 24.025781631469727,
+          "raw_max": 1390.10107421875,
+          "normalized_min": 0.011737069678294932,
+          "normalized_max": 0.6790918779769174,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": false
+        },
+        "gt": {
+          "shape": [
+            20,
+            4,
+            256,
+            256
+          ],
+          "dtype": "float64",
+          "raw_min": 1.0,
+          "raw_max": 2047.0,
+          "normalized_min": 0.0004885197850512946,
+          "normalized_max": 1.0,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": false
+        }
+      },
+      "used_samples": 20,
+      "subset_rule": "all samples",
+      "resident_fp32_bytes": 0
+    },
+    "FR": {
+      "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5",
+      "file_name": "QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5",
+      "sha256": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f",
+      "bytes": 220202744,
+      "arrays": {
+        "pan": {
+          "shape": [
+            20,
+            1,
+            512,
+            512
+          ],
+          "dtype": "float64",
+          "raw_min": 1.0,
+          "raw_max": 2047.0,
+          "normalized_min": 0.0004885197850512946,
+          "normalized_max": 1.0,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": false
+        },
+        "lms": {
+          "shape": [
+            20,
+            4,
+            512,
+            512
+          ],
+          "dtype": "float64",
+          "raw_min": -206.9948272705078,
+          "raw_max": 2319.88818359375,
+          "normalized_min": -0.10112106852491833,
+          "normalized_max": 1.133311276792257,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": true
+        },
+        "ms": {
+          "shape": [
+            20,
+            4,
+            128,
+            128
+          ],
+          "dtype": "float64",
+          "raw_min": 1.0,
+          "raw_max": 2047.0,
+          "normalized_min": 0.0004885197850512946,
+          "normalized_max": 1.0,
+          "all_finite": true,
+          "range_tolerance_dn": 0.0001,
+          "tiny_range_excursion": false
+        }
+      },
+      "used_samples": 20,
+      "subset_rule": "all samples",
+      "resident_fp32_bytes": 0,
+      "gt_policy": "No GT required, synthesized or used, even if an extra key exists"
+    }
+  },
+  "selection": {
+    "seed": 42,
+    "indices": [
+      13,
+      8,
+      11,
+      1,
+      19
+    ],
+    "rule": "uniform without replacement before training/scoring",
+    "scene_id": "zero-based H5 sample index",
+    "full_scene": true,
+    "display_order": [
+      "LR MS nearest",
+      "PAN",
+      "Prediction",
+      "GT"
+    ],
+    "contrast": "per-scene GT 1/99 percentiles; identical per-band contrast for LR MS, prediction, GT"
+  },
+  "seed": 42,
+  "epochs": 100,
+  "batch": 32,
+  "micro": 32,
+  "amp": false,
+  "lr": 0.0001,
+  "deadline": 1792043123.123065,
+  "reserve_gib": 4,
+  "log_seconds": 20,
+  "weight": 0.0,
+  "job_type": "test",
+  "stop_after_group": 0
+}
