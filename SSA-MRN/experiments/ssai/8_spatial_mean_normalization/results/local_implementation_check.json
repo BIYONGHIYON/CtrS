@@ -1,0 +1,16 @@
+{
+  "scope": "local CPU implementation checks, not server performance or full training",
+  "original_rectangle_output_exact": {
+    "N1": true,
+    "N2": true
+  },
+  "common_initial_hash_matches_A0": true,
+  "added_parameters": {
+    "N1": 0,
+    "N2": 12
+  },
+  "diagnostic_rng_preservation": true,
+  "finite_gradient_guard_three_adam_updates_exact": true,
+  "unused_ssa_conv6t12_excluded_from_weight_learning_criterion": true,
+  "backbone_gradient_group": "actual backbone parameter identities, avoids res1/backbone aliases"
+}

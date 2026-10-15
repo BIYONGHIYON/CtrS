@@ -1,0 +1,15 @@
+{
+  "date_kst": "2026-10-15",
+  "base_main": "f5aa2040425a2849c3929105e6c61ecc3c37423e",
+  "source_branch_head": "693a303bcfd72cc3e452b706a568ab4bda46bc5c",
+  "dependency_pr": "https://github.com/BIYONGHIYON/CtrS/pull/84",
+  "branch": "ssai-mean-normalization",
+  "researcher": "이병현",
+  "baseline": "experiment4 A0, no new control training",
+  "learning_threshold": "all three stages active convolution weights >=10% relative to initialization and >=2x A0 latest100; excludes gamma,bias,unused conv6t12",
+  "divergence_threshold": "2x A0 epoch1 validation MSE; nonfinite loss or gradient stops candidate",
+  "experiment9_capacity": "X0 width9 biasTrue; X1 width16 heads2 pan/output biasTrue, QKV pointwise/depthwise biasFalse; delete unused conv6t12 only in replacement blocks",
+  "experiment9_gate": "complete8 train/RR/FR/remote preservation plus validation-selected B itself passes learning criterion; tie selects N1",
+  "preflight_correction": "First preparation-only run stopped before training to correct backbone aliases and exclude unused convolution from diagnostic denominator; original source.zip and old preparation directory retained on server",
+  "training_started_in_first_preparation": false
+}

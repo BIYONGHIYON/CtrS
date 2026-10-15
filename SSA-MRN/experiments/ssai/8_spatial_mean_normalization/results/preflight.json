@@ -1,0 +1,115 @@
+{
+  "passed": true,
+  "original_initial_hash": "c24fee837e68d93a796b47949a4b7dfde0cf1860734532ea2b39cbf2ded56ea6",
+  "actual_experiment4_initial_hash": "c24fee837e68d93a796b47949a4b7dfde0cf1860734532ea2b39cbf2ded56ea6",
+  "models": {
+    "N1": {
+      "common_initial_hash": "c24fee837e68d93a796b47949a4b7dfde0cf1860734532ea2b39cbf2ded56ea6",
+      "added_parameters": 0,
+      "gamma_gradients": null,
+      "forwards": [
+        {
+          "shape": [
+            64,
+            64
+          ],
+          "finite": true,
+          "weight_mean_max_abs_error": 1.1920928955078125e-07
+        },
+        {
+          "shape": [
+            256,
+            256
+          ],
+          "finite": true,
+          "weight_mean_max_abs_error": 1.1920928955078125e-07
+        },
+        {
+          "shape": [
+            512,
+            512
+          ],
+          "finite": true,
+          "weight_mean_max_abs_error": 5.960464477539063e-08
+        },
+        {
+          "shape": [
+            32,
+            48
+          ],
+          "finite": true,
+          "weight_mean_max_abs_error": 1.1920928955078125e-07
+        }
+      ],
+      "original_best_exact_restoration_64_and_rectangle": true
+    },
+    "N2": {
+      "common_initial_hash": "c24fee837e68d93a796b47949a4b7dfde0cf1860734532ea2b39cbf2ded56ea6",
+      "added_parameters": 12,
+      "gamma_gradients": {
+        "SSA_blocks.0.gamma": -0.0006643774686381221,
+        "SSA_blocks.1.gamma": -0.00011738493049051613,
+        "SSA_blocks.2.gamma": -0.0008517540991306305,
+        "SSA_blocks.3.gamma": -0.00039030195330269635,
+        "SSA_blocks1.0.gamma": 9.780412801774219e-05,
+        "SSA_blocks1.1.gamma": 0.0003669196448754519,
+        "SSA_blocks1.2.gamma": -0.00061100407037884,
+        "SSA_blocks1.3.gamma": -5.852148206031416e-06,
+        "SSA_blocks2.0.gamma": 4.889184765488608e-06,
+        "SSA_blocks2.1.gamma": -1.2716600394924171e-05,
+        "SSA_blocks2.2.gamma": 3.278203075751662e-05,
+        "SSA_blocks2.3.gamma": 4.8431236791657284e-05
+      },
+      "forwards": [
+        {
+          "shape": [
+            64,
+            64
+          ],
+          "finite": true,
+          "weight_mean_max_abs_error": 1.1920928955078125e-07
+        },
+        {
+          "shape": [
+            256,
+            256
+          ],
+          "finite": true,
+          "weight_mean_max_abs_error": 1.1920928955078125e-07
+        },
+        {
+          "shape": [
+            512,
+            512
+          ],
+          "finite": true,
+          "weight_mean_max_abs_error": 5.960464477539063e-08
+        },
+        {
+          "shape": [
+            32,
+            48
+          ],
+          "finite": true,
+          "weight_mean_max_abs_error": 1.1920928955078125e-07
+        }
+      ],
+      "original_best_exact_restoration_64_and_rectangle": true
+    }
+  },
+  "cache_verification": {
+    "method": "reuse verified two full epochs of exact FP32 batches/RNG and three exact Adam steps from experiments6/7",
+    "same_numerical_functions": [
+      "configure",
+      "run_epoch",
+      "validate",
+      "Cached",
+      "GPUCachedLoader",
+      "PartialGPUCachedLoader",
+      "make_loader",
+      "save"
+    ],
+    "source_sha256": "5589f7cfe88e1bcd83338d7dd8d2532765c149b810c54defda98c95c22a92dcf",
+    "evidence_sha256": "4d7930b114de18b54e3934b54a04ed41948604fbb3f42481f7cdbf1ad138edd4"
+  }
+}
