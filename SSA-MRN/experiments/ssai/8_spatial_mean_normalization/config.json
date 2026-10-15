@@ -78,10 +78,8 @@
     "gpu_profile_measured": true
   },
   "followup": {
-    "experiment": 9,
-    "B_selection": "lowest validation MSE among N1,N2; exact tie N1",
-    "selected_B_must_pass_learning_success": true,
-    "requires_completed_RR_FR_and_remote_preservation": true,
+    "current_report": "../9_pan_innovation_correction/README.md",
+    "baseline_maintained": "A0",
     "automatic_launch_in_controller": false
   },
   "execution": {
@@ -105,7 +103,6 @@
       "N1": true,
       "N2": true
     },
-    "selected_followup_B": "N2",
     "selection_basis": "validation MSE only; exact tie N1",
     "improvement": {
       "N1": "개선 없음",
@@ -148,6 +145,6 @@
     },
     "single_seed": true,
     "test_used_for_selection": false,
-    "experiment9_launched": false
+    "validation_preferred_candidate": "N2"
   }
 }
