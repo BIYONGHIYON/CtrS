@@ -51,6 +51,7 @@
 | [31. 보정 잔차의 저주파 억제](../../experiments/performance/31_low_frequency_preserving_residual/README.md)<br>[김경찬] | G5 두 보정기의 잔차에서 고정 Gaussian 저주파 성분을 제거했습니다. | P0 대비 PSNR -0.9426 dB·SAM +0.5369°; 잠정 QNR +0.01671. RR 유지 실패·채택 보류 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [32. PAN 조건 특징 변조와 국소 회귀 사전 정보의 빠른 선별](../../experiments/performance/32_feature_modulation_local_regression_screen/README.md)<br>[이병현] | A0 best에서 PAN 조건 특징 변조(W1)·대조군(W1c)·국소 회귀 사전 정보(W2)를 10에폭 이어 학습해 선별했습니다. | 이어 학습 대조군 대비 best validation: W1 −0.06%, W1c −0.06%, W2 −0.03%; 기준 3% 미달, test 미평가 | 사전&nbsp;검증&nbsp;완료 | 판단&nbsp;보류 |
 | [33. MS 기준 가역 밝기·대비 정규화](../../experiments/performance/33_ms_anchored_reversible_normalization/README.md)<br>[김경찬] | 원본 SSA-MRN 앞뒤에 LR MS 기준 공유 정규화·역변환을 추가했습니다. | seed42: PSNR +0.2111 dB·SAM −0.1242°·잠정 QNR +0.01746; 각 지표 20/20장 개선, 반복 검증 대기 | 평가&nbsp;완료<br>seed42 | 개선 |
+| [34. 논문 채널 상관 어텐션과 다중 해상도 복원 재현](../../experiments/performance/34_paper_equation_reproduction/README.md)<br>[이병현] | K6 채널 상관행렬·bicubic·세 단계 잔차를 본문 수식에 맞춰 재현했습니다. | PSNR36.6224dB·잠정QNR0.90102; 과거 A0 대비 주요 RR·FR 악화, 복수 조건 변경 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 
 [새 실험 등록 절차](../../README.md#새-실험-등록) · [실험 보고서 양식](../../docs/experiment_template.md)
 

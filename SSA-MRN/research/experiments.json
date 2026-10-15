@@ -640,5 +640,25 @@
       "N1": 98
     },
     "limits": "단일QB seed42에서 RR 5지표·잠정FR 3지표가 각각20/20장 개선했습니다. PSNR +0.211059dB·SAM -0.124165도·QNR +0.017462. 반복시드·추가센서·독립holdout·MATLAB parity 미검증; 기준모델 채택 보류."
+  },
+  "performance/34_paper_equation_reproduction": {
+    "report": "experiments/performance/34_paper_equation_reproduction/README.md",
+    "research_track": "performance",
+    "experiment": 34,
+    "display_name": "34. 논문 채널 상관 어텐션과 다중 해상도 복원 재현",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "config": "experiments/performance/34_paper_equation_reproduction/config.json",
+    "entrypoint": "experiments/performance/34_paper_equation_reproduction/run.py",
+    "checkpoints": "experiments/performance/34_paper_equation_reproduction/checkpoints",
+    "results": "experiments/performance/34_paper_equation_reproduction/results",
+    "manifest": "experiments/performance/34_paper_equation_reproduction/manifest.json",
+    "sensor": "QB",
+    "evaluated_seeds": [
+      42
+    ],
+    "best_epoch": 97,
+    "limits": "본문 수식 해석 기반·저자 실행 정합 미검증; K6·bicubic 등 복수 변경·과거 A0 통제비교 아님·잠정 지표"
   }
 }
