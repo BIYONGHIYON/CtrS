@@ -48,6 +48,7 @@
 | [28. 원본 복원 후 관측 오차 기반 잔차 보정](28_residual_refinement/README.md)<br>[이병현] | 원본 복원 후 두 번의 잔차 보정·오차 입력·가중치 공유를 비교했습니다. | 기존 G2 대비 G5: PSNR +0.1317 dB, SAM -0.0391°; 잠정 QNR -0.0020. G4는 QNR +0.0079 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [29. 병렬 특징 용량 확장과 독립 잔차 보정](../../experiments/performance/29_capacity_refinement/README.md)<br>[이병현] | 원본 backbone에 저해상도·원해상도 가지를 추가하고 독립 보정기·LRPAN 제거 결합을 비교했습니다. | R0 대비 W2: RR PSNR +0.7234 dB, SAM -0.3542°; 잠정 QNR -0.0922. 후보 모두 RR 개선·FR 악화 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [30. Focal Frequency Loss 추가](../../experiments/performance/30_focal_frequency_loss/README.md)<br>[송준현] | 기존 MSE에 주파수 오차 가중 FFL을 추가했습니다. | seed42: PSNR -0.0553 dB, SAM -0.0073°; 잠정 QNR -0.0022. validation도 기준선 우세 | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
+| [31. 보정 잔차의 저주파 억제](../../experiments/performance/31_low_frequency_preserving_residual/README.md)<br>[김경찬] | G5 두 보정기의 잔차에서 고정 Gaussian 저주파 성분을 제거했습니다. | P0 대비 PSNR -0.9426 dB·SAM +0.5369°; 잠정 QNR +0.01671. RR 유지 실패·채택 보류 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 
 [새 실험 등록 절차](../../README.md#새-실험-등록) · [실험 보고서 양식](../../docs/experiment_template.md)
 
