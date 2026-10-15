@@ -20,7 +20,7 @@
 
 기존 K6의 B1−보관 B0 비교는 별도 세션·optimizer·배치 생성·재개 조건이 달랐습니다. 현재 기본값 K4에서 B0/B1을 처음부터 같은 조건으로 학습해 반복 복원의 성능 이득을 확인했습니다. **두 모델 각각100에포크, best로 RR20장·FR20장 전체 평가 완료.** seed43은 실행하지 않았습니다.
 
-Run ID는 `ssa_B0_B1_K4_s42_20261011T090100414462Z`. 모델 status에 기록된 평가 완료 시각은 B0 **2026-10-11 18:51:14 KST**, B1 **20:25:29 KST**입니다. 사용자 다운로드 산출물의 검증 날짜는 **2026-10-11 KST**이며 실시간 서버 상태 조회는 아닙니다. Notebook Version ID는 산출물에 없습니다. 제공한 다운로드 원본은 수정·삭제하지 않았습니다.
+Run ID는 `ssa_B0_B1_K4_s42_20261011T090100414462Z`. 모델 status에 기록된 평가 완료 시각은 B0 **2026-10-11 18:51:14 KST**, B1 **20:25:29 KST**입니다. 다운로드한 산출물의 검증 날짜는 **2026-10-11 KST**이며 실시간 서버 상태 조회는 아닙니다. Notebook Version ID는 산출물에 없습니다. 제공한 다운로드 원본은 수정·삭제하지 않았습니다.
 
 실행 당시 모델·worker 원문은 [code snapshot](provenance/code)에 보존했습니다. [현재 단일 셀](run.py)은 실행 후 보완한 launcher를 포함하며 **내장 model/worker는 snapshot과 바이트 동일**합니다. 실행 당시 launcher 전체가 제공됐다고 주장하지 않습니다.
 
@@ -146,4 +146,4 @@ python SSA-MRN/common/checkpoint.py --experiment 15 --checkpoint checkpoints/B0/
 
 **K4에서 B1의 RR 이득을 확인하고, FR 포함 종합 채택은 보류합니다.** 잠정 QNR 악화는 HR 정답 오차의 직접 측정이 아니지만 RR 이득만으로 실제 해상도 품질 향상을 보장할 수 없습니다. QNR/D_s의 scikit-image bicubic과 MATLAB imresize 차이, Q2n/SCC parity 제한은 유지합니다.
 
-QB 단일seed42·동일 test split 반복 탐색·GPU0/1 고정배정·GPU교환 반복 없음·서로 다른 best epoch·실측 학습 비용 증가라는 제한이 있습니다. 동일 optimizer/초기 core/순서를 확인했지만 서로 다른 모델의 학습 궤적이나 CUDA 환경 간 bitwise 재현은 보장하지 않습니다. seed43 판단은 사용자가 결과·비용을 검토한 뒤 진행하며 이번 보관 작업에서 추가 학습을 시작하지 않았습니다.
+QB 단일seed42·동일 test split 반복 탐색·GPU0/1 고정배정·GPU교환 반복 없음·서로 다른 best epoch·실측 학습 비용 증가라는 제한이 있습니다. 동일 optimizer/초기 core/순서를 확인했지만 서로 다른 모델의 학습 궤적이나 CUDA 환경 간 bitwise 재현은 보장하지 않습니다. seed43 판단은 결과·비용을 검토한 뒤 진행하며 이번 보관 작업에서 추가 학습을 시작하지 않았습니다.

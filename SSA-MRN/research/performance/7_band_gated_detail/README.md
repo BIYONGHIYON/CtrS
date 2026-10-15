@@ -21,7 +21,7 @@
 
 PAN 고주파가 모든 MS 밴드·위치에서 같은 정도로 유용하지 않을 수 있다는 가설을 검토했습니다. 후보는 기존 SSA-MRN 출력에 학습형 게이트를 곱한 고주파 잔차를 더합니다. 본체·손실·데이터 분할은 기준선과 같습니다.
 
-최초 계획은 baseline·기존 high_frequency·band_gated_hf의 세 모델, FP32·micro batch4였습니다. 실제 실행은 요청에 따라 **baseline과 band_gated_hf 두 모델만** 같은 T4 두 대에서 병렬 학습했으며, 양쪽에 동일한 AMP와 micro batch32를 적용했습니다. 기존 고정 high_frequency와의 같은 장치 직접 비교는 이번 결과에 없습니다. [변경 기록](results/plan_deviations.json)에 실제 조건을 남겼습니다.
+최초 계획은 baseline·기존 high_frequency·band_gated_hf의 세 모델, FP32·micro batch4였습니다. 실제 실행은 **baseline과 band_gated_hf 두 모델만** 같은 T4 두 대에서 병렬 학습했으며, 양쪽에 동일한 AMP와 micro batch32를 적용했습니다. 기존 고정 high_frequency와의 같은 장치 직접 비교는 이번 결과에 없습니다. [변경 기록](results/plan_deviations.json)에 실제 조건을 남겼습니다.
 
 실행 코드는 [한 셀 Python](run.py)입니다. 실제 [worker·모델](provenance/code)과 재현 설정을 보존했습니다.
 

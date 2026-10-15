@@ -160,7 +160,7 @@ NaN/Inf 손실·기울기 또는1에폭 validation이A0 1에폭의2배 이상이
 
 학습당시 원본소스·config·plan은 [training_source.zip](provenance/training_source.zip)에 그대로 보존합니다. 현재config는결과상태를 추가했으므로 원본설정은ZIP과checkpoint내부plan을 기준으로 합니다. 초기값도 실제 학습 환경의 PyTorch로 재구성한 뒤 학습 전 기록한 텐서 해시와 일치시켜 [initial_state.pt](provenance/initial_state.pt)에 보존했습니다. 다른 PyTorch 버전에서 난수 초기화를 재생성한 값으로 대체하지 않습니다. best/latest4개는 optimizer·torch/CUDA/loader/python/numpy RNG를 포함합니다. 모델소스·초기값·원본data/cache·A0참조가중치의 해시를 검증했습니다.
 
-현재드라이버610.88은 이전채팅의591.86과 다릅니다. PyTorch·CUDA runtime·cuDNN은 기존plan과 일치합니다. 현환경의A0 validation1,905개 MSE는0.0001715509279241805로기록과 정확히 같았습니다. 최종평가는 사용자 서버작업완료후 **A0·N1·N2를 모두 같은CUDA FP32환경에서 처음부터 재평가**했고 기존A0 RR/FR 평균과도 정확히 일치했습니다. 이전평가 시도 결과는 사용자 요청으로 삭제했고 최종결과에 섞지 않았습니다. 드라이버변경전후100에폭 학습궤적이 같다는 의미는 아닙니다.
+현재드라이버610.88은 이전채팅의591.86과 다릅니다. PyTorch·CUDA runtime·cuDNN은 기존plan과 일치합니다. 현환경의A0 validation1,905개 MSE는0.0001715509279241805로기록과 정확히 같았습니다. 최종평가는 서버작업완료후 **A0·N1·N2를 모두 같은CUDA FP32환경에서 처음부터 재평가**했고 기존A0 RR/FR 평균과도 정확히 일치했습니다. 이전평가 시도 결과는 삭제했고 최종결과에 섞지 않았습니다. 드라이버변경전후100에폭 학습궤적이 같다는 의미는 아닙니다.
 
 실험4·6·7과 지표함수·전처리·장면루프·미리보기·비용측정코드가 동일함을 AST로확인했습니다. 변경은N1/N2모델선택과기존A0가중치경로해결뿐입니다. 최종평가는원본peak2047·전체장면·clipping없음이며best는test전에고정했습니다. [evaluator_equivalence.json](results/evaluator_equivalence.json), [selection.json](results/evaluation/selection.json)을확인할수있습니다.
 
