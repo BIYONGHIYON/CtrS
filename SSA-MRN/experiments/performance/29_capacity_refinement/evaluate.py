@@ -15,7 +15,10 @@ def main():
     sys.path.insert(0,str(a.source_root.resolve()))
     os.environ.setdefault('OMP_NUM_THREADS','1');os.environ.setdefault('MKL_NUM_THREADS','1')
     print('Loading evaluation source',flush=True)
-    runner=importlib.import_module('experiments.performance.1_capacity_refinement.run')
+    source_exp=a.source_root/'experiments/performance'
+    names=[n.name for n in source_exp.glob('*_capacity_refinement') if (n/'run.py').is_file()]
+    if len(names)!=1:raise ValueError(f'Expected one capacity refinement source: {names}')
+    runner=importlib.import_module('experiments.performance.'+names[0]+'.run')
     runner.seed()
     print('Evaluation initialized: one CPU thread',flush=True)
     work=a.output.resolve()/'runtime';work.mkdir(parents=True,exist_ok=True)
