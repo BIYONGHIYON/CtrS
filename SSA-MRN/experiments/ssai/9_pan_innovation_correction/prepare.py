@@ -9,8 +9,8 @@ from torch.nn import functional as F
 from torch.utils.data import DataLoader, Subset
 from common import ssai_suite as suite
 from common.model import RestoredPansharpeningNet
-module=importlib.import_module('experiments.ssai.10_pan_innovation_correction.model')
-helpers=importlib.import_module('experiments.ssai.10_pan_innovation_correction.train')
+module=importlib.import_module('experiments.ssai.9_pan_innovation_correction.model')
+helpers=importlib.import_module('experiments.ssai.9_pan_innovation_correction.train')
 
 
 def main():
@@ -125,7 +125,7 @@ def main():
     checks['passed']=True; suite.write(a.runtime/'preflight.json',checks)
     first=json.loads((a.previous/'A0/history.json').read_text())[0]['val_mse']
     p={k:v for k,v in old.items() if k not in ('initial_checkpoints','optimization_benchmark','vram_safety','reference_area_candidate')}
-    p.update(arms=['A1','A2'],experiment=10,cache_root=str(cache),cache_mode='gpu_partial',cache_fraction=.85,initial_common_sha256=init_hash,pan_response=response,environment=actual,created_utc=time.time(),baseline_reference={'path':str(cp),'sha256':cp_hash},divergence={'first_epoch_mse_limit':2*first,'reference':'2*A0 epoch1 validation','automatic_restart':False},followup={'automatic_launch':False},source_hashes={})
+    p.update(arms=['A1','A2'],experiment=9,cache_root=str(cache),cache_mode='gpu_partial',cache_fraction=.85,initial_common_sha256=init_hash,pan_response=response,environment=actual,created_utc=time.time(),baseline_reference={'path':str(cp),'sha256':cp_hash},divergence={'first_epoch_mse_limit':2*first,'reference':'2*A0 epoch1 validation','automatic_restart':False},followup={'automatic_launch':False},source_hashes={})
     paths=list((ROOT/'common').glob('*.py'))+[ROOT/'references/upstream/network.py']+list(Path(__file__).parent.glob('*.py'))+[Path(__file__).parent/'config.json']
     for path in paths:
         name=path.relative_to(ROOT);p['source_hashes'][name.as_posix()]=suite.sha(path)

@@ -41,11 +41,11 @@ def load_model(number, checkpoint):
     if RESEARCH_TRACK == 'ssai':
         if number in (6,7) and variant != {6:'D6',7:'D7'}[number]:
             raise ValueError('Checkpoint belongs to a different detail hypothesis')
-        cls = {1:'SpatialAlignmentNet',2:'ReferenceAreaNet',3:'CalibratedSigmoidNet',4:'AlignedSigmoidNet',5:'MixedGatingNet',6:'MSConditionedDetailNet',7:'ChannelRelationDetailNet',8:'MeanNormalizedNet',10:'PanInnovationNet'}[number]
-        if number == 10:
-            if variant not in ('A1','A2') or cfg.get('plan', {}).get('experiment') != 10:
-                raise ValueError('Not an experiment10 PAN correction checkpoint')
-            net = model_module(10).PanInnovationNet(channels,k,innovation=variant=='A2')
+        cls = {1:'SpatialAlignmentNet',2:'ReferenceAreaNet',3:'CalibratedSigmoidNet',4:'AlignedSigmoidNet',5:'MixedGatingNet',6:'MSConditionedDetailNet',7:'ChannelRelationDetailNet',8:'MeanNormalizedNet',9:'PanInnovationNet'}[number]
+        if number == 9:
+            if variant not in ('A1','A2') or cfg.get('plan', {}).get('experiment') not in (9,10):
+                raise ValueError('Not a retained PAN correction checkpoint')
+            net = model_module(9).PanInnovationNet(channels,k,innovation=variant=='A2')
         elif number == 8:
             if variant not in ('N1','N2'):
                 raise ValueError('Unknown mean-normalized checkpoint variant')

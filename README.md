@@ -86,8 +86,7 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 | [6. MS 조건부 공간 세부정보 보정](SSA-MRN/experiments/ssai/6_ms_conditioned_detail/README.md)<br>[이병현] | MS가 선택한 PAN 세부정보를 원본 출력에 잔차 보정합니다. | PSNR -0.0017dB·SAM +0.0038°·잠정QNR -0.0046 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 | [7. MS–PAN 채널 관계 기반 세부정보 보정](SSA-MRN/experiments/ssai/7_channel_relation_detail/README.md)<br>[이병현] | 4×4 MS–PAN 채널 관계로 PAN 세부정보를 선택·보정합니다. | PSNR -0.0061dB·SAM +0.0158°·잠정QNR -0.0030 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 | [8. 공간 가중치 평균 정규화](SSA-MRN/experiments/ssai/8_spatial_mean_normalization/README.md)<br>[이병현] | 원본 공간 softmax 평균을1로 맞추고 고정·학습 gamma를 비교합니다. | N1 개선 없음; N2 PSNR +0.0104dB·SAM +0.0036°·잠정QNR -0.0019; 두 후보 학습 가능화 성공 | 평가&nbsp;완료 | 부분&nbsp;개선 |
-| [9. 채널 축 교차 어텐션](SSA-MRN/experiments/ssai/9_channel_cross_attention/README.md)<br>[이병현] | 정규화 기준에서 채널 어텐션 교체·병렬 추가·용량 대조를 비교합니다. | 사용자 요청으로 진행하지 않습니다. | 계획 | 판단&nbsp;보류 |
-| [10. PAN 재구성 오차 기반 보정](SSA-MRN/experiments/ssai/10_pan_innovation_correction/README.md)<br>[이병현] | PAN 직접 고주파와 PAN 재구성 오차를 같은 크기의 SSAI에서 비교했습니다. | A1 PSNR -0.0314dB·A2 -0.0352dB, 잠정 QNR 모두 악화 | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [9. PAN 재구성 오차 기반 보정](SSA-MRN/experiments/ssai/9_pan_innovation_correction/README.md)<br>[이병현] | PAN 직접 고주파와 PAN 재구성 오차를 같은 크기의 SSAI에서 비교했습니다. | A1 PSNR -0.0314dB·A2 -0.0352dB, 잠정 QNR 모두 악화 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 
 </details>
 
