@@ -13,12 +13,17 @@ def main():
     a=p.parse_args()
     if 'R0' not in a.variants:p.error('Include R0 for the comparison graph')
     sys.path.insert(0,str(a.source_root.resolve()))
+    os.environ.setdefault('OMP_NUM_THREADS','1');os.environ.setdefault('MKL_NUM_THREADS','1')
+    print('Loading evaluation source',flush=True)
     runner=importlib.import_module('experiments.performance.1_capacity_refinement.run')
+    runner.seed()
+    print('Evaluation initialized: one CPU thread',flush=True)
     work=a.output.resolve()/'runtime';work.mkdir(parents=True,exist_ok=True)
     plan=json.loads(a.config.read_text());plan['variants']=a.variants;manifest={}
     for proto,name in [('RR','test_qb_multiExm1.h5'),('FR','test_qb_OrigScale_multiExm1.h5')]:
         paths=[x for x in a.data_root.rglob('*') if x.is_file() and (x.name==name or x.name.endswith('__'+name)) and not x.name.startswith('._') and '__._' not in x.name]
         if len(paths)!=1:raise ValueError(f'{proto}: expected one original H5, found {paths}')
+        print(f'Checking {proto}: {paths[0]}',flush=True)
         manifest[proto]={'path':str(paths[0].resolve()),'sha256':runner.sha(paths[0])}
     runner.write(work/'plan.json',plan);runner.write(work/'data_manifest.json',manifest)
     for v in a.variants:
@@ -32,6 +37,7 @@ def main():
             try:os.link(source,target)
             except OSError:shutil.copy2(source,target)
         shutil.copy2(a.history_root/v/'history.json',dest/'history.json')
-    runner.seed();runner.evaluate(argparse.Namespace(runtime=work,target=a.target))
+    print('Running full RR/FR evaluation',flush=True)
+    runner.evaluate(argparse.Namespace(runtime=work,target=a.target))
     print(work/'evaluation'/str(a.target)/'metrics.json')
 if __name__=='__main__':main()

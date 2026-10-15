@@ -110,4 +110,6 @@ RR 장면 1·8·11·13·19를 미리 고정했습니다. 0부터 시작하는 �
 - 보존 파일 해시는 `python SSA-MRN/common/verify.py --experiment 1_capacity_refinement --research-track performance`로 확인합니다. 해시 검증과 성능 재평가는 별개입니다.
 - `evaluate.py --data-root <dataset> --output <결과폴더> --target 150`으로 보존 가중치를 재평가할 수 있습니다. 원본 PAN–MS H5와 PyTorch·NumPy·h5py·SciPy·scikit-image·matplotlib·Pillow가 필요합니다.
 
-보관 검증: 소스 해시 8개, 체크포인트 25개의 strict load·CPU 64×64 유한 출력, 세 시점의 validation 선택 에폭·평가 평균·가중치 해시를 확인했습니다. 추가 GPU 전체 재평가는 진행 지연으로 종료했습니다. 기존 완료된 RR20·FR20 평가를 보존했고, 재평가 실행기는 문법·경로 구성을 확인했으며 새 실행기의 전체 완료는 확인하지 못했습니다.
+보관 검증: 소스 해시 8개, 체크포인트 25개의 strict load·CPU 64×64 유한 출력, 세 시점의 validation 선택 에폭·평가 평균·가중치 해시를 확인했습니다.
+
+추가 재평가: 새 실행기에서 모델 생성 전에 CPU 스레드를 1개로 제한하고 진행 출력을 추가한 뒤, 150에폭 best 5개 모델의 RR·FR 각 20장 전체 평가를 완료했습니다. 원본 학습·평가 코드는 변경하지 않았습니다. 기존 평가와 비교한 평균 PSNR 최대 차이는 0.000365 dB 미만, 평균 QNR 최대 차이는 0.000035 미만입니다. 모든 장면·모든 지표를 합친 최대 절대 차이는 0.000876 미만입니다. 비트 단위 일치는 아니며 cuDNN autotune 등 실행 조건에 따른 수치 차이 가능성이 있습니다. 후보별 RR 개선·FR QNR 악화와 부분 개선 판정은 유지됐습니다. 재평가 원본 지표·완료 기록·차이 분석은 `provenance/reevaluation_150/`에 보존했습니다.
