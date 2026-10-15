@@ -29,6 +29,7 @@ SSAI의 PAN 공간정보와 MS 분광정보를 결합하는 연산을 개선합�
 | [9. PAN 재구성 오차 기반 보정](../../experiments/ssai/9_pan_innovation_correction/README.md)<br>[이병현] | PAN 직접 고주파와 PAN 재구성 오차를 같은 크기의 SSAI에서 비교했습니다. | A1 PSNR -0.0314dB·A2 -0.0352dB, 잠정 QNR 모두 악화 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 | [10. 국소 창 교차 어텐션 SSAI](../../experiments/ssai/10_local_window_cross_attention/README.md)<br>[이병현] | 전역 공간 softmax를 7×7 국소 창 어텐션으로 바꾸고 동일 파라미터 convolution 대조군과 비교합니다. | 같은 에폭 A0 대비 validation: L2 −0.81%(21에폭), C −1.15%(45에폭); test 미평가 | 학습&nbsp;중단<br>10-16&nbsp;01:20 | 판단&nbsp;보류 |
 | [11. SSAI 경로 제거 분해와 PAN 기저 결합 상한·FR 대리 지표 검증](../../experiments/ssai/11_ssai_contribution_headroom/README.md)<br>[이병현] | 학습 없이 A0 best에서 SSA 출력·SSAI 단계·coarse 경로·backbone 잔차를 제거하고, PAN 기저 결합 oracle 상한과 validation FR 대리 지표를 검증했습니다. | SSA 출력 제거 시 RR·FR 동일; SSAI 단계 제거 PSNR −1.55dB(상수 보정); oracle null 초과 설명량 11.3%; 대리 Ds 순위 상관 −0.18 | 사전&nbsp;검증&nbsp;완료<br>10-16&nbsp;03:02 | 성능&nbsp;비교&nbsp;아님 |
+| [12. 관측 통계로 정합한 밴드별 PAN 입력](../../experiments/ssai/12_observation_matched_pan_guide/README.md)<br>[이병현] | SSAI 8번 N1 블록에서 PAN 입력만 관측 LR MS 밴드의 국소 평균·표준편차로 정합한 PAN으로 바꾸고, 원 PAN(N1)·장면 전체 통계 정합과 비교합니다. | 사전 검사 통과; 1에폭 validation MSE B2 0.0005346·B3 0.0005352, RR·FR 미평가 | 학습&nbsp;중<br>10-16&nbsp;05:59 | 판단&nbsp;보류 |
 
 ## 비교 조건과 한계
 
@@ -51,3 +52,5 @@ A1의 단일 시드 RR·잠정 FR 동반 개선은 반복 검증과 기준 모�
 6·7번은원본SSA기반의MS조건부세부정보보정을각100에폭학습했습니다. 7번validation은0.116%좋아졌지만RR주요지표·잠정FR은악화했고두실험모두개선없음입니다. 실제신규80개예측·best/latest4개·원본소스/설정·그래프·사전고정예시를보존하고원본을유지합니다. 다음우선검토는1번좌표정렬의반복시드재현성이며새학습은시작하지않았습니다.
 
 9번은PAN 직접 고주파와PAN 재구성 오차 보정을각100에폭 학습하고 A0·A1·A2의RR20·FR20 전체를 같은 환경에서 평가했습니다. 두 후보 모두SSAI 가중치가 크게 변했지만 주요RR 지표와잠정QNR이 악화해 개선없음입니다. 원본A0를 유지합니다.
+
+12번은 SSA 경로가 쓰이는 8번 N1 블록에서 PAN 입력만 관측 LR MS 통계로 밴드별 정합한 PAN으로 바꾸는 계획입니다. FR Ds 감소를 주 가설로 두고 기존 A0·N1을 대조군으로 재사용합니다. 2026-10-16 서버 사전 검사를 통과하고 05:56에 B2·B3 학습을 시작했습니다. RR·FR 평가는 학습 완료 후 진행합니다.

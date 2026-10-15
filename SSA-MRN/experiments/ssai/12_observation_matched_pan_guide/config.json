@@ -1,0 +1,85 @@
+{
+  "research_track": "ssai",
+  "experiment": 12,
+  "display_name": "12. 관측 통계로 정합한 밴드별 PAN 입력",
+  "experimenter": "이병현",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "arms": ["B2", "B3"],
+  "controls": {
+    "A0": "../4_aligned_sigmoid_gating (original SSA-MRN K4, reused, no retraining)",
+    "B1": "../8_spatial_mean_normalization N1 (softmax x HW, gamma 1, raw PAN; reused, no retraining)"
+  },
+  "training": {
+    "sensor": "QB",
+    "seed": 42,
+    "epochs": 100,
+    "micro_batch": 32,
+    "effective_batch": 32,
+    "precision": "FP32",
+    "amp": false,
+    "tf32": false,
+    "deterministic": true,
+    "k": 4,
+    "spatial_scale": 4,
+    "lr": 0.0001,
+    "lr_schedule": "constant",
+    "loss": "MSE",
+    "cache_mode": "gpu_partial",
+    "cache_fraction": 0.85,
+    "training_function": "experiment 8 train.py, unchanged",
+    "selection": "minimum validation MSE; earliest exact tie",
+    "initialization": "experiment 4 A0 / experiment 8 N1 common initial state; no added parameters; no warm start"
+  },
+  "operation": {
+    "changed_location": "PAN tensor given to each band's SSA block at full, half and quarter resolution (12 blocks)",
+    "unchanged": "N1 SSA block (original coordinates, spatial softmax x HW, gamma 1), conv48tnum fusion, PReLU, backbone, LRPAN, decoder, loss, data",
+    "guide": "PAN*_b = mu_b + g_b * (PAN_stage - mu_P); g_b = min(s_b / sqrt(s_P^2 + eps^2), gain_max)",
+    "ms_statistics": "observed LR MS band b",
+    "pan_statistics": "PAN 4x4 area average on the MS grid",
+    "B2_window": "5x5 on the MS grid (20x20 PAN pixels), reflect padding",
+    "B3_window": "whole input per sample (diagnostic; never promoted)",
+    "stage_resampling": "statistic maps bilinear align_corners=False to the stage grid; stage PAN as in the original forward",
+    "gradient_through_guide": false,
+    "added_parameters": 0,
+    "constants": {
+      "eps_percentile_of_train_local_pan_std": 5,
+      "gain_max_percentile_of_train_local_gain": 99.9,
+      "shared_by_B2_B3": true,
+      "frozen_before_any_test_input": true
+    }
+  },
+  "preflight": {
+    "training": false,
+    "optimizer_updates": 0,
+    "checks": [
+      "environment equal to N1 training",
+      "shared numerical sources byte-identical to N1 training snapshot",
+      "original H5 and cache hashes equal to experiment 8",
+      "A0/N1 best/latest hashes and strict load",
+      "initial state hash equal to A0/N1; no added parameters",
+      "raw-PAN path exactly equals N1 best (64x64 validation, 32x48)",
+      "finite forwards at 64, 256, 512, 32x48",
+      "zero-update gradients alive in all three SSAI stages on N1 diagnostic batches",
+      "RR/FR input-only guide summary after constants are frozen"
+    ],
+    "benchmark_probe": "40 discarded Adam batches per arm; runs only after approval to train"
+  },
+  "decision": {
+    "hypothesis_B2_vs_B1": "FR D_s <= -0.003 and provisional QNR >= +0.005; RR PSNR >= -0.03 dB and SAM <= +0.02 deg",
+    "noise_reference": "two same-condition A0 runs differ by PSNR 0.036 dB and QNR 0.004",
+    "repository_label_vs_A0": "개선 only if PSNR, SAM, ERGAS and provisional QNR all improve; otherwise 부분 개선 or 개선 없음",
+    "path_use_check": "after training, zero B2 SSA outputs; unchanged metrics mean the hypothesis was not tested",
+    "B3": "diagnostic only; never selected or promoted",
+    "seed_repeat": "seed43/44 for A0, B1, B2 only if B2 passes the hypothesis criterion; separate approval",
+    "promotion": "never automatic"
+  },
+  "evaluation": {
+    "RR": 20,
+    "FR": 20,
+    "peak": 2047,
+    "provisional": ["SCC", "Q2n", "QNR"],
+    "test_used_for_selection": false,
+    "examples_zero_based": [1, 8, 11, 13, 19]
+  }
+}

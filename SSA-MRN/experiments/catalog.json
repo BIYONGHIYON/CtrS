@@ -407,5 +407,34 @@
     ],
     "best_epoch": 97,
     "limits": "본문 수식 해석 기반·저자 실행 정합 미검증; K6·bicubic 등 복수 변경·과거 A0 통제비교 아님·잠정 지표"
+  },
+  "ssai/12_observation_matched_pan_guide": {
+    "report": "experiments/ssai/12_observation_matched_pan_guide/README.md",
+    "research_track": "ssai",
+    "experiment": 12,
+    "display_name": "12. 관측 통계로 정합한 밴드별 PAN 입력",
+    "experimenter": "이병현",
+    "status": "학습 중",
+    "improvement": "판단 보류",
+    "config": "experiments/ssai/12_observation_matched_pan_guide/config.json",
+    "model": "experiments/ssai/12_observation_matched_pan_guide/model.py",
+    "entrypoint": "experiments/ssai/12_observation_matched_pan_guide/run.py",
+    "manifest": "experiments/ssai/12_observation_matched_pan_guide/manifest.json",
+    "last_checked": "2026-10-16T05:59:00+09:00",
+    "sensor": "QB",
+    "arms": [
+      "B2",
+      "B3"
+    ],
+    "controls": {
+      "A0": "experiments/ssai/4_aligned_sigmoid_gating",
+      "B1": "experiments/ssai/8_spatial_mean_normalization (N1)"
+    },
+    "limits": "단일 QB seed42 학습 중, 대조군 A0·N1 재사용, exploratory test, QNR/Q2n/SCC MATLAB parity 미검증.",
+    "completed_epochs_at_check": {
+      "B2": 1,
+      "B3": 1
+    },
+    "results": "experiments/ssai/12_observation_matched_pan_guide/results"
   }
 }
