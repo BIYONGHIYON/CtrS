@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "device": "CPU",
+  "torch": "2.14.1",
+  "models": {
+    "A1": {
+      "registered_parameters": 426666,
+      "common_initial_match": true,
+      "forward_32x48": true,
+      "all12_block_gradients": true,
+      "zero_innovation_exact_zero": false
+    },
+    "A2": {
+      "registered_parameters": 426666,
+      "common_initial_match": true,
+      "forward_32x48": true,
+      "all12_block_gradients": true,
+      "zero_innovation_exact_zero": true
+    }
+  },
+  "server_preflight_required": true
+}

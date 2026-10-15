@@ -227,7 +227,9 @@
     "manifest": "experiments/ssai/9_channel_cross_attention/manifest.json",
     "status": "계획",
     "improvement": "미확인",
-    "limits": "단일 QB seed42 예정; 학습·평가 결과 미측정"
+    "limits": "단일 QB seed42 예정; 학습·평가 결과 미측정",
+    "execution_decision": "사용자 요청으로 진행 생략",
+    "automatic_launch": false
   },
   "performance/30_focal_frequency_loss": {
     "report": "experiments/performance/30_focal_frequency_loss/README.md",
@@ -254,5 +256,30 @@
     "selected_lambda": 0.013491834,
     "last_checked": "2026-10-15T08:45:40.836855+09:00",
     "limits": "seed42: PSNR -0.0553 dB, SAM -0.0073°, 잠정 QNR -0.0022. 세 FFL λ 모두 baseline validation MSE보다 나쁨. 단일 시드·MATLAB parity 미검증, 원본 유지."
+  },
+  "ssai/10_pan_innovation_correction": {
+    "report": "experiments/ssai/10_pan_innovation_correction/README.md",
+    "research_track": "ssai",
+    "experiment": 10,
+    "display_name": "10. PAN 재구성 오차 기반 보정",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "manifest": "experiments/ssai/10_pan_innovation_correction/manifest.json",
+    "config": "experiments/ssai/10_pan_innovation_correction/config.json",
+    "model": "experiments/ssai/10_pan_innovation_correction/model.py",
+    "entrypoint": "experiments/ssai/10_pan_innovation_correction/run.py",
+    "last_checked": "2026-10-15T22:08:36+09:00",
+    "completed_epochs_at_check": 100,
+    "checkpoint_startup_verified": true,
+    "selected_best_epoch": 98,
+    "evaluated_seeds": [
+      42
+    ],
+    "sensor": "QB",
+    "checkpoints": "experiments/ssai/10_pan_innovation_correction/checkpoints",
+    "results": "experiments/ssai/10_pan_innovation_correction/results",
+    "actual_predictions": 120,
+    "limits": "단일QB seed42·exploratory test·QNR/Q2n/SCC MATLAB parity 미검증·원본A0 유지"
   }
 }
