@@ -8,7 +8,7 @@ sys.path.insert(0, str(ROOT))
 import numpy as np
 import torch
 from torch.utils.data import Dataset, DataLoader
-StructureNet = __import__('importlib').import_module('experiments.performance.1_capacity_refinement.model').StructureNet; VARIANTS=('R0','W2','W3','F01','F11')
+StructureNet = __import__('importlib').import_module('experiments.performance.29_capacity_refinement.model').StructureNet; VARIANTS=('R0','W2','W3','F01','F11')
 KEYS = ('pan', 'lms', 'ms', 'gt')
 
 def sha(p):
