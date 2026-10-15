@@ -592,5 +592,33 @@
     "sensor": "QB",
     "last_checked": "2026-10-16T02:32:31+09:00",
     "limits": "A0 best에서 10에폭 이어 학습한 validation 선별·test 미평가·단일QB seed42"
+  },
+  "performance/33_ms_anchored_reversible_normalization": {
+    "report": "experiments/performance/33_ms_anchored_reversible_normalization/README.md",
+    "research_track": "performance",
+    "experiment": 33,
+    "display_name": "33. MS 기준 가역 밝기·대비 정규화",
+    "experimenter": "김경찬",
+    "status": "평가 완료",
+    "improvement": "개선",
+    "checkpoints": "experiments/performance/33_ms_anchored_reversible_normalization/checkpoints",
+    "results": "experiments/performance/33_ms_anchored_reversible_normalization/results",
+    "manifest": "experiments/performance/33_ms_anchored_reversible_normalization/manifest.json",
+    "config": "experiments/performance/33_ms_anchored_reversible_normalization/config.json",
+    "entrypoint": "experiments/performance/33_ms_anchored_reversible_normalization/run.py",
+    "verification": "experiments/performance/33_ms_anchored_reversible_normalization/prepare.py",
+    "evaluated_seeds": [
+      42
+    ],
+    "pending_seeds": [
+      43,
+      44
+    ],
+    "sensor": "QB",
+    "selected_best_epochs": {
+      "N0": 100,
+      "N1": 98
+    },
+    "limits": "단일QB seed42에서 RR 5지표·잠정FR 3지표가 각각20/20장 개선했습니다. PSNR +0.211059dB·SAM -0.124165도·QNR +0.017462. 반복시드·추가센서·독립holdout·MATLAB parity 미검증; 기준모델 채택 보류."
   }
 }
