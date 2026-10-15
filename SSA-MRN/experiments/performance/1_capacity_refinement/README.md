@@ -109,3 +109,5 @@ RR 장면 1·8·11·13·19를 미리 고정했습니다. 0부터 시작하는 �
 - `provenance/plan.json`과 `data_manifest.json`에 원본 데이터·코드 해시를 보존했습니다. 로컬 실행 경로는 재현 설정에만 남겼습니다. 데이터셋과 재생성 가능한 예측 배열은 포함하지 않았습니다.
 - 보존 파일 해시는 `python SSA-MRN/common/verify.py --experiment 1_capacity_refinement --research-track performance`로 확인합니다. 해시 검증과 성능 재평가는 별개입니다.
 - `evaluate.py --data-root <dataset> --output <결과폴더> --target 150`으로 보존 가중치를 재평가할 수 있습니다. 원본 PAN–MS H5와 PyTorch·NumPy·h5py·SciPy·scikit-image·matplotlib·Pillow가 필요합니다.
+
+보관 검증: 소스 해시 8개, 체크포인트 25개의 strict load·CPU 64×64 유한 출력, 세 시점의 validation 선택 에폭·평가 평균·가중치 해시를 확인했습니다. 추가 GPU 전체 재평가는 진행 지연으로 종료했습니다. 기존 완료된 RR20·FR20 평가를 보존했고, 재평가 실행기는 문법·경로 구성을 확인했으며 새 실행기의 전체 완료는 확인하지 못했습니다.
