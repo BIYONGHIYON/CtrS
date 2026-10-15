@@ -106,6 +106,7 @@
 | [29. 병렬 특징 용량 확장과 독립 잔차 보정](experiments/performance/29_capacity_refinement/README.md)<br>[이병현] | 원본 backbone에 저해상도·원해상도 가지를 추가하고 독립 보정기·LRPAN 제거 결합을 비교했습니다. | R0 대비 W2: RR PSNR +0.7234 dB, SAM -0.3542°; 잠정 QNR -0.0922. 후보 모두 RR 개선·FR 악화 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [30. Focal Frequency Loss 추가](experiments/performance/30_focal_frequency_loss/README.md)<br>[송준현] | 기존 MSE에 주파수 오차 가중 FFL을 추가했습니다. | seed42: PSNR -0.0553 dB, SAM -0.0073°; 잠정 QNR -0.0022. validation도 기준선 우세 | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 | [31. 보정 잔차의 저주파 억제](experiments/performance/31_low_frequency_preserving_residual/README.md)<br>[김경찬] | G5 두 보정기의 잔차에서 고정 Gaussian 저주파 성분을 제거했습니다. | P0 대비 PSNR -0.9426 dB·SAM +0.5369°; 잠정 QNR +0.01671. RR 유지 실패·채택 보류 | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [32. PAN 조건 특징 변조와 국소 회귀 사전 정보의 빠른 선별](experiments/performance/32_feature_modulation_local_regression_screen/README.md)<br>[이병현] | A0 best에서 PAN 조건 특징 변조(W1)·대조군(W1c)·국소 회귀 사전 정보(W2)를 10에폭 이어 학습해 선별했습니다. | 이어 학습 대조군 대비 best validation: W1 −0.06%, W1c −0.06%, W2 −0.03%; 기준 3% 미달, test 미평가 | 사전&nbsp;검증&nbsp;완료 | 판단&nbsp;보류 |
 
 </details>
 

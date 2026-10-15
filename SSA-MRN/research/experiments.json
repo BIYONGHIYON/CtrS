@@ -572,5 +572,25 @@
       "C": 45
     },
     "stopped_by_user": true
+  },
+  "performance/32_feature_modulation_local_regression_screen": {
+    "report": "experiments/performance/32_feature_modulation_local_regression_screen/README.md",
+    "research_track": "performance",
+    "experiment": 32,
+    "display_name": "32. PAN 조건 특징 변조와 국소 회귀 사전 정보의 빠른 선별",
+    "experimenter": "이병현",
+    "status": "사전 검증 완료",
+    "improvement": "판단 보류",
+    "checkpoints": "experiments/performance/32_feature_modulation_local_regression_screen/checkpoints",
+    "results": "experiments/performance/32_feature_modulation_local_regression_screen/results",
+    "manifest": "experiments/performance/32_feature_modulation_local_regression_screen/manifest.json",
+    "config": "experiments/performance/32_feature_modulation_local_regression_screen/config.json",
+    "entrypoint": "experiments/performance/32_feature_modulation_local_regression_screen/run.py",
+    "evaluated_seeds": [
+      42
+    ],
+    "sensor": "QB",
+    "last_checked": "2026-10-16T02:32:31+09:00",
+    "limits": "A0 best에서 10에폭 이어 학습한 validation 선별·test 미평가·단일QB seed42"
   }
 }

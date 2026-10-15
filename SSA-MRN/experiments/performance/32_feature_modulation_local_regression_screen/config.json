@@ -1,0 +1,46 @@
+{
+  "research_track": "performance",
+  "experiment": 32,
+  "display_name": "32. PAN 조건 특징 변조와 국소 회귀 사전 정보의 빠른 선별",
+  "experimenter": "이병현",
+  "status": "사전 검증 완료",
+  "improvement": "판단 보류",
+  "arms": [
+    "W0",
+    "W1",
+    "W1c",
+    "W2"
+  ],
+  "baseline_reference": "../../ssai/4_aligned_sigmoid_gating (A0 best, epoch 98)",
+  "training": {
+    "sensor": "QB",
+    "seed": 42,
+    "start": "warm start from A0 best: weights, Adam state, loader RNG",
+    "epochs": 10,
+    "micro_batch": 32,
+    "effective_batch": 32,
+    "precision": "FP32",
+    "deterministic": true,
+    "lr": 0.0001,
+    "loss": "MSE",
+    "cache_mode": "gpu_partial",
+    "cache_fraction": 0.85,
+    "selection": "minimum validation MSE"
+  },
+  "operation": {
+    "W1": "PAN encoder (3x3 1->32, ReLU, 3x3 32->64); 1x1 128->128 scale/shift after resblock 2 and 4; zero init",
+    "W1c": "same as W1 with guide from backbone input features (1x1 64->32, ReLU, 3x3 32->64)",
+    "W2": "guided-filter prior at MS scale (r=2, eps=1e-5) applied to PAN; [GF, GF-LMS] via 3x3 into first features; res += gamma_b*(GF_b-LMS_b); zero init"
+  },
+  "gates": {
+    "phase0_W2": "blend MSE reduction >= 2% on validation second half, or Ds proxy better by >= 0.005",
+    "phase1_W1": ">=3% better than W0, >=1.5% better than W1c, Ds proxy not worse by >0.002",
+    "phase1_W2": ">=2% better than W0 or Ds proxy better by >=0.005"
+  },
+  "result": {
+    "phase0_W2_gate": false,
+    "W2_run": "user-requested confirmation despite failed gate",
+    "passed": [],
+    "test_evaluated": false
+  }
+}
