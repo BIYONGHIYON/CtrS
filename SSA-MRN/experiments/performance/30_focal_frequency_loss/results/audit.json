@@ -1,0 +1,22 @@
+{
+  "checks": {
+    "zip_crc": true,
+    "all_original_artifact_hashes": true,
+    "immutable_source_hashes": true,
+    "same_initial_state_and_actual_sample_orders": true,
+    "fresh_final_training_from_initial_state": true,
+    "six_full_training_runs_and_validation_best": true,
+    "train_total_equals_MSE_plus_lambda_FFL": true,
+    "test_means_recomputed_from_20_scenes": true,
+    "candidate_selection_validation_only": true,
+    "selected_candidate_did_not_beat_baseline_validation": true,
+    "best_latest_model_states_equal": true,
+    "only_seed42_evaluated": true,
+    "five_prespecified_images_retained_for_both_arms": true,
+    "all_retained_checkpoints_strict_load_and_finite_CPU_inference": true
+  },
+  "original_artifacts": 203,
+  "original_zip_sha256": "12a1ed81bdb39332a7ef34e680e9b2a743fab248af0e1d6ea70d062f30e80d52",
+  "strict_loaded_checkpoints": 14,
+  "verification_scope": "hashes, code/config/selection, weights, synthetic CPU inference and stored metric means; no original H5 re-evaluation; seeds43/44 absent"
+}

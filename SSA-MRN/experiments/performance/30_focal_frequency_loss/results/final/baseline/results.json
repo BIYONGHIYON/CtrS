@@ -1,0 +1,282 @@
+{
+  "best_epoch": 100,
+  "best_val_mse": 0.00017208868143908933,
+  "full_scene": true,
+  "test_precision": "FP32",
+  "checkpoint_kind": "best",
+  "limitations": "FR D_s/QNR MATLAB parity is unverified; RR Q2n/SCC parity is unverified.",
+  "splits": {
+    "RR": {
+      "count": 20,
+      "seconds": 6.634686958997918,
+      "mean": {
+        "SAM": 4.937706948658597,
+        "ERGAS": 4.140672456757316,
+        "PSNR": 37.38571514185936,
+        "SCC": 0.9765238677219379,
+        "Q2n": 0.9212865052708228,
+        "MSE_peak1": 0.00021724318137130916
+      }
+    },
+    "FR": {
+      "count": 20,
+      "seconds": 7.583033000999421,
+      "mean": {
+        "D_lambda": 0.038256864660548076,
+        "D_s": 0.043707166481858746,
+        "QNR": 0.9201768136764763
+      }
+    }
+  },
+  "inference_times": [
+    {
+      "split": "RR",
+      "scene_index": 0,
+      "seconds": 0.32626411100136465,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 1,
+      "seconds": 0.02269571199940401,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 2,
+      "seconds": 0.02275774699955946,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 3,
+      "seconds": 0.022775310000724858,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 4,
+      "seconds": 0.024158821001037722,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 5,
+      "seconds": 0.022698628999933135,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 6,
+      "seconds": 0.022757520000595832,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 7,
+      "seconds": 0.022710528999596136,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 8,
+      "seconds": 0.022868297000968596,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 9,
+      "seconds": 0.023207405996799935,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 10,
+      "seconds": 0.022893337001733016,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 11,
+      "seconds": 0.022747824998077704,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 12,
+      "seconds": 0.022726032002537977,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 13,
+      "seconds": 0.022873188001540257,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 14,
+      "seconds": 0.022788441001466708,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 15,
+      "seconds": 0.022819448000518605,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 16,
+      "seconds": 0.022737376999430126,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 17,
+      "seconds": 0.022867461000714684,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 18,
+      "seconds": 0.023902384000393795,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "RR",
+      "scene_index": 19,
+      "seconds": 0.02369431100305519,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 0,
+      "seconds": 0.07713710600000923,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 1,
+      "seconds": 0.07474605300012627,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 2,
+      "seconds": 0.07457650099968305,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 3,
+      "seconds": 0.07477671000015107,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 4,
+      "seconds": 0.07481222600108595,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 5,
+      "seconds": 0.07444923399816616,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 6,
+      "seconds": 0.07474788699983037,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 7,
+      "seconds": 0.0745370870026818,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 8,
+      "seconds": 0.07467876199734746,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 9,
+      "seconds": 0.07463447599729989,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 10,
+      "seconds": 0.07475398999667959,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 11,
+      "seconds": 0.07443371199769899,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 12,
+      "seconds": 0.07464386300125625,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 13,
+      "seconds": 0.07459234600173659,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 14,
+      "seconds": 0.07476483199934592,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 15,
+      "seconds": 0.07462807999763754,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 16,
+      "seconds": 0.07459325699892361,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 17,
+      "seconds": 0.07448777800163953,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 18,
+      "seconds": 0.07461278899791068,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    },
+    {
+      "split": "FR",
+      "scene_index": 19,
+      "seconds": 0.0746910960006062,
+      "scope": "FP32 forward only; transfer/metrics excluded; no warmup exclusion"
+    }
+  ],
+  "peak_gpu_gib": 0.33100366592407227,
+  "checkpoints": {
+    "best": {
+      "sha256": "02c7c22f2841f702daafce5d90ee3fe4ab0400d353e8237828adbba94de837ee"
+    },
+    "latest": {
+      "sha256": "349fd746cfaab2437342f5745563313109e75d552816295c0394cf67aded5850"
+    }
+  }
+}
