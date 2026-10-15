@@ -1,0 +1,48 @@
+{
+  "name": "논문 채널 상관 어텐션과 다중 해상도 복원 재현",
+  "research_track": "performance",
+  "experiment": 34,
+  "sensor": "QB",
+  "seed": 42,
+  "channels": 4,
+  "k": 6,
+  "spatial_scale": 4,
+  "epochs": 100,
+  "batch_size": 32,
+  "optimizer": "Adam",
+  "learning_rate": 0.0001,
+  "lr_schedule": "constant",
+  "loss": "final-output MSE",
+  "train_precision": "FP32",
+  "validation_precision": "FP32",
+  "tf32": false,
+  "selection": "minimum validation MSE; exact tie retains earlier epoch",
+  "paper_doi": "10.1109/JSTARS.2025.3543827",
+  "interpretation": {
+    "priority": "body equations (1)-(14) and Fig.2, over inconsistent Fig.3 legend and public code",
+    "attention": "unscaled P @ Q^T, row softmax, W @ P; K by K",
+    "small_stage": "include residual per Eq.14",
+    "lms": "recompute bicubic from raw MS, do not modify H5",
+    "lrpan": "4x down then 4x up; Conv and ReLU per Fig.2",
+    "feature_extractor": "4 residual blocks, 64 channels from public implementation; no external LMS addition per Fig.2",
+    "unspecified": [
+      "softmax axis",
+      "bicubic implementation/align_corners/antialias",
+      "all feature channel counts",
+      "initialization",
+      "seed",
+      "Adam epsilon/betas",
+      "checkpoint selection"
+    ],
+    "chosen": "softmax last axis; PyTorch bicubic align_corners=False antialias=False; Conv bias=True; PyTorch defaults; seed42; validation best",
+    "limitation": "paper-equation reconstruction; exact author-runtime parity and paper-score parity unverified"
+  },
+  "examples_zero_based": [
+    1,
+    8,
+    11,
+    13,
+    19
+  ],
+  "limits": "Single QB seed42; historical K4 baseline is not an attention-only matched control; QNR/Q2n/SCC MATLAB parity unverified"
+}

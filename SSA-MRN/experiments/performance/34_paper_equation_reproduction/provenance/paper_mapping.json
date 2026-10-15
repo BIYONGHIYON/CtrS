@@ -1,0 +1,40 @@
+{
+  "paper_doi": "10.1109/JSTARS.2025.3543827",
+  "paper_sha256": "485b0eb92869267c65aa052897abcac35689a258ccd0c10b11bf11abac187392",
+  "source": "user supplied PDF",
+  "mapping": {
+    "Fig2": "four 64-channel residual blocks; LRPAN Conv+ReLU; three stages; three decoder convs",
+    "Eq8-9": "bandwise spectral conv; PAN Conv-ReLU-Conv",
+    "Eq10-12": "KxK matrix; row softmax; W @ PAN",
+    "Eq14": "stage input residual at all three scales",
+    "Eq5-7": "coarse-to-fine concatenation and convolution"
+  },
+  "ambiguities": {
+    "priority": "body equations (1)-(14) and Fig.2, over inconsistent Fig.3 legend and public code",
+    "attention": "unscaled P @ Q^T, row softmax, W @ P; K by K",
+    "small_stage": "include residual per Eq.14",
+    "lms": "recompute bicubic from raw MS, do not modify H5",
+    "lrpan": "4x down then 4x up; Conv and ReLU per Fig.2",
+    "feature_extractor": "4 residual blocks, 64 channels from public implementation; no external LMS addition per Fig.2",
+    "unspecified": [
+      "softmax axis",
+      "bicubic implementation/align_corners/antialias",
+      "all feature channel counts",
+      "initialization",
+      "seed",
+      "Adam epsilon/betas",
+      "checkpoint selection"
+    ],
+    "chosen": "softmax last axis; PyTorch bicubic align_corners=False antialias=False; Conv bias=True; PyTorch defaults; seed42; validation best",
+    "limitation": "paper-equation reconstruction; exact author-runtime parity and paper-score parity unverified"
+  },
+  "prior_implementation_differences": [
+    "K4 -> K6",
+    "elementwise spatial weighting -> KxK matrix attention",
+    "bilinear -> bicubic",
+    "provided LMS -> MS bicubic",
+    "LRPAN PReLU -> Fig2 ReLU",
+    "small stage residual restored",
+    "no external LMS feature-extractor residual per Fig2 (text mentions LMS incorporation but placement unspecified)"
+  ]
+}
