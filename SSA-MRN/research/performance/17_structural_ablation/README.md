@@ -35,7 +35,7 @@
 
 [S0 원본 출력 정확 일치·9개 역전파·optimizer/AMP 재개 검증](results/preflight.json)을 통과했습니다. Windows worker2·전송·validation·저장 경로도 별도 smoke로 검증했습니다. 실행은 SSH와 독립된 WMI 컨트롤러이며 [운영 명령](../../../README.md#evaluate)에 기록했습니다.
 
-실데이터32/64/128/256 측정 후 사용자 승인으로 batch256을 공통 선택했습니다. 합산965patch/s·전체 VRAM 최고4908MiB였고 실제 S0/S1 시작 시 GPU100%·약5.2GB를 확인했습니다. 단독 R2 측정1387patch/s보다 합산 속도가 낮았으며, 다른 후보·짧은 예비 측정이므로 정확한 병렬 가속비는 아닙니다. 유효 배치32에서256으로 바뀌면서 epoch당 optimizer update는536→67회로 감소했습니다. **50에폭은3350회 nominal update**이며 이전100에폭/batch32와 동일 학습량이 아닙니다.
+실데이터32/64/128/256 측정 후 batch256을 공통 선택했습니다. 합산965patch/s·전체 VRAM 최고4908MiB였고 실제 S0/S1 시작 시 GPU100%·약5.2GB를 확인했습니다. 단독 R2 측정1387patch/s보다 합산 속도가 낮았으며, 다른 후보·짧은 예비 측정이므로 정확한 병렬 가속비는 아닙니다. 유효 배치32에서256으로 바뀌면서 epoch당 optimizer update는536→67회로 감소했습니다. **50에폭은3350회 nominal update**이며 이전100에폭/batch32와 동일 학습량이 아닙니다.
 
 S1/S2는 해당 SSAI의 최종 기여를0으로 하고, S3는 작은 SSAI만 제거해 decoder의 원본 MS를 유지합니다. R1은 마지막 출력을LMS+잔차로, R2는 작은/중간/전체 단계에서 잔차를 누적합니다. M1은 작은 SSAI를 현재 작은 특징+MS의1×1/3×3 밴드 혼합으로 교체합니다. I2는 PAN/LRPAN과 LMS를 별도 stem으로 추출합니다. I2 stem은3520→3744parameters(+6.4%), 전체 모델426654→426878(+0.05%)입니다. 구현은 [windows_structure.py](model.py)에서 확인할 수 있습니다.
 
