@@ -135,7 +135,7 @@ SSA-MRN/
 ├── common/                   여러 실험이 공유하는 도구
 ├── data/                     외부 학습·평가 데이터
 ├── docs/                     설명·보고서 양식·구조도
-└── references/               공식 원본
+└── references/               공식 코드·원 논문
 ```
 
 실험 폴더마다 `README.md`, 필요한 실행 코드·설정, `checkpoints/`, `results/`, `provenance/`를 함께 둡니다. 필요하지 않은 빈 파일은 만들지 않습니다.
