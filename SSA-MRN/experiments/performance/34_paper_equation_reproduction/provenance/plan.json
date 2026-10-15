@@ -1,0 +1,135 @@
+{
+  "config": {
+    "name": "논문 채널 상관 어텐션과 다중 해상도 복원 재현",
+    "research_track": "performance",
+    "experiment": 33,
+    "sensor": "QB",
+    "seed": 42,
+    "channels": 4,
+    "k": 6,
+    "spatial_scale": 4,
+    "epochs": 100,
+    "batch_size": 32,
+    "optimizer": "Adam",
+    "learning_rate": 0.0001,
+    "lr_schedule": "constant",
+    "loss": "final-output MSE",
+    "train_precision": "FP32",
+    "validation_precision": "FP32",
+    "tf32": false,
+    "selection": "minimum validation MSE; exact tie retains earlier epoch",
+    "paper_doi": "10.1109/JSTARS.2025.3543827",
+    "interpretation": {
+      "priority": "body equations (1)-(14) and Fig.2, over inconsistent Fig.3 legend and public code",
+      "attention": "unscaled P @ Q^T, row softmax, W @ P; K by K",
+      "small_stage": "include residual per Eq.14",
+      "lms": "recompute bicubic from raw MS, do not modify H5",
+      "lrpan": "4x down then 4x up; Conv and ReLU per Fig.2",
+      "feature_extractor": "4 residual blocks, 64 channels from public implementation; no external LMS addition per Fig.2",
+      "unspecified": [
+        "softmax axis",
+        "bicubic implementation/align_corners/antialias",
+        "all feature channel counts",
+        "initialization",
+        "seed",
+        "Adam epsilon/betas",
+        "checkpoint selection"
+      ],
+      "chosen": "softmax last axis; PyTorch bicubic align_corners=False antialias=False; Conv bias=True; PyTorch defaults; seed42; validation best",
+      "limitation": "paper-equation reconstruction; exact author-runtime parity and paper-score parity unverified"
+    },
+    "examples_zero_based": [
+      1,
+      8,
+      11,
+      13,
+      19
+    ],
+    "limits": "Single QB seed42; historical K4 baseline is not an attention-only matched control; QNR/Q2n/SCC MATLAB parity unverified"
+  },
+  "source_hashes": {
+    "evaluate.py": "f801128cdfd083f6bf2d66da00629bb383ca355c3418623ccbfab96d895773fc",
+    "model.py": "d0f5e4cbc9aca40d73017f2f89812963e1c1fa3e0e4a1a70746e6ca913d26ad7",
+    "prepare.py": "a69a275f77e89a2ccbcfd37734879a2d4a98085b5bb083d5b4134d247c800dba",
+    "run.py": "1b2fbb7542d2ec2badbef742fbf9954632891f56d0daef94c99c620fb28e9e4b",
+    "train.py": "6f79df23b0cce6f0b37dfd7fcefbbcea6db79664f33cfb8e55ac0c78dc11c6f0",
+    "config.json": "199f092a968c7451985d1c9b9bd7a60516fce4708d828640b425f929b11544f7"
+  },
+  "data": {
+    "train": {
+      "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\train_qb.h5",
+      "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "shapes": {
+        "pan": [
+          17139,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          17139,
+          4,
+          64,
+          64
+        ],
+        "ms": [
+          17139,
+          4,
+          16,
+          16
+        ],
+        "gt": [
+          17139,
+          4,
+          64,
+          64
+        ]
+      }
+    },
+    "val": {
+      "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\QuickBird\\Training Dataset\\valid_qb.h5",
+      "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "shapes": {
+        "pan": [
+          1905,
+          1,
+          64,
+          64
+        ],
+        "lms": [
+          1905,
+          4,
+          64,
+          64
+        ],
+        "ms": [
+          1905,
+          4,
+          16,
+          16
+        ],
+        "gt": [
+          1905,
+          4,
+          64,
+          64
+        ]
+      }
+    }
+  },
+  "environment": {
+    "torch": "2.7.1+cu128",
+    "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+    "cuda": "12.8",
+    "gpu": "NVIDIA GeForce RTX 3060 Ti"
+  },
+  "examples_frozen_before_test": [
+    1,
+    8,
+    11,
+    13,
+    19
+  ],
+  "determinism": "warn_only for CUDA bicubic backward; not bitwise guaranteed",
+  "created_utc": 1792089015.8563821
+}
