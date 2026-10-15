@@ -102,8 +102,8 @@
 | [26. 평가 가중치의 지수 이동 평균](research/performance/26_ema_weight_averaging/README.md)<br>[송준현] | 일반 MSE 학습을 유지하고 평가 가중치에 EMA를 적용했습니다. | seed42: PSNR +0.0893 dB, SAM −0.0244°; 잠정 QNR −0.0018 | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 | [27. Backbone 채널 어텐션 추가](research/performance/27_backbone_channel_attention/README.md)<br>[김경찬] | Backbone 잔차 블록 4개에 채널 어텐션을 추가했습니다. | seed42: RR PSNR +0.4803 dB, SAM −0.1369°; 잠정 FR QNR −0.0226 | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 | [28. 원본 복원 후 관측 오차 기반 잔차 보정](research/performance/28_residual_refinement/README.md)<br>[이병현] | 원본 복원 후 두 번의 잔차 보정·오차 입력·가중치 공유를 비교했습니다. | 기존 G2 대비 G5: PSNR +0.1317 dB, SAM -0.0391°; 잠정 QNR -0.0020. G4는 QNR +0.0079 | 평가&nbsp;완료 | 부분&nbsp;개선 |
-| [30. Focal Frequency Loss 추가](experiments/performance/30_focal_frequency_loss/README.md)<br>[송준현] | 기존 MSE에 주파수 오차 가중 FFL을 추가했습니다. | seed42: PSNR -0.0553 dB, SAM -0.0073°; 잠정 QNR -0.0022. validation도 기준선 우세 | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 | [29. 병렬 특징 용량 확장과 독립 잔차 보정](experiments/performance/29_capacity_refinement/README.md)<br>[이병현] | 원본 backbone에 저해상도·원해상도 가지를 추가하고 독립 보정기·LRPAN 제거 결합을 비교했습니다. | R0 대비 W2: RR PSNR +0.7234 dB, SAM -0.3542°; 잠정 QNR -0.0922. 후보 모두 RR 개선·FR 악화 | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [30. Focal Frequency Loss 추가](experiments/performance/30_focal_frequency_loss/README.md)<br>[송준현] | 기존 MSE에 주파수 오차 가중 FFL을 추가했습니다. | seed42: PSNR -0.0553 dB, SAM -0.0073°; 잠정 QNR -0.0022. validation도 기준선 우세 | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 
 </details>
 
