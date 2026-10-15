@@ -1,0 +1,138 @@
+{
+  "research_track": "ssai",
+  "experiment": 6,
+  "display_name": "6. MS 조건부 공간 세부정보 보정",
+  "experimenter": "이병현",
+  "status": "평가 완료",
+  "improvement": "개선 없음",
+  "arm": "D6",
+  "baseline_reference": "../4_aligned_sigmoid_gating",
+  "training": {
+    "sensor": "QB",
+    "seed": 42,
+    "epochs": 100,
+    "micro_batch": 32,
+    "effective_batch": 32,
+    "precision": "FP32",
+    "amp": false,
+    "tf32": false,
+    "k": 4,
+    "spatial_scale": 4,
+    "lr": 0.0001,
+    "loss": "MSE",
+    "initialization": "same original parameters/RNG; added output convolution zero; no warm start",
+    "selection": "minimum validation MSE; earliest exact tie"
+  },
+  "operation": {
+    "highpass": "x-avg_pool3x3(reflect_pad(x))",
+    "gate": "2*sigmoid(existing MS projection Q)",
+    "out_projection": "K4 to K4 1x1, no bias, zero init",
+    "reference_areas": [
+      4096,
+      1024,
+      256
+    ],
+    "channel_relation": false,
+    "temperature": null,
+    "new_parameters": 192
+  },
+  "execution": {
+    "source_root": "C:/CtrS-ssai-detail/SSA-MRN",
+    "runtime_root": "C:/CtrS-ssai-detail/runtime/qb_s42_100_partial_cache",
+    "slots": 2,
+    "shared_with_experiment": 7,
+    "cache_fraction_if_selected": 0.85,
+    "cache_mode": "gpu_partial",
+    "cache_fraction": 0.85,
+    "worker_budget_mib": 2968.0,
+    "minimum_headroom_mib": 512,
+    "probe_minimum_free_mib": 1079,
+    "probe_aggregate_patches_per_second": 306.3251171431871,
+    "controller_pid": 19736,
+    "worker_pid": 21748,
+    "actual_phase": "100epochs and RR/FR evaluation completed"
+  },
+  "followup": {
+    "automatic_launch": false,
+    "validation_threshold": 0.0001715509279241805,
+    "research_goal_rr_psnr_delta_db": 0.2
+  },
+  "last_checked": "2026-10-15T05:37:11.618083+09:00",
+  "conditions_verification": "two full epochs FP32 batches and RNG identical; three A0 Adam updates identical; only cache placement differs from reused control",
+  "results_summary": {
+    "best_epoch": 98,
+    "latest_epoch": 100,
+    "validation_mse": 0.0001721758135408652,
+    "validation_delta_percent": 0.3642566229434152,
+    "rr_delta": {
+      "SAM": 0.0038113366058230014,
+      "ERGAS": 0.0020533528896136133,
+      "PSNR": -0.0017063582963388058,
+      "SCC": -7.528877267848344e-06,
+      "Q2n": -0.0007907269733555822
+    },
+    "fr_delta": {
+      "D_lambda": 0.003599156173678217,
+      "D_s": 0.0012020844565501648,
+      "QNR": -0.0046057133430355
+    },
+    "scene_counts": {
+      "RR": {
+        "SAM": {
+          "improved": 9,
+          "worsened": 11,
+          "unchanged": 0
+        },
+        "ERGAS": {
+          "improved": 10,
+          "worsened": 10,
+          "unchanged": 0
+        },
+        "PSNR": {
+          "improved": 10,
+          "worsened": 10,
+          "unchanged": 0
+        },
+        "SCC": {
+          "improved": 8,
+          "worsened": 12,
+          "unchanged": 0
+        },
+        "Q2n": {
+          "improved": 5,
+          "worsened": 15,
+          "unchanged": 0
+        }
+      },
+      "FR": {
+        "D_lambda": {
+          "improved": 0,
+          "worsened": 20,
+          "unchanged": 0
+        },
+        "D_s": {
+          "improved": 10,
+          "worsened": 10,
+          "unchanged": 0
+        },
+        "QNR": {
+          "improved": 6,
+          "worsened": 14,
+          "unchanged": 0
+        }
+      }
+    },
+    "validation_threshold_passed": false,
+    "performance_adoption_passed": false
+  },
+  "evaluation": {
+    "actual_candidate_predictions": 40,
+    "RR_scenes": 20,
+    "FR_scenes": 20,
+    "checkpoint_selection": "minimum validation MSE, earliest exact tie",
+    "test_used_for_selection": false,
+    "matlab_parity": "unverified",
+    "independent_holdout": false
+  },
+  "decision": "Keep original A0. No repeat seed/sensor runs authorized or launched."
+}

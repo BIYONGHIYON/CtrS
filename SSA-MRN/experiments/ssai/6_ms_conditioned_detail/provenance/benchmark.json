@@ -1,0 +1,97 @@
+{
+  "rows": [
+    {
+      "trial": "gpu32_D6_D7",
+      "pair": [
+        "D6",
+        "D7"
+      ],
+      "cache_mode": "gpu",
+      "micro_batch": 32,
+      "slots": 2,
+      "safe": false,
+      "minimum_free_mib": 339.0,
+      "exitcodes": [
+        0,
+        0
+      ],
+      "probes": [
+        {
+          "arm": "D6",
+          "slots": 2,
+          "seconds": 6.4689999999973224,
+          "patches": 1024,
+          "patches_per_second": 158.2933992889819,
+          "peak_reserved_mib": 3050.0,
+          "probe_discarded": true,
+          "checkpoint_saved": false,
+          "micro_batch": 32,
+          "cache_mode": "gpu"
+        },
+        {
+          "arm": "D7",
+          "slots": 2,
+          "seconds": 6.764999999999418,
+          "patches": 1024,
+          "patches_per_second": 151.36733185514976,
+          "peak_reserved_mib": 3146.0,
+          "probe_discarded": true,
+          "checkpoint_saved": false,
+          "micro_batch": 32,
+          "cache_mode": "gpu"
+        }
+      ],
+      "aggregate_patches_per_second": 309.66073114413166
+    },
+    {
+      "trial": "gpu_partial32_D6_D7",
+      "pair": [
+        "D6",
+        "D7"
+      ],
+      "cache_mode": "gpu_partial",
+      "micro_batch": 32,
+      "slots": 2,
+      "safe": true,
+      "minimum_free_mib": 1079.0,
+      "exitcodes": [
+        0,
+        0
+      ],
+      "probes": [
+        {
+          "arm": "D6",
+          "slots": 2,
+          "seconds": 6.578000000001339,
+          "patches": 1024,
+          "patches_per_second": 155.67041653995008,
+          "peak_reserved_mib": 2680.0,
+          "probe_discarded": true,
+          "checkpoint_saved": false,
+          "micro_batch": 32,
+          "cache_mode": "gpu_partial"
+        },
+        {
+          "arm": "D7",
+          "slots": 2,
+          "seconds": 6.796999999998661,
+          "patches": 1024,
+          "patches_per_second": 150.65470060323696,
+          "peak_reserved_mib": 2776.0,
+          "probe_discarded": true,
+          "checkpoint_saved": false,
+          "micro_batch": 32,
+          "cache_mode": "gpu_partial"
+        }
+      ],
+      "aggregate_patches_per_second": 306.3251171431871
+    }
+  ],
+  "selected_slots": 2,
+  "selected_micro_batch": 32,
+  "selected_cache_mode": "gpu_partial",
+  "worker_budget_mib": 2968.0,
+  "minimum_headroom_mib": 512,
+  "probe_only_no_retained_weights": true,
+  "rule": "every arm pair passes training, validation and atomic checkpoint reload with at least 512 MiB observed headroom; GPU cache preferred"
+}
