@@ -1,0 +1,13 @@
+{
+  "experiment": 32,
+  "RR": "20 full scenes, peak2047 per-band PSNR averaged per scene",
+  "FR": "20 full scenes; QNR/D_lambda/D_s provisional",
+  "std": "population variance over C,H,W of LR MS per sample, floor=0.01",
+  "loss": "MSE after inverse in DN/2047 units",
+  "predefined_targets": {
+    "RR_PSNR_min_delta": -0.03,
+    "RR_SAM_max_delta": 0.02,
+    "FR_QNR_min_delta": 0.003
+  },
+  "test_tuning": false
+}
