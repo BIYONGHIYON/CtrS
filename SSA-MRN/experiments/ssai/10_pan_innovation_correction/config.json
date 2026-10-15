@@ -1,0 +1,164 @@
+{
+  "research_track": "ssai",
+  "experiment": 10,
+  "display_name": "10. PAN 재구성 오차 기반 보정",
+  "experimenter": "이병현",
+  "status": "평가 완료",
+  "improvement": "개선 없음",
+  "arms": [
+    "A1",
+    "A2"
+  ],
+  "baseline_reference": "../4_aligned_sigmoid_gating",
+  "training": {
+    "sensor": "QB",
+    "seed": 42,
+    "epochs": 100,
+    "micro_batch": 32,
+    "effective_batch": 32,
+    "precision": "FP32",
+    "amp": false,
+    "tf32": false,
+    "deterministic": true,
+    "k": 4,
+    "spatial_scale": 4,
+    "lr": 0.0001,
+    "loss": "MSE",
+    "cache_mode": "gpu_partial",
+    "cache_fraction": 0.85,
+    "selection": "minimum validation MSE; earliest exact tie",
+    "initialization": "same original A0 common initial parameters; no warm start"
+  },
+  "operation": {
+    "A1": "gamma*HP(embed(HP(PAN))*2sigmoid(q))",
+    "A2": "gamma*HP(embed(HP(PAN-fixed_response(current_features)))*2sigmoid(q))",
+    "highpass": "x-reflect_avgpool5x5(x)",
+    "response": "fixed affine ridge regression on512 evenly spaced train inputs only; no GT",
+    "gamma_initial": 0.1,
+    "bias_free_detail_embedding": true,
+    "unused_original_parameters": "conv6t12, conv1t6.bias, conv6t6.bias retained but unused in both arms",
+    "area_division": false,
+    "spatial_softmax": false
+  },
+  "safety": {
+    "minimum_gpu_headroom_mib": 512,
+    "probe_required": true,
+    "nonfinite": "stop candidate before Adam update",
+    "first_epoch_validation_limit": 0.0010792540327653171,
+    "automatic_restart": false,
+    "automatic_condition_change": false
+  },
+  "evaluation": {
+    "RR": 20,
+    "FR": 20,
+    "peak": 2047,
+    "provisional": [
+      "SCC",
+      "Q2n",
+      "QNR"
+    ],
+    "test_used_for_selection": false,
+    "actual_predictions": 120,
+    "reevaluated_A0": true,
+    "device": "CUDA FP32"
+  },
+  "success_goal": {
+    "rr_psnr_db": 0.3,
+    "other": "SAM/ERGAS improve; provisional QNR no deterioration; goal is not prediction"
+  },
+  "execution": {
+    "source_root": "C:/CtrS-ssai10/SSA-MRN",
+    "runtime_root": "C:/CtrS-ssai10/runtime/qb_s42_100",
+    "controller_pid": 2240,
+    "actual_worker_pids": {
+      "A1": 1484,
+      "A2": 4568
+    },
+    "slots": 2,
+    "minimum_gpu_headroom_mib": 512,
+    "ssh_detached_verified": true,
+    "checked_kst": "2026-10-15T22:08:36+09:00",
+    "first_epoch_validation": {
+      "A1": 0.0005427112352173883,
+      "A2": 0.0005394048843529134
+    },
+    "checkpoint_startup_verified": true,
+    "actual_phase": "100epochs complete; full RR20/FR20 evaluation complete",
+    "completed_kst": {
+      "A1": "2026-10-15T21:54:07+09:00",
+      "A2": "2026-10-15T21:59:01+09:00"
+    }
+  },
+  "results_summary": {
+    "baseline": "A0 original experiment4; not promoted",
+    "candidate_verdict": {
+      "A1": "개선 없음",
+      "A2": "개선 없음"
+    },
+    "selected_by_validation": "A2",
+    "selected_candidate_is_not_new_baseline": true,
+    "validation_percent_delta_vs_A0": {
+      "A1": 0.4428315997638599,
+      "A2": 0.09970486714472315
+    },
+    "rr_fr_delta": {
+      "A1": {
+        "RR": {
+          "SAM": 0.017268345844706268,
+          "ERGAS": 0.02101136156184147,
+          "PSNR": -0.03141280742781305,
+          "SCC": -0.0003008331960533406,
+          "Q2n": -0.0013796127587426543
+        },
+        "FR": {
+          "D_lambda": 0.00023682840457127374,
+          "D_s": -8.682764586959157e-06,
+          "QNR": -0.00022388720659138883
+        }
+      },
+      "A2": {
+        "RR": {
+          "SAM": 0.017319246199109628,
+          "ERGAS": 0.02149527714432775,
+          "PSNR": -0.035224011054665993,
+          "SCC": -0.0003735030031383202,
+          "Q2n": -0.0010581847756162555
+        },
+        "FR": {
+          "D_lambda": -0.0010448485267367455,
+          "D_s": 0.0011677420244907005,
+          "QNR": -8.850301502416613e-05
+        }
+      }
+    },
+    "latest_active_conv_weight_changes": {
+      "A1": {
+        "SSA_blocks": 0.7209465314689335,
+        "SSA_blocks1": 0.6854793276545516,
+        "SSA_blocks2": 0.3367762300088369
+      },
+      "A2": {
+        "SSA_blocks": 0.8382252948036896,
+        "SSA_blocks1": 0.8071400805696692,
+        "SSA_blocks2": 0.4182831186610178
+      },
+      "A0": {
+        "SSA_blocks": 0.006555207834081357,
+        "SSA_blocks1": 0.011091697998205363,
+        "SSA_blocks2": 0.028567892952469025
+      }
+    },
+    "goal": {
+      "PSNR_gain_db": 0.3,
+      "achieved": false
+    },
+    "interpretation": "positive intermediate validation direction and larger SSAI weight changes did not produce final RR/FR gains; no causal attribution to fixed PAN response alone",
+    "limits": [
+      "single QB seed42",
+      "reused exploratory test, no independent holdout",
+      "QNR/Q2n/SCC MATLAB parity unverified",
+      "current driver610.88; original A0 training driver not captured in checkpoint plan"
+    ],
+    "future_training_started": false
+  }
+}

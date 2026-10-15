@@ -1,0 +1,72 @@
+{
+  "baseline": "A0 original experiment4; not promoted",
+  "candidate_verdict": {
+    "A1": "개선 없음",
+    "A2": "개선 없음"
+  },
+  "selected_by_validation": "A2",
+  "selected_candidate_is_not_new_baseline": true,
+  "validation_percent_delta_vs_A0": {
+    "A1": 0.4428315997638599,
+    "A2": 0.09970486714472315
+  },
+  "rr_fr_delta": {
+    "A1": {
+      "RR": {
+        "SAM": 0.017268345844706268,
+        "ERGAS": 0.02101136156184147,
+        "PSNR": -0.03141280742781305,
+        "SCC": -0.0003008331960533406,
+        "Q2n": -0.0013796127587426543
+      },
+      "FR": {
+        "D_lambda": 0.00023682840457127374,
+        "D_s": -8.682764586959157e-06,
+        "QNR": -0.00022388720659138883
+      }
+    },
+    "A2": {
+      "RR": {
+        "SAM": 0.017319246199109628,
+        "ERGAS": 0.02149527714432775,
+        "PSNR": -0.035224011054665993,
+        "SCC": -0.0003735030031383202,
+        "Q2n": -0.0010581847756162555
+      },
+      "FR": {
+        "D_lambda": -0.0010448485267367455,
+        "D_s": 0.0011677420244907005,
+        "QNR": -8.850301502416613e-05
+      }
+    }
+  },
+  "latest_active_conv_weight_changes": {
+    "A1": {
+      "SSA_blocks": 0.7209465314689335,
+      "SSA_blocks1": 0.6854793276545516,
+      "SSA_blocks2": 0.3367762300088369
+    },
+    "A2": {
+      "SSA_blocks": 0.8382252948036896,
+      "SSA_blocks1": 0.8071400805696692,
+      "SSA_blocks2": 0.4182831186610178
+    },
+    "A0": {
+      "SSA_blocks": 0.006555207834081357,
+      "SSA_blocks1": 0.011091697998205363,
+      "SSA_blocks2": 0.028567892952469025
+    }
+  },
+  "goal": {
+    "PSNR_gain_db": 0.3,
+    "achieved": false
+  },
+  "interpretation": "positive intermediate validation direction and larger SSAI weight changes did not produce final RR/FR gains; no causal attribution to fixed PAN response alone",
+  "limits": [
+    "single QB seed42",
+    "reused exploratory test, no independent holdout",
+    "QNR/Q2n/SCC MATLAB parity unverified",
+    "current driver610.88; original A0 training driver not captured in checkpoint plan"
+  ],
+  "future_training_started": false
+}
