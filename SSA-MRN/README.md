@@ -4,13 +4,13 @@
 
 ## 연구 분담
 
-연구 분야를 선택하면 해당 분야의 목적과 실험 표를 바로 확인할 수 있습니다. SSAI 개선은 QB 단일 시드의 세 가설 평가를 마쳤습니다. 가변 배율 확장은2·3·4배 학습과 RR 평가를 마쳤으며 FR·장면 출처 검증이 남았습니다.
+연구 분야를 선택하면 해당 분야의 목적과 실험 표를 바로 확인할 수 있습니다. SSAI 개선은 1-11번으로 종료했습니다. 학습된 원본에서 SSA 연산이 출력에 영향을 주지 않고 SSAI 결합 연산의 개선 상한도 작아, 결합 연산만 바꾸는 개선으로는 큰 향상을 기대하기 어렵다고 판단했습니다. 이병현은 기존 성능 개선 연구에 합류했습니다. 가변 배율 확장은2·3·4배 학습과 RR 평가를 마쳤으며 FR·장면 출처 검증이 남았습니다.
 
 | 연구 | 담당 | 목표 | 현재 단계 |
 |---|---|---|---|
-| [SSAI 개선](research/ssai/README.md) | 이병현 | 밴드별 공간·분광 특징을 결합하는 SSAI의 연산과 구조를 개선합니다. | SSAI 1-3 평가 완료 |
+| [SSAI 개선](research/ssai/README.md) | 이병현 | 밴드별 공간·분광 특징을 결합하는 SSAI의 연산과 구조를 개선합니다. | 연구 종료(SSAI 1-11) |
 | [가변 배율 확장](research/variable_scale/README.md) | 김윤지 | 기존 고정 4배 복원을 여러 배율에서 동작하도록 확장합니다. | 학습 완료·일부 평가 |
-| [기존 성능 개선](research/performance/README.md) | 김경찬·송준현 | 기존 연구의 구조·학습·손실 변경을 이어서 비교합니다. | 기존 결과 보유 · 후속 연구 계속 |
+| [기존 성능 개선](research/performance/README.md) | 김경찬·송준현·이병현 | 기존 연구의 구조·학습·손실 변경을 이어서 비교합니다. | 기존 결과 보유 · 후속 연구 계속 |
 
 <a id="decision"></a>
 
@@ -28,7 +28,7 @@
 
 ### SSAI 개선
 
-[연구 페이지](research/ssai/README.md) · 담당: **이병현**
+[연구 페이지](research/ssai/README.md) · 담당: **이병현** · 연구 종료
 
 <details>
 <summary>SSAI 개선 실험 표 펼치기</summary>
@@ -45,6 +45,7 @@
 | [8. 공간 가중치 평균 정규화](experiments/ssai/8_spatial_mean_normalization/README.md)<br>[이병현] | 원본 공간 softmax 평균을1로 맞추고 고정·학습 gamma를 비교합니다. | N1 개선 없음; N2 PSNR +0.0104dB·SAM +0.0036°·잠정QNR -0.0019; 두 후보 학습 가능화 성공 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [9. PAN 재구성 오차 기반 보정](experiments/ssai/9_pan_innovation_correction/README.md)<br>[이병현] | PAN 직접 고주파와 PAN 재구성 오차를 같은 크기의 SSAI에서 비교했습니다. | A1 PSNR -0.0314dB·A2 -0.0352dB, 잠정 QNR 모두 악화 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 | [10. 국소 창 교차 어텐션 SSAI](experiments/ssai/10_local_window_cross_attention/README.md)<br>[이병현] | 전역 공간 softmax를 7×7 국소 창 어텐션으로 바꾸고 동일 파라미터 convolution 대조군과 비교합니다. | 같은 에폭 A0 대비 validation: L2 −0.81%(21에폭), C −1.15%(45에폭); test 미평가 | 학습&nbsp;중단<br>10-16&nbsp;01:20 | 판단&nbsp;보류 |
+| [11. SSAI 경로 제거 분해와 PAN 기저 결합 상한·FR 대리 지표 검증](experiments/ssai/11_ssai_contribution_headroom/README.md)<br>[이병현] | 학습 없이 A0 best에서 SSA 출력·SSAI 단계·coarse 경로·backbone 잔차를 제거하고, PAN 기저 결합 oracle 상한과 validation FR 대리 지표를 검증했습니다. | SSA 출력 제거 시 RR·FR 동일; SSAI 단계 제거 PSNR −1.55dB(상수 보정); oracle null 초과 설명량 11.3%; 대리 Ds 순위 상관 −0.18 | 사전&nbsp;검증&nbsp;완료<br>10-16&nbsp;03:02 | 성능&nbsp;비교&nbsp;아님 |
 
 </details>
 
@@ -68,7 +69,7 @@
 
 ### 기존 성능 개선
 
-[연구 페이지](research/performance/README.md) · 담당: **김경찬·송준현**
+[연구 페이지](research/performance/README.md) · 담당: **김경찬·송준현·이병현**
 
 <details>
 <summary>기존 성능 개선 실험 표 펼치기</summary>
