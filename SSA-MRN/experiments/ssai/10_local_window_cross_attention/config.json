@@ -1,0 +1,71 @@
+{
+  "research_track": "ssai",
+  "experiment": 10,
+  "display_name": "10. 국소 창 교차 어텐션 SSAI",
+  "experimenter": "이병현",
+  "status": "학습 중",
+  "improvement": "판단 보류",
+  "arms": ["L2", "C", "L1"],
+  "baseline_reference": "../4_aligned_sigmoid_gating",
+  "training": {
+    "sensor": "QB",
+    "seed": 42,
+    "epochs": 100,
+    "micro_batch": 32,
+    "effective_batch": 32,
+    "precision": "FP32",
+    "amp": false,
+    "tf32": false,
+    "deterministic": true,
+    "k": 4,
+    "spatial_scale": 4,
+    "lr": 0.0001,
+    "loss": "MSE",
+    "cache_mode": "gpu_partial",
+    "cache_fraction": "benchmark selected; recorded in runtime plan.json",
+    "selection": "minimum validation MSE; earliest exact tie",
+    "initialization": "same original A0 common initial parameters; new ssai_local parameters created after the original network; no warm start"
+  },
+  "operation": {
+    "changed_location": "per-band SSA computation at full, half and quarter resolution; original SSA modules kept registered but unused",
+    "unchanged": "backbone, conv48tnum fusion (16->4), PReLU, decoder, loss, data",
+    "per_band_output_channels": 4,
+    "width": 16,
+    "heads": 2,
+    "window": 7,
+    "normalization": "softmax over valid 7x7 neighbours (out-of-image masked); no global spatial softmax, area factor or gamma",
+    "value": "per-stage PAN encoder: 3x3 1->16, ReLU, 3x3 16->16",
+    "query": "per-band 3x3 (current 4ch features + MS band) -> 16",
+    "L2_key": "per-stage 1x1 64->16 on backbone features, bilinear 0.5 per stage like res",
+    "L1_key": "per-stage 1x1 16->16 on the PAN encoder output",
+    "C_control": "per band: 1x1 (5+16+16 -> 10), ReLU, depthwise 7x7, 1x1 10->4; same inputs as L2, parameter-matched, no attention",
+    "position_bias": "per stage, band and head, 49 offsets, zero initial"
+  },
+  "diagnostics": {
+    "D1": "A0 best with original SSA outputs zeroed: validation (prepare) and RR20/FR20 (evaluation arm A0Z)",
+    "D2": "stage operator interior equality between 96x96 input and 64x64 crop, float64 CPU"
+  },
+  "safety": {
+    "minimum_gpu_headroom_mib": 512,
+    "probe_required": true,
+    "nonfinite": "stop candidate before Adam update",
+    "first_epoch_validation_limit": "2x A0 epoch1 validation",
+    "automatic_restart": false,
+    "automatic_condition_change": false
+  },
+  "evaluation": {
+    "RR": 20,
+    "FR": 20,
+    "peak": 2047,
+    "provisional": ["SCC", "Q2n", "QNR"],
+    "test_used_for_selection": false,
+    "reevaluated_A0": true,
+    "device": "CUDA FP32"
+  },
+  "success_goal": {
+    "rr": "PSNR >= +0.2 dB and SAM <= -0.1 deg vs A0, ERGAS improves",
+    "fr": "provisional QNR >= A0; D_s deterioration above 0.005 is at most partial improvement",
+    "attribution": "attention effect only when L2 beats C on RR and FR",
+    "promotion": "never automatic; seed43/44 repeats are proposals only"
+  }
+}
