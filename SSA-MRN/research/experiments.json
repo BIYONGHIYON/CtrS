@@ -592,25 +592,5 @@
     "sensor": "QB",
     "last_checked": "2026-10-16T02:32:31+09:00",
     "limits": "A0 best에서 10에폭 이어 학습한 validation 선별·test 미평가·단일QB seed42"
-  },
-  "ssai/11_ssai_contribution_headroom": {
-    "report": "experiments/ssai/11_ssai_contribution_headroom/README.md",
-    "research_track": "ssai",
-    "experiment": 11,
-    "display_name": "11. SSAI 경로 제거 분해와 PAN 기저 결합 상한·FR 대리 지표 검증",
-    "experimenter": "이병현",
-    "status": "사전 검증 완료",
-    "improvement": "성능 비교 아님",
-    "config": "experiments/ssai/11_ssai_contribution_headroom/config.json",
-    "entrypoint": "experiments/ssai/11_ssai_contribution_headroom/evaluate.py",
-    "results": "experiments/ssai/11_ssai_contribution_headroom/results",
-    "manifest": "experiments/ssai/11_ssai_contribution_headroom/manifest.json",
-    "last_checked": "2026-10-16T03:02:00+09:00",
-    "sensor": "QB",
-    "evaluated_seeds": [
-      42
-    ],
-    "retraining": false,
-    "limits": "학습 없는 진단. A0 best(QB seed42) 하나, 경로 제거는 재학습 없는 의존도, D6은 선형 결합 상한, 대리 지표는 256패치·15모델. QNR/Q2n/SCC MATLAB parity 미검증."
   }
 }
