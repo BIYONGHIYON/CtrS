@@ -6,10 +6,6 @@
 
 SSAI의 PAN 공간정보와 MS 분광정보를 결합하는 연산을 개선합니다. 기준 모델은 **원본 SSA-MRN·K4·MSE·단일복원·공간4배확대**로 유지합니다.
 
-## 현재 결과
-
-SSAI 1-3의QB seed42 결과를 보관했습니다. A0 원본·A1 좌표 정렬·A2 sigmoid는 각 100에폭 학습했고, R1 면적 보정은A0의 같은 best를 사용했습니다. validation으로 고정한 98에폭 best에서 모든 연산의 RR·FR 각 20개 전체 장면을 평가했습니다. 기존 세 실험의 원본 결과는 유지합니다. 4번에서는 새로운 seed42 대조군과 세 후보를 동일 micro32 조건으로 처음부터 비교했습니다.
-
 ## SSAI를 읽는 방법
 
 각 밴드는 PAN과 현재 전체 MS 특징·해당 밴드를 K채널로 바꿉니다. 두 특징을 곱해 공간 가중치를 만든 뒤 PAN 특징을 가중하며, 밴드별 출력을 모아 원본 Conv로 혼합합니다. 전체·절반·1/4 해상도에 적용합니다. 전체 픽셀 간 행렬 곱이나 MS Value 집계는 없습니다.
@@ -30,8 +26,7 @@ SSAI 1-3의QB seed42 결과를 보관했습니다. A0 원본·A1 좌표 정렬·
 | [6. MS 조건부 공간 세부정보 보정](../../experiments/ssai/6_ms_conditioned_detail/README.md)<br>[이병현] | MS가 선택한 PAN 세부정보를 원본 출력에 잔차 보정합니다. | PSNR -0.0017dB·SAM +0.0038°·잠정QNR -0.0046 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 | [7. MS–PAN 채널 관계 기반 세부정보 보정](../../experiments/ssai/7_channel_relation_detail/README.md)<br>[이병현] | 4×4 MS–PAN 채널 관계로 PAN 세부정보를 선택·보정합니다. | PSNR -0.0061dB·SAM +0.0158°·잠정QNR -0.0030 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 | [8. 공간 가중치 평균 정규화](../../experiments/ssai/8_spatial_mean_normalization/README.md)<br>[이병현] | 원본 공간 softmax 평균을1로 맞추고 고정·학습 gamma를 비교합니다. | N1 개선 없음; N2 PSNR +0.0104dB·SAM +0.0036°·잠정QNR -0.0019; 두 후보 학습 가능화 성공 | 평가&nbsp;완료 | 부분&nbsp;개선 |
-| [9. 채널 축 교차 어텐션](../../experiments/ssai/9_channel_cross_attention/README.md)<br>[이병현] | 정규화 기준에서 채널 어텐션 교체·병렬 추가·용량 대조를 비교합니다. | 사용자 요청으로 진행하지 않습니다. | 계획 | 판단&nbsp;보류 |
-| [10. PAN 재구성 오차 기반 보정](../../experiments/ssai/10_pan_innovation_correction/README.md)<br>[이병현] | PAN 직접 고주파와 PAN 재구성 오차를 같은 크기의 SSAI에서 비교했습니다. | A1 PSNR -0.0314dB·A2 -0.0352dB, 잠정 QNR 모두 악화 | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [9. PAN 재구성 오차 기반 보정](../../experiments/ssai/9_pan_innovation_correction/README.md)<br>[이병현] | PAN 직접 고주파와 PAN 재구성 오차를 같은 크기의 SSAI에서 비교했습니다. | A1 PSNR -0.0314dB·A2 -0.0352dB, 잠정 QNR 모두 악화 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 
 ## 비교 조건과 한계
 
@@ -53,4 +48,4 @@ A1의 단일 시드 RR·잠정 FR 동반 개선은 반복 검증과 기준 모�
 
 6·7번은원본SSA기반의MS조건부세부정보보정을각100에폭학습했습니다. 7번validation은0.116%좋아졌지만RR주요지표·잠정FR은악화했고두실험모두개선없음입니다. 실제신규80개예측·best/latest4개·원본소스/설정·그래프·사전고정예시를보존하고원본을유지합니다. 다음우선검토는1번좌표정렬의반복시드재현성이며새학습은시작하지않았습니다.
 
-10번은PAN 직접 고주파와PAN 재구성 오차 보정을각100에폭 학습하고 A0·A1·A2의RR20·FR20 전체를 같은 환경에서 평가했습니다. 두 후보 모두SSAI 가중치가 크게 변했지만 주요RR 지표와잠정QNR이 악화해 개선없음입니다. 원본A0를 유지하고9번은사용자 요청으로 진행하지 않습니다.
+9번은PAN 직접 고주파와PAN 재구성 오차 보정을각100에폭 학습하고 A0·A1·A2의RR20·FR20 전체를 같은 환경에서 평가했습니다. 두 후보 모두SSAI 가중치가 크게 변했지만 주요RR 지표와잠정QNR이 악화해 개선없음입니다. 원본A0를 유지합니다.

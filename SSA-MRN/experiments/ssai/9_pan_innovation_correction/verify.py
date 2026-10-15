@@ -8,12 +8,12 @@ torch.set_num_threads(1)
 
 
 def main():
-    module=importlib.import_module('experiments.ssai.10_pan_innovation_correction.model')
+    module=importlib.import_module('experiments.ssai.9_pan_innovation_correction.model')
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--runtime',type=Path,required=True)
     a=parser.parse_args(); p=json.loads((a.runtime/'plan.json').read_text())
     for name,digest in p['source_hashes'].items():
-        assert hashlib.sha256((ROOT/name).read_bytes()).hexdigest()==digest,name
+        assert hashlib.sha256((a.runtime/'provenance/source'/name).read_bytes()).hexdigest()==digest,name
     results={};now=time.time()
     for arm in ('A1','A2'):
         out=a.runtime/arm; history=json.loads((out/'history.json').read_text())
@@ -44,7 +44,7 @@ def retained_main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root',type=Path,default=ROOT)
     parser.add_argument('--output',type=Path)
-    args=parser.parse_args();root=args.root.resolve();e=root/'experiments/ssai/10_pan_innovation_correction'
+    args=parser.parse_args();root=args.root.resolve();e=root/'experiments/ssai/9_pan_innovation_correction'
     def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
     manifest=json.loads((e/'manifest.json').read_text())
     for name,record in manifest['files'].items():
@@ -54,15 +54,16 @@ def retained_main():
         assert (root/name).stat().st_size==record['bytes'] and sha(root/name)==record['sha256'],name
     refs=json.loads((e/'provenance/reference_assets.json').read_text())['files']['A0']
     for record in refs.values():assert sha(root/record['repository_path'])==record['sha256']
-    with tempfile.TemporaryDirectory(prefix='ssai10-restore-') as temp:
+    with tempfile.TemporaryDirectory(prefix='ssai9-restore-') as temp:
         t=Path(temp)
         with zipfile.ZipFile(e/'provenance/training_source.zip') as z:
             plan=json.loads(z.read('plan.json'))
             assert plan==json.loads((e/'provenance/plan.json').read_text())
             for name,digest in plan['source_hashes'].items():assert hashlib.sha256(z.read('source/'+name)).hexdigest()==digest,name
             path=t/'references/upstream/network.py';path.parent.mkdir(parents=True);path.write_bytes(z.read('source/references/upstream/network.py'))
-            for name in ('common/model.py','experiments/ssai/10_pan_innovation_correction/model.py'):
-                assert sha(root/name)==plan['source_hashes'][name]
+            for name in ('common/model.py','experiments/ssai/9_pan_innovation_correction/model.py'):
+                archived_name=name if name in plan['source_hashes'] else name.replace('9_pan_innovation_correction','10_pan_innovation_correction')
+                assert sha(root/name)==plan['source_hashes'][archived_name]
                 path=t/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes((root/name).read_bytes())
         (t/'common/checkpoint.py').write_bytes((root/'common/checkpoint.py').read_bytes())
         # Use submitted adapter/model/loader with the exact original upstream source.
@@ -86,7 +87,7 @@ def retained_main():
             done=json.loads((e/f'results/training/{arm}/complete.json').read_text())
             for kind in ('best','latest'):
                 path=e/f'checkpoints/{arm}_QB_s42/{kind}.pt'
-                net,ck=checkpoint.load_model(10,path)
+                net,ck=checkpoint.load_model(9,path)
                 assert sha(path)==done[kind+'_sha256']
                 assert ck['config']['plan']==plan and ck['config']['variant']==arm
                 assert ck['epoch']==(best['epoch'] if kind=='best' else 100)

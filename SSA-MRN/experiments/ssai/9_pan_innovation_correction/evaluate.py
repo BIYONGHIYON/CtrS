@@ -20,7 +20,7 @@ def write(p,data):
 
 def main():
  parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--source-root',type=Path,required=True);parser.add_argument('--runtime',type=Path,required=True);parser.add_argument('--data',type=Path,required=True);parser.add_argument('--output',type=Path,required=True);parser.add_argument('--device',choices=('cuda','cpu'),default='cuda');parser.add_argument('--arms',nargs='+',choices=('A0','A1','A2'),default=['A0','A1','A2']);parser.add_argument('--reference-evaluation',type=Path);a=parser.parse_args()
- if 'A0' not in a.arms or a.reference_evaluation is not None:parser.error('Experiment10 requires fresh A0/A1/A2 evaluation; reference reuse disabled')
+ if 'A0' not in a.arms or a.reference_evaluation is not None:parser.error('Experiment9 requires fresh A0/A1/A2 evaluation; reference reuse disabled')
  arms=list(dict.fromkeys(a.arms))
  if a.output.exists():raise FileExistsError('Use fresh output; original reports are never overwritten')
  a.output.mkdir(parents=True);sys.path.insert(0,str(a.source_root))
@@ -30,7 +30,7 @@ def main():
  torch.set_num_threads(1);torch.use_deterministic_algorithms(True);torch.backends.cudnn.benchmark=False;torch.backends.cuda.matmul.allow_tf32=False;torch.backends.cudnn.allow_tf32=False
  def model(arm):
   if arm=='A0':return RestoredPansharpeningNet(4,4)
-  cls=importlib.import_module('experiments.ssai.10_pan_innovation_correction.model').PanInnovationNet
+  cls=importlib.import_module('experiments.ssai.9_pan_innovation_correction.model').PanInnovationNet
   return cls(4,4,innovation=arm=='A2')
  selected={}
  for arm in [x for x in arms if x!='R1']:
