@@ -1,0 +1,28 @@
+{
+  "research_track": "performance",
+  "experiment": 31,
+  "experimenter": "김경찬",
+  "status": "평가 완료",
+  "improvement": "부분 개선",
+  "sensor": "QB",
+  "k": 4,
+  "seed": 46,
+  "extra_epochs": 20,
+  "effective_batch": 64,
+  "micro_batch": 32,
+  "lr": 1e-05,
+  "selection": "minimum validation MSE including epoch0; earliest exact tie",
+  "original_config": "provenance/config.json",
+  "source_snapshot": "provenance/source",
+  "variants": [
+    "P0",
+    "P1"
+  ],
+  "baseline": "P0: same G5 parent, fresh Adam fine-tuning",
+  "limits": [
+    "Single seed46 and QB",
+    "Repeated exploratory test",
+    "QNR/Q2n/SCC MATLAB parity unverified",
+    "No fresh H5 inference during repository archival"
+  ]
+}
