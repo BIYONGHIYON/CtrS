@@ -1,0 +1,39 @@
+{
+  "original_archive_crc_pass": true,
+  "original_manifest_files": 51,
+  "original_manifest_hashes_pass": true,
+  "source_hashes": {
+    "common/model.py": "2baf71d9bba152cc05aa54aff62f2ba72c31bd66900a0cef3587777c967e21cf",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "references/upstream/network.py": "9321e77c7dcb9a767a5ca2ec033036096df469dbfcf6d3c4ba0081c08b38849a",
+    "refiner.py": "a1fa42856861cae7194b722ee37f4bdb7a48df45f14abb4c060d50f0893cbf75",
+    "worker.py": "2c7d2bb40ad904348c2979fefc6e3466ff26bb0ed79fa934b195e4dcc9853a6b",
+    "launcher_template.py": "04e1330f9d5354da470451afa63562e60aed6531fcaa1e78bd407fb4142dd48b"
+  },
+  "paired_initialization": true,
+  "paired_epoch_orders": true,
+  "epochs": 20,
+  "optimizer_updates": {
+    "P0": 5360,
+    "P1": 5360
+  },
+  "skipped_updates": {
+    "P0": 0,
+    "P1": 0
+  },
+  "selected_best_epochs": {
+    "P0": 19,
+    "P1": 20
+  },
+  "RR_scenes_per_arm": 20,
+  "FR_scenes_per_arm": 20,
+  "RR_preview_count": 10,
+  "archive_verification_only": true,
+  "not_reexecuted": [
+    "checkpoint strict load",
+    "model CPU/CUDA inference",
+    "raw H5 metric recomputation",
+    "continuous-vs-resume equality"
+  ],
+  "original_gpu_preflight_records": "results/P0/preflight.json and results/P1/preflight.json"
+}

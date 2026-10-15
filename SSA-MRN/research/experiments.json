@@ -521,5 +521,28 @@
     "results": "experiments/ssai/9_pan_innovation_correction/results",
     "actual_predictions": 120,
     "limits": "단일QB seed42·exploratory test·QNR/Q2n/SCC MATLAB parity 미검증·원본A0 유지"
+  },
+  "performance/31_low_frequency_preserving_residual": {
+    "report": "experiments/performance/31_low_frequency_preserving_residual/README.md",
+    "research_track": "performance",
+    "experiment": 31,
+    "display_name": "31. 보정 잔차의 저주파 억제",
+    "experimenter": "김경찬",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "checkpoints": "experiments/performance/31_low_frequency_preserving_residual/checkpoints",
+    "results": "experiments/performance/31_low_frequency_preserving_residual/results",
+    "manifest": "experiments/performance/31_low_frequency_preserving_residual/manifest.json",
+    "config": "experiments/performance/31_low_frequency_preserving_residual/config.json",
+    "entrypoint": "experiments/performance/31_low_frequency_preserving_residual/run.py",
+    "evaluated_seeds": [
+      46
+    ],
+    "sensor": "QB",
+    "selected_best_epochs": {
+      "P0": 19,
+      "P1": 20
+    },
+    "limits": "같은G5 부모에서20에포크 미세조정. P1 RR PSNR -0.942564dB·SAM +0.536880도, 잠정QNR +0.016711; RR 유지 실패·채택 보류. 단일QB seed46·탐색test·MATLAB parity 미검증."
   }
 }
