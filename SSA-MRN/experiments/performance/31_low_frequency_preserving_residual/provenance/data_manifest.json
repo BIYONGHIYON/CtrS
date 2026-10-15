@@ -1,0 +1,191 @@
+{
+  "train": {
+    "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+    "sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+    "keys": {
+      "pan": {
+        "shape": [
+          17139,
+          1,
+          64,
+          64
+        ],
+        "dtype": "float64",
+        "min": 0.0,
+        "max": 1917.2325893393565
+      },
+      "lms": {
+        "shape": [
+          17139,
+          4,
+          64,
+          64
+        ],
+        "dtype": "float64",
+        "min": -99.9723020204939,
+        "max": 1659.9496147035165
+      },
+      "ms": {
+        "shape": [
+          17139,
+          4,
+          16,
+          16
+        ],
+        "dtype": "float64",
+        "min": -9.118218560999747e-09,
+        "max": 1510.233314226248
+      },
+      "gt": {
+        "shape": [
+          17139,
+          4,
+          64,
+          64
+        ],
+        "dtype": "float64",
+        "min": 0.0,
+        "max": 2047.0
+      }
+    }
+  },
+  "val": {
+    "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5",
+    "sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+    "keys": {
+      "pan": {
+        "shape": [
+          1905,
+          1,
+          64,
+          64
+        ],
+        "dtype": "float64",
+        "min": 0.0,
+        "max": 1889.794570125629
+      },
+      "lms": {
+        "shape": [
+          1905,
+          4,
+          64,
+          64
+        ],
+        "dtype": "float64",
+        "min": -96.95726876989049,
+        "max": 1636.7507041336712
+      },
+      "ms": {
+        "shape": [
+          1905,
+          4,
+          16,
+          16
+        ],
+        "dtype": "float64",
+        "min": -7.351043832579706e-09,
+        "max": 1509.9582513913758
+      },
+      "gt": {
+        "shape": [
+          1905,
+          4,
+          64,
+          64
+        ],
+        "dtype": "float64",
+        "min": 0.0,
+        "max": 2047.0
+      }
+    }
+  },
+  "RR": {
+    "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+    "sha256": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+    "keys": {
+      "pan": {
+        "shape": [
+          20,
+          1,
+          256,
+          256
+        ],
+        "dtype": "float64",
+        "min": 54.040407419612485,
+        "max": 1878.973613985974
+      },
+      "lms": {
+        "shape": [
+          20,
+          4,
+          256,
+          256
+        ],
+        "dtype": "float64",
+        "min": -42.168352894326034,
+        "max": 1487.4173129416745
+      },
+      "ms": {
+        "shape": [
+          20,
+          4,
+          64,
+          64
+        ],
+        "dtype": "float64",
+        "min": 24.025781397001143,
+        "max": 1390.1010748662075
+      },
+      "gt": {
+        "shape": [
+          20,
+          4,
+          256,
+          256
+        ],
+        "dtype": "float64",
+        "min": 1.0,
+        "max": 2047.0
+      }
+    }
+  },
+  "FR": {
+    "path": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5",
+    "sha256": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f",
+    "keys": {
+      "pan": {
+        "shape": [
+          20,
+          1,
+          512,
+          512
+        ],
+        "dtype": "float64",
+        "min": 1.0,
+        "max": 2047.0
+      },
+      "lms": {
+        "shape": [
+          20,
+          4,
+          512,
+          512
+        ],
+        "dtype": "float64",
+        "min": -206.99482859539307,
+        "max": 2319.8881522010593
+      },
+      "ms": {
+        "shape": [
+          20,
+          4,
+          128,
+          128
+        ],
+        "dtype": "float64",
+        "min": 1.0,
+        "max": 2047.0
+      }
+    }
+  }
+}
