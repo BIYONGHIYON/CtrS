@@ -1,0 +1,46 @@
+{
+  "best_epoch": 134,
+  "best_validation": {
+    "mse": 0.0001322122890834655,
+    "psnr": 40.32400873139149,
+    "sam": 4.214760148356148,
+    "ergas": 3.9715882370588287,
+    "scc": 0.9688175823165933,
+    "q2n": 0.8437066854954819,
+    "gate": {
+      "mean": 0.23010687264870472,
+      "std": 0.102260530330001,
+      "min": 0.051115624606609344,
+      "max": 0.9991635084152222
+    }
+  },
+  "last_validation": {
+    "lr": 1e-06,
+    "epoch": 150,
+    "train_mse": 0.00011610538185996539,
+    "val_mse": 0.0001322752821779861,
+    "val_psnr": 40.32260706944103,
+    "val_sam": 4.213952145779357,
+    "skipped_amp_steps": 23,
+    "order_sha256": "93454abffafe2032f33b8929e8fb9051014b1d4d127ef654dca07c2947d768a5",
+    "train_segment_seconds": 46.41990170900135,
+    "validation_seconds": 3.505423073000202,
+    "resumed_mid_epoch": false,
+    "train_total": 0.00011610538185996539,
+    "val_ergas": 3.973771884388713,
+    "val_scc": 0.9687776462293348,
+    "val_q2n": 0.8435767476336062,
+    "validation_diagnostic_scope": "ERGAS/SCC/Q2n: first 32 validation patches; MSE/PSNR/SAM: all used validation patches",
+    "gate": {
+      "mean": 0.23029205617629325,
+      "std": 0.10246620954950984,
+      "min": 0.049651142209768295,
+      "max": 0.9991223216056824
+    }
+  },
+  "last_epoch": 150,
+  "peak_gpu_gib": 3.565847873687744,
+  "train_seconds_measured_segments": 7039.147583294999,
+  "train_active_seconds": 7039.147585837999,
+  "timing_limit": "active train timer includes within-epoch checkpoint overhead; excludes data loading/validation; preserved across resume"
+}

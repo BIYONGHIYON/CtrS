@@ -476,6 +476,32 @@
     "retraining": false,
     "limits": "학습 없는 관문 검사. 보관된 단일 시드 QB 모델·탐색에 반복 사용한 test·잠정 FR 지표에 한정."
   },
+  "performance/37_spatial_gate_on_parallel_branch": {
+    "report": "experiments/performance/37_spatial_gate_on_parallel_branch/README.md",
+    "research_track": "performance",
+    "experiment": 37,
+    "display_name": "37. 병렬 추가 가지의 위치별 게이트",
+    "experimenter": "송준현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42
+    ],
+    "cancelled_repetitions": [
+      43,
+      44
+    ],
+    "sensor": "QB",
+    "last_checked": "2026-10-15T23:17:22+09:00",
+    "limits": "RR PSNR +0.02817dB·SAM -0.01138°, 잠정 FR QNR -0.04456; QNR·Ds 20/20장 악화. 단일 시드, 채택 보류. MATLAB/센서 MTF 대응 미검증.",
+    "checkpoints": "experiments/performance/37_spatial_gate_on_parallel_branch/checkpoints",
+    "results": "experiments/performance/37_spatial_gate_on_parallel_branch/results",
+    "manifest": "experiments/performance/37_spatial_gate_on_parallel_branch/manifest.json",
+    "model": "experiments/performance/37_spatial_gate_on_parallel_branch/model.py",
+    "config": "experiments/performance/37_spatial_gate_on_parallel_branch/config.json",
+    "entrypoint": "experiments/performance/37_spatial_gate_on_parallel_branch/run.py",
+    "verification": "experiments/performance/37_spatial_gate_on_parallel_branch/prepare.py"
+  },
   "performance/38_ms_anchored_normalization_seed_repeat": {
     "report": "experiments/performance/38_ms_anchored_normalization_seed_repeat/README.md",
     "research_track": "performance",
@@ -501,5 +527,29 @@
     "sensor": "QB",
     "reference_experiment": 33,
     "limits": "세 시드 RR 평균5지표 개선; seed44 잠정 FR QNR·Ds 악화. 부분 개선·최종 채택 보류. H5 재평가·반복 가중치 strict load·MATLAB 수치 대응 미검증."
+  },
+  "performance/39_local_ms_anchored_reversible_normalization": {
+    "report": "experiments/performance/39_local_ms_anchored_reversible_normalization/README.md",
+    "research_track": "performance",
+    "experiment": 39,
+    "display_name": "39. 국소 MS 통계 기반 가역 정규화",
+    "experimenter": "송준현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "sensor": "QB",
+    "last_checked": "2026-10-17T01:39:18.796220+09:00",
+    "limits": "3seed 평균 PSNR -0.13345dB·SAM +0.06825°·잠정 QNR -0.00370. seed44 일부FR 이득, 전체 평균 악화·채택 보류. MATLAB/센서 MTF 대응 미검증.",
+    "checkpoints": "experiments/performance/39_local_ms_anchored_reversible_normalization/checkpoints",
+    "results": "experiments/performance/39_local_ms_anchored_reversible_normalization/results",
+    "manifest": "experiments/performance/39_local_ms_anchored_reversible_normalization/manifest.json",
+    "model": "experiments/performance/39_local_ms_anchored_reversible_normalization/model.py",
+    "config": "experiments/performance/39_local_ms_anchored_reversible_normalization/config.json",
+    "entrypoint": "experiments/performance/39_local_ms_anchored_reversible_normalization/run.py",
+    "verification": "experiments/performance/39_local_ms_anchored_reversible_normalization/prepare.py"
   }
 }
