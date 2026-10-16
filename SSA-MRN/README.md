@@ -114,6 +114,7 @@
 | [34. 논문 채널 상관 어텐션과 다중 해상도 복원 재현](experiments/performance/34_paper_equation_reproduction/README.md)<br>[이병현] | K6 채널 상관행렬·bicubic·세 단계 잔차를 본문 수식에 맞춰 재현했습니다. | PSNR36.6224dB·잠정QNR0.90102; 과거 A0 대비 주요 RR·FR 악화, 복수 조건 변경 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 | [35. 교차 축척 일관성 학습](experiments/performance/35_cross_scale_consistency/README.md)<br>[이병현] | 기존 30개 모델로 교차 축척 불일치와 FR Ds의 관계, 8방향 self-ensemble을 학습 없이 확인하고 FR 지표 구현을 toolbox와 대조했습니다. | I_cs↔Ds Spearman 0.58(기본)·0.39(전체)로 기준 미달, 학습 안 함; self-ensemble A0 PSNR −0.93dB; 지표 구조 toolbox와 동일 | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 | [36. 저해상도 이득 지도 기반 세부정보 주입 제한](experiments/performance/36_gain_map_detail_injection/README.md)<br>[이병현] | 출력 구조 제한의 전제(고전 MTF-GLP의 FR Ds)와 이론 상한을 학습 없이 확인했습니다. | MTF-GLP Ds +0.1275·PSNR −4.92dB(A0 대비); 상한 0.50 < A0 0.871로 두 관문 실패, 학습 안 함 | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
+| [38. MS 기준 가역 정규화의 반복 시드 검증](experiments/performance/38_ms_anchored_normalization_seed_repeat/README.md)<br>[김경찬] | 33번의 정규화·역변환을 유지하고 seed43·44로 반복했습니다. | 세 시드 평균 PSNR +0.1800dB·잠정 QNR +0.00761; seed44 QNR·Ds 악화, 채택 보류 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [39. 국소 MS 통계 기반 가역 정규화](experiments/performance/39_local_ms_anchored_reversible_normalization/README.md)<br>[송준현] | N1 전체 MS 통계를 위치별5×5 공통 통계 지도로 바꿨습니다. | 3seed 평균 PSNR −0.13345dB·SAM +0.06825°·잠정 QNR −0.00370; seed44 일부FR 이득, 전체 악화·채택 보류 | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
 
 </details>
