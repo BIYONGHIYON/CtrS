@@ -162,7 +162,7 @@ def register():
 def manifest():
  files={}
  for p in sorted(ROOT.rglob('*')):
-  if p.is_file() and '__pycache__' not in p.parts and p.suffix!='.pyc' and p.name!='manifest.json':files[str(p.relative_to(ROOT))]={'bytes':p.stat().st_size,'sha256':sha(p)}
+  if p.is_file() and '__pycache__' not in p.parts and p.suffix!='.pyc' and p.name!='manifest.json':files[p.relative_to(ROOT).as_posix()]={'bytes':p.stat().st_size,'sha256':sha(p)}
  write('manifest.json',{'research_track':'performance','experiment':40,'experimenter':'김경찬','status':'학습 완료·평가 대기','test_scored':False,'files':files})
 if __name__=='__main__':
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--register',action='store_true');args=p.parse_args()
