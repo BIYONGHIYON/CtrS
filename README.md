@@ -17,13 +17,13 @@
 
 ## 연구 분담
 
-연구 분야를 선택하면 해당 분야의 목적과 실험 표를 바로 확인할 수 있습니다. SSAI 개선은 QB 단일 시드의 세 가설 평가를 마쳤습니다. 가변 배율 확장은2·3·4배 학습과 RR 평가를 마쳤으며 FR·장면 출처 검증이 남았습니다.
+연구 분야를 선택하면 해당 분야의 목적과 실험 표를 바로 확인할 수 있습니다. SSAI 개선은 1-12번 결과를 정리했으며 신규 실험은 계획하지 않습니다. 이병현은 기존 성능 개선 연구로 이동했습니다. 가변 배율 확장은2·3·4배 학습과 RR 평가를 마쳤으며 FR·장면 출처 검증이 남았습니다.
 
 | 연구 | 담당 | 목표 | 현재 단계 |
 |---|---|---|---|
-| [SSAI 개선](SSA-MRN/research/ssai/README.md) | 이병현 | 밴드별 공간·분광 특징을 결합하는 SSAI의 연산과 구조를 개선합니다. | SSAI 1-3 평가 완료 |
+| [SSAI 개선](SSA-MRN/research/ssai/README.md) | 이병현 | 밴드별 공간·분광 특징을 결합하는 SSAI의 연산과 구조를 개선합니다. | SSAI 1-12 평가·정리 완료 · 신규 실험 없음 |
 | [가변 배율 확장](SSA-MRN/research/variable_scale/README.md) | 김윤지 | 기존 고정 4배 복원을 여러 배율에서 동작하도록 확장합니다. | 학습 완료·일부 평가 |
-| [기존 성능 개선](SSA-MRN/research/performance/README.md) | 김경찬·송준현 | 기존 연구의 구조·학습·손실 변경을 이어서 비교합니다. | 기존 결과 보유 · 후속 연구 계속 |
+| [기존 성능 개선](SSA-MRN/research/performance/README.md) | 김경찬·송준현·이병현 | 기존 연구의 구조·학습·손실 변경을 이어서 비교합니다. | 기존 결과 보유 · 후속 연구 계속 |
 
 ## SSA-MRN 구조
 
@@ -71,7 +71,7 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 
 ### SSAI 개선
 
-[연구 페이지](SSA-MRN/research/ssai/README.md) · 담당: **이병현**
+[연구 페이지](SSA-MRN/research/ssai/README.md) · 담당: **이병현** · 1-12번 정리 완료
 
 <details>
 <summary>SSAI 개선 실험 표 펼치기</summary>
@@ -113,7 +113,7 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 
 ### 기존 성능 개선
 
-[연구 페이지](SSA-MRN/research/performance/README.md) · 담당: **김경찬·송준현**
+[연구 페이지](SSA-MRN/research/performance/README.md) · 담당: **김경찬·송준현·이병현**
 
 <details>
 <summary>기존 성능 개선 실험 표 펼치기</summary>
