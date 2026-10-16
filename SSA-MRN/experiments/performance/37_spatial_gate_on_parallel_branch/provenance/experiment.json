@@ -1,0 +1,58 @@
+{
+  "name": "W2SpatialGate_1st",
+  "tag": "W2SpatialGate_1st_v1",
+  "source_hashes": {
+    "common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "original_capacity.py": "622244579000d27db74fbb940755794531b4d9e212183506cffdd87c226fd537",
+    "gate29_model.py": "6dcb6dfb59fbb526be770aa556e1f7ba6e2597eb7af8b931de618ae842764a08",
+    "gate29_worker.py": "216200c9ccc5c80a969e63567cfba7cdc6c8c0681e24fe61287a6161b5cd4d87",
+    "provenance/original29_model.py": "a35c99f829a1617bb005b6c070a638e89b972cf210124468b582361efbdd7918",
+    "provenance/original29_run.py": "5a4a11f3f163e6340b267c63d49c7a4916f63d50299e74feb327ff9f902c3b89",
+    "gate29_dashboard.py": "028afdf83233f3da2e77437ae6deeb0f2a996ff91ca109354cf0082b0b2fd2e4"
+  },
+  "source_audit": {
+    "repository": "BIYONGHIYON/CtrS",
+    "commit": "cdebe7057c2c2466a9a2831269bf2cb86666a1cd",
+    "experiment": "SSA-MRN/experiments/performance/29_capacity_refinement",
+    "snapshot_model_path": "provenance/source/SSA-MRN/experiments/performance/1_capacity_refinement/model.py",
+    "baseline": "W2 only; unchanged archived Block/Parallel classes and original adapter/upstream forward",
+    "source_text": "UTF-8, line endings normalized to LF; hashes refer to delivered text",
+    "new_change": "spatial sigmoid gate on W2 added feature branch; MSE unchanged",
+    "harness_changes": [
+      "standalone Kaggle launcher and physical GPU pinning",
+      "resident FP32 QB arrays instead of Windows mmap cache",
+      "60-second optimizer-boundary checkpoints",
+      "primary validation statistics match archived 29; extra quality diagnostics on fixed first 32 val patches",
+      "smoke deterministic only; main retains cuDNN autotune and AMP",
+      "seed parameterization replaces hardcoded42 for repeated seeds",
+      "no original runtime/weights resumed; fresh training only"
+    ]
+  },
+  "conditions": {
+    "dataset": "QB only",
+    "k": 4,
+    "spatial_ratio": 4,
+    "normalization": "raw DN / 2047; supplied LMS; no clipping",
+    "micro": 32,
+    "effective_batch": 32,
+    "epochs": 150,
+    "optimizer": "Adam defaults",
+    "loss": "final output MSE only",
+    "precision": "AMP FP16 training; FP32 validation/evaluation; TF32 off",
+    "lr": "1e-6+(1e-4-1e-6)*0.5*(1+cos(pi*zero_based_epoch/149))",
+    "order": "CPU randperm seeded by seed + zero-based epoch; independent from model RNG",
+    "selection": "lowest full validation MSE; earliest exact tie",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "gate": "cat(original64,added64) -> Conv1x1(128,16) -> ReLU -> Conv1x1(16,1) -> sigmoid; shared across feature channels",
+    "gate_init": "last Conv zero; gate=0.5; W2 added branch final Conv zero",
+    "test_policy": "architecture frozen before any final test; no tuning after seed42 test",
+    "metric_limitations": "Q2n/SCC/Ds/QNR MATLAB parity unverified; FR has no GT"
+  },
+  "basis": "6fbb88fd40b24b89d296001a640357c3404d294e0f290697e1873f660482b782"
+}
