@@ -1,0 +1,36 @@
+{
+  "best_epoch": 137,
+  "best_validation": {
+    "mse": 0.00013223714879628397,
+    "psnr": 40.3231918214813,
+    "sam": 4.2166926608269195,
+    "ergas": 3.9891985361167954,
+    "scc": 0.968520564340246,
+    "q2n": 0.843434601993642,
+    "gate": {}
+  },
+  "last_validation": {
+    "lr": 1e-06,
+    "epoch": 150,
+    "train_mse": 0.00011560808073291293,
+    "val_mse": 0.00013224946290958585,
+    "val_psnr": 40.32346390050853,
+    "val_sam": 4.216462722116065,
+    "skipped_amp_steps": 22,
+    "order_sha256": "93454abffafe2032f33b8929e8fb9051014b1d4d127ef654dca07c2947d768a5",
+    "train_segment_seconds": 44.73295895299998,
+    "validation_seconds": 3.4520073479998246,
+    "resumed_mid_epoch": false,
+    "train_total": 0.00011560808073291293,
+    "val_ergas": 3.989336712259155,
+    "val_scc": 0.9685675916781118,
+    "val_q2n": 0.8436692196689812,
+    "validation_diagnostic_scope": "ERGAS/SCC/Q2n: first 32 validation patches; MSE/PSNR/SAM: all used validation patches",
+    "gate": {}
+  },
+  "last_epoch": 150,
+  "peak_gpu_gib": 3.5658116340637207,
+  "train_seconds_measured_segments": 6776.114364043,
+  "train_active_seconds": 6776.114357867989,
+  "timing_limit": "active train timer includes within-epoch checkpoint overhead; excludes data loading/validation; preserved across resume"
+}
