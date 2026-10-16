@@ -1,0 +1,52 @@
+{
+  "best_epoch": 94,
+  "best_validation": {
+    "mse": 0.00017990527911018462,
+    "psnr": 39.134449225398185,
+    "sam": 4.639065936425759,
+    "ergas": 4.5320530224512625,
+    "scc": 0.958257553926116,
+    "q2n": 0.8111205510672994,
+    "normalization": {
+      "mean_location": 0.0834936767337438,
+      "mean_scale": 0.038804616081941475,
+      "std_scale": 0.01585333222731001,
+      "floor_fraction": 0.0,
+      "scale_min": 0.01752847619354725,
+      "scale_max": 0.1453607976436615,
+      "scope": "one scalar per sample"
+    }
+  },
+  "last_validation": {
+    "lr": 0.0001,
+    "epoch": 100,
+    "train_mse": 0.0001775602584250371,
+    "val_mse": 0.0001801885614552902,
+    "val_psnr": 39.13674028051181,
+    "val_sam": 4.632330928314467,
+    "skipped_amp_steps": 0,
+    "order_sha256": "c1d6c4a09e872f4ba6a6223b762bcdc4dc8e4574e5b7b10086805a0c55cbebb5",
+    "train_segment_seconds": 28.97310265699889,
+    "validation_seconds": 1.8725876980006433,
+    "resumed_mid_epoch": false,
+    "train_total": 0.0001775602584250371,
+    "val_ergas": 4.532459737300201,
+    "val_scc": 0.9585072339394729,
+    "val_q2n": 0.8124589163015241,
+    "validation_diagnostic_scope": "ERGAS/SCC/Q2n: first 32 validation patches; MSE/PSNR/SAM: all used validation patches",
+    "normalization": {
+      "mean_location": 0.0834936767337438,
+      "mean_scale": 0.038804616081941475,
+      "std_scale": 0.01585333222731001,
+      "floor_fraction": 0.0,
+      "scale_min": 0.01752847619354725,
+      "scale_max": 0.1453607976436615,
+      "scope": "one scalar per sample"
+    }
+  },
+  "last_epoch": 100,
+  "peak_gpu_gib": 2.979620933532715,
+  "train_seconds_measured_segments": 2879.3363412919934,
+  "train_active_seconds": 2879.3363224130135,
+  "timing_limit": "active train timer includes within-epoch checkpoint overhead; excludes data loading/validation; preserved across resume"
+}

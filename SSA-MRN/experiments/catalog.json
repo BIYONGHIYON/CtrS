@@ -501,5 +501,29 @@
     "config": "experiments/performance/37_spatial_gate_on_parallel_branch/config.json",
     "entrypoint": "experiments/performance/37_spatial_gate_on_parallel_branch/run.py",
     "verification": "experiments/performance/37_spatial_gate_on_parallel_branch/prepare.py"
+  },
+  "performance/39_local_ms_anchored_reversible_normalization": {
+    "report": "experiments/performance/39_local_ms_anchored_reversible_normalization/README.md",
+    "research_track": "performance",
+    "experiment": 39,
+    "display_name": "39. 국소 MS 통계 기반 가역 정규화",
+    "experimenter": "송준현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "sensor": "QB",
+    "last_checked": "2026-10-17T01:39:18.796220+09:00",
+    "limits": "3seed 평균 PSNR -0.13345dB·SAM +0.06825°·잠정 QNR -0.00370. seed44 일부FR 이득, 전체 평균 악화·채택 보류. MATLAB/센서 MTF 대응 미검증.",
+    "checkpoints": "experiments/performance/39_local_ms_anchored_reversible_normalization/checkpoints",
+    "results": "experiments/performance/39_local_ms_anchored_reversible_normalization/results",
+    "manifest": "experiments/performance/39_local_ms_anchored_reversible_normalization/manifest.json",
+    "model": "experiments/performance/39_local_ms_anchored_reversible_normalization/model.py",
+    "config": "experiments/performance/39_local_ms_anchored_reversible_normalization/config.json",
+    "entrypoint": "experiments/performance/39_local_ms_anchored_reversible_normalization/run.py",
+    "verification": "experiments/performance/39_local_ms_anchored_reversible_normalization/prepare.py"
   }
 }
