@@ -1,0 +1,739 @@
+{
+  "best_epoch": 100,
+  "best_val_mse": 0.00018154707616966652,
+  "full_scene": true,
+  "test_precision": "FP32",
+  "checkpoint_kind": "latest",
+  "limitations": "FR D_s/QNR MATLAB parity is unverified; RR Q2n/SCC parity is unverified.",
+  "splits": {
+    "RR": {
+      "count": 20,
+      "seconds": 5.890740487000585,
+      "mean": {
+        "SAM": 5.0359710138694584,
+        "ERGAS": 4.157061219710625,
+        "PSNR": 37.38204617896948,
+        "SCC": 0.9762009587723075,
+        "Q2n": 0.9230374811277897,
+        "MSE_peak1": 0.00021919617984902332
+      }
+    },
+    "FR": {
+      "count": 20,
+      "seconds": 8.177286641999672,
+      "mean": {
+        "D_lambda": 0.03859229760503323,
+        "D_s": 0.047192750834319085,
+        "QNR": 0.9165394223870027
+      }
+    }
+  },
+  "smoke_validation_inputs_only": false,
+  "inference_times": [
+    {
+      "split": "RR",
+      "scene_index": 0,
+      "seconds": 0.02037469599963515,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 1,
+      "seconds": 0.01935320399934426,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 2,
+      "seconds": 0.02030513099998643,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 3,
+      "seconds": 0.019602238999141264,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 4,
+      "seconds": 0.019615890998466057,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 5,
+      "seconds": 0.01985249200151884,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 6,
+      "seconds": 0.023865835000833613,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 7,
+      "seconds": 0.019498077999742236,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 8,
+      "seconds": 0.01961375599967141,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 9,
+      "seconds": 0.025889718999678735,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 10,
+      "seconds": 0.023452585000995896,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 11,
+      "seconds": 0.023347715001364122,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 12,
+      "seconds": 0.023558427001262316,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 13,
+      "seconds": 0.023735451000902685,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 14,
+      "seconds": 0.02362532700135489,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 15,
+      "seconds": 0.025039910000486998,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 16,
+      "seconds": 0.023547996999695897,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 17,
+      "seconds": 0.023538110001027235,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 18,
+      "seconds": 0.023404929001117125,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 19,
+      "seconds": 0.023426956999173854,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 0,
+      "seconds": 0.04946458199992776,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 1,
+      "seconds": 0.04178154200053541,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 2,
+      "seconds": 0.04250381700148864,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 3,
+      "seconds": 0.04170211000018753,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 4,
+      "seconds": 0.04259603099853848,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 5,
+      "seconds": 0.041876840999975684,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 6,
+      "seconds": 0.060804876000474906,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 7,
+      "seconds": 0.0603684970010363,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 8,
+      "seconds": 0.06487247699988075,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 9,
+      "seconds": 0.07358399099939561,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 10,
+      "seconds": 0.07503593500041461,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 11,
+      "seconds": 0.07619456300017191,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 12,
+      "seconds": 0.07650524000018777,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 13,
+      "seconds": 0.07645673799925135,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 14,
+      "seconds": 0.07646550500066951,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 15,
+      "seconds": 0.07652847800090967,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 16,
+      "seconds": 0.07703055000092718,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 17,
+      "seconds": 0.07767119799973443,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 18,
+      "seconds": 0.07819469899914111,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 19,
+      "seconds": 0.07646768700033135,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    }
+  ],
+  "warmed_forward": {
+    "RR": {
+      "median_ms": 21.633289999954286,
+      "warmup": 3,
+      "repetitions": 5,
+      "scope": "first scene only; transfer/metrics excluded"
+    },
+    "FR": {
+      "median_ms": 58.06222799947136,
+      "warmup": 3,
+      "repetitions": 5,
+      "scope": "first scene only; transfer/metrics excluded"
+    }
+  },
+  "normalization_statistics": [
+    {
+      "split": "RR",
+      "scene_index": 0,
+      "mean_location": 0.066036157310009,
+      "mean_scale": 0.036082591861486435,
+      "scale_min": 0.036082591861486435,
+      "scale_max": 0.036082591861486435,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 1,
+      "mean_location": 0.06597822904586792,
+      "mean_scale": 0.034283287823200226,
+      "scale_min": 0.034283287823200226,
+      "scale_max": 0.034283287823200226,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 2,
+      "mean_location": 0.10440684854984283,
+      "mean_scale": 0.04775315150618553,
+      "scale_min": 0.04775315150618553,
+      "scale_max": 0.04775315150618553,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 3,
+      "mean_location": 0.10365653038024902,
+      "mean_scale": 0.04759904369711876,
+      "scale_min": 0.04759904369711876,
+      "scale_max": 0.04759904369711876,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 4,
+      "mean_location": 0.09199292957782745,
+      "mean_scale": 0.04517250508069992,
+      "scale_min": 0.04517250508069992,
+      "scale_max": 0.04517250508069992,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 5,
+      "mean_location": 0.09983593970537186,
+      "mean_scale": 0.05120781064033508,
+      "scale_min": 0.05120781064033508,
+      "scale_max": 0.05120781064033508,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 6,
+      "mean_location": 0.0975218266248703,
+      "mean_scale": 0.04911790415644646,
+      "scale_min": 0.04911790415644646,
+      "scale_max": 0.04911790415644646,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 7,
+      "mean_location": 0.07470010966062546,
+      "mean_scale": 0.04059692099690437,
+      "scale_min": 0.04059692099690437,
+      "scale_max": 0.04059692099690437,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 8,
+      "mean_location": 0.0940062552690506,
+      "mean_scale": 0.04397539421916008,
+      "scale_min": 0.04397539421916008,
+      "scale_max": 0.04397539421916008,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 9,
+      "mean_location": 0.10629729181528091,
+      "mean_scale": 0.04717891663312912,
+      "scale_min": 0.04717891663312912,
+      "scale_max": 0.04717891663312912,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 10,
+      "mean_location": 0.09354148060083389,
+      "mean_scale": 0.04272903874516487,
+      "scale_min": 0.04272903874516487,
+      "scale_max": 0.04272903874516487,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 11,
+      "mean_location": 0.10180924832820892,
+      "mean_scale": 0.05318495258688927,
+      "scale_min": 0.05318495258688927,
+      "scale_max": 0.05318495258688927,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 12,
+      "mean_location": 0.08562231063842773,
+      "mean_scale": 0.038152605295181274,
+      "scale_min": 0.038152605295181274,
+      "scale_max": 0.038152605295181274,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 13,
+      "mean_location": 0.09268379956483841,
+      "mean_scale": 0.03776881843805313,
+      "scale_min": 0.03776881843805313,
+      "scale_max": 0.03776881843805313,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 14,
+      "mean_location": 0.08864958584308624,
+      "mean_scale": 0.04453078657388687,
+      "scale_min": 0.04453078657388687,
+      "scale_max": 0.04453078657388687,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 15,
+      "mean_location": 0.08565168082714081,
+      "mean_scale": 0.03835729509592056,
+      "scale_min": 0.03835729509592056,
+      "scale_max": 0.03835729509592056,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 16,
+      "mean_location": 0.09099081158638,
+      "mean_scale": 0.03700820356607437,
+      "scale_min": 0.03700820356607437,
+      "scale_max": 0.03700820356607437,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 17,
+      "mean_location": 0.08199899643659592,
+      "mean_scale": 0.040020447224378586,
+      "scale_min": 0.040020447224378586,
+      "scale_max": 0.040020447224378586,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 18,
+      "mean_location": 0.09118841588497162,
+      "mean_scale": 0.03698112070560455,
+      "scale_min": 0.03698112070560455,
+      "scale_max": 0.03698112070560455,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "RR",
+      "scene_index": 19,
+      "mean_location": 0.08381140232086182,
+      "mean_scale": 0.03685126081109047,
+      "scale_min": 0.03685126081109047,
+      "scale_max": 0.03685126081109047,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 0,
+      "mean_location": 0.07640286535024643,
+      "mean_scale": 0.05494042485952377,
+      "scale_min": 0.05494042485952377,
+      "scale_max": 0.05494042485952377,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 1,
+      "mean_location": 0.10422436892986298,
+      "mean_scale": 0.0757276639342308,
+      "scale_min": 0.0757276639342308,
+      "scale_max": 0.0757276639342308,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 2,
+      "mean_location": 0.10098907351493835,
+      "mean_scale": 0.06299147754907608,
+      "scale_min": 0.06299147754907608,
+      "scale_max": 0.06299147754907608,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 3,
+      "mean_location": 0.10087072849273682,
+      "mean_scale": 0.0663650780916214,
+      "scale_min": 0.0663650780916214,
+      "scale_max": 0.0663650780916214,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 4,
+      "mean_location": 0.09208497405052185,
+      "mean_scale": 0.06790968030691147,
+      "scale_min": 0.06790968030691147,
+      "scale_max": 0.06790968030691147,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 5,
+      "mean_location": 0.10641017556190491,
+      "mean_scale": 0.07229361683130264,
+      "scale_min": 0.07229361683130264,
+      "scale_max": 0.07229361683130264,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 6,
+      "mean_location": 0.10580435395240784,
+      "mean_scale": 0.07664121687412262,
+      "scale_min": 0.07664121687412262,
+      "scale_max": 0.07664121687412262,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 7,
+      "mean_location": 0.11036224663257599,
+      "mean_scale": 0.06812209635972977,
+      "scale_min": 0.06812209635972977,
+      "scale_max": 0.06812209635972977,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 8,
+      "mean_location": 0.10765628516674042,
+      "mean_scale": 0.07770675420761108,
+      "scale_min": 0.07770675420761108,
+      "scale_max": 0.07770675420761108,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 9,
+      "mean_location": 0.11437712609767914,
+      "mean_scale": 0.09085024148225784,
+      "scale_min": 0.09085024148225784,
+      "scale_max": 0.09085024148225784,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 10,
+      "mean_location": 0.10948094725608826,
+      "mean_scale": 0.0887821614742279,
+      "scale_min": 0.0887821614742279,
+      "scale_max": 0.0887821614742279,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 11,
+      "mean_location": 0.10466707497835159,
+      "mean_scale": 0.07934069633483887,
+      "scale_min": 0.07934069633483887,
+      "scale_max": 0.07934069633483887,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 12,
+      "mean_location": 0.11154976487159729,
+      "mean_scale": 0.09940525144338608,
+      "scale_min": 0.09940525144338608,
+      "scale_max": 0.09940525144338608,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 13,
+      "mean_location": 0.10334978997707367,
+      "mean_scale": 0.08036427944898605,
+      "scale_min": 0.08036427944898605,
+      "scale_max": 0.08036427944898605,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 14,
+      "mean_location": 0.11153829097747803,
+      "mean_scale": 0.0869266539812088,
+      "scale_min": 0.0869266539812088,
+      "scale_max": 0.0869266539812088,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 15,
+      "mean_location": 0.07960385829210281,
+      "mean_scale": 0.06564594060182571,
+      "scale_min": 0.06564594060182571,
+      "scale_max": 0.06564594060182571,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 16,
+      "mean_location": 0.08374808728694916,
+      "mean_scale": 0.05740244314074516,
+      "scale_min": 0.05740244314074516,
+      "scale_max": 0.05740244314074516,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 17,
+      "mean_location": 0.07500948756933212,
+      "mean_scale": 0.05042789503931999,
+      "scale_min": 0.05042789503931999,
+      "scale_max": 0.05042789503931999,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 18,
+      "mean_location": 0.09179343283176422,
+      "mean_scale": 0.06147955358028412,
+      "scale_min": 0.06147955358028412,
+      "scale_max": 0.06147955358028412,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    },
+    {
+      "split": "FR",
+      "scene_index": 19,
+      "mean_location": 0.09726538509130478,
+      "mean_scale": 0.06720857322216034,
+      "scale_min": 0.06720857322216034,
+      "scale_max": 0.06720857322216034,
+      "floor_fraction": 0.0,
+      "arm": "global",
+      "scope": "LR MS statistics only, shared across all bands; no GT"
+    }
+  ],
+  "peak_gpu_gib": 0.33613061904907227,
+  "checkpoints": {
+    "best": {
+      "sha256": "253e20245a675454164e1bba659b79c8f94a1ad246f91b69ca7eef00f05d0176"
+    },
+    "latest": {
+      "sha256": "e5e40feb7ea0e9a2555ade407983017fadd7fa99f7596feff253b89b7401db12"
+    }
+  }
+}
