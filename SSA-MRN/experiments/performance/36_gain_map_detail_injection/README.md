@@ -102,7 +102,7 @@ MTF-GLP의 Ds가 A0보다 크게 나빠 **Ga는 실패**입니다.
 
 ## 7. 재현 자료
 
-[관문 검사](prepare.py) · [설정과 사전 기준](config.json) · [실행 당시 설정](provenance/config.json) · [Ga](results/Ga.json) · [Gb](results/Gb.json) · [실행 로그](results/phase0.log) · [manifest](manifest.json)
+[관문 검사](prepare.py) · [설정과 사전 기준](config.json) · [실행 당시 설정](provenance/config.json) · [Ga](results/Ga.json) · [Gb](results/Gb.json) · [manifest](manifest.json)
 
 ```bash
 python SSA-MRN/experiments/performance/36_gain_map_detail_injection/prepare.py --data <QB_H5_폴더> --output <새_출력_폴더>

@@ -138,7 +138,7 @@ MATLAB `imresize`는 문서화된 알고리즘을 Python으로 옮겨 계산했�
 
 ## 7. 재현 자료
 
-[관문 검사](prepare.py) · [설정과 사전 기준](config.json) · [실행 당시 설정](provenance/config.json) · [G1](results/G1.json) · [G2](results/G2.json) · [지표 대조](results/metric_parity.json) · [실행 로그](results/phase0.log) · [manifest](manifest.json)
+[관문 검사](prepare.py) · [설정과 사전 기준](config.json) · [실행 당시 설정](provenance/config.json) · [G1](results/G1.json) · [G2](results/G2.json) · [지표 대조](results/metric_parity.json) · [manifest](manifest.json)
 
 ```bash
 python SSA-MRN/experiments/performance/35_cross_scale_consistency/prepare.py --data <QB_H5_폴더> --output <새_출력_폴더>
