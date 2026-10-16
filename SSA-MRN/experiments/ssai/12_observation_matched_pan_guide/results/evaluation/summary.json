@@ -1,0 +1,155 @@
+{
+  "means": {
+    "A0": {
+      "RR": {
+        "SAM": 4.928274390619155,
+        "ERGAS": 4.110100185806998,
+        "PSNR": 37.453589066314706,
+        "SCC": 0.9769483265244674,
+        "Q2n": 0.9232389945473625
+      },
+      "FR": {
+        "D_lambda": 0.04516672273229319,
+        "D_s": 0.039613654633621,
+        "QNR": 0.9174105843313989
+      }
+    },
+    "N1": {
+      "RR": {
+        "SAM": 4.979478027813753,
+        "ERGAS": 4.142892814249059,
+        "PSNR": 37.400140632811954,
+        "SCC": 0.9765806392299812,
+        "Q2n": 0.922407687751643
+      },
+      "FR": {
+        "D_lambda": 0.048994123173152826,
+        "D_s": 0.04077200423793338,
+        "QNR": 0.9126703664579889
+      }
+    },
+    "B2": {
+      "RR": {
+        "SAM": 4.932211087742741,
+        "ERGAS": 4.1342235859943175,
+        "PSNR": 37.40819517447103,
+        "SCC": 0.9765747438143736,
+        "Q2n": 0.9208752345850615
+      },
+      "FR": {
+        "D_lambda": 0.0390136355202984,
+        "D_s": 0.04461834049500323,
+        "QNR": 0.9186042096631514
+      }
+    },
+    "B3": {
+      "RR": {
+        "SAM": 4.919300830607488,
+        "ERGAS": 4.089929980971926,
+        "PSNR": 37.503754913302764,
+        "SCC": 0.9773090383023989,
+        "Q2n": 0.9234798061079668
+      },
+      "FR": {
+        "D_lambda": 0.04597693729769076,
+        "D_s": 0.04296720854723565,
+        "QNR": 0.913328855408226
+      }
+    },
+    "B2Z": {
+      "RR": {
+        "SAM": 23.557775218840113,
+        "ERGAS": 10.71252992441865,
+        "PSNR": 33.00742519582842,
+        "SCC": 0.9754257817060689,
+        "Q2n": 0.8843106151143205
+      },
+      "FR": {
+        "D_lambda": 0.20896800595599832,
+        "D_s": 0.14003694181763784,
+        "QNR": 0.6822606755031386
+      }
+    }
+  },
+  "archived_mean_max_abs_difference": {
+    "A0": {
+      "RR": 0.0,
+      "FR": 0.0
+    },
+    "N1": {
+      "RR": 0.0,
+      "FR": 0.0
+    }
+  },
+  "selection": {
+    "A0": {
+      "checkpoint": "C:\\CtrS-ssai12\\SSA-MRN\\experiments\\ssai\\4_aligned_sigmoid_gating\\checkpoints\\A0_QB_s42\\best.pt",
+      "sha256": "d3c9b01b1659370c969b43d55506b7cf9d16056485622b15c9142483238c26e2",
+      "epoch": 98,
+      "validation_mse": 0.0001715509279241805
+    },
+    "N1": {
+      "checkpoint": "C:\\CtrS-ssai12\\SSA-MRN\\experiments\\ssai\\8_spatial_mean_normalization\\checkpoints\\N1_QB_s42\\best.pt",
+      "sha256": "f66916d517255207811cb4d12ab412496d3ed169d324ef7aae65873f00a976a3",
+      "epoch": 98,
+      "validation_mse": 0.00017265520144737963
+    },
+    "B2": {
+      "checkpoint": "C:\\CtrS-ssai12\\runtime\\qb_s42_100\\B2\\best.pt",
+      "sha256": "8025fab330c07955a5dde6b822438c4718f463fc0b2af69e12513c3debf42ff4",
+      "epoch": 98,
+      "validation_mse": 0.0001714710597947406
+    },
+    "B3": {
+      "checkpoint": "C:\\CtrS-ssai12\\runtime\\qb_s42_100\\B3\\best.pt",
+      "sha256": "c1e54ea79746286ae85d8dd66512a46efc4bc4bf541bcda89d995d9ce3d3cd6e",
+      "epoch": 98,
+      "validation_mse": 0.00017117893892698468
+    },
+    "B2Z": {
+      "checkpoint": "C:\\CtrS-ssai12\\runtime\\qb_s42_100\\B2\\best.pt",
+      "sha256": "8025fab330c07955a5dde6b822438c4718f463fc0b2af69e12513c3debf42ff4",
+      "epoch": 98,
+      "validation_mse": 0.0001714710597947406,
+      "modification": "every SSA block output replaced by zeros at evaluation; fusion bias/PReLU kept"
+    }
+  },
+  "observation_statistics": {
+    "eps": 0.00215447355133265,
+    "gain_max": 2.8775806849294616,
+    "window_ms_grid": 5,
+    "ratio": 4,
+    "rule": {
+      "eps_percentile_of_train_local_pan_std": 5,
+      "gain_max_percentile_of_train_local_gain": 99.9,
+      "shared_by_B2_B3": true,
+      "frozen_before_any_test_input": true
+    },
+    "source": "train split only (17,139 patches), float64, before any test input",
+    "train_local_pan_std_percentiles": {
+      "0": 0.0,
+      "1": 0.0008920707395618405,
+      "5": 0.00215447355133265,
+      "50": 0.017380365393019355,
+      "95": 0.07248880381651565,
+      "99": 0.10660645558061814,
+      "99.9": 0.15159844840137815,
+      "100": 0.25805787108383765
+    },
+    "train_local_gain_percentiles": {
+      "0": 0.0,
+      "1": 0.08422696048254985,
+      "5": 0.20326036388381044,
+      "50": 0.6420774895511903,
+      "95": 1.3527748688199424,
+      "99": 1.8998183373925084,
+      "99.9": 2.8775806849294616,
+      "100": 8.260389522268705
+    },
+    "train_gain_clipped_fraction": 0.00099998085506739
+  },
+  "torch": "2.7.1+cu128",
+  "gpu": "NVIDIA GeForce RTX 3060 Ti",
+  "evaluator_sha256": "ffeab4dac74ce026aa9ff6a1fdd9dd050a2908e3c456e2eb1789581d36785367",
+  "training_started": false
+}

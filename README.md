@@ -89,7 +89,7 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 | [9. PAN 재구성 오차 기반 보정](SSA-MRN/experiments/ssai/9_pan_innovation_correction/README.md)<br>[이병현] | PAN 직접 고주파와 PAN 재구성 오차를 같은 크기의 SSAI에서 비교했습니다. | A1 PSNR -0.0314dB·A2 -0.0352dB, 잠정 QNR 모두 악화 | 평가&nbsp;완료 | 개선&nbsp;없음 |
 | [10. 국소 창 교차 어텐션 SSAI](SSA-MRN/experiments/ssai/10_local_window_cross_attention/README.md)<br>[이병현] | 전역 공간 softmax를 7×7 국소 창 어텐션으로 바꾸고 동일 파라미터 convolution 대조군과 비교합니다. | 같은 에폭 A0 대비 validation: L2 −0.81%(21에폭), C −1.15%(45에폭); test 미평가 | 학습&nbsp;중단<br>10-16&nbsp;01:20 | 판단&nbsp;보류 |
 | [11. SSAI 경로 제거 분해와 PAN 기저 결합 상한·FR 대리 지표 검증](SSA-MRN/experiments/ssai/11_ssai_contribution_headroom/README.md)<br>[이병현] | 학습 없이 A0 best에서 SSA 출력·SSAI 단계·coarse 경로·backbone 잔차를 제거하고, PAN 기저 결합 oracle 상한과 validation FR 대리 지표를 검증했습니다. | SSA 출력 제거 시 RR·FR 동일; SSAI 단계 제거 PSNR −1.55dB(상수 보정); oracle null 초과 설명량 11.3%; 대리 Ds 순위 상관 −0.18 | 사전&nbsp;검증&nbsp;완료<br>10-16&nbsp;03:02 | 성능&nbsp;비교&nbsp;아님 |
-| [12. 관측 통계로 정합한 밴드별 PAN 입력](SSA-MRN/experiments/ssai/12_observation_matched_pan_guide/README.md)<br>[이병현] | SSAI 8번 N1 블록에서 PAN 입력만 관측 LR MS 밴드의 국소 평균·표준편차로 정합한 PAN으로 바꾸고, 원 PAN(N1)·장면 전체 통계 정합과 비교합니다. | 사전 검사 통과; 1에폭 validation MSE B2 0.0005346·B3 0.0005352, RR·FR 미평가 | 학습&nbsp;중<br>10-16&nbsp;05:59 | 판단&nbsp;보류 |
+| [12. 관측 통계로 정합한 밴드별 PAN 입력](SSA-MRN/experiments/ssai/12_observation_matched_pan_guide/README.md)<br>[이병현] | SSAI 8번 N1 블록에서 PAN 입력만 관측 LR MS 밴드의 국소 평균·표준편차로 정합한 PAN으로 바꾸고, 원 PAN(N1)·장면 전체 통계 정합과 비교합니다. | B2: B1 대비 Dλ −0.0100·QNR +0.0059, Ds +0.0038로 가설 기각; A0 대비 PSNR −0.0454dB·QNR +0.0012. B3(진단): PSNR +0.0502dB·QNR −0.0041 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 
 </details>
 
