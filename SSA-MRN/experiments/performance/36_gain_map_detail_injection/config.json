@@ -1,0 +1,63 @@
+{
+  "research_track": "performance",
+  "experiment": 36,
+  "display_name": "36. 저해상도 이득 지도 기반 세부정보 주입 제한",
+  "experimenter": "이병현",
+  "status": "사전 검증 완료",
+  "improvement": "성능 비교 아님",
+  "phase": "0 (no training): Ga classical MTF-GLP vs A0 on RR20/FR20; Gb oracle ceiling of the constrained output on validation",
+  "reference_source": "DLPan-Toolbox a34f884: GLP/MTF_GLP.m, Tools/LPfilterGauss.m, Tools/genMTF.m, Tools/MTF_PAN.m, Tools/interp23tap.m (read only, reimplemented in Python)",
+  "mtf_glp": {
+    "input_ms": "H5 LMS (upsampled MS), as MTF_GLP(I_MS, I_PAN, 'QB', 4) receives",
+    "histogram_matching": "PAN_eq_b = (PAN - mean2(PAN)) * std2(LMS_b) / std2(LPfilterGauss(PAN)) + mean2(LMS_b); std2 with N-1",
+    "LPfilterGauss": "GNyq 0.3, N 41, alpha uses N*(fcut/2) (not N-1), Kaiser fwind1, replicate",
+    "PAN_LP_b": "interp23tap(nearest decimation by 4 of imfilter(PAN_eq_b, genMTF_QB_band_b, replicate)), phase 2",
+    "output": "LMS_b + PAN_eq_b - PAN_LP_b",
+    "clipping": false
+  },
+  "Ga": {
+    "compare": "MTF-GLP vs A0 (experiment SSAI 4 archived per-scene RR/FR) with the same common/metrics.py",
+    "pass": "MTF-GLP FR mean D_s <= A0 FR mean D_s - 0.005",
+    "fail_action": "premise 'constrained injection lowers D_s' is weak; do not train plan B"
+  },
+  "Gb": {
+    "data": "validation 1,905 patches",
+    "target": "GT - LMS (LMS error)",
+    "bases": {
+      "D1": "PAN - LP2(PAN)",
+      "D2": "LP2(PAN) - LP4(PAN)",
+      "LPr": "interp23tap(phase-correct decimation by r of MTF_PAN-style filter at ratio r)"
+    },
+    "fits": [
+      "K1: one gain on D1+D2 per band per cell",
+      "K2: gains on D1 and D2 per band per cell"
+    ],
+    "cells": [
+      4,
+      8
+    ],
+    "oracle": "per band, per cell least squares with GT (upper bound, not achievable)",
+    "null": "same fit with the neighbouring patch's PAN (chance fit)",
+    "A0_reference": "1 - E_A/E_LMS on the same validation patches",
+    "pass": "K2 cell4 (oracle - null) >= A0 explained fraction",
+    "fail_action": "strict P1 cannot reach A0 RR even ideally; drop P1 and centre phase 1 on P3-W"
+  },
+  "constraints": {
+    "training": false,
+    "optimizer_updates": 0,
+    "test_used_for_selection": false,
+    "gates_fixed_before_measurement": true
+  },
+  "results_summary": {
+    "Ga_pass": false,
+    "Gb_pass": false,
+    "MTF_GLP_minus_A0": {
+      "RR_PSNR": -4.9194,
+      "FR_D_s": 0.1275,
+      "FR_QNR": -0.1438
+    },
+    "Gb_K2_cell4_oracle_minus_null": 0.5,
+    "A0_explained": 0.871,
+    "training": false
+  }
+}

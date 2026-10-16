@@ -1,0 +1,57 @@
+{
+  "reference": {
+    "repository": "liangjiandeng/DLPan-Toolbox",
+    "commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+    "license": "GPL-3.0",
+    "files_read_not_executed": [
+      "Quality_Indices/QNR.m",
+      "D_s.m",
+      "D_lambda.m",
+      "D_lambda_K.m",
+      "HQNR.m",
+      "q2n.m",
+      "onions_quality.m",
+      "norm_blocco.m",
+      "onion_mult.m",
+      "onion_mult2D.m",
+      "SCC.m",
+      "SAM.m",
+      "ERGAS.m",
+      "Q.m",
+      "Tools/indexes_evaluation_FS.m",
+      "indexes_evaluation.m",
+      "interp23tap.m",
+      "MTF.m",
+      "MTF_PAN.m",
+      "genMTF.m"
+    ],
+    "note": "toolbox sources are not copied into this repository"
+  },
+  "structure": {
+    "QNR_D_lambda_D_s": "same as Toolbox 1.0 (flag_orig_paper=0): full-resolution 32x32 UQI blocks, D_lambda vs LMS band pairs, D_s vs interp23tap(imresize(PAN,1/4)); p=q=1",
+    "interp23tap": "same insertion phase, circular boundary and coefficients",
+    "SAM_ERGAS_SCC": "same formulas and boundary handling"
+  },
+  "differences": {
+    "Q2n_onion_multiplication": {
+      "finding": "common/metrics._onion differs from onion_mult.m for 4 and 8 bands (max element difference 12.3 and 18.3 on random vectors)",
+      "measured_effect_RR_test_20": {
+        "GT_vs_LMS_max_abs_Q2n_diff": 1.33e-05,
+        "GT_vs_GT_plus_noise20_max_abs_Q2n_diff": 5.22e-05
+      }
+    },
+    "FR_D_s_PAN_downsampling": {
+      "finding": "scikit-image resize(order=3, anti_aliasing) instead of MATLAB imresize bicubic antialias",
+      "measured_effect_on_Q_low_FR_test_20x4": {
+        "mean": 0.002957,
+        "mean_abs": 0.008242,
+        "max_abs": 0.019579
+      },
+      "interpretation": "Q_low depends only on inputs; |delta D_s| per scene-band is bounded by |delta Q_low|; model differences are unchanged when Q_high values lie on the same side of Q_low",
+      "caveat": "MATLAB imresize reproduced from its documented algorithm in Python; not bit-verified against MATLAB"
+    },
+    "output_clipping": "toolbox clips to [0, 2^L] when th_values=1; repository evaluation does not clip; calling script not checked",
+    "reported_index": "toolbox also provides HQNR (D_lambda_K with MTF and Q2n); which index the SSA-MRN paper used was not checked"
+  },
+  "conclusion": "implementation differences cannot explain the perf29 W2 D_s gap (0.146 vs 0.039); small D_s differences (< ~0.01) need care"
+}
