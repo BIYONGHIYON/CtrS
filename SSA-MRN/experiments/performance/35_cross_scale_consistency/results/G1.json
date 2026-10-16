@@ -1,0 +1,571 @@
+{
+  "environment": {
+    "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+    "torch": "2.7.1+cu128",
+    "cuda": "12.8",
+    "gpu": "NVIDIA GeForce RTX 3060 Ti",
+    "source_sha256": "fb544cda191264cba19075a620e46655c493135e09cb6cee57b8f24d03f81d3e",
+    "config_sha256": "f4cb0b70f921537f072e86730d04a8f04631a162290668f0e1eab6ccb7ff9525"
+  },
+  "data": {
+    "validation_sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+    "patches": 1905,
+    "h5_lms_vs_interp23tap_max_abs": 0.207401305437088,
+    "shapes_b": {
+      "pan": [
+        1905,
+        1,
+        32,
+        32
+      ],
+      "ms": [
+        1905,
+        4,
+        8,
+        8
+      ],
+      "lms": [
+        1905,
+        4,
+        32,
+        32
+      ],
+      "gt": [
+        1905,
+        4,
+        32,
+        32
+      ]
+    },
+    "lms_b_vs_gt_b_mse_interior": 0.0008622856221038287,
+    "lms_a_vs_gt_a_mse": 0.0013280033639073404
+  },
+  "models": [
+    {
+      "name": "A0",
+      "set": "primary",
+      "checkpoint": "experiments\\ssai\\4_aligned_sigmoid_gating\\checkpoints\\A0_QB_s42\\best.pt",
+      "checkpoint_sha256": "d3c9b01b1659370c969b43d55506b7cf9d16056485622b15c9142483238c26e2",
+      "I_cs": 0.00020677148160307411,
+      "E_A": 0.0001715509275304917,
+      "E_B": 0.00022161559028998842,
+      "E_B_over_E_A": 1.291835570230876,
+      "I_cs_over_E_A": 1.20530669568267,
+      "test_D_s": 0.039613654633621,
+      "test_QNR": 0.9174105843313989
+    },
+    {
+      "name": "ssai8_N1",
+      "set": "primary",
+      "checkpoint": "experiments\\ssai\\8_spatial_mean_normalization\\checkpoints\\N1_QB_s42\\best.pt",
+      "checkpoint_sha256": "f66916d517255207811cb4d12ab412496d3ed169d324ef7aae65873f00a976a3",
+      "I_cs": 0.0002085049253591239,
+      "E_A": 0.00017265520062026584,
+      "E_B": 0.00022645417602633645,
+      "E_B_over_E_A": 1.3115977695012786,
+      "I_cs_over_E_A": 1.2076376767688868,
+      "test_D_s": 0.04077200423793338,
+      "test_QNR": 0.9126703664579889
+    },
+    {
+      "name": "ssai8_N2",
+      "set": "primary",
+      "checkpoint": "experiments\\ssai\\8_spatial_mean_normalization\\checkpoints\\N2_QB_s42\\best.pt",
+      "checkpoint_sha256": "34aef79d645da6ec26530601544e165b38139632773d6f4d31fac1299d83db4b",
+      "I_cs": 0.0002053113718357852,
+      "E_A": 0.00017161830348492297,
+      "E_B": 0.00022075506736270642,
+      "E_B_over_E_A": 1.286314238516524,
+      "I_cs_over_E_A": 1.1963256113519516,
+      "test_D_s": 0.040604823809242074,
+      "test_QNR": 0.9155464835150312
+    },
+    {
+      "name": "ssai9_A1",
+      "set": "primary",
+      "checkpoint": "experiments\\ssai\\9_pan_innovation_correction\\checkpoints\\A1_QB_s42\\best.pt",
+      "checkpoint_sha256": "7bc7162ad8542dfe1c1b137be5dff3d2d1e2caaa507d5abc4dc02bc3fc681240",
+      "I_cs": 0.00020199879417949775,
+      "E_A": 0.0001723106134131413,
+      "E_B": 0.00021793081441798894,
+      "E_B_over_E_A": 1.264755606756887,
+      "I_cs_over_E_A": 1.1722945567791256,
+      "test_D_s": 0.03960497186903404,
+      "test_QNR": 0.9171866971248075
+    },
+    {
+      "name": "ssai9_A2",
+      "set": "primary",
+      "checkpoint": "experiments\\ssai\\9_pan_innovation_correction\\checkpoints\\A2_QB_s42\\best.pt",
+      "checkpoint_sha256": "18982a7316e6edfd09df3ac46484495f1524178df0d28cbd12ef2d491023dd4f",
+      "I_cs": 0.0002028818972486709,
+      "E_A": 0.000171721971941839,
+      "E_B": 0.0002181293934919704,
+      "E_B_over_E_A": 1.2702474297572663,
+      "I_cs_over_E_A": 1.1814556690356754,
+      "test_D_s": 0.0407813966581117,
+      "test_QNR": 0.9173220813163747
+    },
+    {
+      "name": "perf29_R0@50",
+      "set": "primary",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\R0_QB_s42\\best_at_50.pt",
+      "checkpoint_sha256": "07dc4ea1c3835d651d4d8c2d6020e65d720c4e0859aa804600af71d0d7faa2a3",
+      "I_cs": 0.00018918481781190642,
+      "E_A": 0.00019247607233330988,
+      "E_B": 0.00019519080193505656,
+      "E_B_over_E_A": 1.0141042445891435,
+      "I_cs_over_E_A": 0.9829004484479297,
+      "test_D_s": 0.05402834524828008,
+      "test_QNR": 0.9084080348101982
+    },
+    {
+      "name": "perf29_W2@50",
+      "set": "primary",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\W2_QB_s42\\best_at_50.pt",
+      "checkpoint_sha256": "c5ee0ce50f43f6e35d549007197925d974d005c7f8dc4d665332cbef3b10014a",
+      "I_cs": 0.0002302898118118124,
+      "E_A": 0.00013942281254685542,
+      "E_B": 0.00023757708616235556,
+      "E_B_over_E_A": 1.7040044008760311,
+      "I_cs_over_E_A": 1.6517369546997165,
+      "test_D_s": 0.10633897927922882,
+      "test_QNR": 0.8614885904901755
+    },
+    {
+      "name": "perf29_W3@50",
+      "set": "primary",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\W3_QB_s42\\best_at_50.pt",
+      "checkpoint_sha256": "027c83840ebaff47ee5df35ef1a1247c2cfe55687f95ed3bd7d5da8eff560a59",
+      "I_cs": 0.00021712619587780572,
+      "E_A": 0.0001571919847996612,
+      "E_B": 0.00022834854308488088,
+      "E_B_over_E_A": 1.4526729424271068,
+      "I_cs_over_E_A": 1.3812803251675319,
+      "test_D_s": 0.10686246505679005,
+      "test_QNR": 0.8477387254602098
+    },
+    {
+      "name": "perf29_F01@50",
+      "set": "primary",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\F01_QB_s42\\best_at_50.pt",
+      "checkpoint_sha256": "83ee0d879ef70b7a9deeb5df174e0c5958344bda6cd71cf62b15db2f2c020952",
+      "I_cs": 0.00019242979528024144,
+      "E_A": 0.00018078505729209163,
+      "E_B": 0.0002017451473634386,
+      "E_B_over_E_A": 1.1159392838396045,
+      "I_cs_over_E_A": 1.0644120601700813,
+      "test_D_s": 0.04873873060795161,
+      "test_QNR": 0.9131683243220131
+    },
+    {
+      "name": "perf29_F11@50",
+      "set": "primary",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\F11_QB_s42\\best_at_50.pt",
+      "checkpoint_sha256": "a26725f1461cf971bc875814f670bac3b239d57759bd8466c1e5dda9f63fae33",
+      "I_cs": 0.0001908932302969379,
+      "E_A": 0.00018331836849542511,
+      "E_B": 0.0002000784851132808,
+      "E_B_over_E_A": 1.0914262807126933,
+      "I_cs_over_E_A": 1.0413208008760009,
+      "test_D_s": 0.04335478684637577,
+      "test_QNR": 0.9166841569866611
+    },
+    {
+      "name": "perf29_R0@150",
+      "set": "primary",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\R0_QB_s42\\best_at_150.pt",
+      "checkpoint_sha256": "584af0b3eef56a4bc878b5d8a1f4f03204c770220a8d9a099eb7f5143507ca1c",
+      "I_cs": 0.00020501290027065603,
+      "E_A": 0.00017358678599501323,
+      "E_B": 0.00021647321980920004,
+      "E_B_over_E_A": 1.2470604750722145,
+      "I_cs_over_E_A": 1.1810397841950113,
+      "test_D_s": 0.03916803003317356,
+      "test_QNR": 0.9239374399709013
+    },
+    {
+      "name": "perf29_W2@150",
+      "set": "primary",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\W2_QB_s42\\best_at_150.pt",
+      "checkpoint_sha256": "e95f4b91f1357533c40c814e4daec5e9e0325f55b8f73c9644018e49913fc8f0",
+      "I_cs": 0.0002624133542744898,
+      "E_A": 0.0001320444616918703,
+      "E_B": 0.00026867434538687594,
+      "E_B_over_E_A": 2.0347263485676175,
+      "I_cs_over_E_A": 1.987310568820669,
+      "test_D_s": 0.14613639757446206,
+      "test_QNR": 0.831768571938967
+    },
+    {
+      "name": "perf29_W3@150",
+      "set": "primary",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\W3_QB_s42\\best_at_150.pt",
+      "checkpoint_sha256": "d354f73a139e9a9f2027a845af3f84b797f46f6019aa6f881d38f18d404c55f7",
+      "I_cs": 0.00023352599642916062,
+      "E_A": 0.00014737677780775284,
+      "E_B": 0.00024250783382179236,
+      "E_B_over_E_A": 1.64549556198151,
+      "I_cs_over_E_A": 1.5845508356396965,
+      "test_D_s": 0.16908964796480364,
+      "test_QNR": 0.7890625550602541
+    },
+    {
+      "name": "perf29_F01@150",
+      "set": "primary",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\F01_QB_s42\\best_at_150.pt",
+      "checkpoint_sha256": "a2518100d51938c5049b5a3abc0d40cb63e06bf53769f42fd6742cfd9959a506",
+      "I_cs": 0.00021296317898733652,
+      "E_A": 0.0001649044734187671,
+      "E_B": 0.00022323750193504286,
+      "E_B_over_E_A": 1.3537383025877157,
+      "I_cs_over_E_A": 1.291433607422684,
+      "test_D_s": 0.050226209334220714,
+      "test_QNR": 0.9102647729861962
+    },
+    {
+      "name": "perf29_F11@150",
+      "set": "primary",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\F11_QB_s42\\best_at_150.pt",
+      "checkpoint_sha256": "b037ad12e8b0cc69d99cb4ee25b08ff29cae70edf4e4cffc0afb0e2568db3d34",
+      "I_cs": 0.00021396648660432037,
+      "E_A": 0.0001657588972909786,
+      "E_B": 0.0002251926651809309,
+      "E_B_over_E_A": 1.3585555216720604,
+      "I_cs_over_E_A": 1.2908295729593122,
+      "test_D_s": 0.05266395391660944,
+      "test_QNR": 0.9131010991723685
+    },
+    {
+      "name": "perf29_R0@100",
+      "set": "extended",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\R0_QB_s42\\best_at_100.pt",
+      "checkpoint_sha256": "ba2631b393680a70e4e84816f464b853f931000ecfcc6032a6bcd413ffad0449",
+      "I_cs": 0.00020500692953445427,
+      "E_A": 0.00017610968611925086,
+      "E_B": 0.0002199355776668003,
+      "E_B_over_E_A": 1.2488556564564721,
+      "I_cs_over_E_A": 1.164086621536739,
+      "test_D_s": 0.04014743191456775,
+      "test_QNR": 0.9235105825019396
+    },
+    {
+      "name": "perf29_W2@100",
+      "set": "extended",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\W2_QB_s42\\best_at_100.pt",
+      "checkpoint_sha256": "32d0286fe9ac46275b8336257d62eacaae28a6425b8bc35bdf0f74e08933b8a5",
+      "I_cs": 0.0002550302744949502,
+      "E_A": 0.00013281225666759235,
+      "E_B": 0.0002612766775414231,
+      "E_B_over_E_A": 1.9672632940448898,
+      "I_cs_over_E_A": 1.9202314672903258,
+      "test_D_s": 0.13316220793033268,
+      "test_QNR": 0.8450503541969023
+    },
+    {
+      "name": "perf29_W3@100",
+      "set": "extended",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\W3_QB_s42\\best_at_100.pt",
+      "checkpoint_sha256": "42db0f979a8e12f17ef2d9ee587e2ac2fc70acf63294f52aa7fd9105d22d77b7",
+      "I_cs": 0.0002301824288062544,
+      "E_A": 0.00014917146716691507,
+      "E_B": 0.00023710867265741656,
+      "E_B_over_E_A": 1.5895041938020518,
+      "I_cs_over_E_A": 1.5430727683913728,
+      "test_D_s": 0.13855527229014522,
+      "test_QNR": 0.8202219449291333
+    },
+    {
+      "name": "perf29_F01@100",
+      "set": "extended",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\F01_QB_s42\\best_at_100.pt",
+      "checkpoint_sha256": "4083e2ce02e5f6cec9d28330c09e2edf0c8ad950f0ee2c3742a429d2177ef346",
+      "I_cs": 0.0002091398289450949,
+      "E_A": 0.00016699631212536775,
+      "E_B": 0.00021883356228538238,
+      "E_B_over_E_A": 1.3104095503683895,
+      "I_cs_over_E_A": 1.2523619610718655,
+      "test_D_s": 0.045011336845946576,
+      "test_QNR": 0.9169004724201798
+    },
+    {
+      "name": "perf29_F11@100",
+      "set": "extended",
+      "checkpoint": "experiments\\performance\\29_capacity_refinement\\checkpoints\\F11_QB_s42\\best_at_100.pt",
+      "checkpoint_sha256": "077c3672edeec0bdd8b67fae829e7ea5929346615b5c590bb8f6dc34f88ba273",
+      "I_cs": 0.00020439010312875932,
+      "E_A": 0.00016821716657290376,
+      "E_B": 0.00021540823564748036,
+      "E_B_over_E_A": 1.2805365827757207,
+      "I_cs_over_E_A": 1.2150371290446065,
+      "test_D_s": 0.04676635849116646,
+      "test_QNR": 0.9183165754986986
+    },
+    {
+      "name": "ssai4_A1",
+      "set": "extended",
+      "checkpoint": "experiments\\ssai\\4_aligned_sigmoid_gating\\checkpoints\\A1_QB_s42\\best.pt",
+      "checkpoint_sha256": "55ad6b2225f08cbf4532e7a14c44985b9f27492ec6b274e33349087c4a8e0d97",
+      "I_cs": 0.00019857875894299117,
+      "E_A": 0.0001720805017303039,
+      "E_B": 0.0002152504205900644,
+      "E_B_over_E_A": 1.2508704846027199,
+      "I_cs_over_E_A": 1.1539875636474906,
+      "test_D_s": 0.04271998194211528,
+      "test_QNR": 0.9166683599412007
+    },
+    {
+      "name": "ssai4_A2",
+      "set": "extended",
+      "checkpoint": "experiments\\ssai\\4_aligned_sigmoid_gating\\checkpoints\\A2_QB_s42\\best.pt",
+      "checkpoint_sha256": "53e981f4b92cc9fe160e6ab5bd4c3d3fb0ac864857ab4f44e20c55ee6bd572eb",
+      "I_cs": 0.00021163016374009375,
+      "E_A": 0.00017170199355802225,
+      "E_B": 0.0002258812664091671,
+      "E_B_over_E_A": 1.3155424799004234,
+      "I_cs_over_E_A": 1.2325434280329355,
+      "test_D_s": 0.03977335990547985,
+      "test_QNR": 0.9225142895441417
+    },
+    {
+      "name": "ssai4_A3",
+      "set": "extended",
+      "checkpoint": "experiments\\ssai\\4_aligned_sigmoid_gating\\checkpoints\\A3_QB_s42\\best.pt",
+      "checkpoint_sha256": "57f98ff508d60f5ebecdb88ab80d12be0f0dc945ecf7ba3b2f2b7613a556c2f3",
+      "I_cs": 0.00020949415091037828,
+      "E_A": 0.00017231530699588721,
+      "E_B": 0.00022607713690814127,
+      "E_B_over_E_A": 1.3119968321417739,
+      "I_cs_over_E_A": 1.2157605413161492,
+      "test_D_s": 0.03694659091984791,
+      "test_QNR": 0.9273423358815958
+    },
+    {
+      "name": "ssai_M25",
+      "set": "extended",
+      "checkpoint": "experiments\\ssai\\5_mixed_gating\\checkpoints\\M25_QB_s42\\best.pt",
+      "checkpoint_sha256": "ea6e111cb45cee6fdc867758bb2467299c0381c137b4deb2bc2339666bdfe774",
+      "I_cs": 0.00020348552678158083,
+      "E_A": 0.0001716960914021366,
+      "E_B": 0.0002187326341061422,
+      "E_B_over_E_A": 1.2739523207539962,
+      "I_cs_over_E_A": 1.185149441200667,
+      "test_D_s": 0.04038941345317985,
+      "test_QNR": 0.9146993869503698
+    },
+    {
+      "name": "ssai_M50",
+      "set": "extended",
+      "checkpoint": "experiments\\ssai\\5_mixed_gating\\checkpoints\\M50_QB_s42\\best.pt",
+      "checkpoint_sha256": "438da33476b6c101e43b83d4ff099e86a7a905eace413b830e1f3f710faafbc6",
+      "I_cs": 0.0002056546710644552,
+      "E_A": 0.00017172226625889765,
+      "E_B": 0.0002215313218790649,
+      "E_B_over_E_A": 1.2900558949360268,
+      "I_cs_over_E_A": 1.1976004949433827,
+      "test_D_s": 0.038463686116593815,
+      "test_QNR": 0.921755634551042
+    },
+    {
+      "name": "ssai_D6",
+      "set": "extended",
+      "checkpoint": "experiments\\ssai\\6_ms_conditioned_detail\\checkpoints\\D6_QB_s42\\best.pt",
+      "checkpoint_sha256": "ff03be94b84b9dac92dfe5307dcd3cb825e3c69e4733ae08d35a8408d64e2fb2",
+      "I_cs": 0.00020455857686921096,
+      "E_A": 0.00017217581155581736,
+      "E_B": 0.00022083250649880532,
+      "E_B_over_E_A": 1.2825988999460243,
+      "I_cs_over_E_A": 1.1880796438290373,
+      "test_D_s": 0.040815739090171166,
+      "test_QNR": 0.9128048709883634
+    },
+    {
+      "name": "ssai_D7",
+      "set": "extended",
+      "checkpoint": "experiments\\ssai\\7_channel_relation_detail\\checkpoints\\D7_QB_s42\\best.pt",
+      "checkpoint_sha256": "61c1353b19649403d36fd00312c39df608c1328dadd8ae4b0338be798cc2e14c",
+      "I_cs": 0.0002064004259435242,
+      "E_A": 0.00017135187635596702,
+      "E_B": 0.0002217739613568542,
+      "E_B_over_E_A": 1.2942604777559608,
+      "I_cs_over_E_A": 1.2045413819382238,
+      "test_D_s": 0.04062749744138115,
+      "test_QNR": 0.9144193550577391
+    },
+    {
+      "name": "ssai12_B2",
+      "set": "extended",
+      "checkpoint": "experiments\\ssai\\12_observation_matched_pan_guide\\checkpoints\\B2_QB_s42\\best.pt",
+      "checkpoint_sha256": "8025fab330c07955a5dde6b822438c4718f463fc0b2af69e12513c3debf42ff4",
+      "I_cs": 0.00020844944148987318,
+      "E_A": 0.00017147106134316907,
+      "E_B": 0.00022739236874879637,
+      "E_B_over_E_A": 1.3261267934518155,
+      "I_cs_over_E_A": 1.2156537660468456,
+      "test_D_s": 0.04461834049500323,
+      "test_QNR": 0.9186042096631514
+    },
+    {
+      "name": "ssai12_B3",
+      "set": "extended",
+      "checkpoint": "experiments\\ssai\\12_observation_matched_pan_guide\\checkpoints\\B3_QB_s42\\best.pt",
+      "checkpoint_sha256": "c1e54ea79746286ae85d8dd66512a46efc4bc4bf541bcda89d995d9ce3d3cd6e",
+      "I_cs": 0.0002095652767396286,
+      "E_A": 0.00017117894031941334,
+      "E_B": 0.00022428930517728217,
+      "E_B_over_E_A": 1.310262259824526,
+      "I_cs_over_E_A": 1.2242468398775448,
+      "test_D_s": 0.04296720854723565,
+      "test_QNR": 0.913328855408226
+    },
+    {
+      "name": "perf34_PAPER",
+      "set": "extended",
+      "checkpoint": "experiments\\performance\\34_paper_equation_reproduction\\checkpoints\\PAPER_QB_s42\\best.pt",
+      "checkpoint_sha256": "60678447ef6478d9a5d572345ab53332951575a30c9fa930c0e0e08be74c1a6c",
+      "I_cs": 0.00015856880608876533,
+      "E_A": 0.00017705165744947267,
+      "E_B": 0.00017154654094376273,
+      "E_B_over_E_A": 0.9689067214336528,
+      "I_cs_over_E_A": 0.8956075778845392,
+      "test_D_s": 0.06016381838558428,
+      "test_QNR": 0.9010237633315089
+    }
+  ],
+  "correlations": {
+    "primary": {
+      "I_cs": {
+        "vs_D_s": {
+          "spearman": 0.5785714285714285,
+          "pearson": 0.8215037672022395,
+          "n": 15
+        },
+        "vs_QNR": {
+          "spearman": -0.6357142857142856,
+          "pearson": -0.773919544132846,
+          "n": 15
+        }
+      },
+      "E_A": {
+        "vs_D_s": {
+          "spearman": -0.5678571428571427,
+          "pearson": -0.8161873008220838,
+          "n": 15
+        },
+        "vs_QNR": {
+          "spearman": 0.575,
+          "pearson": 0.7811177790937427,
+          "n": 15
+        }
+      },
+      "E_B": {
+        "vs_D_s": {
+          "spearman": 0.5678571428571427,
+          "pearson": 0.7473696452619307,
+          "n": 15
+        },
+        "vs_QNR": {
+          "spearman": -0.6535714285714285,
+          "pearson": -0.7133793592188504,
+          "n": 15
+        }
+      },
+      "E_B_over_E_A": {
+        "vs_D_s": {
+          "spearman": 0.5892857142857142,
+          "pearson": 0.8181528072630818,
+          "n": 15
+        },
+        "vs_QNR": {
+          "spearman": -0.6428571428571428,
+          "pearson": -0.7731421249900157,
+          "n": 15
+        }
+      },
+      "I_cs_over_E_A": {
+        "vs_D_s": {
+          "spearman": 0.5821428571428571,
+          "pearson": 0.8387414130298518,
+          "n": 15
+        },
+        "vs_QNR": {
+          "spearman": -0.6392857142857141,
+          "pearson": -0.788376575584881,
+          "n": 15
+        }
+      }
+    },
+    "all": {
+      "I_cs": {
+        "vs_D_s": {
+          "spearman": 0.3890989988876529,
+          "pearson": 0.7236774160565289,
+          "n": 30
+        },
+        "vs_QNR": {
+          "spearman": -0.3899888765294772,
+          "pearson": -0.6769632853278215,
+          "n": 30
+        }
+      },
+      "E_A": {
+        "vs_D_s": {
+          "spearman": -0.5412680756395996,
+          "pearson": -0.8433553978796146,
+          "n": 30
+        },
+        "vs_QNR": {
+          "spearman": 0.47408231368186876,
+          "pearson": 0.8020824859255388,
+          "n": 30
+        }
+      },
+      "E_B": {
+        "vs_D_s": {
+          "spearman": 0.3268075639599555,
+          "pearson": 0.6305515798480872,
+          "n": 30
+        },
+        "vs_QNR": {
+          "spearman": -0.38731924360400444,
+          "pearson": -0.5918833808392687,
+          "n": 30
+        }
+      },
+      "E_B_over_E_A": {
+        "vs_D_s": {
+          "spearman": 0.4318131256952169,
+          "pearson": 0.7978202678707406,
+          "n": 30
+        },
+        "vs_QNR": {
+          "spearman": -0.43003337041156836,
+          "pearson": -0.7475005984069025,
+          "n": 30
+        }
+      },
+      "I_cs_over_E_A": {
+        "vs_D_s": {
+          "spearman": 0.4589543937708565,
+          "pearson": 0.8226525418231465,
+          "n": 30
+        },
+        "vs_QNR": {
+          "spearman": -0.4082313681868743,
+          "pearson": -0.7694349625671157,
+          "n": 30
+        }
+      }
+    }
+  },
+  "gate": {
+    "rule": {
+      "pass": "Spearman(I_cs, D_s) >= 0.7 on the primary set AND >= 0.5 on primary+extended",
+      "partial": "primary >= 0.7 only",
+      "fail": "otherwise; do not train the consistency regularizer, use plan B (detail-injection constrained output)"
+    },
+    "primary_spearman_I_cs_D_s": 0.5785714285714285,
+    "all_spearman_I_cs_D_s": 0.3890989988876529,
+    "result": "fail"
+  }
+}

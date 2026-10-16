@@ -1,0 +1,92 @@
+{
+  "research_track": "performance",
+  "experiment": 35,
+  "display_name": "35. 교차 축척 일관성 학습",
+  "experimenter": "이병현",
+  "status": "사전 검증 완료",
+  "improvement": "성능 비교 아님",
+  "phase": "0 (no training): G1 cross-scale inconsistency vs FR test D_s, G2 geometric self-ensemble",
+  "scale_b": {
+    "description": "Wald degradation by 2 of the validation scale-A patches; PAN/MS ratio stays 4",
+    "mtf": "DLPan genMTF formula (as common/observation.py) with ratio 2, 41 taps, Kaiser radial window, signed taps kept",
+    "gnyq_ms_QB": [
+      0.34,
+      0.32,
+      0.3,
+      0.22
+    ],
+    "gnyq_pan_QB": 0.15,
+    "padding": "replicate (index clamp)",
+    "decimation_phase": [
+      1,
+      1
+    ],
+    "pan_b": "decimate2(MTF_PAN_r2(PAN_A)) 32x32",
+    "ms_b": "decimate2(MTF_MS_r2(MS_A)) 8x8",
+    "lms_b": "common.interpolation.interp23tap(MS_B, 4) 32x32",
+    "gt_b": "decimate2(MTF_MS_r2(GT_A)) 32x32",
+    "output_degradation": "D(y_A) = decimate2(MTF_MS_r2(y_A))",
+    "interior_margin_scale_b": 4
+  },
+  "G1": {
+    "data": "validation 1,905 patches (original H5, DN/2047)",
+    "primary_metric": "I_cs = mean over patches of MSE(D(f(x_A)), f(x_B)) on the scale-B interior",
+    "secondary_metrics": [
+      "E_A = MSE(f(x_A), GT_A)",
+      "E_B = MSE(f(x_B), GT_B) interior",
+      "E_B / E_A",
+      "I_cs / E_A"
+    ],
+    "target": "FR test 20-scene mean D_s from each model's archived evaluation",
+    "primary_set": "the same 15 models as SSAI 11 D7",
+    "extended_set": "primary set plus 15 more archived models with FR test results",
+    "gate": {
+      "pass": "Spearman(I_cs, D_s) >= 0.7 on the primary set AND >= 0.5 on primary+extended",
+      "partial": "primary >= 0.7 only",
+      "fail": "otherwise; do not train the consistency regularizer, use plan B (detail-injection constrained output)"
+    },
+    "reference": "SSAI 11 D7 reduced-scale FR proxy: Spearman -0.18 on the same 15 models"
+  },
+  "G2": {
+    "method": "average of 8 dihedral transforms (rot90 x4, horizontal flip x2) on PAN, LMS, MS; inverse transform of outputs",
+    "models": [
+      "A0 (SSAI 4)",
+      "perf29 R0 best_at_150",
+      "perf29 W2 best_at_150"
+    ],
+    "data": "RR20 and FR20 full scenes",
+    "report": "difference from the single forward of the same weights",
+    "note": "inference-only protocol; reported separately, never mixed with single-forward results",
+    "useful_if": "A0 PSNR >= +0.05 dB and provisional QNR not worse"
+  },
+  "constraints": {
+    "training": false,
+    "optimizer_updates": 0,
+    "test_used_for_selection": false,
+    "gate_fixed_before_measurement": true
+  },
+  "planned_phase1_if_pass": {
+    "arms": [
+      "A0 (reused)",
+      "W: perf29 W2 capacity",
+      "W+S: W2 + scale-B supervision + cross-scale consistency",
+      "optional A0+S"
+    ],
+    "condition": "QB seed42, FP32, batch32, Adam 1e-4 constant, 100 epochs",
+    "loss": "MSE(f(x_A),GT_A) + lambda_B MSE(f(x_B),GT_B) + lambda_c ||D(f(x_A)) - f(x_B)||^2; lambdas fixed from initial gradient ratios",
+    "decision": {
+      "mechanism_WS_vs_W": "D_s <= -0.03 and PSNR loss <= 0.15 dB",
+      "improvement_WS_vs_A0": "PSNR >= +0.3 dB, SAM <= -0.1 deg, QNR >= +0.005, D_s worse by at most 0.003"
+    },
+    "requires_separate_approval": true
+  },
+  "results_summary": {
+    "G1": "fail",
+    "G1_spearman_primary": 0.579,
+    "G1_spearman_all": 0.389,
+    "G2_A0_PSNR_delta": -0.9254,
+    "G2_useful": false,
+    "phase1_training": false,
+    "metric_parity": "results/metric_parity.json"
+  }
+}
