@@ -1,0 +1,61 @@
+{
+  "experiment": 40,
+  "research_track": "performance",
+  "experimenter": "\uae40\uacbd\ucc2c",
+  "out": "/kaggle/working/40_ms_center_scale_ablation_s42_v1",
+  "data": {
+    "train": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+    "val": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5",
+    "RR": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+    "FR": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5"
+  },
+  "seed": 42,
+  "epochs": 100,
+  "batch": 64,
+  "micro": 32,
+  "lr": 0.0001,
+  "std_floor": 0.01,
+  "mode": "train",
+  "resume": false,
+  "evaluate_after_training": false,
+  "gpu_map": {
+    "A0": 0,
+    "A3": 1,
+    "A1": 0,
+    "A2": 1
+  },
+  "waves": [
+    [
+      "A0",
+      "A3"
+    ],
+    [
+      "A1",
+      "A2"
+    ]
+  ],
+  "scenes": [
+    1,
+    8,
+    11,
+    13,
+    19
+  ],
+  "controller_sha256": "8a139e0c0ecca4e5d8c35aeb4b80daa2b4332e95641f4431b29d82d9b8d066a9",
+  "source_hashes": {
+    "common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "normalization.py": "bbcbd5cb2a1f53cacad886ca113def7ffb2c532ddbbbab00f37bef9255a68598",
+    "references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "worker.py": "6f12ae522c689cf96a1ea28aabd21a8c7fc3965e8dcfc6e3ba0db5368b5efe7b",
+    "experiment_plan.md": "ac05f4c5d4036f9e1d2a9776403a463627b0e4ef0ccc27fbde07189ed4ef563c",
+    "KAGGLE_GUIDE.md": "fe37cef51849dfc70a844ebbe770f2195d45518f13e31e5f91285c6a41ef8072",
+    "controller_template.py": "79973efc3afbd05b3f5b3e56b554e79dace65328703c19b4e0230e06471f41d9"
+  },
+  "source_parent": "38 seed44 provenance/run_cell.py, PR99 head 56dcbc478d2ec7c47f30b49fb29bd13484de7602; common model/metrics/upstream byte-preserved",
+  "model": "K4 original/LRPAN/BatchNorm maintained; A0 identity,A1 centering,A2 scaling,A3 centering+scaling",
+  "selection": "minimum validation MSE including epoch0, earliest exact tie",
+  "precision": "FP16 AMP train; FP32 transforms/loss/validation/test; TF32 off",
+  "normalization": "DN/2047 no clipping; per-sample C,H,W MS population stats; GT excluded",
+  "fingerprint": "02fe406f77f988883f765942329b553ed5d66055b1f7d5781c000e3a9cb33687"
+}

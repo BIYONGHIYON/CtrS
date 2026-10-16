@@ -1,0 +1,31 @@
+{
+  "best": {
+    "A0": {
+      "epoch": 100,
+      "val_mse": 0.00018711491214610065,
+      "best_sha256": "9e211dabf4153148e6976501914498ce66b64ec5b04f9cd9b759dcf21871a3b7"
+    },
+    "A1": {
+      "epoch": 100,
+      "val_mse": 0.00018445604184957304,
+      "best_sha256": "af8a7ab06a20ec8839ea9aa63015932b8c8ba7d9a1ed54651c8cb0b000263024"
+    },
+    "A2": {
+      "epoch": 99,
+      "val_mse": 0.00018553088902388779,
+      "best_sha256": "086cd8c0c6072043cc908767d897a9b9bd7f0e7670c72183e6136f00e53e6977"
+    },
+    "A3": {
+      "epoch": 98,
+      "val_mse": 0.0001822320810700441,
+      "best_sha256": "e5ba7c7306a62dbf310ce51454ac447415ae1e20ee322a64557c29a5dc479d53"
+    }
+  },
+  "simplified_arm_pass": {
+    "A1": false,
+    "A2": false
+  },
+  "repeat_all_four_arms_seeds43_44": false,
+  "rule": "A1 or A2 best validation MSE <= A3*1.005; frozen before test; no automatic seed launches",
+  "test_used_for_decision": false
+}
