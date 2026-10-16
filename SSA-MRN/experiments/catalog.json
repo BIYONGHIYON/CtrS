@@ -414,13 +414,13 @@
     "experiment": 12,
     "display_name": "12. 관측 통계로 정합한 밴드별 PAN 입력",
     "experimenter": "이병현",
-    "status": "학습 중",
-    "improvement": "판단 보류",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
     "config": "experiments/ssai/12_observation_matched_pan_guide/config.json",
     "model": "experiments/ssai/12_observation_matched_pan_guide/model.py",
     "entrypoint": "experiments/ssai/12_observation_matched_pan_guide/run.py",
     "manifest": "experiments/ssai/12_observation_matched_pan_guide/manifest.json",
-    "last_checked": "2026-10-16T05:59:00+09:00",
+    "last_checked": "2026-10-16T10:05:00+09:00",
     "sensor": "QB",
     "arms": [
       "B2",
@@ -430,11 +430,16 @@
       "A0": "experiments/ssai/4_aligned_sigmoid_gating",
       "B1": "experiments/ssai/8_spatial_mean_normalization (N1)"
     },
-    "limits": "단일 QB seed42 학습 중, 대조군 A0·N1 재사용, exploratory test, QNR/Q2n/SCC MATLAB parity 미검증.",
-    "completed_epochs_at_check": {
-      "B2": 1,
-      "B3": 1
+    "limits": "단일 QB seed42. B2는 A0 대비 RR 악화·잠정 QNR +0.0012, Ds 악화로 가설 기각. B3 진단 전용. 대조군 A0·N1 재사용·재평가 일치, exploratory test, QNR/Q2n/SCC MATLAB parity 미검증.",
+    "results": "experiments/ssai/12_observation_matched_pan_guide/results",
+    "checkpoints": "experiments/ssai/12_observation_matched_pan_guide/checkpoints",
+    "evaluated_seeds": [
+      42
+    ],
+    "selected_best_epoch": {
+      "B2": 98,
+      "B3": 98
     },
-    "results": "experiments/ssai/12_observation_matched_pan_guide/results"
+    "hypothesis": "rejected: B2 D_s +0.003846 vs N1 (criterion <= -0.003)"
   }
 }

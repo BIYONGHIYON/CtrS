@@ -1,0 +1,46 @@
+{
+  "frozen_before_evaluation": true,
+  "rule": "minimum validation MSE, earliest tie; test not used",
+  "selected": {
+    "A0": {
+      "checkpoint": "C:\\CtrS-ssai12\\SSA-MRN\\experiments\\ssai\\4_aligned_sigmoid_gating\\checkpoints\\A0_QB_s42\\best.pt",
+      "sha256": "d3c9b01b1659370c969b43d55506b7cf9d16056485622b15c9142483238c26e2",
+      "epoch": 98,
+      "validation_mse": 0.0001715509279241805
+    },
+    "N1": {
+      "checkpoint": "C:\\CtrS-ssai12\\SSA-MRN\\experiments\\ssai\\8_spatial_mean_normalization\\checkpoints\\N1_QB_s42\\best.pt",
+      "sha256": "f66916d517255207811cb4d12ab412496d3ed169d324ef7aae65873f00a976a3",
+      "epoch": 98,
+      "validation_mse": 0.00017265520144737963
+    },
+    "B2": {
+      "checkpoint": "C:\\CtrS-ssai12\\runtime\\qb_s42_100\\B2\\best.pt",
+      "sha256": "8025fab330c07955a5dde6b822438c4718f463fc0b2af69e12513c3debf42ff4",
+      "epoch": 98,
+      "validation_mse": 0.0001714710597947406
+    },
+    "B3": {
+      "checkpoint": "C:\\CtrS-ssai12\\runtime\\qb_s42_100\\B3\\best.pt",
+      "sha256": "c1e54ea79746286ae85d8dd66512a46efc4bc4bf541bcda89d995d9ce3d3cd6e",
+      "epoch": 98,
+      "validation_mse": 0.00017117893892698468
+    },
+    "B2Z": {
+      "checkpoint": "C:\\CtrS-ssai12\\runtime\\qb_s42_100\\B2\\best.pt",
+      "sha256": "8025fab330c07955a5dde6b822438c4718f463fc0b2af69e12513c3debf42ff4",
+      "epoch": 98,
+      "validation_mse": 0.0001714710597947406,
+      "modification": "every SSA block output replaced by zeros at evaluation; fusion bias/PReLU kept"
+    }
+  },
+  "examples_zero_based": [
+    1,
+    8,
+    11,
+    13,
+    19
+  ],
+  "precision": "CUDA FP32",
+  "no_clipping": true
+}
