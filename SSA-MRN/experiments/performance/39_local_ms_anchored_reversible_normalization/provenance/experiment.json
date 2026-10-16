@@ -1,0 +1,74 @@
+{
+  "name": "LocalNorm_1st",
+  "tag": "LocalNorm_1st_v1",
+  "source_hashes": {
+    "common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "normalization33.py": "4a8c71673e86aaad133a607198eb486e2d77fa3982d47863c338519f8bb0177d",
+    "provenance/original33_worker.py": "a29ba0bcec4aaf2205ea5f01c3b1bff94ad3db9e924197e5d1acee221ac2b785",
+    "localnorm_model.py": "7268cdba6689cb2ba5235a111085423f3f51445619d96cb6207e54881baab222",
+    "localnorm_worker.py": "0d6d6b7785ab26afa0cf6818aaf1ab42eaac5a8442da22c39420f9fe051a8d45",
+    "localnorm_dashboard.py": "04fed054c2117853ce967ec1d8b2b36821e8c2ecb6b40b04c3671ebcf503175f"
+  },
+  "source_audit": {
+    "repository": "BIYONGHIYON/CtrS",
+    "pinned_commit": "12d32cf898435e72f17ba09ad5750afcaa31277c",
+    "experiment33_path": "SSA-MRN/experiments/performance/33_ms_anchored_reversible_normalization",
+    "original33_source_commit": "2878e9bbf273edaeafd2b1251a8aed0227f06a19",
+    "verified_original_source_hashes": {
+      "common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+      "common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+      "normalization.py": "4a8c71673e86aaad133a607198eb486e2d77fa3982d47863c338519f8bb0177d",
+      "references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+      "worker.py": "a29ba0bcec4aaf2205ea5f01c3b1bff94ad3db9e924197e5d1acee221ac2b785",
+      "controller_template.py": "93663126f406136efb5d23ac291ad44fa4b7cfe3631358cbd4d7ab35ae73bb7f",
+      "experiment_plan.md": "4573b13132ee16fe37c4b08195530c818ea2109709d95a4ec045837710b45a45",
+      "KAGGLE_GUIDE.md": "27f4e5b692577d1b6095ef6c4fc21db2ea1a51622f8cd1994aa797b1f9183c7c"
+    },
+    "baseline": "exact archived normalization.Model(N1) forward with frozen core and metrics",
+    "change": "global scalar statistics -> local window5 shared mean/scale fields; no parameter/architecture/loss additions",
+    "harness_changes": [
+      "separate smoke/train/test cells; original33 trains then tests in one runner",
+      "one shared initial.pt loaded strictly by both workers",
+      "time-budget pause and 60-second optimizer-boundary snapshots reused from checked controller",
+      "best AND latest full-scene evaluation",
+      "extra first32 validation quality diagnostics; no selection impact",
+      "normalization statistics and fixed-scene MS mean/scale maps"
+    ],
+    "limits": [
+      "no claim of bitwise full CUDA reproduction",
+      "map pixel-center convention and reflect boundary fixed, original QB sampling phase not independently verified",
+      "local normalization can remove useful contrast or amplify flat-area noise; performance not yet verified"
+    ]
+  },
+  "conditions": {
+    "dataset": "QB only",
+    "k": 4,
+    "spatial_ratio": 4,
+    "normalization": "DN/2047 then MS anchored reversible transform; supplied LMS; no clipping; no GT statistics",
+    "micro": 32,
+    "effective_batch": 64,
+    "epochs": 100,
+    "optimizer": "Adam defaults",
+    "loss": "original-unit final output MSE only",
+    "precision": "AMP FP16 train; FP32 statistics/inverse/loss/validation/test; TF32 off; GradScaler initial1024",
+    "lr": "constant 1e-4; no scheduler",
+    "order": "independent CUDA Generator(seed+100000), one full randperm per epoch",
+    "selection": "lowest full validation MSE including epoch0; earliest exact tie",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "baseline": "archived33 N1: one scalar population mean/std over MS C,H,W per sample",
+    "local": "5x5 LR-MS joint C/spatial population moments; reflect boundary; one shared map for all bands",
+    "std_floor": 0.01,
+    "HR_maps": "bilinear align_corners=False of mean and floored scale; same fields for PAN/LMS/output inverse",
+    "floor_scope": "global: sample fraction; local: LR location fraction",
+    "window_selection": "window5 fixed before any training; no sweep, test or validation tuning",
+    "test_policy": "architecture frozen before final tests; same-seed train then test; no tuning after seed42 test",
+    "metric_limitations": "archived33 metrics frozen; SCC/Q2n/FR MATLAB and sensor MTF parity unverified; no FR GT"
+  },
+  "basis": "a219ae25dad4e89088902bc23d40b590d48b2f86bf4585547b4f5f7bfa9a8228"
+}
