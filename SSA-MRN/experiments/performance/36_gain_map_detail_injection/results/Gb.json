@@ -1,0 +1,43 @@
+{
+  "environment": {
+    "python": "3.10.6 (tags/v3.10.6:9c7b4bd, Aug  1 2022, 21:53:49) [MSC v.1932 64 bit (AMD64)]",
+    "numpy": "2.2.6",
+    "source_sha256": "fc27af0f4fd680da3b241acc2d690210f7ba910df43febe30a3056c97e409804",
+    "config_sha256": "c2550235838dd2f7e330bc07535c92c9bd8e8b9ffd99d2de8d9cb95eab818036"
+  },
+  "validation_sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+  "results": {
+    "E_LMS": 0.0013280033714112825,
+    "A0_explained": 0.8708211110806955,
+    "A0_source": {
+      "E_A": 0.00017155,
+      "source": "experiment 35 phase 0 log, A0 best on the same 1,905 validation patches"
+    },
+    "fits": {
+      "K1_cell4": {
+        "oracle": 0.7151195109778706,
+        "null": 0.14624276052040008,
+        "oracle_minus_null": 0.5688767504574705
+      },
+      "K1_cell8": {
+        "oracle": 0.6841930413556315,
+        "null": 0.04632355972256208,
+        "oracle_minus_null": 0.6378694816330694
+      },
+      "K2_cell4": {
+        "oracle": 0.7662282561239699,
+        "null": 0.26601969025685845,
+        "oracle_minus_null": 0.5002085658671115
+      },
+      "K2_cell8": {
+        "oracle": 0.7163948884750122,
+        "null": 0.08372035691873647,
+        "oracle_minus_null": 0.6326745315562757
+      }
+    }
+  },
+  "gate": {
+    "rule": "K2 cell4 (oracle - null) >= A0 explained fraction",
+    "pass": false
+  }
+}
