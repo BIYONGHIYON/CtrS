@@ -1,0 +1,366 @@
+{
+  "research_track": "performance",
+  "experiment": 37,
+  "display_name": "37. 병렬 추가 가지의 위치별 게이트",
+  "experimenter": "송준현",
+  "status": "평가 완료",
+  "improvement": "부분 개선",
+  "files": {
+    ".gitattributes": {
+      "bytes": 110,
+      "sha256": "b0ec880dc2d8fcd775a9a39b80271f91d985dfad44dd07ac7757111af7bfbeee"
+    },
+    "config.json": {
+      "bytes": 3607,
+      "sha256": "ad464d39959d24a95d3a8ee25f7dcf1b6a59ee3e92a534a8973617e1e115e254"
+    },
+    "model.py": {
+      "bytes": 258,
+      "sha256": "dc58b2d79f8b24d544891f118c6c785cedcc2fe352231dbf68f6698e9355811b"
+    },
+    "prepare.py": {
+      "bytes": 3135,
+      "sha256": "55ec04744a22537cd96137bd4bccf0ac98d2b5813191aa11baf65a72a5733913"
+    },
+    "README.md": {
+      "bytes": 12495,
+      "sha256": "153736b60afd02c2969bfed4a98112ff22cb0affd60871050cae4ee512582a4a"
+    },
+    "run.py": {
+      "bytes": 128990,
+      "sha256": "ae69a21fc38c3b2ac8bd5e195dbf7c8b6f8bcd0d0b53d8b2d1d4cb264f6d4539"
+    },
+    "provenance/archive.json": {
+      "bytes": 404,
+      "sha256": "cbc55e6ec52450d9ae452c4949fe05bb47e606436bc4c4473885eb6dcc349243"
+    },
+    "provenance/data_contract.json": {
+      "bytes": 3628,
+      "sha256": "0740c37d6b60b82eae759ed24ddc9046e65199219f9498590b80388054c59a91"
+    },
+    "provenance/environment_contract.json": {
+      "bytes": 597,
+      "sha256": "41519986753810e0c70b932632aef9bda437ffc6ec4307c18db03c7341338f93"
+    },
+    "provenance/experiment.json": {
+      "bytes": 3176,
+      "sha256": "37be26733720418738d8290258a6b8ff45f665771e5d40ae492fd7e128f73ebc"
+    },
+    "provenance/initial.sha256": {
+      "bytes": 64,
+      "sha256": "57e66dabcde74b63ff648f45645bb2b09882216f0afe3645c57ad0250f9c6b81"
+    },
+    "provenance/original_artifact_manifest.json": {
+      "bytes": 28556,
+      "sha256": "2ad4768f0f33313841f16ad951bbae6907f904b5f00b0be9ffc9adb5abb33db9"
+    },
+    "provenance/smoke_checks.json": {
+      "bytes": 120,
+      "sha256": "b5b24b86264070b6aa5e14e5d081a6a55811f3113578512c5ed3fb05caa9543b"
+    },
+    "provenance/smoke_resume_checks.json": {
+      "bytes": 470,
+      "sha256": "e8a9832757eaf83f8b103b921aac0b6ca8f8a81b353a81fb1a50276416ecb258"
+    },
+    "results/analysis.json": {
+      "bytes": 57107,
+      "sha256": "7c5299790fac9c8e96972251f7dc871fa9671ae5c629e20603e5f8a4711174a8"
+    },
+    "results/comparison.csv": {
+      "bytes": 1496,
+      "sha256": "6179510455a7c1e6fc7085f63ad47a7c2e3c0304a621cf34046a65c5bbe2bc96"
+    },
+    "results/comparison.md": {
+      "bytes": 1375,
+      "sha256": "d9fc72ffcc6237f035721f31da8dc4ff002851590c9c6fbe4d45195f7b208d8d"
+    },
+    "results/gate_curve_seed42.png": {
+      "bytes": 49952,
+      "sha256": "f5a58172d708eb1f6762042272041fd9cc9b69db79142f5895d80e13d21e1d88"
+    },
+    "results/learning_seed42.png": {
+      "bytes": 127265,
+      "sha256": "d68933f3bf825292378e226b015e5725199ce345a4626671d20c18f464619c6e"
+    },
+    "results/paired_scene_deltas.json": {
+      "bytes": 20104,
+      "sha256": "192d15fc14032ea4a56f28c844489ef9a4736cafa5eb30f708a35599603691a5"
+    },
+    "results/pair_checks.json": {
+      "bytes": 238,
+      "sha256": "b9bbb942504f578345f192fdf5a19dd91ae75af62d090eddd1bd3718f87915b6"
+    },
+    "results/scene_deltas_seed42.png": {
+      "bytes": 52757,
+      "sha256": "a730466d5eae6f1ab9b1fb1b0e07cc90b164d1dd9fddc7d2520bb85baa9f152e"
+    },
+    "results/seed_statistics.json": {
+      "bytes": 6091,
+      "sha256": "ec87c07422c2a0b0443b18f147dad69ff54fa4bd259e77fd5df81ff3d9acdfb8"
+    },
+    "results/source_artifact_map.json": {
+      "bytes": 7118,
+      "sha256": "9c7bee14109b4d8d850e1522bdab001a0d628f4011ad7879bfdc7d54309e46d6"
+    },
+    "results/test_comparison_seed42.png": {
+      "bytes": 129328,
+      "sha256": "e67e8fbb21ff87b4573ba88ed706f870b551e2fa80f309bde261d8018d8ab992"
+    },
+    "checkpoints/baseline_QB_seed42/best.pt": {
+      "bytes": 12670107,
+      "sha256": "1c4b153036e94e92da37d88e0d3a6a78ee74e73af6acd790f5d5757fc81805c2"
+    },
+    "checkpoints/baseline_QB_seed42/latest.pt": {
+      "bytes": 47417917,
+      "sha256": "2a5b7794ec47d014219811afe705407220136cd29fcf641eeb0661857e754733"
+    },
+    "checkpoints/gated_QB_seed42/best.pt": {
+      "bytes": 12679763,
+      "sha256": "06f07cfd88c033ff5a09132d311cde2005c54e4962f7b208c203ee67c8b454f6"
+    },
+    "checkpoints/gated_QB_seed42/latest.pt": {
+      "bytes": 47465685,
+      "sha256": "e5144e41410473b50f93c0afa6076d171b4fc8bed34930e4f3269aa65d464036"
+    },
+    "checkpoints/initial_QB_seed42/initial.pt": {
+      "bytes": 11484283,
+      "sha256": "2115c3d459f05f96fbf451c84c705861a127b3db3dd1487bb24cf8fecb8e4821"
+    },
+    "provenance/code/gate29_dashboard.py": {
+      "bytes": 13799,
+      "sha256": "028afdf83233f3da2e77437ae6deeb0f2a996ff91ca109354cf0082b0b2fd2e4"
+    },
+    "provenance/code/gate29_model.py": {
+      "bytes": 1958,
+      "sha256": "6dcb6dfb59fbb526be770aa556e1f7ba6e2597eb7af8b931de618ae842764a08"
+    },
+    "provenance/code/gate29_worker.py": {
+      "bytes": 25539,
+      "sha256": "216200c9ccc5c80a969e63567cfba7cdc6c8c0681e24fe61287a6161b5cd4d87"
+    },
+    "provenance/code/original_capacity.py": {
+      "bytes": 941,
+      "sha256": "622244579000d27db74fbb940755794531b4d9e212183506cffdd87c226fd537"
+    },
+    "provenance/configs/baseline.json": {
+      "bytes": 6031,
+      "sha256": "face056d4406e32325fc9e1dbed8e2aeadf38fe7b3a7dc4c67e027e600f0c58f"
+    },
+    "provenance/configs/gated.json": {
+      "bytes": 6026,
+      "sha256": "243fcf2f05e0648b76be09e59483594184696f78953e48ed9e6e12851ac9ed33"
+    },
+    "provenance/code/common/metrics.py": {
+      "bytes": 7107,
+      "sha256": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012"
+    },
+    "provenance/code/common/model.py": {
+      "bytes": 5524,
+      "sha256": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41"
+    },
+    "provenance/code/provenance/original29_model.py": {
+      "bytes": 2369,
+      "sha256": "a35c99f829a1617bb005b6c070a638e89b972cf210124468b582361efbdd7918"
+    },
+    "provenance/code/provenance/original29_run.py": {
+      "bytes": 23977,
+      "sha256": "5a4a11f3f163e6340b267c63d49c7a4916f63d50299e74feb327ff9f902c3b89"
+    },
+    "provenance/code/references/upstream/network.py": {
+      "bytes": 15375,
+      "sha256": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a"
+    },
+    "results/baseline/evaluation_complete.json": {
+      "bytes": 447,
+      "sha256": "0429fbd89f8cd80cb5adee072f6a01d098c7a797a590757b51fa2c0ecc342de0"
+    },
+    "results/baseline/history.json": {
+      "bytes": 110626,
+      "sha256": "e753641280c64fc9cc5a63e7156fb2717505974e9370458f304596cc9c5f8eb2"
+    },
+    "results/baseline/initialization.json": {
+      "bytes": 256,
+      "sha256": "e38c1019837eb37d73c05827a8649e3c0dacf6b4f8809b4da14ad64ff65d2f11"
+    },
+    "results/baseline/orders.json": {
+      "bytes": 16994,
+      "sha256": "0232d42aa5c127e7c17a0fe1c137638601c1c8c65c8ca217202277a2c143980e"
+    },
+    "results/baseline/training_complete.json": {
+      "bytes": 335,
+      "sha256": "f1a1e10e350d26d72ffb6d836fa4480adcae7f07c663a7745fa23cfe6edaec62"
+    },
+    "results/baseline/validation_result.json": {
+      "bytes": 1296,
+      "sha256": "027042f0479642d8c690f589a1c97dce7a01eb80d22b43fa694f2efc08865ec5"
+    },
+    "results/gated/evaluation_complete.json": {
+      "bytes": 447,
+      "sha256": "18cf79e6db73d9f89656455ead6f111920295b8ebe960f6e72bd93582d680a2d"
+    },
+    "results/gated/history.json": {
+      "bytes": 131547,
+      "sha256": "d0549fce991d74afea2a06a572ec40bd948083b16384c2175c62b767055dcf74"
+    },
+    "results/gated/initialization.json": {
+      "bytes": 262,
+      "sha256": "34c6180d7c07e6bdf9a96ef946b385c731c8e948cfaeb20f76501c2aa3ce623c"
+    },
+    "results/gated/orders.json": {
+      "bytes": 16994,
+      "sha256": "0232d42aa5c127e7c17a0fe1c137638601c1c8c65c8ca217202277a2c143980e"
+    },
+    "results/gated/training_complete.json": {
+      "bytes": 334,
+      "sha256": "b8e69f6081764ec44ab92739d1ab50f76923f5cfc138507bd99723b853429629"
+    },
+    "results/gated/validation_result.json": {
+      "bytes": 1577,
+      "sha256": "405b357d23cf182b8c3b1a75c9d496cae1dfc92451037ee149da700f8057eb84"
+    },
+    "results/baseline/evaluations/best/evaluation_complete.json": {
+      "bytes": 371,
+      "sha256": "e9d5aabee8672bec83f02a50cbd300ec6181a4e553f1981e8fb5cd56cdb3bd6c"
+    },
+    "results/baseline/evaluations/best/FR_per_scene.json": {
+      "bytes": 2618,
+      "sha256": "ea073c366bfefb350ea6bb4cf4755edc219c58bb9de750de2db865ba90761011"
+    },
+    "results/baseline/evaluations/best/results.json": {
+      "bytes": 8299,
+      "sha256": "57a39f4147b748fbe3e148248aed88020b18191465f86d577db654b9ac6055f9"
+    },
+    "results/baseline/evaluations/best/RR_per_scene.json": {
+      "bytes": 4537,
+      "sha256": "c24a4d81c5d59b0794d6a8071312942a1dad1e6bab32db10a1c6e2b415665712"
+    },
+    "results/baseline/evaluations/best/RR_scene_001.png": {
+      "bytes": 532177,
+      "sha256": "e099cfafd3d6f8934f3a05c7754829a6a4026e3e532fbdaada515c20f7069999"
+    },
+    "results/baseline/evaluations/best/RR_scene_008.png": {
+      "bytes": 535180,
+      "sha256": "881242c36736b1a117db7225f395bf1db3701bc47161d56a62731f2309ed4e7c"
+    },
+    "results/baseline/evaluations/best/RR_scene_011.png": {
+      "bytes": 530829,
+      "sha256": "ffe99b194128a9f05e5403e51f75ee06a4a3bc4d10e5235810441b6c94a989ca"
+    },
+    "results/baseline/evaluations/best/RR_scene_013.png": {
+      "bytes": 551598,
+      "sha256": "6ecca050f6c1ae5f86d5dda3ba4517f264e7267214a1e2c039ab9f3339d0eff4"
+    },
+    "results/baseline/evaluations/best/RR_scene_019.png": {
+      "bytes": 559935,
+      "sha256": "6aa76141874dbd35e5f31724c909a28517d05bf15b8a19188ce585cd30633bf6"
+    },
+    "results/baseline/evaluations/latest/evaluation_complete.json": {
+      "bytes": 371,
+      "sha256": "0b67e5ff05d36a58b6163195d00e85204046ebfe4579cb106ee025c50cd8c3fa"
+    },
+    "results/baseline/evaluations/latest/FR_per_scene.json": {
+      "bytes": 2613,
+      "sha256": "ab75a326f038faeee85644732bdfb7a0017e603ce7d92d90e35eba8ed37686f7"
+    },
+    "results/baseline/evaluations/latest/results.json": {
+      "bytes": 8310,
+      "sha256": "0550fafdb228ed3536614297ed3366ab3b4e19ac0563234d346ca4571cd01dde"
+    },
+    "results/baseline/evaluations/latest/RR_per_scene.json": {
+      "bytes": 4540,
+      "sha256": "99888422f91016b81d531424edb32f1dfe313f4f36fd1e40f6dbbd45af7156de"
+    },
+    "results/baseline/evaluations/latest/RR_scene_001.png": {
+      "bytes": 532150,
+      "sha256": "b89e75da8d79206d356453efbbb2a9b7509170910cc2c0cec1076840f83430a6"
+    },
+    "results/baseline/evaluations/latest/RR_scene_008.png": {
+      "bytes": 535297,
+      "sha256": "bb65861be89039cfff67744c32d20833c50cb6ad0e3af1f975fbcf31b9260a1f"
+    },
+    "results/baseline/evaluations/latest/RR_scene_011.png": {
+      "bytes": 530663,
+      "sha256": "6dca53258a1c79bc6c941763de3c472a58500d7d963633e629f7f913da369093"
+    },
+    "results/baseline/evaluations/latest/RR_scene_013.png": {
+      "bytes": 551480,
+      "sha256": "edc40c6502bd1f110bd1d2d50e27ebaae423c468eac7cc3ca73c6d3417cda17e"
+    },
+    "results/baseline/evaluations/latest/RR_scene_019.png": {
+      "bytes": 559983,
+      "sha256": "33ab07d78cbdcfe9f4898bb7734d7cb041184c4174d21816a1bccda3a523b6e0"
+    },
+    "results/gated/evaluations/best/evaluation_complete.json": {
+      "bytes": 371,
+      "sha256": "8453290a46a24cbae6f5ddcb385af5996514a1666103ae0061590b3d74d54087"
+    },
+    "results/gated/evaluations/best/FR_per_scene.json": {
+      "bytes": 2612,
+      "sha256": "5ec10b9e344aef665f372f6aab49e766babd8bf3a929d3ba21950b4adab3b721"
+    },
+    "results/gated/evaluations/best/results.json": {
+      "bytes": 8301,
+      "sha256": "f03b69a38729a78ca1e4d8ea3db7e500b8a200d315781a6c2031eb869441f038"
+    },
+    "results/gated/evaluations/best/RR_per_scene.json": {
+      "bytes": 4530,
+      "sha256": "5940fa9491682f3268fb6f4fbe69dbe3aaa9865bcb3f8aa2f1ca6fa30b33b076"
+    },
+    "results/gated/evaluations/best/RR_scene_001.png": {
+      "bytes": 529773,
+      "sha256": "0fd7b11f88f4b4aa5afe27e3abcf57082a791c7d5c8f2c93158e86d9d04e326f"
+    },
+    "results/gated/evaluations/best/RR_scene_008.png": {
+      "bytes": 533778,
+      "sha256": "25ba18daf98b1fdf01a488b81ac18f94f38e7099ad8b954aa6005d9ff7c572ae"
+    },
+    "results/gated/evaluations/best/RR_scene_011.png": {
+      "bytes": 529044,
+      "sha256": "68c46576e3b252c910583bacf31b8f71dc9f466371ed64c9328c63a4461d29f8"
+    },
+    "results/gated/evaluations/best/RR_scene_013.png": {
+      "bytes": 550168,
+      "sha256": "8202e5cf32a9ff90c54825fe270cf5d4e977472868f1317897b7155c6ff4b77b"
+    },
+    "results/gated/evaluations/best/RR_scene_019.png": {
+      "bytes": 558589,
+      "sha256": "73cde0b7b476221fea0dc5e37c9ece2f15823ac27537986ad9ef81c01c5d9782"
+    },
+    "results/gated/evaluations/latest/evaluation_complete.json": {
+      "bytes": 371,
+      "sha256": "7364e431a31149d0766426bc7dbc27b8163dcdee083ddea786c9613b30367d62"
+    },
+    "results/gated/evaluations/latest/FR_per_scene.json": {
+      "bytes": 2618,
+      "sha256": "08711d51f81f8b73d0337df6e49044956d03feb10ef473ba294431ede43088da"
+    },
+    "results/gated/evaluations/latest/results.json": {
+      "bytes": 8306,
+      "sha256": "6322a6c7e291ecd4d1cc17a143da7019fa888e40bfb8d8d55ed651f211f49645"
+    },
+    "results/gated/evaluations/latest/RR_per_scene.json": {
+      "bytes": 4529,
+      "sha256": "5259e94550bd8ad8858b95623d8c5dd1f1e5c15df1a502d10b1f8d7166a6477a"
+    },
+    "results/gated/evaluations/latest/RR_scene_001.png": {
+      "bytes": 529892,
+      "sha256": "e8bab55aeb2a08787b63fde656daf4e605981c097e501cfc4e1a934d50ea90e0"
+    },
+    "results/gated/evaluations/latest/RR_scene_008.png": {
+      "bytes": 533715,
+      "sha256": "51c2da98b9243b7e4162fdcf315ad5bbbd3e353bec463a00910bfe3acf099eaf"
+    },
+    "results/gated/evaluations/latest/RR_scene_011.png": {
+      "bytes": 529089,
+      "sha256": "103f9118efc2c20516faa4f7d4fd3489683f23b8da11347b9624abacea9fb66c"
+    },
+    "results/gated/evaluations/latest/RR_scene_013.png": {
+      "bytes": 550145,
+      "sha256": "8d41e3e767837179fd5dc1b1924369f9335bc4f27038f2c5fe20bface0d7e7a7"
+    },
+    "results/gated/evaluations/latest/RR_scene_019.png": {
+      "bytes": 558566,
+      "sha256": "d9196d61c3cffc2b066bf783b78c51e7f591eaab7ea2fabe512bc4b5da4b84ec"
+    }
+  }
+}
