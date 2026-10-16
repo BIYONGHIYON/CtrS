@@ -1,0 +1,49 @@
+{
+  "controller_sha256": "4027d2ccb7d49ddf518f86d1277a7ae69aa2ee273c3dd276361de6709ec3be69",
+  "out": "/kaggle/working/37_ms_anchored_normalization_seed_repeat_s44_v1",
+  "data": {
+    "train": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+    "val": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5",
+    "RR": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+    "FR": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5"
+  },
+  "seed": 44,
+  "epochs": 100,
+  "batch": 64,
+  "micro": 32,
+  "lr": 0.0001,
+  "std_floor": 0.01,
+  "mode": "train",
+  "resume": false,
+  "gpu_map": {
+    "N0": 0,
+    "N1": 1
+  },
+  "scenes": [
+    1,
+    8,
+    11,
+    13,
+    19
+  ],
+  "evaluate_after_training": true,
+  "source_commit": "2878e9bbf273edaeafd2b1251a8aed0227f06a19",
+  "source_hashes": {
+    "common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "normalization.py": "4a8c71673e86aaad133a607198eb486e2d77fa3982d47863c338519f8bb0177d",
+    "references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "worker.py": "a29ba0bcec4aaf2205ea5f01c3b1bff94ad3db9e924197e5d1acee221ac2b785",
+    "controller_template.py": "93663126f406136efb5d23ac291ad44fa4b7cfe3631358cbd4d7ab35ae73bb7f",
+    "experiment_plan.md": "4573b13132ee16fe37c4b08195530c818ea2109709d95a4ec045837710b45a45",
+    "KAGGLE_GUIDE.md": "27f4e5b692577d1b6095ef6c4fc21db2ea1a51622f8cd1994aa797b1f9183c7c"
+  },
+  "precision": "AMP FP16 train; FP32 stats/inverse/loss/validation/test; TF32 off",
+  "selection": "minimum validation MSE including epoch0; earliest exact tie",
+  "experiment": 37,
+  "research_track": "performance",
+  "experimenter": "\uae40\uacbd\ucc2c",
+  "model": "fresh original RestoredPansharpeningNet K4; N1 shared per-sample MS affine wrapper",
+  "data_normalization": "DN/2047; no clipping; GT excluded from input statistics",
+  "fingerprint": "861c9b82475fb1142071ef84e0abbc79bc49518f7fe17fb7651241d051dc0498"
+}

@@ -475,5 +475,31 @@
     "sensor": "QB",
     "retraining": false,
     "limits": "학습 없는 관문 검사. 보관된 단일 시드 QB 모델·탐색에 반복 사용한 test·잠정 FR 지표에 한정."
+  },
+  "performance/38_ms_anchored_normalization_seed_repeat": {
+    "report": "experiments/performance/38_ms_anchored_normalization_seed_repeat/README.md",
+    "research_track": "performance",
+    "experiment": 38,
+    "display_name": "38. MS 기준 가역 정규화의 반복 시드 검증",
+    "experimenter": "김경찬",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "checkpoints": "experiments/performance/38_ms_anchored_normalization_seed_repeat/checkpoints",
+    "results": "experiments/performance/38_ms_anchored_normalization_seed_repeat/results",
+    "manifest": "experiments/performance/38_ms_anchored_normalization_seed_repeat/manifest.json",
+    "config": "experiments/performance/38_ms_anchored_normalization_seed_repeat/config.json",
+    "entrypoint": "experiments/performance/38_ms_anchored_normalization_seed_repeat/prepare.py",
+    "evaluated_seeds": [
+      43,
+      44
+    ],
+    "aggregate_seeds": [
+      42,
+      43,
+      44
+    ],
+    "sensor": "QB",
+    "reference_experiment": 33,
+    "limits": "세 시드 RR 평균5지표 개선; seed44 잠정 FR QNR·Ds 악화. 부분 개선·최종 채택 보류. H5 재평가·반복 가중치 strict load·MATLAB 수치 대응 미검증."
   }
 }
