@@ -1,0 +1,106 @@
+{
+  "passed": true,
+  "training_started": false,
+  "optimizer_updates": 0,
+  "source_identity": {
+    "compared_with": "experiment 8 provenance/training_source.zip",
+    "files": [
+      "common/ssai_suite.py",
+      "common/model.py",
+      "references/upstream/network.py",
+      "experiments/ssai/8_spatial_mean_normalization/model.py",
+      "experiments/ssai/8_spatial_mean_normalization/train.py",
+      "experiments/ssai/8_spatial_mean_normalization/diagnostics.py"
+    ],
+    "byte_identical": true
+  },
+  "cache": {
+    "root": "C:\\CtrS-ssai12\\cache",
+    "reused_existing": true,
+    "hashes_equal_experiment8": true
+  },
+  "observation_statistics": {
+    "eps": 0.00215447355133265,
+    "gain_max": 2.8775806849294616,
+    "window_ms_grid": 5,
+    "ratio": 4,
+    "rule": {
+      "eps_percentile_of_train_local_pan_std": 5,
+      "gain_max_percentile_of_train_local_gain": 99.9,
+      "shared_by_B2_B3": true,
+      "frozen_before_any_test_input": true
+    },
+    "source": "train split only (17,139 patches), float64, before any test input",
+    "train_local_pan_std_percentiles": {
+      "0": 0.0,
+      "1": 0.0008920707395618405,
+      "5": 0.00215447355133265,
+      "50": 0.017380365393019355,
+      "95": 0.07248880381651565,
+      "99": 0.10660645558061814,
+      "99.9": 0.15159844840137815,
+      "100": 0.25805787108383765
+    },
+    "train_local_gain_percentiles": {
+      "0": 0.0,
+      "1": 0.08422696048254985,
+      "5": 0.20326036388381044,
+      "50": 0.6420774895511903,
+      "95": 1.3527748688199424,
+      "99": 1.8998183373925084,
+      "99.9": 2.8775806849294616,
+      "100": 8.260389522268705
+    },
+    "train_gain_clipped_fraction": 0.00099998085506739
+  },
+  "models": {
+    "B2": {
+      "initial_common_sha256": "c24fee837e68d93a796b47949a4b7dfde0cf1860734532ea2b39cbf2ded56ea6",
+      "added_parameters": 0,
+      "finite_forward_shapes": [
+        [
+          64,
+          64
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          32,
+          48
+        ]
+      ],
+      "raw_pan_equals_N1_best_exactly": true,
+      "matched_guide_changes_N1_best_output_mean_abs": 0.0004456659662537277
+    },
+    "B3": {
+      "initial_common_sha256": "c24fee837e68d93a796b47949a4b7dfde0cf1860734532ea2b39cbf2ded56ea6",
+      "added_parameters": 0,
+      "finite_forward_shapes": [
+        [
+          64,
+          64
+        ],
+        [
+          256,
+          256
+        ],
+        [
+          512,
+          512
+        ],
+        [
+          32,
+          48
+        ]
+      ],
+      "raw_pan_equals_N1_best_exactly": true,
+      "matched_guide_changes_N1_best_output_mean_abs": 0.00042848705197684467
+    }
+  }
+}
