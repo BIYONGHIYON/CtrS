@@ -694,5 +694,39 @@
       "B3": 98
     },
     "hypothesis": "rejected: B2 D_s +0.003846 vs N1 (criterion <= -0.003)"
+  },
+  "performance/35_cross_scale_consistency": {
+    "report": "experiments/performance/35_cross_scale_consistency/README.md",
+    "research_track": "performance",
+    "experiment": 35,
+    "display_name": "35. 교차 축척 일관성 학습",
+    "experimenter": "이병현",
+    "status": "사전 검증 완료",
+    "improvement": "성능 비교 아님",
+    "config": "experiments/performance/35_cross_scale_consistency/config.json",
+    "entrypoint": "experiments/performance/35_cross_scale_consistency/prepare.py",
+    "results": "experiments/performance/35_cross_scale_consistency/results",
+    "manifest": "experiments/performance/35_cross_scale_consistency/manifest.json",
+    "last_checked": "2026-10-16T10:52:00+09:00",
+    "sensor": "QB",
+    "retraining": false,
+    "limits": "학습 없는 관문 검사. 보관된 단일 시드 QB 모델·탐색에 반복 사용한 test·잠정 FR 지표에 한정."
+  },
+  "performance/36_gain_map_detail_injection": {
+    "report": "experiments/performance/36_gain_map_detail_injection/README.md",
+    "research_track": "performance",
+    "experiment": 36,
+    "display_name": "36. 저해상도 이득 지도 기반 세부정보 주입 제한",
+    "experimenter": "이병현",
+    "status": "사전 검증 완료",
+    "improvement": "성능 비교 아님",
+    "config": "experiments/performance/36_gain_map_detail_injection/config.json",
+    "entrypoint": "experiments/performance/36_gain_map_detail_injection/prepare.py",
+    "results": "experiments/performance/36_gain_map_detail_injection/results",
+    "manifest": "experiments/performance/36_gain_map_detail_injection/manifest.json",
+    "last_checked": "2026-10-16T11:23:00+09:00",
+    "sensor": "QB",
+    "retraining": false,
+    "limits": "학습 없는 관문 검사. 보관된 단일 시드 QB 모델·탐색에 반복 사용한 test·잠정 FR 지표에 한정."
   }
 }

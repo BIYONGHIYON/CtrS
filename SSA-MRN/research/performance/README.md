@@ -54,6 +54,8 @@
 | [32. PAN 조건 특징 변조와 국소 회귀 사전 정보의 빠른 선별](../../experiments/performance/32_feature_modulation_local_regression_screen/README.md)<br>[이병현] | A0 best에서 PAN 조건 특징 변조(W1)·대조군(W1c)·국소 회귀 사전 정보(W2)를 10에폭 이어 학습해 선별했습니다. | 이어 학습 대조군 대비 best validation: W1 −0.06%, W1c −0.06%, W2 −0.03%; 기준 3% 미달, test 미평가 | 사전&nbsp;검증&nbsp;완료 | 판단&nbsp;보류 |
 | [33. MS 기준 가역 밝기·대비 정규화](../../experiments/performance/33_ms_anchored_reversible_normalization/README.md)<br>[김경찬] | 원본 SSA-MRN 앞뒤에 LR MS 기준 공유 정규화·역변환을 추가했습니다. | seed42: PSNR +0.2111 dB·SAM −0.1242°·잠정 QNR +0.01746; 각 지표 20/20장 개선, 반복 검증 대기 | 평가&nbsp;완료<br>seed42 | 개선 |
 | [34. 논문 채널 상관 어텐션과 다중 해상도 복원 재현](../../experiments/performance/34_paper_equation_reproduction/README.md)<br>[이병현] | K6 채널 상관행렬·bicubic·세 단계 잔차를 본문 수식에 맞춰 재현했습니다. | PSNR36.6224dB·잠정QNR0.90102; 과거 A0 대비 주요 RR·FR 악화, 복수 조건 변경 | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [35. 교차 축척 일관성 학습](../../experiments/performance/35_cross_scale_consistency/README.md)<br>[이병현] | 기존 30개 모델로 교차 축척 불일치와 FR Ds의 관계, 8방향 self-ensemble을 학습 없이 확인하고 FR 지표 구현을 toolbox와 대조했습니다. | I_cs↔Ds Spearman 0.58(기본)·0.39(전체)로 기준 미달, 학습 안 함; self-ensemble A0 PSNR −0.93dB; 지표 구조 toolbox와 동일 | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
+| [36. 저해상도 이득 지도 기반 세부정보 주입 제한](../../experiments/performance/36_gain_map_detail_injection/README.md)<br>[이병현] | 출력 구조 제한의 전제(고전 MTF-GLP의 FR Ds)와 이론 상한을 학습 없이 확인했습니다. | MTF-GLP Ds +0.1275·PSNR −4.92dB(A0 대비); 상한 0.50 < A0 0.871로 두 관문 실패, 학습 안 함 | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 
 [새 실험 등록 절차](../../README.md#새-실험-등록) · [실험 보고서 양식](../../docs/experiment_template.md)
 
