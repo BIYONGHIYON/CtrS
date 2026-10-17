@@ -248,9 +248,11 @@ FiLM은 C보다 세 배율 PSNR을 높였지만4배 SAM은+0.0087° 악화했습
 
 [실제 설정](config.json) · [단일 셀 실행](run.py) · [실제 원본 소스](provenance/code/variable_scale) · [소스·데이터 식별](provenance/suite_identity.json) · [데이터 manifest](provenance/data_manifest.json) · [고정 예시 선택](provenance/selection.json)
 
-[원본 best/latest10개](checkpoints) · [학습 노출량 검증](results/exposure_verification.json) · [체크포인트 검사](results/checkpoint_verification.json) · [복구 배치 검사](results/recovery_layout_verification.json) · [ZIP 검증](provenance/archive_verification.json) · [현재 보관 manifest](manifest.json) · [결과 비교](results/comparison.json) · [직전 실험 비교](results/previous_experiment_comparison.json)
+[원본 best/latest10개](checkpoints) · [학습 노출량 검증](results/exposure_verification.json) · [체크포인트 검사](results/checkpoint_verification.json) · [복구 배치 검사](results/recovery_layout_verification.json) · [원격 가중치 복구 검사](results/remote_storage_verification.json) · [ZIP 검증](provenance/archive_verification.json) · [현재 보관 manifest](manifest.json) · [결과 비교](results/comparison.json) · [직전 실험 비교](results/previous_experiment_comparison.json)
 
 다운로드 ZIP의 외부 SHA-256과 내부194개 manifest 항목의 해시·CRC를 확인했습니다. 실제 best/latest10개의 원본 바이트를 유지했습니다. best의 validation 최솟값 선택·100 rounds 완료·latest 내 전체 학습 상태와 best 복구 정보를 확인했으며,10개 checkpoint의 strict load와 CPU 합성 입력18회 추론을 검사했습니다. compact100개 round 기록은 원본 latest의 validation 평균과 일치합니다. 이 검사는 실제 H5를 다시 입력한 성능 재평가나 GPU 재개 실행 검증과 별개입니다.
+
+원본 가중치는 Git LFS로 보관했습니다. 원격 업로드 후 별도의 빈 LFS 저장소로10개를 다시 다운로드해 원본 ZIP 체크포인트와 SHA-256·크기가 모두 일치함을 확인했습니다. 가중치를 받을 때는 Git LFS를 설치하고 해당 브랜치에서 `git lfs pull`을 실행합니다. 원격 파일 다운로드 복구는 확인했지만 실제 H5·GPU로 학습을 재개한 검증은 수행하지 않았습니다.
 
 `run.py`는 보관된13개 원본 실행 소스가 모두 일치하는 단일 셀 래퍼입니다. 학습 데이터는 포함하지 않습니다. 다른 출력 폴더에서 새로 실행하고 기존 학습 runtime은 덮어쓰지 않습니다. 체크포인트 내부 설정·원본 소스는 변경하지 않았습니다. 원본 latest에는 재개에 필요한 전체 history가 있으므로 compact 기록으로 대체하지 않습니다.
 
