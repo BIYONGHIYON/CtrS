@@ -804,5 +804,27 @@
     "config": "experiments/performance/39_local_ms_anchored_reversible_normalization/config.json",
     "entrypoint": "experiments/performance/39_local_ms_anchored_reversible_normalization/run.py",
     "verification": "experiments/performance/39_local_ms_anchored_reversible_normalization/prepare.py"
+  },
+  "performance/40_ms_center_scale_ablation": {
+    "report": "experiments/performance/40_ms_center_scale_ablation/README.md",
+    "research_track": "performance",
+    "experiment": 40,
+    "display_name": "40. MS 기준 평균 제거와 대비 정규화의 기여 분리",
+    "experimenter": "김경찬",
+    "status": "학습 완료·평가 대기",
+    "improvement": "판단 보류",
+    "sensor": "QB",
+    "trained_seeds": [
+      42
+    ],
+    "evaluated_seeds": [],
+    "test_scored": false,
+    "checkpoints": "experiments/performance/40_ms_center_scale_ablation/checkpoints",
+    "results": "experiments/performance/40_ms_center_scale_ablation/results",
+    "manifest": "experiments/performance/40_ms_center_scale_ablation/manifest.json",
+    "config": "experiments/performance/40_ms_center_scale_ablation/config.json",
+    "entrypoint": "experiments/performance/40_ms_center_scale_ablation/run.py",
+    "verification": "experiments/performance/40_ms_center_scale_ablation/prepare.py",
+    "limits": "seed42 validation만 확인. A1·A2의A3 대비MSE +1.220%·+1.810%로 사전 반복 기준 미달. RR·FR 미평가, 최종 개선 판단 보류."
   }
 }

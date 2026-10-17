@@ -1,0 +1,19 @@
+{
+  "experiment": 40,
+  "status": "plan, actual execution determined by markers",
+  "arms": {
+    "A0": "identity",
+    "A1": "x-mu / y+mu",
+    "A2": "x/s / y*s",
+    "A3": "(x-mu)/s / y*s+mu"
+  },
+  "repeat_gate": "A1 or A2 val MSE <=1.005*A3; decide before test",
+  "thresholds": {
+    "PSNR_min": -0.03,
+    "SAM_max": 0.02,
+    "QNR_min": 0.003,
+    "Dlambda_max": 0,
+    "Ds_max": 0
+  },
+  "test_tuning": false
+}

@@ -1,0 +1,32 @@
+{
+  "forward": true,
+  "backward": true,
+  "gpu_cache": true,
+  "A0_original_equivalence": false,
+  "normalization": {
+    "offset_output_max_abs": 0.026815742254257202,
+    "gain_output_max_abs": 3.2782554626464844e-07,
+    "roundtrip_max_abs": 5.960464477539063e-08,
+    "mean": [
+      0.0
+    ],
+    "scale": [
+      0.2950286567211151
+    ],
+    "affine_gain": 1.1,
+    "affine_offset": 0.02,
+    "affine_output_max_abs": 0.026810020208358765,
+    "affine_output_mean_abs": 0.015448317863047123,
+    "note": "A1: offset equivariance; A2: positive-gain equivariance; A3: affine equivariance away from scale floor. This is a mechanism diagnostic, not a quality metric."
+  },
+  "micro": 32,
+  "effective_batch": 64,
+  "cuda_resume_equivalence": {
+    "passed": true,
+    "max_model_abs": 0.0,
+    "reference_loss": 0.002630062634125352,
+    "resumed_loss": 0.002630062634125352,
+    "scope": "two real-model AMP updates on four train samples; optimizer/scaler/RNG/order/cursor restored",
+    "limit": "not a full epoch/session termination test; CUDA warn-only operations may not be bitwise deterministic"
+  }
+}
