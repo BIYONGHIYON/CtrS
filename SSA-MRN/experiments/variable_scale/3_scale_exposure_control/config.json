@@ -1,0 +1,40 @@
+{
+  "mode": "train",
+  "output_dir": "/kaggle/working/ssa_scale_exposure_control_v3/seed_42",
+  "resume": false,
+  "resume_input": null,
+  "scene_manifest": null,
+  "allow_unverified_splits": true,
+  "provisional_fr": false,
+  "devices": [
+    "cuda:0",
+    "cuda:1"
+  ],
+  "job_names": [
+    "B_x2",
+    "B_x3",
+    "B_x4",
+    "C_mixed",
+    "D_mixed"
+  ],
+  "dataset_version": null,
+  "data_cache": "/kaggle/working/ctrs_data_cache",
+  "paths": {
+    "train": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__train_qb.h5",
+    "val": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Training_Dataset__valid_qb.h5",
+    "RR": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_ReducedData_H5_Format__test_qb_multiExm1.h5",
+    "FR": "/kaggle/input/datasets/biyonghiyon/ctrs-pan-sharpening-dataset/QuickBird__Testing_Dataset_FullData_H5_Format__test_qb_OrigScale_multiExm1.h5"
+  },
+  "training": {
+    "epochs": 100,
+    "seed": 42,
+    "batch_size": 32,
+    "micro_batch": 32,
+    "lr": 0.0001,
+    "amp": false,
+    "deterministic": true,
+    "checkpoint_seconds": 60,
+    "status_seconds": 15,
+    "protocol": "matched_per_scale_exposure_v1"
+  }
+}

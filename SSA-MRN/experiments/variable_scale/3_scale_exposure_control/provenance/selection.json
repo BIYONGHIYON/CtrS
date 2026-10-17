@@ -1,0 +1,52 @@
+{
+  "seed": 42,
+  "indices": [
+    1,
+    8,
+    11,
+    13,
+    19
+  ],
+  "samples": [
+    {
+      "scene_id": "UNVERIFIED:RR:1",
+      "tile": "source H5 sample",
+      "index": 1
+    },
+    {
+      "scene_id": "UNVERIFIED:RR:8",
+      "tile": "source H5 sample",
+      "index": 8
+    },
+    {
+      "scene_id": "UNVERIFIED:RR:11",
+      "tile": "source H5 sample",
+      "index": 11
+    },
+    {
+      "scene_id": "UNVERIFIED:RR:13",
+      "tile": "source H5 sample",
+      "index": 13
+    },
+    {
+      "scene_id": "UNVERIFIED:RR:19",
+      "tile": "source H5 sample",
+      "index": 19
+    }
+  ],
+  "rule": "one first sample per scene, seeded choice then ascending index",
+  "scene_identity_verified": false,
+  "tile": "whole supplied H5 sample; synthetic target uses documented common crop",
+  "display_order": [
+    "LR MS",
+    "PAN input",
+    "prediction",
+    "GT"
+  ],
+  "rgb_bands": [
+    2,
+    1,
+    0
+  ],
+  "fixed_before_training_and_test_scoring": true
+}
