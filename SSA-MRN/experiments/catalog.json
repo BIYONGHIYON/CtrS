@@ -131,6 +131,40 @@
     "manifest": "experiments/variable_scale/2_scale_exposure_extension/manifest.json",
     "limits": "장면 분할 미검증·FR 미평가·단일 seed·배율별 노출량 전용의2/3; latest 확보 상태는 verification.json 참조"
   },
+  "variable_scale/3_scale_exposure_control": {
+    "report": "experiments/variable_scale/3_scale_exposure_control/README.md",
+    "research_track": "variable_scale",
+    "experiment": 3,
+    "display_name": "3. 배율별 학습 노출량 통제",
+    "experimenter": "김윤지",
+    "status": "학습 완료·일부 평가",
+    "improvement": "판단 보류",
+    "checkpoints": "experiments/variable_scale/3_scale_exposure_control/checkpoints",
+    "results": "experiments/variable_scale/3_scale_exposure_control/results",
+    "manifest": "experiments/variable_scale/3_scale_exposure_control/manifest.json",
+    "config": "experiments/variable_scale/3_scale_exposure_control/config.json",
+    "entrypoint": "experiments/variable_scale/3_scale_exposure_control/run.py",
+    "verification": "experiments/variable_scale/3_scale_exposure_control/prepare.py",
+    "model": "experiments/variable_scale/3_scale_exposure_control/provenance/code/variable_scale/model.py",
+    "evaluated_seeds": [
+      42
+    ],
+    "sensor": "QB",
+    "last_checked": "2026-10-18T00:09:55.279128+09:00",
+    "selected_best_epochs": {
+      "B_x2": 97,
+      "B_x3": 100,
+      "B_x4": 99,
+      "C_mixed": 98,
+      "D_mixed": 98
+    },
+    "scene_split_verified": false,
+    "fr_evaluated": false,
+    "per_scale_updates": 53600,
+    "common_initialization_matches": true,
+    "round_sample_order_matches": true,
+    "limits": "3·4배 RR 개선·2배 악화. FR 미평가·원본 장면 분할 미검증·합성 Gaussian proxy·단일 seed42; 실제 H5 재평가·GPU 재개 미검증."
+  },
   "performance/29_capacity_refinement": {
     "report": "experiments/performance/29_capacity_refinement/README.md",
     "research_track": "performance",

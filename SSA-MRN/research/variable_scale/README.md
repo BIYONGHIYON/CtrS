@@ -23,12 +23,13 @@
 
 ## 실험 표
 
-첫 실험의 실제학습·RR 평가 결과입니다. 공동 복원은 동작했으나 전용 모델보다 성능이 낮았고 최종개선 판정은 보류했습니다.
+가변 배율 공동 복원과 학습 노출량을 순서대로 확인했습니다. 배율별 노출량을 맞춘 실험3에서는 공동 모델의3·4배 RR이 전용보다 나아졌지만2배 격차가 남았습니다. FR·독립 장면·반복 시드가 미검증이므로 최종 개선 판정은 보류했습니다.
 
 | 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
 |---|---|---|:---:|:---:|
 | [1. 가변 배율 복원과 배율 조건](../../experiments/variable_scale/1_scale_conditioned_restoration/README.md)<br>[김윤지] | 입력 배율과 피라미드를 분리하고 전용·공동 학습 및 FiLM을 비교했습니다. | 공동 모델은 전용 대비PSNR0.40-0.98dB 하락; FiLM3·4배 소폭 개선 | 학습&nbsp;완료·일부&nbsp;평가 | 판단&nbsp;보류 |
 | [2. 배율별 학습 노출량 확장](../../experiments/variable_scale/2_scale_exposure_extension/README.md)<br>[김윤지] | 공동 C/D를100에서200에포크로 연장 | 모든 배율의 RR 개선, 전용 PSNR 격차 유지 | 학습&nbsp;완료·일부&nbsp;평가 | 판단&nbsp;보류 |
+| [3. 배율별 학습 노출량 통제](../../experiments/variable_scale/3_scale_exposure_control/README.md)<br>[김윤지] | 배율별 표본 순서·53,600회 갱신을 맞춰 전용·공동·FiLM 비교 | D는 전용 대비3·4배 PSNR +0.1420/+0.1471dB,2배 -0.2256dB | 학습&nbsp;완료·일부&nbsp;평가 | 판단&nbsp;보류 |
 
 [새 실험 등록 절차](../../README.md#새-실험-등록) · [실험 보고서 양식](../../docs/experiment_template.md)
 
