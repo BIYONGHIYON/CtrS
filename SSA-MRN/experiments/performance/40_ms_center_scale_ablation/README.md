@@ -1,0 +1,104 @@
+# MS 기준 평균 제거와 대비 정규화의 기여 분리
+
+**연구 분야:** 기존 성능 개선
+
+**실험자:** 김경찬
+
+**변경 내용:** 원본 SSA-MRN 앞뒤의 샘플별 공유 정규화에서 평균 제거와 대비 조절을 분리해 네 군으로 비교했습니다.
+
+| 확인된 결과 | 상태 | 개선 여부 |
+|---|:---:|:---:|
+| seed42 네 군의100epoch 학습을 완료했습니다. A3 validation MSE가 가장 낮았고 A1·A2는 반복 진행 기준을 넘었습니다. RR·FR은 미평가입니다. | 학습&nbsp;완료<br>평가&nbsp;대기 | 판단&nbsp;보류 |
+
+[실험 목록](../../../research/performance/README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [재현 자료](#evidence)
+
+## 1. 목적과 상태
+
+33·38번의 공유 가역 정규화는 RR 이득이 반복됐으나 FR은 시드별로 엇갈렸습니다. 39번 국소 정규화도 전역 방식보다 평균 성능이 악화했습니다. 이번에는 전역 정규화의 평균 제거와 대비 조절을 분리해 어떤 요소가 validation 이득에 기여하는지 확인했습니다.
+
+seed42 네 군 모두100epoch·26,800회 업데이트를 완료했습니다. 학습과 validation은 완료했으며 RR·FR test는 의도적으로 실행하지 않았습니다. 저장된 가중치를 이용한 전체 평가가 다음 단계입니다. 최종 성능 개선이나 새 기준 모델 채택을 확정하지 않습니다.
+
+## 2. 변경한 구조와 비교 조건
+
+LR MS 전체 C·H·W에서 샘플별 모집단 평균 μ와 표준편차 σ를 구하고 s=max(σ,0.01)로 설정합니다. GT와 다른 배치 샘플은 통계 계산에 포함하지 않습니다. PAN·제공 LMS·MS에 동일한 스칼라 변환을 적용합니다.
+
+| 군 | 입력 변환 | 출력 역변환 |
+|---|---|---|
+| A0 원본 | x | 없음 |
+| A1 평균 제거 | x−μ | y+μ |
+| A2 대비 조절 | x/s | sy |
+| A3 전체 정규화 | (x−μ)/s | sy+μ |
+
+원본 초기 LRPAN·backbone BatchNorm·밴드별 SSAI·다중 해상도 복원을 유지했습니다. 추가 학습 파라미터는 없습니다. 네 군은 같은 초기 파라미터를 사용하지만 입력 변환 때문에 초기 출력은 다릅니다.
+
+| 항목 | 실제 공통 조건 |
+|---|---|
+| 데이터 | QuickBird train17,139·validation1,905·RR20·FR20; test는 미사용 |
+| 특징 차원·공간 배율 | K4·4배 |
+| 학습 | fresh seed42·각100epoch·Adam·고정lr1e-4 |
+| 배치 | effective64·micro32, 마지막 불완전 배치 포함 |
+| 손실 | 역변환한 최종 출력의 원래 DN/2047 공간 MSE |
+| 정밀도 | 학습FP16 AMP; 통계·변환·역변환·손실·validation FP32; TF32 off |
+| 장치 | Tesla T4×2; 첫 묶음 GPU0 A0·GPU1 A3, 다음 묶음 GPU0 A1·GPU1 A2 |
+| best | epoch0 포함 전체 validation MSE 최소, 정확한 동률이면 이른 epoch |
+| 공정성 | 네 군 초기 상태와 실제100epoch 배치 순서 해시 일치; 업데이트 생략0회 |
+
+원래 DN/2047 정규화와 제공 LMS를 유지하며 입력·예측을 clipping하지 않습니다. micro batch도 고정해 BatchNorm 조건을 맞췄습니다. 학습된 가중치나 checkpoint 내부 설정을 정리를 위해 변경하지 않았습니다.
+
+<a id="results"></a>
+
+## 3. 정량 결과
+
+아래는 전체 validation 분할의 각 군 best입니다. MSE 변화율은 음수일수록 좋습니다. 이 값은 RR·FR test 결과가 아닙니다.
+
+| 군 | best epoch | validation MSE ↓ | validation PSNR ↑ | validation SAM ↓ | MSE 변화 vs A0 | MSE 변화 vs A3 |
+|---|---:|---:|---:|---:|---:|---:|
+| A0 원본 | 100 | 0.000187114912 | 38.982322 | 4.710287 | +0.000% | +2.679% |
+| A1 평균 제거 | 100 | 0.000184456042 | 39.026939 | 4.665289 | -1.421% | +1.220% |
+| A2 대비 조절 | 99 | 0.000185530889 | 39.008854 | 4.693578 | -0.847% | +1.810% |
+| A3 전체 정규화 | 98 | 0.000182232081 | 39.077446 | 4.651644 | -2.610% | +0.000% |
+
+[전체 epoch 기록](results/) · [집계 수치](results/summary.json) · [학습 전 고정한 선택 규칙과 실제 결정](results/validation_decision.json)
+
+RR PSNR·SAM·ERGAS·SCC·Q2n과 FR QNR·Dλ·Ds는 아직 계산하지 않았습니다. QNR·Q2n·SCC의 공식 수치 대응도 별도 검증이 필요합니다. FR에는 고해상도 GT가 없습니다.
+
+## 4. 기준선 대비 차이와 해석
+
+A1·A2는 원본 A0보다 validation MSE가 각각1.421%·0.847% 낮지만 A3보다1.220%·1.810% 높습니다. A3는 A0보다2.610% 낮습니다. 현재 조건에서는 두 연산을 함께 유지하는 구성이 validation에서 가장 유리했습니다.
+
+사전 규칙은 A1 또는 A2의 best validation MSE가 A3의1.005배 이내이면 네 군을 seed43·44로 반복하는 것이었습니다. 둘 다 이 범위를 벗어나 반복 확대를 중단합니다. 이 결정에 test를 사용하지 않았습니다. A0·A1 best가 마지막epoch이므로 충분히 수렴한 뒤에도 같은 순위가 유지된다고 확정하지 않습니다. 단일 시드의 결과를 정규화 효과의 보편적 인과 증거로 해석하지 않습니다.
+
+<a id="graphs"></a>
+
+## 5. 학습·평가 그래프
+
+![실제 네 군의 학습 MSE와 validation MSE·PSNR·SAM](results/curves.png)
+
+실제100epoch 기록을 사용한 원본 곡선입니다. validation 곡선에는epoch0을 포함하며 최종 구간의 작은 차이는 원본 숫자와 함께 확인합니다. test 기준선 비교 그래프는 미평가 상태이므로 만들지 않았습니다.
+
+<a id="images"></a>
+
+## 6. 결과 이미지
+
+예측 이미지는 아직 생성하지 않았습니다. 학습 전에 RR의0기준 전체 장면1·8·11·13·19를 이 순서로 고정했습니다. 평가 시 LR MS 최근접 확대·PAN 입력·예측·GT의4패널로 저장하며 RGB[2,1,0]과 동일 장면 GT의1/99백분위 대비를 MS 패널에 공유합니다. PAN은 별도 grayscale 대비를 사용합니다. FR에는 GT를 만들지 않습니다.
+
+<a id="evidence"></a>
+
+## 7. 재현 자료
+
+[단일 셀 실행기](run.py) · [보관 검증·집계](prepare.py) · [보관 설정](config.json) · [학습 당시 설정](provenance/config.json) · [원본 실행 셀](provenance/run_cell.py) · [원본 소스](provenance/source/) · [가중치12개](checkpoints/) · [데이터 manifest](provenance/data_manifest.json) · [예시 선택](provenance/selection.json) · [원본 보존 대응](provenance/retained_files.json) · [보존 검증](results/retention_verification.json) · [manifest](manifest.json)
+
+각 군의 실제 initial·best·latest를 원본 바이트 그대로 보존했습니다. latest에는 optimizer·AMP scaler·Python/NumPy/Torch CPU/CUDA RNG·배치 generator·현재 순서·다음 batch·누적 손실·history·best_model이 포함된다는 실행 기록을 보존했습니다. 원본 소스·설정·compact epoch 기록과 원본 학습 곡선을 함께 보관합니다.
+
+보관 환경에서 원본 ZIP SHA256·CRC·내부63개 항목 해시를 확인했고 그중 상세 로그·상태12개를 제외한 원본51개를 이 폴더에 바이트 그대로 보존했습니다. 네 군의101개 epoch 기록·공통 초기 상태·실제 배치 순서·업데이트 수·validation best·반복 진행 규칙을 독립 재계산했습니다. Kaggle에서 네 군의 유한 forward/backward·GPU 상주·두 업데이트 AMP 재개 검사가 통과한 기록을 보존했습니다. 이는 장시간 전체 세션 강제 종료 복구를 검증한 결과와 다릅니다.
+
+이 보관 환경에는 PyTorch·GPU·원본 H5가 없어 checkpoint strict load·원본 데이터 재추론·test 성능 재평가는 수행하지 않았습니다. 해시 검증을 추론 검증으로 표시하지 않습니다. 원본 runtime과 보관 폴더의 파일 배치는 다르므로 원본 Saved Output 또는 다운로드한 training ZIP을 전체 복원해 평가를 재개합니다. 안내는 [학습 당시 실행 문서](provenance/source/KAGGLE_GUIDE.md)를 따릅니다.
+
+```bash
+python SSA-MRN/experiments/performance/40_ms_center_scale_ablation/prepare.py
+python SSA-MRN/common/verify.py --research-track performance --experiment 40
+```
+
+## 8. 개선 여부와 다음 단계
+
+**학습 완료·평가 대기 / 판단 보류**입니다. 평균 제거·대비 조절을 분리한 두 후보는 사전 validation 기준을 넘었으므로 seed43·44 반복은 진행하지 않습니다. 저장된 네 군의 best로 RR·FR 각20장 전체 평가를 수행하고 고정5장면·전체 숫자·비교 그래프를 보존합니다. test를 본 뒤 best·학습량·정규화 설정을 바꾸지 않습니다.
