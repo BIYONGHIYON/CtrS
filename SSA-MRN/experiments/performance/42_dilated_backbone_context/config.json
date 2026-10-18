@@ -1,0 +1,105 @@
+{
+  "research_track": "performance",
+  "experiment": 42,
+  "experimenter": "송준현",
+  "conditions": {
+    "dataset": "QB only",
+    "k": 4,
+    "spatial_ratio": 4,
+    "normalization": "DN/2047 only; supplied LMS; no clipping; no N1/local normalization",
+    "micro": 32,
+    "effective_batch": 64,
+    "epochs": 100,
+    "optimizer": "Adam defaults",
+    "lr": "constant1e-4; no scheduler",
+    "precision": "AMP FP16 train; FP32 final MSE/validation/test; TF32 off; GradScaler initial1024",
+    "order": "independent CUDA Generator(seed+100000), separate model RNG",
+    "loss": "original final-output MSE; no auxiliary loss",
+    "baseline": "archived33 N0, original sampling geometry",
+    "candidate": "only core.res2.conv21 and core.res4.conv21: dilation1/padding1 -> dilation2/padding2; all weights/shapes unchanged",
+    "selection": "minimum full validation MSE including epoch0, earliest exact tie",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "search": "two target layers and dilation2 fixed before training, no sweep/select",
+    "augmentation": "none in either arm",
+    "initialization": "all parameter tensors equal; initial outputs expected to differ",
+    "test_policy": "train/test each seed then next; settings frozen, no test tuning",
+    "metric_limitations": "frozen33 metrics; RR SCC/Q2n and FR MATLAB/sensor MTF/phase parity unverified; FR no GT"
+  },
+  "source_audit": {
+    "repository": "BIYONGHIYON/CtrS",
+    "pinned_commit": "12d32cf898435e72f17ba09ad5750afcaa31277c",
+    "original33_source_commit": "2878e9bbf273edaeafd2b1251a8aed0227f06a19",
+    "verified_original_source_hashes": {
+      "common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+      "common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+      "normalization.py": "4a8c71673e86aaad133a607198eb486e2d77fa3982d47863c338519f8bb0177d",
+      "references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+      "worker.py": "a29ba0bcec4aaf2205ea5f01c3b1bff94ad3db9e924197e5d1acee221ac2b785",
+      "controller_template.py": "93663126f406136efb5d23ac291ad44fa4b7cfe3631358cbd4d7ab35ae73bb7f",
+      "experiment_plan.md": "4573b13132ee16fe37c4b08195530c818ea2109709d95a4ec045837710b45a45",
+      "KAGGLE_GUIDE.md": "27f4e5b692577d1b6095ef6c4fc21db2ea1a51622f8cd1994aa797b1f9183c7c"
+    },
+    "reference": "archived33 N0; not N1, W2 or PhotoAug",
+    "change": "metadata of two active shared/aliased convolutions only; same Parameter objects and key shapes; zero padding retained",
+    "targets": [
+      "core.res2.conv21",
+      "core.res4.conv21"
+    ],
+    "aliases": [
+      "core.backbone.1.conv21",
+      "core.backbone.3.conv21"
+    ],
+    "reuse": "checked paired-GPU checkpoint/controller/evaluation; remove photometric augmentation state completely",
+    "limits": [
+      "no actual private QB/T4/AMP training during preparation",
+      "same parameter count/MAC count does not guarantee same runtime",
+      "state_dict does not encode dilation: reconstruct recorded arm before strict load",
+      "gridding and padding/context mismatch may worsen results; no performance guarantee"
+    ]
+  },
+  "source_hashes": {
+    "common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "normalization33.py": "4a8c71673e86aaad133a607198eb486e2d77fa3982d47863c338519f8bb0177d",
+    "provenance/original33_worker.py": "a29ba0bcec4aaf2205ea5f01c3b1bff94ad3db9e924197e5d1acee221ac2b785",
+    "dilated_model.py": "3f2af9daea3f0a39c19df53ed7a8c6e66a6a8b911a68edc300d4bf32e69b9a09",
+    "dilated_worker.py": "11beb41d495e63b01f41f521cfec38520e97aad6aba2b657a624c3f11521b49c",
+    "dilated_dashboard.py": "f765cf8e72e33b1def2ea0525871462c29c4ce2151fecdce3b11113232326bdc"
+  },
+  "evaluated_seeds": [
+    42,
+    43,
+    44
+  ],
+  "selection": {
+    "seed": 42,
+    "scene_indices_zero_based": [
+      1,
+      8,
+      11,
+      13,
+      19
+    ],
+    "tile": "full scene",
+    "order": [
+      1,
+      8,
+      11,
+      13,
+      19
+    ],
+    "checkpoint": "minimum validation MSE including epoch0; earliest tie",
+    "test_used": false,
+    "other_seeds_same_scene_indices": [
+      43,
+      44
+    ]
+  },
+  "last_checked": "2026-10-18T22:01:16.506561+09:00",
+  "metric_limits": "frozen33 metrics; RR SCC/Q2n and FR MATLAB/sensor MTF/phase parity unverified; FR no GT"
+}
