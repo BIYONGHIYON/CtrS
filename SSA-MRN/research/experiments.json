@@ -884,5 +884,29 @@
     "config": "experiments/performance/41_joint_photometric_augmentation/config.json",
     "entrypoint": "experiments/performance/41_joint_photometric_augmentation/run.py",
     "verification": "experiments/performance/41_joint_photometric_augmentation/prepare.py"
+  },
+  "performance/42_dilated_backbone_context": {
+    "report": "experiments/performance/42_dilated_backbone_context/README.md",
+    "research_track": "performance",
+    "experiment": 42,
+    "display_name": "42. 백본 일부 합성곱의 dilation 확장",
+    "experimenter": "송준현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "sensor": "QB",
+    "last_checked": "2026-10-18T22:01:16.506561+09:00",
+    "limits": "3seed 평균 RR PSNR +0.12171dB·SAM -0.02500°·ERGAS -0.06130. 잠정 FR QNR +0.00360·Ds +0.00121, seed별 상충. 공식 MATLAB/센서 대응 미검증.",
+    "checkpoints": "experiments/performance/42_dilated_backbone_context/checkpoints",
+    "results": "experiments/performance/42_dilated_backbone_context/results",
+    "manifest": "experiments/performance/42_dilated_backbone_context/manifest.json",
+    "model": "experiments/performance/42_dilated_backbone_context/model.py",
+    "config": "experiments/performance/42_dilated_backbone_context/config.json",
+    "entrypoint": "experiments/performance/42_dilated_backbone_context/run.py",
+    "verification": "experiments/performance/42_dilated_backbone_context/prepare.py"
   }
 }
