@@ -1,0 +1,52 @@
+{
+  "best_epoch": 98,
+  "best_validation": {
+    "mse": 0.0001874351956065621,
+    "psnr": 38.98004434340269,
+    "sam": 4.724921596702813,
+    "ergas": 4.619784699222782,
+    "scc": 0.9571161198093998,
+    "q2n": 0.8080808619764084,
+    "photometric": {
+      "applied": false,
+      "scope": "unmodified validation inputs; no gain/offset or test-time augmentation"
+    }
+  },
+  "last_validation": {
+    "lr": 0.0001,
+    "epoch": 100,
+    "train_mse": 0.00018594812648427918,
+    "val_mse": 0.0001878167665484732,
+    "val_psnr": 38.96294504601186,
+    "val_sam": 4.7110581178014,
+    "skipped_amp_steps": 0,
+    "order_sha256": "40f241e636fcd909cb66dcfe146d4771fe0980c3b1fa4cde68418762caa510b5",
+    "train_segment_seconds": 29.585802796999815,
+    "validation_seconds": 1.8323720470002627,
+    "resumed_mid_epoch": false,
+    "train_total": 0.00018594812648427918,
+    "val_ergas": 4.635402282384058,
+    "val_scc": 0.9556227328011291,
+    "val_q2n": 0.8012554286843756,
+    "validation_diagnostic_scope": "ERGAS/SCC/Q2n: first 32 validation patches; MSE/PSNR/SAM: all used validation patches",
+    "photometric": {
+      "applied": false,
+      "scope": "unmodified validation inputs; no gain/offset or test-time augmentation"
+    },
+    "augmentation": {
+      "gain_mean": 1.0006362199783325,
+      "gain_min": 0.9000008702278137,
+      "gain_max": 1.099987268447876,
+      "bias_mean": -4.0670265661901794e-06,
+      "bias_min": -0.00999552570283413,
+      "bias_max": 0.009998997673392296,
+      "samples": 17139
+    },
+    "photo_plan_sha256": "bb9f48a7904076f85b3acc168873506c8f03602e8b2dca818518cd048861f06d"
+  },
+  "last_epoch": 100,
+  "peak_gpu_gib": 2.9781575202941895,
+  "train_seconds_measured_segments": 2960.5040731040003,
+  "train_active_seconds": 2960.5040359199975,
+  "timing_limit": "active train timer includes within-epoch checkpoint overhead; excludes data loading/validation; preserved across resume"
+}
