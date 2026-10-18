@@ -607,5 +607,53 @@
     "entrypoint": "experiments/performance/40_ms_center_scale_ablation/run.py",
     "verification": "experiments/performance/40_ms_center_scale_ablation/prepare.py",
     "limits": "seed42 validation만 확인. A1·A2의A3 대비MSE +1.220%·+1.810%로 사전 반복 기준 미달. RR·FR 미평가, 최종 개선 판단 보류."
+  },
+  "performance/41_joint_photometric_augmentation": {
+    "report": "experiments/performance/41_joint_photometric_augmentation/README.md",
+    "research_track": "performance",
+    "experiment": 41,
+    "display_name": "41. 공통 밝기·대비 증강",
+    "experimenter": "송준현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "sensor": "QB",
+    "last_checked": "2026-10-18T15:31:44.839621+09:00",
+    "limits": "3seed 평균 PSNR +0.02416dB·SAM -0.00144°·잠정 QNR -0.00422. validation2/3seed 악화, seed별 RR/FR 상충·채택 보류. MATLAB/센서 MTF 대응 미검증.",
+    "checkpoints": "experiments/performance/41_joint_photometric_augmentation/checkpoints",
+    "results": "experiments/performance/41_joint_photometric_augmentation/results",
+    "manifest": "experiments/performance/41_joint_photometric_augmentation/manifest.json",
+    "model": "experiments/performance/41_joint_photometric_augmentation/model.py",
+    "config": "experiments/performance/41_joint_photometric_augmentation/config.json",
+    "entrypoint": "experiments/performance/41_joint_photometric_augmentation/run.py",
+    "verification": "experiments/performance/41_joint_photometric_augmentation/prepare.py"
+  },
+  "performance/42_dilated_backbone_context": {
+    "report": "experiments/performance/42_dilated_backbone_context/README.md",
+    "research_track": "performance",
+    "experiment": 42,
+    "display_name": "42. 백본 일부 합성곱의 dilation 확장",
+    "experimenter": "송준현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "sensor": "QB",
+    "last_checked": "2026-10-18T22:01:16.506561+09:00",
+    "limits": "3seed 평균 RR PSNR +0.12171dB·SAM -0.02500°·ERGAS -0.06130. 잠정 FR QNR +0.00360·Ds +0.00121, seed별 상충. 공식 MATLAB/센서 대응 미검증.",
+    "checkpoints": "experiments/performance/42_dilated_backbone_context/checkpoints",
+    "results": "experiments/performance/42_dilated_backbone_context/results",
+    "manifest": "experiments/performance/42_dilated_backbone_context/manifest.json",
+    "model": "experiments/performance/42_dilated_backbone_context/model.py",
+    "config": "experiments/performance/42_dilated_backbone_context/config.json",
+    "entrypoint": "experiments/performance/42_dilated_backbone_context/run.py",
+    "verification": "experiments/performance/42_dilated_backbone_context/prepare.py"
   }
 }

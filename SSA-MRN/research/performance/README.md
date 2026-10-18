@@ -60,6 +60,8 @@
 | [38. MS 기준 가역 정규화의 반복 시드 검증](../../experiments/performance/38_ms_anchored_normalization_seed_repeat/README.md)<br>[김경찬] | 33번의 정규화·역변환을 유지하고 seed43·44로 반복했습니다. | 세 시드 평균 PSNR +0.1800dB·잠정 QNR +0.00761; seed44 QNR·Ds 악화, 채택 보류 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [39. 국소 MS 통계 기반 가역 정규화](../../experiments/performance/39_local_ms_anchored_reversible_normalization/README.md)<br>[송준현] | N1 전체 MS 통계를 위치별5×5 공통 통계 지도로 바꿨습니다. | 3seed 평균 PSNR −0.13345dB·SAM +0.06825°·잠정 QNR −0.00370; seed44 일부FR 이득, 전체 악화·채택 보류 | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
 | [40. MS 기준 평균 제거와 대비 정규화의 기여 분리](../../experiments/performance/40_ms_center_scale_ablation/README.md)<br>[김경찬] | 전역 공유 정규화의 평균 제거·대비 조절을 네 군으로 분리했습니다. | seed42 validation: A3 MSE 최저; A1·A2는A3 대비 +1.220%·+1.810%로 반복 중단. RR·FR 미평가 | 학습&nbsp;완료<br>평가&nbsp;대기 | 판단&nbsp;보류 |
+| [41. 공통 밝기·대비 증강](../../experiments/performance/41_joint_photometric_augmentation/README.md)<br>[송준현] | 학습 PAN·LMS·MS에 공통 gain·offset, 원래 좌표의 MSE를 적용했습니다. | 3seed 평균 PSNR +0.02416dB·SAM −0.00144°·잠정 QNR −0.00422; validation2/3seed 악화·채택 보류 | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
+| [42. 백본 일부 합성곱의 dilation 확장](../../experiments/performance/42_dilated_backbone_context/README.md)<br>[송준현] | res2·res4 conv21의 dilation·padding을1에서2로 변경했습니다. | 3seed 평균 PSNR +0.12171dB·SAM −0.02500°; 잠정 QNR +0.00360·Ds 악화·seed별 상충 | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
 
 [새 실험 등록 절차](../../README.md#새-실험-등록) · [실험 보고서 양식](../../docs/experiment_template.md)
 
