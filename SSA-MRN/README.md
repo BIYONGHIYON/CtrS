@@ -128,7 +128,7 @@
 
 </details>
 
-**판정 기준:** 개선 = 같은 조건에서 주요 RR·FR 지표가 함께 개선, 부분 개선 = 지표·후보·센서별 결과 혼재, 개선 없음 = 평가에서 향상을 확인하지 못함, 판단 보류 = 최종 평가 부족입니다. 비교 기준·성능 비교 아님은 개선 판정 대상에서 제외합니다. 모든 FR QNR은 구현 대응 검증이 끝나지 않은 잠정 지표이며, 단일 실험의 개선은 최종 채택을 뜻하지 않습니다.
+**판정 기준 ([v2.1](docs/judgement_criteria.md)):** 개선 = 같은 조건 대조군 대비 RR PSNR·SAM·ERGAS가 모두 개선되고 정답 기반 보조 판정(RR2·FR_WALD·FR 관측 일치)을 모두 통과, 부분 개선 = 주 판정만 통과하거나 RR 지표 일부만 개선, 개선 없음 = RR 지표 모두 개선 없음, 판단 보류 = 최종 평가 부족입니다. 비교 기준·성능 비교 아님은 개선 판정 대상에서 제외합니다. FR QNR·Dλ·Ds는 [정답 순위 검사](experiments/performance/46_fr_spatial_index_validity/README.md)를 통과하지 못해 참고로만 보고합니다. 47번 이전 실험의 판정은 [성능 47번 재평가](experiments/performance/47_ground_truth_criteria_reevaluation/README.md)를 기준으로 하며, 표의 개선 여부는 각 실험 당시 기준입니다. 단일 실험의 개선은 최종 채택을 뜻하지 않습니다.
 
 <a id="files"></a>
 
