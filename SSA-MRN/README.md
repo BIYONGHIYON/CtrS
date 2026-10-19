@@ -123,6 +123,7 @@
 | [43. MS 기준 가역 정규화와 저해상도 병렬 특징 용량 확장](experiments/performance/43_normalized_parallel_capacity/README.md)<br>[이병현] | 정규화와 W2 가지를 네 군·세 시드로 비교했습니다. | 3seed C3: PSNR +0.7381dB·잠정 QNR -0.11599; C1 평균 개선·seed43 FR 악화, 결합 FR 완화 실패 | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
 | [44. 위상 보존 주파수 대역 안내](experiments/performance/44_phase_preserving_frequency_guidance/README.md)<br>[이병현] | 전체 해상도 SSA의 PAN·고주파·중/고주파 보조 경로를 동일 용량으로 비교했습니다. | F2: PSNR +0.02094dB·SAM −0.02329°·잠정 QNR −0.00951; 동일 용량 우위 미확인·채택 보류 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [45. 추론 시 정확한 관측 일치 사영](experiments/performance/45_exact_observation_projection/README.md)<br>[이병현] | 43번 가중치 12개 출력에 추론 시에만 관측 연산자 기준 최소 보정 사영을 적용해 학습 없이 RR·FR을 다시 평가했습니다. | 사영으로 RR 240/240장 개선(C0 PSNR +0.129dB)이나 C2 Ds +0.036·QNR −0.033(0/60장)으로 기준 미달, 학습 안 함 | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
+| [46. FR 공간 왜곡 지표의 축소 해상도 타당성 검증](experiments/performance/46_fr_spatial_index_validity/README.md)<br>[이병현] | 정답이 있는 RR 입력을 FR 지표로 채점해, 정답·모델·혼합 결과 37개에 대해 Ds가 정답을 가장 좋게 채점하는지 확인했습니다. | 정답 Ds가 모델보다 나은 장면 1/20(Toolbox 1.0)·2-3/20(원 논문 방식), 오차와 Ds 나쁨의 순위 상관 −0.53에서 −0.54로 두 정의 모두 정확도와 충돌 | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 
 </details>
 
