@@ -28,7 +28,24 @@
     "checkpoints": "research/performance/4_interpolation_correction_detail/checkpoints",
     "results": "research/performance/4_interpolation_correction_detail/results",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "부분 개선",
+    "status": "평가 완료",
+    "limits": "QB seed42: interp23·lr_correction·high_frequency 부분 개선. RR 주 판정·RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "4",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "interp23": "부분 개선",
+        "lr_correction": "부분 개선",
+        "high_frequency": "부분 개선"
+      }
+    }
   },
   "5_interpolation_scope_sensors": {
     "report": "research/performance/5_interpolation_scope_sensors/README.md",
@@ -36,7 +53,22 @@
     "checkpoints": "research/performance/5_interpolation_scope_sensors/checkpoints",
     "results": "research/performance/5_interpolation_scope_sensors/results",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "부분 개선",
+    "status": "평가 완료",
+    "limits": "QB seed42: interp23_output 부분 개선. RR ΔPSNR -0.014dB·ΔSAM -0.004°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "5",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "interp23_output": "부분 개선"
+      }
+    }
   },
   "6_interpolation_seed_repeat": {
     "report": "research/performance/6_interpolation_seed_repeat/README.md",
@@ -44,7 +76,25 @@
     "checkpoints": "research/performance/6_interpolation_seed_repeat/checkpoints",
     "results": "research/performance/6_interpolation_seed_repeat/results",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "부분 개선",
+    "status": "평가 완료",
+    "limits": "QB 3시드 평균: interp23·interp23_input 부분 개선. RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "6",
+      "scope": "QB",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "candidate_labels": {
+        "interp23": "부분 개선",
+        "interp23_input": "부분 개선"
+      }
+    }
   },
   "7_band_gated_detail": {
     "report": "research/performance/7_band_gated_detail/README.md",
@@ -52,7 +102,22 @@
     "checkpoints": "research/performance/7_band_gated_detail/checkpoints",
     "results": "research/performance/7_band_gated_detail/results",
     "research_track": "performance",
-    "experimenter": "김윤지"
+    "experimenter": "김윤지",
+    "improvement": "개선 없음",
+    "status": "평가 완료",
+    "limits": "QB seed42: band_gated_hf 개선 없음. RR ΔPSNR -0.175dB·ΔSAM +0.009°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "7",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "band_gated_hf": "개선 없음"
+      }
+    }
   },
   "8_mtf_augmentation": {
     "report": "research/performance/8_mtf_augmentation/README.md",
@@ -62,7 +127,21 @@
     "evaluation": "common/evaluate_retained.py",
     "status": "평가 완료",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "부분 개선",
+    "limits": "QB seed46: mtf_aug 부분 개선. RR ΔPSNR -0.006dB·ΔSAM -0.006°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "8",
+      "scope": "QB",
+      "seeds": [
+        46
+      ],
+      "candidate_labels": {
+        "mtf_aug": "부분 개선"
+      }
+    }
   },
   "9_ssai_fusion": {
     "report": "research/performance/9_ssai_fusion/README.md",
@@ -72,7 +151,23 @@
     "evaluation": "common/evaluate_retained.py",
     "status": "평가 완료",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "부분 개선",
+    "limits": "QB seed46: A1 부분 개선; A2·A3 개선 없음. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "9",
+      "scope": "QB",
+      "seeds": [
+        46
+      ],
+      "candidate_labels": {
+        "A1": "부분 개선",
+        "A2": "개선 없음",
+        "A3": "개선 없음"
+      }
+    }
   },
   "10_recurrent_observation": {
     "report": "research/performance/10_recurrent_observation/README.md",
@@ -80,7 +175,22 @@
     "checkpoints": "research/performance/10_recurrent_observation/checkpoints",
     "results": "research/performance/10_recurrent_observation/results",
     "research_track": "performance",
-    "experimenter": "김윤지"
+    "experimenter": "김윤지",
+    "improvement": "부분 개선",
+    "status": "평가 완료",
+    "limits": "QB seed42: B2 부분 개선. RR ΔPSNR +0.116dB·ΔSAM -0.018°. RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "10",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "B2": "부분 개선"
+      }
+    }
   },
   "11_haar_reconstruction": {
     "report": "research/performance/11_haar_reconstruction/README.md",
@@ -88,7 +198,22 @@
     "checkpoints": "research/performance/11_haar_reconstruction/checkpoints",
     "results": "research/performance/11_haar_reconstruction/results",
     "research_track": "performance",
-    "experimenter": "김윤지"
+    "experimenter": "김윤지",
+    "improvement": "개선 없음",
+    "status": "평가 완료",
+    "limits": "QB seed42: A1 개선 없음. RR ΔPSNR -0.254dB·ΔSAM +0.082°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "11",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "A1": "개선 없음"
+      }
+    }
   },
   "12_feature_dimension": {
     "report": "research/performance/12_feature_dimension/README.md",
@@ -98,7 +223,21 @@
     "evaluation": "common/evaluate_retained.py",
     "status": "평가 완료",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "개선 없음",
+    "limits": "QB seed42: k6 개선 없음. RR ΔPSNR -0.034dB·ΔSAM +0.014°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "12",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "k6": "개선 없음"
+      }
+    }
   },
   "13_recurrent_observation_resume": {
     "report": "research/performance/13_recurrent_observation_resume/README.md",
@@ -106,7 +245,22 @@
     "checkpoints": "research/performance/13_recurrent_observation_resume/checkpoints",
     "results": "research/performance/13_recurrent_observation_resume/results",
     "research_track": "performance",
-    "experimenter": "김윤지"
+    "experimenter": "김윤지",
+    "improvement": "개선 없음",
+    "status": "평가 완료",
+    "limits": "QB seed42: B2 개선 없음. RR ΔPSNR -0.120dB·ΔSAM +0.009°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "13",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "B2": "개선 없음"
+      }
+    }
   },
   "14_auxiliary_losses": {
     "report": "research/performance/14_auxiliary_losses/README.md",
@@ -114,7 +268,22 @@
     "checkpoints": "research/performance/14_auxiliary_losses/checkpoints",
     "results": "research/performance/14_auxiliary_losses/results",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "부분 개선",
+    "status": "평가 완료",
+    "limits": "QB seed42: edge_0.1 부분 개선. RR ΔPSNR -0.066dB·ΔSAM -0.012°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "14",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "edge_0.1": "부분 개선"
+      }
+    }
   },
   "15_shared_reconstruction": {
     "report": "research/performance/15_shared_reconstruction/README.md",
@@ -122,7 +291,22 @@
     "checkpoints": "research/performance/15_shared_reconstruction/checkpoints",
     "results": "research/performance/15_shared_reconstruction/results",
     "research_track": "performance",
-    "experimenter": "김윤지"
+    "experimenter": "김윤지",
+    "improvement": "부분 개선",
+    "status": "평가 완료",
+    "limits": "QB seed42: B1 부분 개선. RR ΔPSNR +0.300dB·ΔSAM -0.108°. RR2·FR_OBS 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "15",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "B1": "부분 개선"
+      }
+    }
   },
   "16_bandlimited_downsampling": {
     "report": "research/performance/16_bandlimited_downsampling/README.md",
@@ -130,7 +314,22 @@
     "checkpoints": "research/performance/16_bandlimited_downsampling/checkpoints",
     "results": "research/performance/16_bandlimited_downsampling/results",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "개선 없음",
+    "status": "평가 완료",
+    "limits": "QB seed42: B1_AA 개선 없음. RR ΔPSNR -0.020dB·ΔSAM +0.002°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "16",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "B1_AA": "개선 없음"
+      }
+    }
   },
   "17_structural_ablation": {
     "report": "research/performance/17_structural_ablation/README.md",
@@ -138,7 +337,29 @@
     "checkpoints": "research/performance/17_structural_ablation/checkpoints",
     "results": "research/performance/17_structural_ablation/results",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "개선",
+    "status": "평가 완료",
+    "limits": "QB seed42: S1·S2 개선; S3·R1·M1·I1 부분 개선; R2·I2 개선 없음. 개선 후보는 RR·보조 판정을 모두 통과했습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "17",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "S1": "개선",
+        "S2": "개선",
+        "S3": "부분 개선",
+        "R1": "부분 개선",
+        "R2": "개선 없음",
+        "M1": "부분 개선",
+        "I1": "부분 개선",
+        "I2": "개선 없음"
+      }
+    }
   },
   "18_coarse_feature_fusion": {
     "report": "research/performance/18_coarse_feature_fusion/README.md",
@@ -146,7 +367,26 @@
     "checkpoints": "research/performance/18_coarse_feature_fusion/checkpoints",
     "results": "research/performance/18_coarse_feature_fusion/results",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "부분 개선",
+    "status": "평가 완료",
+    "limits": "QB seed42: N2·N3·N4·N5 부분 개선; N1 개선 없음. RR 주 판정·RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "18",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "N1": "개선 없음",
+        "N2": "부분 개선",
+        "N3": "부분 개선",
+        "N4": "부분 개선",
+        "N5": "부분 개선"
+      }
+    }
   },
   "19_dual_stream_reconstruction": {
     "report": "research/performance/19_dual_stream_reconstruction/README.md",
@@ -154,7 +394,26 @@
     "checkpoints": "research/performance/19_dual_stream_reconstruction/checkpoints",
     "results": "research/performance/19_dual_stream_reconstruction/results",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "부분 개선",
+    "status": "평가 완료",
+    "limits": "QB seed42: C1 부분 개선; C2·C3·C4·C5 개선 없음. RR 주 판정·RR2·FR_WALD 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "19",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "C1": "부분 개선",
+        "C2": "개선 없음",
+        "C3": "개선 없음",
+        "C4": "개선 없음",
+        "C5": "개선 없음"
+      }
+    }
   },
   "20_recurrent_guidance": {
     "report": "research/performance/20_recurrent_guidance/README.md",
@@ -162,16 +421,56 @@
     "checkpoints": "research/performance/20_recurrent_guidance/checkpoints",
     "results": "research/performance/20_recurrent_guidance/results",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "부분 개선",
+    "status": "평가 완료",
+    "limits": "QB seed42: D1·D2·D3·D4·D5·D6 부분 개선. RR 주 판정·RR2·FR_WALD 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "20",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "D1": "부분 개선",
+        "D2": "부분 개선",
+        "D3": "부분 개선",
+        "D4": "부분 개선",
+        "D5": "부분 개선",
+        "D6": "부분 개선"
+      }
+    }
   },
   "21_guidance_refinement": {
     "report": "research/performance/21_guidance_refinement/README.md",
     "entrypoint": "research/performance/21_guidance_refinement/run.py",
     "checkpoints": "research/performance/21_guidance_refinement/checkpoints",
     "results": "research/performance/21_guidance_refinement/results",
-    "status": "evaluation_complete",
+    "status": "평가 완료",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "개선",
+    "limits": "QB seed42: E6 개선; E1·E2·E3·E4·E5·E7 부분 개선. 개선 후보는 RR·보조 판정을 모두 통과했습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "21",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "E1": "부분 개선",
+        "E2": "부분 개선",
+        "E3": "부분 개선",
+        "E4": "부분 개선",
+        "E5": "부분 개선",
+        "E6": "개선",
+        "E7": "부분 개선"
+      }
+    }
   },
   "22_stage_aware_restoration": {
     "report": "research/performance/22_stage_aware_restoration/README.md",
@@ -180,13 +479,46 @@
     "results": "research/performance/22_stage_aware_restoration/results",
     "status": "평가 완료",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "부분 개선",
+    "limits": "QB seed42: F4 부분 개선; F1·F2·F3·F5 개선 없음. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "22",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "F1": "개선 없음",
+        "F2": "개선 없음",
+        "F3": "개선 없음",
+        "F4": "부분 개선",
+        "F5": "개선 없음"
+      }
+    }
   },
   "23_multi_sensor_comparison": {
     "report": "research/performance/23_multi_sensor_comparison/README.md",
     "status": "평가 완료",
     "research_track": "performance",
-    "experimenter": "이병현"
+    "experimenter": "이병현",
+    "improvement": "부분 개선",
+    "limits": "QB seed46: repeat·F0 부분 개선. RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "23",
+      "scope": "QB",
+      "seeds": [
+        46
+      ],
+      "candidate_labels": {
+        "repeat": "부분 개선",
+        "F0": "부분 개선"
+      }
+    }
   },
   "24_alpha_bounded_shared_reconstruction": {
     "report": "research/performance/24_alpha_bounded_shared_reconstruction/README.md",
@@ -195,10 +527,23 @@
     "checkpoints": "research/performance/24_alpha_bounded_shared_reconstruction/checkpoints",
     "results": "research/performance/24_alpha_bounded_shared_reconstruction/results",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선 없음",
     "experimenter": "김윤지",
     "rr_preservation_target_met": false,
-    "research_track": "performance"
+    "research_track": "performance",
+    "limits": "QB seed42: B1_alpha_bounded 개선 없음. RR ΔPSNR -0.085dB·ΔSAM +0.010°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "24",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "B1_alpha_bounded": "개선 없음"
+      }
+    }
   },
   "25_multiscale_supervision": {
     "report": "research/performance/25_multiscale_supervision/README.md",
@@ -207,10 +552,23 @@
     "checkpoints": "research/performance/25_multiscale_supervision/checkpoints",
     "results": "research/performance/25_multiscale_supervision/results",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선 없음",
     "experimenter": "김윤지",
     "final_RR_improved": false,
-    "research_track": "performance"
+    "research_track": "performance",
+    "limits": "QB seed42: B0_DS 개선 없음. RR ΔPSNR -0.043dB·ΔSAM +0.026°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "25",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "B0_DS": "개선 없음"
+      }
+    }
   },
   "26_ema_weight_averaging": {
     "report": "research/performance/26_ema_weight_averaging/README.md",
@@ -219,7 +577,7 @@
     "checkpoints": "research/performance/26_ema_weight_averaging/checkpoints",
     "results": "research/performance/26_ema_weight_averaging/results",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "experimenter": "송준현",
     "evaluated_seeds": [
       42
@@ -228,19 +586,41 @@
       43,
       44
     ],
-    "research_track": "performance"
+    "research_track": "performance",
+    "limits": "QB seed42: ema 개선. RR ΔPSNR +0.089dB·ΔSAM -0.024°. 개선 후보는 RR·보조 판정을 모두 통과했습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "26",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "ema": "개선"
+      }
+    }
   },
   "27_backbone_channel_attention": {
     "report": "research/performance/27_backbone_channel_attention/README.md",
     "checkpoints": "research/performance/27_backbone_channel_attention/checkpoints",
     "results": "research/performance/27_backbone_channel_attention/results",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "판단 보류",
     "experimenter": "김경찬",
     "evaluated_seeds": [
       42
     ],
-    "research_track": "performance"
+    "research_track": "performance",
+    "limits": "모델 소스가 보존되지 않아 47번 재평가에서 제외됐으며 v2.2 보조 판정이 없습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": null,
+      "scope": "보조 판정 부족",
+      "seeds": null,
+      "candidate_labels": {}
+    }
   },
   "28_residual_refinement": {
     "report": "research/performance/28_residual_refinement/README.md",
@@ -248,9 +628,24 @@
     "checkpoints": "research/performance/28_residual_refinement/checkpoints",
     "results": "research/performance/28_residual_refinement/results",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "experimenter": "이병현",
-    "research_track": "performance"
+    "research_track": "performance",
+    "limits": "QB seed46: G5 개선; G3·G4 부분 개선. 개선 후보는 RR·보조 판정을 모두 통과했습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "28",
+      "scope": "QB",
+      "seeds": [
+        46
+      ],
+      "candidate_labels": {
+        "G3": "부분 개선",
+        "G4": "부분 개선",
+        "G5": "개선"
+      }
+    }
   },
   "ssai/1_spatial_alignment": {
     "report": "experiments/ssai/1_spatial_alignment/README.md",
@@ -270,7 +665,20 @@
     ],
     "sensor": "QB",
     "selected_best_epoch": 98,
-    "limits": "A0·A1은 같은 시드·초기값·샘플 순서와 같은 micro batch 변경 시점을 유지했습니다. 같은 조건에서 RR PSNR·SAM·ERGAS·SCC·Q2n과 잠정 FR QNR·Dλ·Ds가 함께 개선했습니다. 단일 QB seed42 결과이며 반복 시드·센서 확장과 독립 holdout은 아직 없습니다. 이 판정은 현재 비교의 관측 개선이며 기준 모델의 최종 채택을 뜻하지 않습니다."
+    "original_limits": "A0·A1은 같은 시드·초기값·샘플 순서와 같은 micro batch 변경 시점을 유지했습니다. 같은 조건에서 RR PSNR·SAM·ERGAS·SCC·Q2n과 잠정 FR QNR·Dλ·Ds가 함께 개선했습니다. 단일 QB seed42 결과이며 반복 시드·센서 확장과 독립 holdout은 아직 없습니다. 이 판정은 현재 비교의 관측 개선이며 기준 모델의 최종 채택을 뜻하지 않습니다.",
+    "limits": "QB seed42: A1 개선. RR ΔPSNR +0.055dB·ΔSAM -0.035°. 개선 후보는 RR·보조 판정을 모두 통과했습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "ssai1",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "A1": "개선"
+      }
+    }
   },
   "ssai/2_reference_area_normalization": {
     "report": "experiments/ssai/2_reference_area_normalization/README.md",
@@ -290,7 +698,20 @@
     ],
     "sensor": "QB",
     "selected_best_epoch": 98,
-    "limits": "RR PSNR·SAM·ERGAS·SCC·Q2n과 잠정 QNR은 아주 작게 악화했습니다. FR Ds만 아주 작게 개선해 종합 향상은 확인하지 못했습니다. 64×64 patch validation의 출력·gradient는 원본과 같아 이 계수를 validation으로 우열 선택할 수 없습니다. 현재 test는 사전 고정 계수의 진단이며 test로 계수나 후보를 다시 고르지 않았습니다. 최종 채택에는 독립 전체 장면 validation이 필요합니다."
+    "original_limits": "RR PSNR·SAM·ERGAS·SCC·Q2n과 잠정 QNR은 아주 작게 악화했습니다. FR Ds만 아주 작게 개선해 종합 향상은 확인하지 못했습니다. 64×64 patch validation의 출력·gradient는 원본과 같아 이 계수를 validation으로 우열 선택할 수 없습니다. 현재 test는 사전 고정 계수의 진단이며 test로 계수나 후보를 다시 고르지 않았습니다. 최종 채택에는 독립 전체 장면 validation이 필요합니다.",
+    "limits": "QB seed42: R1 개선 없음. RR ΔPSNR -0.000dB·ΔSAM +0.001°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "ssai2",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "R1": "개선 없음"
+      }
+    }
   },
   "ssai/3_calibrated_sigmoid_gating": {
     "report": "experiments/ssai/3_calibrated_sigmoid_gating/README.md",
@@ -299,7 +720,7 @@
     "display_name": "3. 기준 크기 sigmoid 게이트",
     "experimenter": "이병현",
     "status": "평가 완료",
-    "improvement": "판단 보류",
+    "improvement": "부분 개선",
     "checkpoints": "experiments/ssai/3_calibrated_sigmoid_gating/checkpoints",
     "results": "experiments/ssai/3_calibrated_sigmoid_gating/results",
     "manifest": "experiments/ssai/3_calibrated_sigmoid_gating/manifest.json",
@@ -310,7 +731,20 @@
     ],
     "sensor": "QB",
     "selected_best_epoch": 98,
-    "limits": "RR·잠정 FR의 관측 지표는 나아졌지만 A0는 처음3에폭 micro4, A2는 처음부터 micro32입니다. 시드·초기값·샘플 순서·유효 배치가 같아도 FP32 합산 경로 차이가 포함되므로 SSAI만의 효과로 확정하지 않습니다. 처음부터 같은 micro batch 경로의 새 대조군과 반복 비교하기 전 판단을 보류합니다."
+    "original_limits": "RR·잠정 FR의 관측 지표는 나아졌지만 A0는 처음3에폭 micro4, A2는 처음부터 micro32입니다. 시드·초기값·샘플 순서·유효 배치가 같아도 FP32 합산 경로 차이가 포함되므로 SSAI만의 효과로 확정하지 않습니다. 처음부터 같은 micro batch 경로의 새 대조군과 반복 비교하기 전 판단을 보류합니다.",
+    "limits": "QB seed42: A2 부분 개선. RR ΔPSNR +0.023dB·ΔSAM -0.025°. RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "ssai3",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "A2": "부분 개선"
+      }
+    }
   },
   "ssai/4_aligned_sigmoid_gating": {
     "report": "experiments/ssai/4_aligned_sigmoid_gating/README.md",
@@ -319,11 +753,26 @@
     "display_name": "4. 공간 좌표 정렬과 sigmoid 게이트 결합",
     "experimenter": "이병현",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선 없음",
     "checkpoints": "experiments/ssai/4_aligned_sigmoid_gating/checkpoints",
     "results": "experiments/ssai/4_aligned_sigmoid_gating/results",
     "manifest": "experiments/ssai/4_aligned_sigmoid_gating/manifest.json",
-    "last_checked": "2026-10-14T20:48:10+09:00"
+    "last_checked": "2026-10-14T20:48:10+09:00",
+    "limits": "QB seed42: A1·A2·A3 개선 없음. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "ssai4",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "A1": "개선 없음",
+        "A2": "개선 없음",
+        "A3": "개선 없음"
+      }
+    }
   },
   "variable_scale/1_scale_conditioned_restoration": {
     "report": "experiments/variable_scale/1_scale_conditioned_restoration/README.md",
@@ -361,15 +810,29 @@
     "display_name": "5. softmax와 sigmoid 혼합 게이트",
     "experimenter": "이병현",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선 없음",
     "baseline_reference": "experiments/ssai/4_aligned_sigmoid_gating",
-    "limits": "M25 개선 없음·M50 FR 개선/RR 악화. 두 후보 모두 validation 후속 기준 미통과. 신규80개 예측, 실험4 A0·A2 기존80개 참조; 단일QB seed42·탐색test·MATLAB parity 미검증. 원본 유지.",
     "last_checked": "2026-10-15T00:39:29.253901+09:00",
     "evaluated_seeds": [
       42
     ],
     "sensor": "QB",
-    "selected_best_epoch": 98
+    "selected_best_epoch": 98,
+    "original_limits": "M25 개선 없음·M50 FR 개선/RR 악화. 두 후보 모두 validation 후속 기준 미통과. 신규80개 예측, 실험4 A0·A2 기존80개 참조; 단일QB seed42·탐색test·MATLAB parity 미검증. 원본 유지.",
+    "limits": "QB seed42: M25·M50 개선 없음. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "ssai5",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "M25": "개선 없음",
+        "M50": "개선 없음"
+      }
+    }
   },
   "variable_scale/2_scale_exposure_extension": {
     "report": "experiments/variable_scale/2_scale_exposure_extension/README.md",
@@ -425,7 +888,7 @@
     "display_name": "29. 병렬 특징 용량 확장과 독립 잔차 보정",
     "experimenter": "이병현",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "checkpoints": "experiments/performance/29_capacity_refinement/checkpoints",
     "results": "experiments/performance/29_capacity_refinement/results",
     "manifest": "experiments/performance/29_capacity_refinement/manifest.json",
@@ -436,7 +899,23 @@
       42
     ],
     "sensor": "QB",
-    "limits": "150에폭 AMP 동일 조건 R0 대비 W2 RR PSNR +0.7234 dB, SAM -0.3542도; 잠정 QNR -0.0922로 FR 악화. 단일 시드·센서이며 기준 모델 승격 없음."
+    "original_limits": "150에폭 AMP 동일 조건 R0 대비 W2 RR PSNR +0.7234 dB, SAM -0.3542도; 잠정 QNR -0.0922로 FR 악화. 단일 시드·센서이며 기준 모델 승격 없음.",
+    "limits": "QB seed42: F01·F11 개선; W2·W3 부분 개선. 개선 후보는 RR·보조 판정을 모두 통과했습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "29",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "W2": "부분 개선",
+        "W3": "부분 개선",
+        "F01": "개선",
+        "F11": "개선"
+      }
+    }
   },
   "ssai/6_ms_conditioned_detail": {
     "report": "experiments/ssai/6_ms_conditioned_detail/README.md",
@@ -459,7 +938,20 @@
     "sensor": "QB",
     "selected_best_epoch": 98,
     "last_checked": "2026-10-15T05:37:11.618083+09:00",
-    "limits": "PSNR -0.001706dB·SAM +0.003811°·잠정QNR -0.004606; 단일QBseed42·기존탐색test·MATLABparity미검증. 캐시동등성짧은경로검증. 원본유지."
+    "original_limits": "PSNR -0.001706dB·SAM +0.003811°·잠정QNR -0.004606; 단일QBseed42·기존탐색test·MATLABparity미검증. 캐시동등성짧은경로검증. 원본유지.",
+    "limits": "QB seed42: D6 개선 없음. RR ΔPSNR -0.002dB·ΔSAM +0.004°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "ssai6",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "D6": "개선 없음"
+      }
+    }
   },
   "ssai/7_channel_relation_detail": {
     "report": "experiments/ssai/7_channel_relation_detail/README.md",
@@ -482,7 +974,20 @@
     "sensor": "QB",
     "selected_best_epoch": 98,
     "last_checked": "2026-10-15T05:37:11.618083+09:00",
-    "limits": "PSNR -0.006145dB·SAM +0.015805°·잠정QNR -0.002991; 단일QBseed42·기존탐색test·MATLABparity미검증. 캐시동등성짧은경로검증. 원본유지."
+    "original_limits": "PSNR -0.006145dB·SAM +0.015805°·잠정QNR -0.002991; 단일QBseed42·기존탐색test·MATLABparity미검증. 캐시동등성짧은경로검증. 원본유지.",
+    "limits": "QB seed42: D7 개선 없음. RR ΔPSNR -0.006dB·ΔSAM +0.016°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "ssai7",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "D7": "개선 없음"
+      }
+    }
   },
   "ssai/8_spatial_mean_normalization": {
     "research_track": "ssai",
@@ -493,7 +998,6 @@
     "manifest": "experiments/ssai/8_spatial_mean_normalization/manifest.json",
     "status": "평가 완료",
     "improvement": "부분 개선",
-    "limits": "두후보 학습가능화성공; N1개선없음,N2부분개선. 원본A0유지. 단일QB seed42,드라이버변경,잠정지표MATLAB parity미검증.",
     "model": "experiments/ssai/8_spatial_mean_normalization/model.py",
     "config": "experiments/ssai/8_spatial_mean_normalization/config.json",
     "entrypoint": "experiments/ssai/8_spatial_mean_normalization/run.py",
@@ -503,6 +1007,21 @@
     "learning_success": {
       "N1": true,
       "N2": true
+    },
+    "original_limits": "두후보 학습가능화성공; N1개선없음,N2부분개선. 원본A0유지. 단일QB seed42,드라이버변경,잠정지표MATLAB parity미검증.",
+    "limits": "QB seed42: N2 부분 개선; N1 개선 없음. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "ssai8",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "N1": "개선 없음",
+        "N2": "부분 개선"
+      }
     }
   },
   "performance/30_focal_frequency_loss": {
@@ -529,7 +1048,20 @@
     "sensor": "QB",
     "selected_lambda": 0.013491834,
     "last_checked": "2026-10-15T08:45:40.836855+09:00",
-    "limits": "seed42: PSNR -0.0553 dB, SAM -0.0073°, 잠정 QNR -0.0022. 세 FFL λ 모두 baseline validation MSE보다 나쁨. 단일 시드·MATLAB parity 미검증, 원본 유지."
+    "original_limits": "seed42: PSNR -0.0553 dB, SAM -0.0073°, 잠정 QNR -0.0022. 세 FFL λ 모두 baseline validation MSE보다 나쁨. 단일 시드·MATLAB parity 미검증, 원본 유지.",
+    "limits": "QB seed42: final_ffl 부분 개선. RR ΔPSNR -0.055dB·ΔSAM -0.007°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "30",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "final_ffl": "부분 개선"
+      }
+    }
   },
   "ssai/9_pan_innovation_correction": {
     "report": "experiments/ssai/9_pan_innovation_correction/README.md",
@@ -554,7 +1086,21 @@
     "checkpoints": "experiments/ssai/9_pan_innovation_correction/checkpoints",
     "results": "experiments/ssai/9_pan_innovation_correction/results",
     "actual_predictions": 120,
-    "limits": "단일QB seed42·exploratory test·QNR/Q2n/SCC MATLAB parity 미검증·원본A0 유지"
+    "original_limits": "단일QB seed42·exploratory test·QNR/Q2n/SCC MATLAB parity 미검증·원본A0 유지",
+    "limits": "QB seed42: A1·A2 개선 없음. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "ssai9",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "A1": "개선 없음",
+        "A2": "개선 없음"
+      }
+    }
   },
   "performance/31_low_frequency_preserving_residual": {
     "report": "experiments/performance/31_low_frequency_preserving_residual/README.md",
@@ -563,7 +1109,7 @@
     "display_name": "31. 보정 잔차의 저주파 억제",
     "experimenter": "김경찬",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "판단 보류",
     "checkpoints": "experiments/performance/31_low_frequency_preserving_residual/checkpoints",
     "results": "experiments/performance/31_low_frequency_preserving_residual/results",
     "manifest": "experiments/performance/31_low_frequency_preserving_residual/manifest.json",
@@ -577,7 +1123,16 @@
       "P0": 19,
       "P1": 20
     },
-    "limits": "같은G5 부모에서20에포크 미세조정. P1 RR PSNR -0.942564dB·SAM +0.536880도, 잠정QNR +0.016711; RR 유지 실패·채택 보류. 단일QB seed46·탐색test·MATLAB parity 미검증."
+    "original_limits": "같은G5 부모에서20에포크 미세조정. P1 RR PSNR -0.942564dB·SAM +0.536880도, 잠정QNR +0.016711; RR 유지 실패·채택 보류. 단일QB seed46·탐색test·MATLAB parity 미검증.",
+    "limits": "짧은 탐색 실험으로 47번 재평가에서 제외됐으며 v2.2 보조 판정이 없습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": null,
+      "scope": "보조 판정 부족",
+      "seeds": null,
+      "candidate_labels": {}
+    }
   },
   "ssai/10_local_window_cross_attention": {
     "report": "experiments/ssai/10_local_window_cross_attention/README.md",
@@ -625,7 +1180,16 @@
     ],
     "sensor": "QB",
     "last_checked": "2026-10-16T02:32:31+09:00",
-    "limits": "A0 best에서 10에폭 이어 학습한 validation 선별·test 미평가·단일QB seed42"
+    "original_limits": "A0 best에서 10에폭 이어 학습한 validation 선별·test 미평가·단일QB seed42",
+    "limits": "10에폭 validation 탐색이며 RR·FR 전체 test와 v2.2 보조 판정이 없습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": null,
+      "scope": "보조 판정 부족",
+      "seeds": null,
+      "candidate_labels": {}
+    }
   },
   "ssai/11_ssai_contribution_headroom": {
     "report": "experiments/ssai/11_ssai_contribution_headroom/README.md",
@@ -654,7 +1218,7 @@
     "display_name": "33. MS 기준 가역 밝기·대비 정규화",
     "experimenter": "김경찬",
     "status": "평가 완료",
-    "improvement": "개선",
+    "improvement": "부분 개선",
     "checkpoints": "experiments/performance/33_ms_anchored_reversible_normalization/checkpoints",
     "results": "experiments/performance/33_ms_anchored_reversible_normalization/results",
     "manifest": "experiments/performance/33_ms_anchored_reversible_normalization/manifest.json",
@@ -673,7 +1237,22 @@
       "N0": 100,
       "N1": 98
     },
-    "limits": "단일QB seed42에서 RR 5지표·잠정FR 3지표가 각각20/20장 개선했습니다. PSNR +0.211059dB·SAM -0.124165도·QNR +0.017462. 반복시드·추가센서·독립holdout·MATLAB parity 미검증; 기준모델 채택 보류."
+    "original_limits": "단일QB seed42에서 RR 5지표·잠정FR 3지표가 각각20/20장 개선했습니다. PSNR +0.211059dB·SAM -0.124165도·QNR +0.017462. 반복시드·추가센서·독립holdout·MATLAB parity 미검증; 기준모델 채택 보류.",
+    "limits": "QB 3시드 평균: N1 부분 개선. RR ΔPSNR +0.180dB·ΔSAM -0.074°. RR2 미달입니다. 33·38번을 합친 반복 시드 결과입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "33_38",
+      "scope": "QB",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "candidate_labels": {
+        "N1": "부분 개선"
+      }
+    }
   },
   "performance/34_paper_equation_reproduction": {
     "report": "experiments/performance/34_paper_equation_reproduction/README.md",
@@ -682,7 +1261,7 @@
     "display_name": "34. 논문 채널 상관 어텐션과 다중 해상도 복원 재현",
     "experimenter": "이병현",
     "status": "평가 완료",
-    "improvement": "개선 없음",
+    "improvement": "판단 보류",
     "config": "experiments/performance/34_paper_equation_reproduction/config.json",
     "entrypoint": "experiments/performance/34_paper_equation_reproduction/run.py",
     "checkpoints": "experiments/performance/34_paper_equation_reproduction/checkpoints",
@@ -693,7 +1272,16 @@
       42
     ],
     "best_epoch": 97,
-    "limits": "본문 수식 해석 기반·저자 실행 정합 미검증; K6·bicubic 등 복수 변경·과거 A0 통제비교 아님·잠정 지표"
+    "original_limits": "본문 수식 해석 기반·저자 실행 정합 미검증; K6·bicubic 등 복수 변경·과거 A0 통제비교 아님·잠정 지표",
+    "limits": "다른 구조·학습 조건이 함께 바뀌었고 같은 조건 대조군이 없어 47번 재평가에서 제외됐습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": null,
+      "scope": "보조 판정 부족",
+      "seeds": null,
+      "candidate_labels": {}
+    }
   },
   "ssai/12_observation_matched_pan_guide": {
     "report": "experiments/ssai/12_observation_matched_pan_guide/README.md",
@@ -702,7 +1290,7 @@
     "display_name": "12. 관측 통계로 정합한 밴드별 PAN 입력",
     "experimenter": "이병현",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "config": "experiments/ssai/12_observation_matched_pan_guide/config.json",
     "model": "experiments/ssai/12_observation_matched_pan_guide/model.py",
     "entrypoint": "experiments/ssai/12_observation_matched_pan_guide/run.py",
@@ -717,7 +1305,6 @@
       "A0": "experiments/ssai/4_aligned_sigmoid_gating",
       "B1": "experiments/ssai/8_spatial_mean_normalization (N1)"
     },
-    "limits": "단일 QB seed42. B2는 A0 대비 RR 악화·잠정 QNR +0.0012, Ds 악화로 가설 기각. B3 진단 전용. 대조군 A0·N1 재사용·재평가 일치, exploratory test, QNR/Q2n/SCC MATLAB parity 미검증.",
     "results": "experiments/ssai/12_observation_matched_pan_guide/results",
     "checkpoints": "experiments/ssai/12_observation_matched_pan_guide/checkpoints",
     "evaluated_seeds": [
@@ -727,7 +1314,22 @@
       "B2": 98,
       "B3": 98
     },
-    "hypothesis": "rejected: B2 D_s +0.003846 vs N1 (criterion <= -0.003)"
+    "hypothesis": "rejected: B2 D_s +0.003846 vs N1 (criterion <= -0.003)",
+    "original_limits": "단일 QB seed42. B2는 A0 대비 RR 악화·잠정 QNR +0.0012, Ds 악화로 가설 기각. B3 진단 전용. 대조군 A0·N1 재사용·재평가 일치, exploratory test, QNR/Q2n/SCC MATLAB parity 미검증.",
+    "limits": "QB seed42: B3 개선; B2 개선 없음. 개선 후보는 RR·보조 판정을 모두 통과했습니다. B3는 진단 후보이며 최종 채택을 뜻하지 않습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "ssai12",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "B2": "개선 없음",
+        "B3": "개선"
+      }
+    }
   },
   "performance/35_cross_scale_consistency": {
     "report": "experiments/performance/35_cross_scale_consistency/README.md",
@@ -770,7 +1372,7 @@
     "display_name": "37. 병렬 추가 가지의 위치별 게이트",
     "experimenter": "송준현",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "판단 보류",
     "evaluated_seeds": [
       42
     ],
@@ -780,14 +1382,23 @@
     ],
     "sensor": "QB",
     "last_checked": "2026-10-15T23:17:22+09:00",
-    "limits": "RR PSNR +0.02817dB·SAM -0.01138°, 잠정 FR QNR -0.04456; QNR·Ds 20/20장 악화. 단일 시드, 채택 보류. MATLAB/센서 MTF 대응 미검증.",
     "checkpoints": "experiments/performance/37_spatial_gate_on_parallel_branch/checkpoints",
     "results": "experiments/performance/37_spatial_gate_on_parallel_branch/results",
     "manifest": "experiments/performance/37_spatial_gate_on_parallel_branch/manifest.json",
     "model": "experiments/performance/37_spatial_gate_on_parallel_branch/model.py",
     "config": "experiments/performance/37_spatial_gate_on_parallel_branch/config.json",
     "entrypoint": "experiments/performance/37_spatial_gate_on_parallel_branch/run.py",
-    "verification": "experiments/performance/37_spatial_gate_on_parallel_branch/prepare.py"
+    "verification": "experiments/performance/37_spatial_gate_on_parallel_branch/prepare.py",
+    "original_limits": "RR PSNR +0.02817dB·SAM -0.01138°, 잠정 FR QNR -0.04456; QNR·Ds 20/20장 악화. 단일 시드, 채택 보류. MATLAB/센서 MTF 대응 미검증.",
+    "limits": "독립 실행 가능한 모델 모듈이 없어 47번 재평가에서 제외됐으며 v2.2 보조 판정이 없습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": null,
+      "scope": "보조 판정 부족",
+      "seeds": null,
+      "candidate_labels": {}
+    }
   },
   "performance/38_ms_anchored_normalization_seed_repeat": {
     "report": "experiments/performance/38_ms_anchored_normalization_seed_repeat/README.md",
@@ -813,7 +1424,22 @@
     ],
     "sensor": "QB",
     "reference_experiment": 33,
-    "limits": "세 시드 RR 평균5지표 개선; seed44 잠정 FR QNR·Ds 악화. 부분 개선·최종 채택 보류. H5 재평가·반복 가중치 strict load·MATLAB 수치 대응 미검증."
+    "original_limits": "세 시드 RR 평균5지표 개선; seed44 잠정 FR QNR·Ds 악화. 부분 개선·최종 채택 보류. H5 재평가·반복 가중치 strict load·MATLAB 수치 대응 미검증.",
+    "limits": "QB 3시드 평균: N1 부분 개선. RR ΔPSNR +0.180dB·ΔSAM -0.074°. RR2 미달입니다. 33·38번을 합친 반복 시드 결과입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "33_38",
+      "scope": "QB",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "candidate_labels": {
+        "N1": "부분 개선"
+      }
+    }
   },
   "performance/39_local_ms_anchored_reversible_normalization": {
     "report": "experiments/performance/39_local_ms_anchored_reversible_normalization/README.md",
@@ -822,7 +1448,7 @@
     "display_name": "39. 국소 MS 통계 기반 가역 정규화",
     "experimenter": "송준현",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선 없음",
     "evaluated_seeds": [
       42,
       43,
@@ -830,14 +1456,29 @@
     ],
     "sensor": "QB",
     "last_checked": "2026-10-17T01:39:18.796220+09:00",
-    "limits": "3seed 평균 PSNR -0.13345dB·SAM +0.06825°·잠정 QNR -0.00370. seed44 일부FR 이득, 전체 평균 악화·채택 보류. MATLAB/센서 MTF 대응 미검증.",
     "checkpoints": "experiments/performance/39_local_ms_anchored_reversible_normalization/checkpoints",
     "results": "experiments/performance/39_local_ms_anchored_reversible_normalization/results",
     "manifest": "experiments/performance/39_local_ms_anchored_reversible_normalization/manifest.json",
     "model": "experiments/performance/39_local_ms_anchored_reversible_normalization/model.py",
     "config": "experiments/performance/39_local_ms_anchored_reversible_normalization/config.json",
     "entrypoint": "experiments/performance/39_local_ms_anchored_reversible_normalization/run.py",
-    "verification": "experiments/performance/39_local_ms_anchored_reversible_normalization/prepare.py"
+    "verification": "experiments/performance/39_local_ms_anchored_reversible_normalization/prepare.py",
+    "original_limits": "3seed 평균 PSNR -0.13345dB·SAM +0.06825°·잠정 QNR -0.00370. seed44 일부FR 이득, 전체 평균 악화·채택 보류. MATLAB/센서 MTF 대응 미검증.",
+    "limits": "QB 3시드 평균: local 개선 없음. RR ΔPSNR -0.133dB·ΔSAM +0.068°. RR 주 판정 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "39",
+      "scope": "QB",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "candidate_labels": {
+        "local": "개선 없음"
+      }
+    }
   },
   "performance/40_ms_center_scale_ablation": {
     "report": "experiments/performance/40_ms_center_scale_ablation/README.md",
@@ -845,8 +1486,8 @@
     "experiment": 40,
     "display_name": "40. MS 기준 평균 제거와 대비 정규화의 기여 분리",
     "experimenter": "김경찬",
-    "status": "학습 완료·평가 대기",
-    "improvement": "판단 보류",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
     "sensor": "QB",
     "trained_seeds": [
       42
@@ -859,7 +1500,22 @@
     "config": "experiments/performance/40_ms_center_scale_ablation/config.json",
     "entrypoint": "experiments/performance/40_ms_center_scale_ablation/run.py",
     "verification": "experiments/performance/40_ms_center_scale_ablation/prepare.py",
-    "limits": "seed42 validation만 확인. A1·A2의A3 대비MSE +1.220%·+1.810%로 사전 반복 기준 미달. RR·FR 미평가, 최종 개선 판단 보류."
+    "original_limits": "seed42 validation만 확인. A1·A2의A3 대비MSE +1.220%·+1.810%로 사전 반복 기준 미달. RR·FR 미평가, 최종 개선 판단 보류.",
+    "limits": "QB seed42: A1·A2·A3 부분 개선. RR 주 판정·RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "40",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "A1": "부분 개선",
+        "A2": "부분 개선",
+        "A3": "부분 개선"
+      }
+    }
   },
   "performance/41_joint_photometric_augmentation": {
     "report": "experiments/performance/41_joint_photometric_augmentation/README.md",
@@ -876,14 +1532,29 @@
     ],
     "sensor": "QB",
     "last_checked": "2026-10-18T15:31:44.839621+09:00",
-    "limits": "3seed 평균 PSNR +0.02416dB·SAM -0.00144°·잠정 QNR -0.00422. validation2/3seed 악화, seed별 RR/FR 상충·채택 보류. MATLAB/센서 MTF 대응 미검증.",
     "checkpoints": "experiments/performance/41_joint_photometric_augmentation/checkpoints",
     "results": "experiments/performance/41_joint_photometric_augmentation/results",
     "manifest": "experiments/performance/41_joint_photometric_augmentation/manifest.json",
     "model": "experiments/performance/41_joint_photometric_augmentation/model.py",
     "config": "experiments/performance/41_joint_photometric_augmentation/config.json",
     "entrypoint": "experiments/performance/41_joint_photometric_augmentation/run.py",
-    "verification": "experiments/performance/41_joint_photometric_augmentation/prepare.py"
+    "verification": "experiments/performance/41_joint_photometric_augmentation/prepare.py",
+    "original_limits": "3seed 평균 PSNR +0.02416dB·SAM -0.00144°·잠정 QNR -0.00422. validation2/3seed 악화, seed별 RR/FR 상충·채택 보류. MATLAB/센서 MTF 대응 미검증.",
+    "limits": "QB 3시드 평균: aug 부분 개선. RR ΔPSNR +0.024dB·ΔSAM -0.001°. RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "41",
+      "scope": "QB",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "candidate_labels": {
+        "aug": "부분 개선"
+      }
+    }
   },
   "performance/42_dilated_backbone_context": {
     "report": "experiments/performance/42_dilated_backbone_context/README.md",
@@ -900,14 +1571,29 @@
     ],
     "sensor": "QB",
     "last_checked": "2026-10-18T22:01:16.506561+09:00",
-    "limits": "3seed 평균 RR PSNR +0.12171dB·SAM -0.02500°·ERGAS -0.06130. 잠정 FR QNR +0.00360·Ds +0.00121, seed별 상충. 공식 MATLAB/센서 대응 미검증.",
     "checkpoints": "experiments/performance/42_dilated_backbone_context/checkpoints",
     "results": "experiments/performance/42_dilated_backbone_context/results",
     "manifest": "experiments/performance/42_dilated_backbone_context/manifest.json",
     "model": "experiments/performance/42_dilated_backbone_context/model.py",
     "config": "experiments/performance/42_dilated_backbone_context/config.json",
     "entrypoint": "experiments/performance/42_dilated_backbone_context/run.py",
-    "verification": "experiments/performance/42_dilated_backbone_context/prepare.py"
+    "verification": "experiments/performance/42_dilated_backbone_context/prepare.py",
+    "original_limits": "3seed 평균 RR PSNR +0.12171dB·SAM -0.02500°·ERGAS -0.06130. 잠정 FR QNR +0.00360·Ds +0.00121, seed별 상충. 공식 MATLAB/센서 대응 미검증.",
+    "limits": "QB 3시드 평균: dilated 부분 개선. RR ΔPSNR +0.122dB·ΔSAM -0.025°. RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "42",
+      "scope": "QB",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "candidate_labels": {
+        "dilated": "부분 개선"
+      }
+    }
   },
   "performance/43_normalized_parallel_capacity": {
     "report": "experiments/performance/43_normalized_parallel_capacity/README.md",
@@ -935,7 +1621,24 @@
     "config": "experiments/performance/43_normalized_parallel_capacity/config.json",
     "entrypoint": "experiments/performance/43_normalized_parallel_capacity/run.py",
     "verification": "experiments/performance/43_normalized_parallel_capacity/prepare.py",
-    "limits": "QNR 등 MATLAB 수치 대응 미검증; 기존 QB 탐색 benchmark; AMP skip으로 실제 업데이트 수 차이; 원본 기준 유지"
+    "original_limits": "QNR 등 MATLAB 수치 대응 미검증; 기존 QB 탐색 benchmark; AMP skip으로 실제 업데이트 수 차이; 원본 기준 유지",
+    "limits": "QB 3시드 평균: C1·C2·C3 부분 개선. RR2 미달입니다. C3는 FR_WALD PSNR +1.509dB·관측 RMSE 0.584배로 통과했고 RR2에서 미달했습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "43",
+      "scope": "QB",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "candidate_labels": {
+        "C1": "부분 개선",
+        "C2": "부분 개선",
+        "C3": "부분 개선"
+      }
+    }
   },
   "performance/44_phase_preserving_frequency_guidance": {
     "report": "experiments/performance/44_phase_preserving_frequency_guidance/README.md",
@@ -944,7 +1647,7 @@
     "display_name": "44. 위상 보존 주파수 대역 안내",
     "experimenter": "이병현",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "sensor": "QB",
     "trained_seeds": [
       42
@@ -959,7 +1662,22 @@
     "config": "experiments/performance/44_phase_preserving_frequency_guidance/config.json",
     "entrypoint": "experiments/performance/44_phase_preserving_frequency_guidance/run.py",
     "verification": "experiments/performance/44_phase_preserving_frequency_guidance/prepare.py",
-    "limits": "QB seed42·기존 탐색 benchmark·독립 holdout 부재; MATLAB parity 미검증; F2 RR 소폭 개선·FR 악화 및 동일 용량 우위 미확인; 채택 보류"
+    "original_limits": "QB seed42·기존 탐색 benchmark·독립 holdout 부재; MATLAB parity 미검증; F2 RR 소폭 개선·FR 악화 및 동일 용량 우위 미확인; 채택 보류",
+    "limits": "QB seed42: F2 개선; C0·F1 부분 개선. 개선 후보는 RR·보조 판정을 모두 통과했습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json",
+      "group": "44",
+      "scope": "QB",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "C0": "부분 개선",
+        "F1": "부분 개선",
+        "F2": "개선"
+      }
+    }
   },
   "performance/45_exact_observation_projection": {
     "report": "experiments/performance/45_exact_observation_projection/README.md",
