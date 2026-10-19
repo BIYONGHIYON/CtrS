@@ -1,0 +1,23 @@
+{
+  "gate": {
+    "rule": {
+      "main_C2": "3-seed mean of (C2+P5 - C2): D_s <= -0.03 AND PSNR >= -0.15 dB -> pass (supports a capacity + exact observation layer design)",
+      "large_candidate": "3-seed mean C2+P5 vs C0 base: PSNR >= +0.3 dB AND provisional QNR >= -0.005 -> flag as large-improvement candidate",
+      "context": "C0, C1, C3 with P5 and P0, and C2 with P0, are reported without separate gates"
+    },
+    "C2_P5_minus_C2": {
+      "D_s": 0.03607419915010113,
+      "PSNR": 0.03854755389971842
+    },
+    "main_pass": false,
+    "C2_P5_minus_C0": {
+      "PSNR": 0.7409469640695647,
+      "QNR": -0.10656095578428926
+    },
+    "large_candidate": false
+  },
+  "training_started": false,
+  "optimizer_updates": 0,
+  "time": 1792429983.393393,
+  "limit": null
+}
