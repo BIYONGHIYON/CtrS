@@ -1,0 +1,223 @@
+{
+  "experiment": 44,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "위상 보존 주파수 대역 안내",
+  "arms": {
+    "B0": "original",
+    "C0": "two raw PAN branches",
+    "F1": "two high-band branches",
+    "F2": "mid/high branches"
+  },
+  "seeds": [
+    42
+  ],
+  "epochs": 100,
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 0.0001,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "std_floor": 0.01,
+  "precision": "FP32 throughout; TF32 disabled",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cpu_threads": 1,
+  "selection": "minimum full validation MSE including epoch0, earliest exact tie",
+  "loss": "final-output MSE in original DN/2047 coordinates",
+  "max_parallel": 2,
+  "evaluate_after_all_training": true,
+  "scenes": [
+    1,
+    8,
+    11,
+    13,
+    19
+  ],
+  "scene_index_base": 0,
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset/QuickBird",
+  "runtime": "C:/CtrS-frequency44",
+  "data": {
+    "train": "Training Dataset/train_qb.h5",
+    "val": "Training Dataset/valid_qb.h5",
+    "RR": "Testing Dataset (ReducedData, H5 Format)/test_qb_multiExm1.h5",
+    "FR": "Testing Dataset (FullData, H5 Format)/test_qb_OrigScale_multiExm1.h5"
+  },
+  "data_sha256": {
+    "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+    "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+    "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+    "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+  },
+  "queue": [
+    [
+      "B0",
+      42
+    ],
+    [
+      "F2",
+      42
+    ],
+    [
+      "C0",
+      42
+    ],
+    [
+      "F1",
+      42
+    ]
+  ],
+  "limits": [
+    "QNR/Q2n/SCC MATLAB parity unverified",
+    "QB benchmark already explored; no independent holdout",
+    "original baseline is not promoted or replaced",
+    "no test-based selection of checkpoint, seed or training conditions"
+  ],
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "cutoffs": [
+    0.1,
+    0.25
+  ],
+  "fft_padding": 16,
+  "layout": "contiguous",
+  "cache_manifest_sha256": "66debe89dd95de8d37d1b3cfc89759f17bfcb18f5e771b663c62e214776a7411",
+  "source_hashes": {
+    "model.py": "ecbd36e56a7e35c365931a628c5448201ab5484e7e0d7979e449eecab17a7e76",
+    "train.py": "66c7734eef28c25884e3b88bf1f2fd78e1cb7ba5af6c749a026b8c89133957a1",
+    "run.py": "26a78b5a5f1b56f97808e3aec7aa755d35964795b5c7295b0e7e2bbe3fa2c697",
+    "config.json": "cf76257bb262682c4ab197043e26004af9c60bedf10498e683f447065b36cfe5",
+    "provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a"
+  },
+  "base_main": "45438974effaec2095255f87600b5c5879ed6b7f",
+  "created_kst": "2026-10-19T20:19:27.523437+09:00",
+  "optimization": {
+    "selected": "contiguous_t1",
+    "results": {
+      "contiguous_t1": {
+        "layout": "contiguous",
+        "threads": 1,
+        "returncodes": [
+          0,
+          0
+        ],
+        "wall_seconds": 15.062999999999988,
+        "rows": [
+          {
+            "arm": "F1",
+            "layout": "contiguous",
+            "median_step_seconds": 0.15361555000001204,
+            "measured_steps": 40,
+            "warmup": 10,
+            "peak_allocated_bytes": 502998016,
+            "peak_reserved_bytes": 788529152,
+            "loss": 0.0021879798732697964,
+            "probe_updates": 50,
+            "time_kst": "2026-10-19T20:19:56.518450+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          },
+          {
+            "arm": "F2",
+            "layout": "contiguous",
+            "median_step_seconds": 0.15361325000000647,
+            "measured_steps": 40,
+            "warmup": 10,
+            "peak_allocated_bytes": 502998016,
+            "peak_reserved_bytes": 788529152,
+            "loss": 0.002187981503084302,
+            "probe_updates": 50,
+            "time_kst": "2026-10-19T20:19:56.518450+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          }
+        ],
+        "safe": true,
+        "score": 0.15361555000001204
+      },
+      "channels_last_t1": {
+        "layout": "channels_last",
+        "threads": 1,
+        "returncodes": [
+          0,
+          0
+        ],
+        "wall_seconds": 25.32800000000003,
+        "rows": [
+          {
+            "arm": "F1",
+            "layout": "channels_last",
+            "median_step_seconds": 0.18762945000000286,
+            "measured_steps": 40,
+            "warmup": 10,
+            "peak_allocated_bytes": 570779136,
+            "peak_reserved_bytes": 845152256,
+            "loss": 0.002187979407608509,
+            "probe_updates": 50,
+            "time_kst": "2026-10-19T20:20:21.833375+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          },
+          {
+            "arm": "F2",
+            "layout": "channels_last",
+            "median_step_seconds": 0.18906020000000012,
+            "measured_steps": 40,
+            "warmup": 10,
+            "peak_allocated_bytes": 567542784,
+            "peak_reserved_bytes": 694157312,
+            "loss": 0.002187978709116578,
+            "probe_updates": 50,
+            "time_kst": "2026-10-19T20:20:21.880994+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          }
+        ],
+        "safe": true,
+        "score": 0.18906020000000012
+      },
+      "channels_last_t2": {
+        "layout": "channels_last",
+        "threads": 2,
+        "returncodes": [
+          0,
+          0
+        ],
+        "wall_seconds": 24.82800000000003,
+        "rows": [
+          {
+            "arm": "F1",
+            "layout": "channels_last",
+            "median_step_seconds": 0.18354274999995823,
+            "measured_steps": 40,
+            "warmup": 10,
+            "peak_allocated_bytes": 570779136,
+            "peak_reserved_bytes": 845152256,
+            "loss": 0.0021879831328988075,
+            "probe_updates": 50,
+            "time_kst": "2026-10-19T20:20:46.729103+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          },
+          {
+            "arm": "F2",
+            "layout": "channels_last",
+            "median_step_seconds": 0.1834261000000197,
+            "measured_steps": 40,
+            "warmup": 10,
+            "peak_allocated_bytes": 570779136,
+            "peak_reserved_bytes": 845152256,
+            "loss": 0.0021879803389310837,
+            "probe_updates": 50,
+            "time_kst": "2026-10-19T20:20:46.699543+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          }
+        ],
+        "safe": true,
+        "score": 0.18354274999995823
+      }
+    },
+    "note": "two concurrent frequency arms, fixed FP32 batch32; throughput only"
+  },
+  "fingerprint": "1a25c22772ca53afec3ad908f605c443ed4a8e70ca30cfb68ce569b118d772ef"
+}
