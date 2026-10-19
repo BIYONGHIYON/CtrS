@@ -1,0 +1,124 @@
+{
+  "time_kst": "2026-10-19T20:20:54.060413+09:00",
+  "selected": "contiguous_t1",
+  "results": {
+    "contiguous_t1": {
+      "layout": "contiguous",
+      "threads": 1,
+      "returncodes": [
+        0,
+        0
+      ],
+      "wall_seconds": 15.062999999999988,
+      "rows": [
+        {
+          "arm": "F1",
+          "layout": "contiguous",
+          "median_step_seconds": 0.15361555000001204,
+          "measured_steps": 40,
+          "warmup": 10,
+          "peak_allocated_bytes": 502998016,
+          "peak_reserved_bytes": 788529152,
+          "loss": 0.0021879798732697964,
+          "probe_updates": 50,
+          "time_kst": "2026-10-19T20:19:56.518450+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        },
+        {
+          "arm": "F2",
+          "layout": "contiguous",
+          "median_step_seconds": 0.15361325000000647,
+          "measured_steps": 40,
+          "warmup": 10,
+          "peak_allocated_bytes": 502998016,
+          "peak_reserved_bytes": 788529152,
+          "loss": 0.002187981503084302,
+          "probe_updates": 50,
+          "time_kst": "2026-10-19T20:19:56.518450+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        }
+      ],
+      "safe": true,
+      "score": 0.15361555000001204
+    },
+    "channels_last_t1": {
+      "layout": "channels_last",
+      "threads": 1,
+      "returncodes": [
+        0,
+        0
+      ],
+      "wall_seconds": 25.32800000000003,
+      "rows": [
+        {
+          "arm": "F1",
+          "layout": "channels_last",
+          "median_step_seconds": 0.18762945000000286,
+          "measured_steps": 40,
+          "warmup": 10,
+          "peak_allocated_bytes": 570779136,
+          "peak_reserved_bytes": 845152256,
+          "loss": 0.002187979407608509,
+          "probe_updates": 50,
+          "time_kst": "2026-10-19T20:20:21.833375+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        },
+        {
+          "arm": "F2",
+          "layout": "channels_last",
+          "median_step_seconds": 0.18906020000000012,
+          "measured_steps": 40,
+          "warmup": 10,
+          "peak_allocated_bytes": 567542784,
+          "peak_reserved_bytes": 694157312,
+          "loss": 0.002187978709116578,
+          "probe_updates": 50,
+          "time_kst": "2026-10-19T20:20:21.880994+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        }
+      ],
+      "safe": true,
+      "score": 0.18906020000000012
+    },
+    "channels_last_t2": {
+      "layout": "channels_last",
+      "threads": 2,
+      "returncodes": [
+        0,
+        0
+      ],
+      "wall_seconds": 24.82800000000003,
+      "rows": [
+        {
+          "arm": "F1",
+          "layout": "channels_last",
+          "median_step_seconds": 0.18354274999995823,
+          "measured_steps": 40,
+          "warmup": 10,
+          "peak_allocated_bytes": 570779136,
+          "peak_reserved_bytes": 845152256,
+          "loss": 0.0021879831328988075,
+          "probe_updates": 50,
+          "time_kst": "2026-10-19T20:20:46.729103+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        },
+        {
+          "arm": "F2",
+          "layout": "channels_last",
+          "median_step_seconds": 0.1834261000000197,
+          "measured_steps": 40,
+          "warmup": 10,
+          "peak_allocated_bytes": 570779136,
+          "peak_reserved_bytes": 845152256,
+          "loss": 0.0021879803389310837,
+          "probe_updates": 50,
+          "time_kst": "2026-10-19T20:20:46.699543+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        }
+      ],
+      "safe": true,
+      "score": 0.18354274999995823
+    }
+  },
+  "fingerprint": "1a25c22772ca53afec3ad908f605c443ed4a8e70ca30cfb68ce569b118d772ef"
+}
