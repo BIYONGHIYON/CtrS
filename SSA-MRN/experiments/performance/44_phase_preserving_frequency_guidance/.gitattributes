@@ -1,0 +1,5 @@
+# Keep original Windows artifacts byte-exact while checking real whitespace errors.
+* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Unchanged baseline/reference snapshots are evidence artifacts; review model.py for the change.
+provenance/source/** -diff
+provenance/training_source/provenance/source/** -diff

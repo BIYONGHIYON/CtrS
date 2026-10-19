@@ -683,5 +683,29 @@
     "entrypoint": "experiments/performance/43_normalized_parallel_capacity/run.py",
     "verification": "experiments/performance/43_normalized_parallel_capacity/prepare.py",
     "limits": "QNR 등 MATLAB 수치 대응 미검증; 기존 QB 탐색 benchmark; AMP skip으로 실제 업데이트 수 차이; 원본 기준 유지"
+  },
+  "performance/44_phase_preserving_frequency_guidance": {
+    "report": "experiments/performance/44_phase_preserving_frequency_guidance/README.md",
+    "research_track": "performance",
+    "experiment": 44,
+    "display_name": "44. 위상 보존 주파수 대역 안내",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "sensor": "QB",
+    "trained_seeds": [
+      42
+    ],
+    "evaluated_seeds": [
+      42
+    ],
+    "test_scored": true,
+    "checkpoints": "experiments/performance/44_phase_preserving_frequency_guidance/checkpoints",
+    "results": "experiments/performance/44_phase_preserving_frequency_guidance/results",
+    "manifest": "experiments/performance/44_phase_preserving_frequency_guidance/manifest.json",
+    "config": "experiments/performance/44_phase_preserving_frequency_guidance/config.json",
+    "entrypoint": "experiments/performance/44_phase_preserving_frequency_guidance/run.py",
+    "verification": "experiments/performance/44_phase_preserving_frequency_guidance/prepare.py",
+    "limits": "QB seed42·기존 탐색 benchmark·독립 holdout 부재; MATLAB parity 미검증; F2 RR 소폭 개선·FR 악화 및 동일 용량 우위 미확인; 채택 보류"
   }
 }
