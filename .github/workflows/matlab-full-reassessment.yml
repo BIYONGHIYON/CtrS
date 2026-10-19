@@ -15,6 +15,9 @@ jobs:
       JAVA_HOME: /opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home
     steps:
       - uses: actions/checkout@v4
+        with:
+          sparse-checkout: SSA-MRN/common
+          filter: blob:none
       - uses: matlab-actions/setup-matlab@v3
         with:
           release: R2025b
