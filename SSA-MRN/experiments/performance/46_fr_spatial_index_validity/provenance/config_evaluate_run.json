@@ -1,0 +1,53 @@
+{
+  "research_track": "performance",
+  "experiment": 46,
+  "display_name": "46. FR 공간 왜곡 지표의 축소 해상도 타당성 검증",
+  "experimenter": "이병현",
+  "status": "사전 검증 중",
+  "improvement": "판단 보류",
+  "question": "Does the repository FR spatial index D_s (DLPan-Toolbox 1.0 definition, common/metrics.fr_metrics) rank outputs by fidelity when the truth is known?",
+  "protocol": {
+    "data": "RR test 20 scenes; RR PAN/LMS/MS are given to fr_metrics exactly as FR inputs (reduced-resolution QNR check); GT is used only to measure fidelity",
+    "candidates_per_scene": {
+      "GT": "ground truth",
+      "LMS": "provided LMS",
+      "MTF_GLP": "experiment 36 implementation of DLPan MTF_GLP",
+      "models": "experiment 43 C0-C3 x seeds 42/43/44, without and with the experiment 45 P5 projection (24 outputs)",
+      "blend_to_GT": "(1-t) pred + t GT for C0 s42 and C2 s42, t in {0.25, 0.5, 0.75}",
+      "blend_to_LMS": "(1-t) pred + t LMS for C0 s42 and C2 s42, t in {0.25, 0.5}"
+    },
+    "fidelity": "MSE, PSNR and SAM against GT (common/metrics.rr_metrics)",
+    "indices": {
+      "D_lambda, D_s, QNR": "common/metrics.fr_metrics (toolbox 1.0)",
+      "D_lambda_K": "1 - Q2n(LMS, MTF(fused)) as DLPan D_lambda_K.m (MTF blur only, common/observation blur)",
+      "HQNR": "(1 - D_lambda_K)(1 - D_s)"
+    }
+  },
+  "tests": {
+    "T1_truth_ranking": "number of scenes where D_s(GT) < mean D_s of the three C0 seeds; valid >= 15/20, conflicting <= 5/20",
+    "T2_fidelity_rank": "per scene Spearman(MSE vs GT, index) over all candidates, median over scenes; valid >= +0.5, conflicting <= -0.5",
+    "T3_monotone_blend": "scenes where the index at t=0.75 toward GT is better than at t=0 (C0 s42 and C2 s42 separately)",
+    "decision": "D_s conflicts with fidelity at RR if T1 conflicting AND T2 <= -0.5; consistent if T1 valid AND T2 >= +0.5; otherwise mixed. Same tests reported for D_lambda, D_lambda_K, QNR and HQNR without separate decisions"
+  },
+  "limits": "Reduced-resolution check relies on the scale-invariance assumption that FR indices themselves make; it does not prove FR behaviour. QB only; exploratory test reused; MATLAB parity handled separately (PR 105).",
+  "constraints": {
+    "training": false,
+    "optimizer_updates": 0,
+    "tests_fixed_before_measurement": true
+  },
+  "additional_evaluation": {
+    "script": "evaluate.py",
+    "added_after": "the toolbox 1.0 run (prepare.py) was complete; the original prepare.py run and its results are unchanged",
+    "variants": {
+      "orig_paper (DLPan flag_orig_paper=1)": {
+        "D_lambda_orig": "mean over band pairs |Q32(F_i,F_j) - Q8(MS_LR_i, MS_LR_j)|",
+        "D_s_orig": "mean over bands |Q32(F_b, PAN) - Q8(MS_LR_b, imresize(PAN, 1/4))|",
+        "QNR_orig": "(1 - D_lambda_orig)(1 - D_s_orig)",
+        "imresize": "MATLAB bicubic antialias reproduced in Python (documented algorithm, not bit-verified); scikit-image resize reported as a sensitivity check"
+      },
+      "Q32 / Q8": "UQI averaged over non-overlapping 32x32 (full grid) or 8x8 (MS grid) blocks, common/metrics._block_uqi"
+    },
+    "candidates": "identical construction to prepare.py (checked by recomputing the toolbox 1.0 indices and comparing with results/validity.json)",
+    "tests": "same T1, T2, T3 and the same decision rule as prepare.py, applied to D_s_orig (decision) and to D_lambda_orig, QNR_orig (reported)"
+  }
+}
