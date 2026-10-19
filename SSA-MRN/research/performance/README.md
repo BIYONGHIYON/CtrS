@@ -64,6 +64,7 @@
 | [42. 백본 일부 합성곱의 dilation 확장](../../experiments/performance/42_dilated_backbone_context/README.md)<br>[송준현] | res2·res4 conv21의 dilation·padding을1에서2로 변경했습니다. | 3seed 평균 PSNR +0.12171dB·SAM −0.02500°; 잠정 QNR +0.00360·Ds 악화·seed별 상충 | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
 | [43. MS 기준 가역 정규화와 저해상도 병렬 특징 용량 확장](../../experiments/performance/43_normalized_parallel_capacity/README.md)<br>[이병현] | 정규화와 W2 가지를 네 군·세 시드로 비교했습니다. | 3seed C3: PSNR +0.7381dB·잠정 QNR -0.11599; C1 평균 개선·seed43 FR 악화, 결합 FR 완화 실패 | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
 | [44. 위상 보존 주파수 대역 안내](../../experiments/performance/44_phase_preserving_frequency_guidance/README.md)<br>[이병현] | 전체 해상도 SSA의 PAN·고주파·중/고주파 보조 경로를 동일 용량으로 비교했습니다. | F2: PSNR +0.02094dB·SAM −0.02329°·잠정 QNR −0.00951; 동일 용량 우위 미확인·채택 보류 | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [45. 추론 시 정확한 관측 일치 사영](../../experiments/performance/45_exact_observation_projection/README.md)<br>[이병현] | 43번 가중치 12개 출력에 추론 시에만 관측 연산자 기준 최소 보정 사영을 적용해 학습 없이 RR·FR을 다시 평가했습니다. | 사영으로 RR 240/240장 개선(C0 PSNR +0.129dB)이나 C2 Ds +0.036·QNR −0.033(0/60장)으로 기준 미달, 학습 안 함 | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 
 [새 실험 등록 절차](../../README.md#새-실험-등록) · [실험 보고서 양식](../../docs/experiment_template.md)
 
