@@ -1,0 +1,81 @@
+{
+  "time_kst": "2026-10-18T23:09:15.493013+09:00",
+  "selected_layout": "channels_last",
+  "results": {
+    "contiguous": {
+      "returncodes": [
+        0,
+        0
+      ],
+      "wall_seconds": 8.265000000000327,
+      "rows": [
+        {
+          "arm": "C2",
+          "layout": "contiguous",
+          "median_step_seconds": 0.18047745000012583,
+          "measured_steps": 10,
+          "warmup": 4,
+          "peak_allocated_bytes": 457590272,
+          "peak_reserved_bytes": 555745280,
+          "loss": 0.003908388316631317,
+          "probe_updates": 14,
+          "time_kst": "2026-10-18T23:08:58.757279+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        },
+        {
+          "arm": "C3",
+          "layout": "contiguous",
+          "median_step_seconds": 0.18405630000006568,
+          "measured_steps": 10,
+          "warmup": 4,
+          "peak_allocated_bytes": 460211712,
+          "peak_reserved_bytes": 509607936,
+          "loss": 0.0025621713139116764,
+          "probe_updates": 14,
+          "time_kst": "2026-10-18T23:08:58.797279+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        }
+      ],
+      "safe": true,
+      "score": 0.3645337500001915
+    },
+    "channels_last": {
+      "returncodes": [
+        0,
+        0
+      ],
+      "wall_seconds": 7.765999999999622,
+      "rows": [
+        {
+          "arm": "C2",
+          "layout": "channels_last",
+          "median_step_seconds": 0.15898965000042153,
+          "measured_steps": 10,
+          "warmup": 4,
+          "peak_allocated_bytes": 459425280,
+          "peak_reserved_bytes": 513802240,
+          "loss": 0.003908362705260515,
+          "probe_updates": 14,
+          "time_kst": "2026-10-18T23:09:06.563836+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        },
+        {
+          "arm": "C3",
+          "layout": "channels_last",
+          "median_step_seconds": 0.15925849999985076,
+          "measured_steps": 10,
+          "warmup": 4,
+          "peak_allocated_bytes": 462046720,
+          "peak_reserved_bytes": 515899392,
+          "loss": 0.002562163397669792,
+          "probe_updates": 14,
+          "time_kst": "2026-10-18T23:09:06.596836+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        }
+      ],
+      "safe": true,
+      "score": 0.3182481500002723
+    }
+  },
+  "fingerprint": "1cc0fb7969c53b721430c38b09e5522a134b4b4e55df1adce4ff65679e855682"
+}
