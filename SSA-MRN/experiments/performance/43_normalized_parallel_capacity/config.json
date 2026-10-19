@@ -1,0 +1,115 @@
+{
+  "experiment": 43,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "MS 기준 가역 정규화와 저해상도 병렬 특징 용량 확장",
+  "arms": {
+    "C0": "original",
+    "C1": "original+N1",
+    "C2": "original+W2",
+    "C3": "original+N1+W2"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "epochs": 150,
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "std_floor": 0.01,
+  "precision": "FP16 AMP core training; FP32 transforms/inverse/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cpu_threads": 1,
+  "selection": "minimum full validation MSE including epoch0, earliest exact tie",
+  "loss": "final-output MSE in original DN/2047 coordinates",
+  "max_parallel": 2,
+  "evaluate_after_all_training": true,
+  "scenes": [
+    1,
+    8,
+    11,
+    13,
+    19
+  ],
+  "scene_index_base": 0,
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset/QuickBird",
+  "runtime": "C:/CtrS-normalization-capacity43",
+  "data": {
+    "train": "Training Dataset/train_qb.h5",
+    "val": "Training Dataset/valid_qb.h5",
+    "RR": "Testing Dataset (ReducedData, H5 Format)/test_qb_multiExm1.h5",
+    "FR": "Testing Dataset (FullData, H5 Format)/test_qb_OrigScale_multiExm1.h5"
+  },
+  "data_sha256": {
+    "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+    "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+    "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+    "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+  },
+  "queue": [
+    [
+      "C0",
+      42
+    ],
+    [
+      "C3",
+      42
+    ],
+    [
+      "C1",
+      42
+    ],
+    [
+      "C2",
+      42
+    ],
+    [
+      "C0",
+      43
+    ],
+    [
+      "C3",
+      43
+    ],
+    [
+      "C1",
+      43
+    ],
+    [
+      "C2",
+      43
+    ],
+    [
+      "C0",
+      44
+    ],
+    [
+      "C3",
+      44
+    ],
+    [
+      "C1",
+      44
+    ],
+    [
+      "C2",
+      44
+    ]
+  ],
+  "limits": [
+    "QNR/Q2n/SCC MATLAB parity unverified",
+    "QB benchmark already explored; no independent holdout",
+    "original baseline is not promoted or replaced",
+    "no test-based selection of checkpoint, seed or training conditions"
+  ],
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8"
+}

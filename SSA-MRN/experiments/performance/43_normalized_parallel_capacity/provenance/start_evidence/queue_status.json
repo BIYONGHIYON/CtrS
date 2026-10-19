@@ -1,0 +1,137 @@
+{
+  "time_kst": "2026-10-18T23:15:25.637943+09:00",
+  "phase": "train",
+  "active": [
+    {
+      "arm": "C0",
+      "seed": 42
+    },
+    {
+      "arm": "C3",
+      "seed": 42
+    }
+  ],
+  "runs": [
+    {
+      "arm": "C0",
+      "seed": 42,
+      "training_complete": false,
+      "evaluation_complete": false,
+      "status": {
+        "time_kst": "2026-10-18T23:15:23.347475+09:00",
+        "pid": 18332,
+        "arm": "C0",
+        "seed": 42,
+        "phase": "train",
+        "allocated_gb": 0.010714530944824219,
+        "reserved_gb": 0.3671875,
+        "epoch": 4,
+        "epochs": 150,
+        "batch": 235,
+        "batches": 536,
+        "train_mse": 0.0003941153787928534,
+        "lr": 9.990100799627072e-05,
+        "actual_updates": 1843,
+        "skipped_updates": 0,
+        "epoch_seconds_estimate": 64.8130000000001,
+        "eta_seconds": 9499.094852611956,
+        "training_end_kst": "2026-10-19T01:53:42.442328+09:00"
+      }
+    },
+    {
+      "arm": "C3",
+      "seed": 42,
+      "training_complete": false,
+      "evaluation_complete": false,
+      "status": {
+        "time_kst": "2026-10-18T23:15:19.425815+09:00",
+        "pid": 2724,
+        "arm": "C3",
+        "seed": 42,
+        "phase": "train",
+        "allocated_gb": 0.047860145568847656,
+        "reserved_gb": 0.48046875,
+        "epoch": 3,
+        "epochs": 150,
+        "batch": 484,
+        "batches": 536,
+        "train_mse": 0.00032867903256892755,
+        "lr": 9.995599540320191e-05,
+        "actual_updates": 1556,
+        "skipped_updates": 0,
+        "epoch_seconds_estimate": 78.8125,
+        "eta_seconds": 11593.08348880597,
+        "training_end_kst": "2026-10-19T02:28:32.509304+09:00"
+      }
+    },
+    {
+      "arm": "C1",
+      "seed": 42,
+      "training_complete": false,
+      "evaluation_complete": false
+    },
+    {
+      "arm": "C2",
+      "seed": 42,
+      "training_complete": false,
+      "evaluation_complete": false
+    },
+    {
+      "arm": "C0",
+      "seed": 43,
+      "training_complete": false,
+      "evaluation_complete": false
+    },
+    {
+      "arm": "C3",
+      "seed": 43,
+      "training_complete": false,
+      "evaluation_complete": false
+    },
+    {
+      "arm": "C1",
+      "seed": 43,
+      "training_complete": false,
+      "evaluation_complete": false
+    },
+    {
+      "arm": "C2",
+      "seed": 43,
+      "training_complete": false,
+      "evaluation_complete": false
+    },
+    {
+      "arm": "C0",
+      "seed": 44,
+      "training_complete": false,
+      "evaluation_complete": false
+    },
+    {
+      "arm": "C3",
+      "seed": 44,
+      "training_complete": false,
+      "evaluation_complete": false
+    },
+    {
+      "arm": "C1",
+      "seed": 44,
+      "training_complete": false,
+      "evaluation_complete": false
+    },
+    {
+      "arm": "C2",
+      "seed": 44,
+      "training_complete": false,
+      "evaluation_complete": false
+    }
+  ],
+  "epoch_seconds_by_arm": {
+    "C0": 64.8130000000001,
+    "C1": 64.8130000000001,
+    "C2": 78.8125,
+    "C3": 78.8125
+  },
+  "training_remaining_seconds": 69930.71985261203,
+  "training_end_kst": "2026-10-19T18:40:56.357796+09:00",
+  "eta_basis": "recent full train+validation+checkpoint epochs, capacity-matched speed proxy for not-yet-started arms; excludes final RR/FR evaluation"
+}
