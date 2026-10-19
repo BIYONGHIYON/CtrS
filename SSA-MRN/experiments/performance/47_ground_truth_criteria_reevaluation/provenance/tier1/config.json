@@ -1,0 +1,45 @@
+{
+  "research_track": "performance",
+  "experiment": 47,
+  "display_name": "47. 정답 기반 판정 기준(v2)과 기존 후보 재평가",
+  "experimenter": "이병현",
+  "status": "사전 검증 중",
+  "improvement": "판단 보류",
+  "criteria_v2": {
+    "basis": "experiment 46: on QB the FR D_s/QNR (toolbox 1.0 and original-paper variants) rank the ground truth below model outputs, so they cannot veto",
+    "primary_RR": "PanCollection RR20; candidate minus same-condition control; seed-mean PSNR > 0, SAM < 0, ERGAS < 0; with 3 seeds also PSNR > 0 in at least 2 of 3 seeds",
+    "guards_ground_truth": {
+      "RR2": "RR test scenes degraded once more (dataset Wald operator), GT = RR MS: seed-mean PSNR >= -0.05 dB and SAM <= +0.02 deg",
+      "FR_WALD": "FR test scenes degraded by the same operator, GT = native FR MS: seed-mean PSNR >= -0.05 dB and SAM <= +0.02 deg",
+      "FR_OBS": "interior RMSE (DN) of observation(FR output) - FR MS: seed-mean ratio to control <= 1.10"
+    },
+    "reported_only": ["FR QNR", "FR D_lambda", "FR D_s", "RR SCC", "RR Q2n", "RR2/FR_WALD ERGAS"],
+    "labels": {
+      "개선": "primary passes and all three guards pass",
+      "부분 개선": "primary passes but a guard fails, or only part of PSNR/SAM/ERGAS improves",
+      "개선 없음": "none of PSNR/SAM/ERGAS improves"
+    },
+    "adoption": "a baseline-model change additionally requires 3 seeds; single-seed results are labelled with their seed",
+    "new_FR_indices": "an FR index may enter decisions only after passing the experiment 46 ground-truth ranking test",
+    "tolerance_reference": "experiment 43 C0 seed SD: RR PSNR 0.056 dB, SAM 0.021 deg"
+  },
+  "protocol": {
+    "tool": "common/evaluation_protocol.py",
+    "degradation": "MS: common/observation.SensorObservation (QB DLPan MTF, x4, phase 2; experiment 3 audit; RR GT reproduces RR MS to 1e-4 DN in experiment 45). PAN: DLPan MTF_PAN (QB GNyq 0.15, 41 taps, replicate) and the same x4 phase-2 sampling. LMS: interp23tap, which reproduces the H5 LMS of RR and FR test scenes exactly (0 DN)",
+    "scenes": "RR test 20 and FR test 20; RR scene i and FR scene i are evaluated by the same model call sequence",
+    "precision": "FP32 inference, metrics in float64 DN, no clipping"
+  },
+  "groups": {
+    "29": {"loader": "perf29", "control": "R0", "candidates": ["W2", "W3", "F01", "F11"], "seeds": [42], "checkpoint": "checkpoints/{arm}_QB_s42/best.pt"},
+    "30": {"loader": "plain", "control": "final_baseline", "candidates": ["final_ffl"], "seeds": [42], "checkpoint": "checkpoints/{arm}_QB_s42/best.pt"},
+    "33_38": {"loader": "norm33", "control": "N0", "candidates": ["N1"], "seeds": [42, 43, 44], "checkpoint": "33: checkpoints/{arm}_QB_s42/best.pt; 38: checkpoints/{arm}_QB_s{seed}/best.pt"},
+    "39": {"loader": "local39", "control": "global", "candidates": ["local"], "seeds": [42, 43, 44], "checkpoint": "checkpoints/{baseline|local}_QB_seed{seed}/best.pt"},
+    "40": {"loader": "norm40", "control": "A0", "candidates": ["A1", "A2", "A3"], "seeds": [42], "checkpoint": "checkpoints/{arm}_QB_s42/best.pt"},
+    "41": {"loader": "photo41", "control": "baseline", "candidates": ["aug"], "seeds": [42, 43, 44], "checkpoint": "checkpoints/{arm}_QB_seed{seed}/best.pt"},
+    "42": {"loader": "dil42", "control": "baseline", "candidates": ["dilated"], "seeds": [42, 43, 44], "checkpoint": "checkpoints/{arm}_QB_seed{seed}/best.pt"},
+    "43": {"loader": "m43", "control": "C0", "candidates": ["C1", "C2", "C3"], "seeds": [42, 43, 44], "checkpoint": "checkpoints/{arm}_QB_s{seed}/best.pt"},
+    "44": {"loader": "m44", "control": "B0", "candidates": ["C0", "F1", "F2"], "seeds": [42], "checkpoint": "checkpoints/{arm}_QB_s42/best.pt"}
+  },
+  "not_included": "research/performance 1-28 (different loaders and protocols), 31 (seed46 short run), 32 (10-epoch screen), 34 (no matched control), 37 (W2 gate; no standalone model module), SSAI and variable-scale tracks",
+  "constraints": {"training": false, "optimizer_updates": 0, "test_used_for_selection": false, "criteria_fixed_before_measurement": true}
+}
