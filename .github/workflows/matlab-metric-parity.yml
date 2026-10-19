@@ -1,0 +1,45 @@
+name: MATLAB metric reference audit
+on:
+  push:
+    branches: [metric-reference-audit]
+    paths:
+      - '.github/workflows/matlab-metric-parity.yml'
+      - 'SSA-MRN/common/metrics_parity.py'
+      - 'SSA-MRN/common/metrics_matlab_reference.m'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: SSA-MRN/common
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install numpy==1.26.4 scipy==1.14.1 scikit-image==0.24.0
+      - name: Prepare synthetic inputs and unmodified MATLAB reference
+        run: python SSA-MRN/common/metrics_parity.py --prepare --work "$RUNNER_TEMP/metric-parity"
+      - uses: matlab-actions/setup-matlab@v3
+        with:
+          release: R2025b
+          products: Image_Processing_Toolbox
+      - name: Execute actual MATLAB
+        uses: matlab-actions/run-command@v3
+        with:
+          command: addpath('SSA-MRN/common'); metrics_matlab_reference(fullfile(getenv('RUNNER_TEMP'),'metric-parity'))
+      - name: Compare with Python (audit records differences without accepting parity)
+        run: python SSA-MRN/common/metrics_parity.py --compare --work "$RUNNER_TEMP/metric-parity"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: matlab-metric-reference
+          path: |
+            ${{ runner.temp }}/metric-parity/reference.mat
+            ${{ runner.temp }}/metric-parity/comparison.json
+            ${{ runner.temp }}/metric-parity/sources.json
+            ${{ runner.temp }}/metric-parity/matlab_environment.json
+          retention-days: 14
