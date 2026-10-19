@@ -2,7 +2,7 @@ function metrics_matlab_reference(work)
 % Run unmodified pinned DLPan MATLAB functions on deterministic synthetic data.
 addpath(fullfile(work,'reference'));
 f = load(fullfile(work,'fixtures.mat'));
-rows = struct([]);
+rows = cell(1,numel(f.names));
 for k = 1:numel(f.names)
     id = f.names{k};
     gt = f.([id '_gt']); pred = f.([id '_pred']);
@@ -15,10 +15,10 @@ for k = 1:numel(f.names)
     row.D_lambda = D_lambda(pred,lms,ms,32,4,1);
     row.D_s = D_s(pred,lms,ms,pan,4,32,1);
     row.QNR = (1-row.D_lambda)*(1-row.D_s);
-    rows(k) = row;
+    rows{k} = row;
     fprintf('%s Q2n=%.12g QNR=%.12g\n',id,row.Q2n,row.QNR);
 end
-result.rows = rows;
+result.rows = [rows{:}];
 for n = [64,128,256,512]
     weights = imresize(eye(n),[n/4,n],'bicubic','Antialiasing',true);
     result.(sprintf('resize_%d',n)) = weights;
