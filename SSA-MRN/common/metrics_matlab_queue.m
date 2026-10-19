@@ -1,9 +1,10 @@
 function metrics_matlab_queue(work)
 % Private local-file queue. Never upload images or original test data to CI.
 addpath(fullfile(work,'reference'));
+metrics_matlab_reference(work);
 if ~isfolder(fullfile(work,'done')), mkdir(fullfile(work,'done')); end
 fprintf('MATLAB %s; image toolbox %s\n',version,ver('images').Version);
-started=tic;
+started=tic; cached_name=''; cached=struct;
 while toc(started)<5.5*3600
     jobs=dir(fullfile(work,'queue','*.mat'));
     for j=1:numel(jobs)
@@ -12,9 +13,18 @@ while toc(started)<5.5*3600
         if isfile(target), continue; end
         f=load(source); result=struct; result.id=f.id;
         result.matlab_version=version; result.matlab_release=version('-release');
+        if isfield(f,'data_file')
+            if ~strcmp(cached_name,f.data_file), cached=load(fullfile(work,'inputs',f.data_file)); cached_name=f.data_file; end
+        end
         result.rows=cell(1,numel(f.scenes));
         for k=1:numel(f.scenes)
-            s=f.scenes{k}; pred=double(s.pred); row=struct; row.index=s.index;
+            s=f.scenes{k};
+            if isfield(f,'data_file')
+                pred=double(s.normalized_pred)*double(f.scale); idx=double(s.index)+1; s=cached.scenes{idx}; s.index=idx-1;
+            else
+                pred=double(s.pred);
+            end
+            row=struct; row.index=s.index;
             if strcmp(f.protocol,'RR')
                 gt=double(s.gt); delta=gt-pred;
                 row.PSNR=mean(10*log10(double(f.peak)^2./squeeze(mean(delta.^2,[1 2]))));
