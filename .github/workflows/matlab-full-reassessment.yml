@@ -1,6 +1,9 @@
 name: MATLAB full reassessment
 on:
   workflow_dispatch:
+  push:
+    branches: [metric-reference-audit]
+    paths: [.github/workflows/matlab-full-reassessment.yml]
 permissions:
   contents: read
 jobs:
