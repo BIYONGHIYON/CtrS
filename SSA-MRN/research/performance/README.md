@@ -10,7 +10,7 @@
 
 기존 복원 구조·학습 방법·손실 등의 수치 개선을 계속 비교합니다.
 
-같은 센서·배율·데이터·학습 조건의 대조군과 비교합니다. validation으로 후보와 가중치를 선택하고, 개선 여부는 [판정 기준 v2.1](../../docs/judgement_criteria.md)(RR 주 판정과 RR2·FR_WALD·FR 관측 일치 보조 판정)으로 정합니다. 47번 이전 실험의 판정은 [성능 47번 재평가](../../experiments/performance/47_ground_truth_criteria_reevaluation/README.md)를 기준으로 합니다.
+같은 센서·배율·데이터·학습 조건의 대조군과 비교합니다. validation으로 후보와 가중치를 선택하고, 개선 여부는 [판정 기준 v2.2](../../docs/judgement_criteria.md)(RR 주 판정과 RR2·FR_WALD·FR 관측 일치 보조 판정)으로 정합니다. 단일 시드도 모든 항목을 통과하면 개선으로 표기하고, 여러 시드는 같은 조건 대조군과 짝지은 전체 시드의 평균으로 판정합니다. 시드 수·시드별 결과를 함께 보고하며, 기준 모델 교체에는 3시드 이상에서 개선이 필요합니다. 47번 이전 실험의 판정은 [성능 47번 재평가](../../experiments/performance/47_ground_truth_criteria_reevaluation/README.md)를 기준으로 합니다.
 
 <a id="experiments"></a>
 
