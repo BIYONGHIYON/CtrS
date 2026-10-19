@@ -1,0 +1,4 @@
+{
+  "time_kst": "2026-10-18T23:03:44.671206+09:00",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\CtrS-normalization-capacity43\\code\\train.py\", line 237, in <module>\n    elif a.mode=='preflight':preflight(cfg)\n  File \"C:\\CtrS-normalization-capacity43\\code\\train.py\", line 131, in preflight\n    delta=float((v-m.state_dict()[k].cpu()).abs().max());largest=max(largest,delta);torch.testing.assert_close(v,m.state_dict()[k].cpu(),rtol=1e-5,atol=1e-6)\n  File \"C:\\CtrS\\.venv\\lib\\site-packages\\torch\\testing\\_comparison.py\", line 1519, in assert_close\n    raise error_metas[0].to_error(msg)\nAssertionError: Tensor-likes are not close!\n\nMismatched elements: 2 / 36864 (0.0%)\nGreatest absolute difference: 2.3618340492248535e-06 at index (61, 50, 0, 2) (up to 1e-06 allowed)\nGreatest relative difference: 6.458155257860199e-05 at index (52, 6, 1, 0) (up to 1e-05 allowed)\n"
+}

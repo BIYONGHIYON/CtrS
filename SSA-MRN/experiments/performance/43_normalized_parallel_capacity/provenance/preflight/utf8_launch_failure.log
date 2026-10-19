@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "C:\CtrS-normalization-capacity43\code_v2\run.py", line 141, in <module>
+    else:run(a.resume)
+  File "C:\CtrS-normalization-capacity43\code_v2\run.py", line 104, in run
+    conf=json.loads((HERE/'config.json').read_text());root=Path(conf['runtime']);guard=lock(root/'controller.lock');cp=root/'runtime_config.json';cfg=json.loads(cp.read_text(encoding='utf8'))
+  File "C:\CtrS\runtime\Python310\lib\pathlib.py", line 1135, in read_text
+    return f.read()
+UnicodeDecodeError: 'cp949' codec can't decode byte 0xec in position 76: illegal multibyte sequence

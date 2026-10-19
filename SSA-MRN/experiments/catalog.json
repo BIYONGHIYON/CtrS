@@ -655,5 +655,33 @@
     "config": "experiments/performance/42_dilated_backbone_context/config.json",
     "entrypoint": "experiments/performance/42_dilated_backbone_context/run.py",
     "verification": "experiments/performance/42_dilated_backbone_context/prepare.py"
+  },
+  "performance/43_normalized_parallel_capacity": {
+    "report": "experiments/performance/43_normalized_parallel_capacity/README.md",
+    "research_track": "performance",
+    "experiment": 43,
+    "display_name": "43. MS 기준 가역 정규화와 저해상도 병렬 특징 용량 확장",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "sensor": "QB",
+    "trained_seeds": [
+      42,
+      43,
+      44
+    ],
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "test_scored": true,
+    "checkpoints": "experiments/performance/43_normalized_parallel_capacity/checkpoints",
+    "results": "experiments/performance/43_normalized_parallel_capacity/results",
+    "manifest": "experiments/performance/43_normalized_parallel_capacity/manifest.json",
+    "config": "experiments/performance/43_normalized_parallel_capacity/config.json",
+    "entrypoint": "experiments/performance/43_normalized_parallel_capacity/run.py",
+    "verification": "experiments/performance/43_normalized_parallel_capacity/prepare.py",
+    "limits": "QNR 등 MATLAB 수치 대응 미검증; 기존 QB 탐색 benchmark; AMP skip으로 실제 업데이트 수 차이; 원본 기준 유지"
   }
 }
