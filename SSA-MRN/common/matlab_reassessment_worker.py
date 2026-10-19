@@ -13,8 +13,17 @@ def digest(path):
   for b in iter(lambda:f.read(8*1024**2),b''):h.update(b)
  return h.hexdigest()
 
+def replace(source,target):
+ # Windows denies replacement while SFTP has an old version open.
+ deadline=time.monotonic()+180
+ while True:
+  try:source.replace(target);return
+  except PermissionError:
+   if time.monotonic()>=deadline:raise
+   time.sleep(1)
+
 def write(p,x):
- p.parent.mkdir(parents=True,exist_ok=True);t=p.with_suffix('.tmp');t.write_text(json.dumps(x,ensure_ascii=False,indent=2,default=str),encoding='utf8');t.replace(p)
+ p.parent.mkdir(parents=True,exist_ok=True);t=p.with_suffix('.tmp');t.write_text(json.dumps(x,ensure_ascii=False,indent=2,default=str),encoding='utf8');replace(t,p)
 
 def reusable(record,out):
  if not record.exists():return False
@@ -62,13 +71,13 @@ def run_job(a,job):
     if not inputs.exists():
      row={k:(v.astype('float64')*rr_factor if k=='gt' else v).transpose(1,2,0) for k,v in vals.items()};row['pan']=row['pan'][:,:,0];source.append(row)
   if not inputs.exists():
-   tmp=Path(str(inputs)+'.part');inputs.parent.mkdir(parents=True,exist_ok=True);savemat(str(tmp),dict(scenes=np.array(source,dtype=object)),do_compression=True,appendmat=False);tmp.replace(inputs)
-  dest=r/'v2/queue'/f'{key}_{proto}_x{ratio}.mat';tmp=Path(str(dest)+'.part');dest.parent.mkdir(parents=True,exist_ok=True)
-  savemat(str(tmp),dict(id=dest.stem,protocol=proto,peak=2047.,ratio=float(ratio),scale=float(scale*rr_factor),data_file=data_file,contract_id=contract_id,scenes=np.array(scenes,dtype=object)),do_compression=True,appendmat=False);tmp.replace(dest)
+   tmp=Path(str(inputs)+'.part');inputs.parent.mkdir(parents=True,exist_ok=True);savemat(str(tmp),dict(scenes=np.array(source,dtype=object)),do_compression=True,appendmat=False);replace(tmp,inputs)
+  dest=r/'v2/queue'/f'{key}_{contract_id}_{proto}_x{ratio}.mat';tmp=Path(str(dest)+'.part');dest.parent.mkdir(parents=True,exist_ok=True)
+  savemat(str(tmp),dict(id=dest.stem,protocol=proto,peak=2047.,ratio=float(ratio),scale=float(scale*rr_factor),data_file=data_file,contract_id=contract_id,scenes=np.array(scenes,dtype=object)),do_compression=True,appendmat=False);replace(tmp,dest)
   exports.append(dict(file=dest.name,sha256=digest(dest),input=data_file,input_sha256=digest(inputs),contract=contract,contract_id=contract_id,scenes=len(scenes),reproduction_mean={k:float(np.mean(v)) for k,v in summary.items() if v}))
  return dict(status='inference_exported_matlab_pending',version=VERSION,checkpoint=c,exports=exports)
 
-def main():
+def main(attempt=1,last_pass=True):
  p=argparse.ArgumentParser();p.add_argument('--runtime',type=Path,required=True);p.add_argument('--data',type=Path,required=True);p.add_argument('--job',type=Path);p.add_argument('--max-jobs',type=int);a=p.parse_args();r=a.runtime;out=r/'v2';out.mkdir(exist_ok=True)
  if a.job:
   job=json.loads(a.job.read_text(encoding='utf8'));record=Path(job['record'])
@@ -91,5 +100,8 @@ def main():
   status=json.loads(record.read_text(encoding='utf8'));ok+=status['status']=='inference_exported_matlab_pending';failed+=status['status']!='inference_exported_matlab_pending'
   write(out/'status.json',dict(state='running',processed=idx+1,total=len(jobs),exported=ok,errors=failed,current=job['checkpoint']['path']))
   print(idx+1,len(jobs),ok,failed,flush=True)
- write(out/'status.json',dict(state='scan_finished',total=len(jobs),exported=ok,errors=failed,complete=failed==0))
-if __name__=='__main__':main()
+ result=dict(state='scan_finished' if failed==0 or last_pass else 'pass_finished_retrying',attempt=attempt,total=len(jobs),exported=ok,errors=failed,complete=failed==0);write(out/'status.json',result);return result
+if __name__=='__main__':
+ for attempt in range(1,4):
+  result=main(attempt,last_pass=attempt==3)
+  if '--job' in sys.argv or result.get('complete'):break
