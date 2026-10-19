@@ -5,7 +5,7 @@ complete exports with matching hashes and adapter version are reused.
 """
 import argparse,hashlib,json,os,subprocess,sys,time,traceback
 from pathlib import Path
-VERSION='matlab-reassessment-v2-'+hashlib.sha256((Path(__file__).with_name('SSA-MRN')/'common/matlab_reassessment_models.py' if (Path(__file__).parent/'SSA-MRN').exists() else Path(__file__).with_name('matlab_reassessment_models.py')).read_bytes()).hexdigest()[:12]
+VERSION='matlab-reassessment-v2-'+hashlib.sha256((Path(__file__).with_name('SSA-MRN')/'common/matlab_reassessment_models.py' if (Path(__file__).parent/'SSA-MRN').exists() else Path(__file__).with_name('matlab_reassessment_models.py')).read_bytes()+Path(__file__).read_bytes()).hexdigest()[:12]
 
 def digest(path):
  h=hashlib.sha256()
@@ -50,7 +50,7 @@ def run_job(a,job):
     xs={k:torch.from_numpy(v/scale).unsqueeze(0).cuda() for k,v in vals.items()}
     if contract['synthetic']:
      transformed=net._audit_scale_data.synthetic_pair(xs['gt'],xs['pan'],ratio);xs={k:transformed[k] for k in ('pan','lms','ms','gt')}
-     vals={k:v[0].cpu().numpy()*scale for k,v in xs.items()}
+     vals={k:v[0].cpu().numpy().astype('float64')*scale for k,v in xs.items()}
     y=predict(net,context,*[xs[k] for k in ('pan','lms','ms')],ratio=ratio)[0].cpu().numpy()
     if not np.isfinite(y).all():raise ValueError('Nonfinite prediction')
     scenes.append(dict(index=i,normalized_pred=y.transpose(1,2,0)))
@@ -60,7 +60,7 @@ def run_job(a,job):
      dot=np.sum(pred*gt,axis=0);norm=np.linalg.norm(pred,axis=0)*np.linalg.norm(gt,axis=0);valid=norm>0
      summary['SAM'].append(float(np.mean(np.arccos(np.clip(dot[valid]/norm[valid],-1,1)))*180/np.pi))
     if not inputs.exists():
-     row={k:(v*rr_factor if k=='gt' else v).transpose(1,2,0) for k,v in vals.items()};row['pan']=row['pan'][:,:,0];source.append(row)
+     row={k:(v.astype('float64')*rr_factor if k=='gt' else v).transpose(1,2,0) for k,v in vals.items()};row['pan']=row['pan'][:,:,0];source.append(row)
   if not inputs.exists():
    tmp=Path(str(inputs)+'.part');inputs.parent.mkdir(parents=True,exist_ok=True);savemat(str(tmp),dict(scenes=np.array(source,dtype=object)),do_compression=True,appendmat=False);tmp.replace(inputs)
   dest=r/'v2/queue'/f'{key}_{proto}_x{ratio}.mat';tmp=Path(str(dest)+'.part');dest.parent.mkdir(parents=True,exist_ok=True)
