@@ -1,0 +1,21 @@
+name: MATLAB full reassessment
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reassess:
+    if: github.ref == 'refs/heads/metric-reference-audit'
+    runs-on: [self-hosted, macOS, ARM64, ctrs-matlab-reassessment]
+    timeout-minutes: 360
+    env:
+      JAVA_HOME: /opt/homebrew/Cellar/openjdk@21/21.0.12.1/libexec/openjdk.jdk/Contents/Home
+    steps:
+      - uses: actions/checkout@v4
+      - uses: matlab-actions/setup-matlab@v3
+        with:
+          release: R2025b
+          products: Image_Processing_Toolbox
+      - uses: matlab-actions/run-command@v3
+        with:
+          command: addpath('SSA-MRN/common'); metrics_matlab_queue('/private/tmp/ctrs-matlab-reassessment');
