@@ -124,6 +124,7 @@
 | [44. 위상 보존 주파수 대역 안내](experiments/performance/44_phase_preserving_frequency_guidance/README.md)<br>[이병현] | 전체 해상도 SSA의 PAN·고주파·중/고주파 보조 경로를 동일 용량으로 비교했습니다. | F2: PSNR +0.02094dB·SAM −0.02329°·잠정 QNR −0.00951; 동일 용량 우위 미확인·채택 보류 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [45. 추론 시 정확한 관측 일치 사영](experiments/performance/45_exact_observation_projection/README.md)<br>[이병현] | 43번 가중치 12개 출력에 추론 시에만 관측 연산자 기준 최소 보정 사영을 적용해 학습 없이 RR·FR을 다시 평가했습니다. | 사영으로 RR 240/240장 개선(C0 PSNR +0.129dB)이나 C2 Ds +0.036·QNR −0.033(0/60장)으로 기준 미달, 학습 안 함 | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 | [46. FR 공간 왜곡 지표의 축소 해상도 타당성 검증](experiments/performance/46_fr_spatial_index_validity/README.md)<br>[이병현] | 정답이 있는 RR 입력을 FR 지표로 채점해, 정답·모델·혼합 결과 37개에 대해 Ds가 정답을 가장 좋게 채점하는지 확인했습니다. | 정답 Ds가 모델보다 나은 장면 1/20(Toolbox 1.0)·2-3/20(원 논문 방식), 오차와 Ds 나쁨의 순위 상관 −0.53에서 −0.54로 두 정의 모두 정확도와 충돌 | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
+| [47. 정답 기반 판정 기준(v2)과 기존 후보 재평가](experiments/performance/47_ground_truth_criteria_reevaluation/README.md)<br>[이병현] | 측정 전에 고정한 정답 기반 판정 기준 v2(RR 주 판정 + RR2·FR_WALD·FR 관측 일치 보조 판정, QNR류는 참고)로 저장된 기존 후보 96개를 다시 채점했습니다. | 개선 6(28 G5·29 F01·F11·21 E6·26 ema·17 S2, 모두 단일 시드), 부분 개선 57, 개선 없음 33. ΔQNR과 FR_WALD ΔPSNR 순위 상관 −0.10, RR 이득 큰 후보는 주로 RR2에서 미달 | 평가&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 
 </details>
 
