@@ -163,6 +163,7 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 | [40. MS 기준 평균 제거와 대비 정규화의 기여 분리](SSA-MRN/experiments/performance/40_ms_center_scale_ablation/README.md)<br>[김경찬] | 전역 공유 정규화의 평균 제거·대비 조절을 네 군으로 분리했습니다. | seed42 validation: A3 MSE 최저; A1·A2는A3 대비 +1.220%·+1.810%로 반복 중단. RR·FR 미평가 | 학습&nbsp;완료<br>평가&nbsp;대기 | 판단&nbsp;보류 |
 | [41. 공통 밝기·대비 증강](SSA-MRN/experiments/performance/41_joint_photometric_augmentation/README.md)<br>[송준현] | 학습 PAN·LMS·MS에 공통 gain·offset, 원래 좌표의 MSE를 적용했습니다. | 3seed 평균 PSNR +0.02416dB·SAM −0.00144°·잠정 QNR −0.00422; validation2/3seed 악화·채택 보류 | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
 | [42. 백본 일부 합성곱의 dilation 확장](SSA-MRN/experiments/performance/42_dilated_backbone_context/README.md)<br>[송준현] | res2·res4 conv21의 dilation·padding을1에서2로 변경했습니다. | 3seed 평균 PSNR +0.12171dB·SAM −0.02500°; 잠정 QNR +0.00360·Ds 악화·seed별 상충 | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
+| [43. MS 기준 가역 정규화와 저해상도 병렬 특징 용량 확장](SSA-MRN/experiments/performance/43_normalized_parallel_capacity/README.md)<br>[이병현] | 정규화와 W2 가지를 네 군·세 시드로 비교했습니다. | 3seed C3: PSNR +0.7381dB·잠정 QNR -0.11599; C1 평균 개선·seed43 FR 악화, 결합 FR 완화 실패 | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
 
 </details>
 

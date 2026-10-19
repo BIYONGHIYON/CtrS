@@ -1,0 +1,47 @@
+{
+  "time_kst": "2026-10-18T23:09:14.973663+09:00",
+  "initial_output_pairs_equal": [
+    [
+      "C0",
+      "C2"
+    ],
+    [
+      "C1",
+      "C3"
+    ]
+  ],
+  "C0_original_equal": true,
+  "W2_original29_branch_equal_nonzero": true,
+  "batchnorm_modules": 0,
+  "checks": {
+    "C0": {
+      "initial_state_sha256": "f9323ba6cb23b9b775a1435b4a670e5577772084818b3c55c3ed9f3a82393060",
+      "parameters": 426654,
+      "resume_max_abs": 0.0,
+      "loss": 0.2206428200006485,
+      "initial_state_restored": true
+    },
+    "C1": {
+      "initial_state_sha256": "f9323ba6cb23b9b775a1435b4a670e5577772084818b3c55c3ed9f3a82393060",
+      "parameters": 426654,
+      "resume_max_abs": 0.0,
+      "loss": 0.097446970641613,
+      "initial_state_restored": true
+    },
+    "C2": {
+      "initial_state_sha256": "004f0b47ef8d4a0a8a7c12edfb2125c7d9c5a4c4727e6026118a936099393442",
+      "parameters": 2853918,
+      "resume_max_abs": 0.0,
+      "loss": 0.21978962421417236,
+      "initial_state_restored": true
+    },
+    "C3": {
+      "initial_state_sha256": "004f0b47ef8d4a0a8a7c12edfb2125c7d9c5a4c4727e6026118a936099393442",
+      "parameters": 2853918,
+      "resume_max_abs": 0.0,
+      "loss": 0.09738297015428543,
+      "initial_state_restored": true
+    }
+  },
+  "scope": "tiny AMP forward/backward and two-update state/optimizer resume, rollback; not long-session crash proof"
+}

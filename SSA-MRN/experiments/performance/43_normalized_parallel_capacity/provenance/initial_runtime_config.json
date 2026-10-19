@@ -1,0 +1,210 @@
+{
+  "experiment": 43,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "MS 기준 가역 정규화와 저해상도 병렬 특징 용량 확장",
+  "arms": {
+    "C0": "original",
+    "C1": "original+N1",
+    "C2": "original+W2",
+    "C3": "original+N1+W2"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "epochs": 150,
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "std_floor": 0.01,
+  "precision": "FP16 AMP core training; FP32 transforms/inverse/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cpu_threads": 1,
+  "selection": "minimum full validation MSE including epoch0, earliest exact tie",
+  "loss": "final-output MSE in original DN/2047 coordinates",
+  "max_parallel": 2,
+  "evaluate_after_all_training": true,
+  "scenes": [
+    1,
+    8,
+    11,
+    13,
+    19
+  ],
+  "scene_index_base": 0,
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset/QuickBird",
+  "runtime": "C:/CtrS-normalization-capacity43",
+  "data": {
+    "train": "Training Dataset/train_qb.h5",
+    "val": "Training Dataset/valid_qb.h5",
+    "RR": "Testing Dataset (ReducedData, H5 Format)/test_qb_multiExm1.h5",
+    "FR": "Testing Dataset (FullData, H5 Format)/test_qb_OrigScale_multiExm1.h5"
+  },
+  "data_sha256": {
+    "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+    "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+    "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+    "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+  },
+  "queue": [
+    [
+      "C0",
+      42
+    ],
+    [
+      "C3",
+      42
+    ],
+    [
+      "C1",
+      42
+    ],
+    [
+      "C2",
+      42
+    ],
+    [
+      "C0",
+      43
+    ],
+    [
+      "C3",
+      43
+    ],
+    [
+      "C1",
+      43
+    ],
+    [
+      "C2",
+      43
+    ],
+    [
+      "C0",
+      44
+    ],
+    [
+      "C3",
+      44
+    ],
+    [
+      "C1",
+      44
+    ],
+    [
+      "C2",
+      44
+    ]
+  ],
+  "limits": [
+    "QNR/Q2n/SCC MATLAB parity unverified",
+    "QB benchmark already explored; no independent holdout",
+    "original baseline is not promoted or replaced",
+    "no test-based selection of checkpoint, seed or training conditions"
+  ],
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "layout": "channels_last",
+  "cache_manifest_sha256": "66debe89dd95de8d37d1b3cfc89759f17bfcb18f5e771b663c62e214776a7411",
+  "base_main": "ecf676f94b825b98b33efae2ece473d6f09d32f7",
+  "created_kst": "2026-10-18T23:06:14.188542+09:00",
+  "optimization": {
+    "selected_layout": "channels_last",
+    "results": {
+      "contiguous": {
+        "returncodes": [
+          0,
+          0
+        ],
+        "wall_seconds": 8.265000000000327,
+        "rows": [
+          {
+            "arm": "C2",
+            "layout": "contiguous",
+            "median_step_seconds": 0.18047745000012583,
+            "measured_steps": 10,
+            "warmup": 4,
+            "peak_allocated_bytes": 457590272,
+            "peak_reserved_bytes": 555745280,
+            "loss": 0.003908388316631317,
+            "probe_updates": 14,
+            "time_kst": "2026-10-18T23:08:58.757279+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          },
+          {
+            "arm": "C3",
+            "layout": "contiguous",
+            "median_step_seconds": 0.18405630000006568,
+            "measured_steps": 10,
+            "warmup": 4,
+            "peak_allocated_bytes": 460211712,
+            "peak_reserved_bytes": 509607936,
+            "loss": 0.0025621713139116764,
+            "probe_updates": 14,
+            "time_kst": "2026-10-18T23:08:58.797279+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          }
+        ],
+        "safe": true,
+        "score": 0.3645337500001915
+      },
+      "channels_last": {
+        "returncodes": [
+          0,
+          0
+        ],
+        "wall_seconds": 7.765999999999622,
+        "rows": [
+          {
+            "arm": "C2",
+            "layout": "channels_last",
+            "median_step_seconds": 0.15898965000042153,
+            "measured_steps": 10,
+            "warmup": 4,
+            "peak_allocated_bytes": 459425280,
+            "peak_reserved_bytes": 513802240,
+            "loss": 0.003908362705260515,
+            "probe_updates": 14,
+            "time_kst": "2026-10-18T23:09:06.563836+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          },
+          {
+            "arm": "C3",
+            "layout": "channels_last",
+            "median_step_seconds": 0.15925849999985076,
+            "measured_steps": 10,
+            "warmup": 4,
+            "peak_allocated_bytes": 462046720,
+            "peak_reserved_bytes": 515899392,
+            "loss": 0.002562163397669792,
+            "probe_updates": 14,
+            "time_kst": "2026-10-18T23:09:06.596836+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          }
+        ],
+        "safe": true,
+        "score": 0.3182481500002723
+      }
+    },
+    "note": "two concurrent worst-case capacity arms; throughput and memory, no validation/test tuning"
+  },
+  "source_hashes": {
+    "model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "train.py": "d9c6dd05dabc0136027e6c7336f07ade4f69e4432b3e9f2b036f4028a6944edd",
+    "run.py": "7bf3d64ab8629e00c6ba0d2f6ff6bd124f3f7268b956d8980235484a6ec46c09",
+    "config.json": "3b7e1d71c20a632504198733ba81327e9013b4d8c6e68b713c49b926e43d0e4e",
+    "provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "provenance/29_model_original.py": "1eb1ea0cdeb39d1d724da1110022019c688ba0adfb27dfd7024211cb4c08912b"
+  },
+  "fingerprint": "1cc0fb7969c53b721430c38b09e5522a134b4b4e55df1adce4ff65679e855682"
+}
