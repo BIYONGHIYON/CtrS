@@ -1,0 +1,82 @@
+{
+  "research_track": "performance",
+  "experiment": 45,
+  "display_name": "45. 추론 시 정확한 관측 일치 사영",
+  "experimenter": "이병현",
+  "status": "사전 검증 완료",
+  "improvement": "성능 비교 아님",
+  "phase": "0 (no training): exact observation-consistency projection applied only at inference to experiment 43 weights",
+  "models": {
+    "source": "experiments/performance/43_normalized_parallel_capacity checkpoints/<arm>_QB_s<seed>/best.pt (validation-selected)",
+    "arms": [
+      "C0",
+      "C1",
+      "C2",
+      "C3"
+    ],
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "main": "C2 (original + W2 parallel capacity, no normalization)"
+  },
+  "operator": {
+    "D": "common/observation.SensorObservation('QB', 'decimate', phase=(2, 2)): DLPan MTF FIR 41 taps per band, replicate boundary, x4 decimation; audited in experiment 3 (train interior RMSE 2.2e-13 DN)",
+    "adjoint": "exact adjoint of D by automatic differentiation",
+    "projection": "y' = argmin ||y' - y||^2 s.t. M D y' = M MS  =>  y' = y + D^T M^T lambda, (M D D^T M^T) lambda = M (MS - D y)",
+    "solver": "conjugate gradient per band, FP32 tensors, relative residual 1e-6, at most 300 iterations; iterations and final observation residual recorded",
+    "variants": {
+      "P5": "M = MS-grid interior with a 5-pixel border excluded (as the experiment 3 audit) - main",
+      "P0": "M = all MS-grid pixels - secondary"
+    },
+    "units": "DN/2047 inputs and outputs, metrics on DN, no clipping",
+    "trainable_parameters": 0
+  },
+  "checks_before_metrics": [
+    "RR test: interior and border RMSE of D(GT) - MS (data consistency of the constraint)",
+    "base (no projection) means reproduce the archived experiment 43 evaluation"
+  ],
+  "gate": {
+    "main_C2": "3-seed mean of (C2+P5 - C2): D_s <= -0.03 AND PSNR >= -0.15 dB -> pass (supports a capacity + exact observation layer design)",
+    "large_candidate": "3-seed mean C2+P5 vs C0 base: PSNR >= +0.3 dB AND provisional QNR >= -0.005 -> flag as large-improvement candidate",
+    "context": "C0, C1, C3 with P5 and P0, and C2 with P0, are reported without separate gates"
+  },
+  "evaluation": {
+    "RR": 20,
+    "FR": 20,
+    "metrics": "common/metrics.py (rr_metrics, fr_metrics)",
+    "provisional": [
+      "SCC",
+      "Q2n",
+      "QNR"
+    ],
+    "test_used_for_selection": false
+  },
+  "constraints": {
+    "training": false,
+    "optimizer_updates": 0,
+    "gate_fixed_before_measurement": true
+  },
+  "results_summary": {
+    "main_pass": false,
+    "large_candidate": false,
+    "C2_P5_minus_C2": {
+      "D_s": 0.0361,
+      "PSNR": 0.0385,
+      "QNR": -0.0332
+    },
+    "C2_P5_minus_C0": {
+      "PSNR": 0.7409,
+      "QNR": -0.1066
+    },
+    "C0_P5_minus_C0": {
+      "PSNR": 0.1294,
+      "D_lambda": -0.0217,
+      "D_s": 0.0267,
+      "QNR": -0.0059
+    },
+    "rr_gt_constraint_rmse_dn": 0.000102,
+    "training": false
+  }
+}
