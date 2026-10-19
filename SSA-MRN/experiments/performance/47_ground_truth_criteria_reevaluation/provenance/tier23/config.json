@@ -1,0 +1,720 @@
+{
+  "research_track": "performance",
+  "experiment": 47,
+  "display_name": "47. 정답 기반 판정 기준(v2)과 기존 후보 재평가",
+  "experimenter": "이병현",
+  "status": "사전 검증 중",
+  "improvement": "판단 보류",
+  "criteria_v2": {
+    "basis": "experiment 46: on QB the FR D_s/QNR (toolbox 1.0 and original-paper variants) rank the ground truth below model outputs, so they cannot veto",
+    "primary_RR": "PanCollection RR20; candidate minus same-condition control; seed-mean PSNR > 0, SAM < 0, ERGAS < 0; with 3 seeds also PSNR > 0 in at least 2 of 3 seeds",
+    "guards_ground_truth": {
+      "RR2": "RR test scenes degraded once more (dataset Wald operator), GT = RR MS: seed-mean PSNR >= -0.05 dB and SAM <= +0.02 deg",
+      "FR_WALD": "FR test scenes degraded by the same operator, GT = native FR MS: seed-mean PSNR >= -0.05 dB and SAM <= +0.02 deg",
+      "FR_OBS": "interior RMSE (DN) of observation(FR output) - FR MS: seed-mean ratio to control <= 1.10"
+    },
+    "reported_only": [
+      "FR QNR",
+      "FR D_lambda",
+      "FR D_s",
+      "RR SCC",
+      "RR Q2n",
+      "RR2/FR_WALD ERGAS"
+    ],
+    "labels": {
+      "개선": "primary passes and all three guards pass",
+      "부분 개선": "primary passes but a guard fails, or only part of PSNR/SAM/ERGAS improves",
+      "개선 없음": "none of PSNR/SAM/ERGAS improves"
+    },
+    "adoption": "a baseline-model change additionally requires 3 seeds; single-seed results are labelled with their seed",
+    "new_FR_indices": "an FR index may enter decisions only after passing the experiment 46 ground-truth ranking test",
+    "tolerance_reference": "experiment 43 C0 seed SD: RR PSNR 0.056 dB, SAM 0.021 deg"
+  },
+  "protocol": {
+    "tool": "common/evaluation_protocol.py",
+    "degradation": "MS: common/observation.SensorObservation (QB DLPan MTF, x4, phase 2; experiment 3 audit; RR GT reproduces RR MS to 1e-4 DN in experiment 45). PAN: DLPan MTF_PAN (QB GNyq 0.15, 41 taps, replicate) and the same x4 phase-2 sampling. LMS: interp23tap, which reproduces the H5 LMS of RR and FR test scenes exactly (0 DN)",
+    "scenes": "RR test 20 and FR test 20; RR scene i and FR scene i are evaluated by the same model call sequence",
+    "precision": "FP32 inference, metrics in float64 DN, no clipping"
+  },
+  "groups": {
+    "29": {
+      "loader": "perf29",
+      "control": "R0",
+      "candidates": [
+        "W2",
+        "W3",
+        "F01",
+        "F11"
+      ],
+      "seeds": [
+        42
+      ],
+      "checkpoint": "checkpoints/{arm}_QB_s42/best.pt",
+      "tier": 1
+    },
+    "30": {
+      "loader": "plain",
+      "control": "final_baseline",
+      "candidates": [
+        "final_ffl"
+      ],
+      "seeds": [
+        42
+      ],
+      "checkpoint": "checkpoints/{arm}_QB_s42/best.pt",
+      "tier": 1
+    },
+    "33_38": {
+      "loader": "norm33",
+      "control": "N0",
+      "candidates": [
+        "N1"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "checkpoint": "33: checkpoints/{arm}_QB_s42/best.pt; 38: checkpoints/{arm}_QB_s{seed}/best.pt",
+      "tier": 1
+    },
+    "39": {
+      "loader": "local39",
+      "control": "global",
+      "candidates": [
+        "local"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "checkpoint": "checkpoints/{baseline|local}_QB_seed{seed}/best.pt",
+      "tier": 1
+    },
+    "40": {
+      "loader": "norm40",
+      "control": "A0",
+      "candidates": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "seeds": [
+        42
+      ],
+      "checkpoint": "checkpoints/{arm}_QB_s42/best.pt",
+      "tier": 1
+    },
+    "41": {
+      "loader": "photo41",
+      "control": "baseline",
+      "candidates": [
+        "aug"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "checkpoint": "checkpoints/{arm}_QB_seed{seed}/best.pt",
+      "tier": 1
+    },
+    "42": {
+      "loader": "dil42",
+      "control": "baseline",
+      "candidates": [
+        "dilated"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "checkpoint": "checkpoints/{arm}_QB_seed{seed}/best.pt",
+      "tier": 1
+    },
+    "43": {
+      "loader": "m43",
+      "control": "C0",
+      "candidates": [
+        "C1",
+        "C2",
+        "C3"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "checkpoint": "checkpoints/{arm}_QB_s{seed}/best.pt",
+      "tier": 1
+    },
+    "44": {
+      "loader": "m44",
+      "control": "B0",
+      "candidates": [
+        "C0",
+        "F1",
+        "F2"
+      ],
+      "seeds": [
+        42
+      ],
+      "checkpoint": "checkpoints/{arm}_QB_s42/best.pt",
+      "tier": 1
+    },
+    "4": {
+      "tier": 2,
+      "loader": "r4",
+      "control": "baseline",
+      "candidates": [
+        "interp23",
+        "lr_correction",
+        "high_frequency"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/4_interpolation_correction_detail/checkpoints/weights/{arm}_best.pt",
+      "k": 6
+    },
+    "5": {
+      "tier": 2,
+      "loader": "r4",
+      "control": "baseline",
+      "candidates": [
+        "interp23_output"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/5_interpolation_scope_sensors/checkpoints/weights/QB_{arm}_k6_s{seed}/best.pt",
+      "k": 6,
+      "note": "interp23 and interp23_input QB weights are evaluated in group 6"
+    },
+    "6": {
+      "tier": 2,
+      "loader": "r4",
+      "control": "baseline",
+      "candidates": [
+        "interp23",
+        "interp23_input"
+      ],
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "paths": "research/performance/6_interpolation_seed_repeat/checkpoints/weights/QB_{arm}_k6_s{seed}/best.pt",
+      "k": 6
+    },
+    "7": {
+      "tier": 2,
+      "loader": "build_model",
+      "control": "baseline",
+      "candidates": [
+        "band_gated_hf"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": {
+        "baseline": "research/performance/7_band_gated_detail/checkpoints/runs/github_QB_baseline_k6_s42/best.pt",
+        "band_gated_hf": "research/performance/7_band_gated_detail/checkpoints/runs/pasted_QB_band_gated_hf_k6_s42/best.pt"
+      },
+      "module": "7_band_gated_detail",
+      "k": 6
+    },
+    "8": {
+      "tier": 2,
+      "loader": "plain",
+      "control": "baseline",
+      "candidates": [
+        "mtf_aug"
+      ],
+      "seeds": [
+        46
+      ],
+      "paths": "research/performance/8_mtf_augmentation/checkpoints/{arm}/best.pt",
+      "k": 6
+    },
+    "9": {
+      "tier": 2,
+      "loader": "r9",
+      "control": "A0",
+      "candidates": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "seeds": [
+        46
+      ],
+      "paths": {
+        "A0": "research/performance/9_ssai_fusion/checkpoints/pair_A0_A1/A0/best.pt",
+        "A1": "research/performance/9_ssai_fusion/checkpoints/pair_A0_A1/A1/best.pt",
+        "A2": "research/performance/9_ssai_fusion/checkpoints/pair_A2_A3/A2/best.pt",
+        "A3": "research/performance/9_ssai_fusion/checkpoints/pair_A2_A3/A3/best.pt"
+      },
+      "k": 6
+    },
+    "10": {
+      "tier": 2,
+      "loader": "build_model",
+      "control": "B1",
+      "candidates": [
+        "B2"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/10_recurrent_observation/checkpoints/runs/{arm}_QB_{arm}_k6_s42/best.pt",
+      "module": "10_recurrent_observation",
+      "k": 6
+    },
+    "11": {
+      "tier": 2,
+      "loader": "r11",
+      "control": "A0",
+      "candidates": [
+        "A1"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/11_haar_reconstruction/checkpoints/runs/{arm}_QB_s42/best.pt"
+    },
+    "12": {
+      "tier": 2,
+      "loader": "plain",
+      "control": "k4",
+      "candidates": [
+        "k6"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/12_feature_dimension/checkpoints/runs/01_QB_{arm}_s42/best.pt",
+      "k": {
+        "k4": 4,
+        "k6": 6
+      }
+    },
+    "13": {
+      "tier": 2,
+      "loader": "build_model",
+      "control": "B1",
+      "candidates": [
+        "B2"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/13_recurrent_observation_resume/checkpoints/runs/{arm}_QB_{arm}_k6_s42/best.pt",
+      "module": "13_recurrent_observation_resume",
+      "k": 6
+    },
+    "14": {
+      "tier": 2,
+      "loader": "plain",
+      "control": "k4",
+      "candidates": [
+        "edge_0.1"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": {
+        "k4": "research/performance/12_feature_dimension/checkpoints/runs/01_QB_k4_s42/best.pt",
+        "edge_0.1": "research/performance/14_auxiliary_losses/checkpoints/runs/05_final_candidate/best.pt"
+      },
+      "k": 4,
+      "note": "30-epoch loss screens are not compared with the 100-epoch control"
+    },
+    "15": {
+      "tier": 2,
+      "loader": "r15",
+      "control": "B0",
+      "candidates": [
+        "B1"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/15_shared_reconstruction/checkpoints/{arm}/best.pt"
+    },
+    "16": {
+      "tier": 2,
+      "loader": "build_model",
+      "control": "B1",
+      "candidates": [
+        "B1_AA"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/16_bandlimited_downsampling/checkpoints/runs/{arm}_QB_{arm}_k4_s42/best.pt",
+      "module": "16_bandlimited_downsampling",
+      "k": 4
+    },
+    "17": {
+      "tier": 2,
+      "loader": "variant_class",
+      "control": "S0",
+      "candidates": [
+        "S1",
+        "S2",
+        "S3",
+        "R1",
+        "R2",
+        "M1",
+        "I1",
+        "I2"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/17_structural_ablation/checkpoints/runs/{arm}/best.pt",
+      "module": "17_structural_ablation",
+      "class": "StructureNet"
+    },
+    "18": {
+      "tier": 2,
+      "loader": "variant_class",
+      "control": "N0",
+      "candidates": [
+        "N1",
+        "N2",
+        "N3",
+        "N4",
+        "N5"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/18_coarse_feature_fusion/checkpoints/runs/{arm}/best.pt",
+      "module": "18_coarse_feature_fusion",
+      "class": "CoarseAnchorNet"
+    },
+    "19": {
+      "tier": 2,
+      "loader": "variant_class",
+      "control": "C0",
+      "candidates": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/19_dual_stream_reconstruction/checkpoints/{arm}/best.pt",
+      "module": "19_dual_stream_reconstruction",
+      "class": "DualStreamNet"
+    },
+    "20": {
+      "tier": 2,
+      "loader": "variant_class",
+      "control": "D0",
+      "candidates": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/20_recurrent_guidance/checkpoints/{arm}/best.pt",
+      "module": "20_recurrent_guidance",
+      "class": "GuidanceNet"
+    },
+    "21": {
+      "tier": 2,
+      "loader": "variant_class",
+      "control": "E0",
+      "candidates": [
+        "E1",
+        "E2",
+        "E3",
+        "E4",
+        "E5",
+        "E6",
+        "E7"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/21_guidance_refinement/checkpoints/{arm}/best.pt",
+      "module": "21_guidance_refinement",
+      "class": "RefinementNet"
+    },
+    "22": {
+      "tier": 2,
+      "loader": "variant_class",
+      "control": "F0",
+      "candidates": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/22_stage_aware_restoration/checkpoints/{arm}/best.pt",
+      "module": "22_stage_aware_restoration",
+      "class": "StageAwareNet"
+    },
+    "23": {
+      "tier": 2,
+      "loader": "r23",
+      "control": "original",
+      "candidates": [
+        "repeat",
+        "F0"
+      ],
+      "seeds": [
+        46
+      ],
+      "paths": "research/performance/23_multi_sensor_comparison/checkpoints/{arm}_QB_s46/best.pt"
+    },
+    "24": {
+      "tier": 2,
+      "loader": "r24",
+      "control": "B1",
+      "candidates": [
+        "B1_alpha_bounded"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/24_alpha_bounded_shared_reconstruction/checkpoints/{arm}/best.pt"
+    },
+    "25": {
+      "tier": 2,
+      "loader": "build_model",
+      "control": "B0",
+      "candidates": [
+        "B0_DS"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/25_multiscale_supervision/checkpoints/{arm}_QB_s42/best.pt",
+      "module": "25_multiscale_supervision",
+      "k": 4
+    },
+    "26": {
+      "tier": 2,
+      "loader": "plain",
+      "control": "baseline",
+      "candidates": [
+        "ema"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "research/performance/26_ema_weight_averaging/checkpoints/{arm}_QB_s42/best.pt",
+      "k": 4
+    },
+    "28": {
+      "tier": 2,
+      "loader": "r28",
+      "control": "G0",
+      "candidates": [
+        "G3",
+        "G4",
+        "G5"
+      ],
+      "seeds": [
+        46
+      ],
+      "paths": {
+        "G0": "research/performance/23_multi_sensor_comparison/checkpoints/original_QB_s46/best_at_100.pt",
+        "G3": "research/performance/28_residual_refinement/checkpoints/G3_QB_s46/best.pt",
+        "G4": "research/performance/28_residual_refinement/checkpoints/G4_QB_s46/best.pt",
+        "G5": "research/performance/28_residual_refinement/checkpoints/G5_QB_s46/best.pt"
+      },
+      "note": "G0 is the experiment-23 original model best within 100 epochs, the control used by experiment 28"
+    },
+    "ssai1": {
+      "tier": 3,
+      "loader": "ssai",
+      "control": "A0",
+      "candidates": [
+        "A1"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "experiments/ssai/1_spatial_alignment/checkpoints/{arm}_QB_s42/best.pt"
+    },
+    "ssai2": {
+      "tier": 3,
+      "loader": "ssai",
+      "control": "A0",
+      "candidates": [
+        "R1"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": {
+        "A0": "experiments/ssai/2_reference_area_normalization/checkpoints/A0_QB_s42/best.pt",
+        "R1": "experiments/ssai/2_reference_area_normalization/checkpoints/A0_QB_s42/best.pt"
+      },
+      "note": "R1 applies the area normalization to the A0 weights without training"
+    },
+    "ssai3": {
+      "tier": 3,
+      "loader": "ssai",
+      "control": "A0",
+      "candidates": [
+        "A2"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "experiments/ssai/3_calibrated_sigmoid_gating/checkpoints/{arm}_QB_s42/best.pt"
+    },
+    "ssai4": {
+      "tier": 3,
+      "loader": "ssai",
+      "control": "A0",
+      "candidates": [
+        "A1",
+        "A2",
+        "A3"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": "experiments/ssai/4_aligned_sigmoid_gating/checkpoints/{arm}_QB_s42/best.pt"
+    },
+    "ssai5": {
+      "tier": 3,
+      "loader": "ssai",
+      "control": "A0",
+      "candidates": [
+        "M25",
+        "M50"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": {
+        "A0": "experiments/ssai/4_aligned_sigmoid_gating/checkpoints/A0_QB_s42/best.pt",
+        "M25": "experiments/ssai/5_mixed_gating/checkpoints/M25_QB_s42/best.pt",
+        "M50": "experiments/ssai/5_mixed_gating/checkpoints/M50_QB_s42/best.pt"
+      }
+    },
+    "ssai6": {
+      "tier": 3,
+      "loader": "ssai",
+      "control": "A0",
+      "candidates": [
+        "D6"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": {
+        "A0": "experiments/ssai/4_aligned_sigmoid_gating/checkpoints/A0_QB_s42/best.pt",
+        "D6": "experiments/ssai/6_ms_conditioned_detail/checkpoints/D6_QB_s42/best.pt"
+      }
+    },
+    "ssai7": {
+      "tier": 3,
+      "loader": "ssai",
+      "control": "A0",
+      "candidates": [
+        "D7"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": {
+        "A0": "experiments/ssai/4_aligned_sigmoid_gating/checkpoints/A0_QB_s42/best.pt",
+        "D7": "experiments/ssai/7_channel_relation_detail/checkpoints/D7_QB_s42/best.pt"
+      }
+    },
+    "ssai8": {
+      "tier": 3,
+      "loader": "ssai8",
+      "control": "A0",
+      "candidates": [
+        "N1",
+        "N2"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": {
+        "A0": "experiments/ssai/4_aligned_sigmoid_gating/checkpoints/A0_QB_s42/best.pt",
+        "N1": "experiments/ssai/8_spatial_mean_normalization/checkpoints/N1_QB_s42/best.pt",
+        "N2": "experiments/ssai/8_spatial_mean_normalization/checkpoints/N2_QB_s42/best.pt"
+      }
+    },
+    "ssai9": {
+      "tier": 3,
+      "loader": "ssai9",
+      "control": "A0",
+      "candidates": [
+        "A1",
+        "A2"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": {
+        "A0": "experiments/ssai/4_aligned_sigmoid_gating/checkpoints/A0_QB_s42/best.pt",
+        "A1": "experiments/ssai/9_pan_innovation_correction/checkpoints/A1_QB_s42/best.pt",
+        "A2": "experiments/ssai/9_pan_innovation_correction/checkpoints/A2_QB_s42/best.pt"
+      }
+    },
+    "ssai12": {
+      "tier": 3,
+      "loader": "ssai12",
+      "control": "A0",
+      "candidates": [
+        "B2",
+        "B3"
+      ],
+      "seeds": [
+        42
+      ],
+      "paths": {
+        "A0": "experiments/ssai/4_aligned_sigmoid_gating/checkpoints/A0_QB_s42/best.pt",
+        "B2": "experiments/ssai/12_observation_matched_pan_guide/checkpoints/B2_QB_s42/best.pt",
+        "B3": "experiments/ssai/12_observation_matched_pan_guide/checkpoints/B3_QB_s42/best.pt"
+      }
+    }
+  },
+  "not_included": {
+    "performance 1": "public-code reproduction; no candidate-control pair",
+    "performance 2, 3": "no stored model weights",
+    "performance 14 loss screens": "30-epoch screens; only the 100-epoch final candidate is compared with the 100-epoch control",
+    "performance 27": "model source not preserved in the repository",
+    "performance 31": "seed46 short run",
+    "performance 32": "10-epoch screen",
+    "performance 34": "no matched control",
+    "performance 35, 36, 45, 46": "training-free gates and diagnostics",
+    "performance 37": "W2 gate; no standalone model module",
+    "SSAI 10": "training stopped at 21 and 45 epochs; not comparable with the 100-epoch control",
+    "SSAI 11": "analysis without trained candidates",
+    "variable scale, GF2, WV3": "different input protocol or sensor"
+  },
+  "constraints": {
+    "training": false,
+    "optimizer_updates": 0,
+    "test_used_for_selection": false,
+    "criteria_fixed_before_measurement": true
+  }
+}
