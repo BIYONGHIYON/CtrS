@@ -10,7 +10,7 @@
 
 기존 복원 구조·학습 방법·손실 등의 수치 개선을 계속 비교합니다.
 
-같은 센서·배율·데이터·학습 조건의 대조군과 RR·FR을 함께 비교합니다. validation으로 후보와 가중치를 선택하며 지표·시드·센서가 엇갈리면 부분 개선으로 기록합니다.
+같은 센서·배율·데이터·학습 조건의 대조군과 비교합니다. validation으로 후보와 가중치를 선택하고, 개선 여부는 [판정 기준 v2.1](../../docs/judgement_criteria.md)(RR 주 판정과 RR2·FR_WALD·FR 관측 일치 보조 판정)으로 정합니다. 47번 이전 실험의 판정은 [성능 47번 재평가](../../experiments/performance/47_ground_truth_criteria_reevaluation/README.md)를 기준으로 합니다.
 
 <a id="experiments"></a>
 
