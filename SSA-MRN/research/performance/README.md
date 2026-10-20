@@ -71,6 +71,7 @@
 | [49. 관측 오차 보정기(G5) 계열의 3시드 재현](../../experiments/performance/49_observation_refinement_seed_repeat/README.md)<br>[이병현] | 원본 뒤에 28번 G5 관측 오차 보정기 두 개를 붙인 F1을 43번과 같은 절차로 seed 42·43·44 학습해 43번 C0 3시드와 비교했습니다. | 3시드 평균 원본 대비 RR PSNR +0.194dB·SAM −0.139°, FR_WALD +0.283dB, 관측 RMSE 0.81배, RR2 −0.014dB로 판정 항목을 모두 통과했습니다. RR은 3/3시드·20/20장에서 개선됐습니다. | 평가&nbsp;완료<br>3seed | 개선 |
 | [50. W2 가지 출력의 추론 시 축소 진단](../../experiments/performance/50_w2_branch_inference_scaling/README.md)<br>[이병현] | 학습 없이 43번 C2의 W2 가지 출력을 추론 시에만 α=0-1로 줄여 RR·RR2·FR_WALD와 오차의 저역·고역을 비교했습니다. | RR·FR_WALD는 α=1에서 최고였지만 RR2는 α=0.5에서 C0 대비 +1.42dB(17/20장)로 최고였고, α=1로 키우면 RR2 고역 오차가 22.0에서 28.2DN으로 늘었습니다. RR2 미달은 세부 주입 세기의 축척 의존성으로 보입니다. | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 | [51. 정답 없는 FR 세부 지표 후보의 타당성 검증](../../experiments/performance/51_fr_detail_index_validity/README.md)<br>[이병현] | 학습 없이 PAN 유사도로 FR 세부를 재는 정답 없는 지표 4개(흑백 합성 고주파 상관·차이, 밴드별 고주파 상관, 국소 상관)를 46번 정답 순위 검사로 확인했습니다. | 네 지표 모두 정답이 C0보다 우세한 장면 0/20, 오차와 지표 나쁨의 순위 상관 −0.62에서 −0.77로 정답을 거꾸로 채점했습니다(충돌). PAN 세부를 그대로 베끼는 MTF-GLP가 1등이어서 판정에 쓰지 않습니다. | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
+| [52. W2 추가 특징의 고주파 선택 제어](../../experiments/performance/52_w2_frequency_selective_attenuation/README.md)<br>[송준현] | W2 저역은 유지하고 고역을 샘플별 에너지 게이트로 조절했습니다. | W2 C2 대비3seed PSNR +0.01737dB(잡음 수준)·RR2 SAM +0.07235° 미달. F1 대비 비교 아님 | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
 
 [새 실험 등록 절차](../../README.md#새-실험-등록) · [실험 보고서 양식](../../docs/experiment_template.md)
 
