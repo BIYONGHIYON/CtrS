@@ -13,7 +13,7 @@ SSAI의 PAN 공간정보와 MS 분광정보를 결합하는 연산을 개선합�
 | 확인한 사실 | 근거 실험 |
 |---|---|
 | test까지 평가한 SSAI 후보의 A0 대비 RR PSNR 변화는 −0.071에서 +0.055 dB 사이였습니다(10번은 test 미평가). 같은 조건 A0 두 번의 차이는 PSNR 0.036 dB, QNR 0.004입니다. | 1-9, 12 |
-| 현행 v2.2에서 1번 A1과 12번 진단용 B3는 모든 판정 항목을 통과한 단일 시드 개선입니다. 1번의 이득은 4번 재비교에서 재현되지 않았습니다. | 1, 4, 12 |
+| 현행 v2.3에서 1번 A1(+0.055dB)과 12번 진단용 B3(+0.050dB)는 모든 판정 항목을 통과했지만 이득이 단일 시드 잡음 문턱 0.06dB 미만이라 부분 개선입니다. 1번의 이득은 4번 재비교에서 재현되지 않았습니다. | 1, 4, 12 |
 | A0에서 SSA 출력을 0으로 바꿔도 RR·FR 지표가 같았습니다. SSAI 단계 전체를 제거하면 RR PSNR이 −1.55 dB 떨어졌습니다. | 11 |
 | SSA 경로를 실제로 쓰게 만든 후보 중 12번 B3는 현행 기준에서 개선이며, 8번 N1·9번·12번 B2는 개선 없음입니다. 과거 QNR 하락만으로 FR 정확도 악화를 판단하지 않습니다. | 8, 9, 12 |
 | A0 오차를 PAN 국소 선형 결합으로 줄일 수 있는 이상적 상한은 약 0.52 dB였습니다. | 11 |
@@ -33,11 +33,11 @@ SSAI의 PAN 공간정보와 MS 분광정보를 결합하는 연산을 개선합�
 
 ## 실험 표
 
-[판정 기준 v2.2](../../docs/judgement_criteria.md)와 [현재 표 판정](../../experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_2.json)을 반영했습니다. 단일 시드도 모든 항목을 통과하면 개선으로 표시하며, 여러 시드는 평균으로 판정합니다. 아래 표는 QB 결과이고, 개별 보고서의 원래 판정은 당시 기록으로 보존합니다. QNR·Dλ·Ds는 참고 지표입니다.
+[판정 기준 v2.3](../../docs/judgement_criteria.md)와 [현재 표 판정](../../experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json)을 반영했습니다. 단일 시드도 모든 항목을 통과하고 RR 이득이 잡음 문턱(0.06dB) 이상이면 개선으로 표시하며, 여러 시드는 평균으로 판정합니다. 아래 표는 QB 결과이고, 개별 보고서의 원래 판정은 당시 기록으로 보존합니다. QNR·Dλ·Ds는 참고 지표입니다.
 
 | 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
 |---|---|---|:---:|:---:|
-| [1. 공간 좌표 정렬](../../experiments/ssai/1_spatial_alignment/README.md)<br>[이병현] | 원본의 두 공간 전치를 제거해 같은 위치의 PAN·MS 특징을 결합했습니다. | QB seed42: A1 개선. RR ΔPSNR +0.055dB·ΔSAM -0.035°. 개선 후보는 RR·보조 판정을 모두 통과했습니다. | 평가&nbsp;완료 | 개선 |
+| [1. 공간 좌표 정렬](../../experiments/ssai/1_spatial_alignment/README.md)<br>[이병현] | 원본의 두 공간 전치를 제거해 같은 위치의 PAN·MS 특징을 결합했습니다. | QB seed42: A1 부분 개선(잡음 수준). 판정 항목을 모두 통과했지만 RR ΔPSNR +0.055dB가 단일 시드 잡음 문턱 0.06dB 미만입니다. ΔSAM -0.035°. | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [2. 기준 면적 정규화](../../experiments/ssai/2_reference_area_normalization/README.md)<br>[이병현] | 원본 SSAI 출력에 현재 면적/학습 기준 면적을 곱했습니다. | QB seed42: R1 개선 없음. RR ΔPSNR -0.000dB·ΔSAM +0.001°. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
 | [3. 기준 크기 sigmoid 게이트](../../experiments/ssai/3_calibrated_sigmoid_gating/README.md)<br>[이병현] | 원본 전치를 유지하고 공간 softmax를 기준 크기 sigmoid 게이트로 교체했습니다. | QB seed42: A2 부분 개선. RR ΔPSNR +0.023dB·ΔSAM -0.025°. RR2 미달입니다. | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [4. 공간 좌표 정렬과 sigmoid 게이트 결합](../../experiments/ssai/4_aligned_sigmoid_gating/README.md)<br>[이병현] | 좌표 정렬과 기준 크기 sigmoid를 결합하고 네 후보를 동일 조건으로 비교합니다. | QB seed42: A1·A2·A3 개선 없음. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
@@ -48,7 +48,7 @@ SSAI의 PAN 공간정보와 MS 분광정보를 결합하는 연산을 개선합�
 | [9. PAN 재구성 오차 기반 보정](../../experiments/ssai/9_pan_innovation_correction/README.md)<br>[이병현] | PAN 직접 고주파와 PAN 재구성 오차를 같은 크기의 SSAI에서 비교했습니다. | QB seed42: A1·A2 개선 없음. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
 | [10. 국소 창 교차 어텐션 SSAI](../../experiments/ssai/10_local_window_cross_attention/README.md)<br>[이병현] | 전역 공간 softmax를 7×7 국소 창 어텐션으로 바꾸고 동일 파라미터 convolution 대조군과 비교합니다. | 같은 에폭 A0 대비 validation: L2 −0.81%(21에폭), C −1.15%(45에폭); test 미평가 | 학습&nbsp;중단<br>10-16&nbsp;01:20 | 판단&nbsp;보류 |
 | [11. SSAI 경로 제거 분해와 PAN 기저 결합 상한·FR 대리 지표 검증](../../experiments/ssai/11_ssai_contribution_headroom/README.md)<br>[이병현] | 학습 없이 A0 best에서 SSA 출력·SSAI 단계·coarse 경로·backbone 잔차를 제거하고, PAN 기저 결합 oracle 상한과 validation FR 대리 지표를 검증했습니다. | SSA 출력 제거 시 RR·FR 동일; SSAI 단계 제거 PSNR −1.55dB(상수 보정); oracle null 초과 설명량 11.3%; 대리 Ds 순위 상관 −0.18 | 사전&nbsp;검증&nbsp;완료<br>10-16&nbsp;03:02 | 성능&nbsp;비교&nbsp;아님 |
-| [12. 관측 통계로 정합한 밴드별 PAN 입력](../../experiments/ssai/12_observation_matched_pan_guide/README.md)<br>[이병현] | SSAI 8번 N1 블록에서 PAN 입력만 관측 LR MS 밴드의 국소 평균·표준편차로 정합한 PAN으로 바꾸고, 원 PAN(N1)·장면 전체 통계 정합과 비교합니다. | QB seed42: B3 개선; B2 개선 없음. 개선 후보는 RR·보조 판정을 모두 통과했습니다. B3는 진단 후보이며 최종 채택을 뜻하지 않습니다. | 평가&nbsp;완료 | 개선 |
+| [12. 관측 통계로 정합한 밴드별 PAN 입력](../../experiments/ssai/12_observation_matched_pan_guide/README.md)<br>[이병현] | SSAI 8번 N1 블록에서 PAN 입력만 관측 LR MS 밴드의 국소 평균·표준편차로 정합한 PAN으로 바꾸고, 원 PAN(N1)·장면 전체 통계 정합과 비교합니다. | QB seed42: B3 부분 개선(잡음 수준, RR ΔPSNR +0.050dB); B2 개선 없음. B3는 진단 후보이며 최종 채택을 뜻하지 않습니다. | 평가&nbsp;완료 | 부분&nbsp;개선 |
 
 ## 비교 조건과 한계
 
@@ -64,12 +64,12 @@ A1의 단일 시드 RR·잠정 FR 동반 개선은 반복 검증과 기준 모�
 
 
 
-4번의 네 후보는 처음부터 동일 micro32·FP32 조건으로 각 100에폭 학습하고 RR·FR 각 20장면을 평가했습니다. 현재 v2.2에서는 세 후보 모두 RR 주 지표가 나빠져 개선 없음이며, 당시 validation 후속 기준도 통과하지 못했습니다. 원본 기준 모델을 유지합니다. 실제 best/latest 8개와 학습 소스·설정·전체 숫자·그래프·고정 예시를 4번 폴더에 보관했습니다.
+4번의 네 후보는 처음부터 동일 micro32·FP32 조건으로 각 100에폭 학습하고 RR·FR 각 20장면을 평가했습니다. 현재 v2.3에서는 세 후보 모두 RR 주 지표가 나빠져 개선 없음이며, 당시 validation 후속 기준도 통과하지 못했습니다. 원본 기준 모델을 유지합니다. 실제 best/latest 8개와 학습 소스·설정·전체 숫자·그래프·고정 예시를 4번 폴더에 보관했습니다.
 
-5번은 신규 혼합 후보 두 개만100에폭 학습하고 실험4의 동일조건 A0·A2를 참조했습니다. 현재 v2.2에서는 M25·M50 모두 개선 없음이며, 당시 validation 기준도 통과하지 못했습니다. 새80개 RR/FR 예측·실제 best/latest4개·학습소스·설정·그래프·고정 예시를5번에 보관했습니다. 원본 기준 모델을 유지합니다.
+5번은 신규 혼합 후보 두 개만100에폭 학습하고 실험4의 동일조건 A0·A2를 참조했습니다. 현재 v2.3에서는 M25·M50 모두 개선 없음이며, 당시 validation 기준도 통과하지 못했습니다. 새80개 RR/FR 예측·실제 best/latest4개·학습소스·설정·그래프·고정 예시를5번에 보관했습니다. 원본 기준 모델을 유지합니다.
 
 6·7번은원본SSA기반의MS조건부세부정보보정을각100에폭학습했습니다. 7번validation은0.116%좋아졌지만RR주요지표·잠정FR은악화했고두실험모두개선없음입니다. 실제신규80개예측·best/latest4개·원본소스/설정·그래프·사전고정예시를보존하고원본을유지합니다. 다음우선검토는1번좌표정렬의반복시드재현성이며새학습은시작하지않았습니다.
 
 9번은PAN 직접 고주파와PAN 재구성 오차 보정을각100에폭 학습하고 A0·A1·A2의RR20·FR20 전체를 같은 환경에서 평가했습니다. 두 후보 모두SSAI 가중치가 크게 변했지만 주요RR 지표와잠정QNR이 악화해 개선없음입니다. 원본A0를 유지합니다.
 
-12번은 SSA 경로가 쓰이는 8번 N1 블록에서 PAN 입력만 관측 LR MS 통계로 밴드별 정합한 PAN으로 바꾸는 계획입니다. FR Ds 감소를 주 가설로 두고 기존 A0·N1을 대조군으로 재사용합니다. 당시 B2의 Ds 감소 가설은 기각됐습니다. 현재 v2.2에서 B2는 RR 주 판정 미달로 개선 없음이고, 진단용 B3는 RR·보조 판정을 모두 통과해 단일 시드 개선입니다. 원본 A0를 유지하며 반복 시드는 진행하지 않습니다.
+12번은 SSA 경로가 쓰이는 8번 N1 블록에서 PAN 입력만 관측 LR MS 통계로 밴드별 정합한 PAN으로 바꾸는 계획입니다. FR Ds 감소를 주 가설로 두고 기존 A0·N1을 대조군으로 재사용합니다. 당시 B2의 Ds 감소 가설은 기각됐습니다. 현재 v2.3에서 B2는 RR 주 판정 미달로 개선 없음이고, 진단용 B3는 RR·보조 판정을 모두 통과했지만 이득(+0.050dB)이 잡음 문턱 미만이라 부분 개선입니다. 원본 A0를 유지하며 반복 시드는 진행하지 않습니다.

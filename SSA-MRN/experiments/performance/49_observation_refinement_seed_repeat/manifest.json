@@ -2,11 +2,11 @@
   "experiment": "performance/49_observation_refinement_seed_repeat",
   "research_track": "performance",
   "experiment_number": 49,
-  "state": "F1 seeds 42-44 trained (150 epochs) and evaluated with criteria v2.2 against 43 C0; code shared with experiment 48",
+  "state": "F1 seeds 42-44 trained and evaluated (criteria v2.2/v2.3 improvement); adopted as baseline 2026-10-20; baseline comparison and FR/RR2 visual check added",
   "files": {
     "README.md": {
-      "bytes": 9753,
-      "sha256": "c1b4e57a15d9f89f398865f7faed4344763de201f0f0ccef41ff404934fb147b"
+      "bytes": 11692,
+      "sha256": "27f54dfc5708307bfa4af9627ba0b857c6ad49ed7e9535a0e25eac160776bf17"
     },
     "checkpoints/F1_QB_s42/best.pt": {
       "bytes": 3102826,
@@ -187,6 +187,82 @@
     "results/F1_QB_s44/training_complete.json": {
       "bytes": 531,
       "sha256": "d35a8fb9f808f2bb9f844e4d35d04fdddb1b265c66d944e5256bb3c58c76f988"
+    },
+    "results/baseline_compare/compare.json": {
+      "bytes": 1643,
+      "sha256": "f2c947c1f940ff7743adb0a7ef449caa127dca4fea8a089b263f5e0185d87630"
+    },
+    "results/baseline_compare/make_compare.py": {
+      "bytes": 3964,
+      "sha256": "293d1063eb145fb1332e927433c6e8fd63ca228d3b0ecd32210a3b2af886eb39"
+    },
+    "results/baseline_compare/scene_01.png": {
+      "bytes": 243191,
+      "sha256": "83505520b4a2d39b8ada49fccd079a77220c041ed94161e2d5d59529ef6e16d4"
+    },
+    "results/baseline_compare/scene_08.png": {
+      "bytes": 235346,
+      "sha256": "8fb9af1c350ab28f3ad693b7d0e38433d85353f9f49575f8b8edb831391ae435"
+    },
+    "results/baseline_compare/scene_11.png": {
+      "bytes": 229827,
+      "sha256": "29435185555d4356b671e986bc7816a8fe67cdf014082e9e6f083dbfc16ffeb5"
+    },
+    "results/baseline_compare/scene_13.png": {
+      "bytes": 236975,
+      "sha256": "073c7fe47aae01a71deb9e32f3eb4e35bad2cd55ef3c165a0adfcbd0f5d1a9c8"
+    },
+    "results/baseline_compare/scene_19.png": {
+      "bytes": 246131,
+      "sha256": "a0e8325a66a76281c8ce6ac8d59db9c91580aa2c380be9adce124ca875dba37e"
+    },
+    "results/fr_rr2_visual/FR_scene_01.png": {
+      "bytes": 428890,
+      "sha256": "a1c1813dc20a846f853fd9e0d365b55646c3d691b47dce543ad772665db1c7dc"
+    },
+    "results/fr_rr2_visual/FR_scene_08.png": {
+      "bytes": 435669,
+      "sha256": "6377a10f42df0b386939a87b4dfb9206049240f5f8dbb414e9620fd1c6d4c19b"
+    },
+    "results/fr_rr2_visual/FR_scene_11.png": {
+      "bytes": 383619,
+      "sha256": "9f668f4d139b495df99a12116e30783750465d5f0cd3abcc17bb67610fd5f407"
+    },
+    "results/fr_rr2_visual/FR_scene_13.png": {
+      "bytes": 396671,
+      "sha256": "12d8cf7e20d960d19308610d4ecd485e56e91cca9b79f4b43f430a635c108053"
+    },
+    "results/fr_rr2_visual/FR_scene_19.png": {
+      "bytes": 404960,
+      "sha256": "6f1fedaa9c7e1e0a12d450fea608a908aa232373ea4abbca3984dfc92f0a5be1"
+    },
+    "results/fr_rr2_visual/RR2_scene_01.png": {
+      "bytes": 119653,
+      "sha256": "42f42521ef3c732bcf045e679d97fa7952edeeb72fb0289b2aaebb9d76678445"
+    },
+    "results/fr_rr2_visual/RR2_scene_08.png": {
+      "bytes": 140592,
+      "sha256": "7fa6259af0207401a9b55ccb359e01db3fc3bfd03c17f5e20eb3320d38d693c8"
+    },
+    "results/fr_rr2_visual/RR2_scene_11.png": {
+      "bytes": 136092,
+      "sha256": "3f08b4bc4f1990ec57d0f75be426809825f9cfc47475518e9dae69386a71f2c9"
+    },
+    "results/fr_rr2_visual/RR2_scene_13.png": {
+      "bytes": 142511,
+      "sha256": "710a6a8162b7e00208cdc34c364126e949d2fcff1102a3b4974d02039d05100e"
+    },
+    "results/fr_rr2_visual/RR2_scene_19.png": {
+      "bytes": 143149,
+      "sha256": "75c8da689f60645e36e7f83d8ce254df875f79143e79c24c8af49daa5b185b1f"
+    },
+    "results/fr_rr2_visual/stats.json": {
+      "bytes": 3548,
+      "sha256": "2079d0a48ee34016c15f0b5e119c03f7378eabf63847e29ac6d2053f4b406fee"
+    },
+    "results/fr_rr2_visual/visual_check.py": {
+      "bytes": 5447,
+      "sha256": "1621c8da0c5f9591505dfaeca3d03dbcd1e1883faefc44004f3348377c7af895"
     },
     "results/learning_curves.png": {
       "bytes": 191009,
