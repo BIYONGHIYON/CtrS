@@ -1873,5 +1873,41 @@
     "config": "experiments/performance/52_w2_frequency_selective_attenuation/config.json",
     "entrypoint": "experiments/performance/52_w2_frequency_selective_attenuation/run.py",
     "verification": "experiments/performance/52_w2_frequency_selective_attenuation/prepare.py"
+  },
+  "performance/53_scale_mixed_training": {
+    "report": "experiments/performance/53_scale_mixed_training/README.md",
+    "research_track": "performance",
+    "experiment": 53,
+    "working_number": 52,
+    "display_name": "53. 2배 거친 학습 쌍을 섞은 축척 혼합 학습",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "개선",
+    "evaluated_seeds": [
+      42
+    ],
+    "sensor": "QB",
+    "last_checked": "2026-10-21T07:02:43+09:00",
+    "limits": "seed 42 한 개. 학습에 2배 거친 쌍을 넣어 RR2(4배 거친 시험)는 처음 보는 축척이 아님. FR 방향 일반화는 직접 확인하지 않음. C2MS 파라미터는 F1의 6.2배. F1MS는 개선 없음.",
+    "judgement": {
+      "criteria_version": "v2.3",
+      "source": "experiments/performance/53_scale_mixed_training/results/evaluation_v2_3.json",
+      "scope": "QB; current baseline F1 seed 42 control",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "C2MS": "개선",
+        "F1MS": "개선 없음"
+      },
+      "large_gain_condition": true
+    },
+    "checkpoints": "experiments/performance/53_scale_mixed_training/checkpoints",
+    "results": "experiments/performance/53_scale_mixed_training/results",
+    "manifest": "experiments/performance/53_scale_mixed_training/manifest.json",
+    "model": "experiments/performance/53_scale_mixed_training/model.py",
+    "config": "experiments/performance/53_scale_mixed_training/config.json",
+    "entrypoint": "experiments/performance/53_scale_mixed_training/run.py",
+    "verification": "experiments/performance/53_scale_mixed_training/evaluate.py"
   }
 }
