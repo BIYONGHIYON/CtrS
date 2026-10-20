@@ -36,14 +36,15 @@ Desktop.ini
 *.log
 
 # 실험별 보존 가중치만 추적합니다. 임시 학습 출력은 runtime에 둡니다.
-!SSA-MRN/experiments/*/checkpoints/**/*.pt
-!SSA-MRN/experiments/*/checkpoints/**/*.pth
-!SSA-MRN/experiments/*/checkpoints/**/*.ckpt
+# experiments·research 아래 checkpoints 폴더는 깊이와 관계없이 추적합니다.
+!SSA-MRN/experiments/**/checkpoints/**/*.pt
+!SSA-MRN/experiments/**/checkpoints/**/*.pth
+!SSA-MRN/experiments/**/checkpoints/**/*.ckpt
+!SSA-MRN/research/**/checkpoints/**/*.pt
+!SSA-MRN/research/**/checkpoints/**/*.pth
+!SSA-MRN/research/**/checkpoints/**/*.ckpt
 SSA-MRN/runtime/
 SSA-MRN/**/*.ipynb
 
 # 로컬 PAN–MS 평가 데이터 (원본 서버에서 복사)
 SSA-MRN/data/test/
-
-# SSAI 계열의 보존 checkpoint (초기 재개 가중치 포함)
-!SSA-MRN/experiments/ssai/*/checkpoints/**/*.pt
