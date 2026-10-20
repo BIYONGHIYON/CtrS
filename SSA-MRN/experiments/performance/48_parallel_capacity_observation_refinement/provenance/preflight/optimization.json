@@ -1,0 +1,221 @@
+{
+  "time_kst": "2026-10-20T06:57:18.221637+09:00",
+  "selected_max_parallel": 1,
+  "makespan_proxy_step_units": {
+    "1": 0.617236600000524,
+    "2": 0.6534757499999841,
+    "3": 0.9193344999998772,
+    "4": 0.6717757500000516
+  },
+  "results": {
+    "1": {
+      "arms": [
+        "WF"
+      ],
+      "returncodes": [
+        0
+      ],
+      "wall_seconds": 18.188000000000102,
+      "rows": [
+        {
+          "arm": "WF",
+          "layout": "channels_last",
+          "tag": "n1_0",
+          "median_step_seconds": 0.154309150000131,
+          "measured_steps": 80,
+          "warmup": 4,
+          "peak_allocated_bytes": 702848512,
+          "peak_reserved_bytes": 784334848,
+          "loss": 0.0011054130736738443,
+          "probe_updates": 84,
+          "time_kst": "2026-10-20T06:54:48.485325+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        }
+      ],
+      "safe": true,
+      "reserved_gib": 0.73046875,
+      "patches_per_second": 207.3759073909281
+    },
+    "2": {
+      "arms": [
+        "WF",
+        "F1"
+      ],
+      "returncodes": [
+        0,
+        0
+      ],
+      "wall_seconds": 33.1400000000001,
+      "rows": [
+        {
+          "arm": "WF",
+          "layout": "channels_last",
+          "tag": "n2_0",
+          "median_step_seconds": 0.34196844999996756,
+          "measured_steps": 80,
+          "warmup": 4,
+          "peak_allocated_bytes": 702848512,
+          "peak_reserved_bytes": 784334848,
+          "loss": 0.0011052493937313557,
+          "probe_updates": 84,
+          "time_kst": "2026-10-20T06:55:21.645795+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        },
+        {
+          "arm": "F1",
+          "layout": "channels_last",
+          "tag": "n2_1",
+          "median_step_seconds": 0.3115073000000166,
+          "measured_steps": 80,
+          "warmup": 4,
+          "peak_allocated_bytes": 529430528,
+          "peak_reserved_bytes": 601882624,
+          "loss": 0.0011446881107985973,
+          "probe_updates": 84,
+          "time_kst": "2026-10-20T06:55:20.286863+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        }
+      ],
+      "safe": true,
+      "reserved_gib": 1.291015625,
+      "patches_per_second": 196.30220852571884
+    },
+    "3": {
+      "arms": [
+        "WF",
+        "F1",
+        "F1"
+      ],
+      "returncodes": [
+        0,
+        0,
+        0
+      ],
+      "wall_seconds": 46.562999999999874,
+      "rows": [
+        {
+          "arm": "WF",
+          "layout": "channels_last",
+          "tag": "n3_0",
+          "median_step_seconds": 0.5096885499999644,
+          "measured_steps": 80,
+          "warmup": 4,
+          "peak_allocated_bytes": 702848512,
+          "peak_reserved_bytes": 784334848,
+          "loss": 0.0011053148191422224,
+          "probe_updates": 84,
+          "time_kst": "2026-10-20T06:56:08.201485+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        },
+        {
+          "arm": "F1",
+          "layout": "channels_last",
+          "tag": "n3_1",
+          "median_step_seconds": 0.4600583999999799,
+          "measured_steps": 80,
+          "warmup": 4,
+          "peak_allocated_bytes": 529430528,
+          "peak_reserved_bytes": 601882624,
+          "loss": 0.0011446881107985973,
+          "probe_updates": 84,
+          "time_kst": "2026-10-20T06:56:06.828993+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        },
+        {
+          "arm": "F1",
+          "layout": "channels_last",
+          "tag": "n3_2",
+          "median_step_seconds": 0.45927609999989727,
+          "measured_steps": 80,
+          "warmup": 4,
+          "peak_allocated_bytes": 529430528,
+          "peak_reserved_bytes": 601882624,
+          "loss": 0.0011447379365563393,
+          "probe_updates": 84,
+          "time_kst": "2026-10-20T06:56:06.779682+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        }
+      ],
+      "safe": true,
+      "reserved_gib": 1.8515625,
+      "patches_per_second": 202.01469020060614
+    },
+    "4": {
+      "arms": [
+        "WF",
+        "F1",
+        "F1",
+        "F1"
+      ],
+      "returncodes": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "wall_seconds": 59.8900000000001,
+      "rows": [
+        {
+          "arm": "WF",
+          "layout": "channels_last",
+          "tag": "n4_0",
+          "median_step_seconds": 0.6717757500000516,
+          "measured_steps": 80,
+          "warmup": 4,
+          "peak_allocated_bytes": 702848512,
+          "peak_reserved_bytes": 784334848,
+          "loss": 0.0011052554473280907,
+          "probe_updates": 84,
+          "time_kst": "2026-10-20T06:57:08.062107+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        },
+        {
+          "arm": "F1",
+          "layout": "channels_last",
+          "tag": "n4_1",
+          "median_step_seconds": 0.6071266000000151,
+          "measured_steps": 80,
+          "warmup": 4,
+          "peak_allocated_bytes": 529430528,
+          "peak_reserved_bytes": 601882624,
+          "loss": 0.0011446891585364938,
+          "probe_updates": 84,
+          "time_kst": "2026-10-20T06:57:06.612207+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        },
+        {
+          "arm": "F1",
+          "layout": "channels_last",
+          "tag": "n4_2",
+          "median_step_seconds": 0.6084394499999917,
+          "measured_steps": 80,
+          "warmup": 4,
+          "peak_allocated_bytes": 529430528,
+          "peak_reserved_bytes": 601882624,
+          "loss": 0.0011446881107985973,
+          "probe_updates": 84,
+          "time_kst": "2026-10-20T06:57:06.578850+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        },
+        {
+          "arm": "F1",
+          "layout": "channels_last",
+          "tag": "n4_3",
+          "median_step_seconds": 0.6098381000000472,
+          "measured_steps": 80,
+          "warmup": 4,
+          "peak_allocated_bytes": 529430528,
+          "peak_reserved_bytes": 601882624,
+          "loss": 0.0011446427088230848,
+          "probe_updates": 84,
+          "time_kst": "2026-10-20T06:57:06.562824+09:00",
+          "note": "disposable benchmark model; not an experimental trained checkpoint"
+        }
+      ],
+      "safe": true,
+      "reserved_gib": 2.412109375,
+      "patches_per_second": 205.40874594280262
+    }
+  },
+  "fingerprint": "8e47059e0989decbdd4aeae39cb0d0759243244dfc7d4a2a7455b93ce593f9c6"
+}

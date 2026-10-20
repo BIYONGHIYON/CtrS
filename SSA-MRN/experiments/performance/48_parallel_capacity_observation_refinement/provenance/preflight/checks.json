@@ -1,0 +1,62 @@
+{
+  "time_kst": "2026-10-20T06:57:17.717617+09:00",
+  "core_equal_to_43": true,
+  "core_state_sha256": {
+    "C0_s42": "f9323ba6cb23b9b775a1435b4a670e5577772084818b3c55c3ed9f3a82393060",
+    "C2_s42": "004f0b47ef8d4a0a8a7c12edfb2125c7d9c5a4c4727e6026118a936099393442",
+    "F1_s42": "f9323ba6cb23b9b775a1435b4a670e5577772084818b3c55c3ed9f3a82393060",
+    "WF_s42": "004f0b47ef8d4a0a8a7c12edfb2125c7d9c5a4c4727e6026118a936099393442",
+    "C0_s43": "373529d2584ed5d3801f4bcb9d3ac07341e37ba2c646357d12c92cb24881b23e",
+    "C2_s43": "dd89b69e043df889415c2ad16bfca5971627e435ea8c0377844a148152db8020",
+    "F1_s43": "373529d2584ed5d3801f4bcb9d3ac07341e37ba2c646357d12c92cb24881b23e",
+    "WF_s43": "dd89b69e043df889415c2ad16bfca5971627e435ea8c0377844a148152db8020",
+    "C0_s44": "791c609d540f495fec5375d119aa1136f600f70b5d196fe03f4baf7f23825515",
+    "C2_s44": "6d86d7b41f85556d2724066194a89b0663633049704d32a53261dcf2c76f9010",
+    "F1_s44": "791c609d540f495fec5375d119aa1136f600f70b5d196fe03f4baf7f23825515",
+    "WF_s44": "6d86d7b41f85556d2724066194a89b0663633049704d32a53261dcf2c76f9010"
+  },
+  "refiners_shared_F1_WF": true,
+  "initial_output_pairs_equal": [
+    [
+      "C0",
+      "F1"
+    ],
+    [
+      "C2",
+      "WF"
+    ]
+  ],
+  "refiner_path_equal_28_G5_nonzero_max_abs": 0.0,
+  "batchnorm_modules": 0,
+  "checks": {
+    "C0": {
+      "initial_state_sha256": "f9323ba6cb23b9b775a1435b4a670e5577772084818b3c55c3ed9f3a82393060",
+      "parameters": 426654,
+      "resume_max_abs": 0.0,
+      "loss": 0.2206428200006485,
+      "initial_state_restored": true
+    },
+    "C2": {
+      "initial_state_sha256": "004f0b47ef8d4a0a8a7c12edfb2125c7d9c5a4c4727e6026118a936099393442",
+      "parameters": 2853918,
+      "resume_max_abs": 0.0,
+      "loss": 0.21978971362113953,
+      "initial_state_restored": true
+    },
+    "F1": {
+      "initial_state_sha256": "2843c768dc82d530098056d7d92942a28b7590214cd3908dbd1aba126b03aeeb",
+      "parameters": 461804,
+      "resume_max_abs": 0.0,
+      "loss": 0.21893802285194397,
+      "initial_state_restored": true
+    },
+    "WF": {
+      "initial_state_sha256": "5ca182d22861f0fae5baed1fef99967a7cd3772fa1c5cbdaa6036e68eab66bc6",
+      "parameters": 2889068,
+      "resume_max_abs": 0.0,
+      "loss": 0.21809107065200806,
+      "initial_state_restored": true
+    }
+  },
+  "scope": "tiny AMP forward/backward and two-update state/optimizer resume, rollback; not long-session crash proof"
+}
