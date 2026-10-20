@@ -1,0 +1,363 @@
+{
+  "experiment": 48,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "저해상도 병렬 특징 용량(W2)과 관측 오차 보정기(G5)의 결합",
+  "status": "사전 검증 중",
+  "improvement": "판단 보류",
+  "shared_runtime_with": "performance/49_observation_refinement_seed_repeat (F1 seeds 42-44 run in the same queue and code)",
+  "arms": {
+    "C0": "43 original (control, not retrained)",
+    "C2": "43 original+W2 (reference, not retrained)",
+    "F1": "C0 + 28 G5 observation-error refiners (29 F01 structure)",
+    "WF": "C2 + 28 G5 observation-error refiners"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "epochs": 150,
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training; FP32 transforms/inverse/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cpu_threads": 1,
+  "selection": "minimum full validation MSE including epoch0, earliest exact tie",
+  "loss": "final-output MSE in original DN/2047 coordinates",
+  "max_parallel": 1,
+  "evaluate_after_all_training": true,
+  "scenes": [
+    1,
+    8,
+    11,
+    13,
+    19
+  ],
+  "scene_index_base": 0,
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset/QuickBird",
+  "data": {
+    "train": "Training Dataset/train_qb.h5",
+    "val": "Training Dataset/valid_qb.h5",
+    "RR": "Testing Dataset (ReducedData, H5 Format)/test_qb_multiExm1.h5",
+    "FR": "Testing Dataset (FullData, H5 Format)/test_qb_OrigScale_multiExm1.h5"
+  },
+  "data_sha256": {
+    "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+    "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+    "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+    "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+  },
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "layout": "channels_last",
+  "std_floor": 0.01,
+  "runtime": "C:/CtrS-p48",
+  "cache_manifest_source": "experiments/performance/43_normalized_parallel_capacity/provenance/data_manifest.json",
+  "cache_manifest_source_sha256": "66debe89dd95de8d37d1b3cfc89759f17bfcb18f5e771b663c62e214776a7411",
+  "queue": [
+    [
+      "WF",
+      42
+    ],
+    [
+      "F1",
+      42
+    ],
+    [
+      "F1",
+      43
+    ],
+    [
+      "F1",
+      44
+    ]
+  ],
+  "refiner_initialization": "torch.manual_seed(seed+1000) inside a forked RNG; F1 and WF share refiner weights per seed; last fuse conv zero so initial output equals the 43 core output",
+  "calibration": "experiments/performance/29_capacity_refinement/calibration.json (identical to 28 plan calibration; training data only)",
+  "expected_43_initial_state_sha256": {
+    "C0_s42": "f9323ba6cb23b9b775a1435b4a670e5577772084818b3c55c3ed9f3a82393060",
+    "C0_s43": "373529d2584ed5d3801f4bcb9d3ac07341e37ba2c646357d12c92cb24881b23e",
+    "C0_s44": "791c609d540f495fec5375d119aa1136f600f70b5d196fe03f4baf7f23825515",
+    "C2_s42": "004f0b47ef8d4a0a8a7c12edfb2125c7d9c5a4c4727e6026118a936099393442",
+    "C2_s43": "dd89b69e043df889415c2ad16bfca5971627e435ea8c0377844a148152db8020",
+    "C2_s44": "6d86d7b41f85556d2724066194a89b0663633049704d32a53261dcf2c76f9010"
+  },
+  "controls": {
+    "C0": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s{seed}/best.pt",
+    "C2": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C2_QB_s{seed}/best.pt"
+  },
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.2 with common/evaluation_protocol.py; fixed before training",
+    "primary_48": "WF s42 vs C0 s42: v2.2 label",
+    "diagnostic_48": [
+      "WF vs C2 (s42): does adding G5 remove the W2 RR2 shortfall? RR2 guard of WF vs C0 is the decision item",
+      "WF vs F1 (s42): does W2 add on top of G5?",
+      "combination kept as a lead only if WF vs C0 is 개선 and RR dPSNR >= +0.40 dB (more than half of the W2 gain)"
+    ],
+    "next_48": "if the lead condition holds, propose WF seeds 43 and 44 (requires approval)",
+    "primary_49": "F1 seeds 42-44 mean vs C0 seeds 42-44 mean: v2.2 label; 3-seed 개선 makes F1 a baseline-change candidate for team decision, never automatic",
+    "reported_only": "FR QNR, D_lambda, D_s; validation curves; per-seed values"
+  },
+  "limits": [
+    "QNR/Q2n/SCC MATLAB parity unverified",
+    "QB benchmark already explored; no independent holdout",
+    "original baseline is not promoted or replaced",
+    "no test-based selection of checkpoint, seed or training conditions",
+    "WF single seed until approved repeats",
+    "controls reused from 43 (same code, cache, seeds, schedule)"
+  ],
+  "constraints": {
+    "training": "requires user approval",
+    "test_used_for_selection": false
+  },
+  "concurrency_candidates": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "vram_budget_gib": 7.0,
+  "source_hashes": {
+    "experiments/performance/48_parallel_capacity_observation_refinement/model.py": "bf3faf29116a37847f0760b02dda1931f4c4b257582a211ff9ce0d49afd60dd6",
+    "experiments/performance/48_parallel_capacity_observation_refinement/train.py": "9ca55238ed89e19f79ddf692474088dcc014c6fde38e37702dad2fe7bff296df",
+    "experiments/performance/48_parallel_capacity_observation_refinement/run.py": "874f3d4f4ecb0c4df31b2eda9043e07231a426750eb7ff120928515206d595de",
+    "experiments/performance/48_parallel_capacity_observation_refinement/config.json": "ebe0f32eec4479fe5ebe77761c19b09259bd8d43a03787f11f19a7450bd8f2fe",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "research/performance/28_residual_refinement/model.py": "a1fa42856861cae7194b722ee37f4bdb7a48df45f14abb4c060d50f0893cbf75",
+    "experiments/performance/29_capacity_refinement/calibration.json": "67225fdfc2c51845c1db8f81be3b18d57796453aa07d254a7253b8562661fe46"
+  },
+  "created_kst": "2026-10-20T06:50:32.276099+09:00",
+  "cache_manifest_sha256": "66debe89dd95de8d37d1b3cfc89759f17bfcb18f5e771b663c62e214776a7411",
+  "optimization": {
+    "selected_max_parallel": 1,
+    "makespan_proxy_step_units": {
+      "1": 0.617236600000524,
+      "2": 0.6534757499999841,
+      "3": 0.9193344999998772,
+      "4": 0.6717757500000516
+    },
+    "results": {
+      "1": {
+        "arms": [
+          "WF"
+        ],
+        "returncodes": [
+          0
+        ],
+        "wall_seconds": 18.188000000000102,
+        "rows": [
+          {
+            "arm": "WF",
+            "layout": "channels_last",
+            "tag": "n1_0",
+            "median_step_seconds": 0.154309150000131,
+            "measured_steps": 80,
+            "warmup": 4,
+            "peak_allocated_bytes": 702848512,
+            "peak_reserved_bytes": 784334848,
+            "loss": 0.0011054130736738443,
+            "probe_updates": 84,
+            "time_kst": "2026-10-20T06:54:48.485325+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          }
+        ],
+        "safe": true,
+        "reserved_gib": 0.73046875,
+        "patches_per_second": 207.3759073909281
+      },
+      "2": {
+        "arms": [
+          "WF",
+          "F1"
+        ],
+        "returncodes": [
+          0,
+          0
+        ],
+        "wall_seconds": 33.1400000000001,
+        "rows": [
+          {
+            "arm": "WF",
+            "layout": "channels_last",
+            "tag": "n2_0",
+            "median_step_seconds": 0.34196844999996756,
+            "measured_steps": 80,
+            "warmup": 4,
+            "peak_allocated_bytes": 702848512,
+            "peak_reserved_bytes": 784334848,
+            "loss": 0.0011052493937313557,
+            "probe_updates": 84,
+            "time_kst": "2026-10-20T06:55:21.645795+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          },
+          {
+            "arm": "F1",
+            "layout": "channels_last",
+            "tag": "n2_1",
+            "median_step_seconds": 0.3115073000000166,
+            "measured_steps": 80,
+            "warmup": 4,
+            "peak_allocated_bytes": 529430528,
+            "peak_reserved_bytes": 601882624,
+            "loss": 0.0011446881107985973,
+            "probe_updates": 84,
+            "time_kst": "2026-10-20T06:55:20.286863+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          }
+        ],
+        "safe": true,
+        "reserved_gib": 1.291015625,
+        "patches_per_second": 196.30220852571884
+      },
+      "3": {
+        "arms": [
+          "WF",
+          "F1",
+          "F1"
+        ],
+        "returncodes": [
+          0,
+          0,
+          0
+        ],
+        "wall_seconds": 46.562999999999874,
+        "rows": [
+          {
+            "arm": "WF",
+            "layout": "channels_last",
+            "tag": "n3_0",
+            "median_step_seconds": 0.5096885499999644,
+            "measured_steps": 80,
+            "warmup": 4,
+            "peak_allocated_bytes": 702848512,
+            "peak_reserved_bytes": 784334848,
+            "loss": 0.0011053148191422224,
+            "probe_updates": 84,
+            "time_kst": "2026-10-20T06:56:08.201485+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          },
+          {
+            "arm": "F1",
+            "layout": "channels_last",
+            "tag": "n3_1",
+            "median_step_seconds": 0.4600583999999799,
+            "measured_steps": 80,
+            "warmup": 4,
+            "peak_allocated_bytes": 529430528,
+            "peak_reserved_bytes": 601882624,
+            "loss": 0.0011446881107985973,
+            "probe_updates": 84,
+            "time_kst": "2026-10-20T06:56:06.828993+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          },
+          {
+            "arm": "F1",
+            "layout": "channels_last",
+            "tag": "n3_2",
+            "median_step_seconds": 0.45927609999989727,
+            "measured_steps": 80,
+            "warmup": 4,
+            "peak_allocated_bytes": 529430528,
+            "peak_reserved_bytes": 601882624,
+            "loss": 0.0011447379365563393,
+            "probe_updates": 84,
+            "time_kst": "2026-10-20T06:56:06.779682+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          }
+        ],
+        "safe": true,
+        "reserved_gib": 1.8515625,
+        "patches_per_second": 202.01469020060614
+      },
+      "4": {
+        "arms": [
+          "WF",
+          "F1",
+          "F1",
+          "F1"
+        ],
+        "returncodes": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "wall_seconds": 59.8900000000001,
+        "rows": [
+          {
+            "arm": "WF",
+            "layout": "channels_last",
+            "tag": "n4_0",
+            "median_step_seconds": 0.6717757500000516,
+            "measured_steps": 80,
+            "warmup": 4,
+            "peak_allocated_bytes": 702848512,
+            "peak_reserved_bytes": 784334848,
+            "loss": 0.0011052554473280907,
+            "probe_updates": 84,
+            "time_kst": "2026-10-20T06:57:08.062107+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          },
+          {
+            "arm": "F1",
+            "layout": "channels_last",
+            "tag": "n4_1",
+            "median_step_seconds": 0.6071266000000151,
+            "measured_steps": 80,
+            "warmup": 4,
+            "peak_allocated_bytes": 529430528,
+            "peak_reserved_bytes": 601882624,
+            "loss": 0.0011446891585364938,
+            "probe_updates": 84,
+            "time_kst": "2026-10-20T06:57:06.612207+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          },
+          {
+            "arm": "F1",
+            "layout": "channels_last",
+            "tag": "n4_2",
+            "median_step_seconds": 0.6084394499999917,
+            "measured_steps": 80,
+            "warmup": 4,
+            "peak_allocated_bytes": 529430528,
+            "peak_reserved_bytes": 601882624,
+            "loss": 0.0011446881107985973,
+            "probe_updates": 84,
+            "time_kst": "2026-10-20T06:57:06.578850+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          },
+          {
+            "arm": "F1",
+            "layout": "channels_last",
+            "tag": "n4_3",
+            "median_step_seconds": 0.6098381000000472,
+            "measured_steps": 80,
+            "warmup": 4,
+            "peak_allocated_bytes": 529430528,
+            "peak_reserved_bytes": 601882624,
+            "loss": 0.0011446427088230848,
+            "probe_updates": 84,
+            "time_kst": "2026-10-20T06:57:06.562824+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          }
+        ],
+        "safe": true,
+        "reserved_gib": 2.412109375,
+        "patches_per_second": 205.40874594280262
+      }
+    },
+    "note": "concurrency sweep with the real data path; smallest count within 3% of the fastest queue makespan proxy; no validation/test tuning"
+  },
+  "fingerprint": "8e47059e0989decbdd4aeae39cb0d0759243244dfc7d4a2a7455b93ce593f9c6"
+}

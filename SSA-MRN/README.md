@@ -125,6 +125,7 @@
 | [45. 추론 시 정확한 관측 일치 사영](experiments/performance/45_exact_observation_projection/README.md)<br>[이병현] | 43번 가중치 12개 출력에 추론 시에만 관측 연산자 기준 최소 보정 사영을 적용해 학습 없이 RR·FR을 다시 평가했습니다. | 사영으로 RR 240/240장 개선(C0 PSNR +0.129dB)이나 C2 Ds +0.036·QNR −0.033(0/60장)으로 기준 미달, 학습 안 함 | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 | [46. FR 공간 왜곡 지표의 축소 해상도 타당성 검증](experiments/performance/46_fr_spatial_index_validity/README.md)<br>[이병현] | 정답이 있는 RR 입력을 FR 지표로 채점해, 정답·모델·혼합 결과 37개에 대해 Ds가 정답을 가장 좋게 채점하는지 확인했습니다. | 정답 Ds가 모델보다 나은 장면 1/20(Toolbox 1.0)·2-3/20(원 논문 방식), 오차와 Ds 나쁨의 순위 상관 −0.53에서 −0.54로 두 정의 모두 정확도와 충돌 | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 | [47. 정답 기반 판정 기준(v2)과 기존 후보 재평가](experiments/performance/47_ground_truth_criteria_reevaluation/README.md)<br>[이병현] | 측정 전에 고정한 정답 기반 판정 기준 v2(RR 주 판정 + RR2·FR_WALD·FR 관측 일치 보조 판정, QNR류는 참고)로 저장된 기존 후보 96개를 다시 채점했습니다. | 원래 v2: 개선 6·부분 개선 57·개선 없음 33. 같은 측정값의 현재 v2.2 표 판정: 개선 10·부분 개선 53·개선 없음 33(개선은 모두 단일 시드). ΔQNR과 FR_WALD ΔPSNR 순위 상관 −0.10, RR 이득 큰 후보는 주로 RR2에서 미달 | 평가&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
+| [48. 저해상도 병렬 특징 용량(W2)과 관측 오차 보정기(G5)의 결합](experiments/performance/48_parallel_capacity_observation_refinement/README.md)<br>[이병현] | 43번 W2(C2) 뒤에 28번 G5 관측 오차 보정기 두 개를 붙인 WF를 43번과 같은 절차로 seed42 학습했습니다. | seed42 원본 대비 RR PSNR +0.650dB·FR_WALD +1.341dB·관측 RMSE 0.610배였으나 RR2 −0.266dB·SAM +0.204°로 미달했습니다. W2 단독과 RR2가 거의 같아 보정기가 RR2 미달을 없애지 못했습니다. | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 
 </details>
 
