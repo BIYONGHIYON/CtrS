@@ -1188,5 +1188,42 @@
     "sensor": "QB",
     "retraining": false,
     "limits": "RR 축척에서의 정답 순위 검사. QB 한 센서·탐색에 반복 사용한 test. FR 동작을 직접 증명하지 않음. 양방향(목표값) 변형은 검사하지 않음."
+  },
+  "performance/52_w2_frequency_selective_attenuation": {
+    "report": "experiments/performance/52_w2_frequency_selective_attenuation/README.md",
+    "research_track": "performance",
+    "experiment": 52,
+    "display_name": "52. W2 추가 특징의 고주파 선택 제어",
+    "experimenter": "송준현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "sensor": "QB",
+    "last_checked": "2026-10-21T01:15:39.209256+09:00",
+    "limits": "W2 C2 대비3seed RR PSNR +0.01737dB(잡음 수준), RR2 SAM +0.07235° 미달. F1 대비 비교 아님. 원래 v2.2 보존·현재 v2.3 재집계.",
+    "judgement": {
+      "criteria_version": "v2.3",
+      "source": "experiments/performance/52_w2_frequency_selective_attenuation/results/judgement_v2_3.json",
+      "scope": "QB; W2 C2 control only, not F1",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "candidate_labels": {
+        "hf_gate": "부분 개선"
+      }
+    },
+    "checkpoints": "experiments/performance/52_w2_frequency_selective_attenuation/checkpoints",
+    "results": "experiments/performance/52_w2_frequency_selective_attenuation/results",
+    "manifest": "experiments/performance/52_w2_frequency_selective_attenuation/manifest.json",
+    "model": "experiments/performance/52_w2_frequency_selective_attenuation/model.py",
+    "config": "experiments/performance/52_w2_frequency_selective_attenuation/config.json",
+    "entrypoint": "experiments/performance/52_w2_frequency_selective_attenuation/run.py",
+    "verification": "experiments/performance/52_w2_frequency_selective_attenuation/prepare.py"
   }
 }

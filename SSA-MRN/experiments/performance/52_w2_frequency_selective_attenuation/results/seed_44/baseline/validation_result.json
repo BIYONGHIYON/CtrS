@@ -1,0 +1,46 @@
+{
+  "best_epoch": 100,
+  "best_validation": {
+    "mse": 0.00013858407339326887,
+    "psnr": 40.13663159468042,
+    "sam": 4.271408146569357,
+    "mse_inner4": 0.00013268206132935998,
+    "mse_border4": 0.0001578639794687046,
+    "ergas": 4.049792291231458,
+    "scc": 0.9675677393586064,
+    "q2n": 0.8369023605840442,
+    "evaluation_policy": {
+      "applied": false,
+      "scope": "unmodified validation inputs; no training or test-time augmentation"
+    }
+  },
+  "last_validation": {
+    "lr": 0.0001,
+    "epoch": 100,
+    "train_mse": 0.00013098999300054488,
+    "val_mse": 0.00013858407339326887,
+    "val_psnr": 40.13663159468042,
+    "val_sam": 4.271408146569357,
+    "skipped_amp_steps": 0,
+    "order_sha256": "c1d6c4a09e872f4ba6a6223b762bcdc4dc8e4574e5b7b10086805a0c55cbebb5",
+    "train_segment_seconds": 49.327154471997346,
+    "validation_seconds": 3.496436966001056,
+    "resumed_mid_epoch": false,
+    "train_total": 0.00013098999300054488,
+    "val_ergas": 4.049792291231458,
+    "val_scc": 0.9675677393586064,
+    "val_q2n": 0.8369023605840442,
+    "validation_diagnostic_scope": "ERGAS/SCC/Q2n: first 32 validation patches; MSE/PSNR/SAM: all used validation patches",
+    "evaluation_policy": {
+      "applied": false,
+      "scope": "unmodified validation inputs; no training or test-time augmentation"
+    },
+    "val_mse_inner4": 0.00013268206132935998,
+    "val_mse_border4": 0.0001578639794687046
+  },
+  "last_epoch": 100,
+  "peak_gpu_gib": 3.09767484664917,
+  "train_seconds_measured_segments": 4899.548010092005,
+  "train_active_seconds": 4899.547995688992,
+  "timing_limit": "active train timer includes within-epoch checkpoint overhead; excludes data loading/validation; preserved across resume"
+}

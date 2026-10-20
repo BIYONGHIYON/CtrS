@@ -1,0 +1,30 @@
+{
+  "state_sha256": "9728ef3f22423afd4f29f4426903d1a704180d5340323f458fc07d57c5ac90bf",
+  "common_state_sha256": "9728ef3f22423afd4f29f4426903d1a704180d5340323f458fc07d57c5ac90bf",
+  "model": "43_C2_W2_with_same_inactive_or_active_gate",
+  "parameters": 2853951,
+  "initial_outputs_expected_equal": true,
+  "spatial_operator": {
+    "arm": "hf_gate",
+    "base": "43 C2: original N0 plus W2",
+    "change": "B_low + sigmoid(MLP(detached relative energies))*B_high",
+    "filter": [
+      1,
+      4,
+      6,
+      4,
+      1
+    ],
+    "filter_denominator": 16,
+    "filter_boundary": "reflect, separable, no downsampling",
+    "epsilon": 1e-08,
+    "gate": "2->8->1 SiLU/sigmoid, per sample, common across all feature channels/pixels",
+    "initial_gate": 0.5,
+    "gate_parameters": 33,
+    "initial_outputs_expected_equal": true,
+    "baseline_extra_parameters": "same 33 gate parameters present but unused; no gradient/Adam state for them",
+    "feature_blur_is_sensor_MTF": false,
+    "parameters": 2853951
+  },
+  "k": 4
+}
