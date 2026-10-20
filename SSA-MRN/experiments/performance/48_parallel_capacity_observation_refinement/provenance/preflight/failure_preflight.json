@@ -1,0 +1,4 @@
+{
+  "time_kst": "2026-10-20T06:53:19.756740+09:00",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\CtrS-p48\\SSA-MRN\\experiments\\performance\\48_parallel_capacity_observation_refinement\\train.py\", line 257, in <module>\n    elif a.mode=='preflight':preflight(cfg)\n  File \"C:\\CtrS-p48\\SSA-MRN\\experiments\\performance\\48_parallel_capacity_observation_refinement\\train.py\", line 125, in preflight\n    torch.testing.assert_close(test(*inputs),g5(*inputs),rtol=0,atol=0)\n  File \"C:\\CtrS\\.venv\\lib\\site-packages\\torch\\testing\\_comparison.py\", line 1519, in assert_close\n    raise error_metas[0].to_error(msg)\nAssertionError: Tensor-likes are not equal!\n\nMismatched elements: 703 / 32768 (2.1%)\nGreatest absolute difference: 5.960464477539063e-08 at index (0, 1, 13, 36)\nGreatest relative difference: 8.217669346777257e-06 at index (0, 2, 37, 28)\n"
+}

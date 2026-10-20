@@ -1087,5 +1087,35 @@
     "sensor": "QB",
     "retraining": false,
     "limits": "QB 한 센서·탐색에 반복 사용한 test. 개선 6개 모두 단일 시드. FR 목표 축척은 관측 일치로만 확인. QNR류 MATLAB 정합은 PR 105."
+  },
+  "performance/48_parallel_capacity_observation_refinement": {
+    "report": "experiments/performance/48_parallel_capacity_observation_refinement/README.md",
+    "research_track": "performance",
+    "experiment": 48,
+    "display_name": "48. 저해상도 병렬 특징 용량(W2)과 관측 오차 보정기(G5)의 결합",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "sensor": "QB",
+    "trained_seeds": [
+      42
+    ],
+    "evaluated_seeds": [
+      42
+    ],
+    "test_scored": true,
+    "checkpoints": "experiments/performance/48_parallel_capacity_observation_refinement/checkpoints",
+    "results": "experiments/performance/48_parallel_capacity_observation_refinement/results",
+    "manifest": "experiments/performance/48_parallel_capacity_observation_refinement/manifest.json",
+    "config": "experiments/performance/48_parallel_capacity_observation_refinement/config.json",
+    "entrypoint": "experiments/performance/48_parallel_capacity_observation_refinement/run.py",
+    "evaluation": "experiments/performance/48_parallel_capacity_observation_refinement/evaluate.py",
+    "last_checked": "2026-10-20T17:10:00+09:00",
+    "limits": "WF 단일 시드(seed42). QB 한 센서·탐색에 반복 사용한 test. 대조군 C0·C2는 43번 가중치 재사용. 비교용 F1 seed42 가중치는 49번과 함께 보존. QNR류는 참고.",
+    "judgement": {
+      "criteria_version": "v2.2",
+      "primary": "WF s42 vs C0 s42: 부분 개선 (RR2 미달)",
+      "lead_condition_met": false
+    }
   }
 }
