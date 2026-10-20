@@ -1,0 +1,128 @@
+{
+  "experiment": 48,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "저해상도 병렬 특징 용량(W2)과 관측 오차 보정기(G5)의 결합",
+  "status": "사전 검증 중",
+  "improvement": "판단 보류",
+  "shared_runtime_with": "performance/49_observation_refinement_seed_repeat (F1 seeds 42-44 run in the same queue and code)",
+  "arms": {
+    "C0": "43 original (control, not retrained)",
+    "C2": "43 original+W2 (reference, not retrained)",
+    "F1": "C0 + 28 G5 observation-error refiners (29 F01 structure)",
+    "WF": "C2 + 28 G5 observation-error refiners"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "epochs": 150,
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training; FP32 transforms/inverse/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cpu_threads": 1,
+  "selection": "minimum full validation MSE including epoch0, earliest exact tie",
+  "loss": "final-output MSE in original DN/2047 coordinates",
+  "max_parallel": null,
+  "evaluate_after_all_training": true,
+  "scenes": [
+    1,
+    8,
+    11,
+    13,
+    19
+  ],
+  "scene_index_base": 0,
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset/QuickBird",
+  "data": {
+    "train": "Training Dataset/train_qb.h5",
+    "val": "Training Dataset/valid_qb.h5",
+    "RR": "Testing Dataset (ReducedData, H5 Format)/test_qb_multiExm1.h5",
+    "FR": "Testing Dataset (FullData, H5 Format)/test_qb_OrigScale_multiExm1.h5"
+  },
+  "data_sha256": {
+    "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+    "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+    "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+    "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+  },
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "layout": "channels_last",
+  "std_floor": 0.01,
+  "runtime": "C:/CtrS-p48",
+  "cache_manifest_source": "experiments/performance/43_normalized_parallel_capacity/provenance/data_manifest.json",
+  "cache_manifest_source_sha256": "66debe89dd95de8d37d1b3cfc89759f17bfcb18f5e771b663c62e214776a7411",
+  "queue": [
+    [
+      "WF",
+      42
+    ],
+    [
+      "F1",
+      42
+    ],
+    [
+      "F1",
+      43
+    ],
+    [
+      "F1",
+      44
+    ]
+  ],
+  "refiner_initialization": "torch.manual_seed(seed+1000) inside a forked RNG; F1 and WF share refiner weights per seed; last fuse conv zero so initial output equals the 43 core output",
+  "calibration": "experiments/performance/29_capacity_refinement/calibration.json (identical to 28 plan calibration; training data only)",
+  "expected_43_initial_state_sha256": {
+    "C0_s42": "f9323ba6cb23b9b775a1435b4a670e5577772084818b3c55c3ed9f3a82393060",
+    "C0_s43": "373529d2584ed5d3801f4bcb9d3ac07341e37ba2c646357d12c92cb24881b23e",
+    "C0_s44": "791c609d540f495fec5375d119aa1136f600f70b5d196fe03f4baf7f23825515",
+    "C2_s42": "004f0b47ef8d4a0a8a7c12edfb2125c7d9c5a4c4727e6026118a936099393442",
+    "C2_s43": "dd89b69e043df889415c2ad16bfca5971627e435ea8c0377844a148152db8020",
+    "C2_s44": "6d86d7b41f85556d2724066194a89b0663633049704d32a53261dcf2c76f9010"
+  },
+  "controls": {
+    "C0": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s{seed}/best.pt",
+    "C2": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C2_QB_s{seed}/best.pt"
+  },
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.2 with common/evaluation_protocol.py; fixed before training",
+    "primary_48": "WF s42 vs C0 s42: v2.2 label",
+    "diagnostic_48": [
+      "WF vs C2 (s42): does adding G5 remove the W2 RR2 shortfall? RR2 guard of WF vs C0 is the decision item",
+      "WF vs F1 (s42): does W2 add on top of G5?",
+      "combination kept as a lead only if WF vs C0 is 개선 and RR dPSNR >= +0.40 dB (more than half of the W2 gain)"
+    ],
+    "next_48": "if the lead condition holds, propose WF seeds 43 and 44 (requires approval)",
+    "primary_49": "F1 seeds 42-44 mean vs C0 seeds 42-44 mean: v2.2 label; 3-seed 개선 makes F1 a baseline-change candidate for team decision, never automatic",
+    "reported_only": "FR QNR, D_lambda, D_s; validation curves; per-seed values"
+  },
+  "limits": [
+    "QNR/Q2n/SCC MATLAB parity unverified",
+    "QB benchmark already explored; no independent holdout",
+    "original baseline is not promoted or replaced",
+    "no test-based selection of checkpoint, seed or training conditions",
+    "WF single seed until approved repeats",
+    "controls reused from 43 (same code, cache, seeds, schedule)"
+  ],
+  "constraints": {
+    "training": "requires user approval",
+    "test_used_for_selection": false
+  },
+  "concurrency_candidates": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "vram_budget_gib": 7.0
+}
