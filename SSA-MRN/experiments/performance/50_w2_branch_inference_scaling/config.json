@@ -1,0 +1,43 @@
+{
+  "experiment": 50,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "W2 가지 출력의 추론 시 축소 진단",
+  "status": "사전 검증 중",
+  "improvement": "성능 비교 아님",
+  "question": "Is the RR2 shortfall of W2 (43 C2) caused by the W2 branch output itself, and does the extra RR2 error sit in frequencies the MS observation cannot see?",
+  "models": {
+    "C0": "43 C0 best, seeds 42-44 (reference)",
+    "C2_alpha": "43 C2 best, seeds 42-44; backbone output = original(x) + alpha * branch(x) at inference only"
+  },
+  "alphas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "tests": {
+    "RR": "PanCollection RR test 20",
+    "RR2": "RR scenes degraded once more, GT = RR MS",
+    "FR_WALD": "FR scenes degraded once, GT = FR MS",
+    "FR_OBS": "interior observation RMSE of FR output (DN)"
+  },
+  "error_split": "per test, error e = prediction - GT; low = SensorObservation(QB).blur(e) (MTF low-pass, the band the MS observation sees); high = e - low; RMSE in DN over the full image",
+  "protocol": "common/evaluation_protocol.py (WaldDegradation, predict, rr_metrics, observation_rmse); FP32 inference, float64 metrics",
+  "readout": {
+    "H1_branch_causes_RR2_loss": "seed-mean RR2 PSNR decreases from alpha=0 to alpha=1 while RR PSNR increases (monotone trend over the 5 alphas)",
+    "H2_unobservable_band": "the RR2 error increase from alpha=0 to 1 is larger in the high band than in the low band (RMSE_high delta > RMSE_low delta)",
+    "alpha_one_check": "alpha=1 reproduces the experiment 47 C2 values (RR PSNR within 0.001 dB)"
+  },
+  "not_allowed": [
+    "choosing alpha on test as a model change (diagnostic only; no adoption)",
+    "any training or weight update"
+  ],
+  "execution": "single low-priority evaluation process on the 48/49 server; 49 training numerics are unaffected (separate process), throughput is shared for the run time"
+}
