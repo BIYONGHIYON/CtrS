@@ -1,0 +1,168 @@
+{
+  "experiment": 52,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "축척 혼합 학습으로 W2 용량 이득의 축척 강건성 확보",
+  "status": "사전 검증 중",
+  "improvement": "판단 보류",
+  "hypothesis": "mixing the original training pairs with 2x coarser pairs built from the same patches teaches a scale-dependent detail gain, so W2 keeps its large RR gain while passing RR2 (experiment 50: the W2 RR2 shortfall is a scale-dependent detail gain in the unobservable high band)",
+  "arms": {
+    "C2MS": "43 C2 (original + W2) trained on original + 2x coarser pairs (main candidate)",
+    "F1MS": "current baseline F1 trained on original + 2x coarser pairs (effect of the data alone)",
+    "C2": "43 C2 seed 42 (reference, not retrained)",
+    "F1": "49 F1 seed 42 (current baseline control, not retrained)"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "epochs": 150,
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training; FP32 transforms/inverse/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cpu_threads": 1,
+  "selection": "minimum original-scale validation MSE including epoch0, earliest exact tie (same as the controls); coarse validation is logged only",
+  "max_parallel": 1,
+  "evaluate_after_all_training": true,
+  "scenes": [
+    1,
+    8,
+    11,
+    13,
+    19
+  ],
+  "scene_index_base": 0,
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset/QuickBird",
+  "data": {
+    "train": "Training Dataset/train_qb.h5",
+    "val": "Training Dataset/valid_qb.h5",
+    "RR": "Testing Dataset (ReducedData, H5 Format)/test_qb_multiExm1.h5",
+    "FR": "Testing Dataset (FullData, H5 Format)/test_qb_OrigScale_multiExm1.h5"
+  },
+  "data_sha256": {
+    "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+    "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+    "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+    "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+  },
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "layout": "channels_last",
+  "std_floor": 0.01,
+  "loss": "per-pixel MSE on the original batch + coarse_weight x per-pixel MSE on the same patches at the 2x coarser scale (DN/2047 coordinates)",
+  "coarse_weight": 1.0,
+  "coarse_pairs": "coarse.py: GT and PAN blurred by the x2 sensor MTF (genMTF, QB GNyq, 41 taps) and decimated at phase 1 -> 32x32; MS = dataset x4 Wald operator of the coarse GT -> 8x8; LMS = interp23tap(MS). Training and validation splits only; test never used",
+  "runtime": "C:/CtrS-p52",
+  "cache_manifest_source": "experiments/performance/43_normalized_parallel_capacity/provenance/data_manifest.json",
+  "cache_manifest_source_sha256": "66debe89dd95de8d37d1b3cfc89759f17bfcb18f5e771b663c62e214776a7411",
+  "queue": [
+    [
+      "C2MS",
+      42
+    ],
+    [
+      "F1MS",
+      42
+    ]
+  ],
+  "concurrency_candidates": [
+    1
+  ],
+  "vram_budget_gib": 7.0,
+  "expected_43_initial_state_sha256": {
+    "C0_s42": "f9323ba6cb23b9b775a1435b4a670e5577772084818b3c55c3ed9f3a82393060",
+    "C0_s43": "373529d2584ed5d3801f4bcb9d3ac07341e37ba2c646357d12c92cb24881b23e",
+    "C0_s44": "791c609d540f495fec5375d119aa1136f600f70b5d196fe03f4baf7f23825515",
+    "C2_s42": "004f0b47ef8d4a0a8a7c12edfb2125c7d9c5a4c4727e6026118a936099393442",
+    "C2_s43": "dd89b69e043df889415c2ad16bfca5971627e435ea8c0377844a148152db8020",
+    "C2_s44": "6d86d7b41f85556d2724066194a89b0663633049704d32a53261dcf2c76f9010"
+  },
+  "controls": {
+    "C2": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C2_QB_s42/best.pt",
+    "F1": "experiments/performance/49_observation_refinement_seed_repeat/checkpoints/F1_QB_s42/best.pt"
+  },
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.3 with common/evaluation_protocol.py; fixed before training",
+    "primary": "C2MS s42 vs F1 s42 (current baseline): v2.3 label",
+    "large_gain_condition": "C2MS vs F1 is 개선 AND RR dPSNR >= +0.40 dB",
+    "diagnostic_1": "C2MS vs C2: RR dPSNR >= -0.15 dB while the RR2 guard of C2MS vs F1 passes",
+    "diagnostic_2": "F1MS vs F1: v2.3 label (does scale mixing help the baseline itself)",
+    "qualitative": "FR and RR2 comparison panels (fixed scenes 1, 8, 11, 13, 19) of F1, C2, C2MS, F1MS",
+    "next": "if the large-gain condition holds, propose C2MS seeds 43 and 44 (baseline-change candidate; requires approval)",
+    "reported_only": "FR QNR, D_lambda, D_s; coarse-scale validation; TTA x8 results"
+  },
+  "limits": [
+    "QB only; exploratory test reused",
+    "training sees 2x coarser pairs while RR2 is 4x coarser; FR (finer) is never seen",
+    "controls reused from 43 and 49 (same code path, cache, seed, schedule)"
+  ],
+  "constraints": {
+    "training": "requires user approval",
+    "test_used_for_selection": false
+  },
+  "source_hashes": {
+    "experiments/performance/52_scale_mixed_training/model.py": "94e17718c46333eb310b829fb670f40a45371863cc3ee4809baa5386364143b9",
+    "experiments/performance/52_scale_mixed_training/coarse.py": "4d4ffc566f05a711d637b7e4600ff9f0ffc12794d47b96b345a9febae1f50577",
+    "experiments/performance/52_scale_mixed_training/train.py": "9996419a3a3894e8642abc6dc162a764ee617fee01c86725fe9a0687857aea4b",
+    "experiments/performance/52_scale_mixed_training/run.py": "ef26f94b49853a2ae02c77cdbb4d605e400bf503413b179648ad08fc9acd869b",
+    "experiments/performance/52_scale_mixed_training/config.json": "7f8f92de4c3e380c885cb4ae0b596038887a14c4bbbca8d4ab5c548baaab06af",
+    "experiments/performance/48_parallel_capacity_observation_refinement/model.py": "bf3faf29116a37847f0760b02dda1931f4c4b257582a211ff9ce0d49afd60dd6",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "research/performance/28_residual_refinement/model.py": "a1fa42856861cae7194b722ee37f4bdb7a48df45f14abb4c060d50f0893cbf75",
+    "experiments/performance/29_capacity_refinement/calibration.json": "67225fdfc2c51845c1db8f81be3b18d57796453aa07d254a7253b8562661fe46",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41"
+  },
+  "created_kst": "2026-10-20T23:05:21.781637+09:00",
+  "cache_manifest_sha256": "3ac90a04e2af6da761227a6f29079a02495f602ad4f5f4ad3d37a987b09d5cd7",
+  "optimization": {
+    "selected_max_parallel": 1,
+    "makespan_proxy_step_units": {
+      "1": 0.427931999998691
+    },
+    "results": {
+      "1": {
+        "arms": [
+          "C2MS"
+        ],
+        "returncodes": [
+          0
+        ],
+        "wall_seconds": 27.06300000000192,
+        "rows": [
+          {
+            "arm": "C2MS",
+            "layout": "channels_last",
+            "tag": "n1_0",
+            "median_step_seconds": 0.2139659999993455,
+            "measured_steps": 80,
+            "warmup": 4,
+            "peak_allocated_bytes": 510216192,
+            "peak_reserved_bytes": 568328192,
+            "loss": 0.0021175420843064785,
+            "probe_updates": 84,
+            "time_kst": "2026-10-20T23:05:51.195078+09:00",
+            "note": "disposable benchmark model; not an experimental trained checkpoint"
+          }
+        ],
+        "safe": true,
+        "reserved_gib": 0.529296875,
+        "patches_per_second": 149.5564715894015
+      }
+    },
+    "note": "concurrency sweep with the real data path; smallest count within 3% of the fastest queue makespan proxy; no validation/test tuning"
+  },
+  "fingerprint": "4e449a31ecd0cfbcf1603d211ccf09121709bef9f048ea176719c05e6c89f18a"
+}

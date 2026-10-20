@@ -1,0 +1,24 @@
+{
+  "time_kst": "2026-10-21T07:02:23.455329+09:00",
+  "best_epoch": 149,
+  "weight_sha256": "3ab7f20c2fda333f2698163af3b0b6c77030d2436f3407f1c58f3224e689de40",
+  "means": {
+    "RR": {
+      "SAM": 4.577030030410347,
+      "ERGAS": 3.723004655471591,
+      "PSNR": 38.27375820691276,
+      "SCC": 0.9823378933821741,
+      "Q2n": 0.934328081014883
+    },
+    "FR": {
+      "D_lambda": 0.026923861835921763,
+      "D_s": 0.15050912840427103,
+      "QNR": 0.8261159775576488
+    }
+  },
+  "limits": [
+    "QB only; exploratory test reused",
+    "training sees 2x coarser pairs while RR2 is 4x coarser; FR (finer) is never seen",
+    "controls reused from 43 and 49 (same code path, cache, seed, schedule)"
+  ]
+}

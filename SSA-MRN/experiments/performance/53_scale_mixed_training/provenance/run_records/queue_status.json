@@ -1,0 +1,46 @@
+{
+  "time_kst": "2026-10-21T07:02:43.186631+09:00",
+  "phase": "complete",
+  "active": [],
+  "runs": [
+    {
+      "arm": "C2MS",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-10-21T02:09:30.631959+09:00",
+        "pid": 11596,
+        "arm": "C2MS",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.04546833038330078,
+        "reserved_gb": 0.515625,
+        "best_epoch": 149
+      }
+    },
+    {
+      "arm": "F1MS",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-10-21T07:02:04.196479+09:00",
+        "pid": 5508,
+        "arm": "F1MS",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.00985097885131836,
+        "reserved_gb": 0.513671875,
+        "best_epoch": 148
+      }
+    }
+  ],
+  "epoch_seconds_by_arm": {
+    "C2MS": 71.6869999999908,
+    "F1MS": 116.67199999999139
+  },
+  "training_remaining_seconds": 0.0,
+  "training_end_kst": "2026-10-21T07:02:43.186631+09:00",
+  "eta_basis": "recent full train+validation+checkpoint epochs, capacity-matched speed proxy for not-yet-started arms; excludes final RR/FR evaluation"
+}
