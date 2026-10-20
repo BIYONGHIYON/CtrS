@@ -1,0 +1,111 @@
+{
+  "research_track": "performance",
+  "experiment": 52,
+  "experimenter": "송준현",
+  "conditions": {
+    "dataset": "QB only",
+    "k": 4,
+    "spatial_ratio": 4,
+    "normalization": "DN/2047 supplied LMS; no clipping, no N1",
+    "micro": 32,
+    "effective_batch": 64,
+    "epochs": 100,
+    "optimizer": "Adam defaults",
+    "lr": "constant1e-4, no scheduler",
+    "precision": "AMP FP16 core, FP32 feature blur/gate and MSE/validation/test; delta cast to branch dtype before residual add; TF32 off",
+    "order": "independent CUDA Generator(seed+100000), separate model RNG",
+    "loss": "unchanged final-output MSE",
+    "baseline": "43 C2 original+W2, same 33 gate parameters present but bypassed",
+    "candidate": "same C2: W2 B -> binomial5 lowpass(B) + sigmoid(energy gate)*(B-lowpass(B)); g in (0,1)",
+    "gate_features": "detached per-sample relative high-frequency energy of W2 output B and backbone input x; no GT/batch pooling/size/split label",
+    "gate_initial": 0.5,
+    "gate_mlp": "2->8->1, SiLU; output weights/bias zero; hidden init fixed seed20261020 independent fork",
+    "selection": "minimum full unmodified validation MSE including epoch0; earliest exact tie",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "search": "all constants fixed before training; no sweep/select; no alpha from experiment50 test",
+    "augmentation": "none",
+    "initialization": "full shared state equal across arms; zero initialized W2 terminal makes initial outputs equal",
+    "historical_comparison_limit": "fresh paired 100epoch effective64 constantLR; NOT a reproduction of 43 150epoch batch32 cosine",
+    "test_policy": "train/test each seed then next; fixed settings, no test tuning",
+    "metric_limitations": "v2.2 evaluation pinned; QNR/SCC/Q2n reference only; FR has no HR GT; FR_WALD GT is native FR MS, not HR FR truth"
+  },
+  "source_audit": {
+    "repository": "BIYONGHIYON/CtrS",
+    "pinned_commit": "49988cb0bd580ad610e929d45eda95fd7636be95",
+    "reference": "43 C2 W2, no N1; fresh 100epoch comparison not historical150epoch reproduction",
+    "original_source_hashes": {
+      "SSA-MRN/experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+      "SSA-MRN/experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+      "SSA-MRN/experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+      "SSA-MRN/experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+      "SSA-MRN/common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16",
+      "SSA-MRN/common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+      "SSA-MRN/common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+      "SSA-MRN/common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef"
+    },
+    "baseline": "exact C2 FP32 forward; added gate params inactive in control",
+    "change": "only W2 feature combination; lowpass is feature blur, not MS MTF or exact nullspace projector",
+    "initialization": "same core/W2/gate parameter state; separate gate RNG; W2 last conv zero",
+    "criteria": "v2.2; pinned common/evaluation_protocol.py; test not used to choose constants",
+    "limits": [
+      "no actual QB/T4/AMP/full training in local preparation",
+      "performance unknown",
+      "single-scale training may not generalize gate to unseen scales",
+      "baseline has33 unused gate parameters for exact full-state matching"
+    ]
+  },
+  "source_hashes": {
+    "reference43.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "criteria_v2_2.md": "40a34b3a5e30ed1e6abce8dc804ed5994ee8c9c7aa42c9e6c668276d366fa3b5",
+    "hf_gate_model.py": "9a98e43bef97045e7b035127f4ab150729901c89e4ad961bdd939f3bf9ff0b2d",
+    "hf_gate_judgement.py": "e3d653fa53838dd7d139e9aaff0f4b0d0667c6ce364f5e705251da65abd89507",
+    "hf_gate_worker.py": "ec4e33d57795f31c7ac96a6434a711ad9c3ca22b0e21c40f1a9c83306484666b",
+    "hf_gate_dashboard.py": "cc426a89c32fa35897f2b7ce877832d53298ccdfa2ce75059ae2976475f3c8f9"
+  },
+  "evaluated_seeds": [
+    42,
+    43,
+    44
+  ],
+  "selection": {
+    "seed": 42,
+    "scene_indices_zero_based": [
+      1,
+      8,
+      11,
+      13,
+      19
+    ],
+    "tile": "full scene",
+    "order": [
+      1,
+      8,
+      11,
+      13,
+      19
+    ],
+    "checkpoint": "minimum validation MSE including epoch0; earliest tie",
+    "test_used": false,
+    "other_seeds_same_scene_indices": [
+      43,
+      44
+    ]
+  },
+  "last_checked": "2026-10-21T01:15:39.209256+09:00",
+  "metric_limits": "v2.2 evaluation pinned; QNR/SCC/Q2n reference only; FR has no HR GT; FR_WALD GT is native FR MS, not HR FR truth",
+  "current_judgement_version": "v2.3",
+  "actual_control": "same-run W2 C2; 100epoch effective64 constant LR",
+  "current_team_baseline": "F1",
+  "claim_scope": "W2-relative ablation only; no current F1 superiority or baseline replacement claim",
+  "judgement": "results/judgement_v2_3.json"
+}

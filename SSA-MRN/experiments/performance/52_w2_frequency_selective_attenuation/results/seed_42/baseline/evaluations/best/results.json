@@ -1,0 +1,987 @@
+{
+  "best_epoch": 100,
+  "best_val_mse": 0.00013764374490071824,
+  "full_scene": true,
+  "test_precision": "FP32",
+  "checkpoint_kind": "best",
+  "limitations": "FR D_s/QNR MATLAB parity is unverified; RR Q2n/SCC parity is unverified.",
+  "splits": {
+    "RR": {
+      "count": 20,
+      "seconds": 5.794751081999493,
+      "mean": {
+        "SAM": 4.628818623511902,
+        "ERGAS": 3.739785126288121,
+        "PSNR": 38.24307201871513,
+        "SCC": 0.9821218062148699,
+        "Q2n": 0.9335281635403166,
+        "MSE_peak1": 0.00017726077732993408,
+        "MSE_inner4_peak1": 0.00017480939983831437,
+        "MSE_border4_peak1": 0.00021465401176559308
+      }
+    },
+    "RR2": {
+      "count": 20,
+      "seconds": 0.8716440260004674,
+      "mean": {
+        "SAM": 4.534172315429666,
+        "ERGAS": 3.9063054164707665,
+        "PSNR": 38.16612073593925,
+        "SCC": 0.9688939219396356,
+        "Q2n": 0.9300682456324638
+      }
+    },
+    "FR_WALD": {
+      "count": 20,
+      "seconds": 1.1449169049992634,
+      "mean": {
+        "SAM": 4.085697958372218,
+        "ERGAS": 3.5447329382084183,
+        "PSNR": 37.694881346812686,
+        "SCC": 0.9845791839053042,
+        "Q2n": 0.9632417200505433
+      }
+    },
+    "FR": {
+      "count": 20,
+      "seconds": 5.758690390000083,
+      "mean": {
+        "D_lambda": 0.028222488738160672,
+        "D_s": 0.17087909818111427,
+        "QNR": 0.8053759399316324,
+        "OBS_RMSE_DN": 16.853341555996018
+      }
+    }
+  },
+  "smoke_validation_inputs_only": false,
+  "gate_records": {
+    "RR": [
+      {
+        "scene_index": 0,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 1,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 2,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 3,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 4,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 5,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 6,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 7,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 8,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 9,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 10,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 11,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 12,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 13,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 14,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 15,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 16,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 17,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 18,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 19,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      }
+    ],
+    "RR2": [
+      {
+        "scene_index": 0,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 1,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 2,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 3,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 4,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 5,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 6,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 7,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 8,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 9,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 10,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 11,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 12,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 13,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 14,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 15,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 16,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 17,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 18,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 19,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      }
+    ],
+    "FR_WALD": [
+      {
+        "scene_index": 0,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 1,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 2,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 3,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 4,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 5,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 6,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 7,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 8,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 9,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 10,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 11,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 12,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 13,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 14,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 15,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 16,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 17,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 18,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 19,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      }
+    ],
+    "FR": [
+      {
+        "scene_index": 0,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 1,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 2,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 3,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 4,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 5,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 6,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 7,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 8,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 9,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 10,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 11,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 12,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 13,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 14,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 15,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 16,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 17,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 18,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      },
+      {
+        "scene_index": 19,
+        "applied": false,
+        "scope": "baseline bypass or not yet forwarded"
+      }
+    ]
+  },
+  "criteria_version": "v2.2",
+  "inference_times": [
+    {
+      "split": "RR",
+      "scene_index": 0,
+      "seconds": 0.02806234099989524,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 1,
+      "seconds": 0.02410710599997401,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 2,
+      "seconds": 0.024012431999835826,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 3,
+      "seconds": 0.02410829600012221,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 4,
+      "seconds": 0.025121343999671808,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 5,
+      "seconds": 0.024507661000825465,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 6,
+      "seconds": 0.024434549000034167,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 7,
+      "seconds": 0.024389096000049904,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 8,
+      "seconds": 0.025455587999204,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 9,
+      "seconds": 0.03822958499949891,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 10,
+      "seconds": 0.037931491000563256,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 11,
+      "seconds": 0.03873370800010889,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 12,
+      "seconds": 0.043181534999348514,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 13,
+      "seconds": 0.0444311059991378,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 14,
+      "seconds": 0.047002784999676805,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 15,
+      "seconds": 0.0473075810004957,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 16,
+      "seconds": 0.04699686999992991,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 17,
+      "seconds": 0.04708168199977081,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 18,
+      "seconds": 0.0472846570000911,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 19,
+      "seconds": 0.044359618999806116,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 0,
+      "seconds": 0.017397538000295754,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 1,
+      "seconds": 0.016207095999561716,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 2,
+      "seconds": 0.018026877000011154,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 3,
+      "seconds": 0.017026123000505322,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 4,
+      "seconds": 0.017717018999974243,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 5,
+      "seconds": 0.01744691600015358,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 6,
+      "seconds": 0.017419393999261956,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 7,
+      "seconds": 0.017191894000461616,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 8,
+      "seconds": 0.01667788099985046,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 9,
+      "seconds": 0.017513134000182617,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 10,
+      "seconds": 0.01902459299981274,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 11,
+      "seconds": 0.016130228000292846,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 12,
+      "seconds": 0.01549211200017453,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 13,
+      "seconds": 0.0160977739997179,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 14,
+      "seconds": 0.015802465999513515,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 15,
+      "seconds": 0.01550788399981684,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 16,
+      "seconds": 0.016322139999829233,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 17,
+      "seconds": 0.016015424000215717,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 18,
+      "seconds": 0.016111843000544468,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 19,
+      "seconds": 0.01592662399980327,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 0,
+      "seconds": 0.01658192700051586,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 1,
+      "seconds": 0.01596853400042164,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 2,
+      "seconds": 0.01620778500000597,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 3,
+      "seconds": 0.01576500500050315,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 4,
+      "seconds": 0.01564764200065838,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 5,
+      "seconds": 0.01605310900049517,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 6,
+      "seconds": 0.015482799999517738,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 7,
+      "seconds": 0.016202167000301415,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 8,
+      "seconds": 0.01583228900017275,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 9,
+      "seconds": 0.02043228000002273,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 10,
+      "seconds": 0.01669022199985193,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 11,
+      "seconds": 0.015039788000649423,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 12,
+      "seconds": 0.017389519999596814,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 13,
+      "seconds": 0.016241028999502305,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 14,
+      "seconds": 0.01578979999976582,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 15,
+      "seconds": 0.017462744000113162,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 16,
+      "seconds": 0.017804995000005874,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 17,
+      "seconds": 0.01715666499967483,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 18,
+      "seconds": 0.016706607999367407,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 19,
+      "seconds": 0.016106860999570927,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 0,
+      "seconds": 0.10604793400034396,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 1,
+      "seconds": 0.09941356099989207,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 2,
+      "seconds": 0.10050754799976858,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 3,
+      "seconds": 0.10069858200040471,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 4,
+      "seconds": 0.10018114800004696,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 5,
+      "seconds": 0.1000273110003036,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 6,
+      "seconds": 0.09948476399949868,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 7,
+      "seconds": 0.1012546560004921,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 8,
+      "seconds": 0.09963441499985493,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 9,
+      "seconds": 0.10027890999936062,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 10,
+      "seconds": 0.10048136200020963,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 11,
+      "seconds": 0.09987117499986198,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 12,
+      "seconds": 0.10061080299965397,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 13,
+      "seconds": 0.0997241799996118,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 14,
+      "seconds": 0.10014870400027576,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 15,
+      "seconds": 0.10040041000047495,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 16,
+      "seconds": 0.10090800199941441,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 17,
+      "seconds": 0.1000363399998605,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 18,
+      "seconds": 0.09981719799998245,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 19,
+      "seconds": 0.10071924699968804,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    }
+  ],
+  "warmed_forward": {
+    "RR": {
+      "median_ms": 37.56799700022384,
+      "warmup": 3,
+      "repetitions": 5,
+      "scope": "first scene only; transfer/metrics excluded"
+    },
+    "RR2": {
+      "median_ms": 17.33403799971711,
+      "warmup": 3,
+      "repetitions": 5,
+      "scope": "first scene only; transfer/metrics excluded"
+    },
+    "FR_WALD": {
+      "median_ms": 15.687297999647853,
+      "warmup": 3,
+      "repetitions": 5,
+      "scope": "first scene only; transfer/metrics excluded"
+    },
+    "FR": {
+      "median_ms": 105.50893300023745,
+      "warmup": 3,
+      "repetitions": 5,
+      "scope": "first scene only; transfer/metrics excluded"
+    }
+  },
+  "test_input_policy": "unmodified native inputs; RR2/FR_WALD use pinned evaluation protocol; only W2 frequency-selective gate differs",
+  "peak_gpu_gib": 0.3401603698730469,
+  "checkpoints": {
+    "best": {
+      "sha256": "0f8357ef5bbfbb2f1b3ede05dbaa184a4fa40461e6316e1af6abc3288a429870"
+    },
+    "latest": {
+      "sha256": "43b8fea31f64e0ec43fe2468d2670fa5c32814225efff077da29c6173044e68e"
+    }
+  },
+  "evaluation_protocol_sha256": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16"
+}

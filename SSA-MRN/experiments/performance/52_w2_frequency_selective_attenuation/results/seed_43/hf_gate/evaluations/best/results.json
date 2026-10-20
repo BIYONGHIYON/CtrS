@@ -1,0 +1,1227 @@
+{
+  "best_epoch": 98,
+  "best_val_mse": 0.00013788686962447284,
+  "full_scene": true,
+  "test_precision": "FP32",
+  "checkpoint_kind": "best",
+  "limitations": "FR D_s/QNR MATLAB parity is unverified; RR Q2n/SCC parity is unverified.",
+  "splits": {
+    "RR": {
+      "count": 20,
+      "seconds": 6.284507124999436,
+      "mean": {
+        "SAM": 4.633789824674449,
+        "ERGAS": 3.7250788495145875,
+        "PSNR": 38.27513806579084,
+        "SCC": 0.9822157490162526,
+        "Q2n": 0.9338272324093622,
+        "MSE_peak1": 0.00017591005933142304,
+        "MSE_inner4_peak1": 0.00017346465729458624,
+        "MSE_border4_peak1": 0.00021321214436952057
+      }
+    },
+    "RR2": {
+      "count": 20,
+      "seconds": 0.9006030979999196,
+      "mean": {
+        "SAM": 4.536063449244908,
+        "ERGAS": 3.8781365920869293,
+        "PSNR": 38.26795597760058,
+        "SCC": 0.9685945233377009,
+        "Q2n": 0.9317100010465067
+      }
+    },
+    "FR_WALD": {
+      "count": 20,
+      "seconds": 1.3806459050010744,
+      "mean": {
+        "SAM": 4.103438870598907,
+        "ERGAS": 3.552540880907954,
+        "PSNR": 37.68576652642184,
+        "SCC": 0.9843264407873212,
+        "Q2n": 0.9633304573882908
+      }
+    },
+    "FR": {
+      "count": 20,
+      "seconds": 6.330205902999296,
+      "mean": {
+        "D_lambda": 0.025362558688702096,
+        "D_s": 0.13106791428800496,
+        "QNR": 0.8466051256042256,
+        "OBS_RMSE_DN": 14.73499007637532
+      }
+    }
+  },
+  "smoke_validation_inputs_only": false,
+  "gate_records": {
+    "RR": [
+      {
+        "scene_index": 0,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8430074453353882,
+        "min": 0.8430074453353882,
+        "max": 0.8430074453353882
+      },
+      {
+        "scene_index": 1,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8412903547286987,
+        "min": 0.8412903547286987,
+        "max": 0.8412903547286987
+      },
+      {
+        "scene_index": 2,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8499677777290344,
+        "min": 0.8499677777290344,
+        "max": 0.8499677777290344
+      },
+      {
+        "scene_index": 3,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8467739820480347,
+        "min": 0.8467739820480347,
+        "max": 0.8467739820480347
+      },
+      {
+        "scene_index": 4,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8497207164764404,
+        "min": 0.8497207164764404,
+        "max": 0.8497207164764404
+      },
+      {
+        "scene_index": 5,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8493908047676086,
+        "min": 0.8493908047676086,
+        "max": 0.8493908047676086
+      },
+      {
+        "scene_index": 6,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8503068089485168,
+        "min": 0.8503068089485168,
+        "max": 0.8503068089485168
+      },
+      {
+        "scene_index": 7,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8485294580459595,
+        "min": 0.8485294580459595,
+        "max": 0.8485294580459595
+      },
+      {
+        "scene_index": 8,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8496484756469727,
+        "min": 0.8496484756469727,
+        "max": 0.8496484756469727
+      },
+      {
+        "scene_index": 9,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8514941930770874,
+        "min": 0.8514941930770874,
+        "max": 0.8514941930770874
+      },
+      {
+        "scene_index": 10,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8508011102676392,
+        "min": 0.8508011102676392,
+        "max": 0.8508011102676392
+      },
+      {
+        "scene_index": 11,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8508011102676392,
+        "min": 0.8508011102676392,
+        "max": 0.8508011102676392
+      },
+      {
+        "scene_index": 12,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.850744366645813,
+        "min": 0.850744366645813,
+        "max": 0.850744366645813
+      },
+      {
+        "scene_index": 13,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8506770730018616,
+        "min": 0.8506770730018616,
+        "max": 0.8506770730018616
+      },
+      {
+        "scene_index": 14,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8486466407775879,
+        "min": 0.8486466407775879,
+        "max": 0.8486466407775879
+      },
+      {
+        "scene_index": 15,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8512266278266907,
+        "min": 0.8512266278266907,
+        "max": 0.8512266278266907
+      },
+      {
+        "scene_index": 16,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8501267433166504,
+        "min": 0.8501267433166504,
+        "max": 0.8501267433166504
+      },
+      {
+        "scene_index": 17,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.846413791179657,
+        "min": 0.846413791179657,
+        "max": 0.846413791179657
+      },
+      {
+        "scene_index": 18,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8513370752334595,
+        "min": 0.8513370752334595,
+        "max": 0.8513370752334595
+      },
+      {
+        "scene_index": 19,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8510728478431702,
+        "min": 0.8510728478431702,
+        "max": 0.8510728478431702
+      }
+    ],
+    "RR2": [
+      {
+        "scene_index": 0,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8399563431739807,
+        "min": 0.8399563431739807,
+        "max": 0.8399563431739807
+      },
+      {
+        "scene_index": 1,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8414960503578186,
+        "min": 0.8414960503578186,
+        "max": 0.8414960503578186
+      },
+      {
+        "scene_index": 2,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8492681384086609,
+        "min": 0.8492681384086609,
+        "max": 0.8492681384086609
+      },
+      {
+        "scene_index": 3,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8436907529830933,
+        "min": 0.8436907529830933,
+        "max": 0.8436907529830933
+      },
+      {
+        "scene_index": 4,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8531518578529358,
+        "min": 0.8531518578529358,
+        "max": 0.8531518578529358
+      },
+      {
+        "scene_index": 5,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8513302206993103,
+        "min": 0.8513302206993103,
+        "max": 0.8513302206993103
+      },
+      {
+        "scene_index": 6,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8519285917282104,
+        "min": 0.8519285917282104,
+        "max": 0.8519285917282104
+      },
+      {
+        "scene_index": 7,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8493014574050903,
+        "min": 0.8493014574050903,
+        "max": 0.8493014574050903
+      },
+      {
+        "scene_index": 8,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8514625430107117,
+        "min": 0.8514625430107117,
+        "max": 0.8514625430107117
+      },
+      {
+        "scene_index": 9,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8513705134391785,
+        "min": 0.8513705134391785,
+        "max": 0.8513705134391785
+      },
+      {
+        "scene_index": 10,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8511351943016052,
+        "min": 0.8511351943016052,
+        "max": 0.8511351943016052
+      },
+      {
+        "scene_index": 11,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8537477850914001,
+        "min": 0.8537477850914001,
+        "max": 0.8537477850914001
+      },
+      {
+        "scene_index": 12,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8516804575920105,
+        "min": 0.8516804575920105,
+        "max": 0.8516804575920105
+      },
+      {
+        "scene_index": 13,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8515899181365967,
+        "min": 0.8515899181365967,
+        "max": 0.8515899181365967
+      },
+      {
+        "scene_index": 14,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8493424654006958,
+        "min": 0.8493424654006958,
+        "max": 0.8493424654006958
+      },
+      {
+        "scene_index": 15,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8506458401679993,
+        "min": 0.8506458401679993,
+        "max": 0.8506458401679993
+      },
+      {
+        "scene_index": 16,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8494147062301636,
+        "min": 0.8494147062301636,
+        "max": 0.8494147062301636
+      },
+      {
+        "scene_index": 17,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.84724360704422,
+        "min": 0.84724360704422,
+        "max": 0.84724360704422
+      },
+      {
+        "scene_index": 18,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8516921401023865,
+        "min": 0.8516921401023865,
+        "max": 0.8516921401023865
+      },
+      {
+        "scene_index": 19,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8541105389595032,
+        "min": 0.8541105389595032,
+        "max": 0.8541105389595032
+      }
+    ],
+    "FR_WALD": [
+      {
+        "scene_index": 0,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8479745984077454,
+        "min": 0.8479745984077454,
+        "max": 0.8479745984077454
+      },
+      {
+        "scene_index": 1,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8504353165626526,
+        "min": 0.8504353165626526,
+        "max": 0.8504353165626526
+      },
+      {
+        "scene_index": 2,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8491400480270386,
+        "min": 0.8491400480270386,
+        "max": 0.8491400480270386
+      },
+      {
+        "scene_index": 3,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8467148542404175,
+        "min": 0.8467148542404175,
+        "max": 0.8467148542404175
+      },
+      {
+        "scene_index": 4,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.846344530582428,
+        "min": 0.846344530582428,
+        "max": 0.846344530582428
+      },
+      {
+        "scene_index": 5,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8509871959686279,
+        "min": 0.8509871959686279,
+        "max": 0.8509871959686279
+      },
+      {
+        "scene_index": 6,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8510095477104187,
+        "min": 0.8510095477104187,
+        "max": 0.8510095477104187
+      },
+      {
+        "scene_index": 7,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8489102721214294,
+        "min": 0.8489102721214294,
+        "max": 0.8489102721214294
+      },
+      {
+        "scene_index": 8,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8429326415061951,
+        "min": 0.8429326415061951,
+        "max": 0.8429326415061951
+      },
+      {
+        "scene_index": 9,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8503174781799316,
+        "min": 0.8503174781799316,
+        "max": 0.8503174781799316
+      },
+      {
+        "scene_index": 10,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8503804206848145,
+        "min": 0.8503804206848145,
+        "max": 0.8503804206848145
+      },
+      {
+        "scene_index": 11,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8511132597923279,
+        "min": 0.8511132597923279,
+        "max": 0.8511132597923279
+      },
+      {
+        "scene_index": 12,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8512963056564331,
+        "min": 0.8512963056564331,
+        "max": 0.8512963056564331
+      },
+      {
+        "scene_index": 13,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8504053950309753,
+        "min": 0.8504053950309753,
+        "max": 0.8504053950309753
+      },
+      {
+        "scene_index": 14,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.851123034954071,
+        "min": 0.851123034954071,
+        "max": 0.851123034954071
+      },
+      {
+        "scene_index": 15,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8504924178123474,
+        "min": 0.8504924178123474,
+        "max": 0.8504924178123474
+      },
+      {
+        "scene_index": 16,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8509638905525208,
+        "min": 0.8509638905525208,
+        "max": 0.8509638905525208
+      },
+      {
+        "scene_index": 17,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8491424918174744,
+        "min": 0.8491424918174744,
+        "max": 0.8491424918174744
+      },
+      {
+        "scene_index": 18,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8458616733551025,
+        "min": 0.8458616733551025,
+        "max": 0.8458616733551025
+      },
+      {
+        "scene_index": 19,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8476482033729553,
+        "min": 0.8476482033729553,
+        "max": 0.8476482033729553
+      }
+    ],
+    "FR": [
+      {
+        "scene_index": 0,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8587931394577026,
+        "min": 0.8587931394577026,
+        "max": 0.8587931394577026
+      },
+      {
+        "scene_index": 1,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.856025755405426,
+        "min": 0.856025755405426,
+        "max": 0.856025755405426
+      },
+      {
+        "scene_index": 2,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8562667369842529,
+        "min": 0.8562667369842529,
+        "max": 0.8562667369842529
+      },
+      {
+        "scene_index": 3,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8561631441116333,
+        "min": 0.8561631441116333,
+        "max": 0.8561631441116333
+      },
+      {
+        "scene_index": 4,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8546265959739685,
+        "min": 0.8546265959739685,
+        "max": 0.8546265959739685
+      },
+      {
+        "scene_index": 5,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8555368185043335,
+        "min": 0.8555368185043335,
+        "max": 0.8555368185043335
+      },
+      {
+        "scene_index": 6,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8562780022621155,
+        "min": 0.8562780022621155,
+        "max": 0.8562780022621155
+      },
+      {
+        "scene_index": 7,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8562828898429871,
+        "min": 0.8562828898429871,
+        "max": 0.8562828898429871
+      },
+      {
+        "scene_index": 8,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8532829284667969,
+        "min": 0.8532829284667969,
+        "max": 0.8532829284667969
+      },
+      {
+        "scene_index": 9,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8555042147636414,
+        "min": 0.8555042147636414,
+        "max": 0.8555042147636414
+      },
+      {
+        "scene_index": 10,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8560523986816406,
+        "min": 0.8560523986816406,
+        "max": 0.8560523986816406
+      },
+      {
+        "scene_index": 11,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.856702983379364,
+        "min": 0.856702983379364,
+        "max": 0.856702983379364
+      },
+      {
+        "scene_index": 12,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8564973473548889,
+        "min": 0.8564973473548889,
+        "max": 0.8564973473548889
+      },
+      {
+        "scene_index": 13,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8556706309318542,
+        "min": 0.8556706309318542,
+        "max": 0.8556706309318542
+      },
+      {
+        "scene_index": 14,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8560947775840759,
+        "min": 0.8560947775840759,
+        "max": 0.8560947775840759
+      },
+      {
+        "scene_index": 15,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8543917536735535,
+        "min": 0.8543917536735535,
+        "max": 0.8543917536735535
+      },
+      {
+        "scene_index": 16,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8551952242851257,
+        "min": 0.8551952242851257,
+        "max": 0.8551952242851257
+      },
+      {
+        "scene_index": 17,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8552523255348206,
+        "min": 0.8552523255348206,
+        "max": 0.8552523255348206
+      },
+      {
+        "scene_index": 18,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8546940684318542,
+        "min": 0.8546940684318542,
+        "max": 0.8546940684318542
+      },
+      {
+        "scene_index": 19,
+        "applied": true,
+        "scope": "most recent forward only",
+        "mean": 0.8553237318992615,
+        "min": 0.8553237318992615,
+        "max": 0.8553237318992615
+      }
+    ]
+  },
+  "criteria_version": "v2.2",
+  "inference_times": [
+    {
+      "split": "RR",
+      "scene_index": 0,
+      "seconds": 0.03934453100009705,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 1,
+      "seconds": 0.03533893799976795,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 2,
+      "seconds": 0.03526398099893413,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 3,
+      "seconds": 0.03541727700030606,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 4,
+      "seconds": 0.03631810799925006,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 5,
+      "seconds": 0.03584371299984923,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 6,
+      "seconds": 0.04166789600094489,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 7,
+      "seconds": 0.042940440000165836,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 8,
+      "seconds": 0.04333998900074221,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 9,
+      "seconds": 0.04684078500031319,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 10,
+      "seconds": 0.0477880529997492,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 11,
+      "seconds": 0.047398996000993066,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 12,
+      "seconds": 0.05468239600122615,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 13,
+      "seconds": 0.053231502999551594,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 14,
+      "seconds": 0.05379159399853961,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 15,
+      "seconds": 0.05430205199991178,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 16,
+      "seconds": 0.053866524000113714,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 17,
+      "seconds": 0.05408469400026661,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 18,
+      "seconds": 0.055182136999064824,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR",
+      "scene_index": 19,
+      "seconds": 0.05022381500020856,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 0,
+      "seconds": 0.01960411800064321,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 1,
+      "seconds": 0.019955715999458334,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 2,
+      "seconds": 0.01850012499926379,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 3,
+      "seconds": 0.02209122699969157,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 4,
+      "seconds": 0.023754583999107126,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 5,
+      "seconds": 0.019931019998693955,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 6,
+      "seconds": 0.01934311300101399,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 7,
+      "seconds": 0.019274002001111512,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 8,
+      "seconds": 0.01753710100092576,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 9,
+      "seconds": 0.019605103001595126,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 10,
+      "seconds": 0.018542488000093726,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 11,
+      "seconds": 0.01780235599835578,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 12,
+      "seconds": 0.01911515500069072,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 13,
+      "seconds": 0.01762996000070416,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 14,
+      "seconds": 0.01773740999851725,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 15,
+      "seconds": 0.019683903999975882,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 16,
+      "seconds": 0.019183073000021977,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 17,
+      "seconds": 0.01763351000045077,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 18,
+      "seconds": 0.018387186999461846,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "RR2",
+      "scene_index": 19,
+      "seconds": 0.01812985900141939,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 0,
+      "seconds": 0.023444817999916268,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 1,
+      "seconds": 0.02414247799970326,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 2,
+      "seconds": 0.023240840000653407,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 3,
+      "seconds": 0.02310945400131459,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 4,
+      "seconds": 0.02303322900115745,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 5,
+      "seconds": 0.023308256999371224,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 6,
+      "seconds": 0.026080523999553407,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 7,
+      "seconds": 0.02279843300129869,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 8,
+      "seconds": 0.022372706000169273,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 9,
+      "seconds": 0.02220612000019173,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 10,
+      "seconds": 0.02230074799990689,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 11,
+      "seconds": 0.023015425000266987,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 12,
+      "seconds": 0.024721138001041254,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 13,
+      "seconds": 0.023274170998774935,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 14,
+      "seconds": 0.023230155000419472,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 15,
+      "seconds": 0.022929172999283765,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 16,
+      "seconds": 0.023088734000339173,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 17,
+      "seconds": 0.022810851000031107,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 18,
+      "seconds": 0.02287493600124435,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR_WALD",
+      "scene_index": 19,
+      "seconds": 0.023017618999801925,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 0,
+      "seconds": 0.12622721300067496,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 1,
+      "seconds": 0.12099472299996705,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 2,
+      "seconds": 0.12179242199999862,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 3,
+      "seconds": 0.12112136299947451,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 4,
+      "seconds": 0.12036471200008236,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 5,
+      "seconds": 0.1214565610007412,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 6,
+      "seconds": 0.11980408299859846,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 7,
+      "seconds": 0.12063445300009334,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 8,
+      "seconds": 0.12036272099976486,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 9,
+      "seconds": 0.1214224400009698,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 10,
+      "seconds": 0.12128901200048858,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 11,
+      "seconds": 0.1210042370003066,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 12,
+      "seconds": 0.12180770799932361,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 13,
+      "seconds": 0.12175736000062898,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 14,
+      "seconds": 0.12165720100165345,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 15,
+      "seconds": 0.12116535600034695,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 16,
+      "seconds": 0.12195241400149825,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 17,
+      "seconds": 0.12206217200036917,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 18,
+      "seconds": 0.12144061499930103,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    },
+    {
+      "split": "FR",
+      "scene_index": 19,
+      "seconds": 0.12117785999907937,
+      "scope": "FP32 forward only; first-scene probe performed; transfer/metrics excluded"
+    }
+  ],
+  "warmed_forward": {
+    "RR": {
+      "median_ms": 42.09481100042467,
+      "warmup": 3,
+      "repetitions": 5,
+      "scope": "first scene only; transfer/metrics excluded"
+    },
+    "RR2": {
+      "median_ms": 17.443099000956863,
+      "warmup": 3,
+      "repetitions": 5,
+      "scope": "first scene only; transfer/metrics excluded"
+    },
+    "FR_WALD": {
+      "median_ms": 23.159254000347573,
+      "warmup": 3,
+      "repetitions": 5,
+      "scope": "first scene only; transfer/metrics excluded"
+    },
+    "FR": {
+      "median_ms": 125.49431800107413,
+      "warmup": 3,
+      "repetitions": 5,
+      "scope": "first scene only; transfer/metrics excluded"
+    }
+  },
+  "test_input_policy": "unmodified native inputs; RR2/FR_WALD use pinned evaluation protocol; only W2 frequency-selective gate differs",
+  "peak_gpu_gib": 0.5603785514831543,
+  "checkpoints": {
+    "best": {
+      "sha256": "db47075e4d17a1f52cea82f020accaed3510ad8f60a90e494ad96333a1eb4ba8"
+    },
+    "latest": {
+      "sha256": "8518f32e94d452afcc691cb09fe17e10108cc527bf4b782682477464eedf1dc8"
+    }
+  },
+  "evaluation_protocol_sha256": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16"
+}
