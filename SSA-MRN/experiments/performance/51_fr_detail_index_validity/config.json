@@ -1,0 +1,34 @@
+{
+  "research_track": "performance",
+  "experiment": 51,
+  "display_name": "51. 정답 없는 FR 세부 지표 후보의 타당성 검증",
+  "experimenter": "이병현",
+  "status": "사전 검증 중",
+  "improvement": "성능 비교 아님",
+  "question": "Can any reference-free spatial-detail index rank fusion outputs by fidelity when the truth is known (experiment 46 ground-truth ranking test)? Only passing indices may later be proposed for the FR judgement.",
+  "protocol": {
+    "data": "RR test 20 scenes; RR PAN/LMS/MS are treated exactly as FR inputs; GT is used only to measure fidelity (as experiment 46)",
+    "candidates": "experiment 46 set (GT, LMS, MTF_GLP, 43 C0-C3 x seeds 42-44 with and without the 45 P5 projection, C0/C2 s42 blends toward GT t=0.25/0.5/0.75 and toward LMS t=0.25/0.5) plus 49 F1 seeds 42-44",
+    "reproduction_check": "toolbox-1.0 D_s of GT, LMS and C0_s42 must equal experiment 46 results/validity.json (1e-9)"
+  },
+  "indices": {
+    "PDC_corr": "PAN detail correlation: fit P_lr ~ sum_b w_b MS_b + c by least squares on the MS grid (P_lr = PAN blurred with the QB PAN MTF, GNyq 0.15, and decimated x4 at phase 2); I_F = sum_b w_b F_b + c; HP(X) = X - PAN-MTF blur(X); index = 1 - corr(HP(I_F), HP(PAN)) over the image interior (margin 8). Lower is better",
+    "PDC_nrmse": "same I_F and HP: RMSE(HP(I_F) - HP(PAN)) / RMSE(HP(PAN)). Lower is better",
+    "BandHP_corr": "1 - mean over bands of corr(HP(F_b), HP(PAN)) over the interior. Lower is better",
+    "D_rho_style": "local correlation idea of Scarpa et al. 2022: rho_b(x) = Pearson correlation of F_b and PAN in a sliding 4x4 window (ratio); index = mean over bands and pixels of (1 - rho_b(x)). Our implementation, not checked against the authors code. Lower is better"
+  },
+  "tests": {
+    "T1_truth_ranking": "scenes where index(GT) is better than the mean over the three C0 seeds; valid >= 15/20, conflicting <= 5/20",
+    "T2_fidelity_rank": "per scene Spearman(MSE vs GT, index badness) over all candidates, median over scenes; valid >= +0.5, conflicting <= -0.5",
+    "T3_monotone_blend": "scenes where t=0.75 toward GT scores better than t=0 (C0 s42 and C2 s42 separately); reported",
+    "T4_truth_best": "scenes where GT has the best index among all candidates; reported",
+    "decision": "per index: passes if T1 valid AND T2 >= +0.5; conflicts if T1 conflicting AND T2 <= -0.5; otherwise mixed (same rule as experiment 46)"
+  },
+  "use_of_result": "a passing index is a candidate for a later FR guard; adding it to docs/judgement_criteria.md is a separate decision. This experiment changes no judgement",
+  "limits": "RR-scale check of the scale-invariance assumption; it does not prove FR behaviour. QB only; exploratory test reused",
+  "constraints": {
+    "training": false,
+    "optimizer_updates": 0,
+    "tests_fixed_before_measurement": true
+  }
+}
