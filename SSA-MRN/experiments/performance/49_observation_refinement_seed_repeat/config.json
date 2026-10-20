@@ -1,0 +1,44 @@
+{
+  "experiment": 49,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "관측 오차 보정기(G5) 계열의 3시드 재현",
+  "status": "사전 검증 중",
+  "improvement": "판단 보류",
+  "code": "experiments/performance/48_parallel_capacity_observation_refinement (model.py arm F1, train.py, run.py); one shared queue and runtime C:/CtrS-p48",
+  "arms": {
+    "C0": "43 original, seeds 42-44 (control, not retrained)",
+    "F1": "C0 + 28 G5 observation-error refiners (29 F01 structure), seeds 42-44"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "protocol": "identical to 43: 150 epochs, batch/micro 32, Adam, cosine 1e-4 to 1e-6, AMP FP16, cuDNN deterministic, channels_last, per-seed data order (seed+100000), per-seed core initialization equal to 43 C0",
+  "queue_items": [
+    [
+      "F1",
+      42
+    ],
+    [
+      "F1",
+      43
+    ],
+    [
+      "F1",
+      44
+    ]
+  ],
+  "controls": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s{seed}/best.pt",
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.2, fixed before training",
+    "primary": "F1 seeds 42-44 mean vs C0 seeds 42-44 mean: v2.2 label; per-seed values reported",
+    "adoption": "a 3-seed 개선 makes F1 a baseline-change candidate for team decision; never automatic",
+    "reference": "29 F01 (seed42, 29 protocol) and 28 G5 (seed46) are earlier single runs, not pooled"
+  },
+  "constraints": {
+    "training": "requires user approval",
+    "test_used_for_selection": false
+  }
+}
