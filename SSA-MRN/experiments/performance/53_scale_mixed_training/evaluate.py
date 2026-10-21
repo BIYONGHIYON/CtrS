@@ -1,7 +1,8 @@
 """Experiment 53 evaluation (no training): criteria v2.3 judgements, result images, FR/RR2 panels and graphs.
 
-Measures F1 (49 seed 42, current baseline), C2 (43 seed 42), C2MS and F1MS (this experiment, seed 42) with
-common/evaluation_protocol.scene_metrics on all 20 RR and FR test scenes, then applies the judgement fixed in config.json.
+Measures the original SSA-MRN C0 and C2 (43) and F1 (49, baseline when the experiment was run) at seeds 42-44, C2MS (this experiment) at seeds 42-44 and F1MS at seed 42
+with common/evaluation_protocol.scene_metrics on all 20 RR and FR test scenes, then applies the judgement fixed in config.json
+(seed 42) and the three-seed v2.3 judgement (seed means paired by seed). Images and panels use seed 42.
 Also checks the current prepare.py against the preserved coarse.py and the measured RR means against the controller's
 own evaluation records. Writes only below results/.
 """
@@ -22,16 +23,20 @@ import model as M53  # noqa: E402
 import prepare  # noqa: E402
 
 E = ROOT / 'experiments/performance'
-CKPT = {'F1': E / '49_observation_refinement_seed_repeat/checkpoints/F1_QB_s42/best.pt', 'C2': E / '43_normalized_parallel_capacity/checkpoints/C2_QB_s42/best.pt',
-        'C2MS': HERE / 'checkpoints/C2MS_QB_s42/best.pt', 'F1MS': HERE / 'checkpoints/F1MS_QB_s42/best.pt'}
-BUILD = {'F1': 'F1', 'C2': 'C2', 'C2MS': 'C2', 'F1MS': 'F1'}
-HISTORY = {'F1': E / '49_observation_refinement_seed_repeat/results/F1_QB_s42/history.json', 'C2': E / '43_normalized_parallel_capacity/results/C2_QB_s42/history.json',
-           'C2MS': HERE / 'results/C2MS_QB_s42/history.json', 'F1MS': HERE / 'results/F1MS_QB_s42/history.json'}
+SEEDS = {'C0': (42, 43, 44), 'F1': (42, 43, 44), 'C2': (42, 43, 44), 'C2MS': (42, 43, 44), 'F1MS': (42,)}
+BASE = {'C0': E / '43_normalized_parallel_capacity', 'F1': E / '49_observation_refinement_seed_repeat', 'C2': E / '43_normalized_parallel_capacity', 'C2MS': HERE, 'F1MS': HERE}
+BUILD = {'C0': 'C0', 'F1': 'F1', 'C2': 'C2', 'C2MS': 'C2', 'F1MS': 'F1'}
+
+
+def ckpt(key, seed): return BASE[key] / f'checkpoints/{key}_QB_s{seed}/best.pt'
+def history(key, seed): return BASE[key] / f'results/{key}_QB_s{seed}/history.json'
+
 NOISE = {1: 0.06, 2: 0.04}  # docs/judgement_criteria.md v2.3: RR PSNR noise threshold for 1 seed / 2 or more seeds
 TOL = {'RR2': (-0.05, 0.06), 'FR_WALD': (-0.07, 0.04), 'FR_OBS': 1.10}
-PAIRS = ('C2MS:F1', 'C2MS:C2', 'F1MS:F1', 'C2MS:F1MS')
+ALL = (42, 43, 44)
+PAIRS = (('C2MS', 'F1', ALL), ('C2MS', 'C2', ALL), ('C2MS', 'C0', ALL), ('F1', 'C0', ALL), ('F1MS', 'F1', (42,)), ('C2MS', 'F1MS', (42,)), ('C2MS', 'C2', (42,))) + tuple(('C2MS', 'F1', (s,)) for s in ALL if s != 42) + (('C2MS', 'F1', (42,)),)
 VISUAL_SCENES = (1, 8, 11, 13, 19)  # FR/RR2 panels fixed in config.json before training
-COLORS = {'F1': '#4C72B0', 'C2': '#8C8C8C', 'C2MS': '#C44E52', 'F1MS': '#55A868'}
+COLORS = {'C0': '#000000', 'F1': '#4C72B0', 'C2': '#8C8C8C', 'C2MS': '#C44E52', 'F1MS': '#55A868'}
 
 
 def sha(path):
@@ -56,6 +61,9 @@ def judge(cand, ctrl):
 
 
 def scene_wins(cand_rows, ctrl_rows):
+    """Scenes where the candidate is better; rows are lists over seeds (scene metrics averaged over the paired seeds)."""
+    avg = lambda runs: [{part: {k: float(np.mean([run[i][part][k] for run in runs])) for k in ('PSNR', 'SAM')} for part in ('RR', 'RR2', 'FR_WALD')} for i in range(len(runs[0]))]
+    cand_rows, ctrl_rows = avg(cand_rows), avg(ctrl_rows)
     out = {}
     for part in ('RR', 'RR2', 'FR_WALD'):
         out[part] = {'PSNR': int(sum(c[part]['PSNR'] > b[part]['PSNR'] for c, b in zip(cand_rows, ctrl_rows))),
@@ -116,26 +124,32 @@ def panels(nets, data, out, device, degrade):
 def graphs(models, out):
     import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt
     fig, ax = plt.subplots(1, 3, figsize=(16, 4.2))
-    for k, path in HISTORY.items():
-        h = [r for r in json.loads(path.read_text(encoding='utf-8')) if r.get('val_psnr') is not None]
-        ax[0].plot([r['epoch'] for r in h], [r['val_psnr'] for r in h], color=COLORS[k], label=k)
-        c = [r for r in h if r.get('coarse_val_psnr') is not None]
-        if c: ax[1].plot([r['epoch'] for r in c], [r['coarse_val_psnr'] for r in c], color=COLORS[k], label=k)
-        t = [r for r in h if r.get('train_mse')]
-        ax[2].semilogy([r['epoch'] for r in t], [r['train_mse'] for r in t], color=COLORS[k], label=k)
+    for k, seeds in SEEDS.items():
+        for n, s in enumerate(seeds):
+            h = [r for r in json.loads(history(k, s).read_text(encoding='utf-8')) if r.get('val_psnr') is not None]
+            kw = dict(color=COLORS[k], alpha=1 if s == 42 else .45, lw=1.4 if s == 42 else .9, label=k if n == 0 else None)
+            ax[0].plot([r['epoch'] for r in h], [r['val_psnr'] for r in h], **kw)
+            c = [r for r in h if r.get('coarse_val_psnr') is not None]
+            if c: ax[1].plot([r['epoch'] for r in c], [r['coarse_val_psnr'] for r in c], **kw)
+            tr = [r for r in h if r.get('train_mse')]
+            ax[2].semilogy([r['epoch'] for r in tr], [r['train_mse'] for r in tr], **kw)
     ax[0].set(xlabel='epoch', ylabel='PSNR (dB)', ylim=(37, 41), title='Validation PSNR, original scale (selection)')
     ax[1].set(xlabel='epoch', ylabel='PSNR (dB)', title='Validation PSNR, 2x coarser pairs (logged only)')
     ax[2].set(xlabel='epoch', ylabel='MSE (DN/2047)^2', title='Training MSE, original-scale batch')
     for x in ax: x.legend(fontsize=8); x.grid(alpha=.3)
-    fig.suptitle('Seed 42 learning curves (F1 from 49, C2 from 43, C2MS and F1MS from this experiment)', fontsize=10)
+    fig.suptitle('Learning curves, seed 42 bold and seeds 43-44 light (F1 from 49, C2 from 43, C2MS and F1MS from this experiment)', fontsize=10)
     fig.tight_layout(); fig.savefig(out / 'learning.png', dpi=130); plt.close(fig)
-    fig, ax = plt.subplots(figsize=(8, 4)); tests = ('RR', 'RR2', 'FR_WALD'); x = np.arange(len(tests)); w = .26
+    fig, ax = plt.subplots(figsize=(8.5, 4.2)); tests = ('RR', 'RR2', 'FR_WALD'); x = np.arange(len(tests)); w = .26
     for j, k in enumerate(('C2', 'C2MS', 'F1MS')):
-        v = [models[k]['mean'][t]['PSNR'] - models['F1']['mean'][t]['PSNR'] for t in tests]
-        ax.bar(x + (j - 1) * w, v, w, color=COLORS[k], label=k)
-        for xi, vi in zip(x + (j - 1) * w, v): ax.text(xi, vi + (0.03 if vi >= 0 else -0.09), f'{vi:+.2f}', ha='center', fontsize=8)
-    ax.axhline(0, color='black', lw=.8); ax.set_xticks(x, tests); ax.set_ylabel('PSNR difference vs F1 (dB)'); ax.set_title('Seed 42, mean of 20 test scenes, vs current baseline F1')
-    ax.legend(); ax.grid(axis='y', alpha=.3); fig.tight_layout(); fig.savefig(out / 'comparison.png', dpi=130); plt.close(fig)
+        per = [[models[f'{k}_s{s}']['mean'][t]['PSNR'] - models[f'F1_s{s}']['mean'][t]['PSNR'] for s in SEEDS[k]] for t in tests]
+        v = [float(np.mean(d)) for d in per]; label = f'{k} ({len(SEEDS[k])} seed{"s" if len(SEEDS[k]) > 1 else ""})'
+        ax.bar(x + (j - 1) * w, v, w, color=COLORS[k], label=label)
+        for xi, d in zip(x + (j - 1) * w, per):
+            if len(d) > 1: ax.scatter([xi] * len(d), d, color='black', s=9, zorder=3)
+        for xi, vi in zip(x + (j - 1) * w, v): ax.text(xi, vi + (0.04 if vi >= 0 else -0.11), f'{vi:+.2f}', ha='center', fontsize=8)
+    ax.axhline(0, color='black', lw=.8); ax.set_xticks(x, tests); ax.set_ylabel('PSNR difference vs F1 of the same seed (dB)')
+    ax.set_title('Mean of 20 test scenes; bars = seed mean, dots = individual seeds'); ax.legend(); ax.grid(axis='y', alpha=.3)
+    fig.tight_layout(); fig.savefig(out / 'comparison.png', dpi=130); plt.close(fig)
 
 
 def main():
@@ -160,35 +174,43 @@ def main():
     degrade = protocol.WaldDegradation('QB', a.device)
     observation = protocol.SensorObservation('QB', 'decimate', (2, 2)).to(a.device).double()
     nets, models = {}, {}
-    for key, path in CKPT.items():
-        ck = torch.load(path, map_location='cpu', weights_only=False)
-        net = M53.M48.Model(BUILD[key], 42); net.load_state_dict(ck['model'], strict=True); nets[key] = net.to(a.device).eval()
-        rows = [{'index': i, **protocol.scene_metrics(nets[key], rr, fr, a.device, degrade, observation)} for i, (rr, fr) in enumerate(zip(scenes['RR'], scenes['FR']))]
-        mean = {part: {k: float(np.mean([r[part][k] for r in rows])) for k in rows[0][part]} for part in ('RR', 'RR2', 'FR_WALD', 'FR')}
-        models[key] = dict(checkpoint=str(path.relative_to(ROOT)), checkpoint_sha256=sha(path), best_epoch=ck.get('best_epoch'), mean=mean, rows=rows)
-        print(key, 'RR %.4f/%.4f/%.4f RR2 %.4f/%.4f FR_WALD %.4f/%.4f OBS %.3f' % (mean['RR']['PSNR'], mean['RR']['SAM'], mean['RR']['ERGAS'], mean['RR2']['PSNR'],
-              mean['RR2']['SAM'], mean['FR_WALD']['PSNR'], mean['FR_WALD']['SAM'], mean['FR']['OBS_RMSE_DN']), flush=True)
+    for key, seeds in SEEDS.items():
+        for s in seeds:
+            path = ckpt(key, s); ck = torch.load(path, map_location='cpu', weights_only=False)
+            net = M53.M48.Model(BUILD[key], s); net.load_state_dict(ck['model'], strict=True); net = net.to(a.device).eval()
+            rows = [{'index': i, **protocol.scene_metrics(net, rr, fr, a.device, degrade, observation)} for i, (rr, fr) in enumerate(zip(scenes['RR'], scenes['FR']))]
+            mean = {part: {k: float(np.mean([r[part][k] for r in rows])) for k in rows[0][part]} for part in ('RR', 'RR2', 'FR_WALD', 'FR')}
+            models[f'{key}_s{s}'] = dict(checkpoint=str(path.relative_to(ROOT)), checkpoint_sha256=sha(path), best_epoch=ck.get('best_epoch'), mean=mean, rows=rows)
+            print(key, s, 'RR %.4f/%.4f/%.4f RR2 %.4f/%.4f FR_WALD %.4f/%.4f OBS %.3f' % (mean['RR']['PSNR'], mean['RR']['SAM'], mean['RR']['ERGAS'], mean['RR2']['PSNR'],
+                  mean['RR2']['SAM'], mean['FR_WALD']['PSNR'], mean['FR_WALD']['SAM'], mean['FR']['OBS_RMSE_DN']), flush=True)
+            if s == 42: nets[key] = net
+            else: del net
     judgements = {}
-    for pair in PAIRS:
-        cand, ctrl = pair.split(':')
-        j = judge([models[cand]['mean']], [models[ctrl]['mean']]); j['scenes_improved'] = scene_wins(models[cand]['rows'], models[ctrl]['rows']); judgements[pair] = j
-        print(pair, j['label'], 'RR %+.4f/%+.4f/%+.4f RR2 %+.4f/%+.4f FR_WALD %+.4f/%+.4f OBS x%.3f RR scenes %d/20' % (
+    for cand, ctrl, seeds in PAIRS:
+        name = f'{cand}:{ctrl}@' + '+'.join(map(str, seeds))
+        j = judge([models[f'{cand}_s{s}']['mean'] for s in seeds], [models[f'{ctrl}_s{s}']['mean'] for s in seeds])
+        j['seeds'] = list(seeds); j['scenes_improved'] = scene_wins([models[f'{cand}_s{s}']['rows'] for s in seeds], [models[f'{ctrl}_s{s}']['rows'] for s in seeds]); judgements[name] = j
+        print(name, j['label'], 'RR %+.4f/%+.4f/%+.4f RR2 %+.4f/%+.4f FR_WALD %+.4f/%+.4f OBS x%.3f RR scenes %d/20' % (
             j['delta']['RR']['PSNR'], j['delta']['RR']['SAM'], j['delta']['RR']['ERGAS'], j['delta']['RR2']['PSNR'], j['delta']['RR2']['SAM'],
             j['delta']['FR_WALD']['PSNR'], j['delta']['FR_WALD']['SAM'], j['obs_ratio'], j['scenes_improved']['RR']['PSNR']), flush=True)
-    primary = judgements['C2MS:F1']
-    prefixed = {'primary_label': primary['label'],
-                'large_gain_condition': primary['label'] == '개선' and primary['delta']['RR']['PSNR'] >= 0.40,
-                'diagnostic_1': judgements['C2MS:C2']['delta']['RR']['PSNR'] >= -0.15 and primary['guards']['RR2'],
-                'diagnostic_2_label': judgements['F1MS:F1']['label']}
-    controller = {k: max(abs(models[k]['mean']['RR'][m] - json.loads((out / f'{k}_QB_s42/evaluation/RR.json').read_text(encoding='utf-8'))['mean'][m]) for m in ('PSNR', 'SAM', 'ERGAS')) for k in ('C2MS', 'F1MS')}
+    primary = judgements['C2MS:F1@42']; three = judgements['C2MS:F1@42+43+44']
+    prefixed = {'primary_label_seed42': primary['label'],
+                'large_gain_condition_seed42': primary['label'] == '개선' and primary['delta']['RR']['PSNR'] >= 0.40,
+                'diagnostic_1_seed42': judgements['C2MS:C2@42']['delta']['RR']['PSNR'] >= -0.15 and primary['guards']['RR2'],
+                'diagnostic_2_label_seed42': judgements['F1MS:F1@42']['label'],
+                'three_seed_label': three['label'],
+                'three_seed_large_gain': three['label'] == '개선' and three['delta']['RR']['PSNR'] >= 0.40}
+    controller = {f'{k}_s{s}': max(abs(models[f'{k}_s{s}']['mean']['RR'][m] - json.loads((out / f'{k}_QB_s{s}/evaluation/RR.json').read_text(encoding='utf-8'))['mean'][m]) for m in ('PSNR', 'SAM', 'ERGAS'))
+                  for k in ('C2MS', 'F1MS') for s in SEEDS[k]}
     code = current_code_check()
     print('pre-fixed', prefixed, 'controller RR max abs diff', controller, 'current code', code, flush=True)
     for cand in ('C2MS', 'F1MS'):
         result_images.render(nets['F1'], nets[cand], a.data, out / f'images/{cand}_vs_F1', names=('F1', cand), seed=42, device=a.device)
-    panels(nets, a.data, out / 'fr_rr2_visual', a.device, degrade)
+    result_images.render(nets['C0'], nets['C2MS'], a.data, out / 'images/C2MS_vs_original', names=('원본', 'C2MS'), seed=42, device=a.device, labels=('원본 SSA-MRN', '현재 기준 C2MS'))
+    panels({k: nets[k] for k in ('F1', 'C2', 'C2MS', 'F1MS')}, a.data, out / 'fr_rr2_visual', a.device, degrade)
     graphs(models, out)
     (out / 'evaluation_v2_3.json').write_text(json.dumps(dict(
-        criteria='docs/judgement_criteria.md v2.3', noise=NOISE, tolerances=TOL, seeds=[42], prefixed_judgement=prefixed, judgements=judgements,
+        criteria='docs/judgement_criteria.md v2.3', noise=NOISE, tolerances=TOL, seeds={k: list(v) for k, v in SEEDS.items()}, prefixed_judgement=prefixed, judgements=judgements,
         controller_rr_max_abs_diff=controller, current_code_check=code, models=models,
         environment=dict(python=sys.version, torch=torch.__version__, device=torch.cuda.get_device_name(0) if a.device == 'cuda' else 'cpu', evaluate_sha256=sha(__file__),
                          protocol_sha256=sha(ROOT / 'common/evaluation_protocol.py'), result_images_sha256=sha(ROOT / 'common/result_images.py'),

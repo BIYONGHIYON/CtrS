@@ -110,5 +110,22 @@
     "test_used_for_selection": false
   },
   "working_number": 52,
-  "note": "Run under the working number 52 (runtime C:/CtrS-p52, folder 52_scale_mixed_training); renumbered 53 because performance 52 was taken by PR #118. Runtime paths and preserved sources are unchanged."
+  "note": "Run under the working number 52 (runtime C:/CtrS-p52, folder 52_scale_mixed_training); renumbered 53 because performance 52 was taken by PR #118. Runtime paths and preserved sources are unchanged.",
+  "additional_runs": {
+    "approved": "2026-10-21",
+    "runtime": "C:/CtrS-p53",
+    "queue": [
+      [
+        "C2MS",
+        43
+      ],
+      [
+        "C2MS",
+        44
+      ]
+    ],
+    "config": "provenance/run_records_s43_s44/config.json",
+    "note": "same code and settings as seed 42; only runtime and queue differ"
+  },
+  "adopted_as_baseline": "2026-10-21 (C2MS, three-seed improvement over F1)"
 }

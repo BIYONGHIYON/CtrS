@@ -1,0 +1,114 @@
+{
+  "experiment": 53,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "축척 혼합 학습으로 W2 용량 이득의 축척 강건성 확보",
+  "status": "학습 중",
+  "improvement": "판단 보류",
+  "hypothesis": "mixing the original training pairs with 2x coarser pairs built from the same patches teaches a scale-dependent detail gain, so W2 keeps its large RR gain while passing RR2 (experiment 50: the W2 RR2 shortfall is a scale-dependent detail gain in the unobservable high band)",
+  "arms": {
+    "C2MS": "43 C2 (original + W2) trained on original + 2x coarser pairs (main candidate)",
+    "F1MS": "current baseline F1 trained on original + 2x coarser pairs (effect of the data alone)",
+    "C2": "43 C2 seed 42 (reference, not retrained)",
+    "F1": "49 F1 seed 42 (current baseline control, not retrained)"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "epochs": 150,
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training; FP32 transforms/inverse/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cpu_threads": 1,
+  "selection": "minimum original-scale validation MSE including epoch0, earliest exact tie (same as the controls); coarse validation is logged only",
+  "max_parallel": null,
+  "evaluate_after_all_training": true,
+  "scenes": [
+    1,
+    8,
+    11,
+    13,
+    19
+  ],
+  "scene_index_base": 0,
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset/QuickBird",
+  "data": {
+    "train": "Training Dataset/train_qb.h5",
+    "val": "Training Dataset/valid_qb.h5",
+    "RR": "Testing Dataset (ReducedData, H5 Format)/test_qb_multiExm1.h5",
+    "FR": "Testing Dataset (FullData, H5 Format)/test_qb_OrigScale_multiExm1.h5"
+  },
+  "data_sha256": {
+    "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+    "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+    "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+    "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+  },
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "layout": "channels_last",
+  "std_floor": 0.01,
+  "loss": "per-pixel MSE on the original batch + coarse_weight x per-pixel MSE on the same patches at the 2x coarser scale (DN/2047 coordinates)",
+  "coarse_weight": 1.0,
+  "coarse_pairs": "prepare.py (coarse.py when run): GT and PAN blurred by the x2 sensor MTF (genMTF, QB GNyq, 41 taps) and decimated at phase 1 -> 32x32; MS = dataset x4 Wald operator of the coarse GT -> 8x8; LMS = interp23tap(MS). Training and validation splits only; test never used",
+  "runtime": "C:/CtrS-p53",
+  "cache_manifest_source": "experiments/performance/43_normalized_parallel_capacity/provenance/data_manifest.json",
+  "cache_manifest_source_sha256": "66debe89dd95de8d37d1b3cfc89759f17bfcb18f5e771b663c62e214776a7411",
+  "queue": [
+    [
+      "C2MS",
+      43
+    ],
+    [
+      "C2MS",
+      44
+    ]
+  ],
+  "concurrency_candidates": [
+    1
+  ],
+  "vram_budget_gib": 7.0,
+  "expected_43_initial_state_sha256": {
+    "C0_s42": "f9323ba6cb23b9b775a1435b4a670e5577772084818b3c55c3ed9f3a82393060",
+    "C0_s43": "373529d2584ed5d3801f4bcb9d3ac07341e37ba2c646357d12c92cb24881b23e",
+    "C0_s44": "791c609d540f495fec5375d119aa1136f600f70b5d196fe03f4baf7f23825515",
+    "C2_s42": "004f0b47ef8d4a0a8a7c12edfb2125c7d9c5a4c4727e6026118a936099393442",
+    "C2_s43": "dd89b69e043df889415c2ad16bfca5971627e435ea8c0377844a148152db8020",
+    "C2_s44": "6d86d7b41f85556d2724066194a89b0663633049704d32a53261dcf2c76f9010"
+  },
+  "controls": {
+    "C2": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C2_QB_s42/best.pt",
+    "F1": "experiments/performance/49_observation_refinement_seed_repeat/checkpoints/F1_QB_s42/best.pt"
+  },
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.3 with common/evaluation_protocol.py; fixed before training",
+    "primary": "C2MS s42 vs F1 s42 (current baseline): v2.3 label",
+    "large_gain_condition": "C2MS vs F1 is 개선 AND RR dPSNR >= +0.40 dB",
+    "diagnostic_1": "C2MS vs C2: RR dPSNR >= -0.15 dB while the RR2 guard of C2MS vs F1 passes",
+    "diagnostic_2": "F1MS vs F1: v2.3 label (does scale mixing help the baseline itself)",
+    "qualitative": "FR and RR2 comparison panels (fixed scenes 1, 8, 11, 13, 19) of F1, C2, C2MS, F1MS",
+    "next": "if the large-gain condition holds, propose C2MS seeds 43 and 44 (baseline-change candidate; requires approval)",
+    "reported_only": "FR QNR, D_lambda, D_s; coarse-scale validation; TTA x8 results"
+  },
+  "limits": [
+    "QB only; exploratory test reused",
+    "training sees 2x coarser pairs while RR2 is 4x coarser; FR (finer) is never seen",
+    "controls reused from 43 and 49 (same code path, cache, seed, schedule)"
+  ],
+  "constraints": {
+    "training": "requires user approval",
+    "test_used_for_selection": false
+  },
+  "working_number": 52,
+  "note": "Run under the working number 52 (runtime C:/CtrS-p52, folder 52_scale_mixed_training); renumbered 53 because performance 52 was taken by PR #118. Runtime paths and preserved sources are unchanged. Seeds 43 and 44 of C2MS run in a separate runtime C:/CtrS-p53 with the same code and settings as seed 42 (approved 2026-10-21)."
+}
