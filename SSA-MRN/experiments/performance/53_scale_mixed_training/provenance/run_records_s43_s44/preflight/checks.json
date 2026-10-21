@@ -1,0 +1,65 @@
+{
+  "time_kst": "2026-10-21T07:48:28.177170+09:00",
+  "initial_state_equal_to_48": true,
+  "initial_state_sha256": {
+    "C2MS_s42": "004f0b47ef8d4a0a8a7c12edfb2125c7d9c5a4c4727e6026118a936099393442",
+    "F1MS_s42": "2843c768dc82d530098056d7d92942a28b7590214cd3908dbd1aba126b03aeeb",
+    "C2MS_s43": "dd89b69e043df889415c2ad16bfca5971627e435ea8c0377844a148152db8020",
+    "F1MS_s43": "15acb0daa58063cc62ebb1adb2317375067af8170c48ab3ce4799e6bde72ec3b",
+    "C2MS_s44": "6d86d7b41f85556d2724066194a89b0663633049704d32a53261dcf2c76f9010",
+    "F1MS_s44": "78667f950961894b4cac14c1696165e6879e3c36390cc47d3f8569f61d60d2fa"
+  },
+  "genmtf_x4_max_abs_diff": 0.0,
+  "coarse_kernel_dc_gain": {
+    "ms": [
+      0.9997148461933067,
+      0.999698054003819,
+      0.9996803400723344,
+      0.9995969484942354
+    ],
+    "pan": 0.9994961777612154
+  },
+  "coarse_cache_vs_fresh_max_abs": 0.0,
+  "coarse_shapes": {
+    "pan": [
+      17139,
+      1,
+      32,
+      32
+    ],
+    "lms": [
+      17139,
+      4,
+      32,
+      32
+    ],
+    "ms": [
+      17139,
+      4,
+      8,
+      8
+    ],
+    "gt": [
+      17139,
+      4,
+      32,
+      32
+    ]
+  },
+  "coarse_ms_vs_2x_reduced_given_ms_relative_rmse": 0.03967642784118652,
+  "checks": {
+    "C2MS": {
+      "initial_state_sha256": "004f0b47ef8d4a0a8a7c12edfb2125c7d9c5a4c4727e6026118a936099393442",
+      "parameters": 2853918,
+      "resume_max_abs": 0.0,
+      "loss": 0.4485265612602234
+    },
+    "F1MS": {
+      "initial_state_sha256": "2843c768dc82d530098056d7d92942a28b7590214cd3908dbd1aba126b03aeeb",
+      "parameters": 461804,
+      "resume_max_abs": 0.0,
+      "loss": 0.4467552900314331
+    }
+  },
+  "scope": "tiny AMP forward/backward on both scales and two-update resume; not long-session crash proof"
+}
