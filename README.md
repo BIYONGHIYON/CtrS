@@ -2,6 +2,8 @@
 
 # CtrS · SSA-MRN 성능 개선 연구
 
+[연구 소개](#연구-소개) · [팀원](#팀원) · [연구 분담](#연구-분담) · [구조](#ssa-mrn-구조) · [기준 모델](#기준-모델) · [결과 이미지](#기준-모델-결과-이미지) · [다른 실험](#experiments)
+
 ## 연구 소개
 
 고해상도 흑백 위성영상 **PAN**의 공간 정보와 저해상도 다중분광영상 **MS**의 색·분광 정보를 결합해 고해상도 MS를 복원하는 팬샤프닝 연구입니다. SSA-MRN을 기반으로 SSAI 개선, 가변 배율 확장, 기존 성능 개선을 나누어 연구합니다.
@@ -17,20 +19,18 @@
 
 ## 연구 분담
 
-연구 분야를 선택하면 해당 분야의 목적과 실험 표를 바로 확인할 수 있습니다. SSAI 개선은 1-12번 결과를 정리했으며 신규 실험은 계획하지 않습니다. 이병현은 기존 성능 개선 연구로 이동했습니다. 가변 배율 확장은2·3·4배 학습과 RR 평가를 마쳤으며 FR·장면 출처 검증이 남았습니다.
-
 | 연구 | 담당 | 목표 | 현재 단계 |
 |---|---|---|---|
-| [SSAI 개선](SSA-MRN/research/ssai/README.md) | 이병현 | 밴드별 공간·분광 특징을 결합하는 SSAI의 연산과 구조를 개선합니다. | SSAI 1-12 평가·정리 완료 · 신규 실험 없음 |
-| [가변 배율 확장](SSA-MRN/research/variable_scale/README.md) | 김윤지 | 기존 고정 4배 복원을 여러 배율에서 동작하도록 확장합니다. | 학습 완료·일부 평가 |
-| [기존 성능 개선](SSA-MRN/research/performance/README.md) | 김경찬·송준현·이병현 | 기존 연구의 구조·학습·손실 변경을 이어서 비교합니다. | 기존 결과 보유 · 후속 연구 계속 |
+| [SSAI 개선](SSA-MRN/research/ssai/README.md) | 이병현 | 밴드별 공간·분광 특징을 결합하는 SSAI의 연산과 구조를 개선합니다. | 1-12번 평가·정리 완료 · 신규 실험 없음 |
+| [가변 배율 확장](SSA-MRN/research/variable_scale/README.md) | 김윤지 | 고정 4배 복원을 여러 배율에서 동작하도록 확장합니다. | 2·3·4배 학습·RR 평가 완료 · FR·장면 출처 검증 남음 |
+| [기존 성능 개선](SSA-MRN/research/performance/README.md) | 김경찬·송준현·이병현 | 구조·학습·손실 변경으로 성능을 개선합니다. | 후속 연구 계속 (이병현은 SSAI에서 이동) |
 
 ## SSA-MRN 구조
 
-PAN·축소 후 재확대한 PAN(LRPAN)·확대한 MS(LMS)에서 특징을 추출합니다. 전체·절반·1/4 크기에서 밴드별 SSAI로 융합하고, 작은 크기부터 복원하며 이전 크기의 특징을 결합합니다. 현재 기준 모델 **C2MS**는 이 원본 구조를 그대로 두고, 초기 특징에서 갈라지는 **W2 병렬 가지**를 더했습니다(성능 43번 C2와 같은 구조). 그리고 원래 학습 쌍에 같은 패치로 만든 **2배 거친 학습 쌍을 섞어** 학습했습니다(축척 혼합 학습). 추론할 때는 원본과 같은 입력을 그대로 넣습니다.
+원본 SSA-MRN은 PAN·축소 후 재확대한 PAN(LRPAN)·확대한 MS(LMS)에서 특징을 추출하고, 전체·절반·1/4 크기에서 밴드별 SSAI로 융합한 뒤 작은 크기부터 복원합니다. 현재 기준 모델 **C2MS**는 이 구조를 그대로 두고 초기 특징에서 갈라지는 **W2 병렬 가지**를 더한 뒤, 원래 학습 쌍과 **2배 거친 학습 쌍을 섞어** 학습했습니다. 추론 입력은 원본과 같습니다.
 
 <table>
-<tr><th>원본 SSA-MRN</th><th>C2MS = 원본 SSA-MRN + W2 병렬 가지, 축척 혼합 학습 (현재 기준 모델)</th></tr>
+<tr><th>원본 SSA-MRN</th><th>C2MS (현재 기준 모델)</th></tr>
 <tr>
 <td align="center"><img src="SSA-MRN/docs/images/ssa-mrn.png" alt="원본 SSA-MRN 입력·다중 크기 SSAI·단계별 복원 구조" width="300" /></td>
 <td align="center"><img src="SSA-MRN/docs/images/ssa-mrn-c2ms.png" alt="C2MS: 원본 SSA-MRN에 W2 병렬 가지를 더하고 원래·2배 거친 학습 쌍으로 학습한 구조" width="400" /></td>
@@ -39,17 +39,53 @@ PAN·축소 후 재확대한 PAN(LRPAN)·확대한 MS(LMS)에서 특징을 추�
 
 ## 기준 모델
 
-기준 모델은 **C2MS**입니다. 원본 SSA-MRN(내부 특징 차원 K=4, MSE 손실)에 W2 병렬 가지를 더하고, 원래 학습 쌍과 2배 거친 학습 쌍의 MSE를 함께 줄이도록 학습했습니다. 파라미터는 2,853,918개입니다(원본 426,654개). 2026-10-21 [성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)의 QB 3시드(42·43·44) 결과로 채택했습니다. 이전 기준 모델 F1(2026-10-20 채택) 대비로도 3시드 평균 RR PSNR +0.679 dB로 세 시드 모두 개선이었습니다.
+| 항목 | 내용 |
+|---|---|
+| 모델 | **C2MS** = 원본 SSA-MRN(K=4) + W2 병렬 가지, 축척 혼합 학습 |
+| 학습 | 원래 학습 쌍 MSE + 같은 패치로 만든 2배 거친 쌍 MSE, 150에폭 |
+| 파라미터 | 2,853,918개 (원본 426,654개) |
+| 채택 | 2026-10-21, [성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md) QB 3시드(42·43·44) 개선 |
+| 이전 기준 | F1(2026-10-20) → C2MS. F1 대비 3시드 평균 RR PSNR +0.679 dB, 세 시드 모두 개선 |
 
-| 원본 대비 (3시드 평균) | RR PSNR | RR SAM | RR ERGAS | FR_WALD PSNR | RR2 PSNR | FR 관측 오차 |
+### 원본 대비 개선 (QB, test 20장, 3시드 평균)
+
+| 비교 | RR PSNR | RR SAM | RR ERGAS | FR_WALD PSNR | RR2 PSNR | FR 관측 오차 |
 |---|---:|---:|---:|---:|---:|---:|
-| C2MS − 원본 | +0.873 dB | -0.365° | -0.413 | +1.635 dB | +1.125 dB | 0.63배 |
+| C2MS − 원본 | +0.873 dB | −0.365° | −0.413 | +1.635 dB | +1.125 dB | 0.63배 |
 
-판정 기준 v2.3의 모든 항목을 통과했고, RR PSNR은 20장 모두에서 원본보다 높았습니다(세 시드 평균 기준). 채택 근거는 QB 결과이며 다른 센서에서는 확인하지 않았습니다. 학습에 2배 거친 쌍을 넣었기 때문에 더 거친 시험(RR2)은 처음 보는 축척이 아니며, 원래 해상도(FR)보다 세밀한 방향의 일반화는 직접 확인하지 못했습니다. 원본 SSA-MRN(K=4)은 비교 기준으로 보존하며, 이전 실험의 대조군과 판정은 그대로입니다.
+판정 기준 v2.3의 모든 항목을 통과했고 RR PSNR은 20장 모두에서 원본보다 높았습니다. 학습에 2배 거친 쌍을 넣어 RR2(더 거친 시험)는 처음 보는 축척이 아니며, FR(원래 해상도) 방향의 일반화는 직접 확인하지 못했습니다. 다른 센서(GF2·WV3)는 진행 중인 성능 54번 실험에서 확인하고 있습니다.
+
+### 다른 팬샤프닝 모델과 비교 (QB RR test 20장)
+
+| 모델 | PSNR ↑ | SAM ↓ | ERGAS ↓ | Q4 ↑ |
+|---|---:|---:|---:|---:|
+| U2Net + PAKAN (2026) | 38.520 | 4.439 | 3.698 | 0.939 |
+| CANNet (2024) | - | 4.507 | 3.652 | 0.937 |
+| HMPNet | - | 4.617 | 3.404 | 0.936 |
+| **C2MS (현재 기준, 3시드 평균)** | **38.302** | **4.576** | **3.712** | **0.934**\* |
+| LAGNet (2022) | 38.209 | 4.870 | 3.812 | 0.934 |
+| U2Net (2023) | 38.065 | 4.642 | 3.987 | 0.931 |
+| SSA-MRN 원 논문 | 37.665 | 4.848 | 4.073 | 0.924\* |
+| FusionNet (2021) | 37.540 | 4.904 | 4.156 | 0.925 |
+| 원본 SSA-MRN (우리 재현, 3시드 평균) | 37.429 | 4.941 | 4.124 | 0.923\* |
+| PNN (2016) | 36.942 | 5.181 | 4.468 | 0.918 |
+| MTF-GLP-FS (고전 방법) | 32.709 | 7.792 | 7.373 | 0.835 |
+
+C2MS는 최신 모델들과 같은 최상위권에 있으며, PSNR·ERGAS는 2026년 PAKAN과 비슷하고 SAM은 0.14° 뒤집니다.
+
+<details>
+<summary>비교 출처와 주의점</summary>
+
+- 다른 모델의 값은 각 논문에 보고된 값입니다: [PAKAN (arXiv 2603.15109)](https://arxiv.org/abs/2603.15109) Table 1(PAKAN·U2Net·LAGNet·FusionNet·PNN·MTF-GLP-FS), [CANNet (arXiv 2404.07543)](https://arxiv.org/abs/2404.07543) Table 2(CANNet·HMPNet). SSA-MRN 원 논문 값은 논문 표의 QB 결과입니다.
+- \* 우리와 SSA-MRN 원 논문의 값은 Q2n입니다(4밴드에서 Q4와 같은 지표, 구현 차이 가능).
+- 우리 지표 계산은 DLPan-Toolbox 공식 코드와 아직 맞춰 보지 않았습니다. 같은 모델도 논문마다 값이 다르게 보고되므로(예: LAGConv SAM 4.547·LAGNet 4.870), 순위는 참고로만 봅니다.
+- 우리 값은 3시드 평균이고, 다른 논문은 대부분 1회 학습 값입니다. 같은 20장 test를 여러 실험에서 반복해 썼습니다.
+
+</details>
 
 ## 기준 모델 결과 이미지
 
-**C2MS와 원본 SSA-MRN의 결과(seed 42)**입니다. QB RR test에서 정답 영상만 보고 풍경 종류로 고른 6장면을 씁니다. RGB 밴드 [2,1,0], 장면별 정답 1-99% 공통 대비로 표시했으며 수치 평가는 원래 값으로 수행했습니다.
+QB RR test에서 정답 영상만 보고 풍경 종류로 고른 6장면에서 **원본 SSA-MRN과 C2MS(seed 42)**를 비교합니다. RGB 밴드 [2,1,0], 장면별 정답 1-99% 공통 대비로 표시했으며 수치는 원래 값으로 계산했습니다.
 
 | 장면 | 풍경 | 장면 PSNR 원본 → C2MS | 확대 영역 PSNR 원본 → C2MS |
 |---:|---|---|---|
@@ -60,47 +96,77 @@ PAN·축소 후 재확대한 PAN(LRPAN)·확대한 MS(LMS)에서 특징을 추�
 | 14 | 언덕 공원·곡선 주택가 | 37.62 → 38.47 dB (+0.85) | 35.68 → 36.97 dB |
 | 17 | 산지 녹지·산책로 | 38.73 → 39.40 dB (+0.67) | 35.11 → 36.09 dB |
 
-### 원본 크기 비교
+C2MS는 여섯 장면 모두에서 원본보다 높았고, 마리나·운동장과 바다·항구에서 개선이 가장 컸습니다. 숲과 산지는 개선 폭이 작습니다.
 
-256×256 장면 전체입니다. 위 줄은 왼쪽부터 **LR MS(최근접 확대) · PAN 입력 · 원본 SSA-MRN · C2MS · 정답**, 아래 줄은 원본과 C2MS의 |예측 − 정답| 지도입니다. 오차 지도는 원본 오차의 99퍼센타일을 두 모델의 공통 색 척도로 쓰며 밝을수록 오차가 큽니다.
+<details>
+<summary><b>원본 크기 비교 펼치기</b> (256×256 전체 장면 6개)</summary>
+
+위 줄은 왼쪽부터 **LR MS(최근접 확대) · PAN 입력 · 원본 SSA-MRN · C2MS · 정답**, 아래 줄은 원본과 C2MS의 |예측 − 정답| 지도입니다. 오차 지도는 원본 오차의 99퍼센타일을 공통 색 척도로 쓰며 밝을수록 오차가 큽니다.
+
+**장면 0 · 바다·항구 방파제**
 
 ![원본과 C2MS 원본 크기 비교 · 장면 0 (바다·항구 방파제)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/full_scene_00.png)
 
+**장면 1 · 부두·곡선 방파제·수목**
+
 ![원본과 C2MS 원본 크기 비교 · 장면 1 (부두·곡선 방파제·수목)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/full_scene_01.png)
+
+**장면 3 · 요트 마리나·운동장**
 
 ![원본과 C2MS 원본 크기 비교 · 장면 3 (요트 마리나·운동장)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/full_scene_03.png)
 
+**장면 7 · 숲 공원**
+
 ![원본과 C2MS 원본 크기 비교 · 장면 7 (숲 공원)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/full_scene_07.png)
+
+**장면 14 · 언덕 공원·곡선 주택가**
 
 ![원본과 C2MS 원본 크기 비교 · 장면 14 (언덕 공원·곡선 주택가)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/full_scene_14.png)
 
+**장면 17 · 산지 녹지·산책로**
+
 ![원본과 C2MS 원본 크기 비교 · 장면 17 (산지 녹지·산책로)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/full_scene_17.png)
 
-### 확대 비교
+</details>
 
-각 장면에서 **C2MS의 개선이 가장 큰 64×64 영역**(원본 오차 − C2MS 오차가 가장 큰 곳)을 4배 확대했습니다. C2MS가 무엇을 고치는지 보여 주기 위해 C2MS에 유리하게 고른 영역이므로, 장면 전체의 개선 폭은 위 표의 장면 PSNR로 확인합니다. 왼쪽부터 정답 전체(노란 상자가 확대 영역) · 정답 · 원본 · C2MS · 원본 오차 · C2MS 오차입니다.
+<details>
+<summary><b>확대 비교 펼치기</b> (개선이 가장 큰 64×64 영역 4배 확대, 6장면)</summary>
+
+각 장면에서 C2MS의 개선(원본 오차 − C2MS 오차)이 가장 큰 영역을 골랐으므로 C2MS에 유리한 영역입니다. 전체 개선 폭은 위 표의 장면 PSNR로 확인합니다. 왼쪽부터 정답 전체(노란 상자가 확대 영역) · 정답 · 원본 · C2MS · 원본 오차 · C2MS 오차입니다.
+
+**장면 0 · 바다·항구 방파제**
 
 ![원본과 C2MS 확대 비교 · 장면 0 (바다·항구 방파제)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/compare_scene_00.png)
 
+**장면 1 · 부두·곡선 방파제·수목**
+
 ![원본과 C2MS 확대 비교 · 장면 1 (부두·곡선 방파제·수목)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/compare_scene_01.png)
+
+**장면 3 · 요트 마리나·운동장**
 
 ![원본과 C2MS 확대 비교 · 장면 3 (요트 마리나·운동장)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/compare_scene_03.png)
 
+**장면 7 · 숲 공원**
+
 ![원본과 C2MS 확대 비교 · 장면 7 (숲 공원)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/compare_scene_07.png)
+
+**장면 14 · 언덕 공원·곡선 주택가**
 
 ![원본과 C2MS 확대 비교 · 장면 14 (언덕 공원·곡선 주택가)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/compare_scene_14.png)
 
+**장면 17 · 산지 녹지·산책로**
+
 ![원본과 C2MS 확대 비교 · 장면 17 (산지 녹지·산책로)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/compare_scene_17.png)
 
-C2MS는 여섯 장면 모두에서 원본보다 PSNR이 높았고, 마리나·운동장과 바다·항구 장면에서 개선이 가장 컸습니다. 정박한 배, 방파제, 건물 경계 주변의 오차가 줄어든 것이 오차 지도에서 보입니다. 숲과 산지 장면은 개선 폭이 작습니다. FR(정답 없음)과 RR2의 비교 패널, 이전 기준 모델 F1과의 비교는 [성능 53번 보고서](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)에 있습니다.
+</details>
+
+FR(정답 없음)·RR2 비교 패널과 이전 기준 모델 F1과의 비교는 [성능 53번 보고서](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)에 있습니다.
 
 <a id="experiments"></a>
 
 ## 다른 실험
 
-RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없는 원래 해상도 평가입니다. 수치 차이는 각 실험의 대조군 대비이며, 서로 다른 조건의 실험끼리 순위를 매기지 않습니다.
-
-실험은 연구별로 구분하며 각 표 안에서는 오래된 순서부터 최근 순서로 추가합니다.
+연구별 실험 표입니다(오래된 순서부터). RR은 정답이 있는 축소 해상도 평가, FR은 정답이 없는 원래 해상도 평가이며, 수치 차이는 각 실험의 대조군 대비라 서로 다른 조건의 실험끼리 순위를 매기지 않습니다.
 
 <a id="ssai-experiments"></a>
 
@@ -212,4 +278,9 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 
 </details>
 
-**판정 기준 ([v2.3](SSA-MRN/docs/judgement_criteria.md)):** 개선 = 같은 조건 대조군 대비 RR PSNR·SAM·ERGAS가 모두 개선(PSNR은 잡음 문턱 이상: 단일 시드 0.06dB, 2시드 이상 0.04dB)되고 정답 기반 보조 판정(RR2·FR_WALD·FR 관측 일치)을 모두 통과, 부분 개선 = 주 판정만 통과, RR 지표 일부만 개선, 또는 이득이 잡음 문턱 미만, 개선 없음 = RR 지표 모두 개선 없음, 판단 보류 = 최종 평가 부족입니다. 비교 기준·성능 비교 아님은 개선 판정 대상에서 제외합니다. FR QNR·Dλ·Ds는 [정답 순위 검사](SSA-MRN/experiments/performance/46_fr_spatial_index_validity/README.md)를 통과하지 못해 참고로만 보고합니다. 47번 이전 실험의 판정은 [성능 47번 재평가](SSA-MRN/experiments/performance/47_ground_truth_criteria_reevaluation/README.md)의 보존된 측정값을 v2.3으로 다시 집계해 표에 반영합니다. 원래 v2 판정은 47번 보고서에 보존하며, 보조 판정 자료가 없는 성능 비교는 판단 보류입니다. 현재 표의 판정 범위는 QB이고 다른 센서·배율로 확대하지 않습니다. 단일 시드도 모든 판정 항목을 통과하면 개선으로 표기하며, 여러 시드는 같은 조건 대조군과 짝지은 전체 시드의 평균으로 판정합니다. 시드 수·시드별 결과를 함께 보고합니다. 개선 표기와 기준 모델 교체는 구분하며, 기준 모델 교체에는 3시드 이상에서 개선과 FR·RR2 비교 이미지 확인이 필요합니다.
+<details>
+<summary>판정 기준 v2.3 요약</summary>
+
+[판정 기준 v2.3](SSA-MRN/docs/judgement_criteria.md): 개선 = 같은 조건 대조군 대비 RR PSNR·SAM·ERGAS가 모두 개선(PSNR은 잡음 문턱 이상: 단일 시드 0.06dB, 2시드 이상 0.04dB)되고 정답 기반 보조 판정(RR2·FR_WALD·FR 관측 일치)을 모두 통과, 부분 개선 = 주 판정만 통과, RR 지표 일부만 개선, 또는 이득이 잡음 문턱 미만, 개선 없음 = RR 지표 모두 개선 없음, 판단 보류 = 최종 평가 부족입니다. 비교 기준·성능 비교 아님은 개선 판정 대상에서 제외합니다. FR QNR·Dλ·Ds는 [정답 순위 검사](SSA-MRN/experiments/performance/46_fr_spatial_index_validity/README.md)를 통과하지 못해 참고로만 보고합니다. 47번 이전 실험의 판정은 [성능 47번 재평가](SSA-MRN/experiments/performance/47_ground_truth_criteria_reevaluation/README.md)의 보존된 측정값을 v2.3으로 다시 집계해 표에 반영합니다. 원래 v2 판정은 47번 보고서에 보존하며, 보조 판정 자료가 없는 성능 비교는 판단 보류입니다. 현재 표의 판정 범위는 QB이고 다른 센서·배율로 확대하지 않습니다. 단일 시드도 모든 판정 항목을 통과하면 개선으로 표기하며, 여러 시드는 같은 조건 대조군과 짝지은 전체 시드의 평균으로 판정합니다. 시드 수·시드별 결과를 함께 보고합니다. 개선 표기와 기준 모델 교체는 구분하며, 기준 모델 교체에는 3시드 이상에서 개선과 FR·RR2 비교 이미지 확인이 필요합니다.
+
+</details>
