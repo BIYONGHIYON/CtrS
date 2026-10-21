@@ -1236,23 +1236,28 @@
     "status": "평가 완료",
     "improvement": "개선",
     "evaluated_seeds": [
-      42
+      42,
+      43,
+      44
     ],
     "sensor": "QB",
-    "last_checked": "2026-10-21T07:02:43+09:00",
-    "limits": "seed 42 한 개. 학습에 2배 거친 쌍을 넣어 RR2(4배 거친 시험)는 처음 보는 축척이 아님. FR 방향 일반화는 직접 확인하지 않음. C2MS 파라미터는 F1의 6.2배. F1MS는 개선 없음.",
+    "last_checked": "2026-10-21T13:47:26+09:00",
+    "limits": "C2MS 3시드(F1MS는 seed 42 하나). 학습에 2배 거친 쌍을 넣어 RR2(4배 거친 시험)는 처음 보는 축척이 아님. FR 방향 일반화는 직접 확인하지 않음. C2MS 파라미터는 F1의 6.2배. 원래 축척 validation과 test의 C2 대비 방향이 세 시드 모두 다름.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/53_scale_mixed_training/results/evaluation_v2_3.json",
-      "scope": "QB; current baseline F1 seed 42 control",
+      "scope": "QB; F1 (baseline when run) seeds 42-44 paired by seed",
       "seeds": [
-        42
+        42,
+        43,
+        44
       ],
       "candidate_labels": {
         "C2MS": "개선",
-        "F1MS": "개선 없음"
+        "F1MS": "개선 없음 (seed 42)"
       },
-      "large_gain_condition": true
+      "large_gain_condition": true,
+      "three_seed_label": "개선"
     },
     "checkpoints": "experiments/performance/53_scale_mixed_training/checkpoints",
     "results": "experiments/performance/53_scale_mixed_training/results",
@@ -1260,6 +1265,7 @@
     "model": "experiments/performance/53_scale_mixed_training/model.py",
     "config": "experiments/performance/53_scale_mixed_training/config.json",
     "entrypoint": "experiments/performance/53_scale_mixed_training/run.py",
-    "verification": "experiments/performance/53_scale_mixed_training/evaluate.py"
+    "verification": "experiments/performance/53_scale_mixed_training/evaluate.py",
+    "adopted_as_baseline": "2026-10-21"
   }
 }

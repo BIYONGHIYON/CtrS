@@ -27,73 +27,72 @@
 
 ## SSA-MRN 구조
 
-PAN·축소 후 재확대한 PAN(LRPAN)·확대한 MS(LMS)에서 특징을 추출합니다. 전체·절반·1/4 크기에서 밴드별 SSAI로 융합하고, 작은 크기부터 복원하며 이전 크기의 특징을 결합합니다. 현재 기준 모델 **F1**은 이 원본 구조를 그대로 두고, 복원 결과 뒤에 **관측 오차 보정기 두 개**를 붙였습니다. 보정기는 출력을 MS 해상도로 줄였을 때 실제 MS와 어긋나는 정도(관측 오차)와 PAN 고주파 차이를 입력으로 받아 출력을 두 번 고칩니다.
+PAN·축소 후 재확대한 PAN(LRPAN)·확대한 MS(LMS)에서 특징을 추출합니다. 전체·절반·1/4 크기에서 밴드별 SSAI로 융합하고, 작은 크기부터 복원하며 이전 크기의 특징을 결합합니다. 현재 기준 모델 **C2MS**는 이 원본 구조를 그대로 두고, 초기 특징에서 갈라지는 **W2 병렬 가지**를 더했습니다(성능 43번 C2와 같은 구조). 그리고 원래 학습 쌍에 같은 패치로 만든 **2배 거친 학습 쌍을 섞어** 학습했습니다(축척 혼합 학습). 추론할 때는 원본과 같은 입력을 그대로 넣습니다.
 
 <table>
-<tr><th>원본 SSA-MRN (이전 기준 모델)</th><th>F1 = 원본 SSA-MRN + 관측 오차 보정기 2개 (현재 기준 모델)</th></tr>
+<tr><th>원본 SSA-MRN</th><th>C2MS = 원본 SSA-MRN + W2 병렬 가지, 축척 혼합 학습 (현재 기준 모델)</th></tr>
 <tr>
 <td align="center"><img src="SSA-MRN/docs/images/ssa-mrn.png" alt="원본 SSA-MRN 입력·다중 크기 SSAI·단계별 복원 구조" width="300" /></td>
-<td align="center"><img src="SSA-MRN/docs/images/ssa-mrn-f1.png" alt="F1: 원본 SSA-MRN 뒤에 관측 오차 보정기 두 개를 붙인 구조" width="400" /></td>
+<td align="center"><img src="SSA-MRN/docs/images/ssa-mrn-c2ms.png" alt="C2MS: 원본 SSA-MRN에 W2 병렬 가지를 더하고 원래·2배 거친 학습 쌍으로 학습한 구조" width="400" /></td>
 </tr>
 </table>
 
 ## 기준 모델
 
-기준 모델은 **F1**입니다. 원본 SSA-MRN(내부 특징 차원 K=4, MSE 손실)은 바꾸지 않고, 성능 28번의 G5 관측 오차 보정기 두 개를 뒤에 붙였습니다. 추가 파라미터는 35,150개입니다(원본 426,654개). 2026-10-20 [성능 49번](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/README.md)의 QB 3시드(42·43·44) 평균 결과로 채택했습니다.
+기준 모델은 **C2MS**입니다. 원본 SSA-MRN(내부 특징 차원 K=4, MSE 손실)에 W2 병렬 가지를 더하고, 원래 학습 쌍과 2배 거친 학습 쌍의 MSE를 함께 줄이도록 학습했습니다. 파라미터는 2,853,918개입니다(원본 426,654개). 2026-10-21 [성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)의 QB 3시드(42·43·44) 결과로 채택했습니다. 이전 기준 모델 F1(2026-10-20 채택) 대비로도 3시드 평균 RR PSNR +0.679 dB로 세 시드 모두 개선이었습니다.
 
-| 원본 대비 (3시드 평균) | RR PSNR | RR SAM | FR_WALD PSNR | RR2 PSNR | FR 관측 오차 |
-|---|---:|---:|---:|---:|---:|
-| F1 − 원본 | +0.194 dB | −0.139° | +0.283 dB | −0.014 dB | 0.81배 |
+| 원본 대비 (3시드 평균) | RR PSNR | RR SAM | RR ERGAS | FR_WALD PSNR | RR2 PSNR | FR 관측 오차 |
+|---|---:|---:|---:|---:|---:|---:|
+| C2MS − 원본 | +0.873 dB | -0.365° | -0.413 | +1.635 dB | +1.125 dB | 0.63배 |
 
-판정 기준 v2.3의 모든 항목을 통과했습니다. 채택 근거는 QB 결과이며 다른 센서에서는 확인하지 않았습니다. 이전 기준 모델인 원본 SSA-MRN(K=4)은 비교 기준으로 보존하며, 이전 실험의 대조군과 판정은 그대로입니다.
+판정 기준 v2.3의 모든 항목을 통과했고, RR PSNR은 20장 모두에서 원본보다 높았습니다(세 시드 평균 기준). 채택 근거는 QB 결과이며 다른 센서에서는 확인하지 않았습니다. 학습에 2배 거친 쌍을 넣었기 때문에 더 거친 시험(RR2)은 처음 보는 축척이 아니며, 원래 해상도(FR)보다 세밀한 방향의 일반화는 직접 확인하지 못했습니다. 원본 SSA-MRN(K=4)은 비교 기준으로 보존하며, 이전 실험의 대조군과 판정은 그대로입니다.
 
 ## 기준 모델 결과 이미지
 
-**F1 (seed 42)의 결과**입니다. 아래 5개는 QB RR test의 고정 장면이며, 왼쪽부터 **LR MS · PAN · 예측 · 정답**입니다. MS 표시에는 확대·대비 조정을 적용했으며, 수치 평가는 원래 값으로 수행했습니다.
+**C2MS와 원본 SSA-MRN의 결과(seed 42)**입니다. QB RR test에서 정답 영상만 보고 풍경 종류로 고른 6장면을 씁니다. RGB 밴드 [2,1,0], 장면별 정답 1-99% 공통 대비로 표시했으며 수치 평가는 원래 값으로 수행했습니다.
 
-### 장면 1
+| 장면 | 풍경 | 장면 PSNR 원본 → C2MS | 확대 영역 PSNR 원본 → C2MS |
+|---:|---|---|---|
+| 0 | 바다·항구 방파제 | 41.45 → 42.81 dB (+1.36) | 35.30 → 37.38 dB |
+| 1 | 부두·곡선 방파제·수목 | 42.44 → 43.18 dB (+0.74) | 39.45 → 40.76 dB |
+| 3 | 요트 마리나·운동장 | 36.22 → 37.96 dB (+1.74) | 33.03 → 35.36 dB |
+| 7 | 숲 공원 | 38.83 → 39.41 dB (+0.57) | 36.54 → 38.12 dB |
+| 14 | 언덕 공원·곡선 주택가 | 37.62 → 38.47 dB (+0.85) | 35.68 → 36.97 dB |
+| 17 | 산지 녹지·산책로 | 38.73 → 39.40 dB (+0.67) | 35.11 → 36.09 dB |
 
-![F1 · 장면 1](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/results/F1_QB_s42/evaluation/RR_scene_001.png)
+### 원본 크기 비교
 
-### 장면 8
+256×256 장면 전체입니다. 위 줄은 왼쪽부터 **LR MS(최근접 확대) · PAN 입력 · 원본 SSA-MRN · C2MS · 정답**, 아래 줄은 원본과 C2MS의 |예측 − 정답| 지도입니다. 오차 지도는 원본 오차의 99퍼센타일을 두 모델의 공통 색 척도로 쓰며 밝을수록 오차가 큽니다.
 
-![F1 · 장면 8](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/results/F1_QB_s42/evaluation/RR_scene_008.png)
+![원본과 C2MS 원본 크기 비교 · 장면 0 (바다·항구 방파제)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/full_scene_00.png)
 
-### 장면 11
+![원본과 C2MS 원본 크기 비교 · 장면 1 (부두·곡선 방파제·수목)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/full_scene_01.png)
 
-![F1 · 장면 11](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/results/F1_QB_s42/evaluation/RR_scene_011.png)
+![원본과 C2MS 원본 크기 비교 · 장면 3 (요트 마리나·운동장)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/full_scene_03.png)
 
-### 장면 13
+![원본과 C2MS 원본 크기 비교 · 장면 7 (숲 공원)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/full_scene_07.png)
 
-![F1 · 장면 13](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/results/F1_QB_s42/evaluation/RR_scene_013.png)
+![원본과 C2MS 원본 크기 비교 · 장면 14 (언덕 공원·곡선 주택가)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/full_scene_14.png)
 
-### 장면 19
+![원본과 C2MS 원본 크기 비교 · 장면 17 (산지 녹지·산책로)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/full_scene_17.png)
 
-![F1 · 장면 19](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/results/F1_QB_s42/evaluation/RR_scene_019.png)
+### 확대 비교
 
-### 이전 기준 모델(원본)과의 비교
+각 장면에서 **C2MS의 개선이 가장 큰 64×64 영역**(원본 오차 − C2MS 오차가 가장 큰 곳)을 4배 확대했습니다. C2MS가 무엇을 고치는지 보여 주기 위해 C2MS에 유리하게 고른 영역이므로, 장면 전체의 개선 폭은 위 표의 장면 PSNR로 확인합니다. 왼쪽부터 정답 전체(노란 상자가 확대 영역) · 정답 · 원본 · C2MS · 원본 오차 · C2MS 오차입니다.
 
-같은 seed 42, 같은 장면에서 원본 SSA-MRN과 F1을 비교했습니다. 두 모델의 차이는 작아서, 각 장면에서 **F1의 개선이 가장 큰 64×64 영역**(원본 오차 − F1 오차가 가장 큰 곳)을 골라 4배 확대했습니다. F1이 무엇을 고치는지 보여 주기 위해 F1에 유리하게 고른 영역이므로, 장면 전체의 개선 폭은 아래 표의 장면 PSNR로 확인합니다. 왼쪽부터 정답 전체(노란 상자가 확대 영역) · 정답 · 원본 · F1 · 원본 오차 · F1 오차입니다. 오차 지도는 두 모델에 같은 색 척도를 쓰며 밝을수록 오차가 큽니다.
+![원본과 C2MS 확대 비교 · 장면 0 (바다·항구 방파제)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/compare_scene_00.png)
 
-| 장면 | 장면 PSNR 원본 → F1 | 확대 영역 PSNR 원본 → F1 |
-|---:|---|---|
-| 1 | 42.44 → 42.64 dB (+0.20) | 39.45 → 39.89 dB (+0.43) |
-| 8 | 36.75 → 37.09 dB (+0.34) | 35.23 → 36.03 dB (+0.80) |
-| 11 | 36.01 → 36.19 dB (+0.19) | 35.86 → 36.41 dB (+0.55) |
-| 13 | 37.05 → 37.29 dB (+0.24) | 35.25 → 35.53 dB (+0.28) |
-| 19 | 36.82 → 36.99 dB (+0.17) | 37.34 → 37.72 dB (+0.39) |
+![원본과 C2MS 확대 비교 · 장면 1 (부두·곡선 방파제·수목)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/compare_scene_01.png)
 
-![원본과 F1 비교 · 장면 1](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/results/baseline_compare/scene_01.png)
+![원본과 C2MS 확대 비교 · 장면 3 (요트 마리나·운동장)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/compare_scene_03.png)
 
-![원본과 F1 비교 · 장면 8](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/results/baseline_compare/scene_08.png)
+![원본과 C2MS 확대 비교 · 장면 7 (숲 공원)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/compare_scene_07.png)
 
-![원본과 F1 비교 · 장면 11](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/results/baseline_compare/scene_11.png)
+![원본과 C2MS 확대 비교 · 장면 14 (언덕 공원·곡선 주택가)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/compare_scene_14.png)
 
-![원본과 F1 비교 · 장면 13](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/results/baseline_compare/scene_13.png)
+![원본과 C2MS 확대 비교 · 장면 17 (산지 녹지·산책로)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/compare_scene_17.png)
 
-![원본과 F1 비교 · 장면 19](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/results/baseline_compare/scene_19.png)
-
-F1은 다섯 장면 모두에서 원본보다 PSNR이 높았습니다. 확대 영역의 오차 지도에서는 밝은 지붕과 건물 경계 주변의 오차가 줄어든 것이 보입니다. FR(정답 없음)과 RR2에서의 비교 이미지는 [성능 49번 보고서](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/README.md)에 있습니다.
+C2MS는 여섯 장면 모두에서 원본보다 PSNR이 높았고, 마리나·운동장과 바다·항구 장면에서 개선이 가장 컸습니다. 정박한 배, 방파제, 건물 경계 주변의 오차가 줄어든 것이 오차 지도에서 보입니다. 숲과 산지 장면은 개선 폭이 작습니다. FR(정답 없음)과 RR2의 비교 패널, 이전 기준 모델 F1과의 비교는 [성능 53번 보고서](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)에 있습니다.
 
 <a id="experiments"></a>
 
@@ -209,7 +208,7 @@ RR은 정답이 있는 축소 해상도 평가, FR은 고해상도 정답이 없
 | [50. W2 가지 출력의 추론 시 축소 진단](SSA-MRN/experiments/performance/50_w2_branch_inference_scaling/README.md)<br>[이병현] | 학습 없이 43번 C2의 W2 가지 출력을 추론 시에만 α=0-1로 줄여 RR·RR2·FR_WALD와 오차의 저역·고역을 비교했습니다. | RR·FR_WALD는 α=1에서 최고였지만 RR2는 α=0.5에서 C0 대비 +1.42dB(17/20장)로 최고였고, α=1로 키우면 RR2 고역 오차가 22.0에서 28.2DN으로 늘었습니다. RR2 미달은 세부 주입 세기의 축척 의존성으로 보입니다. | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 | [51. 정답 없는 FR 세부 지표 후보의 타당성 검증](SSA-MRN/experiments/performance/51_fr_detail_index_validity/README.md)<br>[이병현] | 학습 없이 PAN 유사도로 FR 세부를 재는 정답 없는 지표 4개(흑백 합성 고주파 상관·차이, 밴드별 고주파 상관, 국소 상관)를 46번 정답 순위 검사로 확인했습니다. | 네 지표 모두 정답이 C0보다 우세한 장면 0/20, 오차와 지표 나쁨의 순위 상관 −0.62에서 −0.77로 정답을 거꾸로 채점했습니다(충돌). PAN 세부를 그대로 베끼는 MTF-GLP가 1등이어서 판정에 쓰지 않습니다. | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 | [52. W2 추가 특징의 고주파 선택 제어](SSA-MRN/experiments/performance/52_w2_frequency_selective_attenuation/README.md)<br>[송준현] | W2 저역은 유지하고 고역을 샘플별 에너지 게이트로 조절했습니다. | W2 C2 대비 3seed PSNR +0.01737dB(잡음 수준)·RR2 SAM +0.07235° 미달. F1 대비 비교 아님 | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
-| [53. 2배 거친 학습 쌍을 섞은 축척 혼합 학습](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)<br>[이병현] | 43번 C2(원본+W2)와 현재 기준 F1을 같은 학습 패치로 만든 2배 거친 쌍과 함께 다시 학습했습니다(C2MS·F1MS, 구조 변경 없음). | C2MS seed42가 F1 대비 RR PSNR +0.675 dB·SAM −0.231°(20/20장), RR2 +1.252 dB, FR_WALD +1.369 dB, 관측 RMSE 0.77배로 판정 항목을 모두 통과했습니다. 같은 학습의 F1MS는 RR −0.291 dB로 개선 없음이었습니다. 1시드, C2MS 파라미터는 F1의 6.2배입니다. | 평가&nbsp;완료<br>1seed | 개선 |
+| [53. 2배 거친 학습 쌍을 섞은 축척 혼합 학습](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)<br>[이병현] | 43번 C2(원본+W2)와 당시 기준 F1을 같은 학습 패치로 만든 2배 거친 쌍과 함께 다시 학습했습니다(C2MS·F1MS, 구조 변경 없음). | C2MS 3시드 평균이 F1 대비 RR PSNR +0.679 dB·SAM −0.226°(20/20장), RR2 +1.139 dB, FR_WALD +1.352 dB, 관측 RMSE 0.78배로 판정 항목을 모두 통과했고 세 시드 각각도 개선이었습니다. 원본 대비 RR +0.873 dB. 2026-10-21 기준 모델로 채택했습니다. 같은 학습의 F1MS(seed42)는 개선 없음이었습니다. | 평가&nbsp;완료<br>3seed | 개선 |
 
 </details>
 
