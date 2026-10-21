@@ -47,6 +47,20 @@
 | 채택 | 2026-10-21, [성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md) QB 3시드(42·43·44) 개선 |
 | 이전 기준 | F1(2026-10-20) → C2MS. F1 대비 3시드 평균 RR PSNR +0.679 dB, 세 시드 모두 개선 |
 
+### C2MS 발전 과정
+
+| 단계 | 실험 | 한 일 | 결과와 다음 단계로 이어진 점 |
+|---:|---|---|---|
+| 0 | [성능 2번](SSA-MRN/research/performance/2_paper_setting_reproduction/README.md) 외 | 원본 SSA-MRN 재현, K=4를 연구 기본값으로 확정(2026-10-09) | 이후 모든 비교의 출발점(원본) |
+| 1 | [성능 29번](SSA-MRN/experiments/performance/29_capacity_refinement/README.md) | 원본 backbone 옆에 저해상도 병렬 가지 **W2**를 처음 붙임 | RR PSNR +0.72 dB로 큰 이득이지만 보조 판정 미달(부분 개선) |
+| 2 | [성능 43번](SSA-MRN/experiments/performance/43_normalized_parallel_capacity/README.md) | 원본+W2(**C2**)를 같은 절차로 3시드 재현 | RR +0.70 dB가 재현됐지만 RR2(더 거친 시험)에서 미달 → 축척을 바꾸면 무너지는 약점 확인 |
+| 3 | [성능 47번](SSA-MRN/experiments/performance/47_ground_truth_criteria_reevaluation/README.md)·[48번](SSA-MRN/experiments/performance/48_parallel_capacity_observation_refinement/README.md) | 정답 기반 판정 기준(v2)으로 재평가, W2 뒤에 관측 오차 보정기를 붙여 봄 | RR 이득이 큰 후보는 대부분 RR2에서 미달, 보정기로는 RR2가 고쳐지지 않음 |
+| 4 | [성능 50번](SSA-MRN/experiments/performance/50_w2_branch_inference_scaling/README.md) | 학습 없이 W2 출력 세기를 줄여 보는 진단 | RR2 미달의 원인은 **축척에 따라 맞지 않는 세부 주입 세기**(고주파 오차 증가) |
+| 5 | [성능 52번](SSA-MRN/experiments/performance/52_w2_frequency_selective_attenuation/README.md) | W2 고주파를 샘플별 게이트로 줄이는 구조 변경(송준현) | 게이트가 축척을 구분하지 못해 RR2 미달 유지 → 구조만으로는 부족 |
+| 6 | [성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md) | 구조는 C2 그대로, 학습에 **2배 거친 학습 쌍을 섞음**(**C2MS**) | RR2 약점 해소, 원본 대비 RR +0.873 dB, 3시드 모두 개선 → **기준 모델 채택(2026-10-21)** |
+
+기준 모델은 원본 → F1([성능 49번](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/README.md), 원본 + 관측 오차 보정기, 2026-10-20) → C2MS 순서로 바뀌었습니다. 같은 크기 섞기를 작은 F1에 적용한 F1MS는 개선이 없어서, C2MS의 이득은 큰 W2 가지와 크기 섞기를 함께 쓴 결과입니다.
+
 ### 원본 대비 개선 (QB, test 20장, 3시드 평균)
 
 | 비교 | RR PSNR | RR SAM | RR ERGAS | FR_WALD PSNR | RR2 PSNR | FR 관측 오차 |
