@@ -3,7 +3,7 @@
 ## 현재 연구 기준
 
 - 2026-10-09 Windows 3센서 validation 다수결에 따라 현재 연구 기본값은 K=4로 확정한다. 별도 승인된 K 비교 외 신규 기준선·개선 비교는 K4로 설계한다.
-- 2026-10-21 성능 53번(QB, seed 42·43·44 평균 개선)에 따라 기준 모델을 **C2MS**(원본 SSA-MRN K4 + 성능 43번 W2 병렬 가지, 원래 학습 쌍과 2배 거친 학습 쌍을 섞은 축척 혼합 학습, 코드 `experiments/performance/53_scale_mixed_training/`, 가중치 `checkpoints/C2MS_QB_s42-44`)로 교체한다. 이후 신규 개선 비교의 대조군은 C2MS이며, 원본 SSA-MRN K4는 비교 기준으로 보존한다. 이전 기준 모델 F1(2026-10-20, 성능 49번)과 이전 실험의 대조군·판정은 바꾸지 않는다. 채택 근거는 QB 결과이며 다른 센서 확인은 하지 않았다. C2MS 학습에는 2배 거친 쌍이 들어가므로 RR2는 처음 보는 축척이 아니라는 점을 비교 해석에 적는다.
+- 2026-10-21 성능 53번(QB, seed 42·43·44 평균 개선)에 따라 기준 모델을 **C2MS**(원본 SSA-MRN K4 + 성능 43번 W2 병렬 가지, 원래 학습 쌍과 2배 거친 학습 쌍을 섞은 축척 혼합 학습, 코드 `experiments/performance/53_scale_mixed_training/`, 가중치 `checkpoints/C2MS_QB_s42-44`)로 교체한다. 이후 신규 개선 비교의 대조군은 C2MS이며, 원본 SSA-MRN K4는 비교 기준으로 보존한다. 이전 기준 모델 F1(2026-10-20, 성능 49번)과 이전 실험의 대조군·판정은 바꾸지 않는다. 채택 근거는 QB 결과이며, 2026-10-22 성능 54번에서 GF2·WV3(WV2 전이 포함) 3시드로도 원본 대비 개선을 확인했다. C2MS 학습에는 2배 거친 쌍이 들어가므로 RR2는 처음 보는 축척이 아니라는 점을 비교 해석에 적는다.
 - 과거 K6 실험의 실제 설정·가중치·수치를 변경하거나 K4 결과로 표시하지 않는다. 실행 중 학습은 문서 정리만으로 변경·재시작하지 않는다.
 - 보고서의 비교 조건에서 실제 K, validation/test, 학습/평가/보관 상태를 구분한다. K4 확정을 모든 센서·test 지표의 우위로 확대 해석하지 않는다.
 
@@ -56,7 +56,7 @@
 - 다음 실험 시작 전에는 [공통 용량 정리 규칙](../AGENTS.md)을 적용한다. 완료 결과의 보존은 검증 가능한 원격 보관을 뜻하며, 보관·복구 확인이 끝난 이전 실행 폴더의 로컬 중복본은 삭제한다. 현재/재개 예정 실험은 유지한다.
 
 - 원본 데이터 및 공식 submodule을 수정/삭제하지 않는다. 대용량 데이터를 Git에 넣지 않는다.
-- 실제 학습된 best/latest 원본 `.pt`도 커밋 대상에 포함하고 checksum, 숫자 결과, compact epoch 기록, 정합 manifest, 결과 그래프·예시를 함께 보존한다. 커밋·푸시는 사용자 요청 시 진행한다.
+- 실제 학습된 best 원본 `.pt`는 커밋 대상에 포함하고(latest·initial은 GitHub Release 자산으로 보존) checksum, 숫자 결과, compact epoch 기록, 정합 manifest, 결과 그래프·예시를 함께 보존한다. 커밋·푸시는 사용자 요청 시 진행한다.
 - 완료된 실험의 학습 JSON, 원시 실행 로그, smoke/random 가중치·산출물, 코드 캐시는 삭제할 수 있다. checkpoint 안의 config는 기존 가중치 평가에 필요하므로 수정하지 않는다.
 - 현재/재개 예정인 학습 설정, snapshot, controller runtime, 로그, 가중치는 보존한다. 서버에서 active 상태를 확인한 뒤 완료 run만 정리한다.
 - 현재 학습 중인 checkout을 pull하거나 실행 코드를 덮어쓰지 않는다.
@@ -70,12 +70,12 @@
 - 모든 새 실험은 `SSA-MRN/research/<분야>/<번호>_<변경한 구조의 영문 이름>/` 하나에 모읍니다. 분야는 `ssai`, `variable_scale`, `performance` 중 하나이며 세 분야에 동일한 네이밍 규칙을 적용합니다. 새 실험 번호는 분야별로 1부터 시작하며 각 분야 안에서 순서대로 증가합니다. 기존 실험 번호는 변경하지 않습니다.
 - 폴더 이름은 `<정수 번호>_<소문자 snake_case 영문 변경명>`으로 작성합니다. 예: `ssai/1_cross_band_fusion`, `variable_scale/1_scale_conditioned_restoration`, `performance/1_residual_gating`입니다. 예시는 예약된 번호나 실제 실험이 아닙니다. 서버·센서·시드·K·날짜·담당자 이름은 제목 장식으로 붙이지 않고 설정과 비교 조건에 기록합니다.
 - 실험 폴더에는 `README.md`, 필요한 `model.py`, `run.py`, `train.py`, `evaluate.py`, `prepare.py`, `config.json`만 둡니다. 필요하지 않은 빈 파일이나 중복 구현을 만들지 않습니다.
-- 가중치는 같은 실험의 `checkpoints/<후보·센서·시드>/best.pt`·`latest.pt`, 숫자·compact 기록·이미지는 `results/`, 학습 당시 원본 소스·설정은 `provenance/`에 보존합니다. 초기 재현 가중치도 예외 없이 해당 실험 안에 둡니다.
+- 가중치는 같은 실험의 `checkpoints/<후보·센서·시드>/best.pt`, 숫자·compact 기록·이미지는 `results/`, 학습 당시 원본 소스·설정은 `provenance/`에 보존합니다. 재개용 `latest.pt`와 초기 `initial.pt`는 Git에 넣지 않고 실험별 GitHub Release(`weights-<experiments|research>-<분야>-<번호>`, 태그는 이력과 연결되지 않은 빈 커밋 `weights-anchor`를 가리킴)에 올린 뒤, 해당 실험 `manifest.json`의 `release_assets`에 경로·크기·SHA-256·다운로드 주소를 기록합니다. 2026-10-22 저장소 용량 정리로 기존 `latest.pt`·`initial.pt`도 모두 Release로 옮기고 Git 이력에서 제거했습니다.
 - 여러 실험이 실제로 공유하는 데이터 로더·기준 모델·보간·관측·지표·미리보기·평가 도구만 `common/`에 둡니다. 실험 전용 코드를 `src`, `scripts`, `docs/assets`로 다시 분산하지 않습니다. 빈 패키지 초기화 파일은 만들지 않습니다.
 - 원본 학습 소스와 체크포인트 내부 설정은 보존 근거이므로 이름 정리를 위해 내용을 바꾸지 않습니다. 현행 코드의 import·경로 변경은 가중치 strict load와 추론으로 확인합니다.
 - 데이터 경로는 `data/`로 단순화합니다. `data/processed`, 중복 notebook·txt, IDE 설정, 캐시, 완료된 상세 로그, 재생성 가능한 예측 배열은 추적하지 않습니다. 서버의 원본 데이터와 현재 실행·재개 예정인 파일은 건드리지 않습니다.
 - `docs/`에는 연구 설명·문서 양식·구조도만 둡니다. 실험 보고서는 각 실험 README에 작성합니다. 저장소 분리 이력, 이전/현재 파일명 대응표, 삭제 파일 복구 위치, 과거 서버 정리·전송 기록은 독자용 문서에 추가하지 않습니다.
-- 새 결과를 보관할 때 `research/experiments.json`과 해당 실험의 `manifest.json`을 갱신합니다. manifest에는 현재 파일 경로·크기·SHA-256을 기록합니다. 보존 해시는 `python SSA-MRN/common/verify.py --experiment <번호>`로 확인합니다. 해시 확인과 실제 성능 재평가는 별개입니다.
+- 새 결과를 보관할 때 `research/experiments.json`과 해당 실험의 `manifest.json`을 갱신합니다. manifest에는 현재 파일 경로·크기·SHA-256을 기록합니다. 보존 해시는 `python SSA-MRN/common/verify.py --experiment <번호>`로 확인하고, Release 자산까지 확인할 때는 `--releases`를 붙입니다. 해시 확인과 실제 성능 재평가는 별개입니다.
 - 학습·평가·예시 선택 기준은 유지하고 실제 확인한 결과만 작성합니다. validation 선택을 test 결과로 바꾸지 않습니다. README의 8개 절·시간순 표·합니다체를 계속 사용합니다.
 - 큰 폴더 이동은 별도 checkout에서 수행합니다. 실행 중 checkout은 pull·이동·덮어쓰기하지 않습니다. 기존 runtime을 새 코드로 재개하지 않으며 새 실행은 별도 runtime을 사용합니다.
 

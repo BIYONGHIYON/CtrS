@@ -188,8 +188,8 @@ FR에는 GT가 없고 QNR 자체도 잠정 값입니다. FR 이득으로 실제 
 
 | 모델 | Best 원본 | Epoch | Latest 원본 | Epoch | 첫 구간 best |
 |---|---|---:|---|---:|---|
-| B0 | [best.pt](checkpoints/B0_QB_s42/best.pt) | 199 | [latest.pt](checkpoints/B0_QB_s42/latest.pt) | 200 | [epoch 99](checkpoints/B0_QB_s42/best_first100.pt) |
-| B0_DS | [best.pt](checkpoints/B0_DS_QB_s42/best.pt) | 199 | [latest.pt](checkpoints/B0_DS_QB_s42/latest.pt) | 200 | [epoch 99](checkpoints/B0_DS_QB_s42/best_first100.pt) |
+| B0 | [best.pt](checkpoints/B0_QB_s42/best.pt) | 199 | [latest.pt](https://github.com/BIYONGHIYON/CtrS/releases/download/weights-research-performance-25/checkpoints__B0_QB_s42__latest.pt) | 200 | [epoch 99](checkpoints/B0_QB_s42/best_first100.pt) |
+| B0_DS | [best.pt](checkpoints/B0_DS_QB_s42/best.pt) | 199 | [latest.pt](https://github.com/BIYONGHIYON/CtrS/releases/download/weights-research-performance-25/checkpoints__B0_DS_QB_s42__latest.pt) | 200 | [epoch 99](checkpoints/B0_DS_QB_s42/best_first100.pt) |
 
 checkpoint 내부 config·optimizer·scaler·Python/NumPy/Torch CPU/CUDA RNG·batch generator·lr 진행·history를 수정하지 않았습니다. latest의 best recovery bytes는 별도 best 원본과 SHA-256이 일치했습니다. 원본 source·설정·데이터 manifest는 [provenance](provenance), 현재 파일의 크기·SHA-256은 [manifest](manifest.json), load·best·history·scene 검사와 ZIP 해시는 [verification](results/verification.json)에 보존했습니다.
 

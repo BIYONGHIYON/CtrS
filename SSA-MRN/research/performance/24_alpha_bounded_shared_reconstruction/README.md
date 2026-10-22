@@ -161,8 +161,8 @@ history에 누적된 학습/validation 시간은 B1 **122.78/13.35분**, 후보 
 
 | 모델 | Best 원본 | Epoch | Latest 원본 | Epoch |
 |---|---|---:|---|---:|
-| B1 | [best.pt](checkpoints/B1/best.pt) | 94 | [latest.pt](checkpoints/B1/latest.pt) | 100 |
-| B1_alpha_bounded | [best.pt](checkpoints/B1_alpha_bounded/best.pt) | 96 | [latest.pt](checkpoints/B1_alpha_bounded/latest.pt) | 100 |
+| B1 | [best.pt](checkpoints/B1/best.pt) | 94 | [latest.pt](https://github.com/BIYONGHIYON/CtrS/releases/download/weights-research-performance-24/checkpoints__B1__latest.pt) | 100 |
+| B1_alpha_bounded | [best.pt](checkpoints/B1_alpha_bounded/best.pt) | 96 | [latest.pt](https://github.com/BIYONGHIYON/CtrS/releases/download/weights-research-performance-24/checkpoints__B1_alpha_bounded__latest.pt) | 100 |
 
 원본 SHA-256·크기는 [결과 JSON의 weights](results/results.json), [검증 기록](results/verification.json), [실제 보관 manifest](manifest.json)에 기록했습니다. [선택 기록](results/selection.json), [정합·관측 manifest](provenance/observation_manifest.json), [실행 protocol](provenance/protocol.json), [실행 당시 전체 셀](provenance/run_cell.py), [모델·worker 원문](provenance/code), 초기 state·GPU 출력, 원본 제공 manifest를 함께 보존했습니다.
 

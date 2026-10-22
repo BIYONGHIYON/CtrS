@@ -77,7 +77,7 @@
 | B1−B0 | +0.236541 | -0.133224 | -1.36760636e-05 | -0.037049 |
 | B2−B0 | +0.116622 | -0.123887 | -8.890208e-06 | -0.017912 |
 
-B0에 비해 두 변형의 RR PSNR·SAM·MSE는 개선됐지만 **FR QNR은 모두 악화**했습니다. 종합 개선을 확정하지 않으며, B1은 B2보다 이번 RR 전 장면 PSNR이 높다는 기존 판단을 유지합니다. B0의 전체 ERGAS/SCC/Q2n/Dλ/Ds·checkpoint 해시와 모든 차이는 [비교 JSON](results/b0_comparison.json)에 있습니다. [B0 원본 결과·20장별 수치](../7_band_gated_detail/results/results.json) · [B0 보고서](../7_band_gated_detail/README.md) · [B0 best](../7_band_gated_detail/checkpoints/runs/github_QB_baseline_k6_s42/best.pt) · [B0 latest](../7_band_gated_detail/checkpoints/runs/github_QB_baseline_k6_s42/latest.pt)
+B0에 비해 두 변형의 RR PSNR·SAM·MSE는 개선됐지만 **FR QNR은 모두 악화**했습니다. 종합 개선을 확정하지 않으며, B1은 B2보다 이번 RR 전 장면 PSNR이 높다는 기존 판단을 유지합니다. B0의 전체 ERGAS/SCC/Q2n/Dλ/Ds·checkpoint 해시와 모든 차이는 [비교 JSON](results/b0_comparison.json)에 있습니다. [B0 원본 결과·20장별 수치](../7_band_gated_detail/results/results.json) · [B0 보고서](../7_band_gated_detail/README.md) · [B0 best](../7_band_gated_detail/checkpoints/runs/github_QB_baseline_k6_s42/best.pt) · [B0 latest](https://github.com/BIYONGHIYON/CtrS/releases/download/weights-research-performance-7/checkpoints__runs__github_QB_baseline_k6_s42__latest.pt)
 
 논문 표의 수치와 비교하려면 [기존 논문 K6 재현 보고서](../2_paper_setting_reproduction/README.md)의 논문 인용 열을 별도로 봐야 합니다. 그 열을 B0 실측값으로 섞지 않습니다. 원본 코드와 논문 수식의 차이·환경·지표 parity 제한이 있어 논문 그대로 재현 또는 논문 전체 성능 우위를 주장하지 않습니다.
 
