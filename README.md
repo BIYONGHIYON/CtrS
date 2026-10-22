@@ -56,44 +56,74 @@
 
 ## 기준 모델 결과 이미지
 
-원본 SSA-MRN과 C2MS(seed 42)를 RR test의 고정 6장면에서 비교합니다. 장면은 QB에서 정답 영상만 보고 풍경 종류로 고른 번호(0·1·3·7·14·17)이며, 아래에는 QB와 학습하지 않은 센서인 WV2(WV3로 학습한 모델의 전이)의 장면 0을 보입니다. 두 형식 모두 **원본 → C2MS → 정답** 순서입니다.
+**학습하지 않은 센서에서도 C2MS는 원본보다 선명하고 색이 정확합니다.** 아래는 두 모델을 WV3로만 학습한 뒤, 한 번도 학습하지 않은 **WV2** test에 그대로 적용한 결과입니다. 학습한 센서(QB·GF2·WV3)에서는 두 모델 모두 정답에 가까워 장면 전체로 보면 차이가 잘 드러나지 않지만, 처음 보는 센서에서는 원본이 흐려지고 색이 틀어지는 반면 C2MS는 선명도와 색을 더 잘 유지합니다.
+
+| 정답 대비 (WV2 test 20장, 3시드 평균) | 원본 SSA-MRN | C2MS |
+|---|---:|---:|
+| 선명도 (출력 고주파 세기 ÷ 정답, 1이 정답) | 0.34 | **0.47** |
+| 넣은 세부와 실제 세부의 상관 | 0.70 | **0.74** |
+| 밴드별 평균 밝기 치우침 (가장 큰 밴드) | 7.2% | **1.0%** |
+
+세 시드 모두 C2MS가 더 선명했고, 시드별 가장 큰 색 치우침은 원본 4.0-11.4%, C2MS 1.7-3.0%였습니다. 원본은 화면에 쓰는 파랑 밴드가 평균 7.2% 밝게 나와 전체가 회보라색으로 보입니다. 같은 모델을 학습한 센서 WV3에 쓰면 선명도는 원본 0.84·C2MS 0.88, 색 치우침은 둘 다 0.2% 이하로 비슷합니다. 측정 방법과 시드별 값은 [성능 54번 전이 분석](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/transfer_detail.json)에 있습니다.
+
+### WV2 장면별 결과 (seed 42, RGB 밴드 [4,2,1])
+
+| 장면 | 장면 PSNR 원본 → C2MS | 확대 영역 PSNR 원본 → C2MS |
+|---:|---|---|
+| 7 | 28.38 → 29.18 dB (+0.80) | 24.03 → 25.14 dB |
+| 0 | 27.80 → 28.69 dB (+0.89) | 26.15 → 27.76 dB |
+| 1 | 26.02 → 26.82 dB (+0.79) | 24.14 → 25.29 dB |
+| 3 | 33.71 → 34.94 dB (+1.23) | 27.19 → 28.56 dB |
+| 14 | 27.91 → 28.93 dB (+1.02) | 26.07 → 27.92 dB |
+| 17 | 28.43 → 29.39 dB (+0.96) | 26.41 → 27.86 dB |
+
+장면은 QB에서 정답 영상만 보고 정한 고정 번호(0·1·3·7·14·17)이고, 여섯 장면 모두 C2MS가 높았습니다. **장면 7은 결과를 본 뒤 차이가 눈으로 가장 잘 보이는 예로 골라 먼저 보입니다.**
 
 - **원본 크기 비교:** 위 줄은 LR MS(최근접 확대) · PAN 입력 · 원본 · C2MS · 정답, 아래 줄은 원본과 C2MS의 |예측 − 정답| 지도입니다(원본 오차의 99퍼센타일을 공통 색 척도로 사용, 밝을수록 오차가 큼).
 - **확대 비교:** C2MS의 개선이 가장 큰 64×64 영역을 4배 확대한 정답 전체(노란 상자) · 원본 · C2MS · 정답 · 원본 오차 · C2MS 오차입니다. C2MS에 유리하게 고른 영역이므로 전체 차이는 표의 장면 PSNR로 확인합니다.
 
-**[더 많은 이미지 보기 →](SSA-MRN/docs/c2ms_result_images.md)** QB·GF2·WV3·WV2의 6장면 전체(원본 크기·확대 비교)
+**장면 7**
 
-### QB (RGB 밴드 [2,1,0])
+![WV2 원본 크기 비교 · 장면 7](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_07.png)
 
-| 장면 | 풍경 | 장면 PSNR 원본 → C2MS | 확대 영역 PSNR 원본 → C2MS |
-|---:|---|---|---|
-| 0 | 바다·항구 방파제 | 41.45 → 42.81 dB (+1.36) | 35.30 → 37.38 dB |
-| 1 | 부두·곡선 방파제·수목 | 42.44 → 43.18 dB (+0.74) | 39.45 → 40.76 dB |
-| 3 | 요트 마리나·운동장 | 36.22 → 37.96 dB (+1.74) | 33.03 → 35.36 dB |
-| 7 | 숲 공원 | 38.83 → 39.41 dB (+0.57) | 36.54 → 38.12 dB |
-| 14 | 언덕 공원·곡선 주택가 | 37.62 → 38.47 dB (+0.85) | 35.68 → 36.97 dB |
-| 17 | 산지 녹지·산책로 | 38.73 → 39.40 dB (+0.67) | 35.11 → 36.09 dB |
+![WV2 확대 비교 · 장면 7](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_07.png)
 
-![QB 원본 크기 비교 · 장면 0 (바다·항구 방파제)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/full_scene_00.png)
+<details>
+<summary><b>WV2 나머지 5장면 펼치기</b> (0·1·3·14·17)</summary>
 
-![QB 확대 비교 · 장면 0 (바다·항구 방파제)](SSA-MRN/experiments/performance/53_scale_mixed_training/results/images/C2MS_vs_original/compare_scene_00.png)
-
-### WV2 전이 (WV3로 학습, RGB 밴드 [4,2,1])
-
-| 장면 | 장면 PSNR 원본 → C2MS | 확대 영역 PSNR 원본 → C2MS |
-|---:|---|---|
-| 0 | 27.80 → 28.69 dB (+0.89) | 26.15 → 27.76 dB |
-| 1 | 26.02 → 26.82 dB (+0.79) | 24.14 → 25.29 dB |
-| 3 | 33.71 → 34.94 dB (+1.23) | 27.19 → 28.56 dB |
-| 7 | 28.38 → 29.18 dB (+0.80) | 24.03 → 25.14 dB |
-| 14 | 27.91 → 28.93 dB (+1.02) | 26.07 → 27.92 dB |
-| 17 | 28.43 → 29.39 dB (+0.96) | 26.41 → 27.86 dB |
+**장면 0**
 
 ![WV2 원본 크기 비교 · 장면 0](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_00.png)
 
 ![WV2 확대 비교 · 장면 0](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_00.png)
 
-C2MS는 두 데이터셋의 12장면 모두에서 원본보다 높았습니다. FR(정답 없음)·RR2 비교 패널과 이전 기준 모델 F1과의 비교는 [성능 53번 보고서](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)에 있습니다.
+**장면 1**
+
+![WV2 원본 크기 비교 · 장면 1](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_01.png)
+
+![WV2 확대 비교 · 장면 1](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_01.png)
+
+**장면 3**
+
+![WV2 원본 크기 비교 · 장면 3](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_03.png)
+
+![WV2 확대 비교 · 장면 3](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_03.png)
+
+**장면 14**
+
+![WV2 원본 크기 비교 · 장면 14](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_14.png)
+
+![WV2 확대 비교 · 장면 14](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_14.png)
+
+**장면 17**
+
+![WV2 원본 크기 비교 · 장면 17](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_17.png)
+
+![WV2 확대 비교 · 장면 17](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_17.png)
+
+</details>
+
+**[더 많은 이미지 보기 →](SSA-MRN/docs/c2ms_result_images.md)** QB·GF2·WV3·WV2의 6장면 전체(원본 크기·확대 비교). FR(정답 없음)·RR2 비교 패널과 이전 기준 모델 F1과의 비교는 [성능 53번 보고서](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)에 있습니다.
 
 ## 원본 대비 개선
 

@@ -170,6 +170,34 @@ def graphs(models, judgements, runtime, out):
     fig.tight_layout(); fig.savefig(out / 'comparison.png', dpi=130); plt.close(fig)
 
 
+def transfer_detail(data, device, out):
+    """Why WV2 looks different (added 2026-10-22): sharpness, detail fidelity and colour bias of the archived WV3-trained C0 and C2MS
+    (checkpoints/, seeds 42-44) on all 20 RR scenes of WV3 and WV2. Sharpness = mean |4-neighbour Laplacian| of the output / of the GT;
+    detail = correlation and std ratio of (output - LMS) to (GT - LMS); bias = per-band (mean output - mean GT) / mean GT."""
+    lap = torch.tensor([[0., 1., 0.], [1., -4., 1.], [0., 1., 0.]], dtype=torch.float64).view(1, 1, 3, 3)
+    def hf(x): t = torch.from_numpy(x)[:, None]; return float(torch.nn.functional.conv2d(torch.nn.functional.pad(t, (1, 1, 1, 1), mode='replicate'), lap).abs().mean())
+    result = {}
+    for target in ('WV3', 'WV2'):
+        scenes = load(data, target, None)['RR']; result[target] = {'input': dict(pan_highfreq=float(np.mean([hf(a['pan']) for a in scenes])), gt_highfreq=float(np.mean([hf(a['gt']) for a in scenes])))}
+        for arm in ARMS:
+            per_seed = {}
+            for s in ALL:
+                ck = torch.load(HERE / f'checkpoints/{arm}_WV3_s{s}/best.pt', map_location='cpu', weights_only=False)
+                net = Model(arm, 8, s); net.load_state_dict(ck['model'], strict=True); net = net.to(device).eval(); rows = []
+                for a in scenes:
+                    p_, g = predict(net, a['pan'], a['lms'], a['ms'], 2047., device), a['gt']; dp, dg = (p_ - a['lms']).ravel(), (g - a['lms']).ravel()
+                    rows.append(dict(sharpness=hf(p_) / hf(g), detail_corr=float(np.corrcoef(dp, dg)[0, 1]), detail_gain=float(dp.std() / dg.std()),
+                                     bias=((p_ - g).mean(axis=(1, 2)) / g.mean(axis=(1, 2))).tolist()))
+                per_seed[s] = dict(sharpness=float(np.mean([r['sharpness'] for r in rows])), detail_corr=float(np.mean([r['detail_corr'] for r in rows])),
+                                   detail_gain=float(np.mean([r['detail_gain'] for r in rows])), band_bias=np.mean([r['bias'] for r in rows], axis=0).tolist())
+                print(target, arm, s, {k: (round(v, 3) if isinstance(v, float) else [round(x, 3) for x in v]) for k, v in per_seed[s].items()}, flush=True)
+            mean = {k: float(np.mean([v[k] for v in per_seed.values()])) for k in ('sharpness', 'detail_corr', 'detail_gain')}
+            mean['band_bias'] = np.mean([v['band_bias'] for v in per_seed.values()], axis=0).tolist(); mean['max_abs_band_bias'] = float(np.max(np.abs(mean['band_bias'])))
+            result[target][arm] = dict(seed_mean=mean, seeds=per_seed)
+    (out / 'transfer_detail.json').write_text(json.dumps(dict(description=transfer_detail.__doc__, bands='WV3/WV2 band order coastal, blue, green, yellow, red, red edge, NIR1, NIR2; display RGB = bands [4,2,1]',
+                                                             results=result, evaluate_sha256=sha(__file__)), ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--data', type=Path, required=True)
@@ -178,8 +206,10 @@ def main():
     p.add_argument('--device', default='cuda')
     p.add_argument('--limit', type=int, help='first N scenes only (code check; the judgement needs all 20)')
     p.add_argument('--graphs-only', action='store_true', help='redraw graphs from <out>/evaluation_v2_3.json')
+    p.add_argument('--transfer-detail', action='store_true', help='sharpness, detail and colour bias of the archived WV3 models on WV3 and WV2 (transfer_detail.json)')
     a = p.parse_args()
     out = a.out; out.mkdir(parents=True, exist_ok=True)
+    if a.transfer_detail: return transfer_detail(a.data, a.device, out)
     if a.graphs_only:
         r = json.loads((out / 'evaluation_v2_3.json').read_text(encoding='utf-8'))
         return graphs(r['models'], r['judgements'], a.runtime if a.runtime.exists() else None, out)
