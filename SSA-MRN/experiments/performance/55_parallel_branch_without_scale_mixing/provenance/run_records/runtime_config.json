@@ -1,0 +1,146 @@
+{
+  "experiment": 55,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "축척 혼합 없이 W2 병렬 가지만 쓴 모델(C2)의 센서 전이: C2MS의 WV2 이득 원인 분리",
+  "status": "학습 중",
+  "improvement": "판단 보류",
+  "hypothesis": "the WV2 transfer gain of C2MS over the original (54) comes from the 2x coarser pair training, not only from the W2 capacity: C2MS > C2 on WV2 (and C2 close to C0)",
+  "arms": {
+    "C2": "original + W2 parallel branch (43 C2), original pairs only; built exactly like 54 C2MS of the same seed (identical initial weights)",
+    "C0 (54)": "original SSA-MRN K4, WV3 seeds 42-44 from experiment 54 (comparison arm, not retrained)",
+    "C2MS (54)": "original + W2, original + 2x coarser pairs, WV3 seeds 42-44 from experiment 54 (comparison arm, not retrained)"
+  },
+  "sensors": [
+    "WV3"
+  ],
+  "transfer_tests": {
+    "WV2": "WV3-trained models evaluated on the WV2 test set (PanCollection convention; WV2 has no training data)"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "epochs": 150,
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training; FP32 transforms/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "layout": "channels_last",
+  "cpu_threads": 1,
+  "loss": "per-pixel MSE on the original batch only (coarse_weight 0); the 2x coarser validation pairs of 54 are logged only",
+  "coarse_weight": {
+    "C2": 0.0
+  },
+  "selection": "minimum original-scale validation MSE including epoch0, earliest exact tie (43/53 rule); coarse validation is logged only",
+  "normalization": {
+    "WV3": 2047,
+    "WV2": 2047
+  },
+  "sensor_operators": "54 prepare.py SENSORS (WV3 toolbox MS GNyq, PAN 0.14; WV2 MS [0.35x7, 0.27], PAN 0.11), phase 2",
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset",
+  "data_sha256": {
+    "WV3": {
+      "train": "f9e7ec381390ff36ddffd0714df7af07a3c5f456078b219a25f3e18372228f82",
+      "val": "ba883e57408d1f3c2263cc2818a9fbbf2dbe8e62554c531288f9e8bf9f59dc87",
+      "RR": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "FR": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+    }
+  },
+  "data_counts": {
+    "WV3": {
+      "train": 9714,
+      "val": 1080,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "transfer_data_sha256": {
+    "WV2": {
+      "RR": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b",
+      "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
+    }
+  },
+  "runtime": "C:/CtrS-p55/run",
+  "queue": [
+    [
+      "WV3",
+      "C2",
+      42
+    ],
+    [
+      "WV3",
+      "C2",
+      43
+    ],
+    [
+      "WV3",
+      "C2",
+      44
+    ]
+  ],
+  "max_parallel": 1,
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.3 with the 54 sensor Wald operators; fixed before training",
+    "primary": "WV2 transfer: C2MS (54) vs C2 of the same seeds, v2.3 label on 3-seed means; if C2MS improves over C2, the WV2 gain of C2MS is attributed to the scale-mixed training",
+    "secondary": "WV2 transfer: C2 vs C0 (54) (capacity effect without scale mixing); WV3: C2MS vs C2 and C2 vs C0 with the same criteria",
+    "diagnostic": "WV2 sharpness (mean |Laplacian| ratio to GT), detail correlation and per-band mean bias for C0, C2, C2MS (seeds 42-44), as measured for the 54 WV2 images",
+    "qualitative": "result images with common/result_images.py on scenes 0, 1, 3, 7, 14, 17 of WV2 (C2 vs C2MS, seed 42)",
+    "reported_only": "FR QNR, D_lambda, D_s; coarse-scale validation",
+    "note": "noise thresholds and guard tolerances were derived from QB seed variation and are applied unchanged"
+  },
+  "limits": [
+    "C0 and C2MS are the 54 runs (same code, data, seeds and schedule); C2 is trained here in a separate runtime",
+    "WV3 training only; WV2 is a transfer test",
+    "exploratory test reused"
+  ],
+  "constraints": {
+    "training": "approved by the user 2026-10-22",
+    "test_used_for_selection": false
+  },
+  "source_hashes": {
+    "experiments/performance/55_parallel_branch_without_scale_mixing/model.py": "b5b62ba144792a75a1f922bce700216da86e455a7748df96926e08cb22a4df57",
+    "experiments/performance/55_parallel_branch_without_scale_mixing/prepare.py": "f753987e59272341a35cec97d55b909fe04aec4877a9e8bbac9590b74e7d9f7d",
+    "experiments/performance/55_parallel_branch_without_scale_mixing/train.py": "aa91bc98850fdeeb772b5fa5881afe8c860decf95daa39410b476a9c89d6bb25",
+    "experiments/performance/55_parallel_branch_without_scale_mixing/run.py": "544a6ac8861d70801281baeb3af142e7756e3605e3110f8877d6940059795f09",
+    "experiments/performance/55_parallel_branch_without_scale_mixing/config.json": "32c213745b55e99ff8b2fd03484cc22717fb86ad21dcb20c7d38a2179757d878",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d"
+  },
+  "created_kst": "2026-10-22T23:40:39.058411+09:00",
+  "cache_manifest_sha256": "60466e6e39917a7ea29370066aa5c87e2358c5b486b7b8cce8fcdcbe38e79dcf",
+  "benchmark": {
+    "WV3_C2": {
+      "median_step_seconds": 0.10769845001050271,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 0.54296875
+    }
+  },
+  "fingerprint": "91a292f126bbdc00b99c540887ead016e5022fa478852023ebf56892e6ac18d4"
+}
