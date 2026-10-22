@@ -106,6 +106,7 @@ validation PSNR은 정규화 값(peak 1) 기준입니다. 학습 시간은 valid
 - **QB에서 본 개선이 다른 센서에서도 그대로 나타났고 오히려 컸습니다.** 원본 대비 RR PSNR 이득은 QB +0.873 dB([53번](../53_scale_mixed_training/README.md)), GF2 +2.045 dB, WV3 +1.007 dB입니다. 세 센서 모두 3시드 각각이 개선이고 시드 간 차이도 0.2 dB 이내여서, 채택 근거가 QB에만 맞춰진 결과는 아니었습니다.
 - **원본은 한 단계 거친 시험(RR2)에서 크게 약했고, C2MS는 이를 뒤집었습니다.** WV3에서 원본은 RR 37.54 dB보다 RR2 35.21 dB가 2.3 dB 낮았지만, C2MS는 RR2 39.82 dB로 RR보다 1.3 dB 높았습니다(+4.606 dB). GF2도 RR2 +2.271 dB입니다. 53번과 같이 2배 거친 쌍을 학습했기 때문에 RR2(4배 거친 시험)는 C2MS에게 처음 보는 축척이 아닙니다. 이 이득은 축척 혼합 학습의 직접 효과로 보고, RR보다 크다는 점을 FR 방향의 일반화 근거로 쓰지 않습니다.
 - **학습하지 않은 WV2에서도 이득이 유지됐고, 시드에 덜 흔들렸습니다.** WV2 RR 이득은 +0.828 dB로 WV3(+1.007 dB)보다 조금 작습니다. 원본 C0는 WV2에서 시드 간 SD가 RR 0.27 dB, 관측 RMSE 6.85 DN으로 컸지만 C2MS는 0.10 dB, 1.12 DN이었습니다. seed 43의 이득(+0.465 dB)이 가장 작은 것은 C2MS가 나빠서가 아니라 C0 seed 43이 WV2에서 유난히 좋았기 때문입니다(C0 RR 28.87 dB, 다른 시드 28.57·28.32 dB).
+- **WV2에서는 결과 이미지로도 차이가 크게 보입니다(2026-10-22 추가 분석).** 학습한 센서에서는 두 모델 모두 정답에 가까워 장면 전체로는 구분이 어렵지만, WV2에서는 원본이 흐려지고 색이 틀어집니다. test 20장·3시드 평균으로 정답 대비 선명도(출력의 4방향 Laplacian 절댓값 평균 ÷ 정답)는 원본 0.34, C2MS 0.47(세 시드 모두 C2MS가 높음)이고, 넣은 세부(출력 − LMS)와 실제 세부(정답 − LMS)의 상관은 0.70과 0.74, 밴드별 평균 밝기 치우침의 최댓값은 7.2%와 1.0%입니다. 원본은 파랑 밴드가 평균 7.2% 밝게 나와 RGB [4,2,1] 표시에서 회보라색으로 보입니다. 같은 지표가 WV3에서는 선명도 0.84·0.88, 치우침 0.2% 이하로 비슷합니다. WV2 입력은 WV3보다 PAN 고주파가 약하고(48.5 대 60.9) 정답 고주파는 강해서(155.9 대 115.2), WV3에서 배운 세부 주입 비율로는 세부가 모자랍니다. 이 차이가 W2 용량과 축척 혼합 학습 중 어디서 왔는지는 이 실험만으로 나눌 수 없습니다. 측정은 `evaluate.py --transfer-detail`로 보관 가중치에서 다시 계산했습니다([수치](results/transfer_detail.json)).
 - **FR 관측 일치도 좋아졌습니다.** FR 출력을 센서 관측 연산(MTF 흐림 + 4배 다운샘플링)으로 줄였을 때 실제 MS와의 RMSE가 원본의 0.57-0.68배였습니다. FR_WALD도 세 대상 모두 좋아졌습니다.
 - **참고 지표 QNR은 QB와 다르게 움직였습니다.** QB에서는 C2MS의 QNR이 원본보다 0.10 낮았지만(Ds 악화), GF2에서는 0.907 → 0.941로 좋아졌고 WV3는 비슷, WV2는 0.006 낮았습니다. [46번](../46_fr_spatial_index_validity/README.md)·[51번](../51_fr_detail_index_validity/README.md)에서 Ds가 QB 정답 순위를 거꾸로 매겼기 때문에 QNR·Dλ·Ds는 판정에 쓰지 않았습니다.
 - **비용은 QB와 같은 구조적 부담입니다.** 파라미터는 원본의 6.7배(4밴드)·5.7배(8밴드)이고, 학습 시간은 같은 센서 원본의 약 2.1-2.2배였습니다.
@@ -234,7 +235,7 @@ seed 42의 원본 SSA-MRN(C0)과 현재 기준 C2MS를 [결과 이미지 도구]
 - 학습 당시 소스·설정: [provenance/code](provenance/code/). 현재 `model.py`·`prepare.py`·`train.py`·`run.py`·학습 당시 `config.json`은 서버 실행본과 해시가 같습니다. 판정을 낸 평가 코드는 [evaluate_run.py](provenance/code/evaluate_run.py)이고(해시가 `evaluation_v2_3.json`의 기록과 같음), 현재 `evaluate.py`는 이후 그래프 배치만 고친 판입니다. 결과 이미지 도구에는 이번에 센서 옵션(파일·정규화·RGB 밴드)을 추가했으며, QB 기본값의 출력은 수정 전과 픽셀 단위로 같습니다.
 - 실행 기록: [provenance/run_records](provenance/run_records/)(실행 설정, 데이터 해시, 환경, 사전 점검·벤치마크, 큐 상태, 중단 기록), [센서 점검](provenance/sensor_audit.json)과 [점검 코드](provenance/sensor_audit.py), [초기 가중치 확인](provenance/initial_weights_check.json)
 - 가중치: [checkpoints](checkpoints/)의 `<군>_<센서>_s<시드>/best.pt`·`latest.pt` 12쌍. `initial.pt`는 시드로 똑같이 다시 만들어져 보관하지 않았습니다.
-- 결과: [v2.3 판정·장면별 수치](results/evaluation_v2_3.json), 실행별 학습 기록·기본 평가([results](results/)의 `<군>_<센서>_s<시드>/`), [파일 manifest](manifest.json)
+- 결과: [v2.3 판정·장면별 수치](results/evaluation_v2_3.json), [WV2 전이 선명도·색 분석](results/transfer_detail.json), 실행별 학습 기록·기본 평가([results](results/)의 `<군>_<센서>_s<시드>/`), [파일 manifest](manifest.json)
 
 ```bash
 python SSA-MRN/common/verify.py --experiment 54 --research-track performance
