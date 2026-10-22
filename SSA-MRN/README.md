@@ -78,6 +78,7 @@
 
 | 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
 |---|---|---|:---:|:---:|
+| [55. DLPan 지표 정합 검증](experiments/performance/55_dlpan_metric_parity/README.md)<br>[김경찬] | Q2n 3개 처리 수정, FR MATLAB 호환 축소 옵션 추가 | QB RR 100/100, FR 검사용 출력 60/60 정합 확인. 실제 C2MS·기존 점수 영향 미평가 | 평가&nbsp;완료 | 성능 비교 아님 |
 | [54. 축척 혼합 학습 기준 모델 C2MS의 다른 센서 적용](experiments/performance/54_multi_sensor_scale_mixed_training/README.md)<br>[이병현] | 현재 기준 C2MS를 GF2(4밴드)·WV3(8밴드) 데이터로 새로 학습해 같은 시드의 원본 SSA-MRN(C0)과 비교하고, WV3 모델을 학습하지 않은 WV2 test에도 적용했습니다(구조·학습 절차는 53번과 같음). | C2MS 3시드 평균이 원본 대비 RR PSNR GF2 +2.045 dB, WV3 +1.007 dB, WV2 전이 +0.828 dB(SAM·ERGAS도 개선, 세 대상 20/20장)로 RR2·FR_WALD·관측 보조 판정(관측 RMSE 0.57-0.68배)을 모두 통과했고 시드 9쌍도 모두 개선이었습니다. QB의 원본 대비 이득(+0.873 dB)이 다른 센서에서도 유지됐습니다. | 평가&nbsp;완료<br>3seed | 개선 |
 | [53. 2배 거친 학습 쌍을 섞은 축척 혼합 학습](experiments/performance/53_scale_mixed_training/README.md)<br>[이병현] | 43번 C2(원본+W2)와 당시 기준 F1을 같은 학습 패치로 만든 2배 거친 쌍과 함께 다시 학습했습니다(C2MS·F1MS, 구조 변경 없음). | C2MS 3시드 평균이 F1 대비 RR PSNR +0.679 dB·SAM −0.226°(20/20장), RR2 +1.139 dB, FR_WALD +1.352 dB, 관측 RMSE 0.78배로 판정 항목을 모두 통과했고 세 시드 각각도 개선이었습니다. 원본 대비 RR +0.873 dB. 2026-10-21 기준 모델로 채택했습니다. 같은 학습의 F1MS(seed42)는 개선 없음이었습니다. | 평가&nbsp;완료<br>3seed | 개선 |
 | [52. W2 추가 특징의 고주파 선택 제어](experiments/performance/52_w2_frequency_selective_attenuation/README.md)<br>[송준현] | W2 저역은 유지하고 고역을 샘플별 에너지 게이트로 조절했습니다. | W2 C2 대비 3seed PSNR +0.01737dB(잡음 수준)·RR2 SAM +0.07235° 미달. F1 대비 비교 아님 | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
