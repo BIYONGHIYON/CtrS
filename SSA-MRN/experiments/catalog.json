@@ -1267,5 +1267,45 @@
     "entrypoint": "experiments/performance/53_scale_mixed_training/run.py",
     "verification": "experiments/performance/53_scale_mixed_training/evaluate.py",
     "adopted_as_baseline": "2026-10-21"
+  },
+  "performance/54_multi_sensor_scale_mixed_training": {
+    "report": "experiments/performance/54_multi_sensor_scale_mixed_training/README.md",
+    "research_track": "performance",
+    "experiment": 54,
+    "display_name": "54. 축척 혼합 학습 기준 모델 C2MS의 다른 센서 적용",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "개선",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "sensor": "GF2, WV3 (WV2 transfer)",
+    "last_checked": "2026-10-22T18:49:10+09:00",
+    "limits": "대조군은 원본 C0 하나(C2·F1 미학습)라 W2 용량과 축척 혼합 효과를 나눌 수 없음. GF2 PAN MTF 0.15는 확인 불가한 가정값. 잡음 문턱·허용 폭은 QB에서 정한 값. GF2 PSNR은 peak 2047로 약 6 dB 높게 표시. GF2 C0 seed 42는 CUDA 오류 후 latest.pt에서 재개. 학습에 2배 거친 쌍을 넣어 RR2는 처음 보는 축척이 아님.",
+    "judgement": {
+      "criteria_version": "v2.3",
+      "source": "experiments/performance/54_multi_sensor_scale_mixed_training/results/evaluation_v2_3.json",
+      "scope": "GF2, WV3 and WV2 transfer; C0 (original SSA-MRN) seeds 42-44 paired by seed",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "three_seed_labels": {
+        "GF2": "개선",
+        "WV3": "개선",
+        "WV2_transfer": "개선"
+      },
+      "three_seed_label": "개선"
+    },
+    "checkpoints": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints",
+    "results": "experiments/performance/54_multi_sensor_scale_mixed_training/results",
+    "manifest": "experiments/performance/54_multi_sensor_scale_mixed_training/manifest.json",
+    "model": "experiments/performance/54_multi_sensor_scale_mixed_training/model.py",
+    "config": "experiments/performance/54_multi_sensor_scale_mixed_training/config.json",
+    "entrypoint": "experiments/performance/54_multi_sensor_scale_mixed_training/run.py",
+    "verification": "experiments/performance/54_multi_sensor_scale_mixed_training/evaluate.py"
   }
 }
