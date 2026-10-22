@@ -1307,5 +1307,19 @@
     "config": "experiments/performance/54_multi_sensor_scale_mixed_training/config.json",
     "entrypoint": "experiments/performance/54_multi_sensor_scale_mixed_training/run.py",
     "verification": "experiments/performance/54_multi_sensor_scale_mixed_training/evaluate.py"
+  },
+  "performance/55_dlpan_metric_parity": {
+    "report": "experiments/performance/55_dlpan_metric_parity/README.md",
+    "research_track": "performance",
+    "experiment": 55,
+    "display_name": "55. DLPan 지표 정합 검증",
+    "experimenter": "김경찬",
+    "status": "평가 완료",
+    "improvement": "성능 비교 아님",
+    "results": "experiments/performance/55_dlpan_metric_parity/results",
+    "manifest": "experiments/performance/55_dlpan_metric_parity/manifest.json",
+    "config": "experiments/performance/55_dlpan_metric_parity/config.json",
+    "entrypoint": "experiments/performance/55_dlpan_metric_parity/run.py",
+    "limits": "QB x4 float64; RR GT/LMS and synthetic FR outputs; no C2MS inference or model-score impact evaluation"
   }
 }
