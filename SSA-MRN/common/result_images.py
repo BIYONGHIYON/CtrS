@@ -8,7 +8,8 @@ Two images per scene:
 - full_scene_XX.png: the whole 256x256 scene at native size. Top: LR MS (nearest) | PAN | baseline | candidate | GT.
   Bottom: baseline and candidate error maps |prediction - GT| on a shared colour scale (99th percentile of the baseline error).
 - compare_scene_XX.png: the 64x64 window (stride 16) with the largest error reduction (baseline error - candidate error),
-  magnified 4x: GT with yellow box | GT | baseline | candidate | baseline error | candidate error. The window is chosen in
+  magnified 4x: GT with yellow box | baseline | candidate | GT | baseline error | candidate error (since 2026-10-22 the same
+  baseline -> candidate -> GT order as the full-scene image; earlier images put GT second). The window is chosen in
   favour of the candidate; whole-scene differences are given by the scene PSNR in the title and in result_images.json.
 Display: RGB bands [2,1,0], shared GT 1-99% stretch per scene.
 Other sensors (experiment 54): pass rr_file, scale (DN normalization), bands and land_cover; the defaults are the QB values above.
@@ -81,8 +82,8 @@ def _zoom(a, out, names, title, path, font, labels, bands=BANDS):
     err = {k: np.abs(o - a['gt']).mean(0)[r:r + WINDOW, c:c + WINDOW] for k, o in out.items()}; vmax = np.percentile(err[base], 99)
     full = _rgb(a['gt'], lo, hi, bands); ImageDraw.Draw(full).rectangle([c, r, c + WINDOW - 1, r + WINDOW - 1], outline=(255, 210, 0), width=2)
     crop = {k: _psnr(o[s], a['gt'][s]) for k, o in out.items()}
-    cells = [('정답 전체 (노란 상자)', full), ('정답 (확대)', _rgb(a['gt'][s], lo, hi, bands)), (labels[0], _rgb(out[base][s], lo, hi, bands)),
-             (labels[1], _rgb(out[cand][s], lo, hi, bands)), (f'{labels[0]} 오차', _heat(err[base], vmax)), (f'{labels[1]} 오차', _heat(err[cand], vmax))]
+    cells = [('정답 전체 (노란 상자)', full), (labels[0], _rgb(out[base][s], lo, hi, bands)), (labels[1], _rgb(out[cand][s], lo, hi, bands)),
+             ('정답 (확대)', _rgb(a['gt'][s], lo, hi, bands)), (f'{labels[0]} 오차', _heat(err[base], vmax)), (f'{labels[1]} 오차', _heat(err[cand], vmax))]
     P = WINDOW * ZOOM; img = Image.new('RGB', (len(cells) * (P + 8) + 8, P + 64), 'white'); d = ImageDraw.Draw(img)
     d.text((10, 6), f'{title} · 확대 영역({cand} 개선이 가장 큰 64×64) PSNR {base} {crop[base]:.2f} → {cand} {crop[cand]:.2f} dB', fill='black', font=font)
     for k, (label, im) in enumerate(cells):
