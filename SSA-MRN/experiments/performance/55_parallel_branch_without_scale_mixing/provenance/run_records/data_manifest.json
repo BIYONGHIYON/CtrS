@@ -1,0 +1,251 @@
+{
+  "WV3": {
+    "train": {
+      "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Training Dataset\\train_wv3.h5",
+      "sha256": "f9e7ec381390ff36ddffd0714df7af07a3c5f456078b219a25f3e18372228f82",
+      "bytes": 5570398376,
+      "arrays": {
+        "gt": {
+          "shape": [
+            9714,
+            8,
+            64,
+            64
+          ],
+          "dtype": "float64",
+          "normalized_cache_sha256": "ad67657d0c1918b95547af52a519d13d56a8cfc62052a8b584e52cb0500f932b"
+        },
+        "lms": {
+          "shape": [
+            9714,
+            8,
+            64,
+            64
+          ],
+          "dtype": "float64",
+          "normalized_cache_sha256": "f29979d4f8e93d33bdf4bbb6fe2e3d18b0c13aad267dec827b2d1c24251ece64"
+        },
+        "ms": {
+          "shape": [
+            9714,
+            8,
+            16,
+            16
+          ],
+          "dtype": "float64",
+          "normalized_cache_sha256": "b941acfd3139bc211b363625a80251e3ba027f02d593b7c2253402e11ca6cfe5"
+        },
+        "pan": {
+          "shape": [
+            9714,
+            1,
+            64,
+            64
+          ],
+          "dtype": "float64",
+          "normalized_cache_sha256": "580c8c5b922f63c865b8739ae35bbfc1015d78315e65d9bd9960db07386ac8ba"
+        }
+      },
+      "coarse": {
+        "pan": {
+          "shape": [
+            9714,
+            1,
+            32,
+            32
+          ],
+          "sha256": "e945c06167a774f50dc6c3f72e012aa260ac51b417a6ba5a4afa24a215b39be0"
+        },
+        "lms": {
+          "shape": [
+            9714,
+            8,
+            32,
+            32
+          ],
+          "sha256": "9a876bef0a10dc4db0223337a98cfc4f2e74f8d4137c61b12d6c9e52cb0898c0"
+        },
+        "ms": {
+          "shape": [
+            9714,
+            8,
+            8,
+            8
+          ],
+          "sha256": "005a53e7ab27d5675c694952c99141a702213f5c6a1da4e5cd6481be2b73eb07"
+        },
+        "gt": {
+          "shape": [
+            9714,
+            8,
+            32,
+            32
+          ],
+          "sha256": "d74bc02c679cf72c4903099dfde47edfa8107c518c5fd098476910a5572a9821"
+        }
+      }
+    },
+    "val": {
+      "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Training Dataset\\valid_wv3.h5",
+      "sha256": "ba883e57408d1f3c2263cc2818a9fbbf2dbe8e62554c531288f9e8bf9f59dc87",
+      "bytes": 619317416,
+      "arrays": {
+        "gt": {
+          "shape": [
+            1080,
+            8,
+            64,
+            64
+          ],
+          "dtype": "float64",
+          "normalized_cache_sha256": "d3fde58a0d07fb820267c07c40e20b5cc79da042bc752fd5873503e008e428b2"
+        },
+        "lms": {
+          "shape": [
+            1080,
+            8,
+            64,
+            64
+          ],
+          "dtype": "float64",
+          "normalized_cache_sha256": "81f719c7a668ff3e14003945d0a70391545f3f6169238c02929b2e91179cc8f6"
+        },
+        "ms": {
+          "shape": [
+            1080,
+            8,
+            16,
+            16
+          ],
+          "dtype": "float64",
+          "normalized_cache_sha256": "a7d21d14aa142a725cb613ab97abffd6974258624826def84b718d54409d5cd8"
+        },
+        "pan": {
+          "shape": [
+            1080,
+            1,
+            64,
+            64
+          ],
+          "dtype": "float64",
+          "normalized_cache_sha256": "1de68736e45f6d22f3b6fb1d9c0156e5f2b2a4f473491ab40eb3ee9c49184804"
+        }
+      },
+      "coarse": {
+        "pan": {
+          "shape": [
+            1080,
+            1,
+            32,
+            32
+          ],
+          "sha256": "3994073046ef5eac0e0cd4540c8007b4565caf4595f8794a72f2c1fbacb89913"
+        },
+        "lms": {
+          "shape": [
+            1080,
+            8,
+            32,
+            32
+          ],
+          "sha256": "e5bbb51ff7ece9844036934ea52b36f873167791a4dc220b1e6025a791d9c912"
+        },
+        "ms": {
+          "shape": [
+            1080,
+            8,
+            8,
+            8
+          ],
+          "sha256": "14f4c34902707b01cfd65537dfed05a0474893df03d20b1177fecb6a2c305065"
+        },
+        "gt": {
+          "shape": [
+            1080,
+            8,
+            32,
+            32
+          ],
+          "sha256": "b4996aaa217907ecc7d533d9025ec80d39e17683b056e86d31d6a5638c7027c6"
+        }
+      }
+    },
+    "RR": {
+      "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Testing Dataset (ReducedData, H5 Format)\\test_wv3_multiExm1.h5",
+      "sha256": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "bytes": 183504896,
+      "arrays": {
+        "gt": {
+          "shape": [
+            20,
+            8,
+            256,
+            256
+          ],
+          "dtype": "float64"
+        },
+        "lms": {
+          "shape": [
+            20,
+            8,
+            256,
+            256
+          ],
+          "dtype": "float64"
+        },
+        "ms": {
+          "shape": [
+            20,
+            8,
+            64,
+            64
+          ],
+          "dtype": "float64"
+        },
+        "pan": {
+          "shape": [
+            20,
+            1,
+            256,
+            256
+          ],
+          "dtype": "float64"
+        }
+      }
+    },
+    "FR": {
+      "path": "C:\\CtrS\\SSA-MRN\\data\\dataset\\WorldView 3\\Testing Dataset (FullData, H5 Format)\\test_wv3_OrigScale_multiExm1.h5",
+      "sha256": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5",
+      "bytes": 398460664,
+      "arrays": {
+        "lms": {
+          "shape": [
+            20,
+            8,
+            512,
+            512
+          ],
+          "dtype": "float64"
+        },
+        "ms": {
+          "shape": [
+            20,
+            8,
+            128,
+            128
+          ],
+          "dtype": "float64"
+        },
+        "pan": {
+          "shape": [
+            20,
+            1,
+            512,
+            512
+          ],
+          "dtype": "float64"
+        }
+      }
+    }
+  }
+}

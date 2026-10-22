@@ -1955,5 +1955,49 @@
     "config": "experiments/performance/54_multi_sensor_scale_mixed_training/config.json",
     "entrypoint": "experiments/performance/54_multi_sensor_scale_mixed_training/run.py",
     "verification": "experiments/performance/54_multi_sensor_scale_mixed_training/evaluate.py"
+  },
+  "performance/55_parallel_branch_without_scale_mixing": {
+    "report": "experiments/performance/55_parallel_branch_without_scale_mixing/README.md",
+    "research_track": "performance",
+    "experiment": 55,
+    "display_name": "55. 축척 혼합 학습을 뺀 W2 병렬 가지 모델의 센서 전이 비교",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "sensor": "WV3 (WV2 transfer)",
+    "last_checked": "2026-10-23T08:05:39+09:00",
+    "limits": "WV3 학습·WV2 전이 한 쌍만 확인. C0·C2MS는 54번 실행을 재평가. 잡음 문턱·허용 폭은 QB에서 정한 값. 원래 축척 validation에서는 C2가 C2MS보다 높아 validation으로는 차이가 드러나지 않음.",
+    "judgement": {
+      "criteria_version": "v2.3",
+      "source": "experiments/performance/55_parallel_branch_without_scale_mixing/results/evaluation_v2_3.json",
+      "scope": "WV3-trained C0 (54), C2, C2MS (54) seeds 42-44 paired by seed; WV3 and WV2 transfer",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "candidate_labels": {
+        "C2 vs C2MS (baseline)": "개선 없음"
+      },
+      "attribution": {
+        "WV2 C2MS vs C2 (primary)": "개선",
+        "WV2 C2 vs C0": "개선 없음",
+        "WV3 C2MS vs C2": "부분 개선",
+        "WV3 C2 vs C0": "개선"
+      },
+      "three_seed_label": "개선 없음"
+    },
+    "checkpoints": "experiments/performance/55_parallel_branch_without_scale_mixing/checkpoints",
+    "results": "experiments/performance/55_parallel_branch_without_scale_mixing/results",
+    "manifest": "experiments/performance/55_parallel_branch_without_scale_mixing/manifest.json",
+    "model": "experiments/performance/55_parallel_branch_without_scale_mixing/model.py",
+    "config": "experiments/performance/55_parallel_branch_without_scale_mixing/config.json",
+    "entrypoint": "experiments/performance/55_parallel_branch_without_scale_mixing/run.py",
+    "verification": "experiments/performance/55_parallel_branch_without_scale_mixing/evaluate.py"
   }
 }
