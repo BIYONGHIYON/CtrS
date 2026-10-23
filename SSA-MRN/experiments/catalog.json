@@ -1400,5 +1400,60 @@
     "config": "experiments/performance/56_original_scale_mixed_training/config.json",
     "entrypoint": "experiments/performance/56_original_scale_mixed_training/run.py",
     "verification": "experiments/performance/56_original_scale_mixed_training/evaluate.py"
+  },
+  "performance/57_c2ms_training_conditions": {
+    "report": "experiments/performance/57_c2ms_training_conditions/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 57,
+    "display_name": "57. 기준 모델 C2MS의 학습 조건 선별: 가중치 EMA와 분광 손실",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42
+    ],
+    "last_checked": "2026-10-24T04:34:00+09:00",
+    "limits": "seed 42 한 시드·QB만. 대조군 53번은 별도 실행이라 RR2·관측 일치에서 실행 간 변동이 허용 폭보다 큼(C2MS 재현도 미달). 분광 손실 계수 0.01 하나. 300에폭 실행은 4에폭에서 중단.",
+    "judgement": {
+      "criteria_version": "v2.3",
+      "source": "experiments/performance/57_c2ms_training_conditions/results/evaluation_v2_3.json",
+      "scope": "QB seed 42; candidates vs 53 C2MS seed 42 and vs the 57 C2MS online weights",
+      "seeds": [
+        42
+      ],
+      "candidate_labels": {
+        "C2MS_SAM vs 53 C2MS": "부분 개선",
+        "C2MS_SAM vs 57 C2MS": "부분 개선 (all guards pass, gain below noise)",
+        "C2MS_EMA vs 57 C2MS": "개선 없음"
+      },
+      "stopped": {
+        "C2MS_L300": "stopped at epoch 4 (user decision)"
+      }
+    },
+    "checkpoints": "experiments/performance/57_c2ms_training_conditions/checkpoints",
+    "results": "experiments/performance/57_c2ms_training_conditions/results",
+    "manifest": "experiments/performance/57_c2ms_training_conditions/manifest.json",
+    "model": "experiments/performance/57_c2ms_training_conditions/model.py",
+    "config": "experiments/performance/57_c2ms_training_conditions/config.json",
+    "entrypoint": "experiments/performance/57_c2ms_training_conditions/run.py",
+    "verification": "experiments/performance/57_c2ms_training_conditions/evaluate.py"
+  },
+  "performance/58_spectral_loss_multi_sensor": {
+    "report": "experiments/performance/58_spectral_loss_multi_sensor/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "experiment": 58,
+    "display_name": "58. 기준 모델 C2MS에 분광 손실을 더한 학습의 반복 시드·다른 센서 확인",
+    "status": "학습 중",
+    "improvement": "판단 보류",
+    "evaluated_seeds": [],
+    "last_checked": "2026-10-24T04:34:00+09:00",
+    "limits": "학습 중. QB seed 42는 57번 실행을 사용.",
+    "model": "experiments/performance/58_spectral_loss_multi_sensor/model.py",
+    "config": "experiments/performance/58_spectral_loss_multi_sensor/config.json",
+    "entrypoint": "experiments/performance/58_spectral_loss_multi_sensor/run.py",
+    "manifest": "experiments/performance/58_spectral_loss_multi_sensor/manifest.json"
   }
 }
