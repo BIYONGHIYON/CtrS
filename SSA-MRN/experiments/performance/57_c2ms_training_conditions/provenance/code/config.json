@@ -1,0 +1,122 @@
+{
+  "experiment": 57,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "기준 모델 C2MS의 학습 조건 선별: 가중치 EMA, 학습 연장(300에폭), 분광 손실",
+  "status": "학습 중",
+  "improvement": "판단 보류",
+  "hypothesis": "training conditions alone can close the QB gap to U2Net+PAKAN (RR PSNR -0.22 dB, SAM +0.14 deg): an EMA of the weights (26: +0.089 dB on the original), a longer cosine schedule, or a spectral (1 - cosine) loss improves C2MS",
+  "arms": {
+    "C2MS": "C2MS, 150 epochs (53 procedure); the online weights reproduce the 53 control, the EMA weights test EMA alone",
+    "C2MS_L300": "C2MS, 300 epochs (same cosine 1e-4 -> 1e-6 over 300 epochs); online = longer schedule, EMA = longer schedule + EMA",
+    "C2MS_SAM": "C2MS, 150 epochs, + spectral_weight x mean(1 - cosine) on the original batch; online = spectral loss, EMA = spectral loss + EMA",
+    "C2MS (53)": "53 C2MS QB seed 42, the comparison control (not retrained)"
+  },
+  "sensors": [
+    "QB"
+  ],
+  "seeds": [
+    42
+  ],
+  "screening": "seed 42 only; candidates that improve over the 53 C2MS control are repeated with seeds 43-44 after approval",
+  "epochs": {
+    "C2MS": 150,
+    "C2MS_L300": 300,
+    "C2MS_SAM": 150
+  },
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training; FP32 transforms/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "layout": "channels_last",
+  "cpu_threads": 1,
+  "loss": "per-pixel MSE on the original batch + 1.0 x per-pixel MSE on the 2x coarser pairs (53 C2MS) + spectral_weight x mean over pixels of (1 - cosine of predicted and GT band vectors) on the original batch",
+  "coarse_weight": {
+    "C2MS": 1.0,
+    "C2MS_L300": 1.0,
+    "C2MS_SAM": 1.0
+  },
+  "spectral_weight": {
+    "C2MS": 0.0,
+    "C2MS_L300": 0.0,
+    "C2MS_SAM": 0.01
+  },
+  "ema_beta": 0.99,
+  "ema": "shadow copy of the weights updated after every applied optimizer step (26: beta 0.99, starts equal to the initial weights, float states averaged, integer states copied); validated every epoch and selected separately (best_ema.pt); never fed back to training",
+  "selection": "online: minimum original-scale validation MSE of the online weights including epoch0 (best.pt); EMA: minimum original-scale validation MSE of the EMA weights including epoch0 (best_ema.pt); earliest exact tie",
+  "normalization": {
+    "QB": 2047
+  },
+  "sensor_operators": "54 prepare.py SENSORS QB entry (MS GNyq 0.34/0.32/0.30/0.22, PAN 0.15, phase 2), the same coarse-pair construction as 53 prepare.py (checked before training)",
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset",
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    }
+  },
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "runtime": "C:/CtrS-p57/run",
+  "queue": [
+    [
+      "QB",
+      "C2MS",
+      42
+    ],
+    [
+      "QB",
+      "C2MS_SAM",
+      42
+    ],
+    [
+      "QB",
+      "C2MS_L300",
+      42
+    ]
+  ],
+  "max_parallel": 1,
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.3 (common/evaluation_protocol, QB), single seed noise threshold 0.06 dB; fixed before training",
+    "primary": "each of the six candidates (C2MS-EMA, L300, L300-EMA, SAM, SAM-EMA; C2MS online as reproduction) vs the 53 C2MS seed 42 control: v2.3 label",
+    "reproduction": "the C2MS online weights should match the 53 C2MS seed 42 within seed noise (same code lineage, data, seed and schedule)",
+    "expansion": "a candidate labelled 개선 with RR PSNR gain >= 0.06 dB is proposed for seeds 43-44; the goal reference is U2Net+PAKAN QB RR 38.520 dB / SAM 4.439 / ERGAS 3.698",
+    "reported_only": "FR QNR, D_lambda, D_s; coarse-scale validation"
+  },
+  "limits": [
+    "seed 42 screening only",
+    "QB only",
+    "the 53 control is a separate run (same code lineage, data, seed and schedule)",
+    "exploratory test reused"
+  ],
+  "constraints": {
+    "training": "approved by the user 2026-10-23 (seed 42 first; 3 seeds only for candidates that improve)",
+    "test_used_for_selection": false
+  }
+}

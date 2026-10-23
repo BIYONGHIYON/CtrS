@@ -1,0 +1,85 @@
+{
+  "time_kst": "2026-10-24T04:16:08.627449+09:00",
+  "phase": "train",
+  "active": [
+    {
+      "sensor": "QB",
+      "arm": "C2MS_L300",
+      "seed": 42
+    }
+  ],
+  "runs": [
+    {
+      "sensor": "QB",
+      "arm": "C2MS",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-10-24T00:37:18.831998+09:00",
+        "pid": 8560,
+        "sensor": "QB",
+        "arm": "C2MS",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.0561671257019043,
+        "reserved_gb": 0.55078125,
+        "best_epoch": 145
+      }
+    },
+    {
+      "sensor": "QB",
+      "arm": "C2MS_SAM",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-10-24T04:10:18.264420+09:00",
+        "pid": 13440,
+        "sensor": "QB",
+        "arm": "C2MS_SAM",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.0561671257019043,
+        "reserved_gb": 0.552734375,
+        "best_epoch": 150
+      }
+    },
+    {
+      "sensor": "QB",
+      "arm": "C2MS_L300",
+      "seed": 42,
+      "training_complete": false,
+      "evaluation_complete": false,
+      "status": {
+        "time_kst": "2026-10-24T04:15:56.687309+09:00",
+        "pid": 2948,
+        "sensor": "QB",
+        "arm": "C2MS_L300",
+        "seed": 42,
+        "phase": "train",
+        "allocated_gb": 0.05895662307739258,
+        "reserved_gb": 0.55078125,
+        "epoch": 4,
+        "epochs": 300,
+        "batch": 377,
+        "batches": 536,
+        "train_mse": 0.00037508565814861784,
+        "lr": 9.997541109876564e-05,
+        "actual_updates": 1985,
+        "skipped_updates": 0,
+        "epoch_seconds_estimate": 82.86000000000058,
+        "eta_seconds": 24551.13973880614,
+        "training_end_kst": "2026-10-24T11:05:07.827048+09:00"
+      }
+    }
+  ],
+  "epoch_seconds": {
+    "QB_C2MS": 83.0779999999977,
+    "QB_C2MS_L300": 82.86000000000058,
+    "QB_C2MS_SAM": 84.79699999999866
+  },
+  "training_remaining_seconds": 24551.13973880614,
+  "training_end_kst": "2026-10-24T11:05:19.767188+09:00",
+  "eta_basis": "measured recent epochs per sensor/arm, else benchmark x1.15; excludes final RR/FR evaluation"
+}

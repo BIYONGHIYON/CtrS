@@ -1,0 +1,181 @@
+{
+  "experiment": 58,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "기준 모델 C2MS에 분광 손실을 더한 학습의 반복 시드·다른 센서 확인",
+  "status": "학습 중",
+  "improvement": "판단 보류",
+  "hypothesis": "the 57 spectral loss (0.01 x mean(1 - cosine)) improves C2MS beyond seed noise: on QB (57 seed 42: RR +0.035 dB, SAM -0.048 deg) and on GF2, WV3 and the WV2 transfer, with seeds 42-44",
+  "arms": {
+    "C2MS_SAM": "C2MS + spectral loss 0.01 (57 arm C2MS_SAM), 150 epochs; QB seed 42 is the 57 run (same code and settings), seeds 43-44 and all GF2/WV3 seeds are trained here",
+    "C2MS (53, 54)": "controls of the same seeds: QB from 53, GF2 and WV3 from 54 (not retrained)"
+  },
+  "sensors": [
+    "QB",
+    "GF2",
+    "WV3"
+  ],
+  "transfer_tests": {
+    "WV2": "WV3-trained models evaluated on the WV2 test set (PanCollection convention; WV2 has no training data)"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "reused_runs": {
+    "QB_C2MS_SAM_s42": "experiment 57 (code, settings and data identical; its best weights and records are referenced, not retrained)"
+  },
+  "epochs": {
+    "C2MS_SAM": 150
+  },
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training; FP32 transforms/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "layout": "channels_last",
+  "cpu_threads": 1,
+  "ema_beta": 0.99,
+  "ema": "shadow copy of the weights updated after every applied optimizer step (26: beta 0.99, starts equal to the initial weights, float states averaged, integer states copied); validated every epoch and selected separately (best_ema.pt); never fed back to training",
+  "selection": "online: minimum original-scale validation MSE of the online weights including epoch0 (best.pt); EMA: minimum original-scale validation MSE of the EMA weights including epoch0 (best_ema.pt); earliest exact tie",
+  "loss": "per-pixel MSE on the original batch + 1.0 x per-pixel MSE on the 2x coarser pairs (53 C2MS) + spectral_weight x mean over pixels of (1 - cosine of predicted and GT band vectors) on the original batch",
+  "coarse_weight": {
+    "C2MS_SAM": 1.0
+  },
+  "spectral_weight": {
+    "C2MS_SAM": 0.01
+  },
+  "normalization": {
+    "QB": 2047,
+    "GF2": 1023,
+    "WV3": 2047,
+    "WV2": 2047
+  },
+  "sensor_operators": "54 prepare.py SENSORS (QB, GF2, WV3; WV2 for the transfer test), phase 2",
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset",
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    },
+    "GF2": {
+      "train": "243a0bc8a4cc0a2740ed24409f9e87afe531d87e9d57524c6bcbec2b5f937621",
+      "val": "ae15b19ccc6ece799ebfeb3fb374b1a333238226397441e3d523b0195dff4f43",
+      "RR": "709a9a53b2e0f29d3dcd5c6ca4410c2913b62cc03c104fed6c049911dbe1c8ea",
+      "FR": "840698f9b3de181de9f665ca88e562fb7783dcd93045a136ace2110d414989ad"
+    },
+    "WV3": {
+      "train": "f9e7ec381390ff36ddffd0714df7af07a3c5f456078b219a25f3e18372228f82",
+      "val": "ba883e57408d1f3c2263cc2818a9fbbf2dbe8e62554c531288f9e8bf9f59dc87",
+      "RR": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "FR": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+    }
+  },
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    },
+    "GF2": {
+      "train": 19809,
+      "val": 2201,
+      "RR": 20,
+      "FR": 20
+    },
+    "WV3": {
+      "train": 9714,
+      "val": 1080,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "transfer_data_sha256": {
+    "WV2": {
+      "RR": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b",
+      "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
+    }
+  },
+  "runtime": "C:/CtrS-p58/run",
+  "queue": [
+    [
+      "QB",
+      "C2MS_SAM",
+      43
+    ],
+    [
+      "QB",
+      "C2MS_SAM",
+      44
+    ],
+    [
+      "GF2",
+      "C2MS_SAM",
+      42
+    ],
+    [
+      "GF2",
+      "C2MS_SAM",
+      43
+    ],
+    [
+      "GF2",
+      "C2MS_SAM",
+      44
+    ],
+    [
+      "WV3",
+      "C2MS_SAM",
+      42
+    ],
+    [
+      "WV3",
+      "C2MS_SAM",
+      43
+    ],
+    [
+      "WV3",
+      "C2MS_SAM",
+      44
+    ]
+  ],
+  "max_parallel": 1,
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.3 (QB: common/evaluation_protocol; GF2, WV3, WV2: the 54 sensor Wald operators); fixed before training",
+    "primary": "per target (QB, GF2, WV3, WV2 transfer): C2MS_SAM vs C2MS of the same seeds 42-44, v2.3 label on 3-seed means (noise threshold 0.04 dB); online best weights",
+    "secondary": "the EMA best weights reported the same way; SAM gap to U2Net+PAKAN on QB (4.439 deg)",
+    "qualitative": "result images with common/result_images.py on scenes 0, 1, 3, 7, 14, 17 (C2MS vs C2MS_SAM, seed 42) for QB and WV2",
+    "reported_only": "FR QNR, D_lambda, D_s; coarse-scale validation"
+  },
+  "limits": [
+    "QB seed 42 comes from experiment 57",
+    "controls are the 53/54 runs (same code lineage, data, seeds and schedule)",
+    "spectral weight 0.01 only",
+    "exploratory test reused"
+  ],
+  "constraints": {
+    "training": "approved by the user 2026-10-24",
+    "test_used_for_selection": false
+  }
+}
