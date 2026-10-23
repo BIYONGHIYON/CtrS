@@ -1351,5 +1351,54 @@
     "config": "experiments/performance/55_parallel_branch_without_scale_mixing/config.json",
     "entrypoint": "experiments/performance/55_parallel_branch_without_scale_mixing/run.py",
     "verification": "experiments/performance/55_parallel_branch_without_scale_mixing/evaluate.py"
+  },
+  "performance/56_original_scale_mixed_training": {
+    "report": "experiments/performance/56_original_scale_mixed_training/README.md",
+    "research_track": "performance",
+    "experiment": 56,
+    "display_name": "56. 원본 SSA-MRN에 축척 혼합 학습만 적용한 W2 용량·축척 혼합 2×2 기여 분해",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "sensor": "QB",
+    "last_checked": "2026-10-23T20:43:08+09:00",
+    "limits": "QB 한 센서. C0·C2는 43번, C2MS는 53번 실행을 재평가. 축척 혼합 비율 1.0·2배 하나만 확인. RR2는 학습한 2배 거친 쌍과 가까운 시험.",
+    "judgement": {
+      "criteria_version": "v2.3",
+      "source": "experiments/performance/56_original_scale_mixed_training/results/evaluation_v2_3.json",
+      "scope": "QB 2x2: C0 (43), C0MS, C2 (43), C2MS (53) seeds 42-44 paired by seed",
+      "seeds": [
+        42,
+        43,
+        44
+      ],
+      "candidate_labels": {
+        "C0MS vs C0 (primary)": "개선 없음"
+      },
+      "two_by_two": {
+        "C2 vs C0": "부분 개선",
+        "C2MS vs C2": "개선",
+        "C2MS vs C0MS": "부분 개선",
+        "C2MS vs C0": "개선"
+      },
+      "interaction_psnr": {
+        "RR": 0.463,
+        "RR2": -0.668,
+        "FR_WALD": 0.695
+      },
+      "three_seed_label": "개선 없음"
+    },
+    "checkpoints": "experiments/performance/56_original_scale_mixed_training/checkpoints",
+    "results": "experiments/performance/56_original_scale_mixed_training/results",
+    "manifest": "experiments/performance/56_original_scale_mixed_training/manifest.json",
+    "model": "experiments/performance/56_original_scale_mixed_training/model.py",
+    "config": "experiments/performance/56_original_scale_mixed_training/config.json",
+    "entrypoint": "experiments/performance/56_original_scale_mixed_training/run.py",
+    "verification": "experiments/performance/56_original_scale_mixed_training/evaluate.py"
   }
 }
