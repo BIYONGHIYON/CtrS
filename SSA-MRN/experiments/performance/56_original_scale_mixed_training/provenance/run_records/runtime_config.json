@@ -1,0 +1,135 @@
+{
+  "experiment": 56,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "원본 SSA-MRN에 축척 혼합 학습만 적용(C0MS): W2 용량과 축척 혼합의 2×2 기여 분해",
+  "status": "학습 중",
+  "improvement": "판단 보류",
+  "hypothesis": "scale-mixed training helps only together with the W2 capacity: C0MS (original + mixing) does not improve over C0 on QB RR, while C2MS does (53); the 2x2 of W2 x mixing separates the two effects",
+  "arms": {
+    "C0MS": "original SSA-MRN K4, original + 2x coarser pairs (53 loss, coarse_weight 1); built exactly like 43 C0 of the same seed (identical initial weights)",
+    "C0 (43)": "original SSA-MRN K4, original pairs only, QB seeds 42-44 from experiment 43 (not retrained)",
+    "C2 (43)": "original + W2, original pairs only, QB seeds 42-44 from experiment 43 (not retrained)",
+    "C2MS (53)": "original + W2, original + 2x coarser pairs, QB seeds 42-44 from experiment 53 (not retrained)"
+  },
+  "sensors": [
+    "QB"
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "epochs": 150,
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training; FP32 transforms/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "layout": "channels_last",
+  "cpu_threads": 1,
+  "loss": "per-pixel MSE on the original batch + coarse_weight x per-pixel MSE on the same patches at the 2x coarser scale (53 loss; inputs normalized by 2047)",
+  "coarse_weight": {
+    "C0MS": 1.0
+  },
+  "selection": "minimum original-scale validation MSE including epoch0, earliest exact tie (43/53 rule); coarse validation is logged only",
+  "normalization": {
+    "QB": 2047
+  },
+  "sensor_operators": "54 prepare.py SENSORS QB entry (MS GNyq 0.34/0.32/0.30/0.22, PAN 0.15, phase 2), the same coarse-pair construction as 53 prepare.py (checked before training)",
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset",
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    }
+  },
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "runtime": "C:/CtrS-p56/run",
+  "queue": [
+    [
+      "QB",
+      "C0MS",
+      42
+    ],
+    [
+      "QB",
+      "C0MS",
+      43
+    ],
+    [
+      "QB",
+      "C0MS",
+      44
+    ]
+  ],
+  "max_parallel": 1,
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.3 (common/evaluation_protocol, QB); fixed before training",
+    "primary": "QB: C0MS vs C0 (43) of the same seeds, v2.3 label on 3-seed means (effect of scale mixing without W2)",
+    "secondary": "QB 2x2 of the same seeds: C2 vs C0 (W2 without mixing, 43), C2MS vs C2 (mixing with W2, 53), C2MS vs C0MS (W2 with mixing); interaction = (C2MS - C2) - (C0MS - C0) for RR, RR2, FR_WALD PSNR",
+    "qualitative": "result images with common/result_images.py on QB scenes 0, 1, 3, 7, 14, 17 (C0 vs C0MS, seed 42)",
+    "reported_only": "FR QNR, D_lambda, D_s; coarse-scale validation"
+  },
+  "limits": [
+    "C0 and C2 are the 43 runs and C2MS the 53 runs (same code lineage, data, seeds and schedule); C0MS is trained here in a separate runtime",
+    "QB only",
+    "exploratory test reused"
+  ],
+  "constraints": {
+    "training": "approved by the user 2026-10-23",
+    "test_used_for_selection": false
+  },
+  "source_hashes": {
+    "experiments/performance/56_original_scale_mixed_training/model.py": "0e67aedd12112dfcc4def7f3d8ea8f4a3e38d0bfeb293df71697e05d71b547cf",
+    "experiments/performance/56_original_scale_mixed_training/prepare.py": "31a155a7ce3dd617cccd2bed12cf0a820fc0ea164c151d9f615868ac343b2698",
+    "experiments/performance/56_original_scale_mixed_training/train.py": "2243bda8900c6a40638ee906bcd89ed5eb0e32b55d3673302bb9eab766e878f5",
+    "experiments/performance/56_original_scale_mixed_training/run.py": "544a6ac8861d70801281baeb3af142e7756e3605e3110f8877d6940059795f09",
+    "experiments/performance/56_original_scale_mixed_training/config.json": "87bf6c67fc9701ca8a395e5eb696ba3147c75ee7c9c2fc943f566f934682e495",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d"
+  },
+  "created_kst": "2026-10-23T08:45:07.851815+09:00",
+  "cache_manifest_sha256": "5eff51d1aab2a971d850296817ec91de3fcc0560086d75969a11035e04f3d5ad",
+  "benchmark": {
+    "QB_C0MS": {
+      "median_step_seconds": 0.12110965000010765,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.298828125
+    }
+  },
+  "fingerprint": "28e108111d3810f53214b4c531ffbbeeef22a096de10cb63427188c1db508a7d"
+}

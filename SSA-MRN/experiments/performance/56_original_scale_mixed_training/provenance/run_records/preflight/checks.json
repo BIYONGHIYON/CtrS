@@ -1,0 +1,62 @@
+{
+  "time_kst": "2026-10-23T08:45:30.709005+09:00",
+  "initial_state_sha256": {
+    "QB_C0MS_s42": "f9323ba6cb23b9b775a1435b4a670e5577772084818b3c55c3ed9f3a82393060",
+    "QB_C0MS_s43": "373529d2584ed5d3801f4bcb9d3ac07341e37ba2c646357d12c92cb24881b23e",
+    "QB_C0MS_s44": "791c609d540f495fec5375d119aa1136f600f70b5d196fe03f4baf7f23825515"
+  },
+  "four_band_initial_equal_to_43": true,
+  "genmtf_x4_max_abs_diff": {
+    "QB": 0.0,
+    "WV3": 0.0
+  },
+  "sensors": {
+    "QB": {
+      "coarse_cache_vs_fresh_max_abs": 0.0,
+      "coarse_kernel_dc_gain": {
+        "ms": [
+          0.9997148461933067,
+          0.999698054003819,
+          0.9996803400723344,
+          0.9995969484942354
+        ],
+        "pan": 0.9994961777612154
+      },
+      "coarse_ms_vs_2x_reduced_given_ms_relative_rmse": 0.03967642784118652,
+      "coarse_shapes": {
+        "pan": [
+          17139,
+          1,
+          32,
+          32
+        ],
+        "lms": [
+          17139,
+          4,
+          32,
+          32
+        ],
+        "ms": [
+          17139,
+          4,
+          8,
+          8
+        ],
+        "gt": [
+          17139,
+          4,
+          32,
+          32
+        ]
+      },
+      "checks": {
+        "C0MS": {
+          "parameters": 426654,
+          "resume_max_abs": 0.0,
+          "loss": 0.4501756429672241
+        }
+      }
+    }
+  },
+  "scope": "tiny AMP forward/backward on both scales and two-update resume; not long-session crash proof"
+}
