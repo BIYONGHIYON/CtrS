@@ -2094,14 +2094,28 @@
     "sensor": "QB, GF2, WV3 (WV2 transfer)",
     "experiment": 58,
     "display_name": "58. 기준 모델 C2MS에 분광 손실을 더한 학습의 반복 시드·다른 센서 확인",
-    "status": "학습 중",
-    "improvement": "판단 보류",
-    "evaluated_seeds": [],
-    "last_checked": "2026-10-24T04:34:00+09:00",
-    "limits": "학습 중. QB seed 42는 57번 실행을 사용.",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "last_checked": "2026-10-25T08:21:28+09:00",
+    "limits": "GF2만 v2.3 개선. QB RR2 미달·잡음 수준, WV3 잡음 수준, WV2 전이 개선 없음. QB seed 42는 57번 실행 재사용. EMA는 후보에만 적용한 보조 비교.",
     "model": "experiments/performance/58_spectral_loss_multi_sensor/model.py",
     "config": "experiments/performance/58_spectral_loss_multi_sensor/config.json",
     "entrypoint": "experiments/performance/58_spectral_loss_multi_sensor/run.py",
-    "manifest": "experiments/performance/58_spectral_loss_multi_sensor/manifest.json"
+    "manifest": "experiments/performance/58_spectral_loss_multi_sensor/manifest.json",
+    "results": "experiments/performance/58_spectral_loss_multi_sensor/results",
+    "checkpoints": "experiments/performance/58_spectral_loss_multi_sensor/checkpoints",
+    "evaluation": "experiments/performance/58_spectral_loss_multi_sensor/results/evaluation_v2_3.json",
+    "verification": "experiments/performance/58_spectral_loss_multi_sensor/results/archive_validation.json",
+    "judgements": {
+      "QB_C2MS_SAM_vs_C2MS": "부분 개선",
+      "GF2_C2MS_SAM_vs_C2MS": "개선",
+      "WV3_C2MS_SAM_vs_C2MS": "부분 개선",
+      "WV2_C2MS_SAM_vs_C2MS": "개선 없음"
+    }
   }
 }
