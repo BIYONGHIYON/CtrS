@@ -129,6 +129,8 @@
 
 test 20장, 같은 시드(42·43·44) 원본과 짝지은 3시드 평균 차이입니다.
 
+[데이터셋·시드별 전체 평가 수치 보기 →](SSA-MRN/docs/c2ms_evaluation_tables.md) 성능 53·54번의 원본·C2MS 절대 수치와 시드별 차이, 3시드 평균을 정리했습니다.
+
 | 데이터셋 | RR PSNR | RR SAM | RR ERGAS | FR_WALD PSNR | RR2 PSNR | FR 관측 오차 | 판정 |
 |---|---:|---:|---:|---:|---:|---:|:---:|
 | QB ([성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)) | +0.873 dB | −0.365° | −0.413 | +1.635 dB | +1.125 dB | 0.63배 | 개선 |
