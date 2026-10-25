@@ -144,6 +144,8 @@ test 20장, 같은 시드(42·43·44) 원본과 짝지은 3시드 평균 차이�
 
 ## 다른 팬샤프닝 모델과 비교 (QB RR test 20장)
 
+중간발표용 실험 53·54의 [실제 MATLAB 재평가 수치](SSA-MRN/docs/c2ms_matlab_evaluation_tables.md)를 별도로 보존했습니다. PSNR global-MSE와 밴드 평균 정의, 센서별 peak를 구분합니다.
+
 | 모델 | PSNR ↑ | SAM ↓ | ERGAS ↓ | Q4 ↑ |
 |---|---:|---:|---:|---:|
 | U2Net + PAKAN (2026) | 38.520 | 4.439 | 3.698 | 0.939 |

@@ -1,0 +1,541 @@
+{
+  "case": {
+    "experiment": 53,
+    "sensor": "QB",
+    "trained_sensor": "QB",
+    "arm": "C2",
+    "seed": 43,
+    "id": "e53_QB_C2_s43"
+  },
+  "checkpoint": "SSA-MRN/experiments/performance/43_normalized_parallel_capacity/checkpoints/C2_QB_s43/best.pt",
+  "checkpoint_sha256": "b98e9337b54804579fac906df177b132843e64f31ea6a7a2cad2687443adb4d3",
+  "checkpoint_best_epoch": 150,
+  "data": {
+    "RR": {
+      "name": "test_qb_multiExm1.h5",
+      "sha256": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "revision": "dbb764fb81aed9b9d75ce0a8339ea205edbdd165",
+      "url": "https://huggingface.co/datasets/elsting/PanCollection/resolve/dbb764fb81aed9b9d75ce0a8339ea205edbdd165/test_data/test_qb_multiExm1.h5?download=true"
+    },
+    "FR": {
+      "name": "test_qb_OrigScale_multiExm1.h5",
+      "sha256": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f",
+      "revision": "dbb764fb81aed9b9d75ce0a8339ea205edbdd165",
+      "url": "https://huggingface.co/datasets/elsting/PanCollection/resolve/dbb764fb81aed9b9d75ce0a8339ea205edbdd165/test_data/test_qb_OrigScale_multiExm1.h5?download=true"
+    }
+  },
+  "files": [
+    {
+      "protocol": "RR",
+      "scene": 0,
+      "file": "predictions/RR_00.mat",
+      "sha256": "e4a4d37e99e26295b383a622e29bf386335463dcad3112e7df632493b65074f6"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 0,
+      "file": "predictions/RR2_00.mat",
+      "sha256": "ad71165b69f28527a74017f25348244f573154836a9e908699dc0cc352af2d35"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 0,
+      "file": "predictions/FR_WALD_00.mat",
+      "sha256": "5f50ed64d866ac968283f2035bbbd3a9cbeb41fd8f18835124d5705cc8eaa73d"
+    },
+    {
+      "protocol": "FR",
+      "scene": 0,
+      "file": "predictions/FR_00.mat",
+      "sha256": "eb3b834440ba09ededd8a7c24f34718182758f458bfe17e5e7608b97b6519627"
+    },
+    {
+      "protocol": "RR",
+      "scene": 1,
+      "file": "predictions/RR_01.mat",
+      "sha256": "2766a81094000794264e0d51d5910f40c4f6b11fefaeb88b1dd37a8030c355ca"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 1,
+      "file": "predictions/RR2_01.mat",
+      "sha256": "34c1e88010d023a545e670d30ee442e9a87164af1019b4dcbdbc3525c305b495"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 1,
+      "file": "predictions/FR_WALD_01.mat",
+      "sha256": "03d4f03019cf456f692bfe3f02ad17025249d410c8088edc531fe8dbf6131a1a"
+    },
+    {
+      "protocol": "FR",
+      "scene": 1,
+      "file": "predictions/FR_01.mat",
+      "sha256": "c20575a300054f702a7afa2b01a0b28f160eab2155ba341683ee5d3c99a20606"
+    },
+    {
+      "protocol": "RR",
+      "scene": 2,
+      "file": "predictions/RR_02.mat",
+      "sha256": "17839daa9e904b187838e72859e85f2764224a9a615b94bf0253b194e46fc425"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 2,
+      "file": "predictions/RR2_02.mat",
+      "sha256": "eb19e6e6e54f2eb1c6f5a22a30ba9385be1ad3f93dbea2b12fe8f58196ce7343"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 2,
+      "file": "predictions/FR_WALD_02.mat",
+      "sha256": "f62003aca3acccf0074e473ac889d849a39a5f3bf798e8fd765828a654c8c89c"
+    },
+    {
+      "protocol": "FR",
+      "scene": 2,
+      "file": "predictions/FR_02.mat",
+      "sha256": "f2676e6086136965b36f1e3f4c60a99098ce0efb23de595084b6efa36e1012db"
+    },
+    {
+      "protocol": "RR",
+      "scene": 3,
+      "file": "predictions/RR_03.mat",
+      "sha256": "c891d984eb9fac36af5caddd59e9503a8e71ffeededc858f66cd805be8a7520e"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 3,
+      "file": "predictions/RR2_03.mat",
+      "sha256": "3054abe543b72aa8a0a8a6cc793d8926b82fdf25127f437a3a4de117fc8eb28e"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 3,
+      "file": "predictions/FR_WALD_03.mat",
+      "sha256": "69a3cd69dac97cd3534fad63bfde9202ff923560ad1f9965211f62d1d7d3e65b"
+    },
+    {
+      "protocol": "FR",
+      "scene": 3,
+      "file": "predictions/FR_03.mat",
+      "sha256": "67babbca09ec8dfb4276c01e430f36ba5c6ebcd55d3e5a861d479b474985a537"
+    },
+    {
+      "protocol": "RR",
+      "scene": 4,
+      "file": "predictions/RR_04.mat",
+      "sha256": "3e3ae9fae49a2c9f2b343288bc3e35219a45eb0e15bad308c6b5937806f77e1d"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 4,
+      "file": "predictions/RR2_04.mat",
+      "sha256": "20b375c708a9c874a8c94ba32e412abd22f96765b3c25f2db35f65c897547763"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 4,
+      "file": "predictions/FR_WALD_04.mat",
+      "sha256": "cbd56953715a537e3103fa3137838c7dbeab1ba14ba05720426228b1b7a50e54"
+    },
+    {
+      "protocol": "FR",
+      "scene": 4,
+      "file": "predictions/FR_04.mat",
+      "sha256": "e705ac61ff31e6578762d753e082cc7bafe92947c9ddcb6e150e46e74a860e6f"
+    },
+    {
+      "protocol": "RR",
+      "scene": 5,
+      "file": "predictions/RR_05.mat",
+      "sha256": "e181cf22438162d3a2f07fdcdaefacc34619334010876bc21481d3a06ecfbf7d"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 5,
+      "file": "predictions/RR2_05.mat",
+      "sha256": "7f683dbc0742ecf2c93a8b6f76ff2213b6d6a45d3495d13729a2526f7e601677"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 5,
+      "file": "predictions/FR_WALD_05.mat",
+      "sha256": "7b914ce98704375c4fa5611ae13509d2936f48b80176baffa8cae5728fd83dcc"
+    },
+    {
+      "protocol": "FR",
+      "scene": 5,
+      "file": "predictions/FR_05.mat",
+      "sha256": "e0813ab17822b683b58806ba361ea8c2834f58f4c6d1b40224097ddbbd76018c"
+    },
+    {
+      "protocol": "RR",
+      "scene": 6,
+      "file": "predictions/RR_06.mat",
+      "sha256": "f21d503a5279b2fb16bf12fadca244e0f64b93322dcedeb3b7bc7d6ab72572eb"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 6,
+      "file": "predictions/RR2_06.mat",
+      "sha256": "56071d78ff9f198073de1077f4a84854543e378b19cb31e0944aec66b00d40fa"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 6,
+      "file": "predictions/FR_WALD_06.mat",
+      "sha256": "4e1f2714ce8957f05cbbc55b63810102da43a96db5b521233d5037a72fe1bafe"
+    },
+    {
+      "protocol": "FR",
+      "scene": 6,
+      "file": "predictions/FR_06.mat",
+      "sha256": "607178094f578a0a81ee4fa218f54e23845d8f98d3c6fab9fc480c49964ce571"
+    },
+    {
+      "protocol": "RR",
+      "scene": 7,
+      "file": "predictions/RR_07.mat",
+      "sha256": "6705f5db3b38062ac4ed6fc90c8596691274700ab1101143e1b699fe9cca2169"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 7,
+      "file": "predictions/RR2_07.mat",
+      "sha256": "2e37880d3b0e2e484493eaa4f0875985ff05c0d74ba4d777a07a69ce60bf031b"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 7,
+      "file": "predictions/FR_WALD_07.mat",
+      "sha256": "6011610d95fd74f3a6de84e24bbd10ec88ff9793c8c926fc849b0a98256720e4"
+    },
+    {
+      "protocol": "FR",
+      "scene": 7,
+      "file": "predictions/FR_07.mat",
+      "sha256": "0317bdb7b5ac9d092cdd8be4063b876639b75190ec31b29735347e038457b61b"
+    },
+    {
+      "protocol": "RR",
+      "scene": 8,
+      "file": "predictions/RR_08.mat",
+      "sha256": "6465ba19c4101076d10e383ee1f60e63a950480daa460e98559eb23cde26d7a7"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 8,
+      "file": "predictions/RR2_08.mat",
+      "sha256": "dee5f1e9244c560e6c83ebeaabf7871a20c1736a72308912bd48e3ada8befd26"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 8,
+      "file": "predictions/FR_WALD_08.mat",
+      "sha256": "878f7b2d36743d3aac20c2a44f6e0778e5b0517eefae9f820bc990504c5a4bed"
+    },
+    {
+      "protocol": "FR",
+      "scene": 8,
+      "file": "predictions/FR_08.mat",
+      "sha256": "11656f06e4c228469769aaddeba661159d1a87f2dda64f8ab52df4dedfa69257"
+    },
+    {
+      "protocol": "RR",
+      "scene": 9,
+      "file": "predictions/RR_09.mat",
+      "sha256": "a2c58259b530fcc3776a847e9c2810adddb8e02c5ca12686d40b4dc916380356"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 9,
+      "file": "predictions/RR2_09.mat",
+      "sha256": "61688396d4f8cb12fd3a481d3c639b9efc824de8b25c4955e7c33b2bc8b3931d"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 9,
+      "file": "predictions/FR_WALD_09.mat",
+      "sha256": "9dcccf229d012b62404c91ee42eb5fea21fb5861dd7db8c8dd73dec7399299e1"
+    },
+    {
+      "protocol": "FR",
+      "scene": 9,
+      "file": "predictions/FR_09.mat",
+      "sha256": "4626f06287b2458790f35c04e4d2db0143b78c23894291db8eeec7fb32141d6f"
+    },
+    {
+      "protocol": "RR",
+      "scene": 10,
+      "file": "predictions/RR_10.mat",
+      "sha256": "b6ebe33c15d7e5ce1fce1b70bf912f16c516ac58f2cac13c6f83640536841c85"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 10,
+      "file": "predictions/RR2_10.mat",
+      "sha256": "496466e6ca483b6347f74d14cd730119d9715cfd746b7b01d23ac5869a78d103"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 10,
+      "file": "predictions/FR_WALD_10.mat",
+      "sha256": "caa77e8e0878f299e9643b9375581c14de1139c2383247356673ce7be56c9c8e"
+    },
+    {
+      "protocol": "FR",
+      "scene": 10,
+      "file": "predictions/FR_10.mat",
+      "sha256": "4b76f278d94acc01f4281d7afed837d41160cb169c0f9ff6f7a715cf11dc7a82"
+    },
+    {
+      "protocol": "RR",
+      "scene": 11,
+      "file": "predictions/RR_11.mat",
+      "sha256": "ac8acb786548f7b9748d70ce9149c6f6e0ee46fa007ad8fcbd93605ba89a63b6"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 11,
+      "file": "predictions/RR2_11.mat",
+      "sha256": "a9594a43e3d4eeb36805fcdf09781fe9960a4b35f68a7e9991cf337a476a19c1"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 11,
+      "file": "predictions/FR_WALD_11.mat",
+      "sha256": "7f62b3124116ef3f262dd05025ef42bf8e4fda31602f4d198ee09dc83d121f2b"
+    },
+    {
+      "protocol": "FR",
+      "scene": 11,
+      "file": "predictions/FR_11.mat",
+      "sha256": "b9018575a7ca7cf480d18772a546cff85fb6d0eb82e088a6633b2f5ccb06e0ee"
+    },
+    {
+      "protocol": "RR",
+      "scene": 12,
+      "file": "predictions/RR_12.mat",
+      "sha256": "5e0536d2084a42db62a86039e2c079782f2d4097ece4f7d784c718e7e5738521"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 12,
+      "file": "predictions/RR2_12.mat",
+      "sha256": "465f1a45332c93f90ae6c1909ea192e3a2e89b42f624325672cc3a3272c54d68"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 12,
+      "file": "predictions/FR_WALD_12.mat",
+      "sha256": "bef80f19ab944e2de55b2cbc7e556fc7591218d6c891a8bbb058e4901d6d0b39"
+    },
+    {
+      "protocol": "FR",
+      "scene": 12,
+      "file": "predictions/FR_12.mat",
+      "sha256": "2e10b2ae8d08383e64183ae514fffe1bc9d3e846d17f696bbe4f3885dee07462"
+    },
+    {
+      "protocol": "RR",
+      "scene": 13,
+      "file": "predictions/RR_13.mat",
+      "sha256": "c089cdc70a2fc702a6aefc5a0258da4648dddfcf9749d4fdd886e68581105609"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 13,
+      "file": "predictions/RR2_13.mat",
+      "sha256": "b4097c0098c27824e1302bed1d62aff6fceec1a5359f00b9bd3420a418ab286f"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 13,
+      "file": "predictions/FR_WALD_13.mat",
+      "sha256": "77eee008f5f02b71447fa101509d15c7ec6e658b74c5db9ba5d4be2166052f3e"
+    },
+    {
+      "protocol": "FR",
+      "scene": 13,
+      "file": "predictions/FR_13.mat",
+      "sha256": "16f580e4cc21028916ce298c1f1079630f93b6a89b7bbeab1b5c2cd24f993060"
+    },
+    {
+      "protocol": "RR",
+      "scene": 14,
+      "file": "predictions/RR_14.mat",
+      "sha256": "9235cef643f1a815ea4cb7b26114c1d6f3db4e9c16ec4e3655957a70259faf7e"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 14,
+      "file": "predictions/RR2_14.mat",
+      "sha256": "49f7210f03192ffdac4129503c8f2a795342c28ee95dded26475b31f33f917e6"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 14,
+      "file": "predictions/FR_WALD_14.mat",
+      "sha256": "c06604eeb075b55d6d458b4e4fe24e6e17937dcfce3757b767ea6baa21e35d15"
+    },
+    {
+      "protocol": "FR",
+      "scene": 14,
+      "file": "predictions/FR_14.mat",
+      "sha256": "4848ccf8a79d8f3772ae98455da2f4efa745ce5b913954899bae25f752fd624a"
+    },
+    {
+      "protocol": "RR",
+      "scene": 15,
+      "file": "predictions/RR_15.mat",
+      "sha256": "b359375e60ac593193cc95b5f3d9068962a01c878099e5ad0fe15865f5030114"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 15,
+      "file": "predictions/RR2_15.mat",
+      "sha256": "79c3e0710d04b9bd0d379960bc6b55c13ff3ae2a267270c78dd53a6ef8bac122"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 15,
+      "file": "predictions/FR_WALD_15.mat",
+      "sha256": "96a2374e31801cf5941a591dfa170a86297568066de330b25acec66ce709b451"
+    },
+    {
+      "protocol": "FR",
+      "scene": 15,
+      "file": "predictions/FR_15.mat",
+      "sha256": "48d452680ec3d4077788a237e1611c56f7acba931895d41b2865be0846357c3e"
+    },
+    {
+      "protocol": "RR",
+      "scene": 16,
+      "file": "predictions/RR_16.mat",
+      "sha256": "fb7f020ef05a12b59e622560d597083080d345e5c8ecd1c8df00bf53f2ec004b"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 16,
+      "file": "predictions/RR2_16.mat",
+      "sha256": "746c2ef9a7e35f26bd5c72312d75bf07e57d2aeac4fab6d285f7e9a8e9ea9e4a"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 16,
+      "file": "predictions/FR_WALD_16.mat",
+      "sha256": "98212e9991178a266568283cb7ef7972fbcdcc70334e9a68547590566bda1bd8"
+    },
+    {
+      "protocol": "FR",
+      "scene": 16,
+      "file": "predictions/FR_16.mat",
+      "sha256": "3562f65e23f6a0a4700c7f75e422ab518838a651e552638591850faaa0c416b1"
+    },
+    {
+      "protocol": "RR",
+      "scene": 17,
+      "file": "predictions/RR_17.mat",
+      "sha256": "a2f8bf9b6f9657900a7e630c9f31ced73d0cd9a8a8bead50685796d90034bdfc"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 17,
+      "file": "predictions/RR2_17.mat",
+      "sha256": "86bee54b7b131ef68cb1786b848155ab9aa1517b6c3bbe5a734ab9d3b8e62f54"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 17,
+      "file": "predictions/FR_WALD_17.mat",
+      "sha256": "8a1d3bfdf8bccf4f425de8402d3b19bd42b69ae288bba2ecb57709a1a286876f"
+    },
+    {
+      "protocol": "FR",
+      "scene": 17,
+      "file": "predictions/FR_17.mat",
+      "sha256": "06df18a0b558d11ee2bd11f9455d1f584717dbe63b3197a9775eda7026422768"
+    },
+    {
+      "protocol": "RR",
+      "scene": 18,
+      "file": "predictions/RR_18.mat",
+      "sha256": "2035ae353d1007c4bad74397e84135ab8b6cbbdcb1a09aa15ea15e81790eb849"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 18,
+      "file": "predictions/RR2_18.mat",
+      "sha256": "bbe374db6a21ecffce6e71db9064d19744527e3b776a896716a763020a3ed7d6"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 18,
+      "file": "predictions/FR_WALD_18.mat",
+      "sha256": "60d3e68dd6bc6474134f5a83bfed646b3984bdc0dcf74983d21d7a8ac7607e78"
+    },
+    {
+      "protocol": "FR",
+      "scene": 18,
+      "file": "predictions/FR_18.mat",
+      "sha256": "3ff3d5468ad4a86fce24401f52283c4d551163c751cbf4d9161f8d3dac36dad7"
+    },
+    {
+      "protocol": "RR",
+      "scene": 19,
+      "file": "predictions/RR_19.mat",
+      "sha256": "d2aa54622934398d97e71f2045ac51a3ae261970b19eb379055704b777ac6e45"
+    },
+    {
+      "protocol": "RR2",
+      "scene": 19,
+      "file": "predictions/RR2_19.mat",
+      "sha256": "e79abc2bb6ceb748560cce8b9399749fc57ca6ff2a2aa3e6b6ee26935c99eb44"
+    },
+    {
+      "protocol": "FR_WALD",
+      "scene": 19,
+      "file": "predictions/FR_WALD_19.mat",
+      "sha256": "ca0fd39deac40300480b0c26fc86977ab1f7c833b6215c93dfee59053a0709ff"
+    },
+    {
+      "protocol": "FR",
+      "scene": 19,
+      "file": "predictions/FR_19.mat",
+      "sha256": "432218ea35290db5eee67616ddd7ef41e1ee6d244dee69f2d85fa2b2f5eee17c"
+    }
+  ],
+  "source_sha256": {
+    "SSA-MRN/common/matlab_reevaluation/suite.py": "a80224e4380e58e218e7552ba93eff749bf8aa23562b28b5bd031f9776f636e5",
+    "SSA-MRN/experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "SSA-MRN/experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "SSA-MRN/common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "SSA-MRN/common/matlab_reevaluation/report.py": "2613ccf21ed7846cf02571d400c7f7de58a9fbfa298f80f51cd64e91f2b27892",
+    "SSA-MRN/common/matlab_reevaluation/score_suite.m": "e124c152fcfe0824d6bf7f0f8ca4f9bf318a701c20d76481b90dd5018cbe2fd5",
+    "SSA-MRN/experiments/performance/53_scale_mixed_training/model.py": "94e17718c46333eb310b829fb670f40a45371863cc3ee4809baa5386364143b9",
+    "SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "SSA-MRN/experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "SSA-MRN/experiments/performance/48_parallel_capacity_observation_refinement/model.py": "bf3faf29116a37847f0760b02dda1931f4c4b257582a211ff9ce0d49afd60dd6",
+    "SSA-MRN/experiments/performance/29_capacity_refinement/calibration.json": "67225fdfc2c51845c1db8f81be3b18d57796453aa07d254a7253b8562661fe46",
+    "SSA-MRN/research/performance/28_residual_refinement/model.py": "a1fa42856861cae7194b722ee37f4bdb7a48df45f14abb4c060d50f0893cbf75"
+  },
+  "source_commit": "b18e5f0b12fbb2d1fe10552efc8ccd2ab8d613a6",
+  "peak": 2047,
+  "bits": 11,
+  "ratio": 4,
+  "block": 32,
+  "scenes": 20,
+  "inference": "CPU FP32 full scene; validation-selected retained best; no clipping, TTA, or training",
+  "environment": {
+    "python": "3.11.17",
+    "torch": "2.9.1+cpu",
+    "numpy": "2.2.6",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39"
+  },
+  "inference_seconds": 136.010295516,
+  "dlpan_commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+  "legacy_psnr": "per-band mean, peak 2047 even for GF2",
+  "matlab_psnr": "both global-MSE and band-mean at sensor peak; definitions kept separate"
+}
