@@ -1,0 +1,62 @@
+{
+  "experiment": 62,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "C2MS 내부 특징과 넓은 문맥을 쓰는 고주파 밴드 비율 헤드",
+  "status": "평가 완료",
+  "improvement": "부분 개선",
+  "hypothesis": "In experiment 61 a 9x9-receptive-field head that saw only the C2MS output, the PAN high band and the LMS color recovered < 2% of the high-band band-ratio headroom (QB SAM -0.040 deg vs the -2.11 deg oracle). Either the information was missing (the head did not see the 64-channel C2MS features) or the context was too small; a 2x2 factorial separates the two.",
+  "control": "C2MS QB seed 42 (53 best.pt), frozen; the same-seed C2MS output is the epoch-0 reference of every arm",
+  "fixed_from_61": {
+    "output": "y' = L + |H| * normalize(r + delta_perp) (band-ratio head; 61 H2 beat the free residual H3)",
+    "loss": "MSE only on the original and the 2x coarser pairs (61: the angle loss did not lower SAM further and pushed the observation ratio above 1.10)",
+    "selection": "minimum validation SAM among epochs whose validation PSNR >= epoch-0 (C2MS) validation PSNR - 0.02 dB; epoch 0 if none qualifies; test never used"
+  },
+  "arms": {
+    "F0": "61 head inputs, local head (3x3 conv x4, 32 channels, receptive field 9x9) = 61 H1 rerun",
+    "F1": "61 head inputs, wide head (2-level U-Net 32/48/64 channels, additive skips, bilinear upsampling, receptive field 31x31)",
+    "F2": "61 head inputs + the 64-channel C2MS backbone output (original + W2 branch, full resolution, before the SSAI fusion), local head",
+    "F3": "61 head inputs + C2MS backbone features, wide head"
+  },
+  "phase1": {
+    "status": "screen approved by the user on 2026-10-26: QB seed 42, F0-F3",
+    "runtime": "C:/CtrS-p62/run",
+    "data_root": "C:/CtrS/SSA-MRN/data/dataset",
+    "cache_reuse_source": "C:/CtrS-p59/run",
+    "sensors": ["QB"],
+    "seeds": [42],
+    "controls": {
+      "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt",
+      "GF2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s<seed>/best.pt",
+      "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
+    },
+    "data_sha256": {"QB": {"train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371", "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470"}},
+    "c2ms": "frozen (eval mode, no gradient), run online every step in FP32 with TF32 off for every arm, so all arms see identical inputs; the backbone output is read with a forward hook",
+    "epochs": 30,
+    "batch": 32,
+    "optimizer": "Adam",
+    "lr_start": 0.001,
+    "lr_end": 0.00001,
+    "schedule": "cosine per epoch",
+    "precision": "FP32, TF32 off",
+    "coarse_weight": 1.0,
+    "selection_psnr_tolerance_db": 0.02,
+    "train_probe": "every epoch, PSNR/SAM of 1,905 fixed training patches (evenly spaced indices) are logged next to validation, to separate a capacity/information limit from a generalization limit",
+    "max_head_parameters": 200000,
+    "queue": [["QB", "F0", 42], ["QB", "F1", 42], ["QB", "F2", 42], ["QB", "F3", 42]],
+    "evaluation": "control C2MS and C2MS + selected head on all 20 QB RR/FR test scenes: RR, RR2, FR_WALD, FR with OBS_RMSE_DN (v2.3 inputs)"
+  },
+  "gates": {
+    "rule": "fixed before training; QB seed 42 validation at the selected epoch, against epoch 0 (C2MS)",
+    "expand": "an arm with validation SAM decrease >= 0.10 deg and validation PSNR >= C2MS - 0.02 dB is expanded to QB/GF2/WV3 seeds 42-44 and the WV2 transfer (after user approval)",
+    "stop_information_limit": "if no arm passes and every arm also lowers the training-probe SAM by < 0.10 deg, the inputs are taken as unable to predict the high-band color and the head approach is closed",
+    "generalization_limit": "if no arm passes but some arm lowers the training-probe SAM by >= 0.10 deg, the next design targets generalization (regularization, augmentation)"
+  },
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.3, unchanged, single seed (noise threshold 0.06 dB) against the same-seed C2MS",
+    "sam_goal": "QB dSAM <= -0.15 deg (first) / <= -0.28 deg (stretch) with dPSNR >= -0.04 dB, reported separately",
+    "images": "fixed six QB scenes, both formats with common/result_images.py, plus a table of the zoom-window PSNR per scene (the zoom window is chosen in favour of the candidate)"
+  },
+  "limits": "single seed QB screen; the RR test set has been used repeatedly for exploration; F2/F3 add capacity behind C2MS, so a gain is not attributable to the band-ratio form alone",
+  "constraints": "C2MS weights are read only; new runtime C:/CtrS-p62; caches hard-linked from C:/CtrS-p59/run after SHA-256 checks"
+}

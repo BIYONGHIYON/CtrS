@@ -1559,5 +1559,36 @@
     "model": "experiments/performance/61_high_frequency_band_ratio_correction/model.py",
     "checkpoints": "experiments/performance/61_high_frequency_band_ratio_correction/checkpoints",
     "evaluation": "experiments/performance/61_high_frequency_band_ratio_correction/results/judgement_v2_3.json"
+  },
+  "performance/62_feature_context_band_ratio_head": {
+    "report": "experiments/performance/62_feature_context_band_ratio_head/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 62,
+    "display_name": "62. C2MS 내부 특징과 넓은 문맥을 쓰는 고주파 밴드 비율 헤드",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "last_checked": "2026-10-26T06:50:39+09:00",
+    "limits": "QB seed 42 단일 시드 선별(F0-F3, C2MS 고정 + 헤드 30에폭). 관문 판정 정보 한계(학습 패치 SAM도 0.10° 미만)로 헤드 방식 정리, 확장 안 함. 기준 모델 C2MS 유지.",
+    "model": "experiments/performance/62_feature_context_band_ratio_head/model.py",
+    "config": "experiments/performance/62_feature_context_band_ratio_head/config.json",
+    "entrypoint": "experiments/performance/62_feature_context_band_ratio_head/run.py",
+    "results": "experiments/performance/62_feature_context_band_ratio_head/results",
+    "checkpoints": "experiments/performance/62_feature_context_band_ratio_head/checkpoints",
+    "manifest": "experiments/performance/62_feature_context_band_ratio_head/manifest.json",
+    "training_started_kst": "2026-10-26T05:37:14+09:00",
+    "evaluation": "experiments/performance/62_feature_context_band_ratio_head/results/judgement_v2_3.json",
+    "judgements": {
+      "QB_F0_vs_C2MS_s42": "부분 개선",
+      "QB_F1_vs_C2MS_s42": "부분 개선",
+      "QB_F2_vs_C2MS_s42": "부분 개선",
+      "QB_F3_vs_C2MS_s42": "부분 개선",
+      "gate_decision": "stop_information_limit"
+    }
   }
 }
