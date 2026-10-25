@@ -78,6 +78,7 @@
 
 | 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
 |---|---|---|:---:|:---:|
+| [64. C2MS W2 가지의 픽셀별 아핀 변조](experiments/performance/64_w2_pixel_affine_modulation/README.md)<br>[이병현] | C2MS W2 가지의 잔차 블록 8개에 픽셀별 scale·bias 변조(ARConv의 아핀 변조)를 넣고 손실·학습 일정은 그대로 둡니다(QB seed 42 선별). | 아직 학습하지 않았습니다. 63번 종료 후 자동 시작 예약. | 계획 | 판단&nbsp;보류 |
 | [63. C2MS 학습 손실을 MSE에서 L1로 교체](experiments/performance/63_l1_reconstruction_loss/README.md)<br>[이병현] | C2MS의 구조·축척 혼합·학습 일정은 그대로 두고 원래·거친 쌍의 손실만 MSE에서 L1로 바꿔 처음부터 학습합니다(QB seed 42 선별). | 아직 평가하지 않았습니다. | 학습&nbsp;중<br>2026-10-26 | 판단&nbsp;보류 |
 | [62. C2MS 내부 특징과 넓은 문맥을 쓰는 고주파 밴드 비율 헤드](experiments/performance/62_feature_context_band_ratio_head/README.md)<br>[이병현] | 61번 고주파 밴드 비율 헤드에 C2MS backbone 64채널 특징 입력과 넓은 수용 영역(U-Net 31×31)을 2×2로 나눠 더하고 QB seed 42로 선별했습니다(MSE만, C2MS 고정). | 가장 나은 F3도 RR PSNR +0.043 dB·SAM −0.044°(20/20장)였습니다. 네 군 모두 validation과 학습 패치 SAM 감소가 0.03-0.04°에 그쳐, 사전 규칙에 따라 입력의 정보 한계로 판정하고 헤드 방식을 정리했습니다. | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 | [61. 고주파 세부의 밴드 비율 보정](experiments/performance/61_high_frequency_band_ratio_correction/README.md)<br>[이병현] | C2MS 출력의 고주파 세부를 세기와 밴드 비율로 나눠 진단하고(학습 없음), C2MS를 고정한 채 고주파의 밴드 비율만 돌리는 작은 헤드를 QB seed 42로 선별 학습했습니다(MSE만, 각도 손실 3가지, 자유 잔차 대조). | 진단에서는 밴드 비율만 정답으로 바꾸면 QB SAM 4.576° → 2.467°였지만, 학습한 헤드는 가장 나은 H1(MSE만)도 RR PSNR +0.034 dB·SAM −0.040°(20/20장)에 그쳤습니다. 각도 손실은 SAM을 더 줄이지 못하고 관측 비율을 1.10 넘게 올렸습니다. SAM 목표(−0.15°) 미달. | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |

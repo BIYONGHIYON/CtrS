@@ -2259,5 +2259,26 @@
     "results": "experiments/performance/63_l1_reconstruction_loss/results",
     "checkpoints": "experiments/performance/63_l1_reconstruction_loss/checkpoints",
     "manifest": "experiments/performance/63_l1_reconstruction_loss/manifest.json"
+  },
+  "performance/64_w2_pixel_affine_modulation": {
+    "report": "experiments/performance/64_w2_pixel_affine_modulation/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 64,
+    "display_name": "64. C2MS W2 가지의 픽셀별 아핀 변조",
+    "status": "계획",
+    "improvement": "판단 보류",
+    "evaluated_seeds": [],
+    "retraining": true,
+    "epochs": 150,
+    "last_checked": "2026-10-26T08:51:00+09:00",
+    "limits": "QB seed 42 선별부터. 서버에서 63번 종료 후 자동 시작하도록 예약. 대조군은 보관된 53번 C2MS(공식)와 57번 재학습 C2MS(참고).",
+    "model": "experiments/performance/64_w2_pixel_affine_modulation/model.py",
+    "config": "experiments/performance/64_w2_pixel_affine_modulation/config.json",
+    "entrypoint": "experiments/performance/64_w2_pixel_affine_modulation/run.py",
+    "results": "experiments/performance/64_w2_pixel_affine_modulation/results",
+    "checkpoints": "experiments/performance/64_w2_pixel_affine_modulation/checkpoints",
+    "manifest": "experiments/performance/64_w2_pixel_affine_modulation/manifest.json"
   }
 }
