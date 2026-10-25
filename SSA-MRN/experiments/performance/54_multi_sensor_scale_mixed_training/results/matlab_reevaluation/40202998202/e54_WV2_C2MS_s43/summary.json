@@ -1,0 +1,185 @@
+{
+  "case": {
+    "experiment": 54,
+    "sensor": "WV2",
+    "trained_sensor": "WV3",
+    "arm": "C2MS",
+    "seed": 43,
+    "id": "e54_WV2_C2MS_s43"
+  },
+  "matlab_mean": {
+    "RR": {
+      "Q": 0.823281118104726,
+      "SAM": 5.889184089616956,
+      "ERGAS": 4.670188567066743,
+      "SCC": 0.89890524208885,
+      "Q2n": 0.8230655540327716,
+      "PSNR_global": 28.389518444125468,
+      "PSNR_bandmean": 29.333183274972974
+    },
+    "RR2": {
+      "Q": 0.8988395201015618,
+      "SAM": 5.130230499612816,
+      "ERGAS": 3.6704810201647953,
+      "SCC": 0.9352335288523431,
+      "Q2n": 0.895765266160409,
+      "PSNR_global": 30.25496415617033,
+      "PSNR_bandmean": 31.69131484824404
+    },
+    "FR_WALD": {
+      "Q": 0.8409861894014646,
+      "SAM": 6.5121041314903065,
+      "ERGAS": 4.900495074255217,
+      "SCC": 0.9033103447014905,
+      "Q2n": 0.8386362826398743,
+      "PSNR_global": 27.857337030389726,
+      "PSNR_bandmean": 29.220638155288412
+    },
+    "FR": {
+      "D_lambda": 0.050064739181134646,
+      "D_s": 0.07486941725049126,
+      "QNR": 0.8788486892423579
+    }
+  },
+  "python_legacy_reinference_mean": {
+    "RR": {
+      "SAM": 5.889184089616955,
+      "ERGAS": 4.670188567066743,
+      "PSNR": 29.333183274972974,
+      "SCC": 0.89890524208885,
+      "Q2n": 0.8228189195611751
+    },
+    "RR2": {
+      "SAM": 5.130230499612814,
+      "ERGAS": 3.6704810201647953,
+      "PSNR": 31.69131484824404,
+      "SCC": 0.9352335288523428,
+      "Q2n": 0.8954938376443042
+    },
+    "FR_WALD": {
+      "SAM": 6.512104131490308,
+      "ERGAS": 4.900495074255217,
+      "PSNR": 29.220638155288412,
+      "SCC": 0.9033103447014905,
+      "Q2n": 0.8382042361970411
+    },
+    "FR": {
+      "D_lambda": 0.050064739181134646,
+      "D_s": 0.06259666940126411,
+      "QNR": 0.8905044578994852
+    }
+  },
+  "stored_previous_mean": {
+    "RR": {
+      "SAM": 5.889184141212786,
+      "ERGAS": 4.6701886525037235,
+      "PSNR": 29.333183125899456,
+      "SCC": 0.8989052356711298,
+      "Q2n": 0.8228188565761334
+    },
+    "RR2": {
+      "SAM": 5.130230172859706,
+      "ERGAS": 3.6704804603211896,
+      "PSNR": 31.691316233889403,
+      "SCC": 0.9352335365900627,
+      "Q2n": 0.8954938451279666
+    },
+    "FR_WALD": {
+      "SAM": 6.512104196188045,
+      "ERGAS": 4.9004951239541406,
+      "PSNR": 29.220638092756964,
+      "SCC": 0.9033103413257365,
+      "Q2n": 0.8382042134364444
+    },
+    "FR": {
+      "D_lambda": 0.050064745742569264,
+      "D_s": 0.06259665584197298,
+      "QNR": 0.8905044646125561,
+      "OBS_RMSE_DN": 17.659924631654043
+    }
+  },
+  "matlab_minus_python": {
+    "RR": {
+      "ERGAS": 0.0,
+      "SCC": 0.0,
+      "SAM": 8.881784197001252e-16,
+      "Q2n": 0.0002466344715964519,
+      "PSNR_bandmean_vs_legacy": 0.0
+    },
+    "RR2": {
+      "ERGAS": 0.0,
+      "SCC": 3.3306690738754696e-16,
+      "SAM": 1.7763568394002505e-15,
+      "Q2n": 0.0002714285161047325,
+      "PSNR_bandmean_vs_legacy": 0.0
+    },
+    "FR_WALD": {
+      "ERGAS": 0.0,
+      "SCC": 0.0,
+      "SAM": -1.7763568394002505e-15,
+      "Q2n": 0.0004320464428332338,
+      "PSNR_bandmean_vs_legacy": 0.0
+    },
+    "FR": {
+      "QNR": -0.011655768657127252,
+      "D_lambda": 0.0,
+      "D_s": 0.012272747849227147
+    }
+  },
+  "python_reinference_minus_previous": {
+    "RR": {
+      "SAM": -5.159583071900897e-08,
+      "ERGAS": -8.543698015728296e-08,
+      "PSNR": 1.4907351797432966e-07,
+      "SCC": 6.417720244122904e-09,
+      "Q2n": 6.298504173773978e-08
+    },
+    "RR2": {
+      "SAM": 3.2675310812635416e-07,
+      "ERGAS": 5.598436056963862e-07,
+      "PSNR": -1.3856453620064713e-06,
+      "SCC": -7.737719909250984e-09,
+      "Q2n": -7.483662356477794e-09
+    },
+    "FR_WALD": {
+      "SAM": -6.469773694561809e-08,
+      "ERGAS": -4.9698923199059664e-08,
+      "PSNR": 6.253144846368741e-08,
+      "SCC": 3.37575400966017e-09,
+      "Q2n": 2.2760596740667438e-08
+    },
+    "FR": {
+      "D_lambda": -6.561434617857742e-09,
+      "D_s": 1.3559291134335183e-08,
+      "QNR": -6.71307087696249e-09
+    }
+  },
+  "FR_OBS_RMSE_DN": 17.659923522736882,
+  "FR_OBS_note": "Existing sensor observation operator in Python, not a DLPan/MATLAB metric",
+  "peak": 2047,
+  "profile": {
+    "cut_bounds": false,
+    "dim_cut": 21,
+    "clip_output": false,
+    "clipping_upper_if_enabled": 2048,
+    "peak": 2047,
+    "bits": 11,
+    "block": 32,
+    "ratio": 4,
+    "QNR_variant": "DLPan Toolbox 1.0 flag_orig_paper=0 p=q=alpha=beta=1"
+  },
+  "matlab_release": "2025b",
+  "checkpoint_sha256": "259a5651341fcca669d3d141c74ed5f32b459e4ec5f9741cfc9e29bc61a430c9",
+  "checkpoint_best_epoch": 148,
+  "dlpan_commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+  "source_commit": "b18e5f0b12fbb2d1fe10552efc8ccd2ab8d613a6",
+  "complete": true,
+  "direct_metric_delta": true,
+  "inference_seconds": 189.560949711,
+  "matlab_seconds": 13.295537,
+  "limits": [
+    "CPU FP32 reinference may differ slightly from previous GPU results; drift is reported separately",
+    "Same dataset, crop, clipping, PSNR definition and QNR variant must be verified for each comparison paper",
+    "Matlab execution alone does not establish identical evaluation settings to an unspecified paper"
+  ]
+}

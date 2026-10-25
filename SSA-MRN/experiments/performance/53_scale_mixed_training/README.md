@@ -214,6 +214,8 @@ FR은 512×512 출력의 가운데 128×128을 3배, RR2는 64×64 전체를 6�
 ## 7. 재현 자료
 <a id="evidence"></a>
 
+- 중간발표용 [실제 MATLAB 재평가 전체 표](../../../docs/c2ms_matlab_evaluation_tables.md)와 [이 실험의 장면별 수치·증거](results/matlab_reevaluation/40202998202/summary.json)를 보존했습니다. 기존 validation best를 재학습 없이 RR·FR 전체20장과 보조 시험에 적용하고 MATLAB R2025b의 원본 DLPan 함수로 계산했습니다. 이 보고서의 원래 수치는 과거 기록으로 유지합니다.
+
 - 코드: [설정·사전 판정](config.json), [모델](model.py), [거친 쌍 생성](prepare.py), [학습](train.py), [실행 제어](run.py), [평가](evaluate.py), [결과 이미지 도구](../../../common/result_images.py)
 - 원본 소스(작업 당시 그대로): [provenance/code](provenance/code/), 실행 기록: [seed 42 C2MS·F1MS](provenance/run_records/)와 [seed 43·44 C2MS](provenance/run_records_s43_s44/)(데이터 해시, 환경, 사전 점검, 큐 상태, 실행 설정)
 - 가중치: C2MS [seed 42](checkpoints/C2MS_QB_s42/)·[43](checkpoints/C2MS_QB_s43/)·[44](checkpoints/C2MS_QB_s44/)와 [F1MS](checkpoints/F1MS_QB_s42/)의 `initial.pt`·`best.pt`·`latest.pt`

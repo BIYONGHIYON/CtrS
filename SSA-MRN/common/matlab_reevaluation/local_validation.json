@@ -1,0 +1,58 @@
+{
+  "status": "local CPU checks passed",
+  "retained_best_hashes_and_strict_loads": [
+    "e53_QB_C0_s42",
+    "e53_QB_C0_s43",
+    "e53_QB_C0_s44",
+    "e53_QB_C2_s42",
+    "e53_QB_C2_s43",
+    "e53_QB_C2_s44",
+    "e53_QB_F1_s42",
+    "e53_QB_F1_s43",
+    "e53_QB_F1_s44",
+    "e53_QB_C2MS_s42",
+    "e53_QB_C2MS_s43",
+    "e53_QB_C2MS_s44",
+    "e53_QB_F1MS_s42",
+    "e54_GF2_C0_s42",
+    "e54_GF2_C0_s43",
+    "e54_GF2_C0_s44",
+    "e54_GF2_C2MS_s42",
+    "e54_GF2_C2MS_s43",
+    "e54_GF2_C2MS_s44",
+    "e54_WV3_C0_s42",
+    "e54_WV3_C0_s43",
+    "e54_WV3_C0_s44",
+    "e54_WV3_C2MS_s42",
+    "e54_WV3_C2MS_s43",
+    "e54_WV3_C2MS_s44",
+    "e54_WV2_C0_s42",
+    "e54_WV2_C0_s43",
+    "e54_WV2_C0_s44",
+    "e54_WV2_C2MS_s42",
+    "e54_WV2_C2MS_s43",
+    "e54_WV2_C2MS_s44"
+  ],
+  "synthetic_forward_checked": "seed42 all 11 target/arm combinations",
+  "matrix_cases": 31,
+  "report_plumbing": "synthetic fixtures only; not a MATLAB validation",
+  "training_executed": false,
+  "matlab_executed_locally": false,
+  "real_test_reinference_locally": {
+    "case": "e53_QB_C2MS_s42",
+    "scenes": 1,
+    "protocols": [
+      "RR",
+      "RR2",
+      "FR_WALD",
+      "FR"
+    ],
+    "scope": "single-scene export smoke only; not full evaluation or MATLAB scoring",
+    "manifest_sha256": "2639a2def9572b64b96f99205f8720779041b538d286ad6425cbf87df06aeb0c"
+  },
+  "unverified": [
+    "GitHub Actions runtime",
+    "actual MATLAB execution",
+    "full real-data CPU inference"
+  ]
+}
