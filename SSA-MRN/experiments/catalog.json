@@ -1499,5 +1499,31 @@
       "WV3_C2MS300_vs_C2MS150": "개선",
       "WV2_C2MS300_vs_C2MS150": "개선 없음"
     }
+  },
+  "performance/60_norm_preserving_spectral_direction_refinement": {
+    "report": "experiments/performance/60_norm_preserving_spectral_direction_refinement/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "experiment": 60,
+    "display_name": "60. norm을 보존하는 분광 방향 보정",
+    "status": "사전 검증 완료",
+    "improvement": "성능 비교 아님",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "retraining": false,
+    "last_checked": "2026-10-26T04:13:20+09:00",
+    "limits": "학습 없는 0단계 진단·관문. 보관된 C2MS 가중치와 탐색에 반복 사용한 RR test에 한정. 오라클은 정답을 쓰는 상한. Ga 미달로 1단계 학습 안 함.",
+    "config": "experiments/performance/60_norm_preserving_spectral_direction_refinement/config.json",
+    "entrypoint": "experiments/performance/60_norm_preserving_spectral_direction_refinement/prepare.py",
+    "manifest": "experiments/performance/60_norm_preserving_spectral_direction_refinement/manifest.json",
+    "results": "experiments/performance/60_norm_preserving_spectral_direction_refinement/results",
+    "judgements": {
+      "phase0_Ga_QB": "미달",
+      "phase0_Gb_QB": "통과"
+    }
   }
 }

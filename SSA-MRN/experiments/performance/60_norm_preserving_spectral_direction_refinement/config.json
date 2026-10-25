@@ -1,0 +1,75 @@
+{
+  "experiment": 60,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "norm을 보존하는 분광 방향 보정",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "hypothesis": "C2MS keeps its remaining spectral angle error in the high-frequency detail and in low-norm pixels that the MSE objective underweights; a head that only rotates each output pixel's band vector (norm kept) and is trained with MSE + lambda x per-pixel angle can lower SAM without lowering PSNR, because at a fixed norm the per-pixel squared error decreases monotonically with the angle.",
+  "control": "C2MS (53 QB, 54 GF2/WV3) best.pt of the same seed, unchanged",
+  "seeds": [42, 43, 44],
+  "targets": {"QB": "QB", "GF2": "GF2", "WV3": "WV3", "WV2": "WV3"},
+  "checkpoints": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt",
+    "GF2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s<seed>/best.pt",
+    "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
+  },
+  "reference_rr_means": {
+    "source": "53/54 results/evaluation_v2_3.json models.<key>.RR (archived evaluation); phase 0 must reproduce them within 1e-3 dB / 1e-3 deg",
+    "tolerance": {"PSNR": 0.001, "SAM": 0.001}
+  },
+  "data_sha256": {
+    "QB": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+    "source_other": "54 config.json data_sha256.<sensor>.RR / transfer_data_sha256.WV2.RR"
+  },
+  "phase0": {
+    "training": false,
+    "data": "PanCollection RR test, all 20 scenes per target, GT available; FR is not used (no GT)",
+    "precision": "C2MS inference FP32 on CPU, metrics in float64 DN with common/metrics.rr_metrics",
+    "lowpass": "per-band sensor MS MTF blur at full resolution (54 prepare.SENSORS GNyq, 41 taps, replicate border), no decimation",
+    "diagnostics": {
+      "D1_norm_deciles": "pixel angle (deg) vs GT norm deciles per scene: mean angle and share of the SAM sum per decile",
+      "D2_pan_gradient": "pixel angle vs PAN Sobel gradient magnitude terciles (flat / middle / edge) per scene",
+      "D3_ndvi": "pixel angle by GT NDVI class: water/shadow < 0, 0-0.3 bare/urban, >= 0.3 vegetation (band index red/nir per sensor)",
+      "D4_frequency_swap": "SAM after replacing only the low band of the prediction with the GT low band (LF fixed) and only the high band (HF fixed)",
+      "D5_lms": "SAM of the given LMS (23-tap upsampled MS) for reference",
+      "D6_mse_weight": "correlation between the per-pixel MSE weight n*|g| and the per-pixel angle (MSE underweights low-norm pixels)"
+    },
+    "gates": {
+      "rule": "fixed before measurement; evaluated on QB, mean of seeds 42-44 against the same-seed C2MS; other targets are reported without a gate",
+      "Ga_local_direction_oracle": {
+        "construction": "per non-overlapping 8x8 window, least squares B x (B+1) affine band map from prediction to GT fitted on one checkerboard half of the window and applied to the other half (cross-fitted, so a pixel never sees its own GT); output keeps the prediction norm: y' = |y| * normalize(A y + b)",
+        "meaning": "headroom that a local spectral direction correction can reach in principle (an oracle that uses GT, not a model)",
+        "pass": "QB SAM decrease >= 0.50 deg"
+      },
+      "Gb_direction_ceiling": {
+        "construction": "y' = |y| * GT direction (norm of C2MS, exact GT direction; SAM = 0)",
+        "meaning": "how much of the C2MS squared error is due to direction alone",
+        "pass": "QB RR PSNR gain >= 0.30 dB"
+      },
+      "decision": "both pass -> phase 1 (frozen C2MS + direction head). Either fails -> report phase 0 only and revise the design; no training"
+    }
+  },
+  "phase1_plan": {
+    "status": "not started; runs only after phase 0 gates pass and user approval",
+    "arms": {
+      "H0": "C2MS unchanged (control)",
+      "H1": "frozen C2MS + direction head, MSE only (capacity control)",
+      "H2": "frozen C2MS + direction head, MSE + lambda x angle (main candidate)",
+      "H3": "frozen C2MS + free residual head y + delta, MSE + lambda x angle (norm-preservation control)"
+    },
+    "head": "about 32 channels, 4 conv layers, <= 50k parameters; inputs: current direction u = y/|y|, LMS direction, upsampled observation residual Up(MS - D(y)), PAN high band; output delta projected on the tangent plane of u, y' = |y| * normalize(u + delta_perp); last conv zero-initialized so y' = y at start",
+    "loss": "MSE(y', g) + lambda x mean atan2(|y' perpendicular to g|, y' . g_hat) on the original and the 2x coarser pairs (scale mixing kept)",
+    "lambda_grid": [0.003, 0.01, 0.03],
+    "selection": "lambda and epoch by validation: minimum validation SAM among epochs whose validation PSNR >= same-seed C2MS validation PSNR - 0.02 dB; test is never used for selection",
+    "screen": "QB seed 42 for H1-H3, then H2 (validation-chosen lambda) on QB/GF2/WV3 seeds 42-44 and WV2 transfer, H1 on QB seeds 42-44",
+    "phase2_condition": "QB 3-seed mean dSAM <= -0.10 deg and dPSNR >= -0.02 dB in phase 1 -> end-to-end C2MS + head from scratch with scale mixing"
+  },
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.3, unchanged, against the same-seed C2MS",
+    "sam_goal": "reported separately and fixed now: QB 3-seed mean dSAM <= -0.15 deg (first goal, 4.43 deg level) / <= -0.28 deg (stretch) with dPSNR >= -0.04 dB; RR2, FR_WALD, observation ratio and WV2 transfer reported with it",
+    "note": "a large SAM decrease with an RR PSNR gain below the 0.04 dB noise threshold is labelled 부분 개선 by v2.3; the SAM goal row does not change that label"
+  },
+  "limits": "phase 0 uses the RR test set that earlier experiments already used repeatedly for exploration; oracles use GT and are ceilings, not achievable models",
+  "constraints": "no training in phase 0; archived checkpoints are read only; writes only below results/"
+}
