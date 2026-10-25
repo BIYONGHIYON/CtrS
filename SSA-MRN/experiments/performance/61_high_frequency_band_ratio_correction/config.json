@@ -1,0 +1,50 @@
+{
+  "experiment": 61,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "고주파 세부의 밴드 비율 보정",
+  "status": "사전 검증 완료",
+  "improvement": "판단 보류",
+  "hypothesis": "Experiment 60 found that the C2MS spectral angle error lives in the high band (QB SAM 4.576 -> 0.361 deg when only the high band is replaced by the GT) but that an 8x8 local affine band map cannot reach it. Splitting the high band H = y - L(y) of each pixel into its strength |H| and its band ratio H/|H| tells which of the two a correction must change.",
+  "control": "C2MS (53 QB, 54 GF2/WV3) best.pt of the same seed, unchanged; same models, data and lowpass as experiment 60",
+  "seeds": [42, 43, 44],
+  "targets": {"QB": "QB", "GF2": "GF2", "WV3": "WV3", "WV2": "WV3"},
+  "reuse": "experiment 60 prepare.py for data loading (SHA-256 checked), checkpoint loading, inference, per-pixel angle and the sensor MTF lowpass L; the archived RR means must again be reproduced within 1e-3",
+  "phase0": {
+    "training": false,
+    "definitions": "L = per-band sensor MS MTF blur at full resolution (60); H_y = y - L(y), H_g = g - L(g); per pixel, |H| is the norm of the band vector of H and H/|H| its band ratio; pixels with |H| = 0 keep H",
+    "oracles": {
+      "O1_hf_ratio": "L(y) + |H_y| * H_g/|H_g|  (GT band ratio of the high band, C2MS strength)",
+      "O2_hf_strength": "L(y) + |H_g| * H_y/|H_y|  (GT strength of the high band, C2MS band ratio)",
+      "O3_hf_along_lf_rule": "L(y) + (H_y . u) u with u = L(y)/|L(y)|: keeps only the part of the C2MS high band that follows the local low band color; uses no GT (a rule, not an oracle)",
+      "HF_fixed": "L(y) + H_g (60, for reference)"
+    },
+    "ga_sensitivity": "post-hoc check of experiment 60 Ga, reported only: cross-fitted affine band map with 16x16 and 32x32 windows, and a cross-fitted per-band gain + bias (diagonal) map with 8x8 windows; output keeps |y|",
+    "gates": {
+      "rule": "fixed before measurement; QB, mean of seeds 42-44 against the same-seed C2MS; other targets reported without a gate",
+      "G1_ratio": {"pass": "O1 QB SAM decrease >= 0.50 deg"},
+      "G2_strength": {"pass": "O2 QB SAM decrease >= 0.50 deg"},
+      "G3_rule": {"pass": "O3 QB SAM decrease >= 0.10 deg and RR PSNR change >= -0.04 dB"},
+      "decision": "G1 passes -> phase 1 high-band band-ratio head (strength |H_y| kept). Else G2 passes -> phase 1 high-band strength head. Neither -> report phase 0 only. G3 passing marks O3 as a training-free candidate that still needs the full v2.3 evaluation (RR2, FR_WALD, observation ratio); it does not decide phase 1"
+    }
+  },
+  "phase1_plan": {
+    "status": "not started; runs only after a phase 0 gate passes and user approval",
+    "arms": {
+      "H0": "C2MS unchanged (control)",
+      "H1": "frozen C2MS + high-band head, MSE only (capacity control)",
+      "H2": "frozen C2MS + high-band head, MSE + lambda x angle (main candidate)",
+      "H3": "frozen C2MS + free residual head y + delta, MSE + lambda x angle (control for restricting the change to the high band)"
+    },
+    "head": "<= 50k parameters; inputs: L(y) band ratio, H_y, PAN high band, LMS band ratio; G1 path: output a tangent correction of the high band ratio, y' = L(y) + |H_y| * normalize(H_y/|H_y| + delta_perp); G2 path: output a per-pixel per-band positive gain of H_y; last layer zero-initialized so y' = y at start",
+    "loss": "MSE(y', g) + lambda x mean pixel angle (atan2 form) on the original and the 2x coarser pairs (scale mixing kept)",
+    "lambda_grid": [0.003, 0.01, 0.03],
+    "selection": "lambda and epoch by validation: minimum validation SAM among epochs whose validation PSNR >= same-seed C2MS validation PSNR - 0.02 dB; test never used for selection"
+  },
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.3, unchanged, against the same-seed C2MS",
+    "sam_goal": "as experiment 60: QB 3-seed mean dSAM <= -0.15 deg (first) / <= -0.28 deg (stretch) with dPSNR >= -0.04 dB, reported separately"
+  },
+  "limits": "phase 0 uses the RR test set already used repeatedly for exploration; O1 and O2 use the GT and are ceilings, not models",
+  "constraints": "no training in phase 0; archived checkpoints are read only; writes only below results/"
+}
