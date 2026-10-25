@@ -1,0 +1,79 @@
+{
+  "time_kst": "2026-10-25T08:36:51.148316+09:00",
+  "source_contract_unchanged": true,
+  "completed_epoch": 1,
+  "latest_sha256": "ea74a87a8c3011c444930a7ff88b0ac0ed5d7edc34605fff398ce9076cc78544",
+  "latest_bytes": 47367650,
+  "resume_state_present": true,
+  "finite_parameters": true,
+  "validation_selected_best_epoch": 1,
+  "first_epoch": {
+    "epoch": 1,
+    "train_mse": 0.0010312145918327756,
+    "coarse_train_mse": 0.0007305673291620129,
+    "val_mse": 0.0005480771610659009,
+    "val_psnr": 35.01759099684988,
+    "val_sam": 7.451197677110848,
+    "coarse_val_mse": 0.00027496732567329957,
+    "coarse_val_psnr": 38.23265732992978,
+    "coarse_val_sam": 6.047132077503373,
+    "lr": 0.0001,
+    "order_sha256": "6abcf632e3f423fbfec03e78658c67fb01eea194b4c03036806e1d0de9e5b472",
+    "updates": 536,
+    "attempted": 536,
+    "skipped": 0,
+    "epoch_seconds": 96.35899999999674
+  },
+  "gpu": "61 %, 1161 MiB, 8192 MiB, 57",
+  "processes": [
+    {
+      "ProcessId": 8188,
+      "ParentProcessId": 7920,
+      "Name": "cmd.exe",
+      "CommandLine": "cmd.exe /c C:\\CtrS-p59\\launch59.cmd"
+    },
+    {
+      "ProcessId": 4644,
+      "ParentProcessId": 8188,
+      "Name": "python.exe",
+      "CommandLine": "C:\\CtrS\\.venv\\Scripts\\python.exe  -u run.py --mode run "
+    },
+    {
+      "ProcessId": 2512,
+      "ParentProcessId": 4644,
+      "Name": "python.exe",
+      "CommandLine": "\"C:\\CtrS\\runtime\\Python310\\python.exe\" -u run.py --mode run "
+    },
+    {
+      "ProcessId": 10284,
+      "ParentProcessId": 2512,
+      "Name": "python.exe",
+      "CommandLine": "C:\\CtrS\\.venv\\Scripts\\python.exe -u C:\\CtrS-p59\\SSA-MRN\\experiments\\performance\\59_extended_cosine_training\\train.py --config C:\\CtrS-p59\\run\\runtime_config.json --mode train --sensor QB --arm C2MS --seed 42"
+    },
+    {
+      "ProcessId": 13352,
+      "ParentProcessId": 10284,
+      "Name": "python.exe",
+      "CommandLine": "\"C:\\CtrS\\runtime\\Python310\\python.exe\" -u C:\\CtrS-p59\\SSA-MRN\\experiments\\performance\\59_extended_cosine_training\\train.py --config C:\\CtrS-p59\\run\\runtime_config.json --mode train --sensor QB --arm C2MS --seed 42"
+    },
+    {
+      "ProcessId": 10388,
+      "ParentProcessId": 13320,
+      "Name": "cmd.exe",
+      "CommandLine": "\"c:\\windows\\system32\\cmd.exe\" /c \"C:/CtrS/.venv/Scripts/python.exe C:/CtrS-p59/capture_ctrs59.py\""
+    },
+    {
+      "ProcessId": 7676,
+      "ParentProcessId": 10388,
+      "Name": "python.exe",
+      "CommandLine": "C:/CtrS/.venv/Scripts/python.exe  C:/CtrS-p59/capture_ctrs59.py"
+    },
+    {
+      "ProcessId": 9612,
+      "ParentProcessId": 7676,
+      "Name": "python.exe",
+      "CommandLine": "\"C:\\CtrS\\runtime\\Python310\\python.exe\" C:/CtrS-p59/capture_ctrs59.py"
+    }
+  ],
+  "scope": "first epoch and checkpoint startup verification; full training and test not complete"
+}

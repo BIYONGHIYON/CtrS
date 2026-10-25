@@ -2117,5 +2117,35 @@
       "WV3_C2MS_SAM_vs_C2MS": "부분 개선",
       "WV2_C2MS_SAM_vs_C2MS": "개선 없음"
     }
+  },
+  "performance/59_extended_cosine_training": {
+    "report": "experiments/performance/59_extended_cosine_training/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "experiment": 59,
+    "display_name": "59. 기준 모델 C2MS의 cosine 학습 일정 연장",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42
+    ],
+    "epochs": 300,
+    "training_started_kst": "2026-10-25T08:34:30.376426+09:00",
+    "last_checked": "2026-10-26T03:25:17+09:00",
+    "limits": "seed 42 단일 시드. GF2·WV3 v2.3 개선, QB·WV2 전이 개선 없음. 300에폭 전체 일정(150에폭 이어 학습 아님). 기준 모델 C2MS 150에폭 유지.",
+    "model": "experiments/performance/59_extended_cosine_training/model.py",
+    "config": "experiments/performance/59_extended_cosine_training/config.json",
+    "entrypoint": "experiments/performance/59_extended_cosine_training/run.py",
+    "manifest": "experiments/performance/59_extended_cosine_training/manifest.json",
+    "results": "experiments/performance/59_extended_cosine_training/results",
+    "checkpoints": "experiments/performance/59_extended_cosine_training/checkpoints",
+    "evaluation": "experiments/performance/59_extended_cosine_training/results/C2MS_<sensor>_s42/evaluation/<target>_v2_3.json",
+    "judgements": {
+      "QB_C2MS300_vs_C2MS150": "개선 없음",
+      "GF2_C2MS300_vs_C2MS150": "개선",
+      "WV3_C2MS300_vs_C2MS150": "개선",
+      "WV2_C2MS300_vs_C2MS150": "개선 없음"
+    }
   }
 }

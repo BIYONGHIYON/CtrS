@@ -51,6 +51,7 @@
 | 5 | [성능 52번](SSA-MRN/experiments/performance/52_w2_frequency_selective_attenuation/README.md) | W2 고주파를 샘플별 게이트로 줄이는 구조 변경(송준현) | 게이트가 축척을 구분하지 못해 RR2 미달 유지 → 구조만으로는 부족 |
 | 6 | [성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md) | 구조는 C2 그대로, 학습에 **2배 거친 학습 쌍을 섞음**(**C2MS**) | RR2 약점 해소, 원본 대비 RR +0.873 dB, 3시드 모두 개선 → **기준 모델 채택(2026-10-21)** |
 | 7 | [성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md) | 같은 C2MS를 **GF2·WV3**로 학습하고, WV3 모델을 학습하지 않은 **WV2**에 적용 | 세 데이터셋 모두 원본 대비 개선(RR +2.045·+1.007·+0.828 dB, 3시드) → **QB 밖에서도 기준 모델의 이득 확인(2026-10-22)** |
+| 8 | [성능 59번](SSA-MRN/experiments/performance/59_extended_cosine_training/README.md) | 같은 C2MS를 학습 일정만 **150에폭 → 300에폭**으로 늘려 새로 학습(seed 42) | GF2 +0.205·WV3 +0.366 dB로 개선됐지만 QB −0.284 dB, WV2 전이 −1.760 dB로 나빠짐(부분 개선) → **기준 모델은 150에폭 유지(2026-10-26)** |
 
 기준 모델은 원본 → F1([성능 49번](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/README.md), 원본 + 관측 오차 보정기, 2026-10-20) → C2MS 순서로 바뀌었습니다. 같은 크기 섞기를 작은 F1에 적용한 F1MS는 개선이 없어서, C2MS의 이득은 큰 W2 가지와 크기 섞기를 함께 쓴 결과입니다.
 
@@ -178,9 +179,9 @@ C2MS는 최신 모델들과 같은 최상위권에 있으며, PSNR·ERGAS는 202
 
 실험 표와 각 실험 보고서는 연구 페이지에 있습니다(최근 실험부터).
 
-- [SSAI 개선](SSA-MRN/research/ssai/README.md) · 담당 이병현 · 1-12번 정리 완료
-- [가변 배율 확장](SSA-MRN/research/variable_scale/README.md) · 담당 김윤지
 - [기존 성능 개선](SSA-MRN/research/performance/README.md) · 담당 김경찬·송준현·이병현
+- [가변 배율 확장](SSA-MRN/research/variable_scale/README.md) · 담당 김윤지
+- [SSAI 개선](SSA-MRN/research/ssai/README.md) · 담당 이병현 · 1-12번 정리 완료
 
 <details>
 <summary>판정 기준 v2.3 요약</summary>
