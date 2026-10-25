@@ -1,0 +1,157 @@
+name: MATLAB reevaluate experiments 53 and 54
+
+on:
+  workflow_dispatch:
+    inputs:
+      experiments:
+        description: Existing experiments to reevaluate (no training)
+        type: choice
+        options: ['53,54', '53', '54']
+        default: '53,54'
+      cut_bounds:
+        description: Enable the original DLPan RR boundary crop (changes comparison conditions)
+        type: boolean
+        default: false
+      dim_cut:
+        description: Exact DLPan MATLAB dim_cut index if crop is enabled
+        type: choice
+        options: ['21', '11']
+        default: '21'
+      clip_output:
+        description: Enable original DLPan th_values (clamps to 0..2^bits)
+        type: boolean
+        default: false
+  push:
+    branches: [matlab-reevaluate-53-54]
+    paths:
+      - .github/workflows/matlab-reevaluate-53-54.yml
+      - SSA-MRN/common/matlab_reevaluation/**
+
+permissions:
+  contents: read
+
+concurrency:
+  group: matlab-53-54-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: SSA-MRN/common/matlab_reevaluation
+      - id: matrix
+        env:
+          EXPERIMENTS: ${{ inputs.experiments || '53,54' }}
+        run: |
+          matrix=$(python SSA-MRN/common/matlab_reevaluation/suite.py matrix --experiments "$EXPERIMENTS")
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+
+  evaluate:
+    needs: plan
+    name: ${{ matrix.id }} / retained best / actual MATLAB
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    env:
+      OMP_NUM_THREADS: '2'
+      MKL_NUM_THREADS: '2'
+      CUT_BOUNDS: ${{ inputs.cut_bounds && 'true' || 'false' }}
+      DIM_CUT: ${{ inputs.dim_cut || '21' }}
+      CLIP_OUTPUT: ${{ inputs.clip_output && 'true' || 'false' }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          lfs: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /SSA-MRN/common/
+            /SSA-MRN/experiments/performance/53_scale_mixed_training/
+            /SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/
+            /SSA-MRN/experiments/performance/43_normalized_parallel_capacity/
+            /SSA-MRN/experiments/performance/48_parallel_capacity_observation_refinement/model.py
+            /SSA-MRN/experiments/performance/29_capacity_refinement/calibration.json
+            /SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/manifest.json
+            /SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/checkpoints/
+            /SSA-MRN/research/performance/28_residual_refinement/model.py
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.11'
+      - name: Install pinned CPU inference dependencies
+        run: |
+          python -m pip install --disable-pip-version-check torch==2.9.1 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install --disable-pip-version-check numpy==2.2.6 scipy==1.15.3 h5py==3.14.0 scikit-image==0.25.2 pillow==11.3.0
+      - name: Re-infer existing best weights and record exact arrays
+        env:
+          CASE_ID: ${{ matrix.id }}
+        run: python SSA-MRN/common/matlab_reevaluation/suite.py export --case "$CASE_ID" --out evaluation --data "$RUNNER_TEMP/pancollection" --threads 2
+      - name: Checkout original DLPan MATLAB sources
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: liangjiandeng/DLPan-Toolbox
+          ref: a34f884af88967580e3ef4f61a89e12fdfe4cda5
+          path: dlpan
+          sparse-checkout: |
+            02-Test-toolbox-for-traditional-and-DL(Matlab)/Quality_Indices
+            02-Test-toolbox-for-traditional-and-DL(Matlab)/Tools
+      - name: Verify DLPan version and source hashes
+        run: |
+          test "$(git -C dlpan rev-parse HEAD)" = a34f884af88967580e3ef4f61a89e12fdfe4cda5
+          find dlpan -type f -name '*.m' -print0 | sort -z | xargs -0 sha256sum > evaluation/dlpan_sources.sha256
+      - name: Set up actual MATLAB and Image Processing Toolbox
+        uses: matlab-actions/setup-matlab@f9e43010f1ae678f7cfa0542fe2a4f60f7d1ad8d # v3
+        with:
+          release: R2025b
+          products: Image_Processing_Toolbox
+      - name: Score all identical arrays with actual MATLAB
+        uses: matlab-actions/run-command@bfa857648f4895aa98a446fe41c85e0788421ed5 # v3
+        with:
+          command: addpath(fullfile(pwd,'SSA-MRN','common','matlab_reevaluation')); score_suite(fullfile(pwd,'evaluation'),fullfile(pwd,'dlpan','02-Test-toolbox-for-traditional-and-DL(Matlab)'),strcmp(getenv('CUT_BOUNDS'),'true'),str2double(getenv('DIM_CUT')),strcmp(getenv('CLIP_OUTPUT'),'true'))
+      - name: Compare MATLAB, current Python and stored previous numbers
+        run: python SSA-MRN/common/matlab_reevaluation/report.py case --out evaluation
+      - name: Upload compact numeric evidence (no training data or large prediction arrays)
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: matlab-${{ matrix.id }}
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            evaluation/*.json
+            evaluation/*.csv
+            evaluation/*.sha256
+
+  presentation:
+    needs: [plan, evaluate]
+    runs-on: ubuntu-24.04
+    if: ${{ !cancelled() }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: SSA-MRN/common/matlab_reevaluation
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.2.6
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: matlab-e*
+          path: case-results
+      - name: Require every requested case and generate presentation tables
+        env:
+          MATRIX_JSON: ${{ needs.plan.outputs.matrix }}
+        run: |
+          printf '%s' "$MATRIX_JSON" > matrix.json
+          python SSA-MRN/common/matlab_reevaluation/report.py aggregate --input case-results --out presentation --matrix matrix.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: presentation-matlab-experiments-53-54
+          path: presentation/
+          retention-days: 30
+          if-no-files-found: error

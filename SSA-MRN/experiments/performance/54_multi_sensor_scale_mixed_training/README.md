@@ -231,6 +231,8 @@ seed 42의 원본 SSA-MRN(C0)과 현재 기준 C2MS를 [결과 이미지 도구]
 ## 7. 재현 자료
 <a id="evidence"></a>
 
+- 중간발표용 기존 가중치의 실제 MATLAB 재채점은 [실험 53·54 GitHub Actions 평가 안내](../../../common/matlab_reevaluation/README.md)를 사용합니다. 재학습하지 않으며 이 보고서의 원래 수치는 보존합니다. MATLAB 완료 여부는 성공한 Actions와 결과 artifact로 확인합니다.
+
 - 코드: [설정·사전 판정](config.json), [모델](model.py), [센서 연산·거친 쌍 생성](prepare.py), [학습](train.py), [실행 제어](run.py), [평가](evaluate.py), [결과 이미지 도구](../../../common/result_images.py)
 - 학습 당시 소스·설정: [provenance/code](provenance/code/). 현재 `model.py`·`prepare.py`·`train.py`·`run.py`·학습 당시 `config.json`은 서버 실행본과 해시가 같습니다. 판정을 낸 평가 코드는 [evaluate_run.py](provenance/code/evaluate_run.py)이고(해시가 `evaluation_v2_3.json`의 기록과 같음), 현재 `evaluate.py`는 이후 그래프 배치만 고친 판입니다. 결과 이미지 도구에는 이번에 센서 옵션(파일·정규화·RGB 밴드)을 추가했으며, QB 기본값의 출력은 수정 전과 픽셀 단위로 같습니다.
 - 실행 기록: [provenance/run_records](provenance/run_records/)(실행 설정, 데이터 해시, 환경, 사전 점검·벤치마크, 큐 상태, 중단 기록), [센서 점검](provenance/sensor_audit.json)과 [점검 코드](provenance/sensor_audit.py), [초기 가중치 확인](provenance/initial_weights_check.json)
