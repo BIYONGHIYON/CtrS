@@ -3,8 +3,8 @@
   "research_track": "performance",
   "experimenter": "이병현",
   "title": "고주파 세부의 밴드 비율 보정",
-  "status": "사전 검증 완료",
-  "improvement": "판단 보류",
+  "status": "평가 완료",
+  "improvement": "부분 개선",
   "hypothesis": "Experiment 60 found that the C2MS spectral angle error lives in the high band (QB SAM 4.576 -> 0.361 deg when only the high band is replaced by the GT) but that an 8x8 local affine band map cannot reach it. Splitting the high band H = y - L(y) of each pixel into its strength |H| and its band ratio H/|H| tells which of the two a correction must change.",
   "control": "C2MS (53 QB, 54 GF2/WV3) best.pt of the same seed, unchanged; same models, data and lowpass as experiment 60",
   "seeds": [42, 43, 44],
@@ -27,6 +27,35 @@
       "G3_rule": {"pass": "O3 QB SAM decrease >= 0.10 deg and RR PSNR change >= -0.04 dB"},
       "decision": "G1 passes -> phase 1 high-band band-ratio head (strength |H_y| kept). Else G2 passes -> phase 1 high-band strength head. Neither -> report phase 0 only. G3 passing marks O3 as a training-free candidate that still needs the full v2.3 evaluation (RR2, FR_WALD, observation ratio); it does not decide phase 1"
     }
+  },
+  "phase1": {
+    "status": "screen approved by the user on 2026-10-26: QB seed 42, H1, H2 x 3 lambdas, H3; expansion to more seeds/sensors is decided after the screen",
+    "runtime": "C:/CtrS-p61/run",
+    "data_root": "C:/CtrS/SSA-MRN/data/dataset",
+    "cache_reuse_source": "C:/CtrS-p59/run",
+    "sensors": ["QB"],
+    "seeds": [42],
+    "controls": {
+      "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt",
+      "GF2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s<seed>/best.pt",
+      "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
+    },
+    "data_sha256": {"QB": {"train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371", "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470"}},
+    "c2ms_outputs": "FP32 C2MS forward of every train/val patch (original and 2x coarser), computed once and cached; C2MS is frozen (eval mode, no gradient)",
+    "epochs": 30,
+    "batch": 32,
+    "optimizer": "Adam",
+    "lr_start": 0.001,
+    "lr_end": 0.00001,
+    "schedule": "cosine per epoch",
+    "precision": "FP32 head training, TF32 off",
+    "coarse_weight": 1.0,
+    "lambda_grid": [0.003, 0.01, 0.03],
+    "selection_psnr_tolerance_db": 0.02,
+    "selection": "per run: minimum validation SAM among epochs whose validation PSNR >= epoch-0 (C2MS) validation PSNR - 0.02 dB; epoch 0 if none qualifies; test never used",
+    "h3_lambda_rule": "H3 uses the lambda of the H2 run whose selected epoch has the lowest validation SAM",
+    "queue": [["QB", "H1", 0, 42], ["QB", "H2", 0.003, 42], ["QB", "H2", 0.01, 42], ["QB", "H2", 0.03, 42], ["QB", "H3", "h3_rule", 42]],
+    "evaluation": "control C2MS and C2MS + selected head on all 20 RR/FR test scenes: RR, RR2, FR_WALD, FR with OBS_RMSE_DN (v2.3 inputs); WV3 runs also on WV2"
   },
   "phase1_plan": {
     "status": "not started; runs only after a phase 0 gate passes and user approval",

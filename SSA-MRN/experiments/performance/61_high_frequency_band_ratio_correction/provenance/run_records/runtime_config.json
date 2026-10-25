@@ -1,0 +1,92 @@
+{
+  "status": "screen approved by the user on 2026-10-26: QB seed 42, H1, H2 x 3 lambdas, H3; expansion to more seeds/sensors is decided after the screen",
+  "runtime": "C:/CtrS-p61/run",
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset",
+  "cache_reuse_source": "C:/CtrS-p59/run",
+  "sensors": [
+    "QB"
+  ],
+  "seeds": [
+    42
+  ],
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt",
+    "GF2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s<seed>/best.pt",
+    "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
+  },
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470"
+    }
+  },
+  "c2ms_outputs": "FP32 C2MS forward of every train/val patch (original and 2x coarser), computed once and cached; C2MS is frozen (eval mode, no gradient)",
+  "epochs": 30,
+  "batch": 32,
+  "optimizer": "Adam",
+  "lr_start": 0.001,
+  "lr_end": 1e-05,
+  "schedule": "cosine per epoch",
+  "precision": "FP32 head training, TF32 off",
+  "coarse_weight": 1.0,
+  "lambda_grid": [
+    0.003,
+    0.01,
+    0.03
+  ],
+  "selection_psnr_tolerance_db": 0.02,
+  "selection": "per run: minimum validation SAM among epochs whose validation PSNR >= epoch-0 (C2MS) validation PSNR - 0.02 dB; epoch 0 if none qualifies; test never used",
+  "h3_lambda_rule": "H3 uses the lambda of the H2 run whose selected epoch has the lowest validation SAM",
+  "queue": [
+    [
+      "QB",
+      "H1",
+      0,
+      42
+    ],
+    [
+      "QB",
+      "H2",
+      0.003,
+      42
+    ],
+    [
+      "QB",
+      "H2",
+      0.01,
+      42
+    ],
+    [
+      "QB",
+      "H2",
+      0.03,
+      42
+    ],
+    [
+      "QB",
+      "H3",
+      "h3_rule",
+      42
+    ]
+  ],
+  "evaluation": "control C2MS and C2MS + selected head on all 20 RR/FR test scenes: RR, RR2, FR_WALD, FR with OBS_RMSE_DN (v2.3 inputs); WV3 runs also on WV2",
+  "source_hashes": {
+    "experiments/performance/61_high_frequency_band_ratio_correction/model.py": "031432ec56b21fbe7ca1bf924d7725f30d4abcf6f27d889bcca41477be77c2e1",
+    "experiments/performance/61_high_frequency_band_ratio_correction/train.py": "abd123db10181fc44145f69a248cd7f7715a72b12d9890f2dd0ba0c50738ba5d",
+    "experiments/performance/61_high_frequency_band_ratio_correction/run.py": "54377018b252895bb50e69c35f0d28a4985b39352df6d231a2e5e3feb8b299f5",
+    "experiments/performance/61_high_frequency_band_ratio_correction/config.json": "b73a78551920beda71ff9c457cc947583a185a58adff347795acb4c9986a8236",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16"
+  },
+  "created_kst": "2026-10-26T04:47:48.721651+09:00",
+  "cache_manifest_sha256": "645ccf9432d277840eec1b3109394ce3e3f1714b98d8e0300b193a3d8588618e",
+  "fingerprint": "1f4ca86161a14bff3b634dfddcb39af11de0a09794c313b1185a4444b8f8ea8f"
+}
