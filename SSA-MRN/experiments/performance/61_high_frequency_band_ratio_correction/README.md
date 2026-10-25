@@ -51,17 +51,17 @@ C2MS 출력 y 뒤에 작은 헤드를 붙였습니다. C2MS는 바꾸지 않고(
 
 ```mermaid
 flowchart LR
-  X[PAN · LMS · MS] --> C[C2MS 고정]
-  C --> Y[y]
-  Y --> L[L = 센서 MTF 저주파]
-  Y --> H[H = y − L]
-  H --> R[밴드 비율 r = H/|H|]
-  H --> S[세기 |H|]
-  R --> N[헤드: 3×3 Conv 4층, 32채널]
+  X["PAN · LMS · MS"] --> C["C2MS 고정"]
+  C --> Y["y"]
+  Y --> L["L = 센서 MTF 저주파"]
+  Y --> H["H = y − L"]
+  H --> R["밴드 비율 r = H / ‖H‖"]
+  H --> S["세기 ‖H‖"]
+  R --> N["헤드: 3×3 Conv 4층, 32채널"]
   L --> N
   X --> N
-  N --> D[보정 δ, r에 수직인 성분만]
-  D --> O["y′ = L + |H| · normalize(r + δ⊥)"]
+  N --> D["보정 δ, r에 수직인 성분만"]
+  D --> O["y′ = L + ‖H‖ · normalize(r + δ⊥)"]
   S --> O
   L --> O
 ```
