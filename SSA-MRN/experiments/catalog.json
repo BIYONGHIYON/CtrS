@@ -1590,5 +1590,26 @@
       "QB_F3_vs_C2MS_s42": "부분 개선",
       "gate_decision": "stop_information_limit"
     }
+  },
+  "performance/63_l1_reconstruction_loss": {
+    "report": "experiments/performance/63_l1_reconstruction_loss/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 63,
+    "display_name": "63. C2MS 학습 손실을 MSE에서 L1로 교체",
+    "status": "학습 중",
+    "improvement": "판단 보류",
+    "evaluated_seeds": [],
+    "retraining": true,
+    "epochs": 150,
+    "last_checked": "2026-10-26T07:12:00+09:00",
+    "limits": "QB seed 42 선별부터. 대조군은 보관된 53번 C2MS(공식)와 57번 재학습 C2MS(참고), 새로 학습하지 않음.",
+    "model": "experiments/performance/63_l1_reconstruction_loss/model.py",
+    "config": "experiments/performance/63_l1_reconstruction_loss/config.json",
+    "entrypoint": "experiments/performance/63_l1_reconstruction_loss/run.py",
+    "results": "experiments/performance/63_l1_reconstruction_loss/results",
+    "checkpoints": "experiments/performance/63_l1_reconstruction_loss/checkpoints",
+    "manifest": "experiments/performance/63_l1_reconstruction_loss/manifest.json"
   }
 }
