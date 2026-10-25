@@ -1,0 +1,78 @@
+{
+  "status": "screen approved by the user on 2026-10-26: QB seed 42, F0-F3",
+  "runtime": "C:/CtrS-p62/run",
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset",
+  "cache_reuse_source": "C:/CtrS-p59/run",
+  "sensors": [
+    "QB"
+  ],
+  "seeds": [
+    42
+  ],
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt",
+    "GF2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s<seed>/best.pt",
+    "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
+  },
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470"
+    }
+  },
+  "c2ms": "frozen (eval mode, no gradient), run online every step in FP32 with TF32 off for every arm, so all arms see identical inputs; the backbone output is read with a forward hook",
+  "epochs": 30,
+  "batch": 32,
+  "optimizer": "Adam",
+  "lr_start": 0.001,
+  "lr_end": 1e-05,
+  "schedule": "cosine per epoch",
+  "precision": "FP32, TF32 off",
+  "coarse_weight": 1.0,
+  "selection_psnr_tolerance_db": 0.02,
+  "train_probe": "every epoch, PSNR/SAM of 1,905 fixed training patches (evenly spaced indices) are logged next to validation, to separate a capacity/information limit from a generalization limit",
+  "max_head_parameters": 200000,
+  "queue": [
+    [
+      "QB",
+      "F0",
+      42
+    ],
+    [
+      "QB",
+      "F1",
+      42
+    ],
+    [
+      "QB",
+      "F2",
+      42
+    ],
+    [
+      "QB",
+      "F3",
+      42
+    ]
+  ],
+  "evaluation": "control C2MS and C2MS + selected head on all 20 QB RR/FR test scenes: RR, RR2, FR_WALD, FR with OBS_RMSE_DN (v2.3 inputs)",
+  "source_hashes": {
+    "experiments/performance/62_feature_context_band_ratio_head/model.py": "8a42b44b71ef80421ba5d5a21975c0ee503141f5856d1b3f967b37695a9d73e2",
+    "experiments/performance/62_feature_context_band_ratio_head/train.py": "e5bcd1704eb4e4f0104db1c3dbb20ad28fd6bcb104321cc2bab6269bf8c6bdab",
+    "experiments/performance/62_feature_context_band_ratio_head/run.py": "0cf62f50ca4113e398e4fc0aa7f6bab4067459e83a295de5ad92f7bc50eb3e52",
+    "experiments/performance/62_feature_context_band_ratio_head/config.json": "2716206754c4193c0eb0d953d0df18714c76a5093f4b328d17e5d821544490db",
+    "experiments/performance/61_high_frequency_band_ratio_correction/model.py": "031432ec56b21fbe7ca1bf924d7725f30d4abcf6f27d889bcca41477be77c2e1",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16"
+  },
+  "created_kst": "2026-10-26T05:37:03.404404+09:00",
+  "cache_manifest_sha256": "3df9774dac13e8f9f622a3bfc4ed72990944d4fe22c9eeffd21898f225f0855f",
+  "fingerprint": "3db94e51cc1fb41daa733d7d150192aa7f96f6ff328da4d8d39c87de25a0f93a"
+}
