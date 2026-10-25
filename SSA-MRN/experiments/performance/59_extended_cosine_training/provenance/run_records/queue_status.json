@@ -1,0 +1,69 @@
+{
+  "time_kst": "2026-10-26T03:25:17.231821+09:00",
+  "phase": "complete",
+  "active": [],
+  "runs": [
+    {
+      "sensor": "QB",
+      "arm": "C2MS",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-10-25T15:02:27.774780+09:00",
+        "pid": 13352,
+        "sensor": "QB",
+        "arm": "C2MS",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.045468807220458984,
+        "reserved_gb": 0.5390625,
+        "best_epoch": 198
+      }
+    },
+    {
+      "sensor": "GF2",
+      "arm": "C2MS",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-10-25T22:27:33.936573+09:00",
+        "pid": 17468,
+        "sensor": "GF2",
+        "arm": "C2MS",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.04160642623901367,
+        "reserved_gb": 0.533203125,
+        "best_epoch": 283
+      }
+    },
+    {
+      "sensor": "WV3",
+      "arm": "C2MS",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-10-26T03:22:47.666707+09:00",
+        "pid": 7512,
+        "sensor": "WV3",
+        "arm": "C2MS",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.04969930648803711,
+        "reserved_gb": 0.607421875,
+        "best_epoch": 255
+      }
+    }
+  ],
+  "epoch_seconds": {
+    "QB_C2MS": 77.40599999998813,
+    "GF2_C2MS": 88.78100000001723,
+    "WV3_C2MS": 58.78200000000652
+  },
+  "training_remaining_seconds": 0.0,
+  "training_end_kst": "2026-10-26T03:25:17.231821+09:00",
+  "eta_basis": "measured recent epochs per sensor/arm, else benchmark x1.15; excludes final RR/FR evaluation"
+}

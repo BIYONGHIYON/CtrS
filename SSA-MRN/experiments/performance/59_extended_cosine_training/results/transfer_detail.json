@@ -1,0 +1,83 @@
+{
+  "description": "Sharpness, detail fidelity and colour bias of C2MS 150 (54) vs 300 (59) epochs, seed 42, WV3-trained, on all 20 RR scenes of WV3 and WV2.\nSame definitions as 54 evaluate.transfer_detail (sharpness = mean |Laplacian| output / GT; detail = corr and std ratio of (output - LMS) to (GT - LMS);\nbias = per-band (mean output - mean GT) / mean GT). Run after training; test never used for selection.",
+  "bands": "WV3/WV2 band order coastal, blue, green, yellow, red, red edge, NIR1, NIR2; display RGB = bands [4,2,1]",
+  "results": {
+    "WV3": {
+      "C2MS_150": {
+        "sharpness": 0.8798730894912365,
+        "detail_corr": 0.9477500147133728,
+        "detail_gain": 0.9556469158938032,
+        "band_bias": [
+          0.0005051968635445385,
+          0.00017364977497771357,
+          2.9336726836701003e-05,
+          0.0003852106093091824,
+          0.0007917495060042179,
+          0.00010459719161868254,
+          -0.00016460449157107085,
+          -4.963300669322205e-05
+        ],
+        "max_abs_band_bias": 0.0007917495060042179,
+        "weights_sha256": "5f1926608479fa58eaba526e82f6057df81c60b7d4a452274c93ed836fa8e8bd",
+        "best_epoch": 148
+      },
+      "C2MS_300": {
+        "sharpness": 0.8759945119584123,
+        "detail_corr": 0.9514908063857623,
+        "detail_gain": 0.9563551965821656,
+        "band_bias": [
+          -0.0008688687465219578,
+          -0.0007065859496046795,
+          0.0005968486112133644,
+          -0.000433552070269181,
+          0.0009981974755412977,
+          -0.000618642695647271,
+          -0.00029753642549175364,
+          0.0006845056300350564
+        ],
+        "max_abs_band_bias": 0.0009981974755412977,
+        "weights_sha256": "99adbb6eeaed599465373761595353d2d1afbedf8be300dec1cc734592ab4be5",
+        "best_epoch": 255
+      }
+    },
+    "WV2": {
+      "C2MS_150": {
+        "sharpness": 0.45606424512101207,
+        "detail_corr": 0.7493319518492249,
+        "detail_gain": 0.6308108997271098,
+        "band_bias": [
+          0.01673523970163639,
+          0.029703412698051844,
+          0.00611198385636969,
+          0.011932615008060934,
+          -0.007890125433483528,
+          -0.017187056992745864,
+          0.0043020045590500934,
+          0.004550459157925533
+        ],
+        "max_abs_band_bias": 0.029703412698051844,
+        "weights_sha256": "5f1926608479fa58eaba526e82f6057df81c60b7d4a452274c93ed836fa8e8bd",
+        "best_epoch": 148
+      },
+      "C2MS_300": {
+        "sharpness": 0.6508679855062989,
+        "detail_corr": 0.6186161243999484,
+        "detail_gain": 0.8318064328208161,
+        "band_bias": [
+          0.0023780543564142723,
+          -0.010180550909459279,
+          0.021089777170787177,
+          0.00042198669921517833,
+          0.005968968374794739,
+          -0.006232139222409673,
+          0.0071953903211006255,
+          0.010053767745029677
+        ],
+        "max_abs_band_bias": 0.021089777170787177,
+        "weights_sha256": "99adbb6eeaed599465373761595353d2d1afbedf8be300dec1cc734592ab4be5",
+        "best_epoch": 255
+      }
+    }
+  },
+  "script_sha256": "6587449882a3940f5554539b004956481da00cf38c008ff9ba4e9bc65dae1a40"
+}
