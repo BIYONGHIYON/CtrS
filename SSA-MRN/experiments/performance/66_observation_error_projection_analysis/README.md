@@ -205,6 +205,7 @@ seed 43·44는 [analysis_s43.json](results/analysis_s43.json)·[analysis_s44.jso
 - [prepare.py](prepare.py): 관측 오차 분해, 사영 전후 재평가, 그래프·결과 이미지 생성. `--seed`로 시드를 고르고, 결과 이미지는 고정 seed 42로만 만듭니다. 53·63·65번 보관 가중치와 65번 `model.py`·`prepare.py`(54번 C2MS 구조·센서 연산)를 그대로 씁니다. `--plot-only`, `--images-only`로 일부만 다시 만들 수 있습니다.
 - [config.json](config.json): 분석 설정.
 - [results/analysis_s42.json](results/analysis_s42.json)·[analysis_s43.json](results/analysis_s43.json)·[analysis_s44.json](results/analysis_s44.json): 시드별, 모델·사영 여부별 평균과 장면별 RR·RR2·FR_WALD·FR 지표, 관측 오차 분해, 공액 기울기법 반복 수, FFT 연산 확인값.
+- `provenance/server_seed44/`: seed 44 서버 실행 기록입니다. 65번 종료를 기다린 대기 스크립트와 실행 스크립트, 대기 기록, 실행 로그, 입력 해시(`inputs_sha256.json`: test RR·FR 파일, 65번·53번 seed 44 `best.pt`, `prepare.py`)가 있으며, 입력 해시는 저장소의 파일과 같습니다.
 - [manifest.json](manifest.json): 이 폴더 파일의 크기·SHA-256.
 
 ## 8. 개선 여부와 다음 단계
