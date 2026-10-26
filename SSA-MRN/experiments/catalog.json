@@ -1692,11 +1692,12 @@
     "status": "사전 검증 완료",
     "improvement": "성능 비교 아님",
     "evaluated_seeds": [
-      42
+      42,
+      43
     ],
     "retraining": false,
-    "last_checked": "2026-10-26T23:42:00+09:00",
-    "limits": "학습 없는 사후 분석. QB seed 42, 탐색에 반복 사용한 test. 사영은 추론 후처리(장면당 CG 108회)이며 validation 선택 없음.",
+    "last_checked": "2026-10-27T00:22:00+09:00",
+    "limits": "학습 없는 사후 분석. QB seed 42·43(seed 44는 65번 종료 후), 탐색에 반복 사용한 test. 사영은 추론 후처리(장면당 CG 약 108회)이며 validation 선택 없음.",
     "config": "experiments/performance/66_observation_error_projection_analysis/config.json",
     "entrypoint": "experiments/performance/66_observation_error_projection_analysis/prepare.py",
     "results": "experiments/performance/66_observation_error_projection_analysis/results",

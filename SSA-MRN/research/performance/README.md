@@ -1,10 +1,8 @@
-# 기존 성능 개선
+# 성능 개선
 
 [전체 연구](../../../README.md) · [실행·등록 안내](../../README.md#새-실험-등록)
 
-**담당: 김경찬·송준현·이병현**
-
-이병현은 2026-10-16 SSAI 1-12번 정리 후 이 연구에 합류했습니다. 과거 실험의 실험자는 바꾸지 않습니다.
+각 실험의 실제 실험자는 표의 첫 열에 표시하며, 과거 실험의 실험자는 바꾸지 않습니다. SSAI 개선(2026-10-16)과 가변 배율 확장(2026-10-27)은 종료했습니다.
 
 ## 연구 범위
 
@@ -20,7 +18,7 @@
 
 | 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
 |---|---|---|:---:|:---:|
-| [66. L1 학습 모델의 원래 해상도 관측 오차 분석과 관측 일치 사영](../../experiments/performance/66_observation_error_projection_analysis/README.md)<br>[이병현] | 63·65번(L1 계열)의 원래 해상도 관측 오차를 성분별로 나누고, 45번 관측 일치 사영을 추론 때 붙여 seed 42 test를 다시 평가했습니다(학습 없음). | 늘어난 관측 오차는 저주파 성분이었고 에일리어싱은 오히려 줄었습니다. 사영은 관측 오차를 0으로 만들며 RR PSNR을 약 +0.04 dB 올렸고, 65번 + 사영은 53번 대비 RR PSNR +0.123 dB·SAM −0.112°였지만 RR2 미달(−0.258 dB)은 남았습니다. | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
+| [66. L1 학습 모델의 원래 해상도 관측 오차 분석과 관측 일치 사영](../../experiments/performance/66_observation_error_projection_analysis/README.md)<br>[이병현] | 63·65번(L1 계열)의 원래 해상도 관측 오차를 성분별로 나누고, 45번 관측 일치 사영을 추론 때 붙여 seed 42·43 test를 다시 평가했습니다(학습 없음). | 늘어난 관측 오차는 저주파 성분이었고 에일리어싱은 오히려 줄었습니다. 사영은 관측 오차를 0으로 만들며 RR PSNR을 두 시드 모두 약 +0.04 dB 올렸습니다. 65번 + 사영은 같은 시드 53번 대비 RR PSNR +0.123 / +0.039 dB·SAM −0.112° / −0.108°(seed 42 / 43)였지만 RR2 미달(약 −0.26 dB)은 두 시드 모두 남았습니다. | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 | [65. C2MS에 L1 손실과 분광 손실을 함께 적용](../../experiments/performance/65_l1_spectral_loss/README.md)<br>[이병현] | C2MS의 복원 손실을 L1로 바꾸고 58번 분광 손실을 같은 상대적 세기(계수 0.46)로 더해 처음부터 학습했습니다(QB seed 42). | 53번 대비 test RR PSNR +0.077 dB·**SAM −0.111°**·ERGAS −0.030(SAM 20/20장)으로 주 판정은 통과했고, 63번(L1만)보다 SAM이 0.051° 더 낮습니다. 그러나 RR2(−0.267 dB)와 관측 비율(1.47)이 미달했습니다. | 평가&nbsp;완료<br>seed42<br>seed43·44 학습&nbsp;중 | 부분&nbsp;개선 |
 | [64. C2MS W2 가지의 픽셀별 아핀 변조](../../experiments/performance/64_w2_pixel_affine_modulation/README.md)<br>[이병현] | C2MS W2 가지의 잔차 블록 8개에 픽셀별 scale·bias 변조(ARConv의 아핀 변조)를 넣고 손실·학습 일정은 그대로 두었습니다(QB seed 42). | 53번 대비 test RR PSNR −0.087 dB·SAM +0.004°·ERGAS +0.037, RR2 −0.465 dB로 모두 나빠졌고 원래 해상도 관측 오차가 4.89배로 커졌습니다. validation은 C2MS와 거의 같았습니다. | 평가&nbsp;완료<br>seed42 | 개선&nbsp;없음 |
 | [63. C2MS 학습 손실을 MSE에서 L1로 교체](../../experiments/performance/63_l1_reconstruction_loss/README.md)<br>[이병현] | C2MS의 구조·축척 혼합·학습 일정은 그대로 두고 원래·거친 쌍의 손실만 MSE에서 L1로 바꿔 처음부터 학습했습니다(QB seed 42). | 53번 대비 test RR PSNR +0.084 dB·SAM −0.060°·ERGAS −0.027(SAM 20/20장)로 주 판정은 통과했지만, RR2(−0.186 dB)와 관측 비율(1.32)이 미달했습니다. validation PSNR은 −0.073 dB로 test와 반대입니다. | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |

@@ -6,7 +6,7 @@
 
 ## 연구 분야
 
-[SSAI 개선](../research/ssai/README.md)은 이병현, [가변 배율 확장](../research/variable_scale/README.md)은 김윤지가 담당하며 아직 실험 미착수입니다. [기존 성능 개선](../research/performance/README.md)은 김경찬·송준현이 이어갑니다. 아래 처리 흐름은 현재의 고정 4배 기준 모델이며, 가변 배율 구현은 각 새 실험에서 검증합니다.
+[SSAI 개선](../research/ssai/README.md)은 이병현, [가변 배율 확장](../research/variable_scale/README.md)은 김윤지가 담당하며 아직 실험 미착수입니다. [성능 개선](../research/performance/README.md)은 김경찬·송준현이 이어갑니다. 아래 처리 흐름은 현재의 고정 4배 기준 모델이며, 가변 배율 구현은 각 새 실험에서 검증합니다.
 
 ## 현재 기본 설정: K=4
 

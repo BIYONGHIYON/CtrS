@@ -6,7 +6,7 @@
 
 ## 연구 소개
 
-고해상도 흑백 위성영상 **PAN**의 공간 정보와 저해상도 다중분광영상 **MS**의 색·분광 정보를 결합해 고해상도 MS를 복원하는 팬샤프닝 연구입니다. SSA-MRN을 기반으로 SSAI 개선, 가변 배율 확장, 기존 성능 개선을 나누어 연구합니다.
+고해상도 흑백 위성영상 **PAN**의 공간 정보와 저해상도 다중분광영상 **MS**의 색·분광 정보를 결합해 고해상도 MS를 복원하는 팬샤프닝 연구입니다. SSA-MRN을 기반으로 성능 개선 연구를 진행합니다. SSAI 개선과 가변 배율 확장 연구는 종료했습니다.
 
 ## 팀원
 
@@ -179,13 +179,42 @@ C2MS는 최신 모델들과 같은 최상위권에 있으며, PSNR·ERGAS는 202
 
 실험 표와 각 실험 보고서는 연구 페이지에 있습니다(최근 실험부터).
 
-- [기존 성능 개선](SSA-MRN/research/performance/README.md) · 담당 김경찬·송준현·이병현
-- [가변 배율 확장](SSA-MRN/research/variable_scale/README.md) · 담당 김윤지
-- [SSAI 개선](SSA-MRN/research/ssai/README.md) · 담당 이병현 · 1-12번 정리 완료
+- [성능 개선](SSA-MRN/research/performance/README.md) · 진행 중
 
 <details>
-<summary>판정 기준 v2.3 요약</summary>
+<summary>종료된 연구</summary>
 
-[판정 기준 v2.3](SSA-MRN/docs/judgement_criteria.md): 개선 = 같은 조건 대조군 대비 RR PSNR·SAM·ERGAS가 모두 개선(PSNR은 잡음 문턱 이상: 단일 시드 0.06dB, 2시드 이상 0.04dB)되고 정답 기반 보조 판정(RR2·FR_WALD·FR 관측 일치)을 모두 통과, 부분 개선 = 주 판정만 통과, RR 지표 일부만 개선, 또는 이득이 잡음 문턱 미만, 개선 없음 = RR 지표 모두 개선 없음, 판단 보류 = 최종 평가 부족입니다. 비교 기준·성능 비교 아님은 개선 판정 대상에서 제외합니다. FR QNR·Dλ·Ds는 [정답 순위 검사](SSA-MRN/experiments/performance/46_fr_spatial_index_validity/README.md)를 통과하지 못해 참고로만 보고합니다. 47번 이전 실험의 판정은 [성능 47번 재평가](SSA-MRN/experiments/performance/47_ground_truth_criteria_reevaluation/README.md)의 보존된 측정값을 v2.3으로 다시 집계해 표에 반영합니다. 원래 v2 판정은 47번 보고서에 보존하며, 보조 판정 자료가 없는 성능 비교는 판단 보류입니다. 현재 표의 판정 범위는 QB이고 다른 센서·배율로 확대하지 않습니다. 단일 시드도 모든 판정 항목을 통과하면 개선으로 표기하며, 여러 시드는 같은 조건 대조군과 짝지은 전체 시드의 평균으로 판정합니다. 시드 수·시드별 결과를 함께 보고합니다. 개선 표기와 기준 모델 교체는 구분하며, 기준 모델 교체에는 3시드 이상에서 개선과 FR·RR2 비교 이미지 확인이 필요합니다.
+- [SSAI 개선](SSA-MRN/research/ssai/README.md) · 2026-10-16 1-12번 정리 후 종료
+- [가변 배율 확장](SSA-MRN/research/variable_scale/README.md) · 2026-10-27 실용성이 낮아 종료
+
+</details>
+
+### 판정 기준 ([v2.3](SSA-MRN/docs/judgement_criteria.md))
+
+실험 표의 개선 여부는 같은 조건 대조군과 정답이 있는 시험으로만 판정합니다.
+
+| 판정 | 조건 |
+|---|---|
+| **개선** | 주 판정과 보조 판정 3개를 모두 통과 |
+| **부분 개선** | 주 판정만 통과, RR 지표 일부만 개선, 또는 모든 항목을 통과했지만 PSNR 이득이 잡음 문턱 미만 |
+| **개선 없음** | RR PSNR·SAM·ERGAS 모두 개선 없음 |
+| **판단 보류** | 최종 평가 또는 보조 판정 자료가 부족 |
+| 비교 기준·성능 비교 아님 | 판정 대상 아님(기준선, 학습 없는 사전 검증·분석) |
+
+| 구분 | 시험 | 통과 조건 |
+|---|---|---|
+| 주 판정 | RR test 20장 | PSNR·SAM·ERGAS 모두 개선, PSNR 이득 ≥ 잡음 문턱(단일 시드 0.06 dB, 2시드 이상 0.04 dB) |
+| 보조 1 | RR2: RR 입력을 한 번 더 1/4 축소 | ΔPSNR ≥ −0.05 dB, ΔSAM ≤ +0.06° |
+| 보조 2 | FR_WALD: 원래 해상도를 1/4 축소, 실제 MS가 정답 | ΔPSNR ≥ −0.07 dB, ΔSAM ≤ +0.04° |
+| 보조 3 | FR 관측 일치: 출력을 관측 연산으로 줄인 값과 입력 MS의 차이 | 관측 RMSE 비율 ≤ 1.10 |
+
+<details>
+<summary>판정 세부 규칙</summary>
+
+- 여러 시드는 같은 조건 대조군과 짝지은 전체 시드의 평균으로 판정하고, 시드 수와 시드별 결과를 함께 보고합니다. 단일 시드도 모든 항목을 통과하면 개선으로 표기합니다.
+- FR QNR·Dλ·Ds는 [정답 순위 검사](SSA-MRN/experiments/performance/46_fr_spatial_index_validity/README.md)를 통과하지 못해 참고로만 보고합니다.
+- 47번 이전 실험은 [성능 47번 재평가](SSA-MRN/experiments/performance/47_ground_truth_criteria_reevaluation/README.md)의 보존된 측정값을 v2.3으로 다시 집계한 판정을 표에 씁니다. 원래 v2 판정은 47번 보고서에 보존합니다.
+- 현재 표의 판정 범위는 QB이며 다른 센서·배율로 확대하지 않습니다.
+- 개선 표기와 기준 모델 교체는 구분합니다. 기준 모델 교체에는 3시드 이상의 개선과 FR·RR2 비교 이미지 확인이 필요합니다.
 
 </details>

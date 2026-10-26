@@ -1,7 +1,7 @@
 """Experiment 66 (post-hoc, no training): where the FR observation error of the L1 runs comes from, and the exact
-observation-consistency projection of experiment 45 applied at inference. QB seed 42, local CPU.
+observation-consistency projection of experiment 45 applied at inference. QB, per seed, local CPU.
 
-Models (archived best.pt): 53 C2MS, 63 C2MS L1, 65 C2MS L1 + spectral loss. Metrics follow the server evaluation of
+Models (archived best.pt, --seed): 53 C2MS, 63 C2MS L1 (seed 42 only), 65 C2MS L1 + spectral loss. Metrics follow the server evaluation of
 53/54/63/65 (RR, RR2, FR_WALD, FR + observation RMSE with margin 5) for (a) the raw output and (b) the output after
 y' = y + D^T M^T (M D D^T M^T)^-1 M (MS - D y) (interior mask, margin 5, CG in float64) applied at every inference.
 FR observation error e = D(y) - MS (interior) is split into the per-band mean bias, the part from the output's band
@@ -24,9 +24,12 @@ from common.interpolation import interp23tap  # noqa: E402
 
 torch.set_num_threads(8); torch.set_grad_enabled(False)
 S = 2047.
-MODELS = {'C2MS': PERF / '53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt',
-          'L1': PERF / '63_l1_reconstruction_loss/checkpoints/C2MS_L1_QB_s42/best.pt',
-          'L1S': PERF / '65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s42/best.pt'}
+def models(seed):
+    """Archived best.pt per seed; 63 (L1 only) exists for seed 42 only."""
+    m = {'C2MS': PERF / f'53_scale_mixed_training/checkpoints/C2MS_QB_s{seed}/best.pt',
+         'L1': PERF / f'63_l1_reconstruction_loss/checkpoints/C2MS_L1_QB_s{seed}/best.pt',
+         'L1S': PERF / f'65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s{seed}/best.pt'}
+    return {k: v for k, v in m.items() if v.exists()}
 W = Wald('QB', 'cpu')
 
 
@@ -69,7 +72,7 @@ def project(y, ms, margin=OBS_MARGIN, tol=1e-8, max_iter=400):
 
 def load_model(path):
     ck = torch.load(path, map_location='cpu', weights_only=False)
-    m = Model('C2MS', 4, 42); m.load_state_dict(ck['model'], strict=True); return m.eval()
+    m = Model('C2MS', 4, int(ck['seed'])); m.load_state_dict(ck['model'], strict=True); return m.eval()
 
 
 class Net:
@@ -135,25 +138,25 @@ def operator_check():
     return dict(ms_max_abs=float((W.ms(x) - D(x)).abs().max()), pan_max_abs=float((W.pan(p) - DP(p)).abs().max()))
 
 
-def plot(res, out):
+def plot(res, out, seed):
     import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt
-    names = ('C2MS', 'L1', 'L1S'); fig, ax = plt.subplots(1, 2, figsize=(13, 4.2)); x = np.arange(3); w = 0.25
+    names = tuple(n for n in ('C2MS', 'L1', 'L1S') if n in res['models']); fig, ax = plt.subplots(1, 2, figsize=(13, 4.2)); x = np.arange(len(names)); w = 0.25
     for i, k in enumerate(('bias', 'low_band', 'high_band_aliasing')):
         ax[0].bar(x + (i - 1) * w, [res['models'][n]['mean']['obs_decomposition'][k] for n in names], w, label=k)
-    ax[0].set_xticks(x, names); ax[0].set_ylabel('RMSE (DN)'); ax[0].set_title('FR observation error split (seed 42, 20 scenes)'); ax[0].legend(fontsize=8)
+    ax[0].set_xticks(x, names); ax[0].set_ylabel('RMSE (DN)'); ax[0].set_title(f'FR observation error split (seed {seed}, 20 scenes)'); ax[0].legend(fontsize=8)
     base = res['models']['C2MS']['mean']; keys = [n + s for n in names for s in ('', '+P')]
     for i, part in enumerate(('RR', 'RR2', 'FR_WALD')):
         ax[1].bar(np.arange(len(keys)) + (i - 1) * w, [res['models'][k]['mean'][part]['PSNR'] - base[part]['PSNR'] for k in keys], w, label=part)
     ax[1].axhline(0, c='k', lw=.8); ax[1].set_xticks(range(len(keys)), keys, fontsize=8); ax[1].set_title('PSNR - C2MS (dB); +P = with projection'); ax[1].legend(fontsize=8)
-    fig.tight_layout(); fig.savefig(out / 'analysis.png', dpi=120); plt.close(fig)
+    fig.tight_layout(); fig.savefig(out / f'analysis_s{seed}.png', dpi=120); plt.close(fig)
 
 
 def main():
-    a = argparse.ArgumentParser(); a.add_argument('--plot-only', action='store_true'); a.add_argument('--images-only', action='store_true'); a = a.parse_args()
-    out = HERE / 'results'; out.mkdir(exist_ok=True)
-    if a.plot_only: plot(json.loads((out / 'analysis.json').read_text(encoding='utf-8')), out); return
+    a = argparse.ArgumentParser(); a.add_argument('--seed', type=int, default=42); a.add_argument('--plot-only', action='store_true'); a.add_argument('--images-only', action='store_true'); a = a.parse_args()
+    out = HERE / 'results'; out.mkdir(exist_ok=True); target = out / f'analysis_s{a.seed}.json'; MODELS = models(a.seed)
+    if a.plot_only: plot(json.loads(target.read_text(encoding='utf-8')), out, a.seed); return
     if not a.images_only:
-        t0 = time.time(); res = {'operator_check': operator_check(), 'models': {}}
+        t0 = time.time(); res = {'seed': a.seed, 'operator_check': operator_check(), 'models': {}}
         with h5py.File(ROOT / 'data/test/test_qb_multiExm1.h5') as f: rr = [{k: np.asarray(f[k][i], dtype=np.float64) for k in ('pan', 'lms', 'ms', 'gt')} for i in range(20)]
         with h5py.File(ROOT / 'data/test/test_qb_OrigScale_multiExm1.h5') as f: fr = [{k: np.asarray(f[k][i], dtype=np.float64) for k in ('pan', 'lms', 'ms')} for i in range(20)]
         for name, path in MODELS.items():
@@ -162,9 +165,10 @@ def main():
                 mean = {p: {k: float(np.mean([r[p][k] for r in rows])) for k in rows[0][p] if not isinstance(rows[0][p][k], list)} for p in rows[0] if isinstance(rows[0][p], dict)}
                 res['models'][key] = dict(checkpoint=str(path.relative_to(ROOT)), mean=mean, rows=rows, cg_iterations_max=max(net.iters) if net.iters else None)
                 print(key, {p: {k: round(v, 4) for k, v in mean[p].items()} for p in mean}, round(time.time() - t0), 's', flush=True)
-                (out / 'analysis.json').write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding='utf-8')
-        res['seconds'] = round(time.time() - t0, 1); (out / 'analysis.json').write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding='utf-8')
-        plot(res, out)
+                target.write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding='utf-8')
+        res['seconds'] = round(time.time() - t0, 1); target.write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding='utf-8')
+        plot(res, out, a.seed)
+    if a.seed != 42: return  # result images use the fixed seed 42 only
     from common import result_images
     result_images.render(load_model(MODELS['L1S']), Projected(MODELS['L1S']), ROOT / 'data', out / 'images' / 'L1S_vs_L1S_projected', names=('L1S', 'L1S+P'), seed=42, device='cpu',
                          labels=('65번 C2MS L1 + 분광', '65번 + 관측 일치 사영'))

@@ -2,11 +2,11 @@
   "experiment": "performance/65_l1_spectral_loss",
   "research_track": "performance",
   "experiment_number": 65,
-  "state": "QB seed 42 screen complete (L1 + spectral loss 0.46); partially improved; stage 2 pending user decision",
+  "state": "QB seed 42 complete (partially improved); seeds 43 and 44 training on the server (seed 43 best.pt archived)",
   "files": {
     "README.md": {
-      "bytes": 15417,
-      "sha256": "dba205c38b912e9743ddadda1361470070560388d4d1f4146a37ff0906f1ec99"
+      "bytes": 16077,
+      "sha256": "c0f825c8e7322c60a6b1fb6b5cb673848109f3fe20fcbc150c1caaa7dfeb0a85"
     },
     "checkpoints/C2MS_L1S_QB_s42/best.pt": {
       "bytes": 12671795,
@@ -16,13 +16,17 @@
       "bytes": 12680595,
       "sha256": "13c3f8f407c14ee34050ec9de114c1e05fce83d6f050dc3f47400d4fc867268e"
     },
+    "checkpoints/C2MS_L1S_QB_s43/best.pt": {
+      "bytes": 12673011,
+      "sha256": "7bc31dd8bdb7f317d5678e400e7b5666628f15a3f526f6f328b2e27986bf881d"
+    },
     "config.json": {
-      "bytes": 6052,
-      "sha256": "ed0333a59011888166869a645711c17d42e3b6e878a66dcdf80ffbb81f3c47a0"
+      "bytes": 7203,
+      "sha256": "3212a668d33bd650bd3da738149530c63d032d26cfab3fb19977b7af3b5475fd"
     },
     "evaluate.py": {
-      "bytes": 5250,
-      "sha256": "1b12f988e357a284401157df73265a686e594e716c0afc2f5c25c5b5aab806db"
+      "bytes": 5394,
+      "sha256": "37c191b7f14ee89a132be4fe76ff2ffaa2f33c874bc5bd8d3a24de5ca0e17951"
     },
     "model.py": {
       "bytes": 595,
@@ -192,9 +196,21 @@
       "bytes": 785,
       "sha256": "4e1e1c551e621c1a0b72cce0864d25227a36672f3e2312945e77f0babbe982af"
     },
+    "results/C2MS_L1S_QB_s43/history.json": {
+      "bytes": 106980,
+      "sha256": "4afa1a8aaf70ed49ca3953dc9ef58b39d15d699c153201d3325c6fd95652ec59"
+    },
+    "results/C2MS_L1S_QB_s43/initialization.json": {
+      "bytes": 172,
+      "sha256": "f0d90be1a304628cf5c649d82cb5f545e69cffcf9ee7d7e398fd3eefd4947232"
+    },
+    "results/C2MS_L1S_QB_s43/training_complete.json": {
+      "bytes": 784,
+      "sha256": "4a0ffd59dd0c3e4b0ff4d378ea51a5709e0173c03d2c1eebc208e68ef60d8ea0"
+    },
     "run.py": {
-      "bytes": 10894,
-      "sha256": "7a10e8d63a375578f4b5a8a58c2dd00ae2d53dfdb21b58b8cefb4521bc927581"
+      "bytes": 10997,
+      "sha256": "89c8405989949fee303240ec226696feb47a480822ff3e6b96d431229b522556"
     },
     "train.py": {
       "bytes": 3041,
