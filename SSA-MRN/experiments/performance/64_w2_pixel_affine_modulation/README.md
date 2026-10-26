@@ -169,6 +169,10 @@ QB RR·FR test 20장 평균입니다. 세 모델을 같은 서버·같은 코드
 - 결과: `results/C2MS_AM_QB_s42/`의 `history.json`, `training_complete.json`, `evaluation_complete.json`, `evaluation/QB_v2_3.json`, 그래프와 결과 이미지.
 - 실행 기록: `provenance/run_records/`(준비·벤치마크·preflight·컨트롤러 기록, 캐시 manifest, 환경), 자동 시작 대기 스크립트와 기록(`wait64.ps1`, `watcher.log`), 서버 소스 manifest와 실행 스크립트.
 
+### RR2를 고정 대조값으로 다시 집계 (2026-10-27)
+
+[2026-10-27 RR2 고정 대조값](../../../docs/judgement_criteria.md#qb-rr2-고정-대조값-2026-10-27) 규칙에 따라 RR2를 57번 재학습 C2MS seed 42 값(39.1148 dB, 4.2410°)과 다시 비교해도, C2MS_AM의 RR2(38.9557 dB / 4.2678°)는 −0.159 dB / +0.027°로 **미달**입니다. 판정은 **개선 없음**으로 같습니다.
+
 ## 8. 개선 여부와 다음 단계
 
 QB seed 42에서 RR 세 지표가 모두 나빠지고 보조 판정 세 가지도 모두 미달이어서 **개선 없음**입니다. 1단계 관문을 통과하지 못해 seed 43·44로 넓히지 않습니다. 기준 모델은 C2MS로 유지합니다.

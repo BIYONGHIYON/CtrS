@@ -2115,7 +2115,8 @@
       "QB_C2MS_SAM_vs_C2MS": "부분 개선",
       "GF2_C2MS_SAM_vs_C2MS": "개선",
       "WV3_C2MS_SAM_vs_C2MS": "부분 개선",
-      "WV2_C2MS_SAM_vs_C2MS": "개선 없음"
+      "WV2_C2MS_SAM_vs_C2MS": "개선 없음",
+      "rr2_fixed_reference_2026_10_27": "QB RR2 고정 대조값 기준 통과(+0.026 dB), 판정은 잡음 수준 부분 개선으로 동일"
     }
   },
   "performance/59_extended_cosine_training": {
@@ -2254,7 +2255,7 @@
     "retraining": true,
     "epochs": 150,
     "last_checked": "2026-10-26T10:22:27+09:00",
-    "limits": "QB seed 42 단일 시드. 53번 대비 RR 개선(+0.084 dB, −0.060°)이나 RR2·관측 비율 미달, validation PSNR −0.073 dB로 test와 반대. seed 43·44 확장은 사용자 결정 대기. 대조군은 보관된 53번(공식)과 57번 재학습(참조).",
+    "limits": "53번 대비 RR 개선(+0.084 dB, −0.060°)이나 관측 비율 미달(RR2는 2026-10-27 고정 대조값 기준 통과), validation PSNR −0.073 dB로 test와 반대. seed 43·44 확장은 사용자 결정 대기. 대조군은 보관된 53번(공식)과 57번 재학습(참조).",
     "model": "experiments/performance/63_l1_reconstruction_loss/model.py",
     "config": "experiments/performance/63_l1_reconstruction_loss/config.json",
     "entrypoint": "experiments/performance/63_l1_reconstruction_loss/run.py",
@@ -2266,7 +2267,8 @@
     "judgements": {
       "QB_C2MS_L1_vs_C2MS53_s42": "부분 개선",
       "QB_C2MS_L1_vs_C2MS57_s42": "부분 개선",
-      "screen_gate": "test 통과, validation PSNR 반대 방향"
+      "screen_gate": "test 통과, validation PSNR 반대 방향",
+      "rr2_fixed_reference_2026_10_27": "RR2 고정 대조값 기준 통과(+0.120 dB), 관측 비율 미달로 부분 개선 동일"
     }
   },
   "performance/64_w2_pixel_affine_modulation": {
@@ -2296,7 +2298,8 @@
     "judgements": {
       "QB_C2MS_AM_vs_C2MS53_s42": "개선 없음",
       "QB_C2MS_AM_vs_C2MS57_s42": "개선 없음",
-      "screen_gate": "미달"
+      "screen_gate": "미달",
+      "rr2_fixed_reference_2026_10_27": "RR2 고정 대조값 기준으로도 미달(−0.159 dB), 개선 없음 동일"
     }
   },
   "performance/65_l1_spectral_loss": {
@@ -2306,28 +2309,56 @@
     "sensor": "QB",
     "experiment": 65,
     "display_name": "65. C2MS에 L1 손실과 분광 손실을 함께 적용",
-    "status": "평가 완료",
+    "status": "평가 완료(QB 3시드)",
     "improvement": "부분 개선",
     "evaluated_seeds": [
-      42
+      42,
+      43,
+      44
     ],
     "retraining": true,
     "epochs": 150,
     "training_started_kst": "2026-10-26T14:13:39+09:00",
-    "last_checked": "2026-10-26T17:46:20+09:00",
-    "limits": "QB seed 42 단일 시드. 53번 대비 RR PSNR +0.077 dB·SAM −0.111°이나 RR2·관측 비율 미달(57번 재학습 대비 RR2 통과, 관측 비율 미달). validation PSNR −0.045 dB로 관문 조건에 0.005 dB 미달. seed 43·44 확장은 사용자 결정 대기. 분광 계수 0.46(58번과 같은 기울기 비율).",
+    "last_checked": "2026-10-27T02:17:00+09:00",
+    "limits": "QB 3시드(42-44) 평균, 같은 시드 53번 C2MS 대비 RR PSNR +0.028 dB·SAM −0.100°·ERGAS −0.008. PSNR 이득이 잡음 문턱(0.04 dB) 미만이고 관측 비율 1.427 미달. RR2는 고정 대조값 기준 시드 평균 −0.010 dB·+0.058°로 통과, FR_WALD 통과. SAM 목표(−0.15°) 미달로 다른 센서 확장 안 함. 분광 계수 0.46(58번과 같은 기울기 비율).",
     "model": "experiments/performance/65_l1_spectral_loss/model.py",
     "config": "experiments/performance/65_l1_spectral_loss/config.json",
     "entrypoint": "experiments/performance/65_l1_spectral_loss/run.py",
     "results": "experiments/performance/65_l1_spectral_loss/results",
     "checkpoints": "experiments/performance/65_l1_spectral_loss/checkpoints",
     "manifest": "experiments/performance/65_l1_spectral_loss/manifest.json",
-    "evaluation": "experiments/performance/65_l1_spectral_loss/results/C2MS_L1S_QB_s42/evaluation/QB_v2_3.json",
+    "evaluation": "experiments/performance/65_l1_spectral_loss/results/C2MS_L1S_QB_s<seed>/evaluation/QB_v2_3.json",
     "judgements": {
       "QB_C2MS_L1S_vs_C2MS53_s42": "부분 개선",
       "QB_C2MS_L1S_vs_C2MS57_s42": "부분 개선",
       "QB_C2MS_L1S_vs_C2MS_SAM57_s42": "부분 개선",
-      "screen_gate": "test 통과, validation PSNR 0.005 dB 미달"
+      "screen_gate": "test 통과, validation PSNR 0.005 dB 미달",
+      "rr2_fixed_reference_2026_10_27": "seed 42 +0.039 dB / +0.044°, 3시드 평균 −0.010 dB / +0.058° 통과",
+      "QB_C2MS_L1S_vs_C2MS53_s43": "부분 개선",
+      "QB_C2MS_L1S_vs_C2MS53_s44": "부분 개선",
+      "QB_C2MS_L1S_vs_C2MS53_3seed": "부분 개선(잡음 수준·관측 비율 미달)"
     }
+  },
+  "performance/66_observation_error_projection_analysis": {
+    "report": "experiments/performance/66_observation_error_projection_analysis/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 66,
+    "display_name": "66. L1 학습 모델의 원래 해상도 관측 오차 분석과 관측 일치 사영",
+    "status": "사전 검증 완료",
+    "improvement": "성능 비교 아님",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "retraining": false,
+    "last_checked": "2026-10-27T02:17:00+09:00",
+    "limits": "학습 없는 사후 분석. QB seed 42-44(seed 44는 서버 CPU), 탐색에 반복 사용한 test. 사영은 추론 후처리(장면당 CG 약 108회)이며 validation 선택 없음. 3시드 평균 65번 + 사영은 53번 대비 v2.3 수치 항목을 모두 통과(RR PSNR +0.072 dB, SAM −0.102°)했으나 사후 분석이라 판정하지 않음.",
+    "config": "experiments/performance/66_observation_error_projection_analysis/config.json",
+    "entrypoint": "experiments/performance/66_observation_error_projection_analysis/prepare.py",
+    "results": "experiments/performance/66_observation_error_projection_analysis/results",
+    "manifest": "experiments/performance/66_observation_error_projection_analysis/manifest.json"
   }
 }

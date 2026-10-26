@@ -20,9 +20,10 @@ def evaluate(cfg,sensor,arm,seed):
     done=dest/'evaluation_complete.json'
     if done.exists():return
     if not (dest/'training_complete.json').exists():raise RuntimeError('training incomplete')
-    paths={'C2MS':HERE.parents[2]/cfg['controls'][sensor],'C2MS_L1S':dest/'checkpoints/best.pt'}
+    seeded=lambda p:p.replace('<seed>',str(seed))  # control and reference paths may name the seed as <seed> (seed 43/44 stage)
+    paths={'C2MS':HERE.parents[2]/seeded(cfg['controls'][sensor]),'C2MS_L1S':dest/'checkpoints/best.pt'}
     refs=cfg.get('reference_controls',{}).get(sensor,{})
-    paths.update({name:HERE.parents[2]/p for name,p in refs.items()})
+    paths.update({name:HERE.parents[2]/seeded(p) for name,p in refs.items()})
     models={};weights={}
     for name,path in paths.items():
         ck=torch.load(path,map_location='cpu',weights_only=False)

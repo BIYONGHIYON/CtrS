@@ -2,15 +2,13 @@
 
 [연구 소개와 구조도](../README.md) · [알고리즘·지표 설명](docs/research.md)
 
-## 연구 분담
+## 연구 분야
 
-연구 분야를 선택하면 해당 분야의 목적과 실험 표를 바로 확인할 수 있습니다. SSAI 개선은 1-12번 결과를 정리했으며 신규 실험은 계획하지 않습니다. 이병현은 기존 성능 개선 연구로 이동했습니다. 가변 배율 확장은2·3·4배 학습과 RR 평가를 마쳤으며 FR·장면 출처 검증이 남았습니다.
-
-| 연구 | 담당 | 목표 | 현재 단계 |
-|---|---|---|---|
-| [SSAI 개선](research/ssai/README.md) | 이병현 | 밴드별 공간·분광 특징을 결합하는 SSAI의 연산과 구조를 개선합니다. | SSAI 1-12 평가·정리 완료 · 신규 실험 없음 |
-| [가변 배율 확장](research/variable_scale/README.md) | 김윤지 | 기존 고정 4배 복원을 여러 배율에서 동작하도록 확장합니다. | 학습 완료·일부 평가 |
-| [기존 성능 개선](research/performance/README.md) | 김경찬·송준현·이병현 | 기존 연구의 구조·학습·손실 변경을 이어서 비교합니다. | 기존 결과 보유 · 후속 연구 계속 |
+| 연구 | 목표 | 현재 단계 |
+|---|---|---|
+| [성능 개선](research/performance/README.md) | SSA-MRN의 구조·학습·손실을 바꿔 수치를 개선합니다. | 진행 중 |
+| [SSAI 개선](research/ssai/README.md) | 밴드별 공간·분광 특징을 결합하는 SSAI의 연산과 구조를 개선합니다. | 종료(2026-10-16, 1-12번 정리) |
+| [가변 배율 확장](research/variable_scale/README.md) | 고정 4배 복원을 여러 배율에서 동작하도록 확장합니다. | 종료(2026-10-27, 실용성이 낮아 중단) |
 
 <a id="decision"></a>
 
@@ -22,70 +20,25 @@
 
 ## 실험 보고서
 
-실험은 연구별로 구분하며 각 표 안에서는 최근 실험부터 오래된 실험 순서로 정리하고, 새 실험은 표 맨 위에 추가합니다.
-
-<a id="ssai-experiments"></a>
-
-### SSAI 개선
-
-[연구 페이지](research/ssai/README.md) · 담당: **이병현** · 1-12번 정리 완료
-
-<details>
-<summary>SSAI 개선 실험 표 펼치기</summary>
-
-| 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
-|---|---|---|:---:|:---:|
-| [12. 관측 통계로 정합한 밴드별 PAN 입력](experiments/ssai/12_observation_matched_pan_guide/README.md)<br>[이병현] | SSAI 8번 N1 블록에서 PAN 입력만 관측 LR MS 밴드의 국소 평균·표준편차로 정합한 PAN으로 바꾸고, 원 PAN(N1)·장면 전체 통계 정합과 비교합니다. | QB seed42: B3 부분 개선(잡음 수준, RR ΔPSNR +0.050dB); B2 개선 없음. B3는 진단 후보이며 최종 채택을 뜻하지 않습니다. | 평가&nbsp;완료 | 부분&nbsp;개선 |
-| [11. SSAI 경로 제거 분해와 PAN 기저 결합 상한·FR 대리 지표 검증](experiments/ssai/11_ssai_contribution_headroom/README.md)<br>[이병현] | 학습 없이 A0 best에서 SSA 출력·SSAI 단계·coarse 경로·backbone 잔차를 제거하고, PAN 기저 결합 oracle 상한과 validation FR 대리 지표를 검증했습니다. | SSA 출력 제거 시 RR·FR 동일; SSAI 단계 제거 PSNR −1.55dB(상수 보정); oracle null 초과 설명량 11.3%; 대리 Ds 순위 상관 −0.18 | 사전&nbsp;검증&nbsp;완료<br>10-16&nbsp;03:02 | 성능&nbsp;비교&nbsp;아님 |
-| [10. 국소 창 교차 어텐션 SSAI](experiments/ssai/10_local_window_cross_attention/README.md)<br>[이병현] | 전역 공간 softmax를 7×7 국소 창 어텐션으로 바꾸고 동일 파라미터 convolution 대조군과 비교합니다. | 같은 에폭 A0 대비 validation: L2 −0.81%(21에폭), C −1.15%(45에폭); test 미평가 | 학습&nbsp;중단<br>10-16&nbsp;01:20 | 판단&nbsp;보류 |
-| [9. PAN 재구성 오차 기반 보정](experiments/ssai/9_pan_innovation_correction/README.md)<br>[이병현] | PAN 직접 고주파와 PAN 재구성 오차를 같은 크기의 SSAI에서 비교했습니다. | QB seed42: A1·A2 개선 없음. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
-| [8. 공간 가중치 평균 정규화](experiments/ssai/8_spatial_mean_normalization/README.md)<br>[이병현] | 원본 공간 softmax 평균을1로 맞추고 고정·학습 gamma를 비교합니다. | QB seed42: N2 부분 개선; N1 개선 없음. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 부분&nbsp;개선 |
-| [7. MS–PAN 채널 관계 기반 세부정보 보정](experiments/ssai/7_channel_relation_detail/README.md)<br>[이병현] | 4×4 MS–PAN 채널 관계로 PAN 세부정보를 선택·보정합니다. | QB seed42: D7 개선 없음. RR ΔPSNR -0.006dB·ΔSAM +0.016°. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
-| [6. MS 조건부 공간 세부정보 보정](experiments/ssai/6_ms_conditioned_detail/README.md)<br>[이병현] | MS가 선택한 PAN 세부정보를 원본 출력에 잔차 보정합니다. | QB seed42: D6 개선 없음. RR ΔPSNR -0.002dB·ΔSAM +0.004°. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
-| [5. softmax와 sigmoid 혼합 게이트](experiments/ssai/5_mixed_gating/README.md)<br>[이병현] | 원본 좌표에서 softmax와 기준 크기 sigmoid를 고정 비율로 혼합합니다. | QB seed42: M25·M50 개선 없음. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
-| [4. 공간 좌표 정렬과 sigmoid 게이트 결합](experiments/ssai/4_aligned_sigmoid_gating/README.md)<br>[이병현] | 좌표 정렬과 기준 크기 sigmoid를 결합하고 네 후보를 동일 조건으로 비교합니다. | QB seed42: A1·A2·A3 개선 없음. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
-| [3. 기준 크기 sigmoid 게이트](experiments/ssai/3_calibrated_sigmoid_gating/README.md)<br>[이병현] | 원본 전치를 유지하고 공간 softmax를 기준 크기 sigmoid 게이트로 교체했습니다. | QB seed42: A2 부분 개선. RR ΔPSNR +0.023dB·ΔSAM -0.025°. RR2 미달입니다. | 평가&nbsp;완료 | 부분&nbsp;개선 |
-| [2. 기준 면적 정규화](experiments/ssai/2_reference_area_normalization/README.md)<br>[이병현] | 원본 SSAI 출력에 현재 면적/학습 기준 면적을 곱했습니다. | QB seed42: R1 개선 없음. RR ΔPSNR -0.000dB·ΔSAM +0.001°. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
-| [1. 공간 좌표 정렬](experiments/ssai/1_spatial_alignment/README.md)<br>[이병현] | 원본의 두 공간 전치를 제거해 같은 위치의 PAN·MS 특징을 결합했습니다. | QB seed42: A1 부분 개선(잡음 수준). 판정 항목을 모두 통과했지만 RR ΔPSNR +0.055dB가 단일 시드 잡음 문턱 0.06dB 미만입니다. ΔSAM -0.035°. | 평가&nbsp;완료 | 부분&nbsp;개선 |
-
-</details>
-
-<a id="variable_scale-experiments"></a>
-
-### 가변 배율 확장
-
-[연구 페이지](research/variable_scale/README.md) · 담당: **김윤지**
-
-<details>
-<summary>가변 배율 확장 실험 표 펼치기</summary>
-
-| 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
-|---|---|---|:---:|:---:|
-| [3. 배율별 학습 노출량 통제](experiments/variable_scale/3_scale_exposure_control/README.md)<br>[김윤지] | 배율별 표본 순서·53,600회 갱신을 맞춰 전용·공동·FiLM 비교 | D는 전용 대비3·4배 PSNR +0.1420/+0.1471dB,2배 -0.2256dB | 학습&nbsp;완료·일부&nbsp;평가 | 판단&nbsp;보류 |
-| [2. 배율별 학습 노출량 확장](experiments/variable_scale/2_scale_exposure_extension/README.md)<br>[김윤지] | 공동 C/D를100에서200에포크로 연장 | 모든 배율의 RR 개선, 전용 PSNR 격차 유지 | 학습&nbsp;완료·일부&nbsp;평가 | 판단&nbsp;보류 |
-| [1. 가변 배율 복원과 배율 조건](experiments/variable_scale/1_scale_conditioned_restoration/README.md)<br>[김윤지] | 입력 배율과 피라미드를 분리하고 전용·공동 학습 및 FiLM을 비교했습니다. | 공동 모델은 전용 대비PSNR0.40-0.98dB 하락; FiLM3·4배 소폭 개선 | 학습&nbsp;완료·일부&nbsp;평가 | 판단&nbsp;보류 |
-
-</details>
+진행 중인 성능 개선 실험을 먼저 두고 종료된 연구는 접어 두었습니다. 각 표 안에서는 최근 실험부터 오래된 실험 순서로 정리하고, 새 실험은 표 맨 위에 추가합니다.
 
 <a id="performance-experiments"></a>
 
-### 기존 성능 개선
+### 성능 개선
 
-[연구 페이지](research/performance/README.md) · 담당: **김경찬·송준현·이병현**
-
-<details>
-<summary>기존 성능 개선 실험 표 펼치기</summary>
+[연구 페이지](research/performance/README.md)
 
 | 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
 |---|---|---|:---:|:---:|
-| [65. C2MS에 L1 손실과 분광 손실을 함께 적용](experiments/performance/65_l1_spectral_loss/README.md)<br>[이병현] | C2MS의 복원 손실을 L1로 바꾸고 58번 분광 손실을 같은 상대적 세기(계수 0.46)로 더해 처음부터 학습했습니다(QB seed 42). | 53번 대비 test RR PSNR +0.077 dB·**SAM −0.111°**·ERGAS −0.030(SAM 20/20장)으로 주 판정은 통과했고, 63번(L1만)보다 SAM이 0.051° 더 낮습니다. 그러나 RR2(−0.267 dB)와 관측 비율(1.47)이 미달했습니다. | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
-| [64. C2MS W2 가지의 픽셀별 아핀 변조](experiments/performance/64_w2_pixel_affine_modulation/README.md)<br>[이병현] | C2MS W2 가지의 잔차 블록 8개에 픽셀별 scale·bias 변조(ARConv의 아핀 변조)를 넣고 손실·학습 일정은 그대로 두었습니다(QB seed 42). | 53번 대비 test RR PSNR −0.087 dB·SAM +0.004°·ERGAS +0.037, RR2 −0.465 dB로 모두 나빠졌고 원래 해상도 관측 오차가 4.89배로 커졌습니다. validation은 C2MS와 거의 같았습니다. | 평가&nbsp;완료<br>seed42 | 개선&nbsp;없음 |
-| [63. C2MS 학습 손실을 MSE에서 L1로 교체](experiments/performance/63_l1_reconstruction_loss/README.md)<br>[이병현] | C2MS의 구조·축척 혼합·학습 일정은 그대로 두고 원래·거친 쌍의 손실만 MSE에서 L1로 바꿔 처음부터 학습했습니다(QB seed 42). | 53번 대비 test RR PSNR +0.084 dB·SAM −0.060°·ERGAS −0.027(SAM 20/20장)로 주 판정은 통과했지만, RR2(−0.186 dB)와 관측 비율(1.32)이 미달했습니다. validation PSNR은 −0.073 dB로 test와 반대입니다. | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
+| [66. L1 학습 모델의 원래 해상도 관측 오차 분석과 관측 일치 사영](experiments/performance/66_observation_error_projection_analysis/README.md)<br>[이병현] | 63·65번(L1 계열)의 원래 해상도 관측 오차를 성분별로 나누고, 45번 관측 일치 사영을 추론 때 붙여 QB seed 42-44 test를 다시 평가했습니다(학습 없음). | 늘어난 관측 오차는 저주파 성분이었고 에일리어싱은 오히려 줄었습니다. 사영은 관측 오차를 0으로 만들며 RR PSNR을 세 시드 모두 약 +0.04 dB 올렸습니다. 3시드 평균으로 65번 + 사영은 같은 시드 53번 대비 RR PSNR +0.072 dB·SAM −0.102°였고, RR2(고정 대조값 기준)·FR_WALD·관측 일치를 포함한 v2.3 수치 항목을 모두 통과했습니다. 사영끼리 비교한 PSNR 이득은 +0.033 dB입니다. | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
+| [65. C2MS에 L1 손실과 분광 손실을 함께 적용](experiments/performance/65_l1_spectral_loss/README.md)<br>[이병현] | C2MS의 복원 손실을 L1로 바꾸고 58번 분광 손실을 같은 상대적 세기(계수 0.46)로 더해 처음부터 학습했습니다(QB seed 42-44). | 3시드 평균으로 53번 대비 test RR PSNR +0.028 dB·**SAM −0.100°**·ERGAS −0.008로 세 지표가 모두 좋아졌고 SAM은 60/60장에서 낮아졌지만, PSNR 이득이 잡음 문턱(0.04 dB) 미만이고 관측 비율(1.43)이 미달입니다. RR2(고정 대조값 기준)·FR_WALD는 통과했습니다. | 평가&nbsp;완료<br>QB&nbsp;3시드 | 부분&nbsp;개선 |
+| [64. C2MS W2 가지의 픽셀별 아핀 변조](experiments/performance/64_w2_pixel_affine_modulation/README.md)<br>[이병현] | C2MS W2 가지의 잔차 블록 8개에 픽셀별 scale·bias 변조(ARConv의 아핀 변조)를 넣고 손실·학습 일정은 그대로 두었습니다(QB seed 42). | 53번 대비 test RR PSNR −0.087 dB·SAM +0.004°·ERGAS +0.037, RR2 −0.465 dB(고정 대조값 대비 −0.159 dB)로 모두 나빠졌고 원래 해상도 관측 오차가 4.89배로 커졌습니다. validation은 C2MS와 거의 같았습니다. | 평가&nbsp;완료<br>seed42 | 개선&nbsp;없음 |
+| [63. C2MS 학습 손실을 MSE에서 L1로 교체](experiments/performance/63_l1_reconstruction_loss/README.md)<br>[이병현] | C2MS의 구조·축척 혼합·학습 일정은 그대로 두고 원래·거친 쌍의 손실만 MSE에서 L1로 바꿔 처음부터 학습했습니다(QB seed 42). | 53번 대비 test RR PSNR +0.084 dB·SAM −0.060°·ERGAS −0.027(SAM 20/20장)로 주 판정은 통과했지만, RR2는 2026-10-27 고정 대조값 기준 통과, 관측 비율(1.32)은 미달입니다. validation PSNR은 −0.073 dB로 test와 반대입니다. | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 | [62. C2MS 내부 특징과 넓은 문맥을 쓰는 고주파 밴드 비율 헤드](experiments/performance/62_feature_context_band_ratio_head/README.md)<br>[이병현] | 61번 고주파 밴드 비율 헤드에 C2MS backbone 64채널 특징 입력과 넓은 수용 영역(U-Net 31×31)을 2×2로 나눠 더하고 QB seed 42로 선별했습니다(MSE만, C2MS 고정). | 가장 나은 F3도 RR PSNR +0.043 dB·SAM −0.044°(20/20장)였습니다. 네 군 모두 validation과 학습 패치 SAM 감소가 0.03-0.04°에 그쳐, 사전 규칙에 따라 입력의 정보 한계로 판정하고 헤드 방식을 정리했습니다. | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 | [61. 고주파 세부의 밴드 비율 보정](experiments/performance/61_high_frequency_band_ratio_correction/README.md)<br>[이병현] | C2MS 출력의 고주파 세부를 세기와 밴드 비율로 나눠 진단하고(학습 없음), C2MS를 고정한 채 고주파의 밴드 비율만 돌리는 작은 헤드를 QB seed 42로 선별 학습했습니다(MSE만, 각도 손실 3가지, 자유 잔차 대조). | 진단에서는 밴드 비율만 정답으로 바꾸면 QB SAM 4.576° → 2.467°였지만, 학습한 헤드는 가장 나은 H1(MSE만)도 RR PSNR +0.034 dB·SAM −0.040°(20/20장)에 그쳤습니다. 각도 손실은 SAM을 더 줄이지 못하고 관측 비율을 1.10 넘게 올렸습니다. SAM 목표(−0.15°) 미달. | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 | [60. norm을 보존하는 분광 방향 보정](experiments/performance/60_norm_preserving_spectral_direction_refinement/README.md)<br>[이병현] | C2MS 출력의 픽셀 norm은 두고 방향만 고치는 헤드를 계획하고, 학습 전에 보관된 C2MS(QB·GF2·WV3 3시드, WV2 전이)의 각도 오차 위치와 두 관문을 확인했습니다. | QB SAM 4.576°에서 고주파만 정답으로 바꾸면 0.361°, 저주파만 바꾸면 4.481°입니다. 방향 상한 PSNR +2.40 dB로 Gb 통과, 8×8 국소 밴드 변환 상한은 SAM +0.088°로 Ga 미달이어서 학습하지 않았습니다. | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 | [59. 기준 모델 C2MS의 cosine 학습 일정 연장](experiments/performance/59_extended_cosine_training/README.md)<br>[이병현] | C2MS 구조·축척 혼합 손실은 그대로 두고 학습 일정만 150에폭에서 300에폭 cosine으로 늘려 QB·GF2·WV3 seed 42를 새로 학습했습니다(WV3는 WV2 전이 포함). | 같은 시드 150에폭 대비 RR PSNR이 GF2 +0.205 dB·WV3 +0.366 dB(20/20장)로 개선이지만, QB −0.284 dB(validation은 +0.096 dB), WV2 전이 −1.760 dB로 나빠졌습니다. WV2에서는 세부를 더 세게 넣었지만 실제 세부와의 상관이 0.75 → 0.62로 떨어졌습니다. | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
-| [58. 기준 모델 C2MS에 분광 손실을 더한 학습의 반복 시드·다른 센서 확인](experiments/performance/58_spectral_loss_multi_sensor/README.md)<br>[이병현] | C2MS에 분광 손실 0.01을 추가하고 QB·GF2·WV3 seed 42·43·44 및 WV2 전이를 같은 시드 대조군과 비교했습니다. | 3시드 RR PSNR: QB +0.0263 dB(RR2 미달), GF2 +0.0815 dB(v2.3 개선), WV3 +0.0344 dB(잡음 수준), WV2 전이 −0.2147 dB(개선 없음). | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [58. 기준 모델 C2MS에 분광 손실을 더한 학습의 반복 시드·다른 센서 확인](experiments/performance/58_spectral_loss_multi_sensor/README.md)<br>[이병현] | C2MS에 분광 손실 0.01을 추가하고 QB·GF2·WV3 seed 42·43·44 및 WV2 전이를 같은 시드 대조군과 비교했습니다. | 3시드 RR PSNR: QB +0.0263 dB(잡음 수준, RR2는 2026-10-27 고정 대조값 기준 통과), GF2 +0.0815 dB(v2.3 개선), WV3 +0.0344 dB(잡음 수준), WV2 전이 −0.2147 dB(개선 없음). | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [57. 기준 모델 C2MS의 학습 조건 선별: 가중치 EMA와 분광 손실](experiments/performance/57_c2ms_training_conditions/README.md)<br>[이병현] | C2MS 구조는 그대로 두고 가중치 EMA, 분광 손실(0.01 × 1 − cosine), 300에폭 연장을 QB seed 42로 선별했습니다(300에폭은 4에폭에서 중단). | 분광 손실이 53번 C2MS 대비 RR PSNR +0.035 dB·SAM −0.048°(20/20장)·ERGAS −0.015로 세 지표를 개선했지만 PSNR 이득이 단일 시드 문턱 미만이고, 실행 간 변동으로 RR2·관측 일치가 허용 폭을 넘었습니다. 같은 코드의 C2MS 대비로는 모든 보조 판정 통과. EMA는 효과 없음(±0.001 dB). | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 | [56. 원본 SSA-MRN에 축척 혼합 학습만 적용한 W2 용량·축척 혼합 2×2 기여 분해](experiments/performance/56_original_scale_mixed_training/README.md)<br>[이병현] | W2 없이 원본 SSA-MRN에 축척 혼합 학습만 적용한 C0MS를 QB로 학습해, 43번 C0·C2와 53번 C2MS와 같은 시드끼리 2×2로 비교했습니다. | C0MS는 원본 대비 RR PSNR −0.293 dB·FR_WALD −0.525 dB(세 시드 모두, 0/20장)로 나빠졌고 RR2만 +1.910 dB 좋아졌습니다. W2만(C2)은 RR2 미달, 둘 다(C2MS)만 모든 항목 통과이며, 상호작용은 RR +0.463 dB·FR_WALD +0.695 dB였습니다. | 평가&nbsp;완료<br>3seed | 개선&nbsp;없음 |
 | [55. 축척 혼합 학습을 뺀 W2 병렬 가지 모델의 센서 전이 비교](experiments/performance/55_parallel_branch_without_scale_mixing/README.md)<br>[이병현] | 기준 C2MS에서 2배 거친 학습 쌍의 손실만 뺀 C2(원본+W2)를 WV3로 학습해, 54번의 원본·C2MS와 WV3·WV2 전이에서 같은 시드끼리 비교했습니다. | WV2 전이에서 C2MS가 C2보다 RR PSNR +1.305 dB·RR2 +2.354 dB·FR_WALD +1.397 dB(3시드·20/20장)였고, C2는 원본보다도 −0.477 dB여서 C2MS의 전이 이득은 축척 혼합 학습에서 왔습니다. WV3에서는 C2·C2MS의 RR이 비슷했고(C2MS −0.055 dB) RR2만 C2MS가 +3.818 dB 높았습니다. 후보 C2는 기준 C2MS 대비 개선 없음입니다. | 평가&nbsp;완료<br>3seed | 개선&nbsp;없음 |
@@ -144,9 +97,74 @@
 | [2. 논문 설정 재현](research/performance/2_paper_setting_reproduction/README.md)<br>[김경찬] | 논문의 내부 특징 차원 설정으로 재현했습니다. | RR·FR 재현 결과 확보; 공개 코드 재현과 장치 조건이 다름 | 평⁠가⁠ ⁠완⁠료 | 비⁠교⁠ ⁠기⁠준 |
 | [1. 공개 코드 재현](research/performance/1_public_code_reproduction/README.md)<br>[이병현] | 공개 코드 설정을 재현해 초기 기준을 확보했습니다. | RR·FR 재현 결과 확보; 구조 개선 실험이 아님 | 평⁠가⁠ ⁠완⁠료 | 비⁠교⁠ ⁠기⁠준 |
 
+<a id="judgement"></a>
+
+**판정 기준 ([v2.3](docs/judgement_criteria.md))**
+
+| 판정 | 조건 |
+|---|---|
+| 개선 | 주 판정과 보조 판정 3개를 모두 통과 |
+| 부분 개선 | 주 판정만 통과, RR 지표 일부만 개선, 또는 모든 항목을 통과했지만 PSNR 이득이 잡음 문턱 미만 |
+| 개선 없음 | RR PSNR·SAM·ERGAS 모두 개선 없음 |
+| 판단 보류 | 최종 평가 또는 보조 판정 자료가 부족 |
+| 비교 기준·성능 비교 아님 | 판정 대상 아님(기준선, 학습 없는 사전 검증·분석) |
+
+| 구분 | 시험 | 통과 조건 (같은 조건 대조군 대비) |
+|---|---|---|
+| 주 판정 | RR test 20장 | PSNR·SAM·ERGAS 모두 개선, PSNR 이득 ≥ 잡음 문턱(단일 시드 0.06 dB, 2시드 이상 0.04 dB) |
+| 보조 1 | RR2 (RR 입력을 한 번 더 1/4 축소) | ΔPSNR ≥ −0.05 dB, ΔSAM ≤ +0.06°. QB는 57번 재학습 C2MS seed 42의 RR2를 고정 대조값으로 사용([2026-10-27 결정](docs/judgement_criteria.md#qb-rr2-고정-대조값-2026-10-27)) |
+| 보조 2 | FR_WALD (원래 해상도를 1/4 축소, 실제 MS가 정답) | ΔPSNR ≥ −0.07 dB, ΔSAM ≤ +0.04° |
+| 보조 3 | FR 관측 일치 (출력을 관측 연산으로 줄인 값과 입력 MS의 차이) | 관측 RMSE 비율 ≤ 1.10 |
+
+- 여러 시드는 같은 조건 대조군과 짝지은 전체 시드의 평균으로 판정하고, 시드 수와 시드별 결과를 함께 보고합니다.
+- FR QNR·Dλ·Ds는 [정답 순위 검사](experiments/performance/46_fr_spatial_index_validity/README.md)를 통과하지 못해 참고로만 보고합니다.
+- 47번 이전 실험은 [성능 47번 재평가](experiments/performance/47_ground_truth_criteria_reevaluation/README.md)의 보존된 측정값을 v2.3으로 다시 집계한 판정을 표에 씁니다. 원래 v2 판정은 47번 보고서에 보존합니다.
+- 현재 표의 판정 범위는 QB입니다. 개선 표기와 기준 모델 교체는 구분하며, 기준 모델 교체에는 3시드 이상의 개선과 FR·RR2 비교 이미지 확인이 필요합니다.
+
+<a id="ended-research"></a>
+
+### 종료된 연구
+
+두 연구는 종료했습니다. 실험 기록과 실험자 표기는 그대로 보존합니다.
+
+<a id="ssai-experiments"></a>
+
+<details>
+<summary>SSAI 개선 · 2026-10-16 1-12번 정리 후 종료</summary>
+
+[연구 페이지](research/ssai/README.md)
+
+| 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
+|---|---|---|:---:|:---:|
+| [12. 관측 통계로 정합한 밴드별 PAN 입력](experiments/ssai/12_observation_matched_pan_guide/README.md)<br>[이병현] | SSAI 8번 N1 블록에서 PAN 입력만 관측 LR MS 밴드의 국소 평균·표준편차로 정합한 PAN으로 바꾸고, 원 PAN(N1)·장면 전체 통계 정합과 비교합니다. | QB seed42: B3 부분 개선(잡음 수준, RR ΔPSNR +0.050dB); B2 개선 없음. B3는 진단 후보이며 최종 채택을 뜻하지 않습니다. | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [11. SSAI 경로 제거 분해와 PAN 기저 결합 상한·FR 대리 지표 검증](experiments/ssai/11_ssai_contribution_headroom/README.md)<br>[이병현] | 학습 없이 A0 best에서 SSA 출력·SSAI 단계·coarse 경로·backbone 잔차를 제거하고, PAN 기저 결합 oracle 상한과 validation FR 대리 지표를 검증했습니다. | SSA 출력 제거 시 RR·FR 동일; SSAI 단계 제거 PSNR −1.55dB(상수 보정); oracle null 초과 설명량 11.3%; 대리 Ds 순위 상관 −0.18 | 사전&nbsp;검증&nbsp;완료<br>10-16&nbsp;03:02 | 성능&nbsp;비교&nbsp;아님 |
+| [10. 국소 창 교차 어텐션 SSAI](experiments/ssai/10_local_window_cross_attention/README.md)<br>[이병현] | 전역 공간 softmax를 7×7 국소 창 어텐션으로 바꾸고 동일 파라미터 convolution 대조군과 비교합니다. | 같은 에폭 A0 대비 validation: L2 −0.81%(21에폭), C −1.15%(45에폭); test 미평가 | 학습&nbsp;중단<br>10-16&nbsp;01:20 | 판단&nbsp;보류 |
+| [9. PAN 재구성 오차 기반 보정](experiments/ssai/9_pan_innovation_correction/README.md)<br>[이병현] | PAN 직접 고주파와 PAN 재구성 오차를 같은 크기의 SSAI에서 비교했습니다. | QB seed42: A1·A2 개선 없음. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [8. 공간 가중치 평균 정규화](experiments/ssai/8_spatial_mean_normalization/README.md)<br>[이병현] | 원본 공간 softmax 평균을1로 맞추고 고정·학습 gamma를 비교합니다. | QB seed42: N2 부분 개선; N1 개선 없음. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [7. MS–PAN 채널 관계 기반 세부정보 보정](experiments/ssai/7_channel_relation_detail/README.md)<br>[이병현] | 4×4 MS–PAN 채널 관계로 PAN 세부정보를 선택·보정합니다. | QB seed42: D7 개선 없음. RR ΔPSNR -0.006dB·ΔSAM +0.016°. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [6. MS 조건부 공간 세부정보 보정](experiments/ssai/6_ms_conditioned_detail/README.md)<br>[이병현] | MS가 선택한 PAN 세부정보를 원본 출력에 잔차 보정합니다. | QB seed42: D6 개선 없음. RR ΔPSNR -0.002dB·ΔSAM +0.004°. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [5. softmax와 sigmoid 혼합 게이트](experiments/ssai/5_mixed_gating/README.md)<br>[이병현] | 원본 좌표에서 softmax와 기준 크기 sigmoid를 고정 비율로 혼합합니다. | QB seed42: M25·M50 개선 없음. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [4. 공간 좌표 정렬과 sigmoid 게이트 결합](experiments/ssai/4_aligned_sigmoid_gating/README.md)<br>[이병현] | 좌표 정렬과 기준 크기 sigmoid를 결합하고 네 후보를 동일 조건으로 비교합니다. | QB seed42: A1·A2·A3 개선 없음. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [3. 기준 크기 sigmoid 게이트](experiments/ssai/3_calibrated_sigmoid_gating/README.md)<br>[이병현] | 원본 전치를 유지하고 공간 softmax를 기준 크기 sigmoid 게이트로 교체했습니다. | QB seed42: A2 부분 개선. RR ΔPSNR +0.023dB·ΔSAM -0.025°. RR2 미달입니다. | 평가&nbsp;완료 | 부분&nbsp;개선 |
+| [2. 기준 면적 정규화](experiments/ssai/2_reference_area_normalization/README.md)<br>[이병현] | 원본 SSAI 출력에 현재 면적/학습 기준 면적을 곱했습니다. | QB seed42: R1 개선 없음. RR ΔPSNR -0.000dB·ΔSAM +0.001°. RR 주 판정 미달입니다. | 평가&nbsp;완료 | 개선&nbsp;없음 |
+| [1. 공간 좌표 정렬](experiments/ssai/1_spatial_alignment/README.md)<br>[이병현] | 원본의 두 공간 전치를 제거해 같은 위치의 PAN·MS 특징을 결합했습니다. | QB seed42: A1 부분 개선(잡음 수준). 판정 항목을 모두 통과했지만 RR ΔPSNR +0.055dB가 단일 시드 잡음 문턱 0.06dB 미만입니다. ΔSAM -0.035°. | 평가&nbsp;완료 | 부분&nbsp;개선 |
+
 </details>
 
-**판정 기준 ([v2.3](docs/judgement_criteria.md)):** 개선 = 같은 조건 대조군 대비 RR PSNR·SAM·ERGAS가 모두 개선(PSNR은 잡음 문턱 이상: 단일 시드 0.06dB, 2시드 이상 0.04dB)되고 정답 기반 보조 판정(RR2·FR_WALD·FR 관측 일치)을 모두 통과, 부분 개선 = 주 판정만 통과, RR 지표 일부만 개선, 또는 이득이 잡음 문턱 미만, 개선 없음 = RR 지표 모두 개선 없음, 판단 보류 = 최종 평가 부족입니다. 비교 기준·성능 비교 아님은 개선 판정 대상에서 제외합니다. FR QNR·Dλ·Ds는 [정답 순위 검사](experiments/performance/46_fr_spatial_index_validity/README.md)를 통과하지 못해 참고로만 보고합니다. 47번 이전 실험의 판정은 [성능 47번 재평가](experiments/performance/47_ground_truth_criteria_reevaluation/README.md)의 보존된 측정값을 v2.3으로 다시 집계해 표에 반영합니다. 원래 v2 판정은 47번 보고서에 보존하며, 보조 판정 자료가 없는 성능 비교는 판단 보류입니다. 현재 표의 판정 범위는 QB이고 다른 센서·배율로 확대하지 않습니다. 단일 시드도 모든 판정 항목을 통과하면 개선으로 표기하며, 여러 시드는 같은 조건 대조군과 짝지은 전체 시드의 평균으로 판정합니다. 시드 수·시드별 결과를 함께 보고합니다. 개선 표기와 기준 모델 교체는 구분하며, 기준 모델 교체에는 3시드 이상에서 개선과 FR·RR2 비교 이미지 확인이 필요합니다.
+<a id="variable_scale-experiments"></a>
+
+<details>
+<summary>가변 배율 확장 · 2026-10-27 실용성이 낮아 종료</summary>
+
+[연구 페이지](research/variable_scale/README.md)
+
+| 실험 | 변경한 내용 | 확인된 결과 | 상태 | 개선 여부 |
+|---|---|---|:---:|:---:|
+| [3. 배율별 학습 노출량 통제](experiments/variable_scale/3_scale_exposure_control/README.md)<br>[김윤지] | 배율별 표본 순서·53,600회 갱신을 맞춰 전용·공동·FiLM 비교 | D는 전용 대비3·4배 PSNR +0.1420/+0.1471dB,2배 -0.2256dB | 학습&nbsp;완료·일부&nbsp;평가 | 판단&nbsp;보류 |
+| [2. 배율별 학습 노출량 확장](experiments/variable_scale/2_scale_exposure_extension/README.md)<br>[김윤지] | 공동 C/D를100에서200에포크로 연장 | 모든 배율의 RR 개선, 전용 PSNR 격차 유지 | 학습&nbsp;완료·일부&nbsp;평가 | 판단&nbsp;보류 |
+| [1. 가변 배율 복원과 배율 조건](experiments/variable_scale/1_scale_conditioned_restoration/README.md)<br>[김윤지] | 입력 배율과 피라미드를 분리하고 전용·공동 학습 및 FiLM을 비교했습니다. | 공동 모델은 전용 대비PSNR0.40-0.98dB 하락; FiLM3·4배 소폭 개선 | 학습&nbsp;완료·일부&nbsp;평가 | 판단&nbsp;보류 |
+
+</details>
 
 <a id="files"></a>
 

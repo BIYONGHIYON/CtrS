@@ -1,0 +1,28 @@
+{
+  "experiment": 66,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "L1 학습 모델의 원래 해상도 관측 오차 분석과 관측 일치 사영",
+  "status": "사전 검증 완료",
+  "improvement": "성능 비교 아님",
+  "question": "Experiments 63 (L1) and 65 (L1 + spectral loss) failed the FR observation guard (RMSE ratio 1.32 and 1.47 against 53 C2MS) while FR_WALD and FR D_lambda improved. Where does the extra observation error come from, and can the experiment 45 exact observation-consistency projection remove it without losing the RR gains?",
+  "training": false,
+  "models": {
+    "C2MS": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt",
+    "L1": "experiments/performance/63_l1_reconstruction_loss/checkpoints/C2MS_L1_QB_s<seed>/best.pt (seed 42 only)",
+    "L1S": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt"
+  },
+  "data": "QB RR and FR test, 20 scenes each (local data/test, same files as the server evaluation)",
+  "metrics": "same as the server evaluation of 53/54/63/65: rr_metrics on RR, RR2 (54 Wald degradation of the RR input, RR MS as reference) and FR_WALD (degradation of the FR input, FR MS as reference); fr_metrics and observation RMSE (interior, margin 5) on FR",
+  "operators": "54 Wald operators (QB MS/PAN MTF, 41 taps, replicate border, decimation phase 2) evaluated with FFT; checked against the direct form on random 96x96 inputs (max abs difference recorded in results/analysis_s<seed>.json)",
+  "projection": "experiment 45: y' = y + D^T M^T (M D D^T M^T)^-1 M (MS - D y), interior mask margin 5 (P5), CG per band in float64, relative tolerance 1e-8, at most 400 iterations, applied at every inference (RR, RR2, FR_WALD and FR inputs)",
+  "decomposition": "e = D(y) - MS on the interior: per-band mean bias; low band = D(lowpass(y)) - MS with an ideal FFT lowpass at 1/8 cycles/pixel (MS Nyquist); high band (aliasing) = D(y - lowpass(y)); e = low band + high band",
+  "images": "common/result_images.py on the fixed six QB RR scenes, 65 L1 + spectral without vs with projection (visual check of the projection, not a baseline comparison)",
+  "device": "local CPU (Apple), float64 operators; seed 44 on the server CPU (same script, --rr/--fr/--l1s/--out paths) after experiment 65 finished",
+  "limits": "seeds 42-44; post-hoc analysis on the test set already used for exploration; the projection is an inference-time step (about 108 CG iterations per image), not a trained model; no validation-based selection",
+  "seeds": [
+    42,
+    43,
+    44
+  ]
+}
