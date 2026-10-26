@@ -3,8 +3,8 @@
   "research_track": "performance",
   "experimenter": "이병현",
   "title": "C2MS 학습 손실을 MSE에서 L1로 교체",
-  "status": "계획",
-  "improvement": "판단 보류",
+  "status": "평가 완료",
+  "improvement": "부분 개선",
   "hypothesis": "The top single-pass pansharpening models (ARConv, CANNet, U2Net+PAKAN) all train with an L1 loss while C2MS uses MSE. L1 gives every pixel error the same gradient magnitude, so small but widespread errors such as the band ratio of the high band may be reduced more evenly, lowering SAM with PSNR kept.",
   "arms": {
     "C2MS": "unchanged C2MS architecture (SSA-MRN K4 + W2), fresh 150-epoch cosine training with L1 instead of MSE on the original and the 2x coarser pairs (run folder name keeps the 54 arm name C2MS)"

@@ -3,8 +3,8 @@
   "research_track": "performance",
   "experimenter": "이병현",
   "title": "C2MS W2 가지의 픽셀별 아핀 변조",
-  "status": "계획",
-  "improvement": "판단 보류",
+  "status": "평가 완료",
+  "improvement": "개선 없음",
   "hypothesis": "ARConv (CVPR 2025) lost the most SAM when its per-pixel affine modulation was removed (WV3 +0.135 deg). Adding the same per-pixel scale and bias to the eight W2 residual blocks of C2MS lets the branch adapt its features to the local content, which may lower SAM together with PSNR without changing the loss.",
   "arms": {
     "C2MS_AM": "C2MS with every W2 block x + net(x) replaced by x + net(x) * (1 + m(x)) + b(x); [m, b] from 1x1 128->32, PReLU, 3x3 32->32, PReLU, 1x1 32->256 at H/2, last conv zero-initialized; C2MS weights initialized exactly as 43 C2 of the same seed, modulation weights under seed + 1000"

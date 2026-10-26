@@ -1598,19 +1598,28 @@
     "sensor": "QB",
     "experiment": 63,
     "display_name": "63. C2MS 학습 손실을 MSE에서 L1로 교체",
-    "status": "학습 중",
-    "improvement": "판단 보류",
-    "evaluated_seeds": [],
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42
+    ],
     "retraining": true,
     "epochs": 150,
-    "last_checked": "2026-10-26T07:12:00+09:00",
-    "limits": "QB seed 42 선별부터. 대조군은 보관된 53번 C2MS(공식)와 57번 재학습 C2MS(참고), 새로 학습하지 않음.",
+    "last_checked": "2026-10-26T10:22:27+09:00",
+    "limits": "QB seed 42 단일 시드. 53번 대비 RR 개선(+0.084 dB, −0.060°)이나 RR2·관측 비율 미달, validation PSNR −0.073 dB로 test와 반대. seed 43·44 확장은 사용자 결정 대기. 대조군은 보관된 53번(공식)과 57번 재학습(참조).",
     "model": "experiments/performance/63_l1_reconstruction_loss/model.py",
     "config": "experiments/performance/63_l1_reconstruction_loss/config.json",
     "entrypoint": "experiments/performance/63_l1_reconstruction_loss/run.py",
     "results": "experiments/performance/63_l1_reconstruction_loss/results",
     "checkpoints": "experiments/performance/63_l1_reconstruction_loss/checkpoints",
-    "manifest": "experiments/performance/63_l1_reconstruction_loss/manifest.json"
+    "manifest": "experiments/performance/63_l1_reconstruction_loss/manifest.json",
+    "training_started_kst": "2026-10-26T07:10:29+09:00",
+    "evaluation": "experiments/performance/63_l1_reconstruction_loss/results/C2MS_L1_QB_s42/evaluation/QB_v2_3.json",
+    "judgements": {
+      "QB_C2MS_L1_vs_C2MS53_s42": "부분 개선",
+      "QB_C2MS_L1_vs_C2MS57_s42": "부분 개선",
+      "screen_gate": "test 통과, validation PSNR 반대 방향"
+    }
   },
   "performance/64_w2_pixel_affine_modulation": {
     "report": "experiments/performance/64_w2_pixel_affine_modulation/README.md",
@@ -1619,18 +1628,27 @@
     "sensor": "QB",
     "experiment": 64,
     "display_name": "64. C2MS W2 가지의 픽셀별 아핀 변조",
-    "status": "계획",
-    "improvement": "판단 보류",
-    "evaluated_seeds": [],
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "evaluated_seeds": [
+      42
+    ],
     "retraining": true,
     "epochs": 150,
-    "last_checked": "2026-10-26T08:51:00+09:00",
-    "limits": "QB seed 42 선별부터. 서버에서 63번 종료 후 자동 시작하도록 예약. 대조군은 보관된 53번 C2MS(공식)와 57번 재학습 C2MS(참고).",
+    "last_checked": "2026-10-26T14:11:10+09:00",
+    "limits": "QB seed 42 단일 시드. RR 세 지표·보조 판정 모두 악화, 원래 해상도 관측 오차 4.89배. 1단계 관문 미달로 확장 안 함.",
     "model": "experiments/performance/64_w2_pixel_affine_modulation/model.py",
     "config": "experiments/performance/64_w2_pixel_affine_modulation/config.json",
     "entrypoint": "experiments/performance/64_w2_pixel_affine_modulation/run.py",
     "results": "experiments/performance/64_w2_pixel_affine_modulation/results",
     "checkpoints": "experiments/performance/64_w2_pixel_affine_modulation/checkpoints",
-    "manifest": "experiments/performance/64_w2_pixel_affine_modulation/manifest.json"
+    "manifest": "experiments/performance/64_w2_pixel_affine_modulation/manifest.json",
+    "training_started_kst": "2026-10-26T10:24:25+09:00",
+    "evaluation": "experiments/performance/64_w2_pixel_affine_modulation/results/C2MS_AM_QB_s42/evaluation/QB_v2_3.json",
+    "judgements": {
+      "QB_C2MS_AM_vs_C2MS53_s42": "개선 없음",
+      "QB_C2MS_AM_vs_C2MS57_s42": "개선 없음",
+      "screen_gate": "미달"
+    }
   }
 }
