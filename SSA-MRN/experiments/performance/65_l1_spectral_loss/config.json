@@ -3,8 +3,8 @@
   "research_track": "performance",
   "experimenter": "이병현",
   "title": "C2MS에 L1 손실과 분광 손실을 함께 적용",
-  "status": "평가 완료",
-  "improvement": "부분 개선",
+  "status": "학습 중",
+  "improvement": "판단 보류",
   "hypothesis": "Experiment 58 (MSE + 0.01 x spectral loss) lowered QB SAM by 0.048 deg but failed RR2 on QB. Experiment 63 (L1 instead of MSE) shows much better coarse-scale validation (PSNR +0.15 to +0.48 dB by epoch 74). Combining L1 with the same spectral loss may keep the coarse scale (RR2) while adding the spectral-loss SAM gain.",
   "arms": {
     "C2MS_L1S": "unchanged C2MS architecture; original L1 + 1.0 x coarse L1 + 0.46 x spectral loss (mean 1 - cosine) on the original pair; 58 trainer with its MSE expressions replaced by absolute errors"
@@ -16,7 +16,8 @@
     "WV2": "WV3-trained models evaluated on the WV2 test set (PanCollection convention; WV2 has no training data)"
   },
   "seeds": [
-    42
+    43,
+    44
   ],
   "epochs": 150,
   "batch": 32,
@@ -79,12 +80,17 @@
       "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
     }
   },
-  "runtime": "C:/CtrS-p65/run",
+  "runtime": "C:/CtrS-p65s2/run",
   "queue": [
     [
       "QB",
       "C2MS_L1S",
-      42
+      43
+    ],
+    [
+      "QB",
+      "C2MS_L1S",
+      44
     ]
   ],
   "max_parallel": 1,
@@ -106,12 +112,11 @@
   "cache_reuse_source": "C:/CtrS-p59/run",
   "schedule": "lr_end + 0.5*(lr_start-lr_end)*(1+cos(pi*zero_based_epoch/149)); fresh initialization",
   "controls": {
-    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt"
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt"
   },
   "reference_controls": {
     "QB": {
-      "C2MS_57": "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt",
-      "C2MS_SAM_57": "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_SAM_QB_s42/best.pt"
+      "C2MS_SAM_58": "experiments/performance/58_spectral_loss_multi_sensor/checkpoints/C2MS_SAM_QB_s<seed>/best.pt"
     }
   },
   "control_policy": "No new control run. The official control is the archived 53 C2MS of the same seed: a same-seed C2MS retrained in 57 differed from it by only +0.009 dB / -0.003 deg / -0.004 on RR, but by -0.306 dB on RR2 and 1.124 in the observation ratio. The 57 retrained C2MS is reported as a second reference; RR2/observation guards that fail against 53 but pass against 57 are read as run-to-run variance. If the 3-seed guards end within 0.02 dB of a tolerance, same-code 3-seed controls are added.",
@@ -123,5 +128,37 @@
   "ema_beta": 0.99,
   "ema": "EMA (beta 0.99) recorded as in 58, reported only; the main result uses the validation-MSE-selected regular weights",
   "comparison_note": "the L1-only run of experiment 63 (QB seed 42) is compared afterwards from its per-scene records on the same 20 scenes, to separate the spectral-loss effect under L1",
-  "spectral_weight_rule": "fixed before training (user choice on 2026-10-26: same relative strength as 58): lambda = 0.01 x |grad L1| / |grad MSE| with respect to the converged 53 C2MS output on 256 evenly spaced QB training patches (8 batches of 32, local CPU); ratio 46.0 -> 0.4601, per batch 0.43-0.49; record in provenance/spectral_weight_calibration.json"
+  "spectral_weight_rule": "fixed before training (user choice on 2026-10-26: same relative strength as 58): lambda = 0.01 x |grad L1| / |grad MSE| with respect to the converged 53 C2MS output on 256 evenly spaced QB training patches (8 batches of 32, local CPU); ratio 46.0 -> 0.4601, per batch 0.43-0.49; record in provenance/spectral_weight_calibration.json",
+  "stage1_record": {
+    "seeds": [
+      42
+    ],
+    "runtime": "C:/CtrS-p65/run",
+    "queue": [
+      [
+        "QB",
+        "C2MS_L1S",
+        42
+      ]
+    ],
+    "controls": {
+      "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt"
+    },
+    "reference_controls": {
+      "QB": {
+        "C2MS_57": "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt",
+        "C2MS_SAM_57": "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_SAM_QB_s42/best.pt"
+      }
+    },
+    "note": "QB seed 42 screen (2026-10-26 14:13-17:46 KST); sealed copy in provenance/run_records/runtime_config.json"
+  },
+  "stage2": {
+    "approved": "2026-10-26 by the user after the seed 42 screen (test gate passed, validation PSNR 0.005 dB short of the gate)",
+    "seeds": [
+      43,
+      44
+    ],
+    "judgement": "paired 3-seed v2.3 against the 53 C2MS of seeds 42-44 (seed 42 from the stage-1 runtime), noise threshold 0.04 dB; 58 C2MS_SAM (MSE + 0.01 spectral) of seeds 43/44 as reference",
+    "code_change": "evaluate.py/run.py accept <seed> in control and reference paths; training code unchanged"
+  }
 }

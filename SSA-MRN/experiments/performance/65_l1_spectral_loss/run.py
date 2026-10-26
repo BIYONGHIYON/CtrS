@@ -14,7 +14,8 @@ def source_hashes():
     perf=HERE.parent;root=perf.parents[1];e43=perf/'43_normalized_parallel_capacity';e54=perf/'54_multi_sensor_scale_mixed_training'
     paths=[HERE/'model.py',HERE/'prepare.py',HERE/'train.py',HERE/'run.py',HERE/'config.json',HERE/'evaluate.py',e54/'model.py',e54/'prepare.py',e54/'train.py',perf/'58_spectral_loss_multi_sensor/train.py',e54/'evaluate.py',e54/'config.json',e43/'model.py',*sorted((e43/'provenance/source').rglob('*.py')),root/'common/interpolation.py',root/'common/metrics.py',root/'common/observation.py',root/'common/evaluation_protocol.py',root/'common/result_images.py']
     conf=json.loads((HERE/'config.json').read_text(encoding='utf8'))
-    paths += [root/p for p in [*conf['controls'].values(),*(q for refs in conf.get('reference_controls',{}).values() for q in refs.values())]]
+    templates=[*conf['controls'].values(),*(q for refs in conf.get('reference_controls',{}).values() for q in refs.values())]
+    paths += [root/p.replace('<seed>',str(s)) for p in templates for s in (conf['seeds'] if '<seed>' in p else [None])]
     return {str(p.relative_to(root)).replace('\\','/'):sha(p) for p in paths}
 def fingerprint(cfg):
     c={k:v for k,v in cfg.items() if k!='fingerprint'}
