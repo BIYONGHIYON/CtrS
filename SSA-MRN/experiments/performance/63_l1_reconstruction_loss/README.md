@@ -168,7 +168,7 @@ test 조건은 통과했지만 validation PSNR이 반대 방향이라, 미리 �
 
 - [train.py](train.py): 54번 학습기에 L1 치환만 적용한 학습 진입점. [model.py](model.py)·[prepare.py](prepare.py)는 54번 C2MS 구조와 센서 연산을 그대로 씁니다.
 - [run.py](run.py)·[evaluate.py](evaluate.py): 59번 컨트롤러(캐시 하드링크, 벤치마크, preflight, 순차 큐)와 평가(53번 대조군·57번 참조 대비 v2.3, 결과 이미지).
-- [config.json](config.json): 학습 전에 고정한 설정·대조군 방침·관문. 서버에 봉인된 설정·소스 해시는 [runtime_config.json](provenance/run_records/runtime_config.json)에 있고, 저장소의 소스와 같습니다(22개 파일).
+- [config.json](config.json): 학습 전에 고정한 설정·대조군 방침·관문. 서버에 봉인된 설정·소스 해시는 [runtime_config.json](provenance/run_records/runtime_config.json)에 있습니다. 저장소의 학습 소스는 봉인 해시와 같고, config.json은 평가 후 첫머리의 상태·개선 여부 필드만 바꿨습니다.
 - 가중치: `checkpoints/C2MS_L1_QB_s42/best.pt`(Git, 150에폭). 재개용 `latest.pt`와 초기 `initial.pt`는 GitHub Release `weights-experiments-performance-63`에 있고 [manifest.json](manifest.json)의 `release_assets`에 기록했습니다.
 - 결과: `results/C2MS_L1_QB_s42/`의 `history.json`, `training_complete.json`, `evaluation_complete.json`, `evaluation/QB_v2_3.json`(장면별 RR·RR2·FR_WALD·FR), 그래프와 결과 이미지.
 - 실행 기록: `provenance/run_records/`(준비·벤치마크·preflight·컨트롤러 기록, 캐시 manifest, 환경), 서버 소스 manifest와 실행 스크립트.
@@ -179,4 +179,4 @@ QB seed 42에서 RR 세 지표가 모두 좋아지고 PSNR 이득이 잡음 문�
 
 - 1단계 관문은 test 조건을 통과했지만 validation PSNR이 반대 방향이라 사전 조건을 모두 만족하지 못했습니다. seed 43·44로 넓히면 validation과 test 중 어느 쪽이 실제 경향인지, RR2 미달이 실행 간 변동인지를 3시드 평균으로 판단할 수 있습니다. 진행 여부는 사용자 결정으로 남깁니다.
 - 관측 비율 악화는 두 대조군 모두에서 나타났으므로 실제 경향으로 봅니다. L1을 계속 쓴다면 원래 해상도 출력의 관측 일치를 함께 확인해야 합니다.
-- L1에 분광 손실을 더한 후속은 성능 65번에서 진행 중입니다(2026-10-26 서버 학습 중).
+- L1에 분광 손실을 더한 후속 [성능 65번](../65_l1_spectral_loss/README.md)은 같은 조건에서 SAM을 0.051° 더 줄였습니다(53번 대비 −0.111°).

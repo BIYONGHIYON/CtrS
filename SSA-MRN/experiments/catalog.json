@@ -1650,5 +1650,36 @@
       "QB_C2MS_AM_vs_C2MS57_s42": "개선 없음",
       "screen_gate": "미달"
     }
+  },
+  "performance/65_l1_spectral_loss": {
+    "report": "experiments/performance/65_l1_spectral_loss/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 65,
+    "display_name": "65. C2MS에 L1 손실과 분광 손실을 함께 적용",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "epochs": 150,
+    "training_started_kst": "2026-10-26T14:13:39+09:00",
+    "last_checked": "2026-10-26T17:46:20+09:00",
+    "limits": "QB seed 42 단일 시드. 53번 대비 RR PSNR +0.077 dB·SAM −0.111°이나 RR2·관측 비율 미달(57번 재학습 대비 RR2 통과, 관측 비율 미달). validation PSNR −0.045 dB로 관문 조건에 0.005 dB 미달. seed 43·44 확장은 사용자 결정 대기. 분광 계수 0.46(58번과 같은 기울기 비율).",
+    "model": "experiments/performance/65_l1_spectral_loss/model.py",
+    "config": "experiments/performance/65_l1_spectral_loss/config.json",
+    "entrypoint": "experiments/performance/65_l1_spectral_loss/run.py",
+    "results": "experiments/performance/65_l1_spectral_loss/results",
+    "checkpoints": "experiments/performance/65_l1_spectral_loss/checkpoints",
+    "manifest": "experiments/performance/65_l1_spectral_loss/manifest.json",
+    "evaluation": "experiments/performance/65_l1_spectral_loss/results/C2MS_L1S_QB_s42/evaluation/QB_v2_3.json",
+    "judgements": {
+      "QB_C2MS_L1S_vs_C2MS53_s42": "부분 개선",
+      "QB_C2MS_L1S_vs_C2MS57_s42": "부분 개선",
+      "QB_C2MS_L1S_vs_C2MS_SAM57_s42": "부분 개선",
+      "screen_gate": "test 통과, validation PSNR 0.005 dB 미달"
+    }
   }
 }
