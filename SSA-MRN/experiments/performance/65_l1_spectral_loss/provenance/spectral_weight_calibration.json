@@ -1,0 +1,10 @@
+{
+ "patches": 256,
+ "indices": "np.linspace(0,n-1,256) over train_qb.h5",
+ "model": "53 C2MS QB s42 best.pt",
+ "grad_norm_mse": 3.0016041819180828e-05,
+ "grad_norm_l1": 0.0013810675882268697,
+ "grad_norm_spectral": 0.0021047912596259266,
+ "lambda_rule": "0.01 * |grad L1| / |grad MSE| with respect to the C2MS output, mean over 8 batches of 32",
+ "spectral_weight": 0.4601
+}

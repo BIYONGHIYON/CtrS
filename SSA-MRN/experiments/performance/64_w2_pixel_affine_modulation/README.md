@@ -164,7 +164,7 @@ QB RR·FR test 20장 평균입니다. 세 모델을 같은 서버·같은 코드
 - [model.py](model.py): C2MS_AM(W2 블록 변조)과 대조군 C2MS 생성.
 - [train.py](train.py): 54번 학습기에 preflight 초기값 확인만 바꾼 학습 진입점.
 - [prepare.py](prepare.py)·[run.py](run.py)·[evaluate.py](evaluate.py): 59·63번과 같은 컨트롤러·평가(53번 대조군·57번 참조 대비 v2.3, 결과 이미지).
-- [config.json](config.json): 학습 전에 고정한 설정·대조군 방침·관문. 서버에 봉인된 설정·소스 해시는 [runtime_config.json](provenance/run_records/runtime_config.json)에 있고, 저장소의 소스와 같습니다(22개 파일).
+- [config.json](config.json): 학습 전에 고정한 설정·대조군 방침·관문. 서버에 봉인된 설정·소스 해시는 [runtime_config.json](provenance/run_records/runtime_config.json)에 있습니다. 저장소의 학습 소스는 봉인 해시와 같고, config.json은 평가 후 첫머리의 상태·개선 여부 필드만 바꿨습니다.
 - 가중치: `checkpoints/C2MS_AM_QB_s42/best.pt`(Git, 141에폭). 재개용 `latest.pt`와 초기 `initial.pt`는 GitHub Release `weights-experiments-performance-64`에 있고 [manifest.json](manifest.json)의 `release_assets`에 기록했습니다.
 - 결과: `results/C2MS_AM_QB_s42/`의 `history.json`, `training_complete.json`, `evaluation_complete.json`, `evaluation/QB_v2_3.json`, 그래프와 결과 이미지.
 - 실행 기록: `provenance/run_records/`(준비·벤치마크·preflight·컨트롤러 기록, 캐시 manifest, 환경), 자동 시작 대기 스크립트와 기록(`wait64.ps1`, `watcher.log`), 서버 소스 manifest와 실행 스크립트.
