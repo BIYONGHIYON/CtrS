@@ -116,8 +116,8 @@ def run(resume=False):
             if json.loads((out/'training_complete.json').read_text(encoding='utf8'))['fingerprint']!=cfg['fingerprint']:raise RuntimeError('completion contract differs')
         else:job('train',sensor,arm,seed)
         if not (out/'training_complete.json').exists():raise RuntimeError('training interrupted; refusing to advance the queue')
-    for sensor,arm,seed in cfg['queue']:
-        if not (root/'runs'/run_name(sensor,arm,seed)/'evaluation_complete.json').exists():job('evaluate',sensor,arm,seed)
+        # Stage 3: each run is evaluated right after its training, so per-seed results are available before the next run.
+        if not (out/'evaluation_complete.json').exists():job('evaluate',sensor,arm,seed)
     snapshot(cfg,[],'complete');write(root/'all_complete.json',dict(time_kst=now(),fingerprint=cfg['fingerprint'],runs=len(cfg['queue'])))
 if __name__=='__main__':
     import argparse

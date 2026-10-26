@@ -2,11 +2,11 @@
   "experiment": "performance/65_l1_spectral_loss",
   "research_track": "performance",
   "experiment_number": 65,
-  "state": "QB seeds 42-44 evaluated (3-seed v2.3: partially improved, below noise threshold and observation ratio failed)",
+  "state": "QB seeds 42-44 evaluated (partially improved); GF2 and WV3 seeds 42-44 training on the server (stage 3)",
   "files": {
     "README.md": {
-      "bytes": 21520,
-      "sha256": "bd831949e55ff1aa3a5db6e5373e4dc122f32fd491b2398b5994bf17de8d2b91"
+      "bytes": 22607,
+      "sha256": "f99508abccc199f589b6530cfedd0433307cd0c7ea978daa77364f15295bf584"
     },
     "checkpoints/C2MS_L1S_QB_s42/best.pt": {
       "bytes": 12671795,
@@ -33,8 +33,8 @@
       "sha256": "46477914147ad7ebe3990f6fbcb414c2b9f42ce9fff22d98538d2b3ba97a596b"
     },
     "config.json": {
-      "bytes": 7206,
-      "sha256": "4771c792d01235cec4bc18e5b3acccaac2412e28b8d94fd9c6d4526d605a8ff5"
+      "bytes": 10232,
+      "sha256": "d84ae1e89251f479e2c1035e9caacd4e75425d360e1bc1c71b5556c7aa1a6d20"
     },
     "evaluate.py": {
       "bytes": 5394,
@@ -191,6 +191,22 @@
     "provenance/stage2/verify_ctrs65s2_server.py": {
       "bytes": 1708,
       "sha256": "3877a329ed1d94dc68c3bc755dc92e89fa41e8796f1597098172d410cb45649d"
+    },
+    "provenance/stage3/ctrs65s3-source-manifest.json": {
+      "bytes": 8592,
+      "sha256": "a18f86ce6c384f0ffedd34a63e318938b343dec36fcc5d908b97eb4857dc73b5"
+    },
+    "provenance/stage3/launch65s3.cmd": {
+      "bytes": 520,
+      "sha256": "ded771a9df31cff164c6bf74c024d9afe850066167b71a8700a627ebfff3ac0e"
+    },
+    "provenance/stage3/stage65s3.ps1": {
+      "bytes": 771,
+      "sha256": "f45c8090302c2cc291c55cc07924caf41f390185aa4fbd263ba961605743d320"
+    },
+    "provenance/stage3/verify_ctrs65s3_server.py": {
+      "bytes": 2029,
+      "sha256": "14636d28ee5cf38a9cb988f53d728072a85ac21f8cef7df60fda2dbb0d53f7a2"
     },
     "provenance/verify_ctrs65_server.py": {
       "bytes": 1551,
@@ -445,8 +461,8 @@
       "sha256": "9cf7f4f1e41f4e9fa2e46d42b3fae0f4e0ded3fdb31fab4ee24692279e41d15c"
     },
     "run.py": {
-      "bytes": 10997,
-      "sha256": "89c8405989949fee303240ec226696feb47a480822ff3e6b96d431229b522556"
+      "bytes": 11044,
+      "sha256": "28702decad964728d09198778509455490e208d781b274e4e70c8e402436ab0d"
     },
     "train.py": {
       "bytes": 3041,
