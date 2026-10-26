@@ -2,11 +2,11 @@
 
 **연구 분야:** 성능 개선 · **실험자:** 이병현
 
-**변경 내용:** 기준 모델 C2MS의 구조·축척 혼합·학습 일정은 그대로 둡니다. 원래 쌍과 2배 거친 쌍의 복원 손실을 MSE에서 L1으로 바꾸고([성능 63번](../63_l1_reconstruction_loss/README.md)), 원래 쌍에 [성능 58번](../58_spectral_loss_multi_sensor/README.md)의 분광 손실(픽셀별 1 − cos)을 더합니다. 분광 손실 계수는 58번과 같은 상대적 세기(0.46)로 맞췄습니다. QB seed 42로 먼저 선별합니다.
+**변경 내용:** 기준 모델 C2MS의 구조·축척 혼합·학습 일정은 그대로 둡니다. 원래 쌍과 2배 거친 쌍의 복원 손실을 MSE에서 L1으로 바꾸고([성능 63번](../63_l1_reconstruction_loss/README.md)), 원래 쌍에 [성능 58번](../58_spectral_loss_multi_sensor/README.md)의 분광 손실(픽셀별 1 − cos)을 더합니다. 분광 손실 계수는 58번과 같은 상대적 세기(0.46)로 맞췄습니다. QB seed 42로 선별한 뒤 seed 43·44를 더해 3시드로 판정했습니다.
 
 | 확인된 결과 | 상태 | 개선 여부 |
 |---|:---:|:---:|
-| 53번 C2MS 대비 test RR PSNR +0.077 dB·**SAM −0.111°**·ERGAS −0.030(PSNR 17/20장, SAM 20/20장)으로 주 판정과 잡음 문턱을 통과했습니다. 63번(L1만)보다 SAM이 0.051° 더 낮고 PSNR은 같은 수준입니다. RR2는 2026-10-27 정한 고정 대조값(57번 재학습 C2MS) 기준으로 통과했지만(+0.039 dB, +0.044°), 관측 비율(53번 대비 1.47)이 미달입니다. SAM 1차 목표(−0.15°)에는 미달했습니다. | 평가&nbsp;완료<br>seed42<br>seed43·44 학습&nbsp;중 | 부분&nbsp;개선 |
+| QB 3시드(42-44) 평균으로 같은 시드 53번 C2MS 대비 test RR PSNR +0.028 dB·**SAM −0.100°**·ERGAS −0.008로 세 지표가 모두 좋아졌습니다. SAM은 세 시드 모두 20/20장에서 낮아졌습니다(시드별 −0.083에서 −0.111°). 그러나 PSNR 이득이 2시드 이상 잡음 문턱(0.04 dB)보다 작고(시드별 +0.077, −0.003, +0.010 dB), 관측 비율(1.43)이 허용폭을 넘었습니다. RR2(고정 대조값 기준 시드 평균 −0.010 dB·+0.058°)와 FR_WALD는 통과했습니다. SAM 1차 목표(−0.15°)에는 미달했습니다. | 평가&nbsp;완료<br>QB&nbsp;3시드 | 부분&nbsp;개선 |
 
 [실험 목록](../../../research/performance/README.md) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [재현 자료](#evidence)
 
@@ -16,7 +16,7 @@
 
 2026-10-26 사용자 승인으로, 서버의 64번 학습이 끝나면 자동으로 시작하도록 대기 스크립트를 걸었습니다. 대기 스크립트는 14:12 KST에 63·64번 완료와 실행 중인 Python이 없음을 확인하고 소스 검증 후 65번을 시작했습니다. 17:45에 150에폭 학습을, 17:46에 test 평가를 마쳤습니다. 기준 모델은 C2MS로 유지합니다.
 
-사용자 결정에 따라 2026-10-26 18시대에 QB seed 43·44 학습을 서버 새 runtime에서 시작했습니다. 대조군은 같은 시드의 53번 C2MS이고, 같은 시드의 58번 분광 손실 C2MS(MSE + 0.01)를 참조로 함께 평가합니다. 이를 위해 [evaluate.py](evaluate.py)·[run.py](run.py)가 대조군·참조 경로의 `<seed>`를 시드로 바꾸도록 고쳤고, 학습 코드는 바꾸지 않았습니다. seed 42 단계의 설정은 [config.json](config.json)의 `stage1_record`와 봉인 기록에 남겼습니다. 결과가 나오면 seed 42와 함께 짝지은 3시드 평균으로 판정합니다.
+사용자 결정에 따라 2026-10-26 18시대에 QB seed 43·44 학습을 서버 새 runtime에서 시작했습니다. 대조군은 같은 시드의 53번 C2MS이고, 같은 시드의 58번 분광 손실 C2MS(MSE + 0.01)를 참조로 함께 평가합니다. 이를 위해 [evaluate.py](evaluate.py)·[run.py](run.py)가 대조군·참조 경로의 `<seed>`를 시드로 바꾸도록 고쳤고, 학습 코드는 바꾸지 않았습니다. seed 42 단계의 설정은 [config.json](config.json)의 `stage1_record`와 봉인 기록에 남겼습니다. seed 43은 2026-10-26 21:35, seed 44는 2026-10-27 01:08에 150에폭 학습을 마쳤고, 이어서 01:09까지 두 시드의 test 평가를 마쳤습니다. seed 42와 함께 같은 시드 53번 C2MS와 짝지은 3시드 평균으로 판정했습니다.
 
 ## 2. 변경한 구조와 비교 조건
 
@@ -49,6 +49,35 @@
 
 ## 3. 정량 결과
 
+### QB 3시드 판정 (seed 42-44)
+
+QB RR·FR test 20장 평균을 시드별로 같은 시드의 53번 C2MS와 짝지어 평균했습니다. 잡음 문턱은 2시드 이상 기준 0.04 dB이고, RR2는 [2026-10-27 고정 대조값](../../../docs/judgement_criteria.md#qb-rr2-고정-대조값-2026-10-27)(57번 재학습 C2MS seed 42, 39.1148 dB / 4.2410°)과 후보의 시드 평균 RR2를 비교합니다. 시드별 원본 값은 `results/C2MS_L1S_QB_s<seed>/evaluation/QB_v2_3.json`에 있습니다.
+
+| 시드 | RR ΔPSNR / ΔSAM / ΔERGAS | 개선 장면 RR PSNR / SAM | RR2 (고정 대조값 대비) ΔPSNR / ΔSAM | FR_WALD ΔPSNR / ΔSAM | 관측 비율 |
+|---|---|---:|---|---|---:|
+| 42 | +0.077 / −0.111° / −0.030 | 17 / 20 | +0.039 / +0.044° | +0.090 / −0.124° | 1.473 |
+| 43 | −0.003 / −0.107° / +0.006 | 12 / 20 | +0.046 / +0.028° | −0.004 / −0.112° | 1.394 |
+| 44 | +0.010 / −0.083° / +0.001 | 14 / 20 | −0.113 / +0.103° | −0.020 / −0.089° | 1.414 |
+| **3시드 평균** | **+0.028 / −0.100° / −0.008** | - | **−0.010 / +0.058°** ✓ | **+0.022 / −0.108°** ✓ | **1.427** ✗ |
+
+| 판정 항목 | 결과 |
+|---|---|
+| 주 판정 (RR 세 지표가 모두 개선) | 통과 |
+| 잡음 문턱 (RR PSNR +0.04 dB 이상) | **미달** (+0.028 dB) |
+| 보조 1 RR2 (−0.05 dB, +0.06° 허용) | 통과 (−0.010 dB, +0.058°: SAM이 허용폭에 0.002° 남음) |
+| 보조 2 FR_WALD (−0.07 dB, +0.04° 허용) | 통과 |
+| 보조 3 관측 비율 (1.10 이하) | **미달** (1.427) |
+| **3시드 판정** | **부분 개선** |
+
+- SAM 목표: 3시드 평균 −0.100°로 1차 −0.15°, 도전 −0.28° 모두 미달입니다. 3단계(GF2·WV3 확장)로 가는 조건(개선 또는 SAM 목표 달성)은 충족하지 못했습니다.
+- 같은 시드 53번 대비 RR2는 시드 평균 −0.219 dB / +0.175°입니다(참고, 판정에는 고정 대조값 사용).
+- 참고 지표(시드 평균, C2MS → 후보): FR QNR 0.810 → 0.949, Ds 0.169 → 0.030, Dλ 0.026 → 0.022, 관측 RMSE 15.51 → 22.13 DN입니다.
+- 58번 분광 손실 C2MS(MSE + 0.01) 대비(같은 시드, 참고): seed 43은 RR PSNR −0.028 dB·SAM −0.051°, seed 44는 −0.010 dB·−0.045°입니다. L1 + 분광은 MSE + 분광보다 SAM을 약 0.05° 더 낮추지만 PSNR은 조금 낮습니다.
+- **validation(선택 가중치, 53번 선택 가중치 대비):** PSNR −0.045 / −0.018 / −0.047 dB(평균 −0.037), SAM −0.073 / −0.078 / −0.067°(평균 −0.073°)입니다. SAM은 test와 같은 방향이고, PSNR은 validation에서 세 시드 모두 조금 낮았습니다.
+- 선택 에폭은 150 / 148 / 149, AMP가 건너뛴 업데이트는 80,400회 중 24 / 24 / 25회입니다.
+
+### seed 42 상세 (1단계 선별)
+
 QB RR·FR test 20장 평균입니다. 네 모델을 같은 서버·같은 코드로 함께 평가했고, 63번(L1만)은 같은 장면의 보관 기록과 비교했습니다. 장면별 수치는 [QB_v2_3.json](results/C2MS_L1S_QB_s42/evaluation/QB_v2_3.json)에 있습니다.
 
 | 모델 | 손실 | RR PSNR | RR SAM | RR ERGAS | RR2 PSNR / SAM | FR_WALD PSNR / SAM | FR 관측 RMSE (DN) |
@@ -80,7 +109,7 @@ QB RR·FR test 20장 평균입니다. 네 모델을 같은 서버·같은 코드
 | test RR PSNR ≥ −0.04 dB | +0.077 dB ✓ |
 | validation도 같은 방향 (선택 가중치, 53번 선택 가중치 대비) | SAM −0.073° ✓, PSNR −0.045 dB (조건 −0.04 dB에 0.005 dB 미달) |
 
-63번과 같이 test 조건은 통과했지만 validation PSNR이 조건에 조금 못 미칩니다. 2단계(seed 43·44) 진행 여부는 사용자가 결정합니다.
+63번과 같이 test 조건은 통과했지만 validation PSNR이 조건에 조금 못 미쳤습니다. 2단계(seed 43·44)는 사용자 결정으로 진행했습니다.
 
 ### validation과 학습 기록
 
@@ -89,6 +118,12 @@ QB RR·FR test 20장 평균입니다. 네 모델을 같은 서버·같은 코드
 - 80,400회 중 24회 업데이트가 건너뛰어졌습니다. EMA(β 0.99)는 148에폭이 validation 최소였지만(PSNR 40.238 dB), test 평가는 하지 않았습니다.
 
 ## 4. 기준선 대비 차이와 해석
+
+- **3시드에서 SAM 이득은 반복됐고 PSNR 이득은 반복되지 않았습니다.** SAM은 세 시드 모두 −0.08° 이상 낮아지고 60장 모두에서 낮아졌습니다. PSNR은 seed 42만 +0.077 dB였고 seed 43·44는 0에 가까워(−0.003, +0.010 dB), seed 42의 PSNR 이득은 시드 운이 컸던 것으로 봅니다. validation PSNR도 세 시드 모두 C2MS보다 조금 낮아 같은 방향입니다. 결론적으로 L1 + 분광 손실은 **PSNR을 유지한 채 SAM을 약 0.10° 줄이는** 변경입니다.
+- **관측 비율 미달은 세 시드 모두 1.39-1.47로 일관됩니다.** 원인 분석과 관측 일치 사영 결과는 [성능 66번](../66_observation_error_projection_analysis/README.md)에 있습니다. 사영을 붙이면 3시드 평균 RR PSNR이 +0.072 dB가 되어 판정 수치가 모두 허용폭 안에 들어오지만, 사영은 추론 단계에 붙이는 연산이라 이 실험의 판정과 분리합니다.
+- **RR2는 seed 44만 허용폭 밖입니다.** 고정 대조값 대비 seed 42·43은 +0.04 dB 수준이고 seed 44는 −0.113 dB입니다. 시드 평균은 통과했지만 SAM 쪽 여유가 0.002°로 거의 없습니다.
+
+아래는 seed 42 선별 때의 해석이며, 3시드 결과와 다른 부분은 위 내용을 따릅니다.
 
 - **SAM을 가장 많이 줄인 단일 변경입니다.** 53번 대비 RR SAM −0.111°는 지금까지의 SAM 실험(58번 −0.048°, 61·62번 헤드 −0.04°, 63번 −0.060°)보다 큽니다. SAM은 20장 모두에서 낮아졌고, PSNR도 +0.077 dB 올랐습니다. QB RR SAM 4.467°는 논문 보고값 기준 ARConv 4.430°, U2Net+PAKAN 4.439°에 가까운 수준입니다. 다만 지표 계산 방식과 학습 횟수가 달라 직접 순위로 비교하지는 않습니다.
 - **분광 손실은 L1 위에서 효과가 더 컸습니다.** 63번(L1만) 대비 SAM −0.051°를 더했고 PSNR은 거의 같습니다(−0.007 dB). MSE 위의 분광 손실(57번)은 SAM −0.048°였으므로, 같은 상대 세기에서 비슷한 SAM 이득이 PSNR 손해 없이 더해진 셈입니다.
@@ -104,15 +139,27 @@ QB RR·FR test 20장 평균입니다. 네 모델을 같은 서버·같은 코드
 
 ![학습 곡선](results/C2MS_L1S_QB_s42/evaluation/learning.png)
 
-53번 C2MS 대비 RR·RR2·FR_WALD PSNR 차이입니다.
+53번 C2MS 대비 RR·RR2·FR_WALD PSNR 차이입니다(RR2 막대는 같은 시드 53번 대비).
 
 ![test 비교](results/C2MS_L1S_QB_s42/evaluation/comparison.png)
+
+<details><summary>seed 43·44 학습 곡선과 test 비교</summary>
+
+![seed 43 학습 곡선](results/C2MS_L1S_QB_s43/evaluation/learning.png)
+
+![seed 43 test 비교](results/C2MS_L1S_QB_s43/evaluation/comparison.png)
+
+![seed 44 학습 곡선](results/C2MS_L1S_QB_s44/evaluation/learning.png)
+
+![seed 44 test 비교](results/C2MS_L1S_QB_s44/evaluation/comparison.png)
+
+</details>
 
 <a id="images"></a>
 
 ## 6. 결과 이미지
 
-고정 6장면(QB RR test 0-based 0·1·3·7·14·17, seed 42)에서 현재 기준 C2MS(53번)와 L1 + 분광 손실 모델을 비교했습니다. 장면은 정답만 보고 풍경으로 미리 정했고 결과를 보고 바꾸지 않았습니다. `common/result_images.py`로 서버 평가 중에 만들었습니다.
+고정 6장면(QB RR test 0-based 0·1·3·7·14·17, seed 42)에서 현재 기준 C2MS(53번)와 L1 + 분광 손실 모델을 비교했습니다. 장면은 정답만 보고 풍경으로 미리 정했고 결과를 보고 바꾸지 않았습니다. `common/result_images.py`로 서버 평가 중에 만들었습니다. seed 43·44의 같은 형식 이미지도 서버 평가 때 만들어 `results/C2MS_L1S_QB_s<seed>/evaluation/QB/`에 보관했고, 본문에는 seed 42만 표시합니다.
 
 원본 크기 비교는 256×256 전체 장면의 **LR MS · PAN · C2MS · 후보 · 정답**과 **C2MS 오차 · 후보 오차**(같은 색 척도)입니다. 확대 비교는 후보의 개선이 가장 큰 64×64 창을 4배 확대한 **정답 전체(노란 상자) · C2MS · 후보 · 정답 · C2MS 오차 · 후보 오차**입니다. **확대 창은 장면마다 후보에 가장 유리한 곳을 고른 것**이라, 아래 표처럼 확대 창의 차이가 장면 전체 차이보다 큽니다.
 
@@ -178,13 +225,13 @@ QB RR·FR test 20장 평균입니다. 네 모델을 같은 서버·같은 코드
 - [train.py](train.py): 58번 학습기에 L1 치환만 적용한 학습 진입점. [model.py](model.py)·[prepare.py](prepare.py)는 54번 C2MS 구조와 센서 연산을 그대로 씁니다.
 - [run.py](run.py)·[evaluate.py](evaluate.py): 63번과 같은 컨트롤러와 평가(53번 대조군과 57번 두 참조 대비 v2.3, 결과 이미지).
 - [config.json](config.json): 학습 전에 고정한 설정·계수·대조군 방침·관문. [분광 계수 측정 기록](provenance/spectral_weight_calibration.json). 서버에 봉인된 설정·소스 해시는 [runtime_config.json](provenance/run_records/runtime_config.json)에 있습니다. 저장소의 학습 소스는 봉인 해시와 같고, config.json은 평가 후 첫머리의 상태·개선 여부 필드만 바꿨습니다.
-- 가중치: `checkpoints/C2MS_L1S_QB_s42/best.pt`(150에폭)와 `best_ema.pt`(148에폭)는 Git에 있습니다. 재개용 `latest.pt`와 초기 `initial.pt`는 GitHub Release `weights-experiments-performance-65`에 있고 [manifest.json](manifest.json)의 `release_assets`에 기록했습니다.
-- 결과: `results/C2MS_L1S_QB_s42/`의 `history.json`, `training_complete.json`, `evaluation_complete.json`, `evaluation/QB_v2_3.json`, 그래프와 결과 이미지.
-- 실행 기록: `provenance/run_records/`(준비·벤치마크·preflight·컨트롤러 기록, 캐시 manifest, 환경), 자동 시작 대기 스크립트와 기록(`wait65.ps1`, `watcher.log`), 서버 소스 manifest와 실행 스크립트.
+- 가중치: seed별 `checkpoints/C2MS_L1S_QB_s<seed>/best.pt`(선택 에폭 150 / 148 / 149)와 `best_ema.pt`는 Git에 있습니다. 재개용 `latest.pt`와 초기 `initial.pt`(세 시드)는 GitHub Release `weights-experiments-performance-65`에 있고 [manifest.json](manifest.json)의 `release_assets`에 기록했습니다.
+- 결과: `results/C2MS_L1S_QB_s<seed>/`의 `history.json`, `training_complete.json`, `evaluation_complete.json`, `evaluation/QB_v2_3.json`(장면별 수치), 그래프와 결과 이미지.
+- 실행 기록: seed 42는 `provenance/run_records/`(준비·벤치마크·preflight·컨트롤러 기록, 캐시 manifest, 환경)와 자동 시작 대기 스크립트·기록(`wait65.ps1`, `watcher.log`), seed 43·44는 `provenance/stage2/`(서버 소스 manifest·검증, 실행 스크립트, `run_records/`)에 있습니다. stage2의 봉인 설정은 [runtime_config.json](provenance/stage2/run_records/runtime_config.json)입니다.
 
 ## 8. 개선 여부와 다음 단계
 
-QB seed 42에서 RR 세 지표가 모두 좋아지고 PSNR 이득이 잡음 문턱을 넘었으며 SAM은 지금까지 가장 크게 줄었지만, 관측 비율이 보조 판정을 통과하지 못해 **부분 개선**입니다. RR2는 2026-10-27 고정 대조값 기준으로 통과합니다. 기준 모델은 C2MS로 유지합니다.
+QB 3시드 평균으로 RR 세 지표가 모두 좋아졌고 SAM은 −0.100°로 일관되게 낮아졌지만, PSNR 이득(+0.028 dB)이 잡음 문턱(0.04 dB)보다 작고 관측 비율(1.43)이 보조 판정을 통과하지 못해 **부분 개선**입니다. RR2와 FR_WALD는 통과했습니다. 기준 모델은 C2MS로 유지합니다.
 
-- 1단계 관문은 test 조건을 통과했지만 validation PSNR이 조건에 0.005 dB 못 미쳤습니다. 사용자 결정으로 seed 43·44를 학습 중이며, test 이득이 반복되는지 3시드 평균으로 판단합니다.
-- 원래 해상도 관측 일치 악화는 63·65번에서 반복됐습니다. L1 계열을 계속한다면 관측 일치를 지키는 장치(예: 관측 일치 손실, [성능 45번](../45_exact_observation_projection/README.md)의 관측 일치 사영)를 함께 검토해야 합니다.
+- 3단계(GF2·WV3 확장) 조건인 개선 또는 SAM 목표(−0.15°)를 충족하지 못해 확장하지 않습니다.
+- L1 + 분광 손실은 PSNR을 유지하면서 SAM을 약 0.10° 줄이는 가장 큰 단일 변경입니다. 남은 문제는 원래 해상도 관측 일치이며, [성능 66번](../66_observation_error_projection_analysis/README.md)에서 추론 때 관측 일치 사영을 붙이면 이 문제가 없어지고 3시드 평균 판정 수치가 모두 허용폭 안에 드는 것을 확인했습니다. 이를 후보로 채택할지는 사용자가 결정합니다.

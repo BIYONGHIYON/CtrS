@@ -152,18 +152,21 @@ def plot(res, out, seed):
 
 
 def main():
-    a = argparse.ArgumentParser(); a.add_argument('--seed', type=int, default=42); a.add_argument('--plot-only', action='store_true'); a.add_argument('--images-only', action='store_true'); a = a.parse_args()
-    out = HERE / 'results'; out.mkdir(exist_ok=True); target = out / f'analysis_s{a.seed}.json'; MODELS = models(a.seed)
+    a = argparse.ArgumentParser(); a.add_argument('--seed', type=int, default=42); a.add_argument('--plot-only', action='store_true'); a.add_argument('--images-only', action='store_true')
+    # Server run (2026-10-27): the same QB test files from another folder, the 65 best.pt from its runtime, results outside the repository.
+    a.add_argument('--rr', default=str(ROOT / 'data/test/test_qb_multiExm1.h5')); a.add_argument('--fr', default=str(ROOT / 'data/test/test_qb_OrigScale_multiExm1.h5')); a.add_argument('--l1s'); a.add_argument('--out', default=str(HERE / 'results')); a = a.parse_args()
+    out = Path(a.out); out.mkdir(parents=True, exist_ok=True); target = out / f'analysis_s{a.seed}.json'; MODELS = models(a.seed)
+    if a.l1s: MODELS['L1S'] = Path(a.l1s)
     if a.plot_only: plot(json.loads(target.read_text(encoding='utf-8')), out, a.seed); return
     if not a.images_only:
         t0 = time.time(); res = {'seed': a.seed, 'operator_check': operator_check(), 'models': {}}
-        with h5py.File(ROOT / 'data/test/test_qb_multiExm1.h5') as f: rr = [{k: np.asarray(f[k][i], dtype=np.float64) for k in ('pan', 'lms', 'ms', 'gt')} for i in range(20)]
-        with h5py.File(ROOT / 'data/test/test_qb_OrigScale_multiExm1.h5') as f: fr = [{k: np.asarray(f[k][i], dtype=np.float64) for k in ('pan', 'lms', 'ms')} for i in range(20)]
+        with h5py.File(a.rr) as f: rr = [{k: np.asarray(f[k][i], dtype=np.float64) for k in ('pan', 'lms', 'ms', 'gt')} for i in range(20)]
+        with h5py.File(a.fr) as f: fr = [{k: np.asarray(f[k][i], dtype=np.float64) for k in ('pan', 'lms', 'ms')} for i in range(20)]
         for name, path in MODELS.items():
             for projected in (False, True):
                 net = Net(path, projected); key = name + ('+P' if projected else ''); rows = [scene(net, x, y) for x, y in zip(rr, fr)]
                 mean = {p: {k: float(np.mean([r[p][k] for r in rows])) for k in rows[0][p] if not isinstance(rows[0][p][k], list)} for p in rows[0] if isinstance(rows[0][p], dict)}
-                res['models'][key] = dict(checkpoint=str(path.relative_to(ROOT)), mean=mean, rows=rows, cg_iterations_max=max(net.iters) if net.iters else None)
+                res['models'][key] = dict(checkpoint=str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path), mean=mean, rows=rows, cg_iterations_max=max(net.iters) if net.iters else None)
                 print(key, {p: {k: round(v, 4) for k, v in mean[p].items()} for p in mean}, round(time.time() - t0), 's', flush=True)
                 target.write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding='utf-8')
         res['seconds'] = round(time.time() - t0, 1); target.write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding='utf-8')

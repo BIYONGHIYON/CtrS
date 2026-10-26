@@ -18,10 +18,11 @@
   "projection": "experiment 45: y' = y + D^T M^T (M D D^T M^T)^-1 M (MS - D y), interior mask margin 5 (P5), CG per band in float64, relative tolerance 1e-8, at most 400 iterations, applied at every inference (RR, RR2, FR_WALD and FR inputs)",
   "decomposition": "e = D(y) - MS on the interior: per-band mean bias; low band = D(lowpass(y)) - MS with an ideal FFT lowpass at 1/8 cycles/pixel (MS Nyquist); high band (aliasing) = D(y - lowpass(y)); e = low band + high band",
   "images": "common/result_images.py on the fixed six QB RR scenes, 65 L1 + spectral without vs with projection (visual check of the projection, not a baseline comparison)",
-  "device": "local CPU (Apple), float64 operators",
-  "limits": "seeds 42 and 43 (44 after experiment 65 finishes); post-hoc analysis on the test set already used for exploration; the projection is an inference-time step (about 108 CG iterations per image), not a trained model; no validation-based selection",
+  "device": "local CPU (Apple), float64 operators; seed 44 on the server CPU (same script, --rr/--fr/--l1s/--out paths) after experiment 65 finished",
+  "limits": "seeds 42-44; post-hoc analysis on the test set already used for exploration; the projection is an inference-time step (about 108 CG iterations per image), not a trained model; no validation-based selection",
   "seeds": [
     42,
-    43
+    43,
+    44
   ]
 }

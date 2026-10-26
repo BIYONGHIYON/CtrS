@@ -3,8 +3,8 @@
   "research_track": "performance",
   "experimenter": "이병현",
   "title": "C2MS에 L1 손실과 분광 손실을 함께 적용",
-  "status": "학습 중",
-  "improvement": "판단 보류",
+  "status": "평가 완료",
+  "improvement": "부분 개선",
   "hypothesis": "Experiment 58 (MSE + 0.01 x spectral loss) lowered QB SAM by 0.048 deg but failed RR2 on QB. Experiment 63 (L1 instead of MSE) shows much better coarse-scale validation (PSNR +0.15 to +0.48 dB by epoch 74). Combining L1 with the same spectral loss may keep the coarse scale (RR2) while adding the spectral-loss SAM gain.",
   "arms": {
     "C2MS_L1S": "unchanged C2MS architecture; original L1 + 1.0 x coarse L1 + 0.46 x spectral loss (mean 1 - cosine) on the original pair; 58 trainer with its MSE expressions replaced by absolute errors"

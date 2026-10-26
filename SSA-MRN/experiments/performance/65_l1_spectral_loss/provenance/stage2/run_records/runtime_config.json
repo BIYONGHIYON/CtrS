@@ -1,0 +1,201 @@
+{
+  "experiment": 65,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "C2MS에 L1 손실과 분광 손실을 함께 적용",
+  "status": "학습 중",
+  "improvement": "판단 보류",
+  "hypothesis": "Experiment 58 (MSE + 0.01 x spectral loss) lowered QB SAM by 0.048 deg but failed RR2 on QB. Experiment 63 (L1 instead of MSE) shows much better coarse-scale validation (PSNR +0.15 to +0.48 dB by epoch 74). Combining L1 with the same spectral loss may keep the coarse scale (RR2) while adding the spectral-loss SAM gain.",
+  "arms": {
+    "C2MS_L1S": "unchanged C2MS architecture; original L1 + 1.0 x coarse L1 + 0.46 x spectral loss (mean 1 - cosine) on the original pair; 58 trainer with its MSE expressions replaced by absolute errors"
+  },
+  "sensors": [
+    "QB"
+  ],
+  "transfer_tests": {
+    "WV2": "WV3-trained models evaluated on the WV2 test set (PanCollection convention; WV2 has no training data)"
+  },
+  "seeds": [
+    43,
+    44
+  ],
+  "epochs": 150,
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training; FP32 transforms/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "layout": "channels_last",
+  "cpu_threads": 1,
+  "selection": "minimum original-scale validation MSE including epoch0; earliest exact tie; test never used for selection (same rule as C2MS)",
+  "loss": "original per-pixel L1 + 1.0 x per-pixel L1 on 2x coarser pairs + 0.46 x spectral loss (58: mean over pixels of 1 - cos between predicted and GT band vectors, zero-norm pixels skipped) on the original pair; history fields train_mse/coarse_train_mse hold mean absolute errors",
+  "coarse_weight": {
+    "C2MS_L1S": 1.0
+  },
+  "spectral_weight": {
+    "C2MS_L1S": 0.46
+  },
+  "normalization": {
+    "QB": 2047,
+    "WV2": 2047
+  },
+  "sensor_operators": "54 prepare.py SENSORS (QB, GF2, WV3; WV2 for the transfer test), phase 2",
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset",
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    }
+  },
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "transfer_data_sha256": {
+    "WV2": {
+      "RR": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b",
+      "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
+    }
+  },
+  "runtime": "C:/CtrS-p65s2/run",
+  "queue": [
+    [
+      "QB",
+      "C2MS_L1S",
+      43
+    ],
+    [
+      "QB",
+      "C2MS_L1S",
+      44
+    ]
+  ],
+  "max_parallel": 1,
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.3 against the same-seed 53 C2MS; single seed noise threshold 0.06 dB, 0.04 dB for 2+ seeds",
+    "sam_goal": "QB dSAM <= -0.15 deg (first) / <= -0.28 deg (stretch) with dPSNR >= -0.04 dB, reported separately",
+    "reported_only": "FR QNR, D_lambda, D_s; coarse validation"
+  },
+  "limits": [
+    "QB seed 42 screen first",
+    "spectral weight 0.46 matches the 58 gradient ratio at the converged C2MS output; early in training the L1/MSE gradient ratio differs",
+    "exploratory test reused",
+    "no automatic baseline replacement"
+  ],
+  "constraints": {
+    "training": "user authorized on 2026-10-26, to start after experiment 64 on the server (watcher)",
+    "test_used_for_selection": false
+  },
+  "cache_reuse_source": "C:/CtrS-p59/run",
+  "schedule": "lr_end + 0.5*(lr_start-lr_end)*(1+cos(pi*zero_based_epoch/149)); fresh initialization",
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt"
+  },
+  "reference_controls": {
+    "QB": {
+      "C2MS_SAM_58": "experiments/performance/58_spectral_loss_multi_sensor/checkpoints/C2MS_SAM_QB_s<seed>/best.pt"
+    }
+  },
+  "control_policy": "No new control run. The official control is the archived 53 C2MS of the same seed: a same-seed C2MS retrained in 57 differed from it by only +0.009 dB / -0.003 deg / -0.004 on RR, but by -0.306 dB on RR2 and 1.124 in the observation ratio. The 57 retrained C2MS is reported as a second reference; RR2/observation guards that fail against 53 but pass against 57 are read as run-to-run variance. If the 3-seed guards end within 0.02 dB of a tolerance, same-code 3-seed controls are added.",
+  "stages": {
+    "screen": "QB seed 42, scheduled on 2026-10-26 by the user to start automatically after experiment 64 finishes (or fails to start) on the server",
+    "screen_gate": "test RR SAM <= -0.05 deg and RR PSNR >= -0.04 dB against the 53 control, or a single-seed v2.3 improvement, with validation in the same direction -> QB seeds 43 and 44",
+    "expansion": "GF2/WV3 seeds 42-44 and the WV2 transfer only if the QB 3-seed result is an improvement or meets the SAM goal, after user approval"
+  },
+  "ema_beta": 0.99,
+  "ema": "EMA (beta 0.99) recorded as in 58, reported only; the main result uses the validation-MSE-selected regular weights",
+  "comparison_note": "the L1-only run of experiment 63 (QB seed 42) is compared afterwards from its per-scene records on the same 20 scenes, to separate the spectral-loss effect under L1",
+  "spectral_weight_rule": "fixed before training (user choice on 2026-10-26: same relative strength as 58): lambda = 0.01 x |grad L1| / |grad MSE| with respect to the converged 53 C2MS output on 256 evenly spaced QB training patches (8 batches of 32, local CPU); ratio 46.0 -> 0.4601, per batch 0.43-0.49; record in provenance/spectral_weight_calibration.json",
+  "stage1_record": {
+    "seeds": [
+      42
+    ],
+    "runtime": "C:/CtrS-p65/run",
+    "queue": [
+      [
+        "QB",
+        "C2MS_L1S",
+        42
+      ]
+    ],
+    "controls": {
+      "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt"
+    },
+    "reference_controls": {
+      "QB": {
+        "C2MS_57": "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt",
+        "C2MS_SAM_57": "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_SAM_QB_s42/best.pt"
+      }
+    },
+    "note": "QB seed 42 screen (2026-10-26 14:13-17:46 KST); sealed copy in provenance/run_records/runtime_config.json"
+  },
+  "stage2": {
+    "approved": "2026-10-26 by the user after the seed 42 screen (test gate passed, validation PSNR 0.005 dB short of the gate)",
+    "seeds": [
+      43,
+      44
+    ],
+    "judgement": "paired 3-seed v2.3 against the 53 C2MS of seeds 42-44 (seed 42 from the stage-1 runtime), noise threshold 0.04 dB; 58 C2MS_SAM (MSE + 0.01 spectral) of seeds 43/44 as reference",
+    "code_change": "evaluate.py/run.py accept <seed> in control and reference paths; training code unchanged"
+  },
+  "source_hashes": {
+    "experiments/performance/65_l1_spectral_loss/model.py": "79e5ab896ca7758acbaeff0e6c3b0d396e5fe97de86422edddb305b266c8879b",
+    "experiments/performance/65_l1_spectral_loss/prepare.py": "2a4d2bfeaf27ea74a8a49e4f53851f7b39b839cdcfc56870be115a653d6d6253",
+    "experiments/performance/65_l1_spectral_loss/train.py": "d3c332cbe3cb1eb995680c1a41a7a0a4b5ed6374e03b1778db2626a968698158",
+    "experiments/performance/65_l1_spectral_loss/run.py": "89c8405989949fee303240ec226696feb47a480822ff3e6b96d431229b522556",
+    "experiments/performance/65_l1_spectral_loss/config.json": "3212a668d33bd650bd3da738149530c63d032d26cfab3fb19977b7af3b5475fd",
+    "experiments/performance/65_l1_spectral_loss/evaluate.py": "37c191b7f14ee89a132be4fe76ff2ffaa2f33c874bc5bd8d3a24de5ca0e17951",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/train.py": "55c150b067788191664e5f72885e065b1a222fcaeb0fe97a6b13050dc08a7dc5",
+    "experiments/performance/58_spectral_loss_multi_sensor/train.py": "b5a8c3f5e2dbff854a1bbf09c8f1e1ccdd601cb6a53557f31e4e5b76b6f1b575",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/evaluate.py": "e7e60ab17aea8d55f9d1d92fc57c1bd166e50f44d936b1d29c190c25ed818a7a",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/config.json": "821c9038a3c6fa296d96176074b3d91c86a9df3d5a9ffd115eb727de310546e4",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16",
+    "common/result_images.py": "2fc73537d7d60fa8c9d19a036ad0bb53e9ab1231b9811fd6d8e9b5159675c737",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s43/best.pt": "322ee8a85f8de05221403a88cefa64cdd01a224b6043b33da5694dbdd994d6e1",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s44/best.pt": "ad8bfa8eb624aae580e03460a32bf80016d28adbeb2df1bc17bb14dc9eb9e897",
+    "experiments/performance/58_spectral_loss_multi_sensor/checkpoints/C2MS_SAM_QB_s43/best.pt": "d435a760b546774f30ccc022328520e5c978fc3c7fbdf4cd08c0f7323c40a2db",
+    "experiments/performance/58_spectral_loss_multi_sensor/checkpoints/C2MS_SAM_QB_s44/best.pt": "dd25a3e08eb25e0d41f6e6f2e36d16fd429aea3a3bf161103380d77e757f02b2"
+  },
+  "created_kst": "2026-10-26T18:03:31.845738+09:00",
+  "cache_manifest_sha256": "5eff51d1aab2a971d850296817ec91de3fcc0560086d75969a11035e04f3d5ad",
+  "benchmark": {
+    "QB_C2MS_L1S": {
+      "median_step_seconds": 0.13955054999678396,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.533203125
+    }
+  },
+  "fingerprint": "f1fe34fe5f68560a7421a87ea30d1595bec7112260eb22448137f79ea9f11bf1"
+}
