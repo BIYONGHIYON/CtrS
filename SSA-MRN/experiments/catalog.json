@@ -1706,8 +1706,8 @@
       44
     ],
     "retraining": false,
-    "last_checked": "2026-10-27T19:10:00+09:00",
-    "limits": "학습 없는 사후 분석. QB seed 42-44(seed 44는 서버 CPU), 탐색에 반복 사용한 test. 사영은 추론 후처리(장면당 CG 약 108회)이며 validation 선택 없음. 3시드 평균 65번 + 사영은 53번 대비 v2.3 수치 항목을 모두 통과(RR PSNR +0.072 dB, SAM −0.102°)했으나 사후 분석이라 판정하지 않음. 65번 3단계 seed 42·43에 사영 추가(서버 CPU): 54번 C2MS 대비 2시드 평균 GF2 +0.230 dB·SAM −0.032°, WV3 +0.133 dB·SAM −0.089°로 수치 항목 통과, WV2 전이 SAM −0.287°이나 PSNR −0.126 dB.",
+    "last_checked": "2026-10-28T00:15:00+09:00",
+    "limits": "학습 없는 사후 분석. QB seed 42-44(seed 44는 서버 CPU), 탐색에 반복 사용한 test. 사영은 추론 후처리(장면당 CG 약 108회)이며 validation 선택 없음. 3시드 평균 65번 + 사영은 53번 대비 v2.3 수치 항목을 모두 통과(RR PSNR +0.072 dB, SAM −0.102°)했으나 사후 분석이라 판정하지 않음. 65번 3단계 3시드에 사영 추가(서버 CPU): 54번 C2MS 대비 GF2 +0.191 dB·SAM −0.028°, WV3 +0.130 dB·SAM −0.090°, WV2 전이 +0.171 dB·SAM −0.348°로 세 대상 모두 수치 항목 통과(WV2는 시드별 −0.52에서 +0.76 dB).",
     "config": "experiments/performance/66_observation_error_projection_analysis/config.json",
     "entrypoint": "experiments/performance/66_observation_error_projection_analysis/prepare.py",
     "results": "experiments/performance/66_observation_error_projection_analysis/results",

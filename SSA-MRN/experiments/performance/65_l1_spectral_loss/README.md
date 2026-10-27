@@ -377,7 +377,7 @@ WV2에서는 65번이 여섯 장면 모두 0.9-1.1 dB 낮아, 후보에 가장 �
 - 가중치: seed별 `checkpoints/C2MS_L1S_QB_s<seed>/best.pt`(선택 에폭 150 / 148 / 149)와 `best_ema.pt`는 Git에 있습니다. 재개용 `latest.pt`와 초기 `initial.pt`(세 시드)는 GitHub Release `weights-experiments-performance-65`에 있고 [manifest.json](manifest.json)의 `release_assets`에 기록했습니다.
 - 3단계 가중치: `checkpoints/C2MS_L1S_<GF2|WV3>_s<42-44>/best.pt`(선택 에폭 GF2 149·150·148, WV3 149·148·144)와 `best_ema.pt`는 Git에, `latest.pt`·`initial.pt`는 같은 Release에 있습니다. 결과는 `results/C2MS_L1S_<GF2|WV3>_s<seed>/`(WV3는 `evaluation/WV2_v2_3.json` 포함)에 있습니다. 실행 기록은 `provenance/stage3/`(서버 소스 manifest·검증, 실행 스크립트, `run_records/`)에 있고, 봉인 설정은 [runtime_config.json](provenance/stage3/run_records/runtime_config.json)입니다.
 - 결과: `results/C2MS_L1S_QB_s<seed>/`의 `history.json`, `training_complete.json`, `evaluation_complete.json`, `evaluation/QB_v2_3.json`(장면별 수치), 그래프와 결과 이미지.
-- 실행 기록: seed 42는 `provenance/run_records/`(준비·벤치마크·preflight·컨트롤러 기록, 캐시 manifest, 환경)와 자동 시작 대기 스크립트·기록(`wait65.ps1`, `watcher.log`), seed 43·44는 `provenance/stage2/`(서버 소스 manifest·검증, 실행 스크립트, `run_records/`)에 있습니다. stage2의 봉인 설정은 [runtime_config.json](provenance/stage2/run_records/runtime_config.json)입니다.
+- 실행 기록: seed 42는 `provenance/run_records/`(준비·벤치마크·preflight·컨트롤러 기록, 캐시 manifest, 환경)와 자동 시작 대기 스크립트·기록(`wait65.ps1`, `watcher.log`), seed 43·44는 `provenance/stage2/`(서버 소스 manifest·검증, 실행 스크립트, `run_records/`)에 있습니다. stage2의 봉인 설정은 [runtime_config.json](provenance/stage2/run_records/runtime_config.json)입니다. 실행·대기 로그(`.log`)는 Git에서 제외하므로 저장소에는 없고, 같은 폴더의 JSON 기록과 봉인 설정으로 실행을 확인할 수 있습니다.
 
 ## 8. 개선 여부와 다음 단계
 
