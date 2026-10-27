@@ -10,12 +10,14 @@
     "C2MS_L1S": "unchanged C2MS architecture; original L1 + 1.0 x coarse L1 + 0.46 x spectral loss (mean 1 - cosine) on the original pair; 58 trainer with its MSE expressions replaced by absolute errors"
   },
   "sensors": [
-    "QB"
+    "GF2",
+    "WV3"
   ],
   "transfer_tests": {
     "WV2": "WV3-trained models evaluated on the WV2 test set (PanCollection convention; WV2 has no training data)"
   },
   "seeds": [
+    42,
     43,
     44
   ],
@@ -45,6 +47,8 @@
   },
   "normalization": {
     "QB": 2047,
+    "GF2": 1023,
+    "WV3": 2047,
     "WV2": 2047
   },
   "sensor_operators": "54 prepare.py SENSORS (QB, GF2, WV3; WV2 for the transfer test), phase 2",
@@ -64,12 +68,36 @@
       "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
       "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
       "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    },
+    "GF2": {
+      "train": "243a0bc8a4cc0a2740ed24409f9e87afe531d87e9d57524c6bcbec2b5f937621",
+      "val": "ae15b19ccc6ece799ebfeb3fb374b1a333238226397441e3d523b0195dff4f43",
+      "RR": "709a9a53b2e0f29d3dcd5c6ca4410c2913b62cc03c104fed6c049911dbe1c8ea",
+      "FR": "840698f9b3de181de9f665ca88e562fb7783dcd93045a136ace2110d414989ad"
+    },
+    "WV3": {
+      "train": "f9e7ec381390ff36ddffd0714df7af07a3c5f456078b219a25f3e18372228f82",
+      "val": "ba883e57408d1f3c2263cc2818a9fbbf2dbe8e62554c531288f9e8bf9f59dc87",
+      "RR": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "FR": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
     }
   },
   "data_counts": {
     "QB": {
       "train": 17139,
       "val": 1905,
+      "RR": 20,
+      "FR": 20
+    },
+    "GF2": {
+      "train": 19809,
+      "val": 2201,
+      "RR": 20,
+      "FR": 20
+    },
+    "WV3": {
+      "train": 9714,
+      "val": 1080,
       "RR": 20,
       "FR": 20
     }
@@ -80,15 +108,35 @@
       "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
     }
   },
-  "runtime": "C:/CtrS-p65s2/run",
+  "runtime": "C:/CtrS-p65s3/run",
   "queue": [
     [
-      "QB",
+      "GF2",
+      "C2MS_L1S",
+      42
+    ],
+    [
+      "WV3",
+      "C2MS_L1S",
+      42
+    ],
+    [
+      "GF2",
       "C2MS_L1S",
       43
     ],
     [
-      "QB",
+      "WV3",
+      "C2MS_L1S",
+      43
+    ],
+    [
+      "GF2",
+      "C2MS_L1S",
+      44
+    ],
+    [
+      "WV3",
       "C2MS_L1S",
       44
     ]
@@ -112,11 +160,15 @@
   "cache_reuse_source": "C:/CtrS-p59/run",
   "schedule": "lr_end + 0.5*(lr_start-lr_end)*(1+cos(pi*zero_based_epoch/149)); fresh initialization",
   "controls": {
-    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt"
+    "GF2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s<seed>/best.pt",
+    "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
   },
   "reference_controls": {
-    "QB": {
-      "C2MS_SAM_58": "experiments/performance/58_spectral_loss_multi_sensor/checkpoints/C2MS_SAM_QB_s<seed>/best.pt"
+    "GF2": {
+      "C2MS_SAM_58": "experiments/performance/58_spectral_loss_multi_sensor/checkpoints/C2MS_SAM_GF2_s<seed>/best.pt"
+    },
+    "WV3": {
+      "C2MS_SAM_58": "experiments/performance/58_spectral_loss_multi_sensor/checkpoints/C2MS_SAM_WV3_s<seed>/best.pt"
     }
   },
   "control_policy": "No new control run. The official control is the archived 53 C2MS of the same seed: a same-seed C2MS retrained in 57 differed from it by only +0.009 dB / -0.003 deg / -0.004 on RR, but by -0.306 dB on RR2 and 1.124 in the observation ratio. The 57 retrained C2MS is reported as a second reference; RR2/observation guards that fail against 53 but pass against 57 are read as run-to-run variance. If the 3-seed guards end within 0.02 dB of a tolerance, same-code 3-seed controls are added.",
@@ -160,5 +212,50 @@
     ],
     "judgement": "paired 3-seed v2.3 against the 53 C2MS of seeds 42-44 (seed 42 from the stage-1 runtime), noise threshold 0.04 dB; 58 C2MS_SAM (MSE + 0.01 spectral) of seeds 43/44 as reference",
     "code_change": "evaluate.py/run.py accept <seed> in control and reference paths; training code unchanged"
+  },
+  "stage2_record": {
+    "seeds": [
+      43,
+      44
+    ],
+    "runtime": "C:/CtrS-p65s2/run",
+    "queue": [
+      [
+        "QB",
+        "C2MS_L1S",
+        43
+      ],
+      [
+        "QB",
+        "C2MS_L1S",
+        44
+      ]
+    ],
+    "controls": {
+      "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt"
+    },
+    "reference_controls": {
+      "QB": {
+        "C2MS_SAM_58": "experiments/performance/58_spectral_loss_multi_sensor/checkpoints/C2MS_SAM_QB_s<seed>/best.pt"
+      }
+    },
+    "note": "QB seeds 43 and 44 (2026-10-26 18:03 to 2026-10-27 01:09 KST); sealed copy in provenance/stage2/run_records/runtime_config.json"
+  },
+  "stage3": {
+    "approved": "2026-10-27 by the user (expansion gate not met: QB 3-seed partial improvement, SAM -0.100 deg short of the -0.15 deg goal)",
+    "sensors": [
+      "GF2",
+      "WV3"
+    ],
+    "transfer": "WV2 test with the WV3-trained models",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "order": "per seed: GF2 then WV3 (seed 42, 43, 44), each run evaluated right after its training",
+    "spectral_weight": "0.46 for every sensor (the QB recipe unchanged, as 58 kept 0.01 for every sensor); the L1/MSE gradient ratio was calibrated on QB only",
+    "judgement": "per sensor, paired 3-seed v2.3 against the same-seed 54 C2MS (RR2 against the same-seed 54 C2MS: the fixed RR2 reference is QB only), noise threshold 0.04 dB; 58 C2MS_SAM (MSE + 0.01 spectral) of the same seed as reference",
+    "code_change": "run.py evaluates each run right after its training; training and evaluation code unchanged"
   }
 }

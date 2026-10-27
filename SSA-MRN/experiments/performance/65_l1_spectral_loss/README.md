@@ -6,7 +6,7 @@
 
 | 확인된 결과 | 상태 | 개선 여부 |
 |---|:---:|:---:|
-| QB 3시드(42-44) 평균으로 같은 시드 53번 C2MS 대비 test RR PSNR +0.028 dB·**SAM −0.100°**·ERGAS −0.008로 세 지표가 모두 좋아졌습니다. SAM은 세 시드 모두 20/20장에서 낮아졌습니다(시드별 −0.083에서 −0.111°). 그러나 PSNR 이득이 2시드 이상 잡음 문턱(0.04 dB)보다 작고(시드별 +0.077, −0.003, +0.010 dB), 관측 비율(1.43)이 허용폭을 넘었습니다. RR2(고정 대조값 기준 시드 평균 −0.010 dB·+0.058°)와 FR_WALD는 통과했습니다. SAM 1차 목표(−0.15°)에는 미달했습니다. | 평가&nbsp;완료<br>QB&nbsp;3시드 | 부분&nbsp;개선 |
+| QB 3시드(42-44) 평균으로 같은 시드 53번 C2MS 대비 test RR PSNR +0.028 dB·**SAM −0.100°**·ERGAS −0.008로 세 지표가 모두 좋아졌습니다. SAM은 세 시드 모두 20/20장에서 낮아졌습니다(시드별 −0.083에서 −0.111°). 그러나 PSNR 이득이 2시드 이상 잡음 문턱(0.04 dB)보다 작고(시드별 +0.077, −0.003, +0.010 dB), 관측 비율(1.43)이 허용폭을 넘었습니다. RR2(고정 대조값 기준 시드 평균 −0.010 dB·+0.058°)와 FR_WALD는 통과했습니다. SAM 1차 목표(−0.15°)에는 미달했습니다. 3단계(GF2·WV3 3시드, 54번 C2MS 대비): GF2는 PSNR +0.106 dB·SAM −0.022°이지만 RR2 PSNR(−0.055 dB)이 조금 미달해 부분 개선, WV3는 SAM −0.079°·PSNR +0.047 dB에 FR_WALD·관측 비율 미달로 부분 개선, WV2 전이는 PSNR −0.277 dB(시드별 −1.08에서 +0.41 dB)·SAM −0.091°로 부분 개선입니다. | 평가&nbsp;완료 | 부분&nbsp;개선 |
 
 [실험 목록](../../../research/performance/README.md) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [재현 자료](#evidence)
 
@@ -17,6 +17,8 @@
 2026-10-26 사용자 승인으로, 서버의 64번 학습이 끝나면 자동으로 시작하도록 대기 스크립트를 걸었습니다. 대기 스크립트는 14:12 KST에 63·64번 완료와 실행 중인 Python이 없음을 확인하고 소스 검증 후 65번을 시작했습니다. 17:45에 150에폭 학습을, 17:46에 test 평가를 마쳤습니다. 기준 모델은 C2MS로 유지합니다.
 
 사용자 결정에 따라 2026-10-26 18시대에 QB seed 43·44 학습을 서버 새 runtime에서 시작했습니다. 대조군은 같은 시드의 53번 C2MS이고, 같은 시드의 58번 분광 손실 C2MS(MSE + 0.01)를 참조로 함께 평가합니다. 이를 위해 [evaluate.py](evaluate.py)·[run.py](run.py)가 대조군·참조 경로의 `<seed>`를 시드로 바꾸도록 고쳤고, 학습 코드는 바꾸지 않았습니다. seed 42 단계의 설정은 [config.json](config.json)의 `stage1_record`와 봉인 기록에 남겼습니다. seed 43은 2026-10-26 21:35, seed 44는 2026-10-27 01:08에 150에폭 학습을 마쳤고, 이어서 01:09까지 두 시드의 test 평가를 마쳤습니다. seed 42와 함께 같은 시드 53번 C2MS와 짝지은 3시드 평균으로 판정했습니다.
+
+2026-10-27 사용자 결정으로 3단계(GF2·WV3 3시드와 WV2 전이)를 시작했습니다. QB 3시드가 확장 조건(개선 또는 SAM −0.15°)을 충족하지 못했지만, 다른 센서에서도 같은 경향인지 확인하기 위해 진행합니다. 시드별로 결과를 먼저 볼 수 있도록 seed 42의 GF2 → WV3, seed 43의 GF2 → WV3, seed 44의 GF2 → WV3 순서로 학습하고, 각 실행은 학습이 끝나는 즉시 평가합니다(WV2는 WV3 모델의 전이 test). 분광 계수는 QB와 같은 0.46을 모든 센서에 그대로 씁니다. 대조군은 같은 시드의 [성능 54번](../54_multi_sensor_scale_mixed_training/README.md) C2MS, 참조는 같은 시드의 58번 분광 손실 C2MS입니다. 이를 위해 [run.py](run.py)가 각 실행을 학습 직후 평가하도록 순서만 바꿨고, 학습·평가 코드는 그대로입니다. 설정은 [config.json](config.json)의 `stage3`, 2단계 설정은 `stage2_record`에 있습니다. 2026-10-27 03:00에 시작해 23:38에 6개 실행의 학습과 평가를 모두 마쳤습니다.
 
 ## 2. 변경한 구조와 비교 조건
 
@@ -48,6 +50,30 @@
 <a id="results"></a>
 
 ## 3. 정량 결과
+
+### 3단계 판정: GF2·WV3·WV2 (seed 42-44)
+
+각 시드를 같은 시드의 54번 C2MS와 짝지어 3시드 평균으로 판정했습니다. RR2도 같은 시드 54번과 비교합니다(고정 대조값은 QB 전용). 잡음 문턱은 2시드 이상 기준 0.04 dB입니다. 원본 값은 `results/C2MS_L1S_<센서>_s<seed>/evaluation/<대상>_v2_3.json`에 있고, best는 144-150에폭입니다.
+
+| 대상 | 시드 | RR ΔPSNR / ΔSAM / ΔERGAS | RR2 ΔPSNR / ΔSAM | FR_WALD ΔPSNR / ΔSAM | 관측 비율 | 단일 시드 판정 | 58번 대비 ΔRR PSNR / ΔSAM |
+|---|---:|---|---|---|---:|---|---|
+| GF2 | 42 | +0.133 / −0.022° / −0.012 | −0.044 / −0.020° | +0.184 / −0.027° | 1.018 | 개선 | −0.023 / −0.010° |
+| | 43 | +0.151 / −0.028° / −0.015 | +0.089 / −0.023° | +0.256 / −0.040° | 1.013 | 개선 | +0.135 / −0.026° |
+| | 44 | +0.033 / −0.014° / −0.003 | −0.208 / +0.005° | +0.054 / −0.014° | 0.947 | 부분 개선 | −0.039 / −0.005° |
+| | **평균** | **+0.106 / −0.022° / −0.010** | −0.055 ✗ / −0.013° | +0.165 / −0.027° | 0.992 | **부분 개선** (RR2 PSNR 미달) | +0.024 / −0.013° |
+| WV3 | 42 | +0.093 / −0.089° / −0.008 | +0.996 / −0.297° | −0.062 / −0.044° | 1.232 | 부분 개선 | +0.047 / −0.058° |
+| | 43 | +0.006 / −0.064° / +0.014 | −0.843 / +0.161° | −0.123 / −0.018° | 1.418 | 부분 개선 | −0.053 / −0.042° |
+| | 44 | +0.043 / −0.083° / +0.003 | +0.086 / −0.119° | −0.120 / −0.031° | 1.456 | 부분 개선 | +0.045 / −0.073° |
+| | **평균** | +0.047 / **−0.079°** / +0.003 | +0.080 / −0.085° | −0.102 ✗ / −0.031° | 1.364 ✗ | **부분 개선** | +0.013 / −0.058° |
+| WV2 (WV3 모델 전이) | 42 | −1.079 / +0.134° / +0.545 | −1.024 / +0.055° | −0.971 / +0.182° | 1.917 | 개선 없음 | −0.865 / +0.197° |
+| | 43 | −0.159 / −0.100° / +0.070 | +0.625 / −0.234° | +0.290 / −0.220° | 2.152 | 부분 개선 | +0.021 / −0.204° |
+| | 44 | +0.406 / −0.305° / −0.252 | +1.046 / −0.413° | +0.620 / −0.323° | 1.773 | 부분 개선 | +0.656 / −0.266° |
+| | **평균** | −0.277 / −0.091° / +0.121 | +0.215 / −0.198° | −0.020 / −0.120° | 1.945 ✗ | **부분 개선** | −0.063 / −0.091° |
+
+- **GF2:** RR 세 지표가 모두 좋아졌고(PSNR +0.106 dB, SAM −0.022°) 관측 비율도 0.99로 문제가 없습니다. 그러나 seed 44의 RR2가 −0.208 dB여서 평균 RR2 PSNR(−0.055 dB)이 허용폭(−0.05 dB)을 조금 넘어 부분 개선입니다.
+- **WV3:** SAM은 세 시드 모두 줄었지만(평균 −0.079°) PSNR 이득은 잡음 수준(+0.047 dB)이고 ERGAS는 그대로이며, FR_WALD PSNR(−0.102 dB)과 관측 비율(1.36)이 허용폭을 넘습니다. RR2는 시드에 따라 크게 흔들리는데, 대조군 C2MS의 RR2도 시드에 따라 39.3-40.2 dB로 0.8 dB 차이가 납니다.
+- **WV2 전이:** 시드에 따라 −1.08, −0.16, +0.41 dB로 크게 갈립니다. 평균은 PSNR −0.277 dB, SAM −0.091°이고 관측 비율이 2배 안팎입니다. seed 42는 결과 이미지에서도 C2MS보다 흐리고 어둡게 보입니다. 사영을 붙인 결과는 [성능 66번](../66_observation_error_projection_analysis/README.md#sensors)에 있습니다.
+- **58번(MSE + 분광 0.01) 대비:** 세 대상 모두 SAM은 더 낮지만(−0.013에서 −0.091°), PSNR은 GF2 +0.024, WV3 +0.013, WV2 −0.063 dB로 큰 차이가 없습니다.
 
 ### QB 3시드 판정 (seed 42-44)
 
@@ -218,6 +244,129 @@ QB RR·FR test 20장 평균입니다. 네 모델을 같은 서버·같은 코드
 
 </details>
 
+### 3단계 결과 이미지: GF2·WV3·WV2 (seed 42)
+
+서버 평가가 같은 `common/result_images.py`로 만든 이미지입니다. 장면 번호는 QB와 같은 0-based 0·1·3·7·14·17이며, 다른 센서에서는 풍경을 따로 고르지 않고 같은 번호를 그대로 썼습니다(54번과 같은 방식). 대조군은 같은 seed의 54번 C2MS이고, WV2는 WV3로 학습한 두 모델의 전이 결과입니다. 패널 순서와 확대 창 선택은 위 QB와 같으며, **확대 창은 후보에 가장 유리한 곳**입니다. 본문에는 QB와 같은 장면 7을 펼쳐 두고 나머지 5장면은 접었습니다. seed 43·44 이미지는 `results/C2MS_L1S_<센서>_s<seed>/evaluation/<대상>/`에 있습니다.
+
+**GF2**
+
+| 장면 | 장면 PSNR (C2MS → L1+분광) | 장면 차이 | 확대 창 PSNR (C2MS → L1+분광) | 확대 창 차이 |
+|---:|---:|---:|---:|---:|
+| 0 | 47.623 → 47.692 | +0.069 | 47.514 → 48.038 | +0.524 |
+| 1 | 49.156 → 49.314 | +0.158 | 44.465 → 44.949 | +0.484 |
+| 3 | 49.667 → 49.779 | +0.112 | 49.571 → 50.033 | +0.462 |
+| 7 | 50.647 → 50.678 | +0.031 | 49.377 → 49.761 | +0.384 |
+| 14 | 47.869 → 47.960 | +0.091 | 48.145 → 48.826 | +0.681 |
+| 17 | 49.227 → 49.514 | +0.288 | 45.021 → 45.635 | +0.614 |
+
+![GF2 장면 7 원본 크기 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/full_scene_07.png)
+
+![GF2 장면 7 확대 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/compare_scene_07.png)
+
+<details><summary>GF2 나머지 5장면 · 두 비교 형식</summary>
+
+![GF2 장면 0 원본 크기 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/full_scene_00.png)
+
+![GF2 장면 0 확대 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/compare_scene_00.png)
+
+![GF2 장면 1 원본 크기 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/full_scene_01.png)
+
+![GF2 장면 1 확대 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/compare_scene_01.png)
+
+![GF2 장면 3 원본 크기 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/full_scene_03.png)
+
+![GF2 장면 3 확대 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/compare_scene_03.png)
+
+![GF2 장면 14 원본 크기 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/full_scene_14.png)
+
+![GF2 장면 14 확대 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/compare_scene_14.png)
+
+![GF2 장면 17 원본 크기 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/full_scene_17.png)
+
+![GF2 장면 17 확대 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/compare_scene_17.png)
+
+</details>
+
+**WV3**
+
+| 장면 | 장면 PSNR (C2MS → L1+분광) | 장면 차이 | 확대 창 PSNR (C2MS → L1+분광) | 확대 창 차이 |
+|---:|---:|---:|---:|---:|
+| 0 | 39.811 → 39.702 | −0.109 | 40.312 → 40.673 | +0.361 |
+| 1 | 37.602 → 37.406 | −0.196 | 42.560 → 43.899 | +1.339 |
+| 3 | 41.255 → 41.688 | +0.434 | 41.881 → 43.143 | +1.262 |
+| 7 | 38.386 → 38.386 | +0.001 | 42.235 → 43.353 | +1.118 |
+| 14 | 33.564 → 33.440 | −0.124 | 29.126 → 29.190 | +0.064 |
+| 17 | 36.009 → 36.037 | +0.028 | 36.817 → 37.065 | +0.247 |
+
+![WV3 장면 7 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/full_scene_07.png)
+
+![WV3 장면 7 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/compare_scene_07.png)
+
+<details><summary>WV3 나머지 5장면 · 두 비교 형식</summary>
+
+![WV3 장면 0 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/full_scene_00.png)
+
+![WV3 장면 0 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/compare_scene_00.png)
+
+![WV3 장면 1 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/full_scene_01.png)
+
+![WV3 장면 1 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/compare_scene_01.png)
+
+![WV3 장면 3 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/full_scene_03.png)
+
+![WV3 장면 3 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/compare_scene_03.png)
+
+![WV3 장면 14 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/full_scene_14.png)
+
+![WV3 장면 14 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/compare_scene_14.png)
+
+![WV3 장면 17 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/full_scene_17.png)
+
+![WV3 장면 17 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/compare_scene_17.png)
+
+</details>
+
+**WV2 (WV3 모델 전이)**
+
+WV2에서는 65번이 여섯 장면 모두 0.9-1.1 dB 낮아, 후보에 가장 유리한 확대 창에서도 네 장면은 C2MS보다 나쁩니다. 밴드 밝기가 통째로 어긋나는 문제(66번 분석)가 이미지 전체에 퍼져 있기 때문입니다.
+
+| 장면 | 장면 PSNR (C2MS → L1+분광) | 장면 차이 | 확대 창 PSNR (C2MS → L1+분광) | 확대 창 차이 |
+|---:|---:|---:|---:|---:|
+| 0 | 28.691 → 27.683 | −1.007 | 33.713 → 32.568 | −1.146 |
+| 1 | 26.815 → 25.830 | −0.985 | 26.675 → 25.962 | −0.713 |
+| 3 | 34.937 → 34.062 | −0.875 | 42.586 → 43.999 | +1.413 |
+| 7 | 29.176 → 28.106 | −1.071 | 41.789 → 43.121 | +1.332 |
+| 14 | 28.932 → 27.823 | −1.109 | 30.233 → 29.498 | −0.736 |
+| 17 | 29.386 → 28.497 | −0.889 | 27.774 → 27.330 | −0.444 |
+
+![WV2 (WV3 모델 전이) 장면 7 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/full_scene_07.png)
+
+![WV2 (WV3 모델 전이) 장면 7 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/compare_scene_07.png)
+
+<details><summary>WV2 (WV3 모델 전이) 나머지 5장면 · 두 비교 형식</summary>
+
+![WV2 (WV3 모델 전이) 장면 0 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/full_scene_00.png)
+
+![WV2 (WV3 모델 전이) 장면 0 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/compare_scene_00.png)
+
+![WV2 (WV3 모델 전이) 장면 1 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/full_scene_01.png)
+
+![WV2 (WV3 모델 전이) 장면 1 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/compare_scene_01.png)
+
+![WV2 (WV3 모델 전이) 장면 3 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/full_scene_03.png)
+
+![WV2 (WV3 모델 전이) 장면 3 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/compare_scene_03.png)
+
+![WV2 (WV3 모델 전이) 장면 14 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/full_scene_14.png)
+
+![WV2 (WV3 모델 전이) 장면 14 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/compare_scene_14.png)
+
+![WV2 (WV3 모델 전이) 장면 17 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/full_scene_17.png)
+
+![WV2 (WV3 모델 전이) 장면 17 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/compare_scene_17.png)
+
+</details>
+
 <a id="evidence"></a>
 
 ## 7. 재현 자료
@@ -226,12 +375,22 @@ QB RR·FR test 20장 평균입니다. 네 모델을 같은 서버·같은 코드
 - [run.py](run.py)·[evaluate.py](evaluate.py): 63번과 같은 컨트롤러와 평가(53번 대조군과 57번 두 참조 대비 v2.3, 결과 이미지).
 - [config.json](config.json): 학습 전에 고정한 설정·계수·대조군 방침·관문. [분광 계수 측정 기록](provenance/spectral_weight_calibration.json). 서버에 봉인된 설정·소스 해시는 [runtime_config.json](provenance/run_records/runtime_config.json)에 있습니다. 저장소의 학습 소스는 봉인 해시와 같고, config.json은 평가 후 첫머리의 상태·개선 여부 필드만 바꿨습니다.
 - 가중치: seed별 `checkpoints/C2MS_L1S_QB_s<seed>/best.pt`(선택 에폭 150 / 148 / 149)와 `best_ema.pt`는 Git에 있습니다. 재개용 `latest.pt`와 초기 `initial.pt`(세 시드)는 GitHub Release `weights-experiments-performance-65`에 있고 [manifest.json](manifest.json)의 `release_assets`에 기록했습니다.
+- 3단계 가중치: `checkpoints/C2MS_L1S_<GF2|WV3>_s<42-44>/best.pt`(선택 에폭 GF2 149·150·148, WV3 149·148·144)와 `best_ema.pt`는 Git에, `latest.pt`·`initial.pt`는 같은 Release에 있습니다. 결과는 `results/C2MS_L1S_<GF2|WV3>_s<seed>/`(WV3는 `evaluation/WV2_v2_3.json` 포함)에 있습니다. 실행 기록은 `provenance/stage3/`(서버 소스 manifest·검증, 실행 스크립트, `run_records/`)에 있고, 봉인 설정은 [runtime_config.json](provenance/stage3/run_records/runtime_config.json)입니다.
 - 결과: `results/C2MS_L1S_QB_s<seed>/`의 `history.json`, `training_complete.json`, `evaluation_complete.json`, `evaluation/QB_v2_3.json`(장면별 수치), 그래프와 결과 이미지.
-- 실행 기록: seed 42는 `provenance/run_records/`(준비·벤치마크·preflight·컨트롤러 기록, 캐시 manifest, 환경)와 자동 시작 대기 스크립트·기록(`wait65.ps1`, `watcher.log`), seed 43·44는 `provenance/stage2/`(서버 소스 manifest·검증, 실행 스크립트, `run_records/`)에 있습니다. stage2의 봉인 설정은 [runtime_config.json](provenance/stage2/run_records/runtime_config.json)입니다.
+- 실행 기록: seed 42는 `provenance/run_records/`(준비·벤치마크·preflight·컨트롤러 기록, 캐시 manifest, 환경)와 자동 시작 대기 스크립트·기록(`wait65.ps1`, `watcher.log`), seed 43·44는 `provenance/stage2/`(서버 소스 manifest·검증, 실행 스크립트, `run_records/`)에 있습니다. stage2의 봉인 설정은 [runtime_config.json](provenance/stage2/run_records/runtime_config.json)입니다. 실행·대기 로그(`.log`)는 Git에서 제외하므로 저장소에는 없고, 같은 폴더의 JSON 기록과 봉인 설정으로 실행을 확인할 수 있습니다.
 
 ## 8. 개선 여부와 다음 단계
 
-QB 3시드 평균으로 RR 세 지표가 모두 좋아졌고 SAM은 −0.100°로 일관되게 낮아졌지만, PSNR 이득(+0.028 dB)이 잡음 문턱(0.04 dB)보다 작고 관측 비율(1.43)이 보조 판정을 통과하지 못해 **부분 개선**입니다. RR2와 FR_WALD는 통과했습니다. 기준 모델은 C2MS로 유지합니다.
+네 대상 모두 **부분 개선**입니다. 기준 모델은 C2MS로 유지합니다.
 
-- 3단계(GF2·WV3 확장) 조건인 개선 또는 SAM 목표(−0.15°)를 충족하지 못해 확장하지 않습니다.
+| 대상 (3시드) | RR ΔPSNR / ΔSAM | 미달 항목 |
+|---|---|---|
+| QB | +0.028 / −0.100° | 잡음 문턱, 관측 비율 1.43 |
+| GF2 | +0.106 / −0.022° | RR2 PSNR −0.055 dB (허용 −0.05) |
+| WV3 | +0.047 / −0.079° | 잡음 문턱, ERGAS, FR_WALD, 관측 비율 1.36 |
+| WV2 전이 | −0.277 / −0.091° | PSNR, ERGAS, 관측 비율 1.95 |
+
+
+- SAM은 모든 대상에서 3시드 평균으로 줄었습니다. PSNR 이득은 GF2에서만 잡음 문턱을 넘었습니다.
+- WV2 전이는 시드에 따라 크게 흔들리며, seed 42처럼 눈에 띄게 흐리고 어두워지는 경우가 있습니다. WV3 validation 진단에서 이 모델이 PAN 밝기에 특히 민감하다는 것을 확인했고, 이를 줄이는 PAN 밝기·흐림 증강을 성능 67번(서버 학습 중)에서 시험합니다.
 - L1 + 분광 손실은 PSNR을 유지하면서 SAM을 약 0.10° 줄이는 가장 큰 단일 변경입니다. 남은 문제는 원래 해상도 관측 일치이며, [성능 66번](../66_observation_error_projection_analysis/README.md)에서 추론 때 관측 일치 사영을 붙이면 이 문제가 없어지고 3시드 평균 판정 수치가 모두 허용폭 안에 드는 것을 확인했습니다. 이를 후보로 채택할지는 사용자가 결정합니다.
