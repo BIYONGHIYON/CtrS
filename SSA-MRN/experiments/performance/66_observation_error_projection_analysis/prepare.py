@@ -108,8 +108,8 @@ class Net:
 class Projected(torch.nn.Module):
     """Normalized tensors in/out (common/result_images interface), projection at inference."""
 
-    def __init__(self, path):
-        super().__init__(); self.m = load_model(path)
+    def __init__(self, path, bands=4):
+        super().__init__(); self.m = load_model(path, bands)
 
     def forward(self, pan, lms, ms):
         return project(self.m(pan, lms, ms).double(), ms.double())[0]
@@ -181,6 +181,7 @@ def run_sensor(a):
         for t, tr in res['targets'].items(): plot(tr, out, a.seed, f'{stem}_{t}', f'{t}, seed {a.seed}')
         return
     data = Path(a.data) if a.data else ROOT / 'data/test'; bands = SENSORS[a.sensor]['bands']; t0 = time.time()
+    if a.images_only: return sensor_images(a, MODELS, data)
     res = {'seed': a.seed, 'sensor': a.sensor, 'targets': {}}
     for t in TARGETS[a.sensor]:
         use(t); paths = {}
@@ -204,6 +205,19 @@ def run_sensor(a):
         print(t, {k: v['label'] for k, v in tr['judgement'].items()}, flush=True)
         target_file.write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding='utf-8'); plot(tr, out, a.seed, f'{stem}_{t}', f'{t}, seed {a.seed}')
     res['seconds'] = round(time.time() - t0, 1); target_file.write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding='utf-8')
+    if a.seed == 42: sensor_images(a, MODELS, data)
+
+
+def sensor_images(a, MODELS, data):
+    """Fixed six RR scenes (same indices as QB), seed 42: 65 L1S without vs with projection, per test target."""
+    if a.seed != 42: return  # result images use the fixed seed 42 only
+    from common import result_images
+    bands = SENSORS[a.sensor]['bands']
+    for t in TARGETS[a.sensor]:
+        use(t); s = SENSORS[t]
+        result_images.render(load_model(MODELS['L1S'], bands), Projected(MODELS['L1S'], bands), data, Path(a.out) / 'images' / f'L1S_vs_L1S_projected_{t}',
+                             names=('L1S', 'L1S+P'), seed=42, device='cpu', labels=('65번 C2MS L1 + 분광', '65번 + 관측 일치 사영'),
+                             rr_file=f"test_{s['tag']}_multiExm1.h5", scale=s['max_value'], bands=s['rgb'], land_cover={i: f'{t} 장면 {i}' for i in result_images.SCENES})
 
 
 def main():

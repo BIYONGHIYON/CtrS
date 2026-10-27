@@ -278,6 +278,129 @@ GF2·WV3·WV2(65번 3단계) seed 42 그래프입니다. WV2에서 65번의 밴�
 
 </details>
 
+### GF2·WV3·WV2 (65번 3단계 seed 42)
+
+같은 방식으로 65번 3단계 seed 42 가중치의 출력과 사영 출력을 비교했습니다. 장면 번호는 QB와 같은 0-based 0·1·3·7·14·17이며, 다른 센서에서는 같은 번호를 그대로 썼습니다. 관측 연산·정규화·RGB 밴드는 test 대상 센서의 것이고, WV2는 WV3 모델의 전이입니다. 확대 창은 **사영에 유리하게 고른 창**입니다. 사영하지 않은 장면 PSNR은 65번 서버 평가 이미지와 1.4e-6 dB 이내로 같습니다. 로컬 CPU에서 `prepare.py --sensor <GF2|WV3> --seed 42 --images-only`로 만들었습니다.
+
+**GF2**
+
+| 장면 | 65번 | 65번 + 사영 | 차이 (dB) |
+|---:|---:|---:|---:|
+| 0 | 47.692 | 47.795 | +0.103 |
+| 1 | 49.314 | 49.432 | +0.117 |
+| 3 | 49.779 | 49.854 | +0.075 |
+| 7 | 50.678 | 50.781 | +0.103 |
+| 14 | 47.960 | 48.041 | +0.082 |
+| 17 | 49.514 | 49.631 | +0.117 |
+
+![GF2 장면 7 원본 크기 비교](results/images/L1S_vs_L1S_projected_GF2/full_scene_07.png)
+
+![GF2 장면 7 확대 비교](results/images/L1S_vs_L1S_projected_GF2/compare_scene_07.png)
+
+<details><summary>GF2 나머지 5장면 · 두 비교 형식</summary>
+
+![GF2 장면 0 원본 크기 비교](results/images/L1S_vs_L1S_projected_GF2/full_scene_00.png)
+
+![GF2 장면 0 확대 비교](results/images/L1S_vs_L1S_projected_GF2/compare_scene_00.png)
+
+![GF2 장면 1 원본 크기 비교](results/images/L1S_vs_L1S_projected_GF2/full_scene_01.png)
+
+![GF2 장면 1 확대 비교](results/images/L1S_vs_L1S_projected_GF2/compare_scene_01.png)
+
+![GF2 장면 3 원본 크기 비교](results/images/L1S_vs_L1S_projected_GF2/full_scene_03.png)
+
+![GF2 장면 3 확대 비교](results/images/L1S_vs_L1S_projected_GF2/compare_scene_03.png)
+
+![GF2 장면 14 원본 크기 비교](results/images/L1S_vs_L1S_projected_GF2/full_scene_14.png)
+
+![GF2 장면 14 확대 비교](results/images/L1S_vs_L1S_projected_GF2/compare_scene_14.png)
+
+![GF2 장면 17 원본 크기 비교](results/images/L1S_vs_L1S_projected_GF2/full_scene_17.png)
+
+![GF2 장면 17 확대 비교](results/images/L1S_vs_L1S_projected_GF2/compare_scene_17.png)
+
+</details>
+
+**WV3**
+
+| 장면 | 65번 | 65번 + 사영 | 차이 (dB) |
+|---:|---:|---:|---:|
+| 0 | 39.702 | 39.758 | +0.057 |
+| 1 | 37.406 | 37.490 | +0.084 |
+| 3 | 41.688 | 41.781 | +0.093 |
+| 7 | 38.386 | 38.464 | +0.078 |
+| 14 | 33.440 | 33.517 | +0.077 |
+| 17 | 36.037 | 36.118 | +0.081 |
+
+![WV3 장면 7 원본 크기 비교](results/images/L1S_vs_L1S_projected_WV3/full_scene_07.png)
+
+![WV3 장면 7 확대 비교](results/images/L1S_vs_L1S_projected_WV3/compare_scene_07.png)
+
+<details><summary>WV3 나머지 5장면 · 두 비교 형식</summary>
+
+![WV3 장면 0 원본 크기 비교](results/images/L1S_vs_L1S_projected_WV3/full_scene_00.png)
+
+![WV3 장면 0 확대 비교](results/images/L1S_vs_L1S_projected_WV3/compare_scene_00.png)
+
+![WV3 장면 1 원본 크기 비교](results/images/L1S_vs_L1S_projected_WV3/full_scene_01.png)
+
+![WV3 장면 1 확대 비교](results/images/L1S_vs_L1S_projected_WV3/compare_scene_01.png)
+
+![WV3 장면 3 원본 크기 비교](results/images/L1S_vs_L1S_projected_WV3/full_scene_03.png)
+
+![WV3 장면 3 확대 비교](results/images/L1S_vs_L1S_projected_WV3/compare_scene_03.png)
+
+![WV3 장면 14 원본 크기 비교](results/images/L1S_vs_L1S_projected_WV3/full_scene_14.png)
+
+![WV3 장면 14 확대 비교](results/images/L1S_vs_L1S_projected_WV3/compare_scene_14.png)
+
+![WV3 장면 17 원본 크기 비교](results/images/L1S_vs_L1S_projected_WV3/full_scene_17.png)
+
+![WV3 장면 17 확대 비교](results/images/L1S_vs_L1S_projected_WV3/compare_scene_17.png)
+
+</details>
+
+**WV2 (WV3 모델 전이)**
+
+| 장면 | 65번 | 65번 + 사영 | 차이 (dB) |
+|---:|---:|---:|---:|
+| 0 | 27.683 | 28.208 | +0.524 |
+| 1 | 25.830 | 26.319 | +0.489 |
+| 3 | 34.062 | 34.863 | +0.802 |
+| 7 | 28.106 | 28.626 | +0.521 |
+| 14 | 27.823 | 28.303 | +0.480 |
+| 17 | 28.497 | 29.054 | +0.558 |
+
+WV2에서는 사영이 밴드 밝기 치우침을 지워 장면 PSNR이 0.48-0.80 dB 올랐습니다. 다른 센서(0.06-0.12 dB)보다 훨씬 큽니다.
+
+![WV2 (WV3 모델 전이) 장면 7 원본 크기 비교](results/images/L1S_vs_L1S_projected_WV2/full_scene_07.png)
+
+![WV2 (WV3 모델 전이) 장면 7 확대 비교](results/images/L1S_vs_L1S_projected_WV2/compare_scene_07.png)
+
+<details><summary>WV2 (WV3 모델 전이) 나머지 5장면 · 두 비교 형식</summary>
+
+![WV2 (WV3 모델 전이) 장면 0 원본 크기 비교](results/images/L1S_vs_L1S_projected_WV2/full_scene_00.png)
+
+![WV2 (WV3 모델 전이) 장면 0 확대 비교](results/images/L1S_vs_L1S_projected_WV2/compare_scene_00.png)
+
+![WV2 (WV3 모델 전이) 장면 1 원본 크기 비교](results/images/L1S_vs_L1S_projected_WV2/full_scene_01.png)
+
+![WV2 (WV3 모델 전이) 장면 1 확대 비교](results/images/L1S_vs_L1S_projected_WV2/compare_scene_01.png)
+
+![WV2 (WV3 모델 전이) 장면 3 원본 크기 비교](results/images/L1S_vs_L1S_projected_WV2/full_scene_03.png)
+
+![WV2 (WV3 모델 전이) 장면 3 확대 비교](results/images/L1S_vs_L1S_projected_WV2/compare_scene_03.png)
+
+![WV2 (WV3 모델 전이) 장면 14 원본 크기 비교](results/images/L1S_vs_L1S_projected_WV2/full_scene_14.png)
+
+![WV2 (WV3 모델 전이) 장면 14 확대 비교](results/images/L1S_vs_L1S_projected_WV2/compare_scene_14.png)
+
+![WV2 (WV3 모델 전이) 장면 17 원본 크기 비교](results/images/L1S_vs_L1S_projected_WV2/full_scene_17.png)
+
+![WV2 (WV3 모델 전이) 장면 17 확대 비교](results/images/L1S_vs_L1S_projected_WV2/compare_scene_17.png)
+
+</details>
+
 <a id="evidence"></a>
 
 ## 7. 재현 자료
@@ -285,9 +408,10 @@ GF2·WV3·WV2(65번 3단계) seed 42 그래프입니다. WV2에서 65번의 밴�
 - [prepare.py](prepare.py): 관측 오차 분해, 사영 전후 재평가, 그래프·결과 이미지 생성. `--seed`로 시드를 고르고, 결과 이미지는 고정 seed 42로만 만듭니다. 53·63·65번 보관 가중치와 65번 `model.py`·`prepare.py`(54번 C2MS 구조·센서 연산)를 그대로 씁니다. `--plot-only`, `--images-only`로 일부만 다시 만들 수 있습니다.
 - [config.json](config.json): 분석 설정.
 - [results/analysis_s42.json](results/analysis_s42.json)·[analysis_s43.json](results/analysis_s43.json)·[analysis_s44.json](results/analysis_s44.json): 시드별, 모델·사영 여부별 평균과 장면별 RR·RR2·FR_WALD·FR 지표, 관측 오차 분해, 공액 기울기법 반복 수, FFT 연산 확인값.
-- `provenance/server_seed44/`: seed 44 서버 실행 기록입니다. 65번 종료를 기다린 대기 스크립트와 실행 스크립트, 대기 기록, 실행 로그, 입력 해시(`inputs_sha256.json`: test RR·FR 파일, 65번·53번 seed 44 `best.pt`, `prepare.py`)가 있으며, 입력 해시는 저장소의 파일과 같습니다.
+- `provenance/server_seed44/`: seed 44 서버 실행 기록입니다. 65번 종료를 기다린 대기 스크립트와 실행 스크립트, 대기 기록, 실행 로그, 입력 해시(`inputs_sha256.json`: test RR·FR 파일, 65번·53번 seed 44 `best.pt`, `prepare.py`)가 있으며, test 파일과 가중치의 입력 해시는 저장소의 파일과 같습니다. `prepare.py`의 해시는 GF2·WV3 인자를 더하기 전 판과 같습니다(QB 계산은 그 뒤에도 바뀌지 않았습니다).
+- `results/images/L1S_vs_L1S_projected_<GF2|WV3|WV2>/`: 65번 3단계 seed 42의 사영 전후 결과 이미지와 `result_images.json`(장면·확대 창·PSNR).
 - `results/analysis_<GF2|WV3>_s<42|43>.json`과 대상별 그래프 `analysis_<센서>_s<seed>_<대상>.png`: 65번 3단계 가중치의 사영 전후 지표, 관측 오차 분해, 대상별 v2.3 비교(65번·65번 + 사영·C2MS + 사영 대 C2MS, 65번 + 사영 대 C2MS + 사영). `python prepare.py --sensor WV3 --seed 42`처럼 다시 만들 수 있습니다(가중치는 65·54번 보관본).
-- `provenance/server_stage3/`: GF2·WV3 서버 실행 기록입니다. 실행 스크립트(`run66s3.ps1`, seed 43 병렬용 `run66s3b.ps1`, 시작 스크립트), 실행·대기 기록, 로그, 입력 해시(`inputs_<센서>_s<seed>.json`: 65번·54번 `best.pt`, `prepare.py`)가 있으며, 입력 해시는 저장소의 파일과 같습니다. 첫 스크립트의 기록에서 GF2 seed 42의 종료 코드가 빈칸인 것은 PowerShell이 종료 코드를 읽지 못한 것이고, 오류 출력은 비어 있었으며 결과 파일도 끝까지 기록됐습니다.
+- `provenance/server_stage3/`: GF2·WV3 서버 실행 기록입니다. 실행 스크립트(`run66s3.ps1`, seed 43 병렬용 `run66s3b.ps1`, 시작 스크립트), 실행·대기 기록, 로그, 입력 해시(`inputs_<센서>_s<seed>.json`: 65번·54번 `best.pt`, `prepare.py`)가 있으며, 가중치의 입력 해시는 저장소의 파일과 같습니다. `prepare.py`의 해시는 결과 이미지 생성(`sensor_images`)을 더하기 전 판과 같으며, 이후 바뀐 것은 이미지 생성뿐이고 지표 계산은 같습니다. 첫 스크립트의 기록에서 GF2 seed 42의 종료 코드가 빈칸인 것은 PowerShell이 종료 코드를 읽지 못한 것이고, 오류 출력은 비어 있었으며 결과 파일도 끝까지 기록됐습니다.
 - [manifest.json](manifest.json): 이 폴더 파일의 크기·SHA-256.
 
 ## 8. 개선 여부와 다음 단계

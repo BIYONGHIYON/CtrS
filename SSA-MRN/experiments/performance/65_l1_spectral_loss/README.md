@@ -240,6 +240,129 @@ QB RR·FR test 20장 평균입니다. 네 모델을 같은 서버·같은 코드
 
 </details>
 
+### 3단계 결과 이미지: GF2·WV3·WV2 (seed 42)
+
+서버 평가가 같은 `common/result_images.py`로 만든 이미지입니다. 장면 번호는 QB와 같은 0-based 0·1·3·7·14·17이며, 다른 센서에서는 풍경을 따로 고르지 않고 같은 번호를 그대로 썼습니다(54번과 같은 방식). 대조군은 같은 seed의 54번 C2MS이고, WV2는 WV3로 학습한 두 모델의 전이 결과입니다. 패널 순서와 확대 창 선택은 위 QB와 같으며, **확대 창은 후보에 가장 유리한 곳**입니다. 본문에는 QB와 같은 장면 7을 펼쳐 두고 나머지 5장면은 접었습니다. seed 43 이미지는 `results/C2MS_L1S_<센서>_s43/evaluation/<대상>/`에 있습니다.
+
+**GF2**
+
+| 장면 | 장면 PSNR (C2MS → L1+분광) | 장면 차이 | 확대 창 PSNR (C2MS → L1+분광) | 확대 창 차이 |
+|---:|---:|---:|---:|---:|
+| 0 | 47.623 → 47.692 | +0.069 | 47.514 → 48.038 | +0.524 |
+| 1 | 49.156 → 49.314 | +0.158 | 44.465 → 44.949 | +0.484 |
+| 3 | 49.667 → 49.779 | +0.112 | 49.571 → 50.033 | +0.462 |
+| 7 | 50.647 → 50.678 | +0.031 | 49.377 → 49.761 | +0.384 |
+| 14 | 47.869 → 47.960 | +0.091 | 48.145 → 48.826 | +0.681 |
+| 17 | 49.227 → 49.514 | +0.288 | 45.021 → 45.635 | +0.614 |
+
+![GF2 장면 7 원본 크기 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/full_scene_07.png)
+
+![GF2 장면 7 확대 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/compare_scene_07.png)
+
+<details><summary>GF2 나머지 5장면 · 두 비교 형식</summary>
+
+![GF2 장면 0 원본 크기 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/full_scene_00.png)
+
+![GF2 장면 0 확대 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/compare_scene_00.png)
+
+![GF2 장면 1 원본 크기 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/full_scene_01.png)
+
+![GF2 장면 1 확대 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/compare_scene_01.png)
+
+![GF2 장면 3 원본 크기 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/full_scene_03.png)
+
+![GF2 장면 3 확대 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/compare_scene_03.png)
+
+![GF2 장면 14 원본 크기 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/full_scene_14.png)
+
+![GF2 장면 14 확대 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/compare_scene_14.png)
+
+![GF2 장면 17 원본 크기 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/full_scene_17.png)
+
+![GF2 장면 17 확대 비교](results/C2MS_L1S_GF2_s42/evaluation/GF2/compare_scene_17.png)
+
+</details>
+
+**WV3**
+
+| 장면 | 장면 PSNR (C2MS → L1+분광) | 장면 차이 | 확대 창 PSNR (C2MS → L1+분광) | 확대 창 차이 |
+|---:|---:|---:|---:|---:|
+| 0 | 39.811 → 39.702 | −0.109 | 40.312 → 40.673 | +0.361 |
+| 1 | 37.602 → 37.406 | −0.196 | 42.560 → 43.899 | +1.339 |
+| 3 | 41.255 → 41.688 | +0.434 | 41.881 → 43.143 | +1.262 |
+| 7 | 38.386 → 38.386 | +0.001 | 42.235 → 43.353 | +1.118 |
+| 14 | 33.564 → 33.440 | −0.124 | 29.126 → 29.190 | +0.064 |
+| 17 | 36.009 → 36.037 | +0.028 | 36.817 → 37.065 | +0.247 |
+
+![WV3 장면 7 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/full_scene_07.png)
+
+![WV3 장면 7 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/compare_scene_07.png)
+
+<details><summary>WV3 나머지 5장면 · 두 비교 형식</summary>
+
+![WV3 장면 0 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/full_scene_00.png)
+
+![WV3 장면 0 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/compare_scene_00.png)
+
+![WV3 장면 1 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/full_scene_01.png)
+
+![WV3 장면 1 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/compare_scene_01.png)
+
+![WV3 장면 3 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/full_scene_03.png)
+
+![WV3 장면 3 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/compare_scene_03.png)
+
+![WV3 장면 14 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/full_scene_14.png)
+
+![WV3 장면 14 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/compare_scene_14.png)
+
+![WV3 장면 17 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/full_scene_17.png)
+
+![WV3 장면 17 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV3/compare_scene_17.png)
+
+</details>
+
+**WV2 (WV3 모델 전이)**
+
+WV2에서는 65번이 여섯 장면 모두 0.9-1.1 dB 낮아, 후보에 가장 유리한 확대 창에서도 네 장면은 C2MS보다 나쁩니다. 밴드 밝기가 통째로 어긋나는 문제(66번 분석)가 이미지 전체에 퍼져 있기 때문입니다.
+
+| 장면 | 장면 PSNR (C2MS → L1+분광) | 장면 차이 | 확대 창 PSNR (C2MS → L1+분광) | 확대 창 차이 |
+|---:|---:|---:|---:|---:|
+| 0 | 28.691 → 27.683 | −1.007 | 33.713 → 32.568 | −1.146 |
+| 1 | 26.815 → 25.830 | −0.985 | 26.675 → 25.962 | −0.713 |
+| 3 | 34.937 → 34.062 | −0.875 | 42.586 → 43.999 | +1.413 |
+| 7 | 29.176 → 28.106 | −1.071 | 41.789 → 43.121 | +1.332 |
+| 14 | 28.932 → 27.823 | −1.109 | 30.233 → 29.498 | −0.736 |
+| 17 | 29.386 → 28.497 | −0.889 | 27.774 → 27.330 | −0.444 |
+
+![WV2 (WV3 모델 전이) 장면 7 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/full_scene_07.png)
+
+![WV2 (WV3 모델 전이) 장면 7 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/compare_scene_07.png)
+
+<details><summary>WV2 (WV3 모델 전이) 나머지 5장면 · 두 비교 형식</summary>
+
+![WV2 (WV3 모델 전이) 장면 0 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/full_scene_00.png)
+
+![WV2 (WV3 모델 전이) 장면 0 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/compare_scene_00.png)
+
+![WV2 (WV3 모델 전이) 장면 1 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/full_scene_01.png)
+
+![WV2 (WV3 모델 전이) 장면 1 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/compare_scene_01.png)
+
+![WV2 (WV3 모델 전이) 장면 3 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/full_scene_03.png)
+
+![WV2 (WV3 모델 전이) 장면 3 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/compare_scene_03.png)
+
+![WV2 (WV3 모델 전이) 장면 14 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/full_scene_14.png)
+
+![WV2 (WV3 모델 전이) 장면 14 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/compare_scene_14.png)
+
+![WV2 (WV3 모델 전이) 장면 17 원본 크기 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/full_scene_17.png)
+
+![WV2 (WV3 모델 전이) 장면 17 확대 비교](results/C2MS_L1S_WV3_s42/evaluation/WV2/compare_scene_17.png)
+
+</details>
+
 <a id="evidence"></a>
 
 ## 7. 재현 자료

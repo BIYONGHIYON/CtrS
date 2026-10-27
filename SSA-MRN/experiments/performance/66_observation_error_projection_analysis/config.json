@@ -49,6 +49,7 @@
     "judgement": "v2.3 items per target (reference only): L1S, L1S+P and C2MS+P against the same-seed 54 C2MS, and L1S+P against C2MS+P; RR2 against the same-seed 54 C2MS",
     "device": "server CPU while experiment 65 seed 44 trained on the GPU: 4 threads, below-normal priority, separate folder; seed 43 in parallel with seed 42",
     "entry": "prepare.py --sensor <GF2|WV3> --seed <seed> [--data <folder>] [--l1s <best.pt>] [--threads 4]",
-    "limits": "seeds 42 and 43 only (seed 44 still training); post-hoc analysis on test data, no validation-based selection"
+    "limits": "seeds 42 and 43 only (seed 44 still training); post-hoc analysis on test data, no validation-based selection",
+    "images": "common/result_images.py on the same six RR scene indices (0, 1, 3, 7, 14, 17) of GF2, WV3 and WV2, seed 42, 65 L1S without vs with projection, local CPU (--images-only)"
   }
 }
