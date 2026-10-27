@@ -24,5 +24,31 @@
     42,
     43,
     44
-  ]
+  ],
+  "stage3": {
+    "added": "2026-10-27, user request",
+    "models": {
+      "C2MS": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_<GF2|WV3>_s<seed>/best.pt",
+      "L1S": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_<GF2|WV3>_s<seed>/best.pt (65 stage 3)"
+    },
+    "seeds": [
+      42,
+      43
+    ],
+    "targets": {
+      "GF2": [
+        "GF2"
+      ],
+      "WV3": [
+        "WV3",
+        "WV2 (transfer)"
+      ]
+    },
+    "data": "each target's RR and FR test, 20 scenes each, SHA-256 checked against the 54 config",
+    "operators": "the test target's 54 Wald operators and normalization (GF2 1023, WV3/WV2 2047), FFT form checked against the direct form (max abs difference below 3e-15)",
+    "judgement": "v2.3 items per target (reference only): L1S, L1S+P and C2MS+P against the same-seed 54 C2MS, and L1S+P against C2MS+P; RR2 against the same-seed 54 C2MS",
+    "device": "server CPU while experiment 65 seed 44 trained on the GPU: 4 threads, below-normal priority, separate folder; seed 43 in parallel with seed 42",
+    "entry": "prepare.py --sensor <GF2|WV3> --seed <seed> [--data <folder>] [--l1s <best.pt>] [--threads 4]",
+    "limits": "seeds 42 and 43 only (seed 44 still training); post-hoc analysis on test data, no validation-based selection"
+  }
 }
