@@ -1,0 +1,115 @@
+{
+  "time_kst": "2026-10-27T02:59:09.886284+09:00",
+  "initial_state_sha256": {
+    "GF2_C2MS_L1S_s42": "004f0b47ef8d4a0a8a7c12edfb2125c7d9c5a4c4727e6026118a936099393442",
+    "WV3_C2MS_L1S_s42": "1b6ce3d5c12705f08929f5e17cfb1114818808573e3a3ae236aa3c58ca7334cb",
+    "GF2_C2MS_L1S_s43": "dd89b69e043df889415c2ad16bfca5971627e435ea8c0377844a148152db8020",
+    "WV3_C2MS_L1S_s43": "e52fd6d937d94e306f37044b1cdf3601c3b31064839c50b26e262b6b0e79b0d7",
+    "GF2_C2MS_L1S_s44": "6d86d7b41f85556d2724066194a89b0663633049704d32a53261dcf2c76f9010",
+    "WV3_C2MS_L1S_s44": "428dd00b31ade05fb76d690d6d1af2c771bd16e50f2ae36eb2819ddff0f7a63c"
+  },
+  "four_band_initial_equal_to_43": true,
+  "genmtf_x4_max_abs_diff": {
+    "QB": 0.0,
+    "WV3": 0.0
+  },
+  "sensors": {
+    "GF2": {
+      "coarse_cache_vs_fresh_max_abs": 0.0,
+      "coarse_kernel_dc_gain": {
+        "ms": [
+          0.9996803400723346,
+          0.9996803400723344,
+          0.9996803400723344,
+          0.9996803400723344
+        ],
+        "pan": 0.9994961777612154
+      },
+      "coarse_ms_vs_2x_reduced_given_ms_relative_rmse": 0.01630464382469654,
+      "coarse_shapes": {
+        "pan": [
+          19809,
+          1,
+          32,
+          32
+        ],
+        "lms": [
+          19809,
+          4,
+          32,
+          32
+        ],
+        "ms": [
+          19809,
+          4,
+          8,
+          8
+        ],
+        "gt": [
+          19809,
+          4,
+          32,
+          32
+        ]
+      },
+      "checks": {
+        "C2MS_L1S": {
+          "parameters": 2853918,
+          "resume_max_abs": 0.0,
+          "loss": 0.9482589960098267
+        }
+      }
+    },
+    "WV3": {
+      "coarse_cache_vs_fresh_max_abs": 0.0,
+      "coarse_kernel_dc_gain": {
+        "ms": [
+          0.9997023336931097,
+          0.999726903588933,
+          0.9997308285514188,
+          0.9997229324733354,
+          0.9997347086704862,
+          0.9997308285514187,
+          0.9997107280478814,
+          0.9996937168315838
+        ],
+        "pan": 0.9994781518325394
+      },
+      "coarse_ms_vs_2x_reduced_given_ms_relative_rmse": 0.04328946769237518,
+      "coarse_shapes": {
+        "pan": [
+          9714,
+          1,
+          32,
+          32
+        ],
+        "lms": [
+          9714,
+          8,
+          32,
+          32
+        ],
+        "ms": [
+          9714,
+          8,
+          8,
+          8
+        ],
+        "gt": [
+          9714,
+          8,
+          32,
+          32
+        ]
+      },
+      "checks": {
+        "C2MS_L1S": {
+          "parameters": 2946094,
+          "resume_max_abs": 0.0,
+          "loss": 1.4464247226715088
+        }
+      }
+    }
+  },
+  "scope": "tiny AMP forward/backward on both scales and two-update resume; not long-session crash proof"
+}
