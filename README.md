@@ -71,32 +71,26 @@
 
 | 장면 | 장면 PSNR 원본 → C2MS | 확대 영역 PSNR 원본 → C2MS |
 |---:|---|---|
-| 7 | 28.38 → 29.18 dB (+0.80) | 24.03 → 25.14 dB |
 | 0 | 27.80 → 28.69 dB (+0.89) | 26.15 → 27.76 dB |
 | 1 | 26.02 → 26.82 dB (+0.79) | 24.14 → 25.29 dB |
 | 3 | 33.71 → 34.94 dB (+1.23) | 27.19 → 28.56 dB |
+| 7 | 28.38 → 29.18 dB (+0.80) | 24.03 → 25.14 dB |
 | 14 | 27.91 → 28.93 dB (+1.02) | 26.07 → 27.92 dB |
 | 17 | 28.43 → 29.39 dB (+0.96) | 26.41 → 27.86 dB |
 
-장면은 QB에서 정답 영상만 보고 정한 고정 번호(0·1·3·7·14·17)이고, 여섯 장면 모두 C2MS가 높았습니다. **장면 7은 결과를 본 뒤 차이가 눈으로 가장 잘 보이는 예로 골라 먼저 보입니다.**
+장면은 QB에서 정답 영상만 보고 정한 고정 번호(0·1·3·7·14·17)이고, 여섯 장면 모두 C2MS가 높았습니다. 장면 번호 순서로 보입니다.
 
 - **원본 크기 비교:** 위 줄은 LR MS(최근접 확대) · PAN 입력 · 원본 · C2MS · 정답, 아래 줄은 원본과 C2MS의 |예측 − 정답| 지도입니다(원본 오차의 99퍼센타일을 공통 색 척도로 사용, 밝을수록 오차가 큼).
 - **확대 비교:** C2MS의 개선이 가장 큰 64×64 영역을 4배 확대한 정답 전체(노란 상자) · 원본 · C2MS · 정답 · 원본 오차 · C2MS 오차입니다. C2MS에 유리하게 고른 영역이므로 전체 차이는 표의 장면 PSNR로 확인합니다.
-
-**장면 7**
-
-![WV2 원본 크기 비교 · 장면 7](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_07.png)
-
-![WV2 확대 비교 · 장면 7](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_07.png)
-
-<details>
-<summary><b>WV2 나머지 5장면 펼치기</b> (0·1·3·14·17)</summary>
 
 **장면 0**
 
 ![WV2 원본 크기 비교 · 장면 0](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_00.png)
 
 ![WV2 확대 비교 · 장면 0](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_00.png)
+
+<details>
+<summary><b>WV2 나머지 5장면 펼치기</b> (1·3·7·14·17)</summary>
 
 **장면 1**
 
@@ -109,6 +103,12 @@
 ![WV2 원본 크기 비교 · 장면 3](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_03.png)
 
 ![WV2 확대 비교 · 장면 3](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_03.png)
+
+**장면 7**
+
+![WV2 원본 크기 비교 · 장면 7](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_07.png)
+
+![WV2 확대 비교 · 장면 7](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_07.png)
 
 **장면 14**
 
@@ -145,30 +145,44 @@ test 20장, 같은 시드(42·43·44) 원본과 짝지은 3시드 평균 차이�
 
 ## 다른 팬샤프닝 모델과 비교 (QB RR test 20장)
 
-중간발표용 실험 53·54의 [실제 MATLAB 재평가 수치](SSA-MRN/docs/c2ms_matlab_evaluation_tables.md)를 별도로 보존했습니다. PSNR global-MSE와 밴드 평균 정의, 센서별 peak를 구분합니다.
+C2MS는 성능 53번 3시드 가중치를 공식 DLPan MATLAB 코드로 재평가한 [값](SSA-MRN/docs/c2ms_matlab_evaluation_tables.md)입니다(PSNR은 밴드 평균 정의). 다른 모델은 각 논문이 보고한 값이며, PSNR을 보고한 QB 결과를 PSNR 순으로 정렬했습니다.
 
-| 모델 | PSNR ↑ | SAM ↓ | ERGAS ↓ | Q4 ↑ |
-|---|---:|---:|---:|---:|
-| U2Net + PAKAN (2026) | 38.520 | 4.439 | 3.698 | 0.939 |
-| CANNet (2024) | - | 4.507 | 3.652 | 0.937 |
-| HMPNet | - | 4.617 | 3.404 | 0.936 |
-| **C2MS (현재 기준, 3시드 평균)** | **38.302** | **4.576** | **3.712** | **0.934**\* |
-| LAGNet (2022) | 38.209 | 4.870 | 3.812 | 0.934 |
-| U2Net (2023) | 38.065 | 4.642 | 3.987 | 0.931 |
-| SSA-MRN 원 논문 | 37.665 | 4.848 | 4.073 | 0.924\* |
-| FusionNet (2021) | 37.540 | 4.904 | 4.156 | 0.925 |
-| 원본 SSA-MRN (우리 재현, 3시드 평균) | 37.429 | 4.941 | 4.124 | 0.923\* |
-| PNN (2016) | 36.942 | 5.181 | 4.468 | 0.918 |
-| MTF-GLP-FS (고전 방법) | 32.709 | 7.792 | 7.373 | 0.835 |
-
-C2MS는 최신 모델들과 같은 최상위권에 있으며, PSNR·ERGAS는 2026년 PAKAN과 비슷하고 SAM은 0.14° 높습니다.
+| 모델 | PSNR ↑ | SAM ↓ | ERGAS ↓ | Q4 ↑ | 출처 |
+|---|---:|---:|---:|---:|---|
+| SRINO | 38.864 | 4.351 | 3.542 | 0.940 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
+| ABFNet | 38.830 | 4.060 | 3.410 | — | [ABFNet](https://proceedings.mlr.press/v306/wang26hx.html) |
+| SSO-PGA | 38.807 | 4.312 | 3.493 | 0.938 | [SSO-PGA](https://arxiv.org/html/2510.23362v1) |
+| LFormer | 38.674 | 4.382 | 3.616 | 0.939 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
+| MSFFusion | 38.653 | 4.419 | 3.568 | — | [MSFFusion](https://www.mdpi.com/2072-4292/18/18/3236) |
+| PanDiff | 38.538 | 4.524 | 3.688 | 0.937 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
+| S2WMamba | 38.533 | 4.445 | 3.679 | 0.938 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
+| DCPNet | 38.531 | 4.426 | 3.622 | — | [MSFFusion](https://www.mdpi.com/2072-4292/18/18/3236) |
+| OTPNet | 38.521 | 4.415 | 3.624 | — | [OTPNet](https://ojs.aaai.org/index.php/AAAI/article/download/33048/35203) |
+| U2Net + PAKAN | 38.520 | 4.439 | 3.698 | 0.939 | [PAKAN](https://arxiv.org/html/2603.15109v1) |
+| SSMNet | 38.506 | 4.423 | 3.635 | — | [MSFFusion](https://www.mdpi.com/2072-4292/18/18/3236) |
+| CANNet | 38.488 | 4.496 | 3.698 | 0.937 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
+| ADWM | 38.466 | 4.450 | 3.705 | 0.937 | [ADWM](https://arxiv.org/html/2503.13214v1) |
+| DCINN | 38.430 | 4.220 | 3.570 | — | [ABFNet](https://proceedings.mlr.press/v306/wang26hx.html) |
+| **C2MS (현재 기준, 3시드 평균)** | **38.302** | **4.576** | **3.712** | **0.934** | [MATLAB 재평가](SSA-MRN/docs/c2ms_matlab_evaluation_tables.md) |
+| HFIN | 38.247 | 4.542 | 3.813 | 0.934 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
+| HOIF | 38.242 | 4.521 | 3.825 | 0.933 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
+| ProtoFormer | 38.238 | 4.568 | 3.768 | — | [MSFFusion](https://www.mdpi.com/2072-4292/18/18/3236) |
+| LAGNet | 38.209 | 4.534 | 3.812 | 0.934 | [ADWM](https://arxiv.org/html/2503.13214v1) |
+| U2Net | 38.065 | 4.642 | 3.987 | 0.931 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
+| PanDiM | 38.012 | 4.344 | 3.594 | 0.939 | [PanDiM](https://www.mdpi.com/2072-4292/18/14/2299) |
+| FusionMamba | 37.986 | 4.610 | 4.054 | 0.930 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
+| SSA-MRN 원 논문 | 37.665 | 4.848 | 4.073 | 0.924 | [SSA-MRN](https://ieeexplore.ieee.org/abstract/document/10902025) |
+| FusionNet | 37.540 | 4.904 | 4.156 | 0.925 | [ADWM](https://arxiv.org/html/2503.13214v1) |
+| 원본 SSA-MRN (우리 재현, 3시드 평균) | 37.429 | 4.941 | 4.124 | 0.923 | [MATLAB 재평가](SSA-MRN/docs/c2ms_matlab_evaluation_tables.md) |
+| PNN | 36.942 | 5.181 | 4.468 | 0.918 | [ADWM](https://arxiv.org/html/2503.13214v1) |
+| MTF-GLP-FS (고전 방법) | 32.709 | 7.792 | 7.373 | 0.835 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 
 <details>
 <summary>비교 출처와 주의점</summary>
 
-- 다른 모델의 값은 각 논문에 보고된 값입니다: [PAKAN (arXiv 2603.15109)](https://arxiv.org/abs/2603.15109) Table 1(PAKAN·U2Net·LAGNet·FusionNet·PNN·MTF-GLP-FS), [CANNet (arXiv 2404.07543)](https://arxiv.org/abs/2404.07543) Table 2(CANNet·HMPNet). SSA-MRN 원 논문 값은 논문 표의 QB 결과입니다.
-- \* 우리와 SSA-MRN 원 논문의 값은 Q2n입니다(4밴드에서 Q4와 같은 지표, 구현 차이 가능).
-- 우리 지표 계산은 DLPan-Toolbox 공식 코드와 아직 맞춰 보지 않았습니다. 같은 모델도 논문마다 값이 다르게 보고되므로(예: LAGConv SAM 4.547·LAGNet 4.870), 순위는 참고로만 봅니다.
+- 다른 모델의 값은 출처 열의 논문이 보고한 값입니다. 비교군으로 다시 학습·보고된 값(예: LFormer·PanDiff·HFIN·HOIF는 SRINO 보충자료, LAGNet·FusionNet·PNN은 ADWM)도 포함하므로, 같은 모델이 논문마다 다른 값으로 보고될 수 있습니다.
+- 논문마다 데이터 분할·정규화·PSNR 구현·학습 예산이 다를 수 있어 같은 조건의 공인 순위가 아닙니다. 순위는 참고로만 봅니다.
+- PSNR을 보고하지 않은 방법(CC-Pan SAM 4.198, HMPNet SAM 4.617 등)은 표에서 제외했습니다. PSNR 37.99 dB 미만에서는 SSA-MRN 원 논문과 대표 비교군(FusionNet·PNN·MTF-GLP-FS)만 남겼습니다. —는 해당 논문이 Q4를 보고하지 않았다는 뜻입니다.
 - 우리 값은 3시드 평균이고, 다른 논문은 대부분 1회 학습 값입니다. 같은 20장 test를 여러 실험에서 반복해 썼습니다.
 
 </details>
