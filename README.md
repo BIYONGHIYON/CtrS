@@ -147,6 +147,8 @@ test 20장, 같은 시드(42·43·44) 원본과 짝지은 3시드 평균 차이�
 
 C2MS는 성능 53번 3시드 가중치를 공식 DLPan MATLAB 코드로 재평가한 [값](SSA-MRN/docs/c2ms_matlab_evaluation_tables.md)입니다(PSNR은 밴드 평균 정의). 다른 모델은 각 논문이 보고한 값이며, PSNR을 보고한 QB 결과를 PSNR 순으로 정렬했습니다.
 
+[QB·GF2·WV3·WV2 팬샤프닝 성능 조사 전체 보기 →](SSA-MRN/docs/pansharpening_survey/QB_GF_WV2_WV3_팬샤프닝_성능조사_2026-10-27.md) 2026-10-27 기준 논문 보고값을 센서·학습 경로(같은 센서, 다중 센서, 미학습 센서 전이)별로 정리했습니다. [QB 조사](SSA-MRN/docs/pansharpening_survey/QB_팬샤프닝_성능조사_2026-10-27.md)에는 이 표에 없는 방법과 출처별 원표가 있습니다.
+
 | 모델 | PSNR ↑ | SAM ↓ | ERGAS ↓ | Q4 ↑ | 출처 |
 |---|---:|---:|---:|---:|---|
 | SRINO | 38.864 | 4.351 | 3.542 | 0.940 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
