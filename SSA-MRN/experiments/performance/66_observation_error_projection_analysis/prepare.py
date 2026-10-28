@@ -12,6 +12,9 @@ because the direct 41x41 float64 convolution is very slow on CPU. Writes only be
 --sensor GF2/WV3 (65 stage 3): 54 C2MS and 65 L1 + spectral of the same seed, on the sensor's own test set and, for WV3,
 also on WV2 (transfer), each with the target's Wald operator and normalization (GF2 1023, WV3/WV2 2047) as in the 54/65
 evaluation; v2.3 judgements of L1S, L1S+P and C2MS+P against C2MS (and L1S+P against C2MS+P) are added per target.
+
+--median-test (QB): whether the extra FR observation error of the L1 runs comes from L1 estimating the conditional median
+instead of the mean (see median_test).
 """
 import argparse, importlib.util, json, sys, time
 from pathlib import Path
@@ -220,13 +223,62 @@ def sensor_images(a, MODELS, data):
                              rr_file=f"test_{s['tag']}_multiExm1.h5", scale=s['max_value'], bands=s['rgb'], land_cover={i: f'{t} 장면 {i}' for i in result_images.SCENES})
 
 
+def skew_proxy(fine, h, w):
+    """(mean - median) / std and std over the 8x8 fine window around each MS sample (phase 2: centre 4i+2), per band."""
+    x = torch.nn.functional.pad(torch.from_numpy(fine)[None], (2, 4, 2, 4), mode='replicate')  # window rows 4i-2 .. 4i+5
+    u = x.unfold(2, 8, 4).unfold(3, 8, 4)[0, :, :h, :w].reshape(fine.shape[0], h, w, 64)
+    std = u.std(-1)
+    return ((u.mean(-1) - u.median(-1).values) / std.clamp_min(1e-6)).numpy(), std.numpy()
+
+
+def median_test(rr_path, fr_path, out):
+    """Mean-vs-median test (QB, seeds 42-44; 63 L1 seed 42): MSE learns the conditional mean, L1 the conditional median.
+    D is linear, so a mean estimate keeps D(y) = MS. Per MS pixel (interior), d = e_A - e_B with e = D(y) - MS:
+    (1) local test: correlation of d with the fine-scale (mean - median) around the sample (RR: GT, FR: PAN), MSE-MSE pairs as control;
+    (2) global test: mean of d overall, by MS-brightness and PAN-std quintile and per band; skew of the GT - LMS residual on RR."""
+    use('QB'); k = OBS_MARGIN; sl = (slice(None), slice(k, -k), slice(k, -k))
+    names = {f'C2MS_s{s}': models(s)['C2MS'] for s in (42, 43, 44)} | {'L1_s42': models(42)['L1']} | {f'L1S_s{s}': models(s)['L1S'] for s in (42, 43, 44)}
+    nets = {n: Net(p, False) for n, p in names.items()}
+    pairs = [('L1_s42', 'C2MS_s42'), ('L1S_s42', 'C2MS_s42'), ('L1S_s43', 'C2MS_s43'), ('L1S_s44', 'C2MS_s44'), ('C2MS_s43', 'C2MS_s42'), ('C2MS_s44', 'C2MS_s43')]
+    q5 = lambda v: np.quantile(v, np.linspace(0, 1, 6)); res = {'models': {n: str(p.relative_to(ROOT)) for n, p in names.items()}, 'pairs_control': pairs[-2:]}
+    for scale, path in (('RR', rr_path), ('FR', fr_path)):
+        E = {n: [] for n in nets}; SK, SD, BR, BAND, RES = [], [], [], [], []
+        with h5py.File(path) as f:
+            for i in range(20):
+                a = {key: np.asarray(f[key][i], dtype=np.float64) for key in ('pan', 'lms', 'ms') + (('gt',) if scale == 'RR' else ())}
+                h, w = a['ms'].shape[-2:]
+                sk, sd = skew_proxy(a['gt'] if scale == 'RR' else np.repeat(a['pan'], 4, 0), h, w)
+                SK.append(sk[sl].ravel()); SD.append(sd[sl].ravel()); BR.append(a['ms'][sl].ravel())
+                BAND.append(np.broadcast_to(np.arange(4)[:, None, None], a['ms'][sl].shape).ravel())
+                if scale == 'RR': RES.append((a['gt'] - a['lms']).ravel())
+                for n, net in nets.items():
+                    E[n].append((D(torch.from_numpy(net(a['pan'], a['lms'], a['ms']))[None])[0].numpy() - a['ms'])[sl].ravel())
+        sk, sd, br, band = map(np.concatenate, (SK, SD, BR, BAND)); E = {n: np.concatenate(v) for n, v in E.items()}
+        r = {'obs_rmse_dn': {n: float(np.sqrt((v ** 2).mean())) for n, v in E.items()}, 'pairs': {}}
+        if RES:
+            v = np.concatenate(RES); r['gt_minus_lms'] = dict(mean=float(v.mean()), median=float(np.median(v)), std=float(v.std()), skew=float(((v - v.mean()) ** 3).mean() / v.std() ** 3))
+        qs, qb, qk = q5(sd), q5(br), np.quantile(sk, np.linspace(0, 1, 11))
+        by = lambda d, x, q: [float(d[(x >= q[j]) & (x <= q[j + 1])].mean()) for j in range(len(q) - 1)]
+        for A, B in pairs:
+            d = E[A] - E[B]; x = sk * sd
+            r['pairs'][f'{A}-{B}'] = dict(mean_dn=float(d.mean()), rms_dn=float(np.sqrt((d ** 2).mean())), corr_mean_minus_median=float(np.corrcoef(d, x)[0, 1]),
+                                          corr_skew=float(np.corrcoef(d, sk)[0, 1]), mean_by_skew_decile=by(d, sk, qk), mean_by_brightness_quintile=by(d, br, qb),
+                                          mean_by_pan_std_quintile=by(d, sd, qs), rms_by_pan_std_quintile=[float(np.sqrt((d[(sd >= qs[j]) & (sd <= qs[j + 1])] ** 2).mean())) for j in range(5)],
+                                          mean_by_band=[float(d[band == c].mean()) for c in range(4)], corr_abs_pan_std=float(np.corrcoef(np.abs(d), sd)[0, 1]))
+            p = r['pairs'][f'{A}-{B}']; print(scale, A, B, {key: (round(v, 3) if isinstance(v, float) else [round(z, 2) for z in v]) for key, v in p.items()}, flush=True)
+        res[scale] = r
+    out.write_text(json.dumps(res, ensure_ascii=False, indent=1), encoding='utf-8')
+
+
 def main():
     a = argparse.ArgumentParser(); a.add_argument('--seed', type=int, default=42); a.add_argument('--plot-only', action='store_true'); a.add_argument('--images-only', action='store_true')
     # Server run (2026-10-27): the same QB test files from another folder, the 65 best.pt from its runtime, results outside the repository.
     a.add_argument('--rr', default=str(ROOT / 'data/test/test_qb_multiExm1.h5')); a.add_argument('--fr', default=str(ROOT / 'data/test/test_qb_OrigScale_multiExm1.h5')); a.add_argument('--l1s'); a.add_argument('--out', default=str(HERE / 'results'))
     # GF2/WV3 (+WV2 transfer): --data is searched for the test files by name (default data/test), --c2ms/--l1s override the archived best.pt.
-    a.add_argument('--sensor', default='QB', choices=('QB', 'GF2', 'WV3')); a.add_argument('--data'); a.add_argument('--c2ms'); a.add_argument('--threads', type=int, default=8); a = a.parse_args()
+    a.add_argument('--sensor', default='QB', choices=('QB', 'GF2', 'WV3')); a.add_argument('--data'); a.add_argument('--c2ms'); a.add_argument('--threads', type=int, default=8)
+    a.add_argument('--median-test', action='store_true', help='QB mean-vs-median test of the L1 observation error -> results/median_vs_mean.json'); a = a.parse_args()
     torch.set_num_threads(a.threads)
+    if a.median_test: return median_test(Path(a.rr), Path(a.fr), Path(a.out) / 'median_vs_mean.json')
     if a.sensor != 'QB': return run_sensor(a)
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True); target = out / f'analysis_s{a.seed}.json'; MODELS = models(a.seed)
     if a.l1s: MODELS['L1S'] = Path(a.l1s)

@@ -52,5 +52,14 @@
     "entry": "prepare.py --sensor <GF2|WV3> --seed <seed> [--data <folder>] [--l1s <best.pt>] [--threads 4]",
     "limits": "post-hoc analysis on test data, no validation-based selection",
     "images": "common/result_images.py on the same six RR scene indices (0, 1, 3, 7, 14, 17) of GF2, WV3 and WV2, seed 42, 65 L1S without vs with projection, local CPU (--images-only)"
+  },
+  "median_test": {
+    "added": "2026-10-28, user request",
+    "question": "does the extra FR observation error of the L1 runs come from L1 estimating the conditional median instead of the mean (D is linear, so only a mean estimate keeps D(y) = MS)?",
+    "data": "QB RR and FR test, 20 scenes each, local CPU",
+    "models": "53 C2MS seeds 42-44 (MSE), 63 L1 seed 42, 65 L1 + spectral seeds 42-44; MSE-MSE seed pairs as control",
+    "measures": "per MS pixel (interior margin 5) d = e_A - e_B, e = D(y) - MS; correlation of d with the (mean - median) of the 8x8 fine window around each MS sample (RR GT, FR PAN); mean of d overall, by MS-brightness and PAN-std quintile and per band; skew of GT - LMS on RR",
+    "entry": "prepare.py --median-test -> results/median_vs_mean.json",
+    "limits": "post-hoc on test data; QB only"
   }
 }
