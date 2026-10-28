@@ -1712,5 +1712,27 @@
     "entrypoint": "experiments/performance/66_observation_error_projection_analysis/prepare.py",
     "results": "experiments/performance/66_observation_error_projection_analysis/results",
     "manifest": "experiments/performance/66_observation_error_projection_analysis/manifest.json"
+  },
+  "performance/68_ssai_folding_sam_split_seed_ensemble": {
+    "report": "experiments/performance/68_ssai_folding_sam_split_seed_ensemble/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB, WV3, WV2(전이)",
+    "experiment": 68,
+    "display_name": "68. C2MS SSAI 경로 접기·미사용 층 정리, 65번 SAM 이득의 주파수 분해, 시드 앙상블 진단",
+    "status": "사전 검증 완료",
+    "improvement": "성능 비교 아님",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "retraining": false,
+    "last_checked": "2026-10-28T04:50:00+09:00",
+    "limits": "학습 없는 사후 진단(로컬 CPU). 판정 규칙은 측정 전에 config.json에 고정. 탐색에 반복 사용한 test를 다시 봤고, 앙상블 판단은 QB validation으로만 함. WV3·WV2는 로컬 validation이 없어 test만. 진단 1: 미사용 층 제거(QB 118,308개·WV3 190,152개)는 세 대상 모두 비트 단위 동일, SSA 상수 접기는 QB 최대 0.08 DN 통과·WV3 seed 42 국소 최대 1,343 DN으로 사전 관문 미달, 추론 시간 차이는 측정 잡음 안. 진단 2: 65번 QB SAM 감소 0.100° 중 고주파 0.091°(세기 0.039°, 밴드 비율 0.053°), 남은 저주파 여지 0.084°로 고주파 주도. WV2 전이에서 65번 PSNR 손해 −0.277 dB는 전부 저주파. 진단 3: C2MS 3시드 앙상블은 구성원 평균보다 QB validation +0.191 dB·SAM −0.083°(관문 통과), test QB +0.256 dB·WV3 +0.286 dB·WV2 +0.464 dB. 6개 앙상블 QB RR 38.615 dB·SAM 4.395°. 앙상블은 추론 3-6회의 출력 평균이며 단일 모델 후보가 아님.",
+    "config": "experiments/performance/68_ssai_folding_sam_split_seed_ensemble/config.json",
+    "entrypoint": "experiments/performance/68_ssai_folding_sam_split_seed_ensemble/prepare.py",
+    "results": "experiments/performance/68_ssai_folding_sam_split_seed_ensemble/results",
+    "manifest": "experiments/performance/68_ssai_folding_sam_split_seed_ensemble/manifest.json"
   }
 }
