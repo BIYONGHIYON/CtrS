@@ -48,10 +48,8 @@
 | 2 | [성능 43번](SSA-MRN/experiments/performance/43_normalized_parallel_capacity/README.md) | 원본+W2(**C2**)를 같은 절차로 3시드 재현 | RR +0.70 dB가 재현됐지만 RR2(더 거친 시험)에서 미달 → 축척을 바꾸면 무너지는 약점 확인 |
 | 3 | [성능 47번](SSA-MRN/experiments/performance/47_ground_truth_criteria_reevaluation/README.md)·[48번](SSA-MRN/experiments/performance/48_parallel_capacity_observation_refinement/README.md) | 정답 기반 판정 기준(v2)으로 재평가, W2 뒤에 관측 오차 보정기를 붙여 봄 | RR 이득이 큰 후보는 대부분 RR2에서 미달, 보정기로는 RR2가 고쳐지지 않음 |
 | 4 | [성능 50번](SSA-MRN/experiments/performance/50_w2_branch_inference_scaling/README.md) | 학습 없이 W2 출력 세기를 줄여 보는 진단 | RR2 미달의 원인은 **축척에 따라 맞지 않는 세부 주입 세기**(고주파 오차 증가) |
-| 5 | [성능 52번](SSA-MRN/experiments/performance/52_w2_frequency_selective_attenuation/README.md) | W2 고주파를 샘플별 게이트로 줄이는 구조 변경(송준현) | 게이트가 축척을 구분하지 못해 RR2 미달 유지 → 구조만으로는 부족 |
-| 6 | [성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md) | 구조는 C2 그대로, 학습에 **2배 거친 학습 쌍을 섞음**(**C2MS**) | RR2 약점 해소, 원본 대비 RR +0.873 dB, 3시드 모두 개선 → **기준 모델 채택(2026-10-21)** |
-| 7 | [성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md) | 같은 C2MS를 **GF2·WV3**로 학습하고, WV3 모델을 학습하지 않은 **WV2**에 적용 | 세 데이터셋 모두 원본 대비 개선(RR +2.045·+1.007·+0.828 dB, 3시드) → **QB 밖에서도 기준 모델의 이득 확인(2026-10-22)** |
-| 8 | [성능 59번](SSA-MRN/experiments/performance/59_extended_cosine_training/README.md) | 같은 C2MS를 학습 일정만 **150에폭 → 300에폭**으로 늘려 새로 학습(seed 42) | GF2 +0.205·WV3 +0.366 dB로 개선됐지만 QB −0.284 dB, WV2 전이 −1.760 dB로 나빠짐(부분 개선) → **기준 모델은 150에폭 유지(2026-10-26)** |
+| 5 | [성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md) | 구조는 C2 그대로, 학습에 **2배 거친 학습 쌍을 섞음**(**C2MS**) | RR2 약점 해소, 원본 대비 RR +0.873 dB, 3시드 모두 개선 → **기준 모델 채택(2026-10-21)** |
+| 6 | [성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md) | 같은 C2MS를 **GF2·WV3**로 학습하고, WV3 모델을 학습하지 않은 **WV2**에 적용 | 세 데이터셋 모두 원본 대비 개선(RR +2.045·+1.007·+0.828 dB, 3시드) → **QB 밖에서도 기준 모델의 이득 확인(2026-10-22)** |
 
 기준 모델은 원본 → F1([성능 49번](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/README.md), 원본 + 관측 오차 보정기, 2026-10-20) → C2MS 순서로 바뀌었습니다. 같은 크기 섞기를 작은 F1에 적용한 F1MS는 개선이 없어서, C2MS의 이득은 큰 W2 가지와 크기 섞기를 함께 쓴 결과입니다.
 

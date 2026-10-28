@@ -1713,6 +1713,46 @@
     "results": "experiments/performance/66_observation_error_projection_analysis/results",
     "manifest": "experiments/performance/66_observation_error_projection_analysis/manifest.json"
   },
+  "performance/67_pan_brightness_blur_augmentation": {
+    "report": "experiments/performance/67_pan_brightness_blur_augmentation/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "WV3 (WV2 transfer)",
+    "experiment": 67,
+    "display_name": "67. PAN 밝기·흐림 증강 학습",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "epochs": 150,
+    "training_started_kst": "2026-10-27T23:40:42+09:00",
+    "last_checked": "2026-10-28T16:17:05+09:00",
+    "limits": "WV3 seed 42 단일 시드, 같은 시드 54번 C2MS 대비, 갈래 6개(C2MS 손실·65번 손실 × 밝기·흐림·둘 다). WV3: C2MS_G −0.002 dB·+0.007°, C2MS_B −0.204 dB·+0.066°, C2MS_GB −0.240 dB·+0.070°(세 갈래 개선 없음), L1S_G +0.030 dB·−0.076°, L1S_B −0.075 dB·−0.039°, L1S_GB −0.167 dB·−0.012°(세 갈래 부분 개선, FR_WALD·관측 비율 미달). WV2 전이: C2MS_B +1.025 dB·−0.070°(RR2 SAM 미달, 부분 개선, 세부 에너지 0.585 → 0.702), L1S_GB +0.827 dB·−0.061°, L1S_B +0.137 dB, L1S_G −0.533 dB(L1S 세 갈래 관측 비율 미달, 부분 개선), C2MS_G −0.262 dB·C2MS_GB −0.278 dB(개선 없음). 학습 전에 고정한 1단계 관문(WV3 RR PSNR ≥ −0.06 dB·SAM ≤ +0.04°, WV2 PSNR·세부 에너지 ≥ C2MS, L1S는 WV3 SAM ≤ −0.05°)을 통과한 갈래 없음. WV2는 시드 변동이 커서(65번 −1.08에서 +0.41 dB) 1시드로 확정할 수 없음. 2026-10-28 00:12 서버 재부팅으로 L1S_GB를 안전 종료 후 같은 runtime에서 재개.",
+    "model": "experiments/performance/67_pan_brightness_blur_augmentation/model.py",
+    "config": "experiments/performance/67_pan_brightness_blur_augmentation/config.json",
+    "entrypoint": "experiments/performance/67_pan_brightness_blur_augmentation/run.py",
+    "results": "experiments/performance/67_pan_brightness_blur_augmentation/results",
+    "checkpoints": "experiments/performance/67_pan_brightness_blur_augmentation/checkpoints",
+    "manifest": "experiments/performance/67_pan_brightness_blur_augmentation/manifest.json",
+    "evaluation": "experiments/performance/67_pan_brightness_blur_augmentation/results/<arm>_WV3_s42/evaluation/<WV3|WV2>_v2_3.json",
+    "judgements": {
+      "WV3_C2MS_G_s42": "개선 없음",
+      "WV3_C2MS_B_s42": "개선 없음",
+      "WV3_C2MS_GB_s42": "개선 없음",
+      "WV3_L1S_G_s42": "부분 개선",
+      "WV3_L1S_B_s42": "부분 개선",
+      "WV3_L1S_GB_s42": "부분 개선",
+      "WV2_C2MS_G_s42": "개선 없음",
+      "WV2_C2MS_B_s42": "부분 개선",
+      "WV2_C2MS_GB_s42": "개선 없음",
+      "WV2_L1S_G_s42": "부분 개선",
+      "WV2_L1S_B_s42": "부분 개선",
+      "WV2_L1S_GB_s42": "부분 개선",
+      "stage1_gate": "통과 갈래 없음"
+    }
+  },
   "performance/68_ssai_folding_sam_split_seed_ensemble": {
     "report": "experiments/performance/68_ssai_folding_sam_split_seed_ensemble/README.md",
     "research_track": "performance",
