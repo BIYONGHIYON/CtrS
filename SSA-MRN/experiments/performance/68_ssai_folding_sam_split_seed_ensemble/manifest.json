@@ -1,0 +1,104 @@
+{
+  "experiment": "performance/68_ssai_folding_sam_split_seed_ensemble",
+  "research_track": "performance",
+  "experiment_number": 68,
+  "state": "training-free diagnostics complete (D1 SSAI folding and unused layers, D2 frequency split of the 65 SAM gain, D3 seed ensembles; QB seeds 42-44 with validation, WV3 and WV2 transfer test); not a performance comparison",
+  "files": {
+    "README.md": {
+      "bytes": 26473,
+      "sha256": "27fc927ae027c5f11a3b89cde98115f40065ce5b47267c1ee65a75f3cc3cf466"
+    },
+    "config.json": {
+      "bytes": 7545,
+      "sha256": "24ef6f54de919ed60473dd44a94c0134793d93ba273b201f303b8ca038043aea"
+    },
+    "prepare.py": {
+      "bytes": 36608,
+      "sha256": "5300d9d936c3a4d8e6510ae12f0a10d5b823b0fe991810b1329b985d9207e572"
+    },
+    "results/diagnostics.png": {
+      "bytes": 147970,
+      "sha256": "2027d0ad7321577870ecf789b1bd36fd3dc0f24abd1a8b2a22d6f8c8cfd66851"
+    },
+    "results/fft_check.json": {
+      "bytes": 424,
+      "sha256": "3f2e4bae992715f2fe1f2b422b49ead8d6f51c57478e51191508a9724f6ff8a5"
+    },
+    "results/images/C2MS_vs_E_C2MS/compare_scene_00.png": {
+      "bytes": 241313,
+      "sha256": "cfe94e30cc6b8c95749527496b41b14cd0ca5484516f2bf37b2ae43628b05fbc"
+    },
+    "results/images/C2MS_vs_E_C2MS/compare_scene_01.png": {
+      "bytes": 248354,
+      "sha256": "a146321d49131e1bc81e9649bb0123db0baca7b9f79404b0ece87e527a18605c"
+    },
+    "results/images/C2MS_vs_E_C2MS/compare_scene_03.png": {
+      "bytes": 243217,
+      "sha256": "227a645d63e143a9f164bb5543468c33aa2e79f166e9409f11f97b7bec3d20e2"
+    },
+    "results/images/C2MS_vs_E_C2MS/compare_scene_07.png": {
+      "bytes": 229967,
+      "sha256": "1a3befd1411804652683377c289df707f63f4c41815447fb29ef59cb08b269fd"
+    },
+    "results/images/C2MS_vs_E_C2MS/compare_scene_14.png": {
+      "bytes": 233029,
+      "sha256": "96f4698467dcc0271790b1108989d96b228846086c72c1acce5a43ab3bd2b5a5"
+    },
+    "results/images/C2MS_vs_E_C2MS/compare_scene_17.png": {
+      "bytes": 231817,
+      "sha256": "4805007ccec7157521f4ce19c8db52cfb0d7fe854452d5454579409ce8dfd4f3"
+    },
+    "results/images/C2MS_vs_E_C2MS/full_scene_00.png": {
+      "bytes": 745921,
+      "sha256": "dcd6829dca4ce33c73ebaf270882f26bdbae9a5ca6d234b144ec770877880c31"
+    },
+    "results/images/C2MS_vs_E_C2MS/full_scene_01.png": {
+      "bytes": 780241,
+      "sha256": "98b334fdddce02a0edef2a5306901db1af3880a9d5a57422a58e373aed34a994"
+    },
+    "results/images/C2MS_vs_E_C2MS/full_scene_03.png": {
+      "bytes": 809231,
+      "sha256": "3f497a5c994cac68d63af47df8408e5a3232dab9d4901e074573e284d49898f5"
+    },
+    "results/images/C2MS_vs_E_C2MS/full_scene_07.png": {
+      "bytes": 736424,
+      "sha256": "c0fbf6252d22c1c2e2aa026efd9cd511d2e5d1877f41d8da2d80709c96099cbd"
+    },
+    "results/images/C2MS_vs_E_C2MS/full_scene_14.png": {
+      "bytes": 756657,
+      "sha256": "9c366f82b61c6cbe66de14948c67f65767b3450058e695edaabc906c9c627977"
+    },
+    "results/images/C2MS_vs_E_C2MS/full_scene_17.png": {
+      "bytes": 751089,
+      "sha256": "57f5f47a92136fef212917aef8225f500875731f84a353f62dfd9a37f5e8a408"
+    },
+    "results/images/C2MS_vs_E_C2MS/result_images.json": {
+      "bytes": 2728,
+      "sha256": "c852a13a43120907a0279c423b7fd9af3a6dd9cb6edc29414016105dbe12de6c"
+    },
+    "results/latency.json": {
+      "bytes": 1396,
+      "sha256": "0a82ef6d48031e60530fc79456a6566d5257f18c496f2e4a615c9bce45f21183"
+    },
+    "results/raw_QB.json": {
+      "bytes": 340655,
+      "sha256": "5884918bf5a89fb097a25587f47ff134306d8aeee9331e666adf96ef46e4e951"
+    },
+    "results/raw_WV2.json": {
+      "bytes": 318907,
+      "sha256": "0323d9878b4b1288e1b4ad5c9d6f16c0e020dc9d1ace7ec79812ca6bcc5dedcd"
+    },
+    "results/raw_WV3.json": {
+      "bytes": 319812,
+      "sha256": "d23c8986b79f606fe9e095cdb11aa5714c6cd6ca8ef7a1f5a76f96a6094a70c6"
+    },
+    "results/summary.json": {
+      "bytes": 24987,
+      "sha256": "98564f899860ca93b601a19ad3b2c26deeb119d25b2176d4870fb5dd818e798a"
+    },
+    "results/validation_QB.json": {
+      "bytes": 2423,
+      "sha256": "70f6343b23b94db7472dd6b9a368e7ca95b7ba49507ecbc9885b9a362d9a7767"
+    }
+  }
+}

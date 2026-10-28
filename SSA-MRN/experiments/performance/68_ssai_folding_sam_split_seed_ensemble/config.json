@@ -1,0 +1,87 @@
+{
+  "experiment": 68,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "C2MS SSAI 경로 접기·미사용 층 정리, 65번 SAM 이득의 주파수 분해, 시드 앙상블 진단",
+  "status": "계획",
+  "improvement": "성능 비교 아님",
+  "training": false,
+  "fixed_at": "2026-10-28, before any metric of this experiment was computed (only a forward-time probe on random input was run)",
+  "purpose": "Three training-free diagnostics that decide the next steps for lightweighting, SAM and PSNR: (D1) whether the SSA attention of C2MS is dead as in the original A0 (SSAI 11) so that the SSA blocks and the upstream layers never used in forward can be removed without retraining, (D2) whether the SAM gain of experiment 65 (L1 + spectral loss) came from the low or the high frequency band, i.e. whether loss tuning still has low-frequency headroom, (D3) how much of the error is seed variance that an ensemble (and later a distilled student) can remove.",
+  "seeds": [42, 43, 44],
+  "targets": {"QB": "QB", "WV3": "WV3", "WV2": "WV3"},
+  "checkpoints": {
+    "C2MS": {
+      "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt",
+      "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
+    },
+    "L1S": {
+      "QB": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt",
+      "WV3": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s<seed>/best.pt"
+    }
+  },
+  "data_sha256": {
+    "QB": {
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    },
+    "WV3": {
+      "RR": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "FR": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+    },
+    "WV2": {
+      "RR": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b",
+      "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
+    }
+  },
+  "protocol": {
+    "precision": "inference FP32 on local CPU (4 threads), metrics in float64 DN with common/metrics.rr_metrics; normalization by the target's max value (QB/WV3/WV2 2047)",
+    "tests": "RR test 20 scenes, RR2 (RR input degraded once more), FR_WALD (FR input degraded, native MS as GT), FR observation RMSE (margin 5); Wald operators of 54 prepare.Wald for the target sensor",
+    "validation": "QB validation 1,905 patches (64x64), the same val_mse / val_psnr / val_sam as the 53/54 trainer; WV3 validation is not available locally, so WV3/WV2 are test-only",
+    "reproduction": "variant A of C2MS and the unchanged 65 model must reproduce the archived means (53/54 evaluation_v2_3.json, 65 <target>_v2_3.json): RR PSNR/SAM within 1e-3, RR2/FR_WALD PSNR/SAM within 5e-3, FR observation RMSE within 0.05 DN; otherwise the run stops"
+  },
+  "D1_ssai_folding": {
+    "variants": {
+      "A": "C2MS unchanged",
+      "PRUNED": "A with every upstream layer that forward never calls deleted from the module (118,308 parameters on QB: conv1t64, conv48t48_*, convnum3tn64, the extra resblock, SSA conv6t12, ...); must give bit-identical outputs",
+      "Z_SSA": "SSA block outputs replaced by zeros; the band fusion conv bias and PReLU are kept (SSAI 11 Z_SSA)",
+      "FOLDED": "standalone module without the SSA blocks and the band fusion convs: each SSAI stage replaced by its per-band constant PReLU_k(bias of conv48tnum_k) (3 x bands numbers); equal to Z_SSA by construction",
+      "Z_STAGE": "all three SSAI stage outputs set to zero (constants removed too), as SSAI 11 Z_STAGE; RR only"
+    },
+    "evaluated_on": "QB seeds 42-44 (RR, RR2, FR_WALD, FR; PRUNED and Z_SSA on RR and FR), WV3 seeds 42-44 on WV3 and WV2 (A, FOLDED on all four tests, Z_STAGE on RR), QB validation (A vs FOLDED)",
+    "also_reported": "max |SSA block output| per stage, parameter counts, forward latency of A and FOLDED (CPU 4 threads and Apple MPS, batch 1 at 256 and 512, batch 32 at 64; median of 10 after 3 warm-up runs)",
+    "gate": {
+      "pass": "for every model and test: max |A - FOLDED| <= 0.5 DN over all output pixels, |mean dPSNR| <= 0.001 dB and |mean dSAM| <= 0.001 deg per test, FR observation RMSE ratio within 1 +- 0.001; and PRUNED bit-identical to A",
+      "decision": "pass -> the SSA blocks and unused layers can be removed from C2MS without retraining; FOLDED becomes the structure for later lightweight experiments (the baseline model itself is not changed by this). Fail -> report the size of the SSA contribution; no removal"
+    }
+  },
+  "D2_sam_frequency_split": {
+    "comparison": "65 C2MS_L1S vs C2MS of the same seed on RR test (QB seeds 42-44; WV3 and WV2 transfer reported)",
+    "lowpass": "per-band MS MTF blur of the target sensor at full resolution (54 prepare.gen_mtf, 41 taps, replicate border, no decimation), same as experiment 60; H = y - L(y)",
+    "attribution": "Shapley split of the scene SAM change into LF and HF: dLF = 1/2[(S(Lc+Hc) - S(Ll+Hc)) + (S(Lc+Hl) - S(Ll+Hl))], dHF = 1/2[(S(Lc+Hc) - S(Lc+Hl)) + (S(Ll+Hc) - S(Ll+Hl))], dLF + dHF = S(c) - S(l) exactly; the same split of the HF part into per-pixel magnitude |H| and band ratio H/|H| (61 definitions)",
+    "headroom": "remaining LF headroom of 65: S(y_l) - S(L(g) + H(y_l)) (60 LF_fixed oracle)",
+    "rule": {
+      "LF_exhausted": "QB 3-seed mean LF share of 65's SAM gain >= 0.70 and remaining LF headroom of 65 <= 0.03 deg -> the loss change used the low-frequency headroom; further SAM gains need high-frequency band-ratio information, not loss weight tuning",
+      "HF_driven": "HF share >= 0.50 -> the training objective can move the high-frequency band ratio; loss-side follow-ups (weights, HF-weighted spectral terms) stay on the list",
+      "mixed": "otherwise -> both are reported, no priority change"
+    }
+  },
+  "D3_seed_ensemble": {
+    "ensembles": {
+      "E_C2MS": "mean of the outputs of C2MS seeds 42-44",
+      "E_L1S": "mean of the outputs of 65 seeds 42-44",
+      "E_ALL": "mean of the six outputs"
+    },
+    "reference": "the mean of the members' metrics (single-seed average); also the C2MS 3-seed mean",
+    "evaluated_on": "QB validation (decision), QB test RR/RR2/FR_WALD/FR observation and WV3/WV2 test (reported); the LF/HF Shapley split of the ensemble SAM change against each member (test)",
+    "rule": {
+      "decision_data": "QB validation only; test values are reported but not used for the decision",
+      "variance_headroom": "E_C2MS or E_L1S vs the mean of its members: val PSNR >= +0.10 dB or val SAM <= -0.05 deg -> seed variance is a usable headroom; plan a distillation (ensemble teacher) experiment, also as the teacher for a smaller W2",
+      "small": "otherwise -> seed variance is small; distillation is not prioritized"
+    },
+    "images": "QB RR fixed scenes 0, 1, 3, 7, 14, 17: current baseline C2MS seed 42 vs E_C2MS (the pure ensemble effect, same training), both standard formats (common/result_images.py); the zoom window is chosen in favour of the ensemble"
+  },
+  "limits": "post-hoc diagnostics on the RR/FR test set that earlier experiments already used repeatedly; ensembles cost three or six forward passes and are not a single-model candidate; WV3/WV2 have no local validation data",
+  "constraints": "no training; archived checkpoints are read only; writes only below results/"
+}
