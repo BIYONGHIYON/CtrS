@@ -1,0 +1,221 @@
+{
+  "experiment": 67,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "PAN 밝기·흐림 증강 학습",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "hypothesis": "WV3-trained models inject less detail when the PAN is blurrier (WV3 validation: detail energy 0.94 -> 0.56 for C2MS, 58 and 65 alike with an extra 0.88 px Gaussian blur) and the spectral-loss models (58, 65) also depend on the absolute PAN brightness (PAN x0.70: detail 0.92 C2MS, 0.80 58, 0.66 65; band bias 4, 5, 19 DN). The WV2 PAN is blurrier and darker relative to MS than the WV3 PAN, and 65 was visibly blurrier and darker than C2MS on the WV2 transfer. Randomizing the PAN brightness and blur during training (target unchanged) may make C2MS and the 65 loss robust to these sensor differences, so that the 65 SAM/PSNR gain is kept on WV3 without the WV2 degradation, and the shared under-injection of all models on WV2 shrinks.",
+  "arms": {
+    "C2MS_G": "C2MS loss (MSE + 1.0 x coarse MSE) + PAN brightness augmentation",
+    "C2MS_B": "C2MS loss + PAN blur augmentation",
+    "C2MS_GB": "C2MS loss + both augmentations",
+    "L1S_G": "65 loss (L1 + 1.0 x coarse L1 + 0.46 x spectral) + PAN brightness augmentation",
+    "L1S_B": "65 loss + PAN blur augmentation",
+    "L1S_GB": "65 loss + both augmentations"
+  },
+  "arm_labels": {
+    "C2MS_G": "PAN 밝기 증강",
+    "C2MS_B": "PAN 흐림 증강",
+    "C2MS_GB": "PAN 밝기·흐림 증강",
+    "L1S_G": "L1 + 분광, PAN 밝기 증강",
+    "L1S_B": "L1 + 분광, PAN 흐림 증강",
+    "L1S_GB": "L1 + 분광, PAN 밝기·흐림 증강"
+  },
+  "design": "2 losses (C2MS MSE, 65 L1 + spectral) x 3 augmentations (brightness, blur, both); the no-augmentation cells are the archived 54 C2MS and 65 C2MS_L1S of the same seed, so the effect of each augmentation is read under each loss",
+  "augmentation": {
+    "applies_to": "the PAN input of every training sample, on the original pair and independently on the 2x coarser pair; GT, MS and LMS unchanged; validation and test inputs never augmented",
+    "probability": 0.5,
+    "gain_log_half_range": 0.35,
+    "gain_rule": "PAN x exp(U(-0.35, 0.35)) = x0.70 to x1.42 with probability 0.5; 0.35 = ln(1.16 / 0.82), the spread of the mean PAN/MS brightness ratio over the training sensors (training sets: QB 0.96, GF2 0.82, WV3 1.16; per-patch 5-95%: QB 0.80-1.09, GF2 0.69-0.91, WV3 0.99-1.31)",
+    "blur_sigma_max": 1.2,
+    "blur_rule": "separable Gaussian with sigma ~ U(0, 1.2) pixels (replicate border, unit DC gain) with probability 0.5; sigma 1.2 lowers the PAN response at the MS Nyquist (1/8 cycles/pixel) to 0.64 of its value, covering published PAN MTF values (about 0.11-0.17 at Nyquist in the Pansharpening Toolbox sensor table, which includes WV2) relative to the training sensor; the same pixel range is used on the coarse pair",
+    "draws": "four uniforms per sample from a dedicated CPU generator (seed + 200000), always drawn, so _G and _GB share the gains and _B and _GB share the blurs of the same samples; the generator state is saved in latest.pt",
+    "range_source": "fixed before training from the training sets and published sensor MTF values; not tuned on WV2 or any test result"
+  },
+  "augment": {
+    "C2MS_G": {
+      "gain": true,
+      "blur": false
+    },
+    "C2MS_B": {
+      "gain": false,
+      "blur": true
+    },
+    "C2MS_GB": {
+      "gain": true,
+      "blur": true
+    },
+    "L1S_G": {
+      "gain": true,
+      "blur": false
+    },
+    "L1S_B": {
+      "gain": false,
+      "blur": true
+    },
+    "L1S_GB": {
+      "gain": true,
+      "blur": true
+    }
+  },
+  "reconstruction": {
+    "C2MS_G": "MSE",
+    "C2MS_B": "MSE",
+    "C2MS_GB": "MSE",
+    "L1S_G": "L1",
+    "L1S_B": "L1",
+    "L1S_GB": "L1"
+  },
+  "spectral_weight": {
+    "C2MS_G": 0.0,
+    "C2MS_B": 0.0,
+    "C2MS_GB": 0.0,
+    "L1S_G": 0.46,
+    "L1S_B": 0.46,
+    "L1S_GB": 0.46
+  },
+  "coarse_weight": {
+    "L1S_GB": 1.0,
+    "C2MS_GB": 1.0,
+    "L1S_G": 1.0,
+    "L1S_B": 1.0,
+    "C2MS_G": 1.0,
+    "C2MS_B": 1.0
+  },
+  "sensors": [
+    "WV3"
+  ],
+  "transfer_tests": {
+    "WV2": "WV3-trained models evaluated on the WV2 test set (PanCollection convention; WV2 has no training data)"
+  },
+  "seeds": [
+    42
+  ],
+  "epochs": 150,
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training; FP32 transforms/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "layout": "channels_last",
+  "cpu_threads": 1,
+  "selection": "minimum original-scale validation MSE including epoch0; earliest exact tie; test never used for selection (same rule as C2MS)",
+  "normalization": {
+    "WV3": 2047,
+    "WV2": 2047
+  },
+  "sensor_operators": "54 prepare.py SENSORS (QB, GF2, WV3; WV2 for the transfer test), phase 2",
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset",
+  "ema_beta": 0.99,
+  "ema": "EMA (beta 0.99) recorded as in 58, reported only; the main result uses the validation-MSE-selected regular weights",
+  "schedule": "lr_end + 0.5*(lr_start-lr_end)*(1+cos(pi*zero_based_epoch/149)); fresh initialization",
+  "cache_reuse_source": "C:/CtrS-p59/run",
+  "loss": "C2MS_*: per-pixel MSE + 1.0 x MSE on the 2x coarser pairs (C2MS); L1S_*: per-pixel L1 + 1.0 x coarse L1 + 0.46 x spectral loss (65); history fields train_mse/coarse_train_mse hold the arm's reconstruction loss (MAE for L1S_*)",
+  "data_sha256": {
+    "WV3": {
+      "train": "f9e7ec381390ff36ddffd0714df7af07a3c5f456078b219a25f3e18372228f82",
+      "val": "ba883e57408d1f3c2263cc2818a9fbbf2dbe8e62554c531288f9e8bf9f59dc87",
+      "RR": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "FR": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+    }
+  },
+  "data_counts": {
+    "WV3": {
+      "train": 9714,
+      "val": 1080,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "transfer_data_sha256": {
+    "WV2": {
+      "RR": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b",
+      "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
+    }
+  },
+  "runtime": "C:/CtrS-p67/run",
+  "queue": [
+    [
+      "WV3",
+      "L1S_GB",
+      42
+    ],
+    [
+      "WV3",
+      "C2MS_GB",
+      42
+    ],
+    [
+      "WV3",
+      "L1S_G",
+      42
+    ],
+    [
+      "WV3",
+      "L1S_B",
+      42
+    ],
+    [
+      "WV3",
+      "C2MS_G",
+      42
+    ],
+    [
+      "WV3",
+      "C2MS_B",
+      42
+    ]
+  ],
+  "queue_order": "both augmentations first (L1S_GB, C2MS_GB), then the single augmentations under the 65 loss, then under the C2MS loss; the queue can be stopped after any run",
+  "max_parallel": 1,
+  "controls": {
+    "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
+  },
+  "reference_controls": {
+    "WV3": {
+      "C2MS_L1S_65": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s<seed>/best.pt",
+      "C2MS_SAM_58": "experiments/performance/58_spectral_loss_multi_sensor/checkpoints/C2MS_SAM_WV3_s<seed>/best.pt"
+    }
+  },
+  "control_policy": "No new control run: the no-augmentation cells are the archived same-seed 54 C2MS (official control) and 65 C2MS_L1S (reference for the L1S_* arms), trained with the same data, schedule and trainer family.",
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.3 per target against the same-seed 54 C2MS; single seed noise threshold 0.06 dB; RR2 against the same-seed 54 C2MS (the fixed RR2 reference is QB only)",
+    "detail_checks": "RR, reported per target and pre-registered: detail energy (output/GT above the MS Nyquist), injected ratio std(y - LMS)/std(GT - LMS) and band bias (DN) against the same-seed C2MS",
+    "effect_reading": "L1S_X vs 65 C2MS_L1S and C2MS_X vs 54 C2MS give the effect of augmentation X under each loss; _GB vs _G and _B separate the two augmentations",
+    "screen_goal": "an arm continues to more seeds and to the QB -> GF2 transfer if on WV3 test it is not worse than C2MS (RR PSNR >= -0.06 dB, SAM <= +0.04 deg), on WV2 RR PSNR and detail energy are not below C2MS, and (L1S_* only) WV3 SAM <= -0.05 deg; decided with the user",
+    "reported": "WV3 validation curves, WV3 and WV2 test v2.3 items, detail checks, result images (fixed scenes 0, 1, 3, 7, 14, 17)"
+  },
+  "stages": {
+    "stage0": "validation-only diagnostic of the archived seed 42 models (provenance/stage0), done 2026-10-27",
+    "stage1": "WV3 seed 42, six arms, about 2.7 h each (about 16-17 h); training is started later by the user",
+    "later": "passing arms: WV3 seeds 43 and 44, QB seeds 42-44 with the QB -> GF2 transfer"
+  },
+  "limits": [
+    "single seed (42) screen",
+    "the blur range includes the WV2 PAN MTF of the published sensor table; it was not tuned on WV2 test results",
+    "exploratory WV2 test reused",
+    "no automatic baseline replacement"
+  ],
+  "constraints": {
+    "training": "code placed on the server on 2026-10-27; training to be started later by the user",
+    "test_used_for_selection": false
+  }
+}
