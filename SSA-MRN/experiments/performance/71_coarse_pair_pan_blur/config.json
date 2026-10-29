@@ -1,0 +1,134 @@
+{
+  "data_sha256": {
+    "WV3": {
+      "train": "f9e7ec381390ff36ddffd0714df7af07a3c5f456078b219a25f3e18372228f82",
+      "val": "ba883e57408d1f3c2263cc2818a9fbbf2dbe8e62554c531288f9e8bf9f59dc87",
+      "RR": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "FR": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+    }
+  },
+  "transfer_data_sha256": {
+    "WV2": {
+      "RR": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b",
+      "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
+    }
+  },
+  "data_counts": {
+    "WV3": {
+      "train": 9714,
+      "val": 1080,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "controls": {
+    "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
+  },
+  "epochs": 150,
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training; FP32 transforms/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cudnn_deterministic": true,
+  "layout": "channels_last",
+  "cpu_threads": 1,
+  "selection": "minimum original-scale validation MSE including epoch0; earliest exact tie; test never used for selection (same rule as C2MS)",
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset",
+  "ema_beta": 0.99,
+  "normalization": {
+    "WV3": 2047,
+    "WV2": 2047
+  },
+  "sensor_operators": "54 prepare.py SENSORS (QB, GF2, WV3; WV2 for the transfer test), phase 2",
+  "max_parallel": 1,
+  "experiment": 71,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "arms": {
+    "BLUR_BOTH": "BLUR_BOTH",
+    "BLUR_COARSE": "BLUR_COARSE"
+  },
+  "arm_labels": {
+    "BLUR_BOTH": "BLUR_BOTH",
+    "BLUR_COARSE": "BLUR_COARSE"
+  },
+  "seeds": [
+    42
+  ],
+  "sensors": [
+    "WV3"
+  ],
+  "runtime": "C:/CtrS-p70-71/run71",
+  "cache_reuse_source": "C:/CtrS-p59/run",
+  "coarse_weight": {
+    "BLUR_BOTH": 1.0,
+    "BLUR_COARSE": 1.0
+  },
+  "spectral_weight": {
+    "BLUR_BOTH": 0.0,
+    "BLUR_COARSE": 0.0
+  },
+  "reconstruction": {
+    "BLUR_BOTH": "MSE",
+    "BLUR_COARSE": "MSE"
+  },
+  "augmentation": {
+    "blur_sigma_max": 1.2
+  },
+  "blur_probability": {
+    "BLUR_BOTH": {
+      "original": 0.25,
+      "coarse": 0.25
+    },
+    "BLUR_COARSE": {
+      "original": 0.0,
+      "coarse": 0.5
+    }
+  },
+  "queue": [
+    [
+      "WV3",
+      "BLUR_BOTH",
+      42
+    ],
+    [
+      "WV3",
+      "BLUR_COARSE",
+      42
+    ]
+  ],
+  "transfer_tests": {
+    "WV2": "WV3 model unchanged"
+  },
+  "judgement": "v2.3; single-seed PSNR noise threshold 0.06 dB; QB RR2 fixed reference remains unchanged",
+  "preflight_required": true,
+  "reference_controls": {
+    "WV3": {
+      "C2MS_R_70": "experiments/performance/70_c2ms_dilated_backbone/checkpoints/C2MS_R_WV3_s42/best.pt"
+    }
+  },
+  "title": "거친 학습 쌍에 집중한 PAN 흐림 증강",
+  "validation_policy": {
+    "checkpoint": "minimum clean validation MSE",
+    "candidate": "70: QB/WV3 clean PSNR and SAM simultaneous improvement; 71: clean PSNR >= control-0.03 dB, SAM <= control+0.02 deg and fixed sigma .4/.8/1.2 mean PSNR improves, SAM decreases; these are screening guards, not final improvement",
+    "test": "all predefined arms reported; no tuning from WV2 test; no automatic seed expansion"
+  },
+  "registered": "2026-10-29, before training",
+  "constraints": "User authorized seed42 only. Stop on failed preflight; no automatic repeat, combination or cleanup."
+}

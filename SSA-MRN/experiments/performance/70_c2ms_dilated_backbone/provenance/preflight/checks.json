@@ -1,0 +1,123 @@
+{
+  "time_kst": "2026-10-29T16:50:55.344756+09:00",
+  "initial_state_sha256": {
+    "QB_C2MS_R_s42": "004f0b47ef8d4a0a8a7c12edfb2125c7d9c5a4c4727e6026118a936099393442",
+    "QB_C2MS_D_s42": "004f0b47ef8d4a0a8a7c12edfb2125c7d9c5a4c4727e6026118a936099393442",
+    "WV3_C2MS_R_s42": "1b6ce3d5c12705f08929f5e17cfb1114818808573e3a3ae236aa3c58ca7334cb",
+    "WV3_C2MS_D_s42": "1b6ce3d5c12705f08929f5e17cfb1114818808573e3a3ae236aa3c58ca7334cb"
+  },
+  "four_band_initial_equal_to_43": true,
+  "genmtf_x4_max_abs_diff": {
+    "QB": 0.0,
+    "WV3": 0.0
+  },
+  "sensors": {
+    "QB": {
+      "coarse_cache_vs_fresh_max_abs": 0.0,
+      "coarse_kernel_dc_gain": {
+        "ms": [
+          0.9997148461933067,
+          0.999698054003819,
+          0.9996803400723344,
+          0.9995969484942354
+        ],
+        "pan": 0.9994961777612154
+      },
+      "coarse_ms_vs_2x_reduced_given_ms_relative_rmse": 0.03967642784118652,
+      "coarse_shapes": {
+        "pan": [
+          17139,
+          1,
+          32,
+          32
+        ],
+        "lms": [
+          17139,
+          4,
+          32,
+          32
+        ],
+        "ms": [
+          17139,
+          4,
+          8,
+          8
+        ],
+        "gt": [
+          17139,
+          4,
+          32,
+          32
+        ]
+      },
+      "checks": {
+        "C2MS_R": {
+          "parameters": 2853918,
+          "resume_max_abs": 0.0,
+          "loss": 0.4485269784927368
+        },
+        "C2MS_D": {
+          "parameters": 2853918,
+          "resume_max_abs": 0.0,
+          "loss": 0.44848471879959106
+        }
+      }
+    },
+    "WV3": {
+      "coarse_cache_vs_fresh_max_abs": 0.0,
+      "coarse_kernel_dc_gain": {
+        "ms": [
+          0.9997023336931097,
+          0.999726903588933,
+          0.9997308285514188,
+          0.9997229324733354,
+          0.9997347086704862,
+          0.9997308285514187,
+          0.9997107280478814,
+          0.9996937168315838
+        ],
+        "pan": 0.9994781518325394
+      },
+      "coarse_ms_vs_2x_reduced_given_ms_relative_rmse": 0.04328946769237518,
+      "coarse_shapes": {
+        "pan": [
+          9714,
+          1,
+          32,
+          32
+        ],
+        "lms": [
+          9714,
+          8,
+          32,
+          32
+        ],
+        "ms": [
+          9714,
+          8,
+          8,
+          8
+        ],
+        "gt": [
+          9714,
+          8,
+          32,
+          32
+        ]
+      },
+      "checks": {
+        "C2MS_R": {
+          "parameters": 2946094,
+          "resume_max_abs": 0.0,
+          "loss": 0.7488764524459839
+        },
+        "C2MS_D": {
+          "parameters": 2946094,
+          "resume_max_abs": 0.0,
+          "loss": 0.749086856842041
+        }
+      }
+    }
+  },
+  "scope": "tiny AMP forward/backward on both scales and two-update resume; not long-session crash proof"
+}

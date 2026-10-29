@@ -2453,5 +2453,29 @@
       "WV2_C2MS_SPLIT_s42": "부분 개선",
       "stage1_gate": "통과 갈래 없음, 2단계 미실시"
     }
+  },
+  "70_c2ms_dilated_backbone": {
+    "report": "experiments/performance/70_c2ms_dilated_backbone/README.md",
+    "research_track": "performance",
+    "experiment": 70,
+    "experimenter": "이병현",
+    "status": "학습 중",
+    "improvement": "판단 보류",
+    "config": "experiments/performance/70_c2ms_dilated_backbone/config.json",
+    "entrypoint": "experiments/performance/70_c2ms_dilated_backbone/run.py",
+    "status_checked_kst": "2026-10-29T16:54:08+09:00",
+    "confirmed": "2026-10-29 16:54 KST 확인: QB C2MS_R seed42, 1/150에폭, 166/536배치, 실제 업데이트 166·건너뜀 0회입니다. 뒤의 세 실행은 대기합니다."
+  },
+  "71_coarse_pair_pan_blur": {
+    "report": "experiments/performance/71_coarse_pair_pan_blur/README.md",
+    "research_track": "performance",
+    "experiment": 71,
+    "experimenter": "이병현",
+    "status": "계획",
+    "improvement": "판단 보류",
+    "config": "experiments/performance/71_coarse_pair_pan_blur/config.json",
+    "entrypoint": "experiments/performance/71_coarse_pair_pan_blur/run.py",
+    "status_checked_kst": "2026-10-29T16:54:08+09:00",
+    "confirmed": "두 갈래의 GPU 사전 검증·재개·속도 측정을 통과했습니다. 70번 종료 후 공유 대조군을 보관하고 WV3 seed42 두 실행을 자동 시작하도록 예약했습니다."
   }
 }
