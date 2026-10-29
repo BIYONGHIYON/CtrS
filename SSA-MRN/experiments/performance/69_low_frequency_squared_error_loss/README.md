@@ -228,7 +228,7 @@ QB의 RR2는 57번 고정 대조값 대비로도 C2MS_L1SO +0.287 dB·−0.120°
 - [model.py](model.py): 54번 C2MS 구조를 그대로 씁니다. [prepare.py](prepare.py)는 54번 센서 연산을 그대로 내보내고 위상별 추출 함수를 더했습니다.
 - 가중치: `checkpoints/<갈래>_<센서>_s42/best.pt`(선택 에폭 QB 150·150, WV3 148·145)와 `best_ema.pt`는 Git에 있습니다. 재개용 `latest.pt`와 초기 `initial.pt`는 GitHub Release `weights-experiments-performance-69`에 있고 [manifest.json](manifest.json)의 `release_assets`에 크기·SHA-256이 있습니다.
 - 결과: `results/<갈래>_<센서>_s42/`의 `history.json`, `training_complete.json`, `evaluation_complete.json`, `evaluation/<대상>_v2_3.json`(장면별 수치), 그래프와 결과 이미지. 실행 기록은 `provenance/run_records/`(실행 설정·캐시와 위상 표 manifest·환경·preflight 기록, 처음 두 번의 preflight 실패 기록 포함)에 있고, 상세 학습 로그는 Git에 넣지 않았습니다.
-- 서버 실행 자료(`provenance/`): 소스 묶음 manifest, 서버 검증(`verify_ctrs69_server.py`), 배치·실행 스크립트(`stage69.ps1`, `launch69.cmd`, `start69.ps1`), AMP 넘침 진단(`diag_amp_overflow.py`).
+- 서버 실행 자료(`provenance/`): 소스 묶음 manifest, 서버 검증(`verify_ctrs69_server.py`), 배치·실행 스크립트(`stage69.ps1`, `launch69.cmd`, `start69.ps1`)와 실행 기록(`launcher.json`, 마지막 서버 검증 결과 `source_verification.json`), AMP 넘침 진단(`diag_amp_overflow.py`).
 
 ## 8. 개선 여부와 다음 단계
 
