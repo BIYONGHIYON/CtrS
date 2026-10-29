@@ -1,0 +1,264 @@
+{
+  "experiment": 69,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "65번 손실의 저주파 제곱 오차 보정: 관측 일치 손실과 저주파·고주파 손실 분리",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "registered": "2026-10-28, before any training of this experiment",
+  "hypothesis": "65 (L1 + 0.46 spectral) lowered QB SAM by 0.100 deg (3 seeds) but missed v2.3 on the PSNR noise threshold (+0.028 dB) and the FR observation ratio (1.43). 68 showed that 91% of the SAM gain is in the high band and that the WV2 PSNR loss of 65 (-0.277 dB) is entirely low band; 66 showed that making the output consistent with the observation raises RR PSNR by about 0.04 dB. L1 estimates a median and does not keep the linear constraint D(y) = MS that a mean (MSE) keeps (66). Restoring a squared error on the low band should keep the high-band SAM gain while removing the low-band drift.",
+  "arms": {
+    "C2MS_L1SO": "65 loss unchanged (L1 + 1.0 x coarse L1 + 0.46 x spectral) + lambda_O x mean (D_p(y) - D_p(GT))^2 on the original pair (patch phase p) and on the 2x coarser pair (phase 2, weight 1.0)",
+    "C2MS_SPLIT": "k_S x mean (L(y - GT))^2 + mean |H(y - GT)| on the original pair and on the 2x coarser pair (weight 1.0), + 0.46 x spectral on the original pair; L1 is removed from the low band"
+  },
+  "arm_labels": {
+    "C2MS_L1SO": "L1 + 분광 + 관측 일치 손실",
+    "C2MS_SPLIT": "저주파 제곱 오차 + 고주파 L1 + 분광"
+  },
+  "reconstruction": {
+    "C2MS_L1SO": "L1_OBS",
+    "C2MS_SPLIT": "SPLIT"
+  },
+  "spectral_weight": {
+    "C2MS_L1SO": 0.46,
+    "C2MS_SPLIT": 0.46
+  },
+  "coarse_weight": {
+    "C2MS_L1SO": 1.0,
+    "C2MS_SPLIT": 1.0
+  },
+  "loss": "C2MS_L1SO: per-pixel L1 + 500.0 x mean (D_p(y - GT))^2 (patch phase p) + 0.46 x spectral on the original pair, and L1 + 500.0 x mean (D(y - GT))^2 (phase 2) on the 2x coarser pair with weight 1.0; C2MS_SPLIT: 431.5 x mean (L(y - GT))^2 + mean |(y - GT) - L(y - GT)| on both pairs (coarse weight 1.0) + 0.46 x spectral on the original pair; history fields train_mse/coarse_train_mse hold the arm reconstruction loss (without the spectral term)",
+  "operators": {
+    "D_p": "54 Wald MS operator of the training sensor (per-band MS MTF, 41 taps, replicate border) followed by x4 decimation at phase p; on original pairs p is the patch's own phase, on coarse pairs p = phase 2 (the coarse MS is made that way)",
+    "patch_phase": "the training patches carry flips/rotations, so the decimation phase differs per patch: (1,2), (2,1) or (2,2) on QB. With the patch phase, D_p(GT) equals the given MS inside the 5-pixel LR margin to 2.3e-12 DN (256 QB patches); at the fixed phase 2 the interior mismatch is 10.6 DN RMS, max 204 DN. The phase of every train/validation patch is computed once in the runtime preparation (smallest interior mismatch of 16 phases) and stored with its SHA-256 in the data manifest; preflight fails if any patch's interior mismatch exceeds 1e-6 DN",
+    "border": "the observation term uses D_p(GT) instead of the given MS, which is identical inside the margin and avoids the border pixels where the patch crop and the full-image observation differ",
+    "L": "per-band MS MTF blur of the training sensor at full resolution (54 gen_mtf, ratio 4, 41 taps, replicate border, no decimation), the same low band as experiments 60 and 68; H = I - L"
+  },
+  "loss_weights": {
+    "lambda_O": 500.0,
+    "k_S": 431.5,
+    "spectral_weight": 0.46,
+    "coarse_weight": 1.0,
+    "rule": "same principle as the 65 spectral weight: equal gradient strength at a converged output. On 256 evenly spaced QB training patches (8 batches of 32) at the archived 65 C2MS_L1S QB seed 42 output, lambda_O = |grad L1_LF| / |grad OBS| and k_S = |grad L1_LF| / |grad MSE_LF| with L1_LF = mean |L(y - GT)| (batch means; per batch 459-559 and 376-489). The 53 C2MS output gives 526 and 426 (reference). The same weights are used for every sensor, as 65 kept 0.46",
+    "record": "provenance/loss_weight_calibration.json, provenance/observation_check.json (prepare.py --check --calibrate, local CPU)"
+  },
+  "training": {
+    "structure": "C2MS (54 Model('C2MS')), unchanged; parameters as C2MS",
+    "schedule": "same as 65: 150 epochs, Adam, per-epoch cosine 1e-4 -> 1e-6, batch 32 (micro 32), AMP FP16 core, loss terms in FP32, cuDNN deterministic, TF32 off, channels_last",
+    "data": "QB and WV3 train/validation of 54; 2x coarser pairs by 54 CoarsePairs (cache reused from C:/CtrS-p59/run after hash check)",
+    "selection": "original-scale validation MSE minimum (epoch 0 included), as 53-65",
+    "implementation": "65 trainer with only the reconstruction-loss expressions replaced at fixed, exactly matched locations (as 63/65/67); preflight checks the patch phases, that each loss term matches its formula on random tensors, and the initial weights of seed 42 equal 54 C2MS",
+    "device": "server RTX 3060 Ti, one run at a time, separate runtime folder"
+  },
+  "seeds": [
+    42
+  ],
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt",
+    "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
+  },
+  "references": {
+    "65": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_<QB|WV3>_s<seed>/best.pt",
+    "note": "the post-hoc projection numbers of 66 are reported only as the observation ceiling; they are not a comparable model result"
+  },
+  "comparability": "training-only change; inference is one forward pass of one model with inputs PAN, LMS, MS; no projection, ensemble, sensor metadata or test-time adjustment. Transfer (WV2) uses the WV3 model unchanged",
+  "stages": {
+    "1_screen": {
+      "runs": [
+        "QB C2MS_L1SO s42",
+        "QB C2MS_SPLIT s42",
+        "WV3 C2MS_L1SO s42",
+        "WV3 C2MS_SPLIT s42"
+      ],
+      "cost": "about 2.7 h per run (67), about 11 h in all",
+      "evaluation": "RR, RR2, FR_WALD, FR observation (v2.3) and the 67 detail indices (detail energy, injected detail ratio, band bias); QB against 53 C2MS s42 with the fixed QB RR2 reference; WV3 and WV2 transfer against 54 C2MS s42",
+      "gate": {
+        "QB": "FR observation ratio <= 1.10, RR SAM <= -0.07 deg (70% of the 65 gain), RR PSNR >= +0.04 dB",
+        "WV3": "FR observation ratio <= 1.10, RR SAM <= -0.05 deg, RR PSNR >= 0",
+        "WV2_transfer": "RR PSNR >= C2MS - 0.06 dB",
+        "pass": "all three rows",
+        "choice": "if both arms pass, the one with the lower QB validation SAM goes on (C2MS_L1SO on a tie); test is not used to choose between passing arms",
+        "fail": "report; if the observation ratio stays above 1.10 while the training-scale term is met, the constraint does not carry to the FR scale and an observation-consistent output layer becomes the next design"
+      }
+    },
+    "2_repeat": {
+      "condition": "stage-1 pass and user approval",
+      "runs": "the chosen arm on QB seeds 43, 44 and GF2/WV3 seeds 42-44 (WV2 transfer)",
+      "judgement": "paired 3-seed v2.3 per sensor against the same-seed C2MS (53 QB, 54 GF2/WV3), noise threshold 0.04 dB; QB RR2 against the fixed reference; baseline replacement needs a QB 3-seed improvement and the user's decision"
+    }
+  },
+  "judgement": "docs/judgement_criteria.md v2.3, unchanged",
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    },
+    "WV3": {
+      "train": "f9e7ec381390ff36ddffd0714df7af07a3c5f456078b219a25f3e18372228f82",
+      "val": "ba883e57408d1f3c2263cc2818a9fbbf2dbe8e62554c531288f9e8bf9f59dc87",
+      "RR": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "FR": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+    }
+  },
+  "limits": "single-seed screen; the RR/FR test was reused in earlier exploration; the loss weights are matched at a converged output, so the early-training balance differs; validation has no FR scale, so the observation ratio is judged on test only; the patch phases on WV3 are computed in the runtime preparation (only QB was checked locally)",
+  "constraints": "training starts after the user approval of 2026-10-28; archived checkpoints are read only; one GPU job at a time",
+  "epochs": 150,
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training; FP32 transforms/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cudnn_deterministic": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "layout": "channels_last",
+  "cpu_threads": 1,
+  "selection": "minimum original-scale validation MSE including epoch0; earliest exact tie; test never used for selection (same rule as C2MS)",
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset",
+  "ema_beta": 0.99,
+  "ema": "EMA (beta 0.99) recorded as in 58, reported only; the main result uses the validation-MSE-selected regular weights",
+  "schedule": "lr_end + 0.5*(lr_start-lr_end)*(1+cos(pi*zero_based_epoch/149)); fresh initialization",
+  "cache_reuse_source": "C:/CtrS-p59/run",
+  "max_parallel": 1,
+  "sensors": [
+    "QB",
+    "WV3"
+  ],
+  "transfer_tests": {
+    "WV2": "WV3-trained models evaluated on the WV2 test set (PanCollection convention; WV2 has no training data)"
+  },
+  "normalization": {
+    "QB": 2047,
+    "WV3": 2047,
+    "WV2": 2047
+  },
+  "sensor_operators": "54 prepare.py SENSORS (QB, WV3; WV2 for the transfer test); evaluation at phase 2; the training observation term uses the per-patch phase table",
+  "runtime": "C:/CtrS-p69/run",
+  "queue": [
+    [
+      "QB",
+      "C2MS_L1SO",
+      42
+    ],
+    [
+      "QB",
+      "C2MS_SPLIT",
+      42
+    ],
+    [
+      "WV3",
+      "C2MS_L1SO",
+      42
+    ],
+    [
+      "WV3",
+      "C2MS_SPLIT",
+      42
+    ]
+  ],
+  "queue_order": "QB first (the judgement sensor), then WV3 with the WV2 transfer; the queue can be stopped after any run",
+  "reference_controls": {
+    "QB": {
+      "C2MS_L1S_65": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt",
+      "C2MS_57": "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt"
+    },
+    "WV3": {
+      "C2MS_L1S_65": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s<seed>/best.pt"
+    }
+  },
+  "control_policy": "No new control run: the archived same-seed C2MS (53 QB, 54 WV3) is the official control and 65 C2MS_L1S the reference, trained with the same data, schedule and trainer family; the QB RR2 item uses the fixed 57 C2MS seed 42 reference (judgement_vs_references C2MS_57)",
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    },
+    "WV3": {
+      "train": 9714,
+      "val": 1080,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "transfer_data_sha256": {
+    "WV2": {
+      "RR": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b",
+      "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
+    }
+  },
+  "source_hashes": {
+    "experiments/performance/69_low_frequency_squared_error_loss/model.py": "afc58aa5df5401175da6b615c3999c39897d718e9b88145431b9bc5e9929436f",
+    "experiments/performance/69_low_frequency_squared_error_loss/prepare.py": "10f2c0365fcc896876aa2684d565b6d1e429f881207545ed7364d6e79ad562f9",
+    "experiments/performance/69_low_frequency_squared_error_loss/train.py": "2429d71dcd0fee4a220546a159a727e321b627c0855b5a22c70d8a4bd3cf2bdd",
+    "experiments/performance/69_low_frequency_squared_error_loss/run.py": "c835570f2d7a17a58b7e8c2fab6c8d4d22551c82f1a0fefa9790abb45092598a",
+    "experiments/performance/69_low_frequency_squared_error_loss/config.json": "ba390a471def26d88e5d6412de2d948a527f8bbe1be76a43794feb19b4ffeb25",
+    "experiments/performance/69_low_frequency_squared_error_loss/evaluate.py": "0922bd4243149aa274ebd026fb56e4ba833ff1135fecc742c68d53a7e1a6e19c",
+    "experiments/performance/69_low_frequency_squared_error_loss/provenance/loss_weight_calibration.json": "994bf7e5edffe5b6956461847870eb423ef13fa1a897fa8ba9e32e97f350d93b",
+    "experiments/performance/69_low_frequency_squared_error_loss/provenance/observation_check.json": "231c3d1b5cbd8522355da7a9207cbf6c6a9f411e4e1af1e14d3f3c934f0f7fe1",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/train.py": "55c150b067788191664e5f72885e065b1a222fcaeb0fe97a6b13050dc08a7dc5",
+    "experiments/performance/58_spectral_loss_multi_sensor/train.py": "b5a8c3f5e2dbff854a1bbf09c8f1e1ccdd601cb6a53557f31e4e5b76b6f1b575",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/evaluate.py": "e7e60ab17aea8d55f9d1d92fc57c1bd166e50f44d936b1d29c190c25ed818a7a",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/config.json": "821c9038a3c6fa296d96176074b3d91c86a9df3d5a9ffd115eb727de310546e4",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/._metrics.py": "ebcfd7d984e121d322d0e0cda84bfbf99a14a4999344f746c7a3a8aa74fd01ea",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/._model.py": "ebcfd7d984e121d322d0e0cda84bfbf99a14a4999344f746c7a3a8aa74fd01ea",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/._network.py": "ebcfd7d984e121d322d0e0cda84bfbf99a14a4999344f746c7a3a8aa74fd01ea",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16",
+    "common/result_images.py": "2fc73537d7d60fa8c9d19a036ad0bb53e9ab1231b9811fd6d8e9b5159675c737",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt": "3ab7f20c2fda333f2698163af3b0b6c77030d2436f3407f1c58f3224e689de40",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s42/best.pt": "5f1926608479fa58eaba526e82f6057df81c60b7d4a452274c93ed836fa8e8bd",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s42/best.pt": "0175151f6306b275966858cbef6b66b5c9b7345ecdc581e6383a03ad09cbabbb",
+    "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt": "61f5fc49c4c401496bc514fae32c4d070eb95f0591d01843477e91d63b61b5fa",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s42/best.pt": "d9d9d8c67bca9f48f8e6027825041f76a8c5a7e987a26a68287e34fcbd351541"
+  },
+  "created_kst": "2026-10-28T17:49:51.057787+09:00",
+  "cache_manifest_sha256": "35db88ec8b5a8af07f01169011e667db9fd87f1eb65429b91f37086e369f9553",
+  "benchmark": {
+    "QB_C2MS_L1SO": {
+      "median_step_seconds": 0.1443999500006612,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.533203125
+    },
+    "QB_C2MS_SPLIT": {
+      "median_step_seconds": 0.14165159999902244,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.533203125
+    },
+    "WV3_C2MS_L1SO": {
+      "median_step_seconds": 0.19683064999844646,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 0.630859375
+    },
+    "WV3_C2MS_SPLIT": {
+      "median_step_seconds": 0.19209724999745958,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 0.630859375
+    }
+  },
+  "fingerprint": "d58d55ec17c6ec9ba380ac729b5bca39410563b845b9eda8772b506e68ae3891"
+}

@@ -1,0 +1,4 @@
+{
+  "time_kst": "2026-10-28T17:53:27.826675+09:00",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\CtrS-p69\\SSA-MRN\\experiments\\performance\\69_low_frequency_squared_error_loss\\train.py\", line 133, in <module>\n    T.preflight(cfg)\n  File \"C:\\CtrS-p69\\SSA-MRN\\experiments\\performance\\58_spectral_loss_multi_sensor\\train.py\", line 160, in preflight\n    step();ck=dict(model=cpu(m.state_dict()),optimizer=cpu(opt.state_dict()),scaler=scaler.state_dict(),rng=rng())\n  File \"C:\\CtrS-p69\\SSA-MRN\\experiments\\performance\\58_spectral_loss_multi_sensor\\train.py\", line 158, in step\n    if not torch.isfinite(loss) or not all(x.grad is None or torch.isfinite(x.grad).all() for x in m.parameters()):raise FloatingPointError('preflight gradients')\nFloatingPointError: preflight gradients\n"
+}

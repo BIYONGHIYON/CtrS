@@ -2422,5 +2422,36 @@
     "entrypoint": "experiments/performance/68_ssai_folding_sam_split_seed_ensemble/prepare.py",
     "results": "experiments/performance/68_ssai_folding_sam_split_seed_ensemble/results",
     "manifest": "experiments/performance/68_ssai_folding_sam_split_seed_ensemble/manifest.json"
+  },
+  "performance/69_low_frequency_squared_error_loss": {
+    "report": "experiments/performance/69_low_frequency_squared_error_loss/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB, WV3, WV2(전이)",
+    "experiment": 69,
+    "display_name": "69. 65번 손실의 저주파 제곱 오차 보정: 관측 일치 손실과 저주파·고주파 손실 분리",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "last_checked": "2026-10-29T16:30:00+09:00",
+    "limits": "단일 시드(seed 42) 1단계 선별, 탐색에 반복 사용한 test. 학습 전 확인: QB 학습 패치는 패치마다 추출 위상이 달라(1,2)·(2,1)·(2,2), WV3는 모두 (2,2); 패치별 위상에서 D(정답) = MS(1e-12 DN). 계수 λ_O = 500.0, k_S = 431.5는 QB 65번 수렴 출력에서 정해 WV3에도 사용. 관측 비율은 세 대상 모두 C2MS보다 낮아졌지만(0.56-0.77) SAM 이득이 줄고 WV3 학습이 덜 됨(validation −0.7 dB). preflight AMP 시험만 실제 패치·시작 배율 64(초기 FP16 넘침), 학습 중 건너뛴 단계 QB 21·23, WV3 7·8회.",
+    "config": "experiments/performance/69_low_frequency_squared_error_loss/config.json",
+    "entrypoint": "experiments/performance/69_low_frequency_squared_error_loss/run.py",
+    "results": "experiments/performance/69_low_frequency_squared_error_loss/results",
+    "manifest": "experiments/performance/69_low_frequency_squared_error_loss/manifest.json",
+    "evaluation": "experiments/performance/69_low_frequency_squared_error_loss/results/<arm>_<QB|WV3>_s42/evaluation/<QB|WV3|WV2>_v2_3.json",
+    "checkpoints": "experiments/performance/69_low_frequency_squared_error_loss/checkpoints",
+    "judgements": {
+      "QB_C2MS_L1SO_s42": "부분 개선",
+      "QB_C2MS_SPLIT_s42": "부분 개선",
+      "WV3_C2MS_L1SO_s42": "개선 없음",
+      "WV3_C2MS_SPLIT_s42": "개선 없음",
+      "WV2_C2MS_L1SO_s42": "부분 개선",
+      "WV2_C2MS_SPLIT_s42": "부분 개선",
+      "stage1_gate": "통과 갈래 없음, 2단계 미실시"
+    }
   }
 }
