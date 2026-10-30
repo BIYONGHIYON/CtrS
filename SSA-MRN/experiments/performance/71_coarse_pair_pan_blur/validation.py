@@ -2,6 +2,8 @@
 import json,sys
 from pathlib import Path
 import torch
+# Match the training entry point before prepare.py resolves common.interpolation.
+sys.path.append(str(Path(__file__).resolve().parents[3]))
 from model import Model
 from prepare import SENSORS
 from train import T,write,now,run_name,blur_pan
