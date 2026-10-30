@@ -1,0 +1,50 @@
+{
+  "time_kst": "2026-10-30T17:43:40.348668+09:00",
+  "phase": "complete",
+  "active": [],
+  "runs": [
+    {
+      "sensor": "WV3",
+      "arm": "BLUR_BOTH",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-10-30T14:59:52.994098+09:00",
+        "pid": 10688,
+        "sensor": "WV3",
+        "arm": "BLUR_BOTH",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.060530662536621094,
+        "reserved_gb": 0.619140625,
+        "best_epoch": 149
+      }
+    },
+    {
+      "sensor": "WV3",
+      "arm": "BLUR_COARSE",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-10-30T17:39:46.571518+09:00",
+        "pid": 23368,
+        "sensor": "WV3",
+        "arm": "BLUR_COARSE",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.060530662536621094,
+        "reserved_gb": 0.619140625,
+        "best_epoch": 150
+      }
+    }
+  ],
+  "epoch_seconds": {
+    "WV3_BLUR_BOTH": 63.171999999991385,
+    "WV3_BLUR_COARSE": 62.89100000000326
+  },
+  "training_remaining_seconds": 0.0,
+  "training_end_kst": "2026-10-30T17:43:40.348668+09:00",
+  "eta_basis": "measured recent epochs per sensor/arm, else benchmark x1.15; excludes final RR/FR evaluation"
+}
