@@ -1,0 +1,210 @@
+{
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    },
+    "WV3": {
+      "train": "f9e7ec381390ff36ddffd0714df7af07a3c5f456078b219a25f3e18372228f82",
+      "val": "ba883e57408d1f3c2263cc2818a9fbbf2dbe8e62554c531288f9e8bf9f59dc87",
+      "RR": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "FR": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+    }
+  },
+  "transfer_data_sha256": {
+    "WV2": {
+      "RR": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b",
+      "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
+    }
+  },
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    },
+    "WV3": {
+      "train": 9714,
+      "val": 1080,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt",
+    "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
+  },
+  "epochs": 150,
+  "batch": 32,
+  "micro": 32,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "optimizer": "Adam",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training; FP32 transforms/loss/validation/evaluation",
+  "tf32": false,
+  "cudnn_benchmark": true,
+  "cudnn_deterministic": true,
+  "layout": "channels_last",
+  "cpu_threads": 1,
+  "selection": "minimum original-scale validation MSE including epoch0; earliest exact tie; test never used for selection (same rule as C2MS)",
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "data_root": "C:/CtrS/SSA-MRN/data/dataset",
+  "ema_beta": 0.99,
+  "normalization": {
+    "WV3": 2047,
+    "WV2": 2047
+  },
+  "sensor_operators": "54 prepare.py SENSORS (QB, GF2, WV3; WV2 for the transfer test), phase 2",
+  "max_parallel": 1,
+  "experiment": 70,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "arms": {
+    "C2MS_R": "C2MS_R",
+    "C2MS_D": "C2MS_D"
+  },
+  "arm_labels": {
+    "C2MS_R": "C2MS_R",
+    "C2MS_D": "C2MS_D"
+  },
+  "seeds": [
+    42
+  ],
+  "sensors": [
+    "QB",
+    "WV3"
+  ],
+  "runtime": "C:/CtrS-p70-71/run70",
+  "cache_reuse_source": "C:/CtrS-p59/run",
+  "coarse_weight": {
+    "C2MS_R": 1.0,
+    "C2MS_D": 1.0
+  },
+  "spectral_weight": {
+    "C2MS_R": 0.0,
+    "C2MS_D": 0.0
+  },
+  "reconstruction": {
+    "C2MS_R": "MSE",
+    "C2MS_D": "MSE"
+  },
+  "augmentation": {
+    "blur_sigma_max": 1.2
+  },
+  "blur_probability": {
+    "C2MS_R": {
+      "original": 0.0,
+      "coarse": 0.0
+    },
+    "C2MS_D": {
+      "original": 0.0,
+      "coarse": 0.0
+    }
+  },
+  "queue": [
+    [
+      "QB",
+      "C2MS_R",
+      42
+    ],
+    [
+      "QB",
+      "C2MS_D",
+      42
+    ],
+    [
+      "WV3",
+      "C2MS_R",
+      42
+    ],
+    [
+      "WV3",
+      "C2MS_D",
+      42
+    ]
+  ],
+  "transfer_tests": {
+    "WV2": "WV3 model unchanged"
+  },
+  "judgement": "v2.3; single-seed PSNR noise threshold 0.06 dB; QB RR2 fixed reference remains unchanged",
+  "preflight_required": true,
+  "reference_controls": {
+    "QB": {
+      "C2MS_57": "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt"
+    }
+  },
+  "title": "C2MS 원래 해상도 가지의 합성곱 참조 범위 확장",
+  "validation_policy": {
+    "checkpoint": "minimum clean validation MSE",
+    "candidate": "70: QB/WV3 clean PSNR and SAM simultaneous improvement; 71: clean PSNR >= control-0.03 dB, SAM <= control+0.02 deg and fixed sigma .4/.8/1.2 mean PSNR improves, SAM decreases; these are screening guards, not final improvement",
+    "test": "all predefined arms reported; no tuning from WV2 test; no automatic seed expansion"
+  },
+  "registered": "2026-10-29, before training",
+  "constraints": "User authorized seed42 only. Stop on failed preflight; no automatic repeat, combination or cleanup.",
+  "source_hashes": {
+    "experiments/performance/70_c2ms_dilated_backbone/model.py": "0663df15697e47730c34489bf6038a6b86e947e620cacaadc23e9eac21bdbf68",
+    "experiments/performance/70_c2ms_dilated_backbone/prepare.py": "52a747d819a80e1f6063aaa85a77d2f365fd949828ceb1d67846d3621148dbc3",
+    "experiments/performance/70_c2ms_dilated_backbone/train.py": "3b3739cb2e181bcd60fa2ebdc1458292e04498136257415555614405f1fb0181",
+    "experiments/performance/70_c2ms_dilated_backbone/run.py": "ac002bd52c4e3c4029fc1161f15d5b2bdfb21dc514e3ece3ff8d7f5bf052da78",
+    "experiments/performance/70_c2ms_dilated_backbone/config.json": "28cee447794f0732e32817a3ce3969c3ee806e058274904bf434bf3b53794fcb",
+    "experiments/performance/70_c2ms_dilated_backbone/evaluate.py": "6bd4ec9d40507343d678a36e3c7e6432bfa0d4ef8d59a1934824e5eba01ebd30",
+    "experiments/performance/70_c2ms_dilated_backbone/validation.py": "f094ce456ec3682f1698aa3fd37df8495aa4e791e39d0f5db311c980d20834ad",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/train.py": "55c150b067788191664e5f72885e065b1a222fcaeb0fe97a6b13050dc08a7dc5",
+    "experiments/performance/58_spectral_loss_multi_sensor/train.py": "b5a8c3f5e2dbff854a1bbf09c8f1e1ccdd601cb6a53557f31e4e5b76b6f1b575",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/evaluate.py": "e7e60ab17aea8d55f9d1d92fc57c1bd166e50f44d936b1d29c190c25ed818a7a",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/config.json": "821c9038a3c6fa296d96176074b3d91c86a9df3d5a9ffd115eb727de310546e4",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16",
+    "common/result_images.py": "2fc73537d7d60fa8c9d19a036ad0bb53e9ab1231b9811fd6d8e9b5159675c737",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt": "3ab7f20c2fda333f2698163af3b0b6c77030d2436f3407f1c58f3224e689de40",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s42/best.pt": "5f1926608479fa58eaba526e82f6057df81c60b7d4a452274c93ed836fa8e8bd",
+    "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt": "61f5fc49c4c401496bc514fae32c4d070eb95f0591d01843477e91d63b61b5fa"
+  },
+  "created_kst": "2026-10-29T16:49:33.743527+09:00",
+  "cache_manifest_sha256": "7ec967913e80b74f9df6863c77849ed89a6c27402656ce3af455b15910c35d57",
+  "benchmark": {
+    "QB_C2MS_R": {
+      "median_step_seconds": 0.18465695000486448,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.533203125
+    },
+    "QB_C2MS_D": {
+      "median_step_seconds": 0.13843015000747982,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.533203125
+    },
+    "WV3_C2MS_R": {
+      "median_step_seconds": 0.18395500001497567,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 0.611328125
+    },
+    "WV3_C2MS_D": {
+      "median_step_seconds": 0.18464909998874646,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 0.611328125
+    }
+  },
+  "fingerprint": "e4402da0c918e154c9288ed1cdf255cfdae2683b2127fe822f9d3af8795d46a3"
+}

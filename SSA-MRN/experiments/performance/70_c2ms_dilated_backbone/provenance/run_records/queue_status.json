@@ -1,0 +1,88 @@
+{
+  "time_kst": "2026-10-30T12:19:27.557232+09:00",
+  "phase": "complete",
+  "active": [],
+  "runs": [
+    {
+      "sensor": "QB",
+      "arm": "C2MS_R",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-10-29T20:22:33.313071+09:00",
+        "pid": 23804,
+        "sensor": "QB",
+        "arm": "C2MS_R",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.0561671257019043,
+        "reserved_gb": 0.55078125,
+        "best_epoch": 149
+      }
+    },
+    {
+      "sensor": "QB",
+      "arm": "C2MS_D",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-10-30T00:36:54.200169+09:00",
+        "pid": 18072,
+        "sensor": "QB",
+        "arm": "C2MS_D",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.0561671257019043,
+        "reserved_gb": 0.55078125,
+        "best_epoch": 143
+      }
+    },
+    {
+      "sensor": "WV3",
+      "arm": "C2MS_R",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-10-30T03:15:17.254172+09:00",
+        "pid": 29396,
+        "sensor": "WV3",
+        "arm": "C2MS_R",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.060530662536621094,
+        "reserved_gb": 0.619140625,
+        "best_epoch": 150
+      }
+    },
+    {
+      "sensor": "WV3",
+      "arm": "C2MS_D",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-10-30T06:17:47.295232+09:00",
+        "pid": 3388,
+        "sensor": "WV3",
+        "arm": "C2MS_D",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.061049461364746094,
+        "reserved_gb": 0.623046875,
+        "best_epoch": 145
+      }
+    }
+  ],
+  "epoch_seconds": {
+    "QB_C2MS_R": 82.95300000000861,
+    "QB_C2MS_D": 101.07800000000861,
+    "WV3_C2MS_R": 62.5,
+    "WV3_C2MS_D": 72.46900000001187
+  },
+  "training_remaining_seconds": 0.0,
+  "training_end_kst": "2026-10-30T12:19:27.557232+09:00",
+  "eta_basis": "measured recent epochs per sensor/arm, else benchmark x1.15; excludes final RR/FR evaluation"
+}
