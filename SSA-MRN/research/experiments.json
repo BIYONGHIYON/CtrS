@@ -2453,5 +2453,39 @@
       "WV2_C2MS_SPLIT_s42": "부분 개선",
       "stage1_gate": "통과 갈래 없음, 2단계 미실시"
     }
+  },
+  "70_c2ms_dilated_backbone": {
+    "report": "experiments/performance/70_c2ms_dilated_backbone/README.md",
+    "research_track": "performance",
+    "experiment": 70,
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "config": "experiments/performance/70_c2ms_dilated_backbone/config.json",
+    "entrypoint": "experiments/performance/70_c2ms_dilated_backbone/run.py",
+    "confirmed": "dilation은 QB RR에서 공식 기준 대비 +0.009 dB·SAM −0.004°였지만 PSNR 잡음 문턱과 RR2 PSNR에 미달했습니다. WV3·WV2는 PSNR·SAM 모두 악화했습니다.",
+    "evaluated_seeds": [
+      42
+    ],
+    "results": "experiments/performance/70_c2ms_dilated_backbone/results",
+    "checkpoints": "experiments/performance/70_c2ms_dilated_backbone/checkpoints",
+    "manifest": "experiments/performance/70_c2ms_dilated_backbone/manifest.json"
+  },
+  "71_coarse_pair_pan_blur": {
+    "report": "experiments/performance/71_coarse_pair_pan_blur/README.md",
+    "research_track": "performance",
+    "experiment": 71,
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "config": "experiments/performance/71_coarse_pair_pan_blur/config.json",
+    "entrypoint": "experiments/performance/71_coarse_pair_pan_blur/run.py",
+    "confirmed": "거친 쌍 전용 흐림은 WV2 RR +0.728 dB·SAM −0.006°였지만 WV3에서는 −0.026 dB·SAM +0.016°였고, WV2 RR2·FR_WALD SAM에 미달했습니다. 양쪽 쌍 흐림은 WV2 PSNR만 개선하고 SAM이 +0.703° 악화했습니다.",
+    "evaluated_seeds": [
+      42
+    ],
+    "results": "experiments/performance/71_coarse_pair_pan_blur/results",
+    "checkpoints": "experiments/performance/71_coarse_pair_pan_blur/checkpoints",
+    "manifest": "experiments/performance/71_coarse_pair_pan_blur/manifest.json"
   }
 }
