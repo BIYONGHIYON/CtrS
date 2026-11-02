@@ -2503,8 +2503,8 @@
       44
     ],
     "retraining": false,
-    "last_checked": "2026-11-02T11:30:00+09:00",
-    "limits": "학습 없는 사후 분석(로컬 CPU). 탐색에 반복 사용한 test를 다시 봄. 구조 분류는 정답 밝기만 쓴 기하 분류이며, 처음 쓴 Canny 분류는 부류가 한쪽에 몰려 dB 몫을 본 뒤 폐기함. QB RR 이득 +0.873 dB의 87.3%가 주기 8 px 미만(4-8 px 46.9%, 2-4 px 40.2%)에서 나왔고, 16 px 초과는 0.8%였습니다. 미세 구조+작은 세부가 화소의 25.0%로 이득의 57.8%를 냈고, 큰 구조·외곽선은 10.9%였습니다. W2는 2-4 px 세부 세기를 0.76 → 0.81배로 키웠고, 축척 혼합은 세기를 유지한 채 정답과 어긋난 성분을 줄였습니다. GF2·WV3도 8 px 미만이 83.9%·88.2%였지만, 학습하지 않은 WV2는 16 px 초과가 62.9%로 밝기·색 보정이 중심이었습니다.",
+    "last_checked": "2026-11-02T13:30:00+09:00",
+    "limits": "학습 없는 사후 분석(로컬 CPU). 탐색에 반복 사용한 test를 다시 봄. 구조 분류는 정답 밝기만 쓴 기하 분류이며, 처음 쓴 Canny 분류는 부류가 한쪽에 몰려 dB 몫을 본 뒤 폐기함. QB RR 이득 +0.873 dB의 87.3%가 주기 8 px 미만(4-8 px 46.9%, 2-4 px 40.2%)에서 나왔고, 16 px 초과는 0.8%였습니다. 미세 구조+작은 세부가 화소의 25.0%로 이득의 57.8%를 냈고, 큰 구조·외곽선은 10.9%였습니다. W2는 2-4 px 세부 세기를 0.76 → 0.81배로 키웠고, 축척 혼합은 세기를 유지한 채 정답과 상관없는 성분을 줄였습니다. GF2·WV3도 8 px 미만이 83.9%·88.2%였지만, 학습하지 않은 WV2는 16 px 초과가 62.9%로 밝기·색 보정이 중심이었습니다. 4 px 미만 오차는 QB·WV3에서 위치 어긋남이 아니었고 PAN 선형 보정 여지도 1-2%였으며, GF2만 17-23%였습니다.",
     "config": "experiments/performance/72_c2ms_gain_frequency_structure_analysis/config.json",
     "entrypoint": "experiments/performance/72_c2ms_gain_frequency_structure_analysis/prepare.py",
     "results": "experiments/performance/72_c2ms_gain_frequency_structure_analysis/results",

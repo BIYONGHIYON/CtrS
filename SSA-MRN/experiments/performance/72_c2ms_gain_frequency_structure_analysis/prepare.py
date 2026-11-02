@@ -7,7 +7,7 @@ Structure: pixel classes built from the GT intensity only, see classify(). A pix
 
 Parts: --part check (synthetic structure patterns), predict (test outputs into --cache, checked against the archived scene PSNR),
 frequency, structure, canny (the rejected first classes), rr2 (QB, frequency only), swap (direct band swaps as a cross check),
-images, summary (aggregates, results/summary.json and the figures). Default: all of them. Writes only below results/ and --cache.
+headroom (seed ensemble, PAN gain oracle), selfcal (detail gain from the inputs), fine (causes of the <4 px error), images, summary (aggregates, results/summary.json and the figures). Default: all of them. Writes only below results/ and --cache.
 """
 import os
 os.environ.setdefault('OMP_NUM_THREADS', '4')
@@ -367,6 +367,139 @@ def run_images(log):
     log(f'images {sorted(stats)}')
 
 
+# ---------------------------------------------------------------- parts: headroom, selfcal, fine
+
+BLOCK, GRID = 64, np.arange(-1.5, 1.51, .25)
+BY, BX = np.meshgrid(np.fft.fftfreq(BLOCK), np.fft.fftfreq(BLOCK), indexing='ij'); BR = np.hypot(BY, BX); HANN = np.outer(np.hanning(BLOCK), np.hanning(BLOCK))
+SHIFTS = np.array([(a, b) for a in GRID for b in GRID])
+BLOCK_BANDS = dict(lo=(BR >= 1 / 4) & (BR < 1 / 3), hi=(BR >= 1 / 3) & (BR <= .5), b48=(BR >= 1 / 8) & (BR < 1 / 4), b816=(BR >= 1 / 16) & (BR < 1 / 8))
+RAMPS = {k: np.exp(2j * np.pi * (np.outer(SHIFTS[:, 0], BY[m]) + np.outer(SHIFTS[:, 1], BX[m]))) for k, m in BLOCK_BANDS.items()}
+
+
+def pass_band(x, lo, hi=9.):
+    n = x.shape[-1]; r = np.hypot(*np.meshgrid(np.fft.fftfreq(n), np.fft.fftfreq(n), indexing='ij'))
+    return np.fft.ifft2(np.fft.fft2(x, axes=(-2, -1)) * ((r >= lo) & (r < hi)), axes=(-2, -1)).real
+
+
+def to_blocks(x):
+    """(scene, ..., H, W) to (blocks, B, B), stride 32."""
+    out = [x[..., i:i + BLOCK, j:j + BLOCK] for i in range(0, 257 - BLOCK, 32) for j in range(0, 257 - BLOCK, 32)]
+    return np.moveaxis(np.stack(out), 0, 1).reshape(-1, BLOCK, BLOCK)
+
+
+def best_shift(Fa, Fb, key):
+    """Shift s with a(x) = b(x - s), from the cross spectrum on one band of (blocks, B, B) spectra."""
+    m = BLOCK_BANDS[key]; X = Fa[:, m] * np.conj(Fb[:, m]); out = np.zeros((len(X), 2))
+    for k in range(0, len(X), 512): out[k:k + 512] = SHIFTS[(X[k:k + 512] @ RAMPS[key].T).real.argmax(1)]
+    return out
+
+
+def move(F, s):
+    """Spectra F moved by s in space."""
+    return F * np.exp(-2j * np.pi * (s[:, 0, None, None] * BY + s[:, 1, None, None] * BX))
+
+
+def band_energy(Fa, Fb, key):
+    return float((np.abs((Fa - Fb)[:, BLOCK_BANDS[key]]) ** 2).sum())
+
+
+def correlation(a, b): return float((a * b).sum() / np.sqrt((a * a).sum() * (b * b).sum()))
+
+
+def run_headroom(log):
+    """Trained and transfer targets: seed ensemble by band, and how much of the error a local PAN gain could explain with the GT known."""
+    bands = (('>16px', 0, 1 / 16), ('8-16px', 1 / 16, 1 / 8), ('4-8px', 1 / 8, 1 / 4), ('<4px', 1 / 4, 9.)); res = {}
+    for target in TARGETS:
+        data = read_test(target); gt, pan = data['gt'], data['pan']; ys = [cached(target, 'C2MS', s) for s in SEEDS]; ens = np.mean(ys, 0)
+        psnr = lambda y: float((10 * np.log10(2047 ** 2 / ((y - gt) ** 2).mean((-1, -2)))).mean())
+        pairs = list(itertools.combinations(range(3), 2)); single = float(np.mean([psnr(y) for y in ys])); row = dict(single_psnr=single, ensemble2_db=float(np.mean([psnr((ys[i] + ys[j]) / 2) for i, j in pairs])) - single, ensemble3_db=psnr(ens) - single, bands={})
+        for name, lo, hi in bands:
+            e = pass_band(ys[0] - gt, lo, hi); p = pass_band(pan, lo, hi); left = {}
+            for sigma in (2, 4, 8):
+                pp = ndi.gaussian_filter(p * p, (0, 0, sigma, sigma), mode='nearest') + 1e-6; ep = ndi.gaussian_filter(e * p, (0, 0, sigma, sigma), mode='nearest')
+                left[str(sigma)] = float(((e - ep / pp * p) ** 2).mean() / (e ** 2).mean())
+            member = float(np.mean([(pass_band(y - gt, lo, hi) ** 2).mean() for y in ys]))
+            row['bands'][name] = dict(member_mse=member, ensemble_mse=float((pass_band(ens - gt, lo, hi) ** 2).mean()), pan_gain_oracle_left=left)
+        res[target] = row; log(f'headroom {target} {row["ensemble3_db"]:.3f}')
+    write('fine_headroom.json', res)
+
+
+def run_selfcal(log):
+    """Detail gain measured from the inputs: a = sum y g / sum y^2 at the scale one step coarser, where the MS is a real reference."""
+    bins = ((1 / 16, 1 / 8), (1 / 8, 1 / 4), (1 / 4, 9.))
+    def masks(n):
+        r = np.hypot(*np.meshgrid(np.fft.fftfreq(n), np.fft.fftfreq(n), indexing='ij')); return [(r >= a) & (r < b) for a, b in bins]
+    def gains(y, g, ms):
+        Y, G = np.fft.fft2(y, axes=(-2, -1)), np.fft.fft2(g, axes=(-2, -1))
+        return np.stack([(Y[..., m] * np.conj(G[..., m])).real.sum(-1) / np.maximum((np.abs(Y[..., m]) ** 2).sum(-1), 1e-9) for m in ms], -1)
+    def apply(y, a, ms):
+        W = np.ones(y.shape)
+        for j, m in enumerate(ms): W[..., m] = a[..., j, None]
+        return np.fft.ifft2(np.fft.fft2(y, axes=(-2, -1)) * W, axes=(-2, -1)).real
+    def coarse(target, seed):
+        data = read_test(target); wald = P68.FWald(target); net = load_net(target, 'C2MS', seed)
+        return np.stack([P68.predict(net, wald.degrade(data['pan'][i], data['ms'][i]), 2047.) for i in range(len(data['pan']))]), data['ms']
+    m256, m64 = masks(256), masks(64); res = {}
+    for sensor, targets in (('QB', ('QB',)), ('WV3', ('WV3', 'WV2'))):
+        refs = {s: gains(*coarse(sensor, s), m64).mean(0) for s in SEEDS}
+        for target in targets:
+            gt = read_test(target)['gt']; rows = []; res[target] = rows
+            psnr = lambda y: float((10 * np.log10(2047 ** 2 / ((y - gt) ** 2).mean((-1, -2)))).mean())
+            for s in SEEDS:
+                y = cached(target, 'C2MS', s); a = gains(*coarse(target, s), m64); base = psnr(y)
+                rows.append(dict(seed=s, base_psnr=base, relative_db=psnr(apply(y, a / refs[s][None], m256)) - base, oracle_db=psnr(apply(y, gains(y, gt, m256), m256)) - base))
+            log(f'selfcal {target} {np.mean([r["relative_db"] for r in rows]):.3f}')
+    write('fine_selfcal.json', res)
+
+
+def run_fine(log):
+    """<4 px error of C2MS: position, GT noise, or missing information. See config fine_detail."""
+    t = ndi.gaussian_filter(np.random.default_rng(0).normal(size=(4, BLOCK, BLOCK)), (0, 1, 1)); known = np.full((4, 2), (.5, -.75)); Ft = np.fft.fft2(t * HANN)
+    if not np.allclose(best_shift(move(Ft, known), Ft, 'b48'), known): raise ValueError('shift sign check failed')
+    res = {}; rng = np.random.default_rng(0)
+    for target in ('QB', 'GF2', 'WV3'):
+        data = read_test(target); gt, pan = data['gt'], data['pan'][:, 0]; lms = data['lms'].mean(1); Ig = gt.mean(1); n, c = gt.shape[:2]; row = dict(seeds={})
+        Iy = cached(target, 'C2MS', 42).mean(1)
+        row['correlation_with_gt_intensity'] = {name: dict(pan=correlation(pass_band(Ig, lo, hi), pass_band(pan, lo, hi)), c2ms=correlation(pass_band(Ig, lo, hi), pass_band(Iy, lo, hi)))
+                                                for name, lo, hi in (('8-16px', 1 / 16, 1 / 8), ('4-8px', 1 / 8, 1 / 4), ('<4px', 1 / 4, 9.))}
+        ratio = []
+        for s in SEEDS:  # held-out frequencies: search on one half of the <4 px band, score on the other
+            Fg, Fy = np.fft.fft2(to_blocks(gt) * HANN), np.fft.fft2(to_blocks(cached(target, 'C2MS', s)) * HANN); s1, s2 = best_shift(Fg, Fy, 'lo'), best_shift(Fg, Fy, 'hi'); perm = rng.permutation(len(s1))
+            e0 = band_energy(Fg, Fy, 'hi') + band_energy(Fg, Fy, 'lo')
+            ratio.append((float((band_energy(Fg, move(Fy, s1), 'hi') + band_energy(Fg, move(Fy, s2), 'lo')) / e0), float((band_energy(Fg, move(Fy, s1[perm]), 'hi') + band_energy(Fg, move(Fy, s2[perm]), 'lo')) / e0)))
+        row['output_position_error'] = dict(left_after_shift=[r[0] for r in ratio], left_with_shift_of_other_block=[r[1] for r in ratio])
+        Fg, Fp, Fl = (np.fft.fft2(to_blocks(x[:, None]) * HANN) for x in (Ig, pan, lms)); a, b = best_shift(Fg, Fp, 'b48'), best_shift(Fg, Fp, 'b816'); no_gt = best_shift(Fl, Fp, 'b816')
+        g4, p4 = np.fft.ifft2(np.fft.fft2(to_blocks(pass_band(Ig, 1 / 4)[:, None]) * HANN)).real, np.fft.fft2(to_blocks(pass_band(pan, 1 / 4)[:, None]) * HANN)
+        scene = lambda s: correlation(g4, np.fft.ifft2(move(p4, s)).real)
+        row['pan_shift'] = dict(mean=a.mean(0).tolist(), true_sd_from_two_bands=np.sqrt(np.maximum(np.diag(np.cov(a.T, b.T)[:2, 2:]), 0)).tolist(), between_scene_sd=a.reshape(n, -1, 2).mean(1).std(0).tolist(),
+                                band_corr_unshifted=correlation(g4, np.fft.ifft2(p4).real), band_corr_gt_shift=scene(a), band_corr_no_gt_shift=scene(no_gt))
+        # noise bound: <4 px C2MS error in the flattest decile of the GT
+        e4 = pass_band(cached(target, 'C2MS', 42) - gt, 1 / 4); flat = ndi.maximum_filter(np.stack([np.hypot(ndi.gaussian_filter(I, 1, order=(1, 0)), ndi.gaussian_filter(I, 1, order=(0, 1))) for I in Ig]), size=(1, 5, 5))
+        flat = flat <= np.percentile(flat, 10); row['noise_upper_share'] = float((e4 ** 2).mean(1)[flat].mean() / (e4 ** 2).mean())
+        # held-out shallow probe: 9x9 FIR of the <4 and 4-8 px PAN bands, raw and aligned without GT, two folds over the scenes
+        sh = np.median(no_gt.reshape(n, -1, 2), 1); row['no_gt_scene_shift'] = dict(mean=sh.mean(0).tolist(), sd=sh.std(0).tolist())
+        fy2, fx2 = np.meshgrid(np.fft.fftfreq(256), np.fft.fftfreq(256), indexing='ij')
+        def feats(p):
+            return np.stack([np.roll(b_, (dy, dx), (0, 1))[12:-12, 12:-12].ravel()[::3] for b_ in (pass_band(p, 1 / 4), pass_band(p, 1 / 8, 1 / 4)) for dy in range(-4, 5) for dx in range(-4, 5)], 1)
+        F = dict(raw=[feats(pan[i]) for i in range(n)], aligned=[feats(np.fft.ifft2(np.fft.fft2(pan[i]) * np.exp(-2j * np.pi * (sh[i, 0] * fy2 + sh[i, 1] * fx2))).real) for i in range(n)])
+        probe = {k: [] for k in F}
+        for s in SEEDS:
+            e = np.stack([pass_band(gt[i] - cached(target, 'C2MS', s)[i], 1 / 4)[:, 12:-12, 12:-12].reshape(c, -1)[:, ::3] for i in range(n)])
+            for name, X in F.items():
+                base = left = 0.
+                for test in (range(0, n, 2), range(1, n, 2)):
+                    train = [i for i in range(n) if i not in test]; A_ = np.concatenate([X[i] for i in train]); T = np.concatenate([X[i] for i in test]); AA = A_.T @ A_; AA += 1e-3 * np.trace(AA) / len(AA) * np.eye(len(AA))
+                    for k in range(c):
+                        w = np.linalg.solve(AA, A_.T @ np.concatenate([e[i, k] for i in train])); y_ = np.concatenate([e[i, k] for i in test]); base += (y_ ** 2).sum(); left += ((y_ - T @ w) ** 2).sum()
+                probe[name].append(float(left / base))
+        row['pan_probe_left'] = probe; res[target] = row; log(f'fine {target} {row["output_position_error"]["left_after_shift"]} {probe}')
+    with h5py.File(ROOT / 'data/train/train_qb.h5', 'r') as f:  # the shift a fixed filter would have to learn
+        idx = np.sort(rng.choice(f['gt'].shape[0], 1500, replace=False)); gt = np.asarray(f['gt'][idx], np.float64); pan = np.asarray(f['pan'][idx], np.float64)[:, 0]
+    Fg, Fp = np.fft.fft2(gt.mean(1) * HANN), np.fft.fft2(pan * HANN); a, b = best_shift(Fg, Fp, 'b48'), best_shift(Fg, Fp, 'b816')
+    res['QB_train_patches'] = dict(patches=1500, mean=a.mean(0).tolist(), true_sd_from_two_bands=np.sqrt(np.maximum(np.diag(np.cov(a.T, b.T)[:2, 2:]), 0)).tolist())
+    write('fine_detail.json', res); log('fine done')
+
+
 # ---------------------------------------------------------------- part: summary
 
 def summary_numbers():
@@ -434,7 +567,7 @@ def run_summary(log):
     log('summary')
 
 
-PARTS = dict(check=run_check, predict=run_predict, frequency=run_frequency, rr2=run_rr2, swap=run_swap, structure=run_structure, canny=run_canny, images=run_images, summary=run_summary)
+PARTS = dict(check=run_check, predict=run_predict, frequency=run_frequency, rr2=run_rr2, swap=run_swap, structure=run_structure, canny=run_canny, headroom=run_headroom, selfcal=run_selfcal, fine=run_fine, images=run_images, summary=run_summary)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)

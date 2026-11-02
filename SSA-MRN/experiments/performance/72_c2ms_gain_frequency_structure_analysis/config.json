@@ -73,6 +73,16 @@
     "sensitivity": [{"tau": 0.5, "gate": 50}, {"tau": 0.7, "gate": 50}, {"tau": 0.6, "gate": 40}, {"tau": 0.6, "gate": 60}],
     "rejected_canny": {"sigma": 1.5, "quantiles": [75, 90], "zone_radius": 2, "long": 48, "medium": 16}
   },
+  "fine_detail": {
+    "added": "2026-11-02, after the first report, when the <4 px error was examined as a target of its own. Definitions were fixed before each measure was read, except that the first shift run had opposite signs in the search and in its application; it was discarded and a known-shift check now stops the run.",
+    "block": {"size": 64, "stride": 32, "window": "Hann", "shift_grid_px": [-1.5, 1.5, 0.25]},
+    "output_position": "per block and spectral band: shift between C2MS and GT searched on 0.25 <= f < 0.33 and scored on 0.33 <= f <= 0.5, and the other way round; control uses the shift of another block",
+    "pan_shift": "PAN against GT intensity on the 4-8 px band, scored on <4 px; true spread from the covariance of the 4-8 and 8-16 px estimates; the no-GT estimate uses PAN against LMS on 8-16 px",
+    "noise_bound": "<4 px C2MS error in the flattest decile of the GT, as a share of the whole-image <4 px error; an upper bound on GT noise",
+    "pan_probe": "residual of each spectral band regressed on a 9x9 FIR of the <4 and 4-8 px PAN bands (ridge 1e-3), two folds over the 20 test scenes, raw PAN and PAN aligned per scene without the GT; shallow probe, so no drop does not rule out a deep model",
+    "pan_gain_oracle": "local PAN gain from Gaussian weighted least squares against the GT, sigma 2, 4, 8; upper bound",
+    "selfcal": "detail gain a = sum y g / sum y^2 per (scene, band, frequency) measured one scale coarser, divided by the mean of the training sensor and applied to the same frequency band of the output"
+  },
   "protocol": {
     "tests": "RR test 20 scenes of QB, GF2, WV3 and WV2 (WV3 model); QB RR2 (RR input degraded once more, frequency split only because 64x64 scenes cannot hold the 8-sigma structure scale)",
     "precision": "inference FP32 on local CPU (4 threads); metrics in float64 DN with peak 2047, as common/metrics.rr_metrics",
