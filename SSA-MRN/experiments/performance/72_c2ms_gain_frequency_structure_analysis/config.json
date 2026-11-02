@@ -1,0 +1,81 @@
+{
+  "experiment": 72,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "C2MS 이득의 주파수 대역·구조 크기 분해",
+  "status": "사전 검증 완료",
+  "improvement": "성능 비교 아님",
+  "training": false,
+  "purpose": "Training-free diagnostic: where in frequency and in structure size does the gain of C2MS over the original SSA-MRN sit, and how do the W2 branch and the scale-mixed training divide it.",
+  "definition_order": "The frequency bins, the LMDI split and the SAM Shapley groups were fixed before any result was read. The first pixel classes (Canny contour length, part canny) were rejected after their class sizes and dB shares had been read, because 77 % of QB pixels fell in one class. The replacement structure classes were checked on synthetic patterns and on QB class sizes only, before any dB share was read; their thresholds were not changed afterwards.",
+  "seeds": [42, 43, 44],
+  "targets": {"QB": "QB", "GF2": "GF2", "WV3": "WV3", "WV2": "WV3"},
+  "checkpoints": {
+    "QB": {
+      "C0": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s<seed>/best.pt",
+      "C2": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C2_QB_s<seed>/best.pt",
+      "C2MS": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt"
+    },
+    "GF2": {
+      "C0": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_GF2_s<seed>/best.pt",
+      "C2MS": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s<seed>/best.pt"
+    },
+    "WV3": {
+      "C0": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_WV3_s<seed>/best.pt",
+      "C2MS": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
+    }
+  },
+  "archived_rr": {
+    "QB": {
+      "C0": "experiments/performance/43_normalized_parallel_capacity/results/C0_QB_s<seed>/evaluation/RR.json",
+      "C2": "experiments/performance/43_normalized_parallel_capacity/results/C2_QB_s<seed>/evaluation/RR.json",
+      "C2MS": "experiments/performance/53_scale_mixed_training/results/C2MS_QB_s<seed>/evaluation/RR.json"
+    },
+    "GF2": {
+      "C0": "experiments/performance/54_multi_sensor_scale_mixed_training/results/C0_GF2_s<seed>/evaluation/RR.json",
+      "C2MS": "experiments/performance/54_multi_sensor_scale_mixed_training/results/C2MS_GF2_s<seed>/evaluation/RR.json"
+    },
+    "WV3": {
+      "C0": "experiments/performance/54_multi_sensor_scale_mixed_training/results/C0_WV3_s<seed>/evaluation/RR.json",
+      "C2MS": "experiments/performance/54_multi_sensor_scale_mixed_training/results/C2MS_WV3_s<seed>/evaluation/RR.json"
+    },
+    "WV2": {
+      "C0": "experiments/performance/54_multi_sensor_scale_mixed_training/results/C0_WV3_s<seed>/evaluation/WV2_RR.json",
+      "C2MS": "experiments/performance/54_multi_sensor_scale_mixed_training/results/C2MS_WV3_s<seed>/evaluation/WV2_RR.json"
+    }
+  },
+  "reproduction": {
+    "scene_psnr_tolerance_db": 0.00001,
+    "qb_rr2_expected_mean_psnr": {"C0": 38.199, "C2": 38.082, "C2MS": 39.324},
+    "qb_rr2_tolerance_db": 0.005
+  },
+  "data_sha256": {
+    "QB": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+    "GF2": "709a9a53b2e0f29d3dcd5c6ca4410c2913b62cc03c104fed6c049911dbe1c8ea",
+    "WV3": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+    "WV2": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b"
+  },
+  "frequency": {
+    "edges_cycles_per_pixel": [0, 0.015625, 0.03125, 0.0625, 0.125, 0.25, 0.5, 1.0],
+    "bins": ["DC", ">64px", "32-64px", "16-32px", "8-16px", "4-8px", "2-4px", "<2px(diag)"],
+    "sam_shapley_groups": ["DC", ">32px", "16-32px", "8-16px", "4-8px", "<4px"],
+    "psnr_split": "LMDI: per (scene, band) PSNR_b - PSNR_a = 10/ln10 * sum_i (E_a_i - E_b_i) / L(MSE_a, MSE_b), L the logarithmic mean; contributions add up exactly",
+    "signal_model": "inside one (scene, band, bin): y = H g + n; error energy = gain error (1-H)^2 |g|^2 + uncorrelated energy |n|^2"
+  },
+  "structure": {
+    "source": "mean of the GT bands only, never the model outputs",
+    "scales": [1, 2, 4, 8],
+    "response": "M_s = s * |grad G_s I|, unchanged by s on a step edge and decaying once s exceeds the feature width",
+    "extent_tau": 0.6,
+    "gate_percentile": 50,
+    "coherence": {"threshold": 0.5, "gradient_sigma": 1, "integration_sigma": 6},
+    "classes": ["flat", "fine(s1)", "small(s2)", "medium(s4)", "large_complex(s8)", "large_outline(s8,coh)"],
+    "sensitivity": [{"tau": 0.5, "gate": 50}, {"tau": 0.7, "gate": 50}, {"tau": 0.6, "gate": 40}, {"tau": 0.6, "gate": 60}],
+    "rejected_canny": {"sigma": 1.5, "quantiles": [75, 90], "zone_radius": 2, "long": 48, "medium": 16}
+  },
+  "protocol": {
+    "tests": "RR test 20 scenes of QB, GF2, WV3 and WV2 (WV3 model); QB RR2 (RR input degraded once more, frequency split only because 64x64 scenes cannot hold the 8-sigma structure scale)",
+    "precision": "inference FP32 on local CPU (4 threads); metrics in float64 DN with peak 2047, as common/metrics.rr_metrics",
+    "scene_bootstrap": "10000 resamples of the 20 scenes on seed means, 95 % percentile interval; test scenes may share a source image, so the interval is a lower bound on the uncertainty"
+  }
+}
