@@ -1861,5 +1861,21 @@
     "entrypoint": "experiments/performance/72_c2ms_gain_frequency_structure_analysis/prepare.py",
     "results": "experiments/performance/72_c2ms_gain_frequency_structure_analysis/results",
     "manifest": "experiments/performance/72_c2ms_gain_frequency_structure_analysis/manifest.json"
+  },
+  "performance/73_l1_step_learning_rate_schedule": {
+    "report": "experiments/performance/73_l1_step_learning_rate_schedule/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 73,
+    "display_name": "73. C2MS L1 학습의 높은 학습률 단계 감소와 학습 연장",
+    "status": "계획",
+    "improvement": "판단 보류",
+    "evaluated_seeds": [],
+    "retraining": true,
+    "epochs": 360,
+    "last_checked": "2026-11-03T10:00:00+09:00",
+    "limits": "학습 전 계획. 갈래 C2MS_L1S(L1, 4e-4 → 100에폭마다 ×0.7, 360에폭)와 C2MS_L1C(L1, 1e-4 cosine, 360에폭)를 QB seed 42로 선별하고 53번 C2MS를 공식 대조군, 63번을 학습 길이 참조로 둠. 상위 모델의 학습 조건은 더 작은 모델 기준.",
+    "config": "experiments/performance/73_l1_step_learning_rate_schedule/config.json"
   }
 }
