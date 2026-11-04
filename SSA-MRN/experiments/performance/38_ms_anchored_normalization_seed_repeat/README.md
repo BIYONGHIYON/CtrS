@@ -10,7 +10,7 @@
 |---|:---:|:---:|
 | 세 시드의 RR 평균 5지표가 모두 개선됐으나 seed44의 잠정 FR QNR·Ds가 악화했습니다. | 평가 완료 | 부분 개선 |
 
-> **현재 표 판정 (2026-11-04, [판정 기준 v2.4](../../../docs/judgement_criteria.md#보조-판정을-참고로-바꿈-v23--v24)):** **개선**. QB 3시드 평균: N1 개선(v2.4). RR ΔPSNR +0.180dB·ΔSAM −0.074°·ΔERGAS −0.093. RR2 미달은 참고 지표입니다. 33·38번을 합친 반복 시드 결과입니다. 위 요약 표는 작성 당시 판정입니다.
+> **현재 표 판정 (2026-11-04, [판정 기준 v2.4](../../../docs/judgement_criteria.md#보조-판정-삭제-v23--v24)):** **개선**. QB 3시드 평균: N1 개선(v2.4). RR ΔPSNR +0.180dB·ΔSAM −0.074°·ΔERGAS −0.093. 33·38번을 합친 반복 시드 결과입니다. 위 요약 표는 작성 당시 판정입니다.
 
 [실험 목록](../../../research/performance/README.md#experiments) · [선행 실험](../33_ms_anchored_reversible_normalization/README.md)
 

@@ -6,7 +6,7 @@
 |---|:---:|:---:|
 | 9개 모델 × 150에포크와 50·100·150에포크의 RR·FR 전체 평가를 완료했습니다. F0는 원본 대비 QB·GF2에서 RR·잠정 QNR 개선, WV3에서는 지표가 엇갈렸습니다. | 평가&nbsp;완료 | 부분&nbsp;개선 |
 
-> **현재 표 판정 (2026-11-04, [판정 기준 v2.4](../../../docs/judgement_criteria.md#보조-판정을-참고로-바꿈-v23--v24)):** **개선**. QB seed46: repeat·F0 개선(v2.4). repeat RR ΔPSNR +0.176dB·ΔSAM −0.092°. RR2 미달은 참고 지표입니다. 위 요약 표는 작성 당시 판정입니다.
+> **현재 표 판정 (2026-11-04, [판정 기준 v2.4](../../../docs/judgement_criteria.md#보조-판정-삭제-v23--v24)):** **개선**. QB seed46: repeat·F0 개선(v2.4). repeat RR ΔPSNR +0.176dB·ΔSAM −0.092°. 위 요약 표는 작성 당시 판정입니다.
 
 [실험 목록](../../../README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [재현 자료](#evidence)
 
