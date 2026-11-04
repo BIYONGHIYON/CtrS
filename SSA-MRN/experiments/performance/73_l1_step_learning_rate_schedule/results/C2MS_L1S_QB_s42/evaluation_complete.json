@@ -1,0 +1,178 @@
+{
+  "time_kst": "2026-11-04T11:22:46.773028+09:00",
+  "weights": {
+    "C2MS": {
+      "path": "C:\\CtrS-p73\\SSA-MRN\\experiments\\performance\\53_scale_mixed_training\\checkpoints\\C2MS_QB_s42\\best.pt",
+      "sha256": "3ab7f20c2fda333f2698163af3b0b6c77030d2436f3407f1c58f3224e689de40",
+      "best_epoch": 149
+    },
+    "C2MS_L1S": {
+      "path": "C:\\CtrS-p73\\run\\runs\\QB_C2MS_L1S_s42\\checkpoints\\best.pt",
+      "sha256": "671025346aaf574ce958d1aadf369758825c1216a32b57801c87092dc2614d97",
+      "best_epoch": 204
+    },
+    "C2MS_57": {
+      "path": "C:\\CtrS-p73\\SSA-MRN\\experiments\\performance\\57_c2ms_training_conditions\\checkpoints\\C2MS_QB_s42\\best.pt",
+      "sha256": "61f5fc49c4c401496bc514fae32c4d070eb95f0591d01843477e91d63b61b5fa",
+      "best_epoch": 145
+    },
+    "C2MS_L1_63": {
+      "path": "C:\\CtrS-p73\\SSA-MRN\\experiments\\performance\\63_l1_reconstruction_loss\\checkpoints\\C2MS_L1_QB_s42\\best.pt",
+      "sha256": "be5bf09e174d3917ebd82fdc097c000b3c1546ef3be2bb78337a7a0305d6424d",
+      "best_epoch": 150
+    }
+  },
+  "judgement": {
+    "official_vs_53": {
+      "delta": {
+        "RR": {
+          "SAM": -0.027430325303016367,
+          "ERGAS": 0.12978672377299993,
+          "PSNR": -0.29538102269362554,
+          "SCC": -0.0011482842100433155,
+          "Q2n": -0.0005410978043981496
+        },
+        "RR2": {
+          "SAM": -0.14207763736272927,
+          "ERGAS": -0.1839374188549776,
+          "PSNR": 0.41790406709154126,
+          "SCC": 0.0016908437596186987,
+          "Q2n": 0.0038902949783664598
+        },
+        "FR_WALD": {
+          "SAM": -0.06224229274853643,
+          "ERGAS": 0.09933286496919358,
+          "PSNR": -0.2501753949464742,
+          "SCC": -0.0005596932774698526,
+          "Q2n": -0.0005662297216282308
+        },
+        "FR": {
+          "D_lambda": -0.007130035495717883,
+          "D_s": -0.06526193334333624,
+          "QNR": 0.0702928678878838,
+          "OBS_RMSE_DN": 2.77851031204019
+        }
+      },
+      "obs_ratio": 1.177578800035767,
+      "noise_threshold": 0.06,
+      "above_noise": false,
+      "rr_components_improved": {
+        "PSNR": false,
+        "SAM": true,
+        "ERGAS": false
+      },
+      "guards": {
+        "RR2": true,
+        "FR_WALD": false,
+        "FR_OBS": false
+      },
+      "label": "부분 개선"
+    },
+    "reference_vs_57": {
+      "delta": {
+        "RR": {
+          "SAM": -0.024035917954775776,
+          "ERGAS": 0.13345456727878346,
+          "PSNR": -0.30451155180481493,
+          "SCC": -0.0011674106727275202,
+          "Q2n": -0.000572823579544135
+        },
+        "RR2": {
+          "SAM": -0.3192108900594608,
+          "ERGAS": -0.31856059271760273,
+          "PSNR": 0.723768166250295,
+          "SCC": 0.0036822922357296894,
+          "Q2n": 0.007422150184404175
+        },
+        "FR_WALD": {
+          "SAM": -0.045970959283138324,
+          "ERGAS": 0.11047750639436593,
+          "PSNR": -0.27081943947454334,
+          "SCC": -0.0006863891693239532,
+          "Q2n": -0.0009148262226451598
+        },
+        "FR": {
+          "D_lambda": -0.005123516166365725,
+          "D_s": -0.06560066386883406,
+          "QNR": 0.06874599021027006,
+          "OBS_RMSE_DN": 0.8315631259840153
+        }
+      },
+      "obs_ratio": 1.047265145432386,
+      "noise_threshold": 0.06,
+      "above_noise": false,
+      "rr_components_improved": {
+        "PSNR": false,
+        "SAM": true,
+        "ERGAS": false
+      },
+      "guards": {
+        "RR2": true,
+        "FR_WALD": false,
+        "FR_OBS": true
+      },
+      "label": "부분 개선"
+    },
+    "reference_vs_63_l1": {
+      "delta": {
+        "RR": {
+          "SAM": 0.032408253030077994,
+          "ERGAS": 0.1564171237814005,
+          "PSNR": -0.37932623171580815,
+          "SCC": -0.001090491710565189,
+          "Q2n": -0.0007964375221982678
+        },
+        "RR2": {
+          "SAM": -0.2561345856034558,
+          "ERGAS": -0.24904278286854487,
+          "PSNR": 0.6040423226430036,
+          "SCC": 0.0028907129948180232,
+          "Q2n": 0.006069069764395252
+        },
+        "FR_WALD": {
+          "SAM": 0.014892385995874058,
+          "ERGAS": 0.14075305200249844,
+          "PSNR": -0.3576877741716089,
+          "SCC": -0.0009160920985447074,
+          "Q2n": -0.0012972369904600267
+        },
+        "FR": {
+          "D_lambda": 0.002561874225873711,
+          "D_s": 0.0559179336587344,
+          "QNR": -0.05758894087541078,
+          "OBS_RMSE_DN": -2.2672455308247947
+        }
+      },
+      "obs_ratio": 0.8904309430644405,
+      "noise_threshold": 0.06,
+      "above_noise": false,
+      "rr_components_improved": {
+        "PSNR": false,
+        "SAM": false,
+        "ERGAS": false
+      },
+      "guards": {
+        "RR2": true,
+        "FR_WALD": false,
+        "FR_OBS": true
+      },
+      "label": "개선 없음"
+    }
+  },
+  "validation": {
+    "arm": {
+      "val_mse": 0.00012886551815738807,
+      "val_psnr": 40.471546609633236,
+      "val_sam": 4.135507879919431
+    },
+    "control_53": {
+      "val_mse": 0.00013368997450487113,
+      "val_psnr": 40.28266795801678,
+      "val_sam": 4.226184513624599
+    },
+    "delta_psnr": 0.18887865161645578,
+    "delta_sam": -0.09067663370516765
+  },
+  "stage1_gate": false,
+  "scope": "full 20-scene RR/RR2/FR_WALD/FR observation; v2.3; single seed; no automatic baseline promotion"
+}
