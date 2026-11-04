@@ -2517,14 +2517,31 @@
     "sensor": "QB",
     "experiment": 73,
     "display_name": "73. C2MS L1 학습의 높은 학습률 단계 감소와 학습 연장",
-    "status": "학습 중",
-    "improvement": "판단 보류",
-    "evaluated_seeds": [],
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42
+    ],
     "retraining": true,
     "epochs": 360,
-    "last_checked": "2026-11-03T20:07:11+09:00",
-    "limits": "QB seed 42 C2MS_L1S 학습 중(4/360에폭, 2026-11-03 20:07 확인). 3에폭 안정성 확인 통과(건너뛴 AMP 업데이트 0, 학습 손실 0.0152 → 0.0093). 서버가 재구성돼 학습 캐시를 H5에서 다시 만들었고, 63번 기록 해시와 모두 일치했습니다. 갈래 C2MS_L1S(L1, 4e-4 → 100에폭마다 ×0.7, 360에폭)와 C2MS_L1C(L1, 1e-4 cosine, 360에폭)를 QB seed 42로 선별하고 53번 C2MS를 공식 대조군, 63번을 학습 길이 참조로 둠. 상위 모델의 학습 조건은 더 작은 모델 기준.",
+    "last_checked": "2026-11-04T11:23:39+09:00",
+    "limits": "C2MS_L1S(4e-4 단계 감소)는 validation PSNR이 53번 대비 +0.189 dB였지만 test RR은 PSNR −0.295 dB(19/20장 하락)·SAM −0.027°·ERGAS +0.130으로 반대였습니다. C2MS_L1C(1e-4 cosine 360에폭)는 RR −0.026 dB·−0.043°입니다. 두 갈래 모두 SAM만 개선돼 부분 개선이고 1단계 관문은 통과하지 못했습니다. QB에서 validation과 test 방향이 어긋나는 현상(59번과 같음)이 다시 나타나 센서·시드 확장은 하지 않았습니다. 대조군은 보관된 53번(공식), RR2는 57번 고정 대조값, 63번은 학습 길이 참조.",
     "config": "experiments/performance/73_l1_step_learning_rate_schedule/config.json",
-    "training_started_kst": "2026-11-03T20:01:00+09:00"
+    "training_started_kst": "2026-11-03T20:01:00+09:00",
+    "model": "experiments/performance/73_l1_step_learning_rate_schedule/model.py",
+    "entrypoint": "experiments/performance/73_l1_step_learning_rate_schedule/run.py",
+    "results": "experiments/performance/73_l1_step_learning_rate_schedule/results",
+    "checkpoints": "experiments/performance/73_l1_step_learning_rate_schedule/checkpoints",
+    "manifest": "experiments/performance/73_l1_step_learning_rate_schedule/manifest.json",
+    "evaluation": {
+      "C2MS_L1S": "experiments/performance/73_l1_step_learning_rate_schedule/results/C2MS_L1S_QB_s42/evaluation/QB_v2_3.json",
+      "C2MS_L1C": "experiments/performance/73_l1_step_learning_rate_schedule/results/C2MS_L1C_QB_s42/evaluation/QB_v2_3.json"
+    },
+    "judgements": {
+      "QB_C2MS_L1S_vs_C2MS53_s42": "부분 개선",
+      "QB_C2MS_L1C_vs_C2MS53_s42": "부분 개선",
+      "stage1_gate": "두 갈래 모두 미통과(test RR PSNR −0.295·−0.026 dB)",
+      "rr2_fixed_reference_2026_10_27": "L1S 통과(+0.724 dB), L1C 미달(−0.286 dB); 판정 변화 없음"
+    }
   }
 }

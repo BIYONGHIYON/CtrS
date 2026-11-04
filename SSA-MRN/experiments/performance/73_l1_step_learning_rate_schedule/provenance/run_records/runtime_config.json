@@ -1,0 +1,195 @@
+{
+  "experiment": 73,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "C2MS L1 학습의 높은 학습률 단계 감소와 학습 연장",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "registered_kst": "2026-11-03",
+  "hypothesis": "QB models above C2MS (S2WMamba 0.63M, LFormer 0.59M, U2Net+PAKAN, CANNet, LAGNet+ADWM) are 3-5x smaller but all train with L1 at a peak learning rate of 3e-4 to 2e-3 for 200-800 epochs, while every full C2MS training so far used 1e-4 -> 1e-6 cosine for 150 or 300 epochs. If C2MS is held back by its schedule rather than by its capacity, a higher step-decayed rate with a longer L1 training raises RR PSNR and lowers SAM with the architecture unchanged.",
+  "evidence": {
+    "experiment_63": "L1 instead of MSE at the same 150-epoch 1e-4 cosine schedule: QB seed 42 RR +0.084 dB, SAM -0.060 deg against 53",
+    "experiment_59": "MSE, 300-epoch 1e-4 cosine: GF2 +0.205 dB, WV3 +0.366 dB, QB test -0.284 dB with QB validation +0.096 dB",
+    "experiment_72": "the C2MS gain sits at periods under 8 px; no learning rate above 1e-4 was ever used for the whole C2MS network (61/62 trained only small heads at 1e-3)",
+    "literature": "S2WMamba 360 epochs, AdamW 4e-4 x0.7 every 100 epochs, L1; U2Net+PAKAN 500 epochs, Adam 4e-4 x0.7 every 100 epochs, L1; CANNet QB 200 epochs, 5e-4 constant, L1; LFormer 800 epochs, 3e-4 x0.1 at 300 and 500, L1 + 0.1 SSIM. Paper-reported settings, not reproduced here."
+  },
+  "arms": {
+    "C2MS_L1S": "unchanged C2MS architecture (SSA-MRN K4 + W2), fresh training, L1 on the original and the 2x coarser pairs, Adam lr 4e-4 multiplied by 0.7 after epochs 100, 200 and 300, 360 epochs",
+    "C2MS_L1C": "the same with lr 1e-4 -> 1e-6 cosine over 360 epochs; separates the learning-rate schedule from the training length"
+  },
+  "comparisons": {
+    "official": "each arm against the archived 53 C2MS of the same seed (v2.3)",
+    "learning_rate": "C2MS_L1S against C2MS_L1C (same loss, same length)",
+    "length": "C2MS_L1C against the archived 63 C2MS_L1 (same loss and rate, 150 epochs)"
+  },
+  "sensors": [
+    "QB"
+  ],
+  "seeds": [
+    42
+  ],
+  "epochs": 360,
+  "batch": 32,
+  "micro": 32,
+  "optimizer": "Adam (beta 0.9, 0.999), no weight decay",
+  "schedules": {
+    "C2MS_L1S": "lr = 4e-4 * 0.7 ** floor(zero_based_epoch / 100): 4e-4 for epochs 1-100, 2.8e-4 for 101-200, 1.96e-4 for 201-300, 1.372e-4 for 301-360",
+    "C2MS_L1C": "lr = 1e-6 + 0.5 * (1e-4 - 1e-6) * (1 + cos(pi * zero_based_epoch / 359))"
+  },
+  "loss": "original per-pixel L1 + 1.0 x per-pixel L1 on the 2x coarser pairs, as experiment 63",
+  "coarse_weight": {
+    "C2MS_L1S": 1.0,
+    "C2MS_L1C": 1.0
+  },
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training with GradScaler; FP32 transforms, loss, validation and evaluation (as 53/63)",
+  "tf32": false,
+  "cudnn_deterministic": true,
+  "layout": "channels_last",
+  "selection": "minimum original-scale validation MSE including epoch 0, earliest exact tie; test never used for selection (same rule as 53/63)",
+  "normalization": {
+    "QB": 2047
+  },
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    }
+  },
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt",
+    "QB_L1_150": "experiments/performance/63_l1_reconstruction_loss/checkpoints/C2MS_L1_QB_s42/best.pt"
+  },
+  "control_policy": "No new control run, as 63: the archived 53 C2MS of the same seed is the official control and the 57 retrained C2MS is reported as a second reference for RR2 and the observation ratio, which vary between runs.",
+  "runtime": "C:/CtrS-p73/run",
+  "queue": [
+    [
+      "QB",
+      "C2MS_L1S",
+      42
+    ],
+    [
+      "QB",
+      "C2MS_L1C",
+      42
+    ]
+  ],
+  "max_parallel": 1,
+  "expected_duration": "about 7 h per arm on the RTX 3060 Ti (53 needed about 3 h for 150 epochs)",
+  "stability_check": "C2MS_L1S is checked after epoch 3 inside the trainer (train.stability): all losses finite, skipped AMP updates <= 1 % of attempted, epoch-3 training loss below epoch 1. If any fails, the run stops and the rate is not changed without user approval.",
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.3 against the same-seed 53 C2MS; single seed noise threshold 0.06 dB",
+    "reported": "validation PSNR/SAM per epoch, RR/RR2/FR_WALD/FR observation, FR QNR/D_lambda/D_s as reference only, the frequency split of experiment 72 for the chosen arm"
+  },
+  "stages": {
+    "1_screen": "QB seed 42, both arms",
+    "1_gate": "an arm passes v2.3 against 53 with RR PSNR >= +0.06 dB and its validation PSNR also above 53 (experiment 59 showed QB validation and test can disagree)",
+    "2": "GF2 and WV3 seed 42 of the passing arm, WV2 transfer reported, after user approval",
+    "3": "seeds 43 and 44 on the sensors that pass, paired 3-seed v2.3 against 53/54; a baseline change needs the 3-seed improvement"
+  },
+  "limits": [
+    "the literature settings were tuned for smaller models; a 2.85M network may train differently at the same rate",
+    "single-seed screen; exploratory test reused",
+    "no automatic baseline replacement"
+  ],
+  "lr_start": 0.0004,
+  "lr_end": 1e-06,
+  "schedule_params": {
+    "C2MS_L1S": {
+      "kind": "step",
+      "start": 0.0004,
+      "factor": 0.7,
+      "every": 100,
+      "stability": {
+        "epoch": 3,
+        "max_skipped_ratio": 0.01
+      }
+    },
+    "C2MS_L1C": {
+      "kind": "cosine",
+      "start": 0.0001,
+      "end": 1e-06
+    }
+  },
+  "cudnn_benchmark": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "cpu_threads": 1,
+  "data_root": "C:/CtrS/PAN-MS",
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "reference_controls": {
+    "QB": "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt"
+  },
+  "cache_reference_manifest": "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json",
+  "runtime_note": "The 2026-10-27 shared cache C:/CtrS-p59 was gone on 2026-11-03 (server reorganized, data re-copied to C:/CtrS/PAN-MS). Caches are rebuilt from the H5 into the runtime and checked against the hashes recorded by experiment 63.",
+  "source_hashes": {
+    "experiments/performance/73_l1_step_learning_rate_schedule/model.py": "2a757a02abd29e94922942d53efebf9bf837a938588ba7b118c4f0693aaca04c",
+    "experiments/performance/73_l1_step_learning_rate_schedule/prepare.py": "2a4d2bfeaf27ea74a8a49e4f53851f7b39b839cdcfc56870be115a653d6d6253",
+    "experiments/performance/73_l1_step_learning_rate_schedule/train.py": "79ea1475bbd6d9730c35304df0805a5b1aefa8dbbffb04303974f180484b85a0",
+    "experiments/performance/73_l1_step_learning_rate_schedule/run.py": "7da26d77bf5af57c81200956c41f1ba1b050d96372f1ce1d8f82922445f93a86",
+    "experiments/performance/73_l1_step_learning_rate_schedule/config.json": "5c1d85b3f3b01bb29ffa7ef3619dcd2bf583e6b56113cfac2308a711e550a49d",
+    "experiments/performance/73_l1_step_learning_rate_schedule/evaluate.py": "9d1c0e25219bb2086091522a6e21974b57d899ec07c29914703009254314aba2",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/train.py": "55c150b067788191664e5f72885e065b1a222fcaeb0fe97a6b13050dc08a7dc5",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/evaluate.py": "e7e60ab17aea8d55f9d1d92fc57c1bd166e50f44d936b1d29c190c25ed818a7a",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/config.json": "821c9038a3c6fa296d96176074b3d91c86a9df3d5a9ffd115eb727de310546e4",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16",
+    "common/result_images.py": "2fc73537d7d60fa8c9d19a036ad0bb53e9ab1231b9811fd6d8e9b5159675c737",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt": "3ab7f20c2fda333f2698163af3b0b6c77030d2436f3407f1c58f3224e689de40",
+    "experiments/performance/63_l1_reconstruction_loss/checkpoints/C2MS_L1_QB_s42/best.pt": "be5bf09e174d3917ebd82fdc097c000b3c1546ef3be2bb78337a7a0305d6424d",
+    "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt": "61f5fc49c4c401496bc514fae32c4d070eb95f0591d01843477e91d63b61b5fa",
+    "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json": "5eff51d1aab2a971d850296817ec91de3fcc0560086d75969a11035e04f3d5ad"
+  },
+  "created_kst": "2026-11-03T20:01:38.700250+09:00",
+  "coarse_cache_equal_to_63": {
+    "QB_train_coarse_pan": true,
+    "QB_train_coarse_lms": true,
+    "QB_train_coarse_ms": true,
+    "QB_train_coarse_gt": true,
+    "QB_val_coarse_pan": true,
+    "QB_val_coarse_lms": true,
+    "QB_val_coarse_ms": true,
+    "QB_val_coarse_gt": true
+  },
+  "cache_manifest_sha256": "d0a70a5efe10aaed25923f14a002f37f9eb452866df92c47c58c696403e50ba3",
+  "benchmark": {
+    "QB_C2MS_L1S": {
+      "median_step_seconds": 0.1627150000003894,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.533203125
+    },
+    "QB_C2MS_L1C": {
+      "median_step_seconds": 0.1406840499998907,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.533203125
+    }
+  },
+  "fingerprint": "8b63a703f2f407707a6e77688258db64ac800ddad732d8eb81bcbd2670d8a1ac"
+}

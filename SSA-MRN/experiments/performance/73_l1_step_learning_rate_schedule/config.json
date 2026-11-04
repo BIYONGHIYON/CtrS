@@ -3,8 +3,8 @@
   "research_track": "performance",
   "experimenter": "이병현",
   "title": "C2MS L1 학습의 높은 학습률 단계 감소와 학습 연장",
-  "status": "계획",
-  "improvement": "판단 보류",
+  "status": "평가 완료",
+  "improvement": "부분 개선",
   "registered_kst": "2026-11-03",
   "hypothesis": "QB models above C2MS (S2WMamba 0.63M, LFormer 0.59M, U2Net+PAKAN, CANNet, LAGNet+ADWM) are 3-5x smaller but all train with L1 at a peak learning rate of 3e-4 to 2e-3 for 200-800 epochs, while every full C2MS training so far used 1e-4 -> 1e-6 cosine for 150 or 300 epochs. If C2MS is held back by its schedule rather than by its capacity, a higher step-decayed rate with a longer L1 training raises RR PSNR and lowers SAM with the architecture unchanged.",
   "evidence": {
