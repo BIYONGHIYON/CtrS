@@ -1,0 +1,135 @@
+{
+  "experiment": 75,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "축소한 W2 병렬 가지의 폭과 깊이 비교",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "registered_kst": "2026-11-04",
+  "hypothesis": "Experiment 74 (branch 64 channels x 4 blocks, 0.33M) kept 42% of the C2MS RR PSNR gain over the original (SAM 18%), so most of the gain needs branch capacity. Between 74 and C2MS (128 x 8, 2.43M), keeping the width (128 x 4) or keeping the depth (64 x 8) shows which of the two the gain depends on, and how close a 1.05-1.67M model comes to C2MS.",
+  "evidence": {
+    "experiment_74": "64 x 4 branch: RR -0.521 dB, SAM +0.317 deg against 53 C2MS; +0.385 dB against the original; training MSE stayed 1.28x C2MS from epoch 50 (capacity limit, not under-training)",
+    "experiment_74_benchmark": "single job 0.148 s/step at 41-47% GPU use; two jobs 0.189 s/step each (about 1.5x throughput)"
+  },
+  "arms": {
+    "C2MS_W128D4": "C2MS with the W2 branch PixelUnshuffle(2) -> 1x1 256->128 -> 4 residual blocks at 128 channels -> 1x1 128->256 (zero init) -> PixelShuffle(2); the C2MS width with half the depth",
+    "C2MS_W64D8": "the same with 1x1 256->64 -> 8 residual blocks at 64 channels -> 1x1 64->256; the C2MS depth with half the width"
+  },
+  "parameters": {
+    "C2MS": 2853918,
+    "C2MS_W128D4": 1673246,
+    "C2MS_W64D8": 1050590,
+    "C2MS_M_74": 755166,
+    "original": 426654,
+    "branch": {
+      "C2MS (128x8)": 2427264,
+      "W128D4": 1246592,
+      "W64D8": 623936,
+      "74 (64x4)": 328512
+    }
+  },
+  "loss": "original-pair MSE + 1.0 x 2x-coarser-pair MSE, as 53",
+  "coarse_weight": {
+    "C2MS_W128D4": 1.0,
+    "C2MS_W64D8": 1.0
+  },
+  "epochs": 150,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "schedule": "Adam lr = 1e-6 + 0.5 * (1e-4 - 1e-6) * (1 + cos(pi * zero_based_epoch / 149)), as 53",
+  "comparisons": {
+    "official": "each arm against the archived 53 C2MS of the same seed (criteria v2.4, RR only)",
+    "run_to_run": "each arm against the 57 retrained C2MS (reference)",
+    "retention": "share of the C2MS RR PSNR gain over the original 43 C0 kept by each arm, read with 74 (64 x 4) as a capacity curve",
+    "width_vs_depth": "C2MS_W128D4 against C2MS_W64D8 (same seed, reported, not a judgement)"
+  },
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt"
+  },
+  "reference_controls": {
+    "QB": "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt"
+  },
+  "original": {
+    "QB": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s42/best.pt"
+  },
+  "control_policy": "No new control run: the archived 53 C2MS of the same seed is the official control and the 57 retrained C2MS shows run-to-run variation.",
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.4: RR PSNR, SAM, ERGAS against the same-seed 53 C2MS; single seed noise threshold 0.06 dB; FR QNR/D_lambda/D_s reference only",
+    "reported": "validation PSNR/SAM per epoch, RR against 53, 57 and the original, share of the C2MS gain kept, FR QNR reference, epoch time of two concurrent trainings"
+  },
+  "stages": {
+    "1_screen": "QB seed 42, both arms trained at the same time",
+    "reading": "the arms are smaller than C2MS; the result reports the v2.4 label against 53 and the share of the gain kept, together with 74 and C2MS",
+    "next": "seeds 43/44 or GF2/WV3 only after user approval"
+  },
+  "limits": [
+    "single-seed screen; exploratory test reused",
+    "two trainings share the GPU; cudnn benchmark may pick different algorithms under load, which can change floating-point details but not the training recipe",
+    "no automatic baseline replacement"
+  ],
+  "runtime": "C:/CtrS-p75/run",
+  "queue": [
+    [
+      "QB",
+      "C2MS_W128D4",
+      42
+    ],
+    [
+      "QB",
+      "C2MS_W64D8",
+      42
+    ]
+  ],
+  "expected_duration": "about 4 h for both arms together (74: 68 s per epoch alone; two concurrent jobs measured 1.37x slower per step)",
+  "sensors": [
+    "QB"
+  ],
+  "seeds": [
+    42
+  ],
+  "batch": 32,
+  "micro": 32,
+  "optimizer": "Adam (beta 0.9, 0.999), no weight decay",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training with GradScaler; FP32 transforms, loss, validation and evaluation (as 53/63)",
+  "tf32": false,
+  "cudnn_deterministic": true,
+  "layout": "channels_last",
+  "selection": "minimum original-scale validation MSE including epoch 0, earliest exact tie; test never used for selection (same rule as 53/63)",
+  "normalization": {
+    "QB": 2047
+  },
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    }
+  },
+  "max_parallel": 2,
+  "cudnn_benchmark": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "cpu_threads": 1,
+  "data_root": "C:/CtrS/PAN-MS",
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "cache_reference_manifest": "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json"
+}

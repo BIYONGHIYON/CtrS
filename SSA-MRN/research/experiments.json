@@ -2601,5 +2601,22 @@
       "retention_of_C2MS_RR_PSNR_gain": 0.425,
       "criteria": "v2.4"
     }
+  },
+  "performance/75_parallel_branch_width_depth": {
+    "report": "experiments/performance/75_parallel_branch_width_depth/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 75,
+    "display_name": "75. 축소한 W2 병렬 가지의 폭과 깊이 비교",
+    "status": "계획",
+    "improvement": "판단 보류",
+    "evaluated_seeds": [],
+    "retraining": true,
+    "epochs": 150,
+    "limits": "C2MS의 W2 가지를 폭 유지·깊이 절반(128채널 × 4블록, 전체 1.67M)과 깊이 유지·폭 절반(64채널 × 8블록, 1.05M)으로 바꿔 74번(64 × 4)과 C2MS(128 × 8) 사이를 봅니다. 학습 조건은 53번과 같고 두 갈래를 동시에 학습합니다(QB seed 42).",
+    "config": "experiments/performance/75_parallel_branch_width_depth/config.json",
+    "model": "experiments/performance/75_parallel_branch_width_depth/model.py",
+    "entrypoint": "experiments/performance/75_parallel_branch_width_depth/run.py"
   }
 }
