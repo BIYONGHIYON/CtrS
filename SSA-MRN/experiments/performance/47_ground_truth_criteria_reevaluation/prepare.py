@@ -1,4 +1,6 @@
-"""보존된 v2 측정 요약으로 현재 실험 표용 판정(v2.2, v2.3)을 계산합니다."""
+"""보존된 v2 측정 요약으로 현재 실험 표용 판정(v2.2, v2.3, v2.4)을 계산합니다.
+
+v2.4(2026-11-04): RR 주 판정(잡음 문턱 포함)만으로 판정하고 RR2·FR_WALD·FR_OBS는 참고로만 기록합니다."""
 
 import hashlib
 import json
@@ -34,12 +36,18 @@ def rejudge(record, version="v2.2"):
         "rr_components_improved": components,
         "label": label,
     }
-    if version == "v2.3":
+    if version == "v2.4":
+        label = "부분 개선" if any(components.values()) else "개선 없음"
+        out["guards_reference_only"] = out.pop("guards")
+        out["label"] = label
+    if version in ("v2.3", "v2.4"):
         threshold = NOISE.get(len(record["seeds"]), NOISE_MULTI)
         above = rr["PSNR"] >= threshold
         out["noise_threshold_dB"] = threshold
         out["above_noise"] = above
-        if label == "개선" and not above:
+        if version == "v2.4" and primary and above:
+            out["label"] = "개선"
+        elif (primary if version == "v2.4" else label == "개선") and not above:
             out["label"] = "부분 개선"
             out["note"] = "all items pass but RR dPSNR is below the noise threshold"
     return out
@@ -60,10 +68,11 @@ def main(version="v2.2"):
         "scope": "QB; original measured seed means; no training or inference; current table labels only",
         "aggregation": "single seed or all paired seed means; no majority condition; OBS ratio of seed means",
         "thresholds": {"RR": {"PSNR_gt": 0, "SAM_lt": 0, "ERGAS_lt": 0},
-                       "RR2": {"PSNR_ge": -0.05, "SAM_le": 0.06},
-                       "FR_WALD": {"PSNR_ge": -0.07, "SAM_le": 0.04},
-                       "FR_OBS_ratio_le": 1.10,
-                       **({"RR_PSNR_noise_ge": {"1_seed": NOISE[1], "2_or_more_seeds": NOISE_MULTI}} if version == "v2.3" else {})},
+                       **({} if version == "v2.4" else {"RR2": {"PSNR_ge": -0.05, "SAM_le": 0.06},
+                                                        "FR_WALD": {"PSNR_ge": -0.07, "SAM_le": 0.04},
+                                                        "FR_OBS_ratio_le": 1.10}),
+                       **({"RR_PSNR_noise_ge": {"1_seed": NOISE[1], "2_or_more_seeds": NOISE_MULTI}} if version in ("v2.3", "v2.4") else {})},
+        **({"reference_only": "RR2, FR_WALD, FR_OBS and FR QNR/D_lambda/D_s are reported but not used"} if version == "v2.4" else {}),
         "counts": dict(counts),
         "judgements": judgements,
     }

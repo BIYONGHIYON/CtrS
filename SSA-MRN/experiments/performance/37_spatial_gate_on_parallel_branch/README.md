@@ -10,6 +10,8 @@
 |---|:---:|:---:|
 | seed42: RR PSNR +0.02817 dB·SAM −0.01138°, 잠정 FR QNR −0.04456입니다. QNR과 Ds는 20장 모두 악화했습니다. 기준 모델 채택을 보류합니다. | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 
+> **현재 표 판정 (2026-11-04, [판정 기준 v2.4](../../../docs/judgement_criteria.md#보조-판정을-참고로-바꿈-v23--v24)):** **부분 개선**. seed42: RR ΔPSNR +0.028dB·ΔSAM −0.011°·ΔERGAS −0.009로 세 지표가 좋아졌지만 잡음 문턱 0.06dB 미만(잡음 수준)입니다. 잠정 FR QNR −0.045(참고). 위 요약 표는 작성 당시 판정입니다.
+
 [실험 목록](../../../README.md#performance-experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [재현 자료](#evidence)
 
 ## 1. 목적과 상태

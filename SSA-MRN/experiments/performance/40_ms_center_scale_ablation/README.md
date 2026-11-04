@@ -10,6 +10,8 @@
 |---|:---:|:---:|
 | seed42 네 군의100epoch 학습을 완료했습니다. A3 validation MSE가 가장 낮았고 A1·A2는 반복 진행 기준을 넘었습니다. RR·FR은 미평가입니다. | 학습&nbsp;완료<br>평가&nbsp;대기 | 판단&nbsp;보류 |
 
+> **현재 표 판정 (2026-11-04, [판정 기준 v2.4](../../../docs/judgement_criteria.md#보조-판정을-참고로-바꿈-v23--v24)):** **개선**. QB seed42: A3 개선(v2.4); A1·A2 부분 개선. A3 RR ΔPSNR +0.211dB·ΔSAM −0.124°·ΔERGAS −0.117. RR2 미달은 참고 지표입니다. 위 요약 표는 작성 당시 판정입니다.
+
 [실험 목록](../../../research/performance/README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [재현 자료](#evidence)
 
 ## 1. 목적과 상태
