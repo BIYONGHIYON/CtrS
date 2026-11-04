@@ -1912,5 +1912,22 @@
       "stage1_gate": "두 갈래 모두 미통과(test RR PSNR −0.295·−0.026 dB)",
       "criteria": "v2.4(RR만, 2026-11-04 재집계, 판정 변화 없음)"
     }
+  },
+  "performance/74_backbone_matched_parallel_branch": {
+    "report": "experiments/performance/74_backbone_matched_parallel_branch/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 74,
+    "display_name": "74. W2 병렬 가지의 폭·깊이를 원본 backbone과 같게 줄인 C2MS",
+    "status": "계획",
+    "improvement": "판단 보류",
+    "evaluated_seeds": [],
+    "retraining": true,
+    "epochs": 150,
+    "limits": "C2MS의 W2 가지에서 PixelUnshuffle(2)·PixelShuffle(2)는 유지하고, 내부를 원본 backbone과 같은 64채널 잔차 블록 4개(1×1 256→64·64→256 사이)로 바꿨습니다. 가지 2.43M → 0.33M, 전체 2.85M → 0.76M이며 학습 조건은 53번과 같습니다(QB seed 42).",
+    "config": "experiments/performance/74_backbone_matched_parallel_branch/config.json",
+    "model": "experiments/performance/74_backbone_matched_parallel_branch/model.py",
+    "entrypoint": "experiments/performance/74_backbone_matched_parallel_branch/run.py"
   }
 }
