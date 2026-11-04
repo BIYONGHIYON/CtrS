@@ -8,7 +8,7 @@
 |---|:---:|:---:|
 | 53번 C2MS 대비 test RR PSNR +0.084 dB·SAM −0.060°·ERGAS −0.027(PSNR 17/20장, SAM 20/20장)로 주 판정과 잡음 문턱을 통과했습니다. RR2는 2026-10-27 정한 고정 대조값(57번 재학습 C2MS) 기준으로 통과했지만(+0.120 dB, −0.063°), 관측 비율(1.32)이 미달했습니다. validation은 PSNR −0.073 dB로 test와 반대 방향입니다. | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 
-> **현재 표 판정 (2026-11-04, [판정 기준 v2.4](../../../docs/judgement_criteria.md#보조-판정을-참고로-바꿈-v23--v24)):** **개선**. 53번 대비 test RR PSNR +0.084 dB·SAM −0.060°·ERGAS −0.027(SAM 20/20장)로 개선(v2.4)입니다. 관측 비율 1.32는 참고 지표입니다. validation PSNR은 −0.073 dB로 test와 반대입니다. 위 요약 표는 작성 당시 판정입니다.
+> **현재 표 판정 (2026-11-04, [판정 기준 v2.4](../../../docs/judgement_criteria.md#보조-판정-삭제-v23--v24)):** **개선**. 53번 대비 test RR PSNR +0.084 dB·SAM −0.060°·ERGAS −0.027(SAM 20/20장)로 개선(v2.4)입니다. validation PSNR은 −0.073 dB로 test와 반대입니다. 위 요약 표는 작성 당시 판정입니다.
 
 [실험 목록](../../../research/performance/README.md) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [재현 자료](#evidence)
 

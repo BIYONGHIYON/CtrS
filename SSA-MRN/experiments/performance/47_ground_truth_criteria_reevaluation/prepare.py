@@ -1,6 +1,7 @@
 """보존된 v2 측정 요약으로 현재 실험 표용 판정(v2.2, v2.3, v2.4)을 계산합니다.
 
-v2.4(2026-11-04): RR 주 판정(잡음 문턱 포함)만으로 판정하고 RR2·FR_WALD·FR_OBS는 참고로만 기록합니다."""
+v2.4(2026-11-04): RR 지표(잡음 문턱 포함)만으로 판정합니다. 보조 판정(RR2·FR_WALD·FR_OBS)은 삭제해 출력에 남기지 않고,
+FR QNR·Dλ·Ds는 참고로 남깁니다."""
 
 import hashlib
 import json
@@ -38,8 +39,9 @@ def rejudge(record, version="v2.2"):
     }
     if version == "v2.4":
         label = "부분 개선" if any(components.values()) else "개선 없음"
-        out["guards_reference_only"] = out.pop("guards")
-        out["label"] = label
+        out = {"delta": {"RR": rr, "FR": delta["FR"]}, "seeds": record["seeds"],
+               "psnr_seeds_improved": record["psnr_seeds_improved"], "original_v2_label": record["label"],
+               "primary": primary, "rr_components_improved": components, "label": label}
     if version in ("v2.3", "v2.4"):
         threshold = NOISE.get(len(record["seeds"]), NOISE_MULTI)
         above = rr["PSNR"] >= threshold
@@ -66,13 +68,13 @@ def main(version="v2.2"):
         "source": "results/summary.json",
         "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
         "scope": "QB; original measured seed means; no training or inference; current table labels only",
-        "aggregation": "single seed or all paired seed means; no majority condition; OBS ratio of seed means",
+        "aggregation": "single seed or all paired seed means; no majority condition" + ("" if version == "v2.4" else "; OBS ratio of seed means"),
         "thresholds": {"RR": {"PSNR_gt": 0, "SAM_lt": 0, "ERGAS_lt": 0},
                        **({} if version == "v2.4" else {"RR2": {"PSNR_ge": -0.05, "SAM_le": 0.06},
                                                         "FR_WALD": {"PSNR_ge": -0.07, "SAM_le": 0.04},
                                                         "FR_OBS_ratio_le": 1.10}),
                        **({"RR_PSNR_noise_ge": {"1_seed": NOISE[1], "2_or_more_seeds": NOISE_MULTI}} if version in ("v2.3", "v2.4") else {})},
-        **({"reference_only": "RR2, FR_WALD, FR_OBS and FR QNR/D_lambda/D_s are reported but not used"} if version == "v2.4" else {}),
+        **({"reference_only": "FR QNR/D_lambda/D_s are reported but not used; RR2, FR_WALD and FR_OBS were removed from the criteria"} if version == "v2.4" else {}),
         "counts": dict(counts),
         "judgements": judgements,
     }

@@ -122,7 +122,7 @@
 
 </details>
 
-**[더 많은 이미지 보기 →](SSA-MRN/docs/c2ms_result_images.md)** QB·GF2·WV3·WV2의 6장면 전체(원본 크기·확대 비교). FR(정답 없음)·RR2 비교 패널과 이전 기준 모델 F1과의 비교는 [성능 53번 보고서](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)에 있습니다.
+**[더 많은 이미지 보기 →](SSA-MRN/docs/c2ms_result_images.md)** QB·GF2·WV3·WV2의 6장면 전체(원본 크기·확대 비교). FR(정답 없음) 비교 패널과 이전 기준 모델 F1과의 비교는 [성능 53번 보고서](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)에 있습니다.
 
 ## 원본 대비 개선
 
@@ -130,14 +130,14 @@ test 20장, 같은 시드(42·43·44) 원본과 짝지은 3시드 평균 차이�
 
 [데이터셋·시드별 전체 평가 수치 보기 →](SSA-MRN/docs/c2ms_evaluation_tables.md) 성능 53·54번의 원본·C2MS 절대 수치와 시드별 차이, 3시드 평균을 정리했습니다.
 
-| 데이터셋 | RR PSNR | RR SAM | RR ERGAS | FR_WALD PSNR | RR2 PSNR | FR 관측 오차 | 판정 |
-|---|---:|---:|---:|---:|---:|---:|:---:|
-| QB ([성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)) | +0.873 dB | −0.365° | −0.413 | +1.635 dB | +1.125 dB | 0.63배 | 개선 |
-| GF2 ([성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md)) | +2.045 dB | −0.163° | −0.188 | +2.423 dB | +2.271 dB | 0.59배 | 개선 |
-| WV3 ([성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md)) | +1.007 dB | −0.419° | −0.313 | +0.966 dB | +4.606 dB | 0.68배 | 개선 |
-| WV2 전이 ([성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md)) | +0.828 dB | −0.399° | −0.426 | +0.764 dB | +1.131 dB | 0.57배 | 개선 |
+| 데이터셋 | RR PSNR | RR SAM | RR ERGAS | 판정 |
+|---|---:|---:|---:|:---:|
+| QB ([성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)) | +0.873 dB | −0.365° | −0.413 | 개선 |
+| GF2 ([성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md)) | +2.045 dB | −0.163° | −0.188 | 개선 |
+| WV3 ([성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md)) | +1.007 dB | −0.419° | −0.313 | 개선 |
+| WV2 전이 ([성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md)) | +0.828 dB | −0.399° | −0.426 | 개선 |
 
-네 데이터셋 모두 판정 기준 v2.4의 RR 판정을 통과했고 참고 지표(FR_WALD·RR2·FR 관측 오차)도 모두 원본보다 좋았으며, RR PSNR은 각각 20장 모두에서 원본보다 높았습니다. WV2는 WV3로 학습한 모델을 학습하지 않은 센서에 그대로 적용한 결과입니다. 학습에 2배 거친 쌍을 넣어 RR2(더 거친 시험)는 처음 보는 축척이 아니며, FR(원래 해상도) 방향의 일반화는 직접 확인하지 못했습니다.
+네 데이터셋 모두 판정 기준 v2.4의 RR 판정을 통과했고, RR PSNR은 각각 20장 모두에서 원본보다 높았습니다. WV2는 WV3로 학습한 모델을 학습하지 않은 센서에 그대로 적용한 결과입니다. FR(원래 해상도) 방향의 일반화는 직접 확인하지 못했습니다.
 
 <a id="compare"></a>
 
@@ -205,7 +205,7 @@ C2MS는 성능 53번 3시드 가중치를 공식 DLPan MATLAB 코드로 재평�
 
 ### 판정 기준 ([v2.4](SSA-MRN/docs/judgement_criteria.md))
 
-실험 표의 개선 여부는 같은 조건 대조군과 짝지은 RR test(정답이 있는 시험)만으로 판정합니다. 2026-11-04부터 이전 보조 판정 3개(RR2·FR_WALD·FR 관측 일치)는 참고로만 보고합니다.
+실험 표의 개선 여부는 같은 조건 대조군과 짝지은 RR test(정답이 있는 시험)만으로 판정합니다. 2026-11-04부터 이전 보조 판정 3개(RR2·FR_WALD·FR 관측 일치)는 기준에서 삭제했습니다.
 
 | 판정 | 조건 |
 |---|---|
@@ -218,16 +218,15 @@ C2MS는 성능 53번 3시드 가중치를 공식 DLPan MATLAB 코드로 재평�
 | 구분 | 시험 | 조건 |
 |---|---|---|
 | 판정 | RR test 20장 | PSNR·SAM·ERGAS 모두 개선, PSNR 이득 ≥ 잡음 문턱(단일 시드 0.06 dB, 2시드 이상 0.04 dB) |
-| 참고 | RR2(RR 입력을 한 번 더 1/4 축소)·FR_WALD(원래 해상도를 1/4 축소, 실제 MS가 정답)·FR 관측 일치 | 판정에 쓰지 않고 보고만 함 |
 | 참고 | FR QNR·Dλ·Ds | [정답 순위 검사](SSA-MRN/experiments/performance/46_fr_spatial_index_validity/README.md)를 통과하지 못해 보고만 함 |
 
 <details>
 <summary>판정 세부 규칙</summary>
 
 - 여러 시드는 같은 조건 대조군과 짝지은 전체 시드의 평균으로 판정하고, 시드 수와 시드별 결과를 함께 보고합니다. 단일 시드도 RR 판정을 통과하면 개선으로 표기합니다.
-- 47번 이전 실험은 [성능 47번 재평가](SSA-MRN/experiments/performance/47_ground_truth_criteria_reevaluation/README.md)의 보존된 측정값을 v2.4로 다시 집계한 판정을 표에 씁니다. 원래 v2 판정과 v2.3 집계는 보존합니다.
+- 47번 이전 실험은 [성능 47번 재평가](SSA-MRN/experiments/performance/47_ground_truth_criteria_reevaluation/README.md)의 보존된 측정값을 v2.4로 다시 집계한 판정을 표에 씁니다. 원래 v2 판정과 v2.3 집계는 기록으로 보존합니다.
 - 여러 센서를 평가한 실험은 센서별 판정을 확인된 결과에 적고, 평가한 센서가 모두 개선일 때만 실험 전체를 개선으로 표기합니다.
 - 현재 표의 판정 범위는 QB이며 다른 센서·배율로 확대하지 않습니다.
-- 개선 표기와 기준 모델 교체는 구분합니다. 기준 모델 교체에는 3시드 이상의 개선이 필요하고, 참고 지표와 FR·RR2 비교 이미지도 함께 확인합니다.
+- 개선 표기와 기준 모델 교체는 구분합니다. 기준 모델 교체에는 3시드 이상의 개선이 필요하고, FR 비교 이미지도 함께 확인합니다.
 
 </details>
