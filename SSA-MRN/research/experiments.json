@@ -2569,5 +2569,37 @@
       "stage1_gate": "두 갈래 모두 미통과(test RR PSNR −0.295·−0.026 dB)",
       "criteria": "v2.4(RR만, 2026-11-04 재집계, 판정 변화 없음)"
     }
+  },
+  "performance/74_backbone_matched_parallel_branch": {
+    "report": "experiments/performance/74_backbone_matched_parallel_branch/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 74,
+    "display_name": "74. W2 병렬 가지의 폭·깊이를 원본 backbone과 같게 줄인 C2MS",
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "epochs": 150,
+    "limits": "53번 C2MS 대비 test RR PSNR −0.521 dB·SAM +0.317°·ERGAS +0.244로 세 지표 모두 나빠졌습니다(20/20장 하락). 원본 대비로는 +0.385 dB로 C2MS 이득의 42%(SAM은 18%)가 남아, C2MS 이득의 절반 이상은 W2 가지의 용량에서 나옵니다. 스텝 시간은 C2MS와 같고 학습 중 GPU 사용률이 절반이라, 두 학습 동시 실행 시 처리량이 약 1.5배입니다.",
+    "config": "experiments/performance/74_backbone_matched_parallel_branch/config.json",
+    "model": "experiments/performance/74_backbone_matched_parallel_branch/model.py",
+    "entrypoint": "experiments/performance/74_backbone_matched_parallel_branch/run.py",
+    "last_checked": "2026-11-04T17:12:40+09:00",
+    "results": "experiments/performance/74_backbone_matched_parallel_branch/results",
+    "checkpoints": "experiments/performance/74_backbone_matched_parallel_branch/checkpoints",
+    "manifest": "experiments/performance/74_backbone_matched_parallel_branch/manifest.json",
+    "training_started_kst": "2026-11-04T14:21:00+09:00",
+    "evaluation": "experiments/performance/74_backbone_matched_parallel_branch/results/C2MS_M_QB_s42/evaluation/QB_v2_4.json",
+    "judgements": {
+      "QB_C2MS_M_vs_C2MS53_s42": "개선 없음",
+      "QB_C2MS_M_vs_C2MS57_s42": "개선 없음",
+      "QB_C2MS_M_vs_original_s42": "개선",
+      "retention_of_C2MS_RR_PSNR_gain": 0.425,
+      "criteria": "v2.4"
+    }
   }
 }

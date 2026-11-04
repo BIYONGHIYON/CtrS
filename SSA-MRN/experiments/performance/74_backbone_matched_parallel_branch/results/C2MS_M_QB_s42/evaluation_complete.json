@@ -1,0 +1,119 @@
+{
+  "time_kst": "2026-11-04T17:12:40.349660+09:00",
+  "weights": {
+    "C2MS": {
+      "path": "C:\\CtrS-p74\\SSA-MRN\\experiments\\performance\\53_scale_mixed_training\\checkpoints\\C2MS_QB_s42\\best.pt",
+      "sha256": "3ab7f20c2fda333f2698163af3b0b6c77030d2436f3407f1c58f3224e689de40",
+      "best_epoch": 149
+    },
+    "C2MS_M": {
+      "path": "C:\\CtrS-p74\\run\\runs\\QB_C2MS_M_s42\\checkpoints\\best.pt",
+      "sha256": "561b15fd40fa4c66768f01b9732e8a8a0aa44b223808eb3fa73a2bd175267634",
+      "best_epoch": 150
+    },
+    "C2MS_57": {
+      "path": "C:\\CtrS-p74\\SSA-MRN\\experiments\\performance\\57_c2ms_training_conditions\\checkpoints\\C2MS_QB_s42\\best.pt",
+      "sha256": "61f5fc49c4c401496bc514fae32c4d070eb95f0591d01843477e91d63b61b5fa",
+      "best_epoch": 145
+    },
+    "C0": {
+      "path": "C:\\CtrS-p74\\SSA-MRN\\experiments\\performance\\43_normalized_parallel_capacity\\checkpoints\\C0_QB_s42\\best.pt",
+      "sha256": "f3255077687f0cfefb307961957b9ecc4973555d8b926008d778858c60f50406",
+      "best_epoch": 148
+    }
+  },
+  "parameters": {
+    "C2MS": 2853918,
+    "C2MS_M": 755166,
+    "C2MS_57": 2853918,
+    "C0": 426654
+  },
+  "judgement": {
+    "official_vs_53": {
+      "delta_RR": {
+        "SAM": 0.3170564937462128,
+        "ERGAS": 0.24397736472817844,
+        "PSNR": -0.5213961555363582,
+        "SCC": -0.0031567031816585045,
+        "Q2n": -0.007868823945941905
+      },
+      "delta_FR_reference": {
+        "D_lambda": 0.0037773257364226223,
+        "D_s": -0.10488490198594112,
+        "QNR": 0.0990387520050412
+      },
+      "rr_components_improved": {
+        "PSNR": false,
+        "SAM": false,
+        "ERGAS": false
+      },
+      "noise_threshold": 0.06,
+      "above_noise": false,
+      "label": "개선 없음"
+    },
+    "reference_vs_57": {
+      "delta_RR": {
+        "SAM": 0.3204509010944534,
+        "ERGAS": 0.24764520823396197,
+        "PSNR": -0.5305266846475476,
+        "SCC": -0.003175829644342709,
+        "Q2n": -0.00790054972108789
+      },
+      "delta_FR_reference": {
+        "D_lambda": 0.005783845065774781,
+        "D_s": -0.10522363251143894,
+        "QNR": 0.09749187432742745
+      },
+      "rr_components_improved": {
+        "PSNR": false,
+        "SAM": false,
+        "ERGAS": false
+      },
+      "noise_threshold": 0.06,
+      "above_noise": false,
+      "label": "개선 없음"
+    },
+    "reference_vs_original": {
+      "delta_RR": {
+        "SAM": -0.07100446161748142,
+        "ERGAS": -0.18846563961483476,
+        "PSNR": 0.3852521972985201,
+        "SCC": 0.0029171966942359573,
+        "Q2n": 0.004165235711516391
+      },
+      "delta_FR_reference": {
+        "D_lambda": -0.012240531367673009,
+        "D_s": 0.0033912286632601027,
+        "QNR": 0.0080660193386356
+      },
+      "rr_components_improved": {
+        "PSNR": true,
+        "SAM": true,
+        "ERGAS": true
+      },
+      "noise_threshold": 0.06,
+      "above_noise": true,
+      "label": "개선"
+    }
+  },
+  "retention": {
+    "c2ms_gain_dB": 0.9066483528348783,
+    "arm_gain_dB": 0.3852521972985201,
+    "share": 0.4249190947007472
+  },
+  "validation": {
+    "arm": {
+      "val_mse": 0.0001611118391372904,
+      "val_psnr": 39.54819719609939,
+      "val_sam": 4.521540162481653
+    },
+    "control_53": {
+      "val_mse": 0.00013368997450487113,
+      "val_psnr": 40.28266795801678,
+      "val_sam": 4.226184513624599
+    },
+    "delta_psnr": -0.7344707619173931,
+    "delta_sam": 0.2953556488570541
+  },
+  "scope": "full 20-scene RR (judgement) and FR QNR (reference); v2.4; single seed; no automatic baseline promotion"
+}
