@@ -10,6 +10,8 @@
 |---|:---:|:---:|
 | seed42에서 원본(C0) 대비 RR PSNR +0.650 dB·SAM −0.372°, FR_WALD +1.341 dB, 관측 오차 0.61배였지만 RR2가 −0.266 dB·SAM +0.204°로 미달했습니다. W2 단독(C2)과 RR2가 거의 같아(−0.007 dB), 보정기가 W2의 RR2 미달을 없애지 못했습니다. | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
 
+> **현재 표 판정 (2026-11-04, [판정 기준 v2.4](../../../docs/judgement_criteria.md#보조-판정을-참고로-바꿈-v23--v24)):** **개선**. seed42 원본 대비 WF RR ΔPSNR +0.650dB·ΔSAM −0.372°·ΔERGAS −0.324로 개선(v2.4)입니다. FR_WALD +1.341dB·관측 RMSE 0.610배, RR2 −0.266dB·SAM +0.204°는 참고 지표입니다(W2 단독과 RR2가 거의 같음). 위 요약 표는 작성 당시 판정입니다.
+
 [실험 목록](../../../research/performance/README.md) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [재현 자료](#evidence)
 
 ## 1. 목적과 상태

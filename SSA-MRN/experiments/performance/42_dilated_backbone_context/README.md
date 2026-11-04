@@ -10,6 +10,8 @@
 |---|:---:|:---:|
 | 3seed 평균 RR PSNR +0.12171dB·SAM −0.02500°·ERGAS −0.06130입니다. 잠정 FR QNR +0.00360이나 Ds +0.00121로 공간 왜곡이 악화되고 seed별 상충이 있습니다. | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
 
+> **현재 표 판정 (2026-11-04, [판정 기준 v2.4](../../../docs/judgement_criteria.md#보조-판정을-참고로-바꿈-v23--v24)):** **개선**. QB 3시드 평균: dilated 개선(v2.4). RR ΔPSNR +0.122dB·ΔSAM −0.025°·ΔERGAS −0.061. RR2 미달은 참고 지표입니다. 위 요약 표는 작성 당시 판정입니다.
+
 [실험 목록](../../../README.md#performance-experiments) · [재현 자료](#evidence)
 
 ## 1. 목적과 상태

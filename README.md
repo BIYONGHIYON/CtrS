@@ -44,7 +44,7 @@
 | 단계 | 실험 | 한 일 | 결과와 다음 단계로 이어진 점 |
 |---:|---|---|---|
 | 0 | [성능 2번](SSA-MRN/research/performance/2_paper_setting_reproduction/README.md) 외 | 원본 SSA-MRN 재현, K=4를 연구 기본값으로 확정(2026-10-09) | 이후 모든 비교의 출발점(원본) |
-| 1 | [성능 29번](SSA-MRN/experiments/performance/29_capacity_refinement/README.md) | 원본 backbone 옆에 저해상도 병렬 가지 **W2**를 처음 붙임 | RR PSNR +0.72 dB로 큰 이득이지만 보조 판정 미달(부분 개선) |
+| 1 | [성능 29번](SSA-MRN/experiments/performance/29_capacity_refinement/README.md) | 원본 backbone 옆에 저해상도 병렬 가지 **W2**를 처음 붙임 | RR PSNR +0.72 dB로 큰 이득이지만 RR2(더 거친 시험)가 나빠짐(당시 v2 보조 판정 미달) |
 | 2 | [성능 43번](SSA-MRN/experiments/performance/43_normalized_parallel_capacity/README.md) | 원본+W2(**C2**)를 같은 절차로 3시드 재현 | RR +0.70 dB가 재현됐지만 RR2(더 거친 시험)에서 미달 → 축척을 바꾸면 무너지는 약점 확인 |
 | 3 | [성능 47번](SSA-MRN/experiments/performance/47_ground_truth_criteria_reevaluation/README.md)·[48번](SSA-MRN/experiments/performance/48_parallel_capacity_observation_refinement/README.md) | 정답 기반 판정 기준(v2)으로 재평가, W2 뒤에 관측 오차 보정기를 붙여 봄 | RR 이득이 큰 후보는 대부분 RR2에서 미달, 보정기로는 RR2가 고쳐지지 않음 |
 | 4 | [성능 50번](SSA-MRN/experiments/performance/50_w2_branch_inference_scaling/README.md) | 학습 없이 W2 출력 세기를 줄여 보는 진단 | RR2 미달의 원인은 **축척에 따라 맞지 않는 세부 주입 세기**(고주파 오차 증가) |
@@ -137,7 +137,7 @@ test 20장, 같은 시드(42·43·44) 원본과 짝지은 3시드 평균 차이�
 | WV3 ([성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md)) | +1.007 dB | −0.419° | −0.313 | +0.966 dB | +4.606 dB | 0.68배 | 개선 |
 | WV2 전이 ([성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md)) | +0.828 dB | −0.399° | −0.426 | +0.764 dB | +1.131 dB | 0.57배 | 개선 |
 
-네 데이터셋 모두 판정 기준 v2.3의 모든 항목을 통과했고, RR PSNR은 각각 20장 모두에서 원본보다 높았습니다. WV2는 WV3로 학습한 모델을 학습하지 않은 센서에 그대로 적용한 결과입니다. 학습에 2배 거친 쌍을 넣어 RR2(더 거친 시험)는 처음 보는 축척이 아니며, FR(원래 해상도) 방향의 일반화는 직접 확인하지 못했습니다.
+네 데이터셋 모두 판정 기준 v2.4의 RR 판정을 통과했고 참고 지표(FR_WALD·RR2·FR 관측 오차)도 모두 원본보다 좋았으며, RR PSNR은 각각 20장 모두에서 원본보다 높았습니다. WV2는 WV3로 학습한 모델을 학습하지 않은 센서에 그대로 적용한 결과입니다. 학습에 2배 거친 쌍을 넣어 RR2(더 거친 시험)는 처음 보는 축척이 아니며, FR(원래 해상도) 방향의 일반화는 직접 확인하지 못했습니다.
 
 <a id="compare"></a>
 
@@ -203,32 +203,31 @@ C2MS는 성능 53번 3시드 가중치를 공식 DLPan MATLAB 코드로 재평�
 
 </details>
 
-### 판정 기준 ([v2.3](SSA-MRN/docs/judgement_criteria.md))
+### 판정 기준 ([v2.4](SSA-MRN/docs/judgement_criteria.md))
 
-실험 표의 개선 여부는 같은 조건 대조군과 정답이 있는 시험으로만 판정합니다.
+실험 표의 개선 여부는 같은 조건 대조군과 짝지은 RR test(정답이 있는 시험)만으로 판정합니다. 2026-11-04부터 이전 보조 판정 3개(RR2·FR_WALD·FR 관측 일치)는 참고로만 보고합니다.
 
 | 판정 | 조건 |
 |---|---|
-| **개선** | 주 판정과 보조 판정 3개를 모두 통과 |
-| **부분 개선** | 주 판정만 통과, RR 지표 일부만 개선, 또는 모든 항목을 통과했지만 PSNR 이득이 잡음 문턱 미만 |
+| **개선** | RR PSNR·SAM·ERGAS 모두 개선, PSNR 이득 ≥ 잡음 문턱 |
+| **부분 개선** | RR 지표 일부만 개선, 또는 세 지표가 모두 좋아졌지만 PSNR 이득이 잡음 문턱 미만 |
 | **개선 없음** | RR PSNR·SAM·ERGAS 모두 개선 없음 |
-| **판단 보류** | 최종 평가 또는 보조 판정 자료가 부족 |
+| **판단 보류** | 같은 조건 대조군과 짝지은 RR test 평가가 없음 |
 | 비교 기준·성능 비교 아님 | 판정 대상 아님(기준선, 학습 없는 사전 검증·분석) |
 
-| 구분 | 시험 | 통과 조건 |
+| 구분 | 시험 | 조건 |
 |---|---|---|
-| 주 판정 | RR test 20장 | PSNR·SAM·ERGAS 모두 개선, PSNR 이득 ≥ 잡음 문턱(단일 시드 0.06 dB, 2시드 이상 0.04 dB) |
-| 보조 1 | RR2: RR 입력을 한 번 더 1/4 축소 | ΔPSNR ≥ −0.05 dB, ΔSAM ≤ +0.06°. QB는 57번 재학습 C2MS seed 42의 RR2를 고정 대조값으로 사용([2026-10-27 결정](SSA-MRN/docs/judgement_criteria.md#qb-rr2-고정-대조값-2026-10-27)) |
-| 보조 2 | FR_WALD: 원래 해상도를 1/4 축소, 실제 MS가 정답 | ΔPSNR ≥ −0.07 dB, ΔSAM ≤ +0.04° |
-| 보조 3 | FR 관측 일치: 출력을 관측 연산으로 줄인 값과 입력 MS의 차이 | 관측 RMSE 비율 ≤ 1.10 |
+| 판정 | RR test 20장 | PSNR·SAM·ERGAS 모두 개선, PSNR 이득 ≥ 잡음 문턱(단일 시드 0.06 dB, 2시드 이상 0.04 dB) |
+| 참고 | RR2(RR 입력을 한 번 더 1/4 축소)·FR_WALD(원래 해상도를 1/4 축소, 실제 MS가 정답)·FR 관측 일치 | 판정에 쓰지 않고 보고만 함 |
+| 참고 | FR QNR·Dλ·Ds | [정답 순위 검사](SSA-MRN/experiments/performance/46_fr_spatial_index_validity/README.md)를 통과하지 못해 보고만 함 |
 
 <details>
 <summary>판정 세부 규칙</summary>
 
-- 여러 시드는 같은 조건 대조군과 짝지은 전체 시드의 평균으로 판정하고, 시드 수와 시드별 결과를 함께 보고합니다. 단일 시드도 모든 항목을 통과하면 개선으로 표기합니다.
-- FR QNR·Dλ·Ds는 [정답 순위 검사](SSA-MRN/experiments/performance/46_fr_spatial_index_validity/README.md)를 통과하지 못해 참고로만 보고합니다.
-- 47번 이전 실험은 [성능 47번 재평가](SSA-MRN/experiments/performance/47_ground_truth_criteria_reevaluation/README.md)의 보존된 측정값을 v2.3으로 다시 집계한 판정을 표에 씁니다. 원래 v2 판정은 47번 보고서에 보존합니다.
+- 여러 시드는 같은 조건 대조군과 짝지은 전체 시드의 평균으로 판정하고, 시드 수와 시드별 결과를 함께 보고합니다. 단일 시드도 RR 판정을 통과하면 개선으로 표기합니다.
+- 47번 이전 실험은 [성능 47번 재평가](SSA-MRN/experiments/performance/47_ground_truth_criteria_reevaluation/README.md)의 보존된 측정값을 v2.4로 다시 집계한 판정을 표에 씁니다. 원래 v2 판정과 v2.3 집계는 보존합니다.
+- 여러 센서를 평가한 실험은 센서별 판정을 확인된 결과에 적고, 평가한 센서가 모두 개선일 때만 실험 전체를 개선으로 표기합니다.
 - 현재 표의 판정 범위는 QB이며 다른 센서·배율로 확대하지 않습니다.
-- 개선 표기와 기준 모델 교체는 구분합니다. 기준 모델 교체에는 3시드 이상의 개선과 FR·RR2 비교 이미지 확인이 필요합니다.
+- 개선 표기와 기준 모델 교체는 구분합니다. 기준 모델 교체에는 3시드 이상의 개선이 필요하고, 참고 지표와 FR·RR2 비교 이미지도 함께 확인합니다.
 
 </details>

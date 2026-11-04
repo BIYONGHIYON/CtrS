@@ -77,9 +77,9 @@
     "results": "research/performance/6_interpolation_seed_repeat/results",
     "research_track": "performance",
     "experimenter": "이병현",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "status": "평가 완료",
-    "limits": "QB 3시드 평균: interp23·interp23_input 부분 개선. RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "QB 3시드 평균: interp23·interp23_input 개선(v2.4). interp23_input RR ΔPSNR +0.058dB·ΔSAM −0.021°·ΔERGAS −0.028. RR2 미달은 참고 지표입니다.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -94,7 +94,8 @@
         "interp23": "부분 개선",
         "interp23_input": "부분 개선"
       }
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "7_band_gated_detail": {
     "report": "research/performance/7_band_gated_detail/README.md",
@@ -176,9 +177,9 @@
     "results": "research/performance/10_recurrent_observation/results",
     "research_track": "performance",
     "experimenter": "김윤지",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "status": "평가 완료",
-    "limits": "QB seed42: B2 부분 개선. RR ΔPSNR +0.116dB·ΔSAM -0.018°. RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "QB seed42: B2 개선(v2.4). RR ΔPSNR +0.116dB·ΔSAM −0.018°·ΔERGAS −0.054. RR2 미달은 참고 지표입니다.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -190,7 +191,8 @@
       "candidate_labels": {
         "B2": "부분 개선"
       }
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "11_haar_reconstruction": {
     "report": "research/performance/11_haar_reconstruction/README.md",
@@ -292,9 +294,9 @@
     "results": "research/performance/15_shared_reconstruction/results",
     "research_track": "performance",
     "experimenter": "김윤지",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "status": "평가 완료",
-    "limits": "QB seed42: B1 부분 개선. RR ΔPSNR +0.300dB·ΔSAM -0.108°. RR2·FR_OBS 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "QB seed42: B1 개선(v2.4). RR ΔPSNR +0.300dB·ΔSAM −0.108°·ΔERGAS −0.148. RR2·FR 관측 미달은 참고 지표입니다.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -306,7 +308,8 @@
       "candidate_labels": {
         "B1": "부분 개선"
       }
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "16_bandlimited_downsampling": {
     "report": "research/performance/16_bandlimited_downsampling/README.md",
@@ -338,9 +341,9 @@
     "results": "research/performance/17_structural_ablation/results",
     "research_track": "performance",
     "experimenter": "이병현",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "status": "평가 완료",
-    "limits": "QB seed42: S1·S2·S3·R1·M1·I1 부분 개선; R2·I2 개선 없음. S1(+0.019dB)·S2(+0.056dB)는 판정 항목을 모두 통과했지만 RR 이득이 잡음 문턱 0.06dB 미만입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "QB seed42: M1·I1 개선(v2.4); S1·S2·S3·R1 부분 개선; R2·I2 개선 없음. I1 RR ΔPSNR +0.130dB·ΔSAM −0.070°. S1(+0.019dB)·S2(+0.056dB)는 RR 세 지표가 좋아졌지만 잡음 문턱 0.06dB 미만입니다.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -359,7 +362,8 @@
         "I1": "부분 개선",
         "I2": "개선 없음"
       }
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "18_coarse_feature_fusion": {
     "report": "research/performance/18_coarse_feature_fusion/README.md",
@@ -368,9 +372,9 @@
     "results": "research/performance/18_coarse_feature_fusion/results",
     "research_track": "performance",
     "experimenter": "이병현",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "status": "평가 완료",
-    "limits": "QB seed42: N2·N3·N4·N5 부분 개선; N1 개선 없음. RR 주 판정·RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "QB seed42: N3 개선(v2.4); N2·N4·N5 부분 개선; N1 개선 없음. N3 RR ΔPSNR +0.187dB·ΔSAM −0.013°·ΔERGAS −0.101.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -386,7 +390,8 @@
         "N4": "부분 개선",
         "N5": "부분 개선"
       }
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "19_dual_stream_reconstruction": {
     "report": "research/performance/19_dual_stream_reconstruction/README.md",
@@ -395,9 +400,9 @@
     "results": "research/performance/19_dual_stream_reconstruction/results",
     "research_track": "performance",
     "experimenter": "이병현",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "status": "평가 완료",
-    "limits": "QB seed42: C1 부분 개선; C2·C3·C4·C5 개선 없음. RR 주 판정·RR2·FR_WALD 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "QB seed42: C1 개선(v2.4); C2·C3·C4·C5 개선 없음. C1 RR ΔPSNR +0.244dB·ΔSAM −0.188°. RR2·FR_WALD 미달은 참고 지표입니다.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -413,7 +418,8 @@
         "C4": "개선 없음",
         "C5": "개선 없음"
       }
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "20_recurrent_guidance": {
     "report": "research/performance/20_recurrent_guidance/README.md",
@@ -422,9 +428,9 @@
     "results": "research/performance/20_recurrent_guidance/results",
     "research_track": "performance",
     "experimenter": "이병현",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "status": "평가 완료",
-    "limits": "QB seed42: D1·D2·D3·D4·D5·D6 부분 개선. RR 주 판정·RR2·FR_WALD 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "QB seed42: D3·D5 개선(v2.4); D1·D2·D4·D6 부분 개선. D3 RR ΔPSNR +0.096dB·ΔSAM −0.113°. RR2·FR_WALD 미달은 참고 지표입니다.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -441,7 +447,8 @@
         "D5": "부분 개선",
         "D6": "부분 개선"
       }
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "21_guidance_refinement": {
     "report": "research/performance/21_guidance_refinement/README.md",
@@ -504,8 +511,8 @@
     "status": "평가 완료",
     "research_track": "performance",
     "experimenter": "이병현",
-    "improvement": "부분 개선",
-    "limits": "QB seed46: repeat·F0 부분 개선. RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "improvement": "개선",
+    "limits": "QB seed46: repeat·F0 개선(v2.4). repeat RR ΔPSNR +0.176dB·ΔSAM −0.092°. RR2 미달은 참고 지표입니다.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -518,7 +525,8 @@
         "repeat": "부분 개선",
         "F0": "부분 개선"
       }
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "24_alpha_bounded_shared_reconstruction": {
     "report": "research/performance/24_alpha_bounded_shared_reconstruction/README.md",
@@ -606,13 +614,13 @@
     "checkpoints": "research/performance/27_backbone_channel_attention/checkpoints",
     "results": "research/performance/27_backbone_channel_attention/results",
     "status": "평가 완료",
-    "improvement": "판단 보류",
+    "improvement": "개선",
     "experimenter": "김경찬",
     "evaluated_seeds": [
       42
     ],
     "research_track": "performance",
-    "limits": "모델 소스가 보존되지 않아 47번 재평가에서 제외됐으며 v2.2 보조 판정이 없습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "seed42 E0 대비 E1: RR ΔPSNR +0.480dB·ΔSAM −0.137°·ΔERGAS −0.220로 개선(v2.4)입니다. 잠정 FR QNR은 −0.023(참고). 모델 소스는 보존되지 않았습니다.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -620,7 +628,8 @@
       "scope": "보조 판정 부족",
       "seeds": null,
       "candidate_labels": {}
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "28_residual_refinement": {
     "report": "research/performance/28_residual_refinement/README.md",
@@ -1109,7 +1118,7 @@
     "display_name": "31. 보정 잔차의 저주파 억제",
     "experimenter": "김경찬",
     "status": "평가 완료",
-    "improvement": "판단 보류",
+    "improvement": "개선 없음",
     "checkpoints": "experiments/performance/31_low_frequency_preserving_residual/checkpoints",
     "results": "experiments/performance/31_low_frequency_preserving_residual/results",
     "manifest": "experiments/performance/31_low_frequency_preserving_residual/manifest.json",
@@ -1124,7 +1133,7 @@
       "P1": 20
     },
     "original_limits": "같은G5 부모에서20에포크 미세조정. P1 RR PSNR -0.942564dB·SAM +0.536880도, 잠정QNR +0.016711; RR 유지 실패·채택 보류. 단일QB seed46·탐색test·MATLAB parity 미검증.",
-    "limits": "짧은 탐색 실험으로 47번 재평가에서 제외됐으며 v2.2 보조 판정이 없습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "P0 대비 P1: RR ΔPSNR −0.943dB·ΔSAM +0.537°·ΔERGAS +0.496으로 세 지표 모두 나빠져 개선 없음(v2.4)입니다. 잠정 FR QNR +0.017(참고).",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -1132,7 +1141,8 @@
       "scope": "보조 판정 부족",
       "seeds": null,
       "candidate_labels": {}
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "ssai/10_local_window_cross_attention": {
     "report": "experiments/ssai/10_local_window_cross_attention/README.md",
@@ -1181,7 +1191,7 @@
     "sensor": "QB",
     "last_checked": "2026-10-16T02:32:31+09:00",
     "original_limits": "A0 best에서 10에폭 이어 학습한 validation 선별·test 미평가·단일QB seed42",
-    "limits": "10에폭 validation 탐색이며 RR·FR 전체 test와 v2.2 보조 판정이 없습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "10에폭 validation 탐색이며 같은 조건 대조군과 짝지은 RR test 20장 평가가 없습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -1218,7 +1228,7 @@
     "display_name": "33. MS 기준 가역 밝기·대비 정규화",
     "experimenter": "김경찬",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "checkpoints": "experiments/performance/33_ms_anchored_reversible_normalization/checkpoints",
     "results": "experiments/performance/33_ms_anchored_reversible_normalization/results",
     "manifest": "experiments/performance/33_ms_anchored_reversible_normalization/manifest.json",
@@ -1238,7 +1248,7 @@
       "N1": 98
     },
     "original_limits": "단일QB seed42에서 RR 5지표·잠정FR 3지표가 각각20/20장 개선했습니다. PSNR +0.211059dB·SAM -0.124165도·QNR +0.017462. 반복시드·추가센서·독립holdout·MATLAB parity 미검증; 기준모델 채택 보류.",
-    "limits": "QB 3시드 평균: N1 부분 개선. RR ΔPSNR +0.180dB·ΔSAM -0.074°. RR2 미달입니다. 33·38번을 합친 반복 시드 결과입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "QB 3시드 평균: N1 개선(v2.4). RR ΔPSNR +0.180dB·ΔSAM −0.074°·ΔERGAS −0.093. RR2 미달은 참고 지표입니다. 33·38번을 합친 반복 시드 결과입니다.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -1252,7 +1262,8 @@
       "candidate_labels": {
         "N1": "부분 개선"
       }
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "performance/34_paper_equation_reproduction": {
     "report": "experiments/performance/34_paper_equation_reproduction/README.md",
@@ -1372,7 +1383,7 @@
     "display_name": "37. 병렬 추가 가지의 위치별 게이트",
     "experimenter": "송준현",
     "status": "평가 완료",
-    "improvement": "판단 보류",
+    "improvement": "부분 개선",
     "evaluated_seeds": [
       42
     ],
@@ -1390,7 +1401,7 @@
     "entrypoint": "experiments/performance/37_spatial_gate_on_parallel_branch/run.py",
     "verification": "experiments/performance/37_spatial_gate_on_parallel_branch/prepare.py",
     "original_limits": "RR PSNR +0.02817dB·SAM -0.01138°, 잠정 FR QNR -0.04456; QNR·Ds 20/20장 악화. 단일 시드, 채택 보류. MATLAB/센서 MTF 대응 미검증.",
-    "limits": "독립 실행 가능한 모델 모듈이 없어 47번 재평가에서 제외됐으며 v2.2 보조 판정이 없습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "seed42: RR ΔPSNR +0.028dB·ΔSAM −0.011°·ΔERGAS −0.009로 세 지표가 좋아졌지만 잡음 문턱 0.06dB 미만(잡음 수준)입니다. 잠정 FR QNR −0.045(참고).",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -1398,7 +1409,8 @@
       "scope": "보조 판정 부족",
       "seeds": null,
       "candidate_labels": {}
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "performance/38_ms_anchored_normalization_seed_repeat": {
     "report": "experiments/performance/38_ms_anchored_normalization_seed_repeat/README.md",
@@ -1407,7 +1419,7 @@
     "display_name": "38. MS 기준 가역 정규화의 반복 시드 검증",
     "experimenter": "김경찬",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "checkpoints": "experiments/performance/38_ms_anchored_normalization_seed_repeat/checkpoints",
     "results": "experiments/performance/38_ms_anchored_normalization_seed_repeat/results",
     "manifest": "experiments/performance/38_ms_anchored_normalization_seed_repeat/manifest.json",
@@ -1425,7 +1437,7 @@
     "sensor": "QB",
     "reference_experiment": 33,
     "original_limits": "세 시드 RR 평균5지표 개선; seed44 잠정 FR QNR·Ds 악화. 부분 개선·최종 채택 보류. H5 재평가·반복 가중치 strict load·MATLAB 수치 대응 미검증.",
-    "limits": "QB 3시드 평균: N1 부분 개선. RR ΔPSNR +0.180dB·ΔSAM -0.074°. RR2 미달입니다. 33·38번을 합친 반복 시드 결과입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "QB 3시드 평균: N1 개선(v2.4). RR ΔPSNR +0.180dB·ΔSAM −0.074°·ΔERGAS −0.093. RR2 미달은 참고 지표입니다. 33·38번을 합친 반복 시드 결과입니다.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -1439,7 +1451,8 @@
       "candidate_labels": {
         "N1": "부분 개선"
       }
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "performance/39_local_ms_anchored_reversible_normalization": {
     "report": "experiments/performance/39_local_ms_anchored_reversible_normalization/README.md",
@@ -1487,7 +1500,7 @@
     "display_name": "40. MS 기준 평균 제거와 대비 정규화의 기여 분리",
     "experimenter": "김경찬",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "sensor": "QB",
     "trained_seeds": [
       42
@@ -1501,7 +1514,7 @@
     "entrypoint": "experiments/performance/40_ms_center_scale_ablation/run.py",
     "verification": "experiments/performance/40_ms_center_scale_ablation/prepare.py",
     "original_limits": "seed42 validation만 확인. A1·A2의A3 대비MSE +1.220%·+1.810%로 사전 반복 기준 미달. RR·FR 미평가, 최종 개선 판단 보류.",
-    "limits": "QB seed42: A1·A2·A3 부분 개선. RR 주 판정·RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "QB seed42: A3 개선(v2.4); A1·A2 부분 개선. A3 RR ΔPSNR +0.211dB·ΔSAM −0.124°·ΔERGAS −0.117. RR2 미달은 참고 지표입니다.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -1515,7 +1528,8 @@
         "A2": "부분 개선",
         "A3": "부분 개선"
       }
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "performance/41_joint_photometric_augmentation": {
     "report": "experiments/performance/41_joint_photometric_augmentation/README.md",
@@ -1563,7 +1577,7 @@
     "display_name": "42. 백본 일부 합성곱의 dilation 확장",
     "experimenter": "송준현",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "evaluated_seeds": [
       42,
       43,
@@ -1579,7 +1593,7 @@
     "entrypoint": "experiments/performance/42_dilated_backbone_context/run.py",
     "verification": "experiments/performance/42_dilated_backbone_context/prepare.py",
     "original_limits": "3seed 평균 RR PSNR +0.12171dB·SAM -0.02500°·ERGAS -0.06130. 잠정 FR QNR +0.00360·Ds +0.00121, seed별 상충. 공식 MATLAB/센서 대응 미검증.",
-    "limits": "QB 3시드 평균: dilated 부분 개선. RR ΔPSNR +0.122dB·ΔSAM -0.025°. RR2 미달입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "QB 3시드 평균: dilated 개선(v2.4). RR ΔPSNR +0.122dB·ΔSAM −0.025°·ΔERGAS −0.061. RR2 미달은 참고 지표입니다.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -1593,7 +1607,8 @@
       "candidate_labels": {
         "dilated": "부분 개선"
       }
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "performance/43_normalized_parallel_capacity": {
     "report": "experiments/performance/43_normalized_parallel_capacity/README.md",
@@ -1602,7 +1617,7 @@
     "display_name": "43. MS 기준 가역 정규화와 저해상도 병렬 특징 용량 확장",
     "experimenter": "이병현",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "sensor": "QB",
     "trained_seeds": [
       42,
@@ -1622,7 +1637,7 @@
     "entrypoint": "experiments/performance/43_normalized_parallel_capacity/run.py",
     "verification": "experiments/performance/43_normalized_parallel_capacity/prepare.py",
     "original_limits": "QNR 등 MATLAB 수치 대응 미검증; 기존 QB 탐색 benchmark; AMP skip으로 실제 업데이트 수 차이; 원본 기준 유지",
-    "limits": "QB 3시드 평균: C1·C2·C3 부분 개선. RR2 미달입니다. C3는 FR_WALD PSNR +1.509dB·관측 RMSE 0.584배로 통과했고 RR2에서 미달했습니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "QB 3시드 평균: C1·C2·C3 개선(v2.4). C3 RR ΔPSNR +0.738dB·ΔSAM −0.323°. RR2 미달은 참고 지표입니다(C3 FR_WALD PSNR +1.509dB·관측 RMSE 0.584배).",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -1638,7 +1653,8 @@
         "C2": "부분 개선",
         "C3": "부분 개선"
       }
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "performance/44_phase_preserving_frequency_guidance": {
     "report": "experiments/performance/44_phase_preserving_frequency_guidance/README.md",
@@ -1647,7 +1663,7 @@
     "display_name": "44. 위상 보존 주파수 대역 안내",
     "experimenter": "이병현",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "sensor": "QB",
     "trained_seeds": [
       42
@@ -1663,7 +1679,7 @@
     "entrypoint": "experiments/performance/44_phase_preserving_frequency_guidance/run.py",
     "verification": "experiments/performance/44_phase_preserving_frequency_guidance/prepare.py",
     "original_limits": "QB seed42·기존 탐색 benchmark·독립 holdout 부재; MATLAB parity 미검증; F2 RR 소폭 개선·FR 악화 및 동일 용량 우위 미확인; 채택 보류",
-    "limits": "QB seed42: C0·F1·F2 부분 개선. F2는 판정 항목을 모두 통과했지만 RR ΔPSNR +0.021dB가 잡음 문턱 0.06dB 미만입니다. 현행 판정은 QB 측정 범위에 한정하며 다른 센서·배율의 개선을 뜻하지 않습니다.",
+    "limits": "QB seed42: C0 개선(v2.4); F1·F2 부분 개선. C0 RR ΔPSNR +0.089dB·ΔSAM −0.001°·ΔERGAS −0.038. F2(+0.021dB)는 잡음 문턱 0.06dB 미만입니다.",
     "judgement": {
       "criteria_version": "v2.3",
       "source": "experiments/performance/47_ground_truth_criteria_reevaluation/results/summary_v2_3.json",
@@ -1677,7 +1693,8 @@
         "F1": "부분 개선",
         "F2": "부분 개선"
       }
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "performance/45_exact_observation_projection": {
     "report": "experiments/performance/45_exact_observation_projection/README.md",
@@ -1743,7 +1760,7 @@
     "display_name": "48. 저해상도 병렬 특징 용량(W2)과 관측 오차 보정기(G5)의 결합",
     "experimenter": "이병현",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "sensor": "QB",
     "trained_seeds": [
       42
@@ -1759,12 +1776,13 @@
     "entrypoint": "experiments/performance/48_parallel_capacity_observation_refinement/run.py",
     "evaluation": "experiments/performance/48_parallel_capacity_observation_refinement/evaluate.py",
     "last_checked": "2026-10-20T17:10:00+09:00",
-    "limits": "WF 단일 시드(seed42). QB 한 센서·탐색에 반복 사용한 test. 대조군 C0·C2는 43번 가중치 재사용. 비교용 F1 seed42 가중치는 49번과 함께 보존. QNR류는 참고.",
+    "limits": "seed42 원본 대비 WF RR ΔPSNR +0.650dB·ΔSAM −0.372°·ΔERGAS −0.324로 개선(v2.4)입니다. FR_WALD +1.341dB·관측 RMSE 0.610배, RR2 −0.266dB·SAM +0.204°는 참고 지표입니다(W2 단독과 RR2가 거의 같음).",
     "judgement": {
       "criteria_version": "v2.2",
       "primary": "WF s42 vs C0 s42: 부분 개선 (RR2 미달)",
       "lead_condition_met": false
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "performance/50_w2_branch_inference_scaling": {
     "report": "experiments/performance/50_w2_branch_inference_scaling/README.md",
@@ -2248,14 +2266,14 @@
     "experiment": 63,
     "display_name": "63. C2MS 학습 손실을 MSE에서 L1로 교체",
     "status": "평가 완료",
-    "improvement": "부분 개선",
+    "improvement": "개선",
     "evaluated_seeds": [
       42
     ],
     "retraining": true,
     "epochs": 150,
     "last_checked": "2026-10-26T10:22:27+09:00",
-    "limits": "53번 대비 RR 개선(+0.084 dB, −0.060°)이나 관측 비율 미달(RR2는 2026-10-27 고정 대조값 기준 통과), validation PSNR −0.073 dB로 test와 반대. seed 43·44 확장은 사용자 결정 대기. 대조군은 보관된 53번(공식)과 57번 재학습(참조).",
+    "limits": "53번 대비 test RR PSNR +0.084 dB·SAM −0.060°·ERGAS −0.027(SAM 20/20장)로 개선(v2.4)입니다. 관측 비율 1.32는 참고 지표입니다. validation PSNR은 −0.073 dB로 test와 반대입니다.",
     "model": "experiments/performance/63_l1_reconstruction_loss/model.py",
     "config": "experiments/performance/63_l1_reconstruction_loss/config.json",
     "entrypoint": "experiments/performance/63_l1_reconstruction_loss/run.py",
@@ -2269,7 +2287,8 @@
       "QB_C2MS_L1_vs_C2MS57_s42": "부분 개선",
       "screen_gate": "test 통과, validation PSNR 반대 방향",
       "rr2_fixed_reference_2026_10_27": "RR2 고정 대조값 기준 통과(+0.120 dB), 관측 비율 미달로 부분 개선 동일"
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "performance/64_w2_pixel_affine_modulation": {
     "report": "experiments/performance/64_w2_pixel_affine_modulation/README.md",
@@ -2320,7 +2339,7 @@
     "epochs": 150,
     "training_started_kst": "2026-10-26T14:13:39+09:00",
     "last_checked": "2026-10-27T23:50:00+09:00",
-    "limits": "QB 3시드(42-44) 평균, 같은 시드 53번 C2MS 대비 RR PSNR +0.028 dB·SAM −0.100°·ERGAS −0.008. PSNR 이득이 잡음 문턱(0.04 dB) 미만이고 관측 비율 1.427 미달. RR2는 고정 대조값 기준 시드 평균 −0.010 dB·+0.058°로 통과, FR_WALD 통과. SAM 목표(−0.15°) 미달로 다른 센서 확장 안 함. 분광 계수 0.46(58번과 같은 기울기 비율). 3단계(GF2·WV3 3시드, 54번 C2MS 대비): GF2 RR PSNR +0.106 dB·SAM −0.022°(RR2 PSNR −0.055 dB로 부분 개선), WV3 +0.047 dB·SAM −0.079°(FR_WALD·관측 비율 미달, 부분 개선), WV2 전이 −0.277 dB·SAM −0.091°(시드별 −1.08에서 +0.41 dB, 부분 개선).",
+    "limits": "QB 3시드 평균으로 53번 대비 test RR PSNR +0.028 dB·SAM −0.100°·ERGAS −0.008로 세 지표가 모두 좋아졌고 SAM은 60/60장에서 낮아졌지만, PSNR 이득이 잡음 문턱(0.04 dB) 미만이라 부분 개선입니다(관측 비율 1.43은 참고). GF2·WV3 3시드(54번 대비): GF2 +0.106 dB·SAM −0.022°로 v2.4 개선, WV3 +0.047 dB·SAM −0.079°(ERGAS 그대로)와 WV2 전이 −0.277 dB·SAM −0.091°는 부분 개선입니다.",
     "model": "experiments/performance/65_l1_spectral_loss/model.py",
     "config": "experiments/performance/65_l1_spectral_loss/config.json",
     "entrypoint": "experiments/performance/65_l1_spectral_loss/run.py",
@@ -2337,7 +2356,8 @@
       "QB_C2MS_L1S_vs_C2MS53_s43": "부분 개선",
       "QB_C2MS_L1S_vs_C2MS53_s44": "부분 개선",
       "QB_C2MS_L1S_vs_C2MS53_3seed": "부분 개선(잡음 수준·관측 비율 미달)"
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "performance/66_observation_error_projection_analysis": {
     "report": "experiments/performance/66_observation_error_projection_analysis/README.md",
@@ -2377,7 +2397,7 @@
     "epochs": 150,
     "training_started_kst": "2026-10-27T23:40:42+09:00",
     "last_checked": "2026-10-28T16:17:05+09:00",
-    "limits": "WV3 seed 42 단일 시드, 같은 시드 54번 C2MS 대비, 갈래 6개(C2MS 손실·65번 손실 × 밝기·흐림·둘 다). WV3: C2MS_G −0.002 dB·+0.007°, C2MS_B −0.204 dB·+0.066°, C2MS_GB −0.240 dB·+0.070°(세 갈래 개선 없음), L1S_G +0.030 dB·−0.076°, L1S_B −0.075 dB·−0.039°, L1S_GB −0.167 dB·−0.012°(세 갈래 부분 개선, FR_WALD·관측 비율 미달). WV2 전이: C2MS_B +1.025 dB·−0.070°(RR2 SAM 미달, 부분 개선, 세부 에너지 0.585 → 0.702), L1S_GB +0.827 dB·−0.061°, L1S_B +0.137 dB, L1S_G −0.533 dB(L1S 세 갈래 관측 비율 미달, 부분 개선), C2MS_G −0.262 dB·C2MS_GB −0.278 dB(개선 없음). 학습 전에 고정한 1단계 관문(WV3 RR PSNR ≥ −0.06 dB·SAM ≤ +0.04°, WV2 PSNR·세부 에너지 ≥ C2MS, L1S는 WV3 SAM ≤ −0.05°)을 통과한 갈래 없음. WV2는 시드 변동이 커서(65번 −1.08에서 +0.41 dB) 1시드로 확정할 수 없음. 2026-10-28 00:12 서버 재부팅으로 L1S_GB를 안전 종료 후 같은 runtime에서 재개.",
+    "limits": "54번 C2MS 대비 흐림 증강만 넣은 C2MS_B는 WV2 전이에서 RR PSNR +1.025 dB·SAM −0.070°(19/20장 상승), 넣은 세부 0.585 → 0.702로 흐려짐이 줄었지만, 학습한 WV3에서는 −0.204 dB(20/20장 하락)였습니다. 65번 손실 + 두 증강(L1S_GB)도 WV2 +0.827 dB·WV3 −0.167 dB로 같은 맞바꿈이었고, 밝기 증강은 65번 손실의 WV2 밝기 치우침(23 → 8-11 DN)을 줄였습니다. WV2 전이만 보면 C2MS_B·L1S_GB는 v2.4 개선이지만, 미리 정한 1단계 관문(WV3 유지 + WV2 개선)을 통과한 갈래는 없습니다.",
     "model": "experiments/performance/67_pan_brightness_blur_augmentation/model.py",
     "config": "experiments/performance/67_pan_brightness_blur_augmentation/config.json",
     "entrypoint": "experiments/performance/67_pan_brightness_blur_augmentation/run.py",
@@ -2399,7 +2419,8 @@
       "WV2_L1S_B_s42": "부분 개선",
       "WV2_L1S_GB_s42": "부분 개선",
       "stage1_gate": "통과 갈래 없음"
-    }
+    },
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "performance/68_ssai_folding_sam_split_seed_ensemble": {
     "report": "experiments/performance/68_ssai_folding_sam_split_seed_ensemble/README.md",
@@ -2486,7 +2507,9 @@
     ],
     "results": "experiments/performance/71_coarse_pair_pan_blur/results",
     "checkpoints": "experiments/performance/71_coarse_pair_pan_blur/checkpoints",
-    "manifest": "experiments/performance/71_coarse_pair_pan_blur/manifest.json"
+    "manifest": "experiments/performance/71_coarse_pair_pan_blur/manifest.json",
+    "limits": "거친 쌍 전용 흐림은 WV2 RR +0.728 dB·SAM −0.006°·ERGAS −0.343으로 WV2 전이는 v2.4 개선이지만, 학습한 WV3에서는 −0.026 dB·SAM +0.016°였습니다. 양쪽 쌍 흐림은 WV2 PSNR만 개선하고 SAM이 +0.703° 악화했습니다.",
+    "criteria_v2_4": "2026-11-04 v2.4 재집계: RR 주 판정(잡음 문턱 포함)만으로 판정, RR2·FR_WALD·FR 관측 일치는 참고"
   },
   "performance/72_c2ms_gain_frequency_structure_analysis": {
     "report": "experiments/performance/72_c2ms_gain_frequency_structure_analysis/README.md",
