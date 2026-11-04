@@ -2642,5 +2642,22 @@
       },
       "criteria": "v2.4"
     }
+  },
+  "performance/76_quarter_resolution_branch": {
+    "report": "experiments/performance/76_quarter_resolution_branch/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 76,
+    "display_name": "76. 1/4 해상도 병렬 가지(W4) 추가",
+    "status": "계획",
+    "improvement": "판단 보류",
+    "evaluated_seeds": [],
+    "retraining": true,
+    "epochs": 150,
+    "limits": "원본 backbone과 W2 가지 옆에 1/4 해상도 가지(W4: PixelUnshuffle(4) → 1×1 1024→64 → 64채널 잔차 블록 4개 → 1×1 64→1024 → PixelShuffle(4), 0.43M)를 붙입니다. 75번 64 × 8 W2 가지에 붙인 갈래(1.48M)와 C2MS에 붙인 갈래(3.28M)를 동시에 학습합니다(학습 조건은 53번과 같음, QB seed 42).",
+    "config": "experiments/performance/76_quarter_resolution_branch/config.json",
+    "model": "experiments/performance/76_quarter_resolution_branch/model.py",
+    "entrypoint": "experiments/performance/76_quarter_resolution_branch/run.py"
   }
 }
