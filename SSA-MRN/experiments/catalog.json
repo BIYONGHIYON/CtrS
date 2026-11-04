@@ -1944,5 +1944,46 @@
       "retention_of_C2MS_RR_PSNR_gain": 0.425,
       "criteria": "v2.4"
     }
+  },
+  "performance/75_parallel_branch_width_depth": {
+    "report": "experiments/performance/75_parallel_branch_width_depth/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 75,
+    "display_name": "75. 축소한 W2 병렬 가지의 폭과 깊이 비교",
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "epochs": 150,
+    "limits": "53번 C2MS 대비 test RR이 128 × 4는 PSNR −0.201 dB·SAM +0.120°·ERGAS +0.094, 64 × 8은 −0.127 dB·+0.101°·+0.061로 두 갈래 모두 세 지표가 나빠졌습니다. 원본 대비로는 C2MS 이득의 78%(128 × 4)와 86%(64 × 8)가 남아 74번(42%)보다 크게 회복했고, 파라미터가 더 적은 64 × 8이 더 많이 남았습니다(단일 시드, validation은 두 갈래가 같음). 두 학습 동시 실행의 실제 이득은 약 1.17배였습니다.",
+    "config": "experiments/performance/75_parallel_branch_width_depth/config.json",
+    "model": "experiments/performance/75_parallel_branch_width_depth/model.py",
+    "entrypoint": "experiments/performance/75_parallel_branch_width_depth/run.py",
+    "last_checked": "2026-11-05T00:10:47+09:00",
+    "results": "experiments/performance/75_parallel_branch_width_depth/results",
+    "checkpoints": "experiments/performance/75_parallel_branch_width_depth/checkpoints",
+    "manifest": "experiments/performance/75_parallel_branch_width_depth/manifest.json",
+    "training_started_kst": "2026-11-04T19:20:32+09:00",
+    "evaluation": [
+      "experiments/performance/75_parallel_branch_width_depth/results/C2MS_W128D4_QB_s42/evaluation/QB_v2_4.json",
+      "experiments/performance/75_parallel_branch_width_depth/results/C2MS_W64D8_QB_s42/evaluation/QB_v2_4.json"
+    ],
+    "judgements": {
+      "QB_C2MS_W128D4_vs_C2MS53_s42": "개선 없음",
+      "QB_C2MS_W128D4_vs_C2MS57_s42": "개선 없음",
+      "QB_C2MS_W128D4_vs_original_s42": "개선",
+      "QB_C2MS_W64D8_vs_C2MS53_s42": "개선 없음",
+      "QB_C2MS_W64D8_vs_C2MS57_s42": "개선 없음",
+      "QB_C2MS_W64D8_vs_original_s42": "개선",
+      "retention_of_C2MS_RR_PSNR_gain": {
+        "C2MS_W128D4": 0.779,
+        "C2MS_W64D8": 0.86
+      },
+      "criteria": "v2.4"
+    }
   }
 }

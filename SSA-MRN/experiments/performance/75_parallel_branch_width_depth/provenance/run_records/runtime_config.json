@@ -1,0 +1,186 @@
+{
+  "experiment": 75,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "축소한 W2 병렬 가지의 폭과 깊이 비교",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "registered_kst": "2026-11-04",
+  "hypothesis": "Experiment 74 (branch 64 channels x 4 blocks, 0.33M) kept 42% of the C2MS RR PSNR gain over the original (SAM 18%), so most of the gain needs branch capacity. Between 74 and C2MS (128 x 8, 2.43M), keeping the width (128 x 4) or keeping the depth (64 x 8) shows which of the two the gain depends on, and how close a 1.05-1.67M model comes to C2MS.",
+  "evidence": {
+    "experiment_74": "64 x 4 branch: RR -0.521 dB, SAM +0.317 deg against 53 C2MS; +0.385 dB against the original; training MSE stayed 1.28x C2MS from epoch 50 (capacity limit, not under-training)",
+    "experiment_74_benchmark": "single job 0.148 s/step at 41-47% GPU use; two jobs 0.189 s/step each (about 1.5x throughput)"
+  },
+  "arms": {
+    "C2MS_W128D4": "C2MS with the W2 branch PixelUnshuffle(2) -> 1x1 256->128 -> 4 residual blocks at 128 channels -> 1x1 128->256 (zero init) -> PixelShuffle(2); the C2MS width with half the depth",
+    "C2MS_W64D8": "the same with 1x1 256->64 -> 8 residual blocks at 64 channels -> 1x1 64->256; the C2MS depth with half the width"
+  },
+  "parameters": {
+    "C2MS": 2853918,
+    "C2MS_W128D4": 1673246,
+    "C2MS_W64D8": 1050590,
+    "C2MS_M_74": 755166,
+    "original": 426654,
+    "branch": {
+      "C2MS (128x8)": 2427264,
+      "W128D4": 1246592,
+      "W64D8": 623936,
+      "74 (64x4)": 328512
+    }
+  },
+  "loss": "original-pair MSE + 1.0 x 2x-coarser-pair MSE, as 53",
+  "coarse_weight": {
+    "C2MS_W128D4": 1.0,
+    "C2MS_W64D8": 1.0
+  },
+  "epochs": 150,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "schedule": "Adam lr = 1e-6 + 0.5 * (1e-4 - 1e-6) * (1 + cos(pi * zero_based_epoch / 149)), as 53",
+  "comparisons": {
+    "official": "each arm against the archived 53 C2MS of the same seed (criteria v2.4, RR only)",
+    "run_to_run": "each arm against the 57 retrained C2MS (reference)",
+    "retention": "share of the C2MS RR PSNR gain over the original 43 C0 kept by each arm, read with 74 (64 x 4) as a capacity curve",
+    "width_vs_depth": "C2MS_W128D4 against C2MS_W64D8 (same seed, reported, not a judgement)"
+  },
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt"
+  },
+  "reference_controls": {
+    "QB": "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt"
+  },
+  "original": {
+    "QB": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s42/best.pt"
+  },
+  "control_policy": "No new control run: the archived 53 C2MS of the same seed is the official control and the 57 retrained C2MS shows run-to-run variation.",
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.4: RR PSNR, SAM, ERGAS against the same-seed 53 C2MS; single seed noise threshold 0.06 dB; FR QNR/D_lambda/D_s reference only",
+    "reported": "validation PSNR/SAM per epoch, RR against 53, 57 and the original, share of the C2MS gain kept, FR QNR reference, epoch time of two concurrent trainings"
+  },
+  "stages": {
+    "1_screen": "QB seed 42, both arms trained at the same time",
+    "reading": "the arms are smaller than C2MS; the result reports the v2.4 label against 53 and the share of the gain kept, together with 74 and C2MS",
+    "next": "seeds 43/44 or GF2/WV3 only after user approval"
+  },
+  "limits": [
+    "single-seed screen; exploratory test reused",
+    "two trainings share the GPU; cudnn benchmark may pick different algorithms under load, which can change floating-point details but not the training recipe",
+    "no automatic baseline replacement"
+  ],
+  "runtime": "C:/CtrS-p75/run",
+  "queue": [
+    [
+      "QB",
+      "C2MS_W128D4",
+      42
+    ],
+    [
+      "QB",
+      "C2MS_W64D8",
+      42
+    ]
+  ],
+  "expected_duration": "about 4 h for both arms together (74: 68 s per epoch alone; two concurrent jobs measured 1.37x slower per step)",
+  "sensors": [
+    "QB"
+  ],
+  "seeds": [
+    42
+  ],
+  "batch": 32,
+  "micro": 32,
+  "optimizer": "Adam (beta 0.9, 0.999), no weight decay",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training with GradScaler; FP32 transforms, loss, validation and evaluation (as 53/63)",
+  "tf32": false,
+  "cudnn_deterministic": true,
+  "layout": "channels_last",
+  "selection": "minimum original-scale validation MSE including epoch 0, earliest exact tie; test never used for selection (same rule as 53/63)",
+  "normalization": {
+    "QB": 2047
+  },
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    }
+  },
+  "max_parallel": 2,
+  "cudnn_benchmark": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "cpu_threads": 1,
+  "data_root": "C:/CtrS/PAN-MS",
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "cache_reference_manifest": "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json",
+  "source_hashes": {
+    "experiments/performance/75_parallel_branch_width_depth/model.py": "107398906d671fccde503637eea1f9c8309b742700d542f0e458ea4ac56821f0",
+    "experiments/performance/75_parallel_branch_width_depth/prepare.py": "31a155a7ce3dd617cccd2bed12cf0a820fc0ea164c151d9f615868ac343b2698",
+    "experiments/performance/75_parallel_branch_width_depth/train.py": "c3c6e8c495cbc9756a36e397f4cd3a67faebb0ce4c2759c7b36e4dcf8db813b3",
+    "experiments/performance/75_parallel_branch_width_depth/run.py": "558ae7756800d2fca0ea3323ab99595ec9e25cd1ee3e674080876fb04626285d",
+    "experiments/performance/75_parallel_branch_width_depth/config.json": "98ecac26bf88abf8588e61643b7ed552b544530558d85633598105350df5fe6a",
+    "experiments/performance/75_parallel_branch_width_depth/evaluate.py": "0c41f6ab214bb4eb48057f955830602fcf612d755b8f2621627ba205840ce6e0",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/train.py": "55c150b067788191664e5f72885e065b1a222fcaeb0fe97a6b13050dc08a7dc5",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/evaluate.py": "e7e60ab17aea8d55f9d1d92fc57c1bd166e50f44d936b1d29c190c25ed818a7a",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/config.json": "821c9038a3c6fa296d96176074b3d91c86a9df3d5a9ffd115eb727de310546e4",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16",
+    "common/result_images.py": "2fc73537d7d60fa8c9d19a036ad0bb53e9ab1231b9811fd6d8e9b5159675c737",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt": "3ab7f20c2fda333f2698163af3b0b6c77030d2436f3407f1c58f3224e689de40",
+    "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt": "61f5fc49c4c401496bc514fae32c4d070eb95f0591d01843477e91d63b61b5fa",
+    "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s42/best.pt": "f3255077687f0cfefb307961957b9ecc4973555d8b926008d778858c60f50406",
+    "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json": "5eff51d1aab2a971d850296817ec91de3fcc0560086d75969a11035e04f3d5ad"
+  },
+  "created_kst": "2026-11-04T19:19:52.601445+09:00",
+  "coarse_cache_equal_to_63": {
+    "QB_train_coarse_pan": true,
+    "QB_train_coarse_lms": true,
+    "QB_train_coarse_ms": true,
+    "QB_train_coarse_gt": true,
+    "QB_val_coarse_pan": true,
+    "QB_val_coarse_lms": true,
+    "QB_val_coarse_ms": true,
+    "QB_val_coarse_gt": true
+  },
+  "cache_manifest_sha256": "d0a70a5efe10aaed25923f14a002f37f9eb452866df92c47c58c696403e50ba3",
+  "benchmark": {
+    "QB_C2MS_W128D4": {
+      "median_step_seconds": 0.14310945000033826,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.4375
+    },
+    "QB_C2MS_W64D8": {
+      "median_step_seconds": 0.13096889999724226,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.396484375
+    }
+  },
+  "fingerprint": "d8d6764dc973194b790912ebe1604b64968e5ffa6f6579574f68d8b6ebb7ee89"
+}
