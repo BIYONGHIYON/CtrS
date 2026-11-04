@@ -1,0 +1,216 @@
+{
+  "experiment": "performance/74_backbone_matched_parallel_branch",
+  "research_track": "performance",
+  "experiment_number": 74,
+  "state": "QB seed 42 screen complete; no improvement against 53 C2MS (RR -0.521 dB); 42% of the C2MS gain over the original kept with 26% of the parameters",
+  "files": {
+    "README.md": {
+      "bytes": 15498,
+      "sha256": "5c9373aed787390b8ba8c063a014706f6535544830f2e82fb260767b10233de0"
+    },
+    "checkpoints/C2MS_M_QB_s42/best.pt": {
+      "bytes": 4272323,
+      "sha256": "561b15fd40fa4c66768f01b9732e8a8a0aa44b223808eb3fa73a2bd175267634"
+    },
+    "config.json": {
+      "bytes": 5144,
+      "sha256": "8ff423875681934530116f30a85cd1fc1c722f3ae03a25885e06cdcac9fdc377"
+    },
+    "evaluate.py": {
+      "bytes": 7208,
+      "sha256": "0849f66825e1dc6a55ee8d9aef3dea7810a71901980781b0be3b2a20e6ca4386"
+    },
+    "model.py": {
+      "bytes": 1767,
+      "sha256": "6c11f05b631cdbb8a93cdadf7caa38973e1dde05debd69d051be91db44183662"
+    },
+    "prepare.py": {
+      "bytes": 545,
+      "sha256": "31a155a7ce3dd617cccd2bed12cf0a820fc0ea164c151d9f615868ac343b2698"
+    },
+    "provenance/bench2.cmd": {
+      "bytes": 901,
+      "sha256": "92ce8d3d57e548a9290a4976ff6a8804f65c1a162fe260f759f1bf5310c4e38e"
+    },
+    "provenance/ctrs74-source-manifest.json": {
+      "bytes": 38611,
+      "sha256": "8b519c43340db83813699ec8463095bb61c1d3e6726927271ef96d4e45927aad"
+    },
+    "provenance/launch74.cmd": {
+      "bytes": 528,
+      "sha256": "2ee462fbe7dbf99382c99c2353dceae78bc41d7e83bb1404ab0b6642091a40ac"
+    },
+    "provenance/launcher.json": {
+      "bytes": 88,
+      "sha256": "194db9945beda0a867aa6d5bfa3be9d19df567e231d3f8c9eae0a5f6a7752c45"
+    },
+    "provenance/run_records/all_complete.json": {
+      "bytes": 154,
+      "sha256": "e4ddc96f682b08b06561faf629b381c9537722e18752479db50efb0b703dec0b"
+    },
+    "provenance/run_records/controller_started.json": {
+      "bytes": 177,
+      "sha256": "bd086b257ce45f54311488bad2079a3c9e0dbd51a9c21f344904dd00dca24099"
+    },
+    "provenance/run_records/data_manifest.json": {
+      "bytes": 6175,
+      "sha256": "d0a70a5efe10aaed25923f14a002f37f9eb452866df92c47c58c696403e50ba3"
+    },
+    "provenance/run_records/environment.json": {
+      "bytes": 411,
+      "sha256": "8719f5a846ac8352ebf9d8e2e47fd17cb22ff1eac4fd5764dc7257d2bb1cc736"
+    },
+    "provenance/run_records/preflight/benchmark_n1_QB_C2MS_M.json": {
+      "bytes": 443,
+      "sha256": "48c6dacf72ad15e870754b55b8dddf9acc82e95c51726f6343d5455d0cf3bfb6"
+    },
+    "provenance/run_records/preflight/benchmark_pairA_QB_C2MS_M.json": {
+      "bytes": 446,
+      "sha256": "3e7ed636bf3e2f12dfa9ac6828a019fdc706c562cbb9ef96435c6958bf3e62fb"
+    },
+    "provenance/run_records/preflight/benchmark_pairB_QB_C2MS_M.json": {
+      "bytes": 446,
+      "sha256": "d87ad90b4801fb61d38e2f85f763fae4378b0bbe921c8b9a2c0150f699d6ec12"
+    },
+    "provenance/run_records/preflight/benchmark_solo_QB_C2MS_M.json": {
+      "bytes": 446,
+      "sha256": "6ed55f990e7fe88d9266360414c5b18bb9700eb0c5760e2baeeaf58581f25af2"
+    },
+    "provenance/run_records/preflight/checks.json": {
+      "bytes": 1353,
+      "sha256": "cd1ec087ff7168253d249ea7c9a54cb42e33392f35535707c70336598db71566"
+    },
+    "provenance/run_records/preflight/optimization.json": {
+      "bytes": 335,
+      "sha256": "5766b98978fb6259dcaac14a3e7d8f0017128cc6a0c262a7cf27fe9264442fb9"
+    },
+    "provenance/run_records/queue_status.json": {
+      "bytes": 866,
+      "sha256": "5d22f670ebfbf4a138fc46d066f594ff0a05b2b0e6678c43afbd89dca3da0100"
+    },
+    "provenance/run_records/runtime_config.json": {
+      "bytes": 9405,
+      "sha256": "c5eb7847b21846ac67ea94b0053e602760c2de3168b83ec82f227e50186cb386"
+    },
+    "provenance/server_cleanup.json": {
+      "bytes": 622,
+      "sha256": "6f92b92a14154b3eab2c5cf2a2d26045ee3a84e9887c698ef71708aa48f876c1"
+    },
+    "provenance/source_verification.json": {
+      "bytes": 95,
+      "sha256": "313682a643dd09895ce5ce71455916912876e87e246d77fe3a206de8441ad95e"
+    },
+    "provenance/stage74.ps1": {
+      "bytes": 747,
+      "sha256": "67ac7461cf9fee4f901c2514cbae7ba34681d6b49b68d4dc303115d31b6eda5c"
+    },
+    "provenance/verify_ctrs74_server.py": {
+      "bytes": 650,
+      "sha256": "da40ebccc5a5a3747420bfcd57d2b90df1862cbe57ece9b3584e990a07440c4a"
+    },
+    "results/C2MS_M_QB_s42/evaluation/QB/compare_scene_00.png": {
+      "bytes": 225896,
+      "sha256": "e67be7f713ade698feeb542783bdf857e7200ed2584987fa12d4d63b1322ac09"
+    },
+    "results/C2MS_M_QB_s42/evaluation/QB/compare_scene_01.png": {
+      "bytes": 219290,
+      "sha256": "b296261d959e1e97ee8f952f0ef699deb73ca5c7d7887a45e58752b96bac1c1d"
+    },
+    "results/C2MS_M_QB_s42/evaluation/QB/compare_scene_03.png": {
+      "bytes": 238997,
+      "sha256": "6d2db75d8cfd1a987db867976bf9f3c283a57d315a1422ba1fc22c795fe15e3f"
+    },
+    "results/C2MS_M_QB_s42/evaluation/QB/compare_scene_07.png": {
+      "bytes": 220530,
+      "sha256": "af3a849666fe4664a645853142b67f7460310e58be09c1d8ba0b9f9fda95dd2a"
+    },
+    "results/C2MS_M_QB_s42/evaluation/QB/compare_scene_14.png": {
+      "bytes": 223921,
+      "sha256": "ff730a875d9ae8def8b3c957a43acd71682c61391be59249312024dce521cd0b"
+    },
+    "results/C2MS_M_QB_s42/evaluation/QB/compare_scene_17.png": {
+      "bytes": 227666,
+      "sha256": "d0ca0d1023e841a47330dba8a01cee406c73e6b9622f88be3518571a97477044"
+    },
+    "results/C2MS_M_QB_s42/evaluation/QB/full_scene_00.png": {
+      "bytes": 742637,
+      "sha256": "b718bba0c4141612e27522858704958d0428a0d8b55206cefcb09573503bc56e"
+    },
+    "results/C2MS_M_QB_s42/evaluation/QB/full_scene_01.png": {
+      "bytes": 780670,
+      "sha256": "075245524b92f4a047ce9408cbbafa0dd9f7be70d3ee9171e233c7ece48fc432"
+    },
+    "results/C2MS_M_QB_s42/evaluation/QB/full_scene_03.png": {
+      "bytes": 813643,
+      "sha256": "90c6cd982366f0f2153702153043058168addf19e7ee6d2621a80c5c07f67e8b"
+    },
+    "results/C2MS_M_QB_s42/evaluation/QB/full_scene_07.png": {
+      "bytes": 741375,
+      "sha256": "956f3705c645e3b0d160247ed161626d11ee529941cc26a70e123966aff0f2d8"
+    },
+    "results/C2MS_M_QB_s42/evaluation/QB/full_scene_14.png": {
+      "bytes": 759327,
+      "sha256": "bbc1924f51b6370873127e125302c3becf784f589af8543182effa2657833189"
+    },
+    "results/C2MS_M_QB_s42/evaluation/QB/full_scene_17.png": {
+      "bytes": 756777,
+      "sha256": "34078d42d2d0a689b7e1481d5555779a7cb85bb2297d3f4a59d58b0694a0c960"
+    },
+    "results/C2MS_M_QB_s42/evaluation/QB/result_images.json": {
+      "bytes": 2856,
+      "sha256": "4f00b8d17fc1343ac75753381eceda5f9bad6d5144cb4b441da47e0babb3eb38"
+    },
+    "results/C2MS_M_QB_s42/evaluation/QB_v2_4.json": {
+      "bytes": 42759,
+      "sha256": "99f5023e7cae05aed3d1e2cab1503795ce22c4ce9dca4164ea1171f00d76d44e"
+    },
+    "results/C2MS_M_QB_s42/evaluation/comparison.png": {
+      "bytes": 47124,
+      "sha256": "098cffa9fa4e0f54cdc12f8581d5199334b4a5e75ab2ca5c001af42b97fe0575"
+    },
+    "results/C2MS_M_QB_s42/evaluation/learning.png": {
+      "bytes": 92334,
+      "sha256": "4e68be62096505e902386763aa1e05cad1ac3ba71d333b8022d69ab597d70b58"
+    },
+    "results/C2MS_M_QB_s42/evaluation_complete.json": {
+      "bytes": 3716,
+      "sha256": "4a9b96b8cc349b23a8f1c9c90c4ef49ded35849d4a1c85891b983b4f6250220a"
+    },
+    "results/C2MS_M_QB_s42/history.json": {
+      "bytes": 88901,
+      "sha256": "9abf026d40821d66e62b609edfa3ac0a8b696bb19befe53cf9bbe0b229bd7da0"
+    },
+    "results/C2MS_M_QB_s42/initialization.json": {
+      "bytes": 169,
+      "sha256": "4a9d721c81cab802324d8a169463e45cf8be386dde91052428eeb3a29f9231bd"
+    },
+    "results/C2MS_M_QB_s42/training_complete.json": {
+      "bytes": 529,
+      "sha256": "5a2baf331b0f2189a339761cc238d85b86d4bffc0712a92fa3bd146bfd06cc17"
+    },
+    "run.py": {
+      "bytes": 12209,
+      "sha256": "6ae53c98e10cc4124a90df3047f4af2f7a6f2be52cce0ff60acca47d27c1e043"
+    },
+    "train.py": {
+      "bytes": 3491,
+      "sha256": "045b556bf6332497119f5832d5e6ba44713545988acdfa8c396124d530de534e"
+    }
+  },
+  "release_assets": {
+    "checkpoints/C2MS_M_QB_s42/initial.pt": {
+      "release": "weights-experiments-performance-74",
+      "asset": "checkpoints__C2MS_M_QB_s42__initial.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-74/checkpoints__C2MS_M_QB_s42__initial.pt",
+      "bytes": 4279355,
+      "sha256": "06a85d63b45bae074925f9c638d197b98e57b7bc7d8df8f86c1daa1bb73d88f4"
+    },
+    "checkpoints/C2MS_M_QB_s42/latest.pt": {
+      "release": "weights-experiments-performance-74",
+      "asset": "checkpoints__C2MS_M_QB_s42__latest.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-74/checkpoints__C2MS_M_QB_s42__latest.pt",
+      "bytes": 13813714,
+      "sha256": "97c3ca5fa52bcf91ccb0455acf2ec105fd24303f5f63af299ff98f61b48a06be"
+    }
+  }
+}

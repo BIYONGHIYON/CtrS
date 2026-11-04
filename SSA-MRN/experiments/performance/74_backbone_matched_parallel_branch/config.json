@@ -3,8 +3,8 @@
   "research_track": "performance",
   "experimenter": "이병현",
   "title": "W2 병렬 가지의 폭·깊이를 원본 backbone과 같게 줄인 C2MS",
-  "status": "계획",
-  "improvement": "판단 보류",
+  "status": "평가 완료",
+  "improvement": "개선 없음",
   "registered_kst": "2026-11-04",
   "hypothesis": "The W2 branch of C2MS keeps PixelUnshuffle(2)/PixelShuffle(2) but runs 8 blocks at 128 channels (2.43M of the 2.85M parameters). If the gain of C2MS over the original comes mainly from processing at half resolution with the four sub-pixel positions mixed, a branch whose inside equals the original backbone pipeline (four 64-channel conv-ReLU-conv residual blocks between 1x1 projections 256->64 and 64->256, 0.33M) keeps most of the gain with a 0.76M model.",
   "evidence": {
