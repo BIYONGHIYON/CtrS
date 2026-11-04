@@ -1993,7 +1993,7 @@
     "sensor": "QB",
     "experiment": 76,
     "display_name": "76. 1/4 해상도 병렬 가지(W4) 추가",
-    "status": "계획",
+    "status": "학습 중",
     "improvement": "판단 보류",
     "evaluated_seeds": [],
     "retraining": true,
@@ -2001,6 +2001,8 @@
     "limits": "원본 backbone과 W2 가지 옆에 1/4 해상도 가지(W4: PixelUnshuffle(4) → 1×1 1024→64 → 64채널 잔차 블록 4개 → 1×1 64→1024 → PixelShuffle(4), 0.43M)를 붙입니다. 75번 64 × 8 W2 가지에 붙인 갈래(1.48M)와 C2MS에 붙인 갈래(3.28M)를 동시에 학습합니다(학습 조건은 53번과 같음, QB seed 42).",
     "config": "experiments/performance/76_quarter_resolution_branch/config.json",
     "model": "experiments/performance/76_quarter_resolution_branch/model.py",
-    "entrypoint": "experiments/performance/76_quarter_resolution_branch/run.py"
+    "entrypoint": "experiments/performance/76_quarter_resolution_branch/run.py",
+    "last_checked": "2026-11-05T01:01:03+09:00",
+    "training_started_kst": "2026-11-05T00:58:30+09:00"
   }
 }
