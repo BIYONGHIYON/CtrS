@@ -1,0 +1,56 @@
+{
+  "time_kst": "2026-11-05T06:34:57.768717+09:00",
+  "phase": "evaluate",
+  "active": [
+    {
+      "sensor": "QB",
+      "arm": "C2MS_W64D8_W4",
+      "seed": 42
+    }
+  ],
+  "runs": [
+    {
+      "sensor": "QB",
+      "arm": "C2MS_W64D8_W4",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": false,
+      "status": {
+        "time_kst": "2026-11-05T06:23:43.393985+09:00",
+        "pid": 14480,
+        "sensor": "QB",
+        "arm": "C2MS_W64D8_W4",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.024993419647216797,
+        "reserved_gb": 0.421875,
+        "best_epoch": 149
+      }
+    },
+    {
+      "sensor": "QB",
+      "arm": "C2MS_W4",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": false,
+      "status": {
+        "time_kst": "2026-11-05T06:34:54.420740+09:00",
+        "pid": 19192,
+        "sensor": "QB",
+        "arm": "C2MS_W4",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.0518488883972168,
+        "reserved_gb": 0.572265625,
+        "best_epoch": 145
+      }
+    }
+  ],
+  "epoch_seconds": {
+    "QB_C2MS_W64D8_W4": 130.03200000000652,
+    "QB_C2MS_W4": 81.17199999999139
+  },
+  "training_remaining_seconds": 0.0,
+  "training_end_kst": "2026-11-05T06:34:57.768717+09:00",
+  "eta_basis": "measured recent epochs per sensor/arm, else benchmark x1.15; excludes final RR/FR evaluation"
+}

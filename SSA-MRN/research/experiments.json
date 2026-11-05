@@ -2642,5 +2642,50 @@
       },
       "criteria": "v2.4"
     }
+  },
+  "performance/76_quarter_resolution_branch": {
+    "report": "experiments/performance/76_quarter_resolution_branch/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 76,
+    "display_name": "76. 1/4 해상도 병렬 가지(W4) 추가",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "epochs": 150,
+    "limits": "C2MS + W4는 53번 C2MS 대비 test RR PSNR +0.025 dB·SAM −0.010°·ERGAS −0.010으로 세 지표가 모두 좋아졌지만 잡음 문턱(0.06 dB) 미만이라 부분 개선(잡음 수준)입니다. 64 × 8 + W4는 −0.132 dB로 개선 없음이고, W4가 없는 75번 64 × 8과 같았습니다. 노린 4-8 px의 정답과 상관없는 성분과 평탄 영역 오차는 두 갈래 모두 줄지 않았고, W4는 8-16 px 오차만 16-19% 줄였습니다(남은 오차의 2% 미만). C2MS + W4의 이득은 87%가 영상 가장자리 16 px 띠에서 나왔습니다.",
+    "config": "experiments/performance/76_quarter_resolution_branch/config.json",
+    "model": "experiments/performance/76_quarter_resolution_branch/model.py",
+    "entrypoint": "experiments/performance/76_quarter_resolution_branch/run.py",
+    "last_checked": "2026-11-05T16:24:34+09:00",
+    "training_started_kst": "2026-11-05T00:58:30+09:00",
+    "results": "experiments/performance/76_quarter_resolution_branch/results",
+    "checkpoints": "experiments/performance/76_quarter_resolution_branch/checkpoints",
+    "manifest": "experiments/performance/76_quarter_resolution_branch/manifest.json",
+    "evaluation": [
+      "experiments/performance/76_quarter_resolution_branch/results/C2MS_W4_QB_s42/evaluation/QB_v2_4.json",
+      "experiments/performance/76_quarter_resolution_branch/results/C2MS_W64D8_W4_QB_s42/evaluation/QB_v2_4.json"
+    ],
+    "analysis": [
+      "experiments/performance/76_quarter_resolution_branch/results/frequency_structure.json",
+      "experiments/performance/76_quarter_resolution_branch/results/border_interior.json"
+    ],
+    "judgements": {
+      "QB_C2MS_W4_vs_C2MS53_s42": "부분 개선",
+      "QB_C2MS_W4_vs_C2MS57_s42": "부분 개선",
+      "QB_C2MS_W4_vs_original_s42": "개선",
+      "QB_C2MS_W64D8_W4_vs_C2MS53_s42": "개선 없음",
+      "QB_C2MS_W64D8_W4_vs_C2MS57_s42": "개선 없음",
+      "QB_C2MS_W64D8_W4_vs_original_s42": "개선",
+      "retention_of_C2MS_RR_PSNR_gain": {
+        "C2MS_W4": 1.028,
+        "C2MS_W64D8_W4": 0.855
+      },
+      "criteria": "v2.4"
+    }
   }
 }
