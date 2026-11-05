@@ -17,6 +17,7 @@ HERE = Path(__file__).resolve().parent
 _spec = importlib.util.spec_from_file_location('exp75_model', HERE.parent / '75_parallel_branch_width_depth/model.py')
 M75 = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(M75)
 M43 = M75.M43
+M54 = M75.M54  # evaluate.py builds the 53/57 C2MS controls through model.M54 (alias added after training, before evaluation)
 QUARTER = dict(width=64, depth=4)
 ARMS = ('C2MS_W64D8_W4', 'C2MS_W4')
 INNER = {'C2MS_W64D8_W4': 'C2MS_W64D8 (75)', 'C2MS_W4': 'C2 (43) = C2MS (53)'}

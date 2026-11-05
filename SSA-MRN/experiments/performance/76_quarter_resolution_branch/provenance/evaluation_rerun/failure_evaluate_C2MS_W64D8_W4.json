@@ -1,0 +1,4 @@
+{
+  "time_kst": "2026-11-05T06:35:00.492772+09:00",
+  "traceback": "Traceback (most recent call last):\n  File \"C:\\CtrS-p76\\SSA-MRN\\experiments\\performance\\76_quarter_resolution_branch\\train.py\", line 63, in <module>\n    evaluate(cfg,a.sensor,a.arm,a.seed)\n  File \"C:\\CtrS-p73\\.venv\\Lib\\site-packages\\torch\\utils\\_contextlib.py\", line 116, in decorate_context\n    return func(*args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\CtrS-p76\\SSA-MRN\\experiments\\performance\\76_quarter_resolution_branch\\evaluate.py\", line 42, in evaluate\n    m=M43.Model('C0',seed) if kind=='C0' else M.M54.Model('C2MS',SENSORS[sensor]['bands'],seed) if kind=='C2MS' else Model(arm,SENSORS[sensor]['bands'],seed)\n                                              ^^^^^\nAttributeError: module 'model' has no attribute 'M54'\n"
+}

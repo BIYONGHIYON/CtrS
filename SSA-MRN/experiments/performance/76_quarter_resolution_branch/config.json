@@ -3,8 +3,8 @@
   "research_track": "performance",
   "experimenter": "이병현",
   "title": "1/4 해상도 병렬 가지(W4) 추가",
-  "status": "계획",
-  "improvement": "판단 보류",
+  "status": "평가 완료",
+  "improvement": "부분 개선",
   "registered_kst": "2026-11-05",
   "hypothesis": "Against C2MS, 75 C2MS_W64D8 lost RR 0.127 dB, 74% of it in the 4-8 px band (52% with a Hann window; about 90% below 8 px either way) and mostly as error uncorrelated with the GT (detail gain 0.969 vs 0.973); by structure the largest share was flat regions (35% of the loss, 18% of the gain). C2MS itself also keeps most of its error as 4-8 px uncorrelated components. A third branch at quarter resolution (W4, 0.43M) adds cheap, coarse context. If that context suppresses spurious 4-8 px texture in flat regions, (A) W64D8 + W4 (1.48M) recovers more of the C2MS gain than widening did (75 W128D4, 1.67M, 78%), and (B) C2MS + W4 (3.28M) improves RR over 53 C2MS.",
   "evidence": {
