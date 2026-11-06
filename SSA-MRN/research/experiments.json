@@ -2695,14 +2695,48 @@
     "sensor": "QB",
     "experiment": 77,
     "display_name": "77. 원래 해상도 backbone의 폭·깊이 확대",
-    "status": "계획",
-    "improvement": "판단 보류",
-    "evaluated_seeds": [],
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42
+    ],
     "retraining": true,
     "epochs": 150,
-    "limits": "C2MS의 원래 해상도 backbone(64채널 블록 4개)을 키웁니다. E1 128채널 × 8블록(4.94M), E2 64채널 × 8블록(3.15M), E3 backbone과 W2 가지 모두 64채널 × 8블록(1.35M)이며, W2와 학습 조건은 53번과 같습니다(QB seed 42, 두 개씩 동시 학습).",
+    "limits": "E2는 53번 C2MS 대비 test RR PSNR +0.022 dB·SAM −0.018°·ERGAS −0.008로 세 지표가 모두 좋아졌지만 잡음 문턱(0.06 dB) 미만이라 부분 개선(잡음 수준)입니다. E1은 validation이 +0.134 dB로 가장 높았지만 test PSNR −0.026 dB·SAM −0.031°(20장 모두 좋아짐)로 부분 개선, E3는 −0.012 dB로 개선 없음이지만 C2MS의 47% 파라미터로 원본 대비 이득의 98.7%를 얻었습니다. E1은 4-8 px의 정답과 상관없는 성분을 3.1% 줄였지만 2-4 px 오차가 늘었습니다. 추론 시 W2 출력 배율은 α = 0.98-1.0이 최적이었습니다(α > 1은 모두 나빠짐).",
     "config": "experiments/performance/77_full_resolution_backbone_capacity/config.json",
     "model": "experiments/performance/77_full_resolution_backbone_capacity/model.py",
-    "entrypoint": "experiments/performance/77_full_resolution_backbone_capacity/run.py"
+    "entrypoint": "experiments/performance/77_full_resolution_backbone_capacity/run.py",
+    "last_checked": "2026-11-06T23:34:13+09:00",
+    "training_started_kst": "2026-11-06T11:46:39+09:00",
+    "results": "experiments/performance/77_full_resolution_backbone_capacity/results",
+    "checkpoints": "experiments/performance/77_full_resolution_backbone_capacity/checkpoints",
+    "manifest": "experiments/performance/77_full_resolution_backbone_capacity/manifest.json",
+    "evaluation": [
+      "experiments/performance/77_full_resolution_backbone_capacity/results/C2MS_B128D8_QB_s42/evaluation/QB_v2_4.json",
+      "experiments/performance/77_full_resolution_backbone_capacity/results/C2MS_B64D8_QB_s42/evaluation/QB_v2_4.json",
+      "experiments/performance/77_full_resolution_backbone_capacity/results/C2MS_B64D8_W64D8_QB_s42/evaluation/QB_v2_4.json"
+    ],
+    "analysis": [
+      "experiments/performance/77_full_resolution_backbone_capacity/results/frequency_structure.json",
+      "experiments/performance/77_full_resolution_backbone_capacity/results/border_interior.json",
+      "experiments/performance/77_full_resolution_backbone_capacity/results/w2_output_scaling.json"
+    ],
+    "judgements": {
+      "QB_C2MS_B64D8_vs_C2MS53_s42": "부분 개선",
+      "QB_C2MS_B64D8_vs_C2MS57_s42": "부분 개선",
+      "QB_C2MS_B64D8_vs_original_s42": "개선",
+      "QB_C2MS_B128D8_vs_C2MS53_s42": "부분 개선",
+      "QB_C2MS_B128D8_vs_C2MS57_s42": "부분 개선",
+      "QB_C2MS_B128D8_vs_original_s42": "개선",
+      "QB_C2MS_B64D8_W64D8_vs_C2MS53_s42": "개선 없음",
+      "QB_C2MS_B64D8_W64D8_vs_C2MS57_s42": "개선 없음",
+      "QB_C2MS_B64D8_W64D8_vs_original_s42": "개선",
+      "retention_of_C2MS_RR_PSNR_gain": {
+        "C2MS_B64D8": 1.024,
+        "C2MS_B128D8": 0.971,
+        "C2MS_B64D8_W64D8": 0.987
+      },
+      "criteria": "v2.4"
+    }
   }
 }

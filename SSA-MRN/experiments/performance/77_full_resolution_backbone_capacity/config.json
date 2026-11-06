@@ -3,8 +3,8 @@
   "research_track": "performance",
   "experimenter": "이병현",
   "title": "원래 해상도 backbone의 폭·깊이 확대",
-  "status": "계획",
-  "improvement": "판단 보류",
+  "status": "평가 완료",
+  "improvement": "부분 개선",
   "registered_kst": "2026-11-06",
   "hypothesis": "Shrinking the W2 branch lowered RR (74, 75), and widening/deepening it reduced the 4-8 px error that varies between seeds (75: 64x8 -> 128x8 removed 9% of the 4-8 px uncorrelated component). The full-resolution backbone (64 channels x 4 blocks, 0.30M) has never been enlarged together with the W2 branch, and in 29 a full-resolution 64x8 branch (W3, about 0.59M) gave +0.643 dB over the original with a quarter of the W2 parameters (+0.723 dB). If capacity at full resolution, where the 2-8 px detail that carries the C2MS gain lives, is still a limit, enlarging the backbone improves RR over 53 C2MS: E1 (backbone 128x8 + W2 128x8, 4.94M), E2 (backbone 64x8 + W2 128x8, 3.15M); E3 (backbone 64x8 + W2 64x8, 1.35M) shows whether moving capacity from W2 to the full-resolution path keeps the C2MS result with half the parameters.",
   "evidence": {
