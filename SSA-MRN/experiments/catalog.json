@@ -2030,5 +2030,22 @@
       },
       "criteria": "v2.4"
     }
+  },
+  "performance/77_full_resolution_backbone_capacity": {
+    "report": "experiments/performance/77_full_resolution_backbone_capacity/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 77,
+    "display_name": "77. 원래 해상도 backbone의 폭·깊이 확대",
+    "status": "계획",
+    "improvement": "판단 보류",
+    "evaluated_seeds": [],
+    "retraining": true,
+    "epochs": 150,
+    "limits": "C2MS의 원래 해상도 backbone(64채널 블록 4개)을 키웁니다. E1 128채널 × 8블록(4.94M), E2 64채널 × 8블록(3.15M), E3 backbone과 W2 가지 모두 64채널 × 8블록(1.35M)이며, W2와 학습 조건은 53번과 같습니다(QB seed 42, 두 개씩 동시 학습).",
+    "config": "experiments/performance/77_full_resolution_backbone_capacity/config.json",
+    "model": "experiments/performance/77_full_resolution_backbone_capacity/model.py",
+    "entrypoint": "experiments/performance/77_full_resolution_backbone_capacity/run.py"
   }
 }

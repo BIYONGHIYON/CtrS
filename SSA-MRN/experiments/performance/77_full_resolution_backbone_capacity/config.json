@@ -1,0 +1,151 @@
+{
+  "experiment": 77,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "원래 해상도 backbone의 폭·깊이 확대",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "registered_kst": "2026-11-06",
+  "hypothesis": "Shrinking the W2 branch lowered RR (74, 75), and widening/deepening it reduced the 4-8 px error that varies between seeds (75: 64x8 -> 128x8 removed 9% of the 4-8 px uncorrelated component). The full-resolution backbone (64 channels x 4 blocks, 0.30M) has never been enlarged together with the W2 branch, and in 29 a full-resolution 64x8 branch (W3, about 0.59M) gave +0.643 dB over the original with a quarter of the W2 parameters (+0.723 dB). If capacity at full resolution, where the 2-8 px detail that carries the C2MS gain lives, is still a limit, enlarging the backbone improves RR over 53 C2MS: E1 (backbone 128x8 + W2 128x8, 4.94M), E2 (backbone 64x8 + W2 128x8, 3.15M); E3 (backbone 64x8 + W2 64x8, 1.35M) shows whether moving capacity from W2 to the full-resolution path keeps the C2MS result with half the parameters.",
+  "evidence": {
+    "experiment_29": "full-resolution 64x8 branch W3 +0.643 dB vs W2 128x8 +0.723 dB over the original (seed 42, before scale-mixed training)",
+    "experiment_74_75": "W2 64x4 -0.521 dB, 128x4 -0.201 dB, 64x8 -0.127 dB against 53 C2MS; depth kept more of the gain than width",
+    "experiment_75_76_seed_variance": "3-seed C2MS average cut the 4-8 px uncorrelated component by 9.8% (+0.28 dB over the member mean); the quarter-resolution branch of 76 cut it by 0%",
+    "experiment_76": "C2MS + W4 RR +0.025 dB (noise level); W4 reduced only the 8-16 px error"
+  },
+  "arms": {
+    "C2MS_B128D8": "backbone x + 1x1 64->128 -> 8 residual blocks at 128 channels (full resolution) -> 1x1 128->64, replacing the original 4 blocks; W2 128x8 as C2MS",
+    "C2MS_B64D8": "backbone = original 4 blocks + 4 more 64-channel blocks (last conv zero init); W2 128x8 as C2MS",
+    "C2MS_B64D8_W64D8": "backbone = original 4 blocks + 4 more 64-channel blocks (last conv zero init); W2 64x8 as 75 C2MS_W64D8"
+  },
+  "parameters": {
+    "C2MS_B128D8": 4936414,
+    "C2MS_B64D8": 3149342,
+    "C2MS_B64D8_W64D8": 1346014,
+    "C2MS": 2853918,
+    "C2MS_W64D8_75": 1050590,
+    "original": 426654,
+    "backbone": {
+      "original 64x4": 295424,
+      "64x8": 590848,
+      "128x8 with 1x1 projections": 2377920
+    },
+    "W2": {
+      "128x8": 2427264,
+      "64x8": 623936
+    }
+  },
+  "loss": "original-pair MSE + 1.0 x 2x-coarser-pair MSE, as 53",
+  "coarse_weight": {
+    "C2MS_B128D8": 1.0,
+    "C2MS_B64D8": 1.0,
+    "C2MS_B64D8_W64D8": 1.0
+  },
+  "epochs": 150,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "schedule": "Adam lr = 1e-6 + 0.5 * (1e-4 - 1e-6) * (1 + cos(pi * zero_based_epoch / 149)), as 53",
+  "comparisons": {
+    "official": "each arm against the archived 53 C2MS of the same seed (criteria v2.4, RR only)",
+    "run_to_run": "each arm against the 57 retrained C2MS (reference)",
+    "retention": "share of the C2MS RR PSNR gain over the original 43 C0; E3 read with 75 C2MS_W64D8 (W2 64x8 with the original backbone)",
+    "mechanism": "frequency/structure split as in 75/76 (4-8 px uncorrelated component, flat regions) against 53 C2MS; reported, not a judgement"
+  },
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt"
+  },
+  "reference_controls": {
+    "QB": "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt"
+  },
+  "original": {
+    "QB": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s42/best.pt"
+  },
+  "control_policy": "No new control run: the archived 53 C2MS of the same seed is the official control and the 57 retrained C2MS shows run-to-run variation.",
+  "judgement": {
+    "criteria": "docs/judgement_criteria.md v2.4: RR PSNR, SAM, ERGAS against the same-seed 53 C2MS; single seed noise threshold 0.06 dB; FR QNR/D_lambda/D_s reference only",
+    "reported": "validation PSNR/SAM per epoch, RR against 53, 57 and the original, share of the C2MS gain kept, FR QNR reference, epoch time of two concurrent trainings"
+  },
+  "stages": {
+    "1_screen": "QB seed 42, three arms, at most two trainings at the same time (E1 with E3 first, then E2)",
+    "reading": "E1/E2 are candidates for improving C2MS; E3 asks whether full-resolution capacity is a cheaper use of parameters than W2 capacity",
+    "next": "seeds 43/44 or GF2/WV3 only after user approval"
+  },
+  "limits": [
+    "single-seed screen; exploratory test reused",
+    "E1 replaces the original blocks, so its initial output is not the original SSA-MRN output; E2/E3 start exactly from it",
+    "the full-resolution 128-channel backbone has about four times the convolution cost of the W2 branch; step time is measured in the preflight benchmark",
+    "larger models may raise validation without raising test on QB (seen in 59 and 73)",
+    "two trainings share the GPU; cudnn benchmark may pick different algorithms under load, which can change floating-point details but not the training recipe",
+    "no automatic baseline replacement"
+  ],
+  "runtime": "C:/CtrS-p77/run",
+  "queue": [
+    [
+      "QB",
+      "C2MS_B128D8",
+      42
+    ],
+    [
+      "QB",
+      "C2MS_B64D8_W64D8",
+      42
+    ],
+    [
+      "QB",
+      "C2MS_B64D8",
+      42
+    ]
+  ],
+  "expected_duration": "about 8-10 h for the three arms with two at a time; the preflight benchmark gives the step times",
+  "sensors": [
+    "QB"
+  ],
+  "seeds": [
+    42
+  ],
+  "batch": 32,
+  "micro": 32,
+  "optimizer": "Adam (beta 0.9, 0.999), no weight decay",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training with GradScaler; FP32 transforms, loss, validation and evaluation (as 53/63)",
+  "tf32": false,
+  "cudnn_deterministic": true,
+  "layout": "channels_last",
+  "selection": "minimum original-scale validation MSE including epoch 0, earliest exact tie; test never used for selection (same rule as 53/63)",
+  "normalization": {
+    "QB": 2047
+  },
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    }
+  },
+  "max_parallel": 2,
+  "cudnn_benchmark": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "cpu_threads": 1,
+  "data_root": "C:/CtrS/PAN-MS",
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "cache_reference_manifest": "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json"
+}
