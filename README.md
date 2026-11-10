@@ -21,13 +21,14 @@
 
 원본 SSA-MRN은 PAN·축소 후 재확대한 PAN(LRPAN)·확대한 MS(LMS)에서 특징을 추출하고, 전체·절반·1/4 크기에서 밴드별 SSAI로 융합한 뒤 작은 크기부터 복원합니다. 현재 기준 모델 **C2MS**는 이 구조를 그대로 두고 초기 특징에서 갈라지는 **W2 병렬 가지**를 더한 뒤, 원래 학습 쌍과 **2배 거친 학습 쌍을 섞어** 학습했습니다. 추론 입력은 원본과 같습니다.
 
-<table>
-<tr><th>원본 SSA-MRN</th><th>C2MS (현재 기준 모델)</th></tr>
-<tr>
-<td align="center"><img src="SSA-MRN/docs/images/ssa-mrn.png" alt="원본 SSA-MRN 입력·다중 크기 SSAI·단계별 복원 구조" width="300" /></td>
-<td align="center"><img src="SSA-MRN/docs/images/ssa-mrn-c2ms.png" alt="C2MS: 원본 SSA-MRN에 W2 병렬 가지를 더하고 원래·2배 거친 학습 쌍으로 학습한 구조" width="400" /></td>
-</tr>
-</table>
+<p align="center"><img src="SSA-MRN/docs/images/ssa-mrn-c2ms.png" alt="C2MS 전체 구조도: (a) PAN·LMS·LRPAN 초기 특징과 원본 ResBlock×4 backbone, 그 옆의 W2 병렬 가지, (b) 전체·1/2·1/4 크기의 밴드별 SSAI 융합, (c) 1/4 크기부터의 단계적 복원, (d) SSAI 블록 내부, (e) 축척 혼합 학습" width="100%" /></p>
+
+C2MS 구조입니다. 주황색이 원본 SSA-MRN에 더한 W2 병렬 가지와 축척 혼합 학습이며, 나머지는 원본과 같습니다. 입력은 고해상도 PAN, 4배 확대한 MS(LMS), 저해상도 MS(1/4 크기)입니다.
+
+<details>
+<summary>원본 SSA-MRN 구조 보기</summary>
+<p align="center"><img src="SSA-MRN/docs/images/ssa-mrn.png" alt="원본 SSA-MRN 입력·다중 크기 SSAI·단계별 복원 구조" width="360" /></p>
+</details>
 
 ## 기준 모델
 

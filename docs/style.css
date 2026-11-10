@@ -142,3 +142,8 @@ kbd { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13
 .closing p { margin: 10px 0 0; max-width: 620px; color: var(--fg-2); }
 .footer { padding: 24px 0 40px; font-size: 13px; color: var(--fg-3); border-top: 1px solid var(--line); }
 .footer a { color: var(--fg-3); }
+
+.structure-figure { margin: 28px 0 8px; }
+.structure-figure a { display: block; overflow-x: auto; }
+.structure-figure img { display: block; width: 100%; height: auto; background: #fff; }
+@media (max-width: 640px) { .structure-figure img { min-width: 760px; } }
