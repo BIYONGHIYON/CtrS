@@ -2081,5 +2081,26 @@
       },
       "criteria": "v2.4"
     }
+  },
+  "performance/78_seed_ensemble_distillation": {
+    "report": "experiments/performance/78_seed_ensemble_distillation/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 78,
+    "display_name": "78. 시드 앙상블 교사 증류로 작은 C2MS 학습",
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "epochs": 150,
+    "limits": "교사(여섯 모델 앙상블)는 53번 C2MS보다 test RR +0.341 dB였지만 학생에게 거의 옮겨지지 않았습니다. 같은 구조를 정답만으로 학습한 대조군 대비 E3 학생 −0.024 dB·SAM −0.007°, W64D8 학생 +0.006 dB·SAM −0.031°로 1단계 관문(+0.06 dB)을 넘지 못했고, 53번 C2MS 대비 두 학생 모두 개선 없음(−0.035 dB, −0.121 dB)입니다. 학생은 교사 쪽으로 5-6% 가까워졌지만 정답과의 거리는 줄지 않았습니다.",
+    "config": "experiments/performance/78_seed_ensemble_distillation/config.json",
+    "model": "experiments/performance/78_seed_ensemble_distillation/model.py",
+    "entrypoint": "experiments/performance/78_seed_ensemble_distillation/run.py",
+    "results": "experiments/performance/78_seed_ensemble_distillation/results",
+    "manifest": "experiments/performance/78_seed_ensemble_distillation/manifest.json"
   }
 }

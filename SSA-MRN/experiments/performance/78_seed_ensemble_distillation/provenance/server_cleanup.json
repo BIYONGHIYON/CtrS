@@ -1,0 +1,24 @@
+{
+  "time_kst": "2026-11-11T21:05:00+09:00",
+  "rule": "AGENTS.md: delete archived previous run folders before the next experiment",
+  "checked_before_removal": [
+    "no python process on the server, GPU idle",
+    "77 merged to main (PR #157); verify.py --experiment 77 --research-track performance --releases PASS (100 files, 6 release assets hashed)",
+    "78 copies its controls and teachers into C:\\CtrS-p78 and does not reference C:\\CtrS-p77"
+  ],
+  "removed": [
+    {"path": "C:\\CtrS-p77\\run", "gb": 3.60},
+    {"path": "C:\\CtrS-p77\\SSA-MRN", "gb": 0.05},
+    {"path": "C:\\CtrS-p77\\ctrs77-source.tgz", "gb": 0.05}
+  ],
+  "archived_at": [
+    "main (PR #157): SSA-MRN/experiments/performance/77_full_resolution_backbone_capacity",
+    "GitHub Release weights-experiments-performance-77 (verify.py --releases PASS)"
+  ],
+  "kept": [
+    "C:\\CtrS-p73\\.venv (reused by experiment 78)",
+    "C:\\CtrS-p77\\archive77.tgz (0.23 GB, packed run records and detailed logs; logs are not tracked in Git)",
+    "C:\\CtrS-p77 small launch, manifest and verification records",
+    "C:\\CtrS-alpha (not created by this work; untouched)"
+  ]
+}
