@@ -2746,12 +2746,14 @@
     "sensor": "QB",
     "experiment": 78,
     "display_name": "78. 시드 앙상블 교사 증류로 작은 C2MS 학습",
-    "status": "계획",
-    "improvement": "판단 보류",
-    "evaluated_seeds": [],
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "evaluated_seeds": [
+      42
+    ],
     "retraining": true,
     "epochs": 150,
-    "limits": "0단계(학습 없음): QB 학습 패치에서 C2MS 3시드 앙상블이 구성원 평균보다 PSNR +0.183 dB·SAM −0.079°로 validation 이득의 96%가 남아 관문을 통과했습니다. 학생(77번 E3 구조 1.35M, 75번 W64D8 구조 1.05M)을 정답 + 여섯 모델 앙상블 교사 손실로 학습하는 1단계는 아직 하지 않았습니다.",
+    "limits": "교사(여섯 모델 앙상블)는 53번 C2MS보다 test RR +0.341 dB였지만 학생에게 거의 옮겨지지 않았습니다. 같은 구조를 정답만으로 학습한 대조군 대비 E3 학생 −0.024 dB·SAM −0.007°, W64D8 학생 +0.006 dB·SAM −0.031°로 1단계 관문(+0.06 dB)을 넘지 못했고, 53번 C2MS 대비 두 학생 모두 개선 없음(−0.035 dB, −0.121 dB)입니다. 학생은 교사 쪽으로 5-6% 가까워졌지만 정답과의 거리는 줄지 않았습니다.",
     "config": "experiments/performance/78_seed_ensemble_distillation/config.json",
     "model": "experiments/performance/78_seed_ensemble_distillation/model.py",
     "entrypoint": "experiments/performance/78_seed_ensemble_distillation/run.py",

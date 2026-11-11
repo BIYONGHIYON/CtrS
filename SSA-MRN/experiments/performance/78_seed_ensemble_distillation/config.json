@@ -3,8 +3,8 @@
   "research_track": "performance",
   "experimenter": "이병현",
   "title": "시드 앙상블 교사 증류로 작은 C2MS 학습",
-  "status": "계획",
-  "improvement": "판단 보류",
+  "status": "평가 완료",
+  "improvement": "개선 없음",
   "registered": "2026-11-11",
   "hypothesis": "The 68 seed ensemble beats its members by +0.19 dB on QB validation and +0.26 dB on QB test. If the seed-specific (variance) part of the C2MS error can be taught through an ensemble teacher, a smaller student (77 E3, 75 W64D8) trained with GT + teacher targets beats the same structure trained on GT only, and may reach or pass C2MS with fewer parameters and operations.",
   "stage0": {
@@ -102,7 +102,13 @@
     "stage1": {
       "runs": "QB seed 42: S1_E3, S2_W64D8 (서버 2개 동시)",
       "gate": "같은 구조 대조군(seed 42) 대비 test RR 세 지표가 모두 좋아지고 PSNR 이득 ≥ +0.06 dB (v2.4 단일 시드 개선 조건). validation 방향도 함께 보고",
-      "also_reported": "53번 C2MS 대비 v2.4 공식 판정, 57번 재학습 C2MS 대비 참고, 원본 대비 C2MS 이득 중 남은 비율, 75·76·77번과 같은 주파수 분해"
+      "also_reported": "53번 C2MS 대비 v2.4 공식 판정, 57번 재학습 C2MS 대비 참고, 원본 대비 C2MS 이득 중 남은 비율, 75·76·77번과 같은 주파수 분해",
+      "results": {
+        "C2MS_B64D8_W64D8_KD": "vs same structure (77 E3): RR PSNR -0.0239 / SAM -0.0069 / ERGAS +0.0122, partial (gate not passed); vs 53 C2MS -0.0354 / +0.0439 / +0.0215, no improvement",
+        "C2MS_W64D8_KD": "vs same structure (75 W64D8): +0.0059 / -0.0308 / -0.0030, partial at noise level (gate not passed); vs 53 C2MS -0.1213 / +0.0706 / +0.0584, no improvement",
+        "teacher": "E_ALL vs 53 C2MS +0.3411 / -0.1824 / -0.1427 (reference)",
+        "decision": "no student passed the stage 1 gate; stage 2 and 3 not run"
+      }
     },
     "stage2": {
       "runs": "1단계를 통과한 학생만 QB seed 43·44",
@@ -111,7 +117,7 @@
     },
     "stage3_optional": "GF2·WV3 확인과 WV2 전이(참고). 교사는 54·65번의 해당 센서 모델로 같은 규칙에 따라 다시 정함"
   },
-  "not_done": "서버에서 아직 실행하지 않았음. run.py prepare(캐시·교사 캐시·stage 0 대조) → optimize(벤치마크·preflight, 초기 가중치 해시는 서버에서 대조) → run 순서로 진행함",
+  "not_done": "2단계(seed 43·44)와 3단계(다른 센서)는 1단계 관문 미통과로 하지 않았음. 75·76·77번식 주파수 분해는 하지 않았고, 대신 test에서 교사·정답까지의 거리를 진단함",
   "controls": {
     "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt"
   },
@@ -220,5 +226,6 @@
     17
   ],
   "scene_index_base": 0,
-  "cache_reference_manifest": "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json"
+  "cache_reference_manifest": "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json",
+  "run_record": "서버 C:/CtrS-p78, 2026-11-11 20:52 학습 시작, 2026-11-12 02:25 학습·평가 완료"
 }
