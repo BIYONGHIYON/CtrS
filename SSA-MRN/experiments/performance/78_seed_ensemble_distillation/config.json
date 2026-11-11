@@ -1,0 +1,90 @@
+{
+  "experiment": 78,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "시드 앙상블 교사 증류로 작은 C2MS 학습",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "registered": "2026-11-11",
+  "hypothesis": "The 68 seed ensemble beats its members by +0.19 dB on QB validation and +0.26 dB on QB test. If the seed-specific (variance) part of the C2MS error can be taught through an ensemble teacher, a smaller student (77 E3, 75 W64D8) trained with GT + teacher targets beats the same structure trained on GT only, and may reach or pass C2MS with fewer parameters and operations.",
+  "stage0": {
+    "status": "사전 검증 완료 (2026-11-11, 로컬 Apple MPS FP32, 학습 없음)",
+    "purpose": "QB 학습 패치에서 시드 앙상블 교사가 구성원보다 정답에 의미 있게 가까운지 확인 (구성원이 학습 패치에 과하게 맞춰져 있으면 교사 신호가 사라짐)",
+    "code": "prepare.py",
+    "teachers": {
+      "E_C2MS": "53번 C2MS QB seed 42-44 출력 평균 (주 판정)",
+      "E_L1S": "65번 C2MS_L1S QB seed 42-44 출력 평균 (참고)",
+      "E_ALL": "여섯 출력 평균 (참고)"
+    },
+    "data": {
+      "train_original": "data/train/train_qb.h5 전체 17,139개, float32(DN)/2047 (53번 학습 캐시와 같은 좌표)",
+      "train_coarse": "같은 패치에서 53번 CoarsePairs 코드로 만든 2배 거친 쌍 (CPU float64, 8개씩)",
+      "validation": "data/validation/valid_qb.h5 1,905개 (68번 수치 재현 확인용)"
+    },
+    "metric": "53/54 학습 코드 validation()과 같은 누적: 패치·밴드별 PSNR의 평균, SAM 화소 평균, MSE",
+    "gain": "앙상블 지표 − 구성원 지표의 평균",
+    "reproduction_checks": {
+      "validation_vs_checkpoint": "각 구성원의 원래 축척 validation PSNR·SAM이 best.pt 기록과 1e-3 dB / 1e-3° 이내",
+      "validation_ensemble_vs_68": "E_C2MS validation 이득이 68번 +0.191 dB / −0.083°와 0.01 dB / 0.005° 이내",
+      "coarse_validation_vs_53": "C2MS 시드별 2배 거친 validation PSNR이 53번 기록(46.85·46.81·46.86 dB)과 0.01 dB 이내"
+    },
+    "decision_on_E_C2MS_train_original": {
+      "sufficient": "학습 패치 이득 ΔPSNR ≥ +0.10 dB 또는 ΔSAM ≤ −0.05° → 1단계 학생 학습 진행 가능",
+      "weak": "ΔPSNR ≥ +0.05 dB 또는 ΔSAM ≤ −0.025° → 정답 손실 위주에 교사 손실을 작게 두는 조건으로만 진행 검토",
+      "insufficient": "그 밖 → 앙상블 증류 보류"
+    },
+    "results": {
+      "reproduction": "통과: 구성원 validation과 best.pt 기록 차이 1e-6 dB 이내, E_C2MS validation 이득 +0.191 dB / −0.083°, C2MS 거친 validation 46.846 / 46.807 / 46.862 dB",
+      "E_C2MS_train_original": "ΔPSNR +0.183 dB, ΔSAM −0.079° (validation 이득의 96%)",
+      "decision": "sufficient"
+    }
+  },
+  "teacher": {
+    "choice": "E_ALL (53번 C2MS + 65번 C2MS_L1S, QB seed 42-44 여섯 출력의 평균)",
+    "rule": "0단계 세 교사 중 원래 축척 QB validation PSNR이 가장 높은 교사 (E_ALL 40.479 dB, E_C2MS 40.466 dB, E_L1S 40.364 dB; 거친 축척 validation도 E_ALL이 가장 높음). test는 쓰지 않음. 0단계 결과를 읽은 뒤 이 규칙으로 정함",
+    "cache": "서버 prepare 단계에서 학습·validation 패치의 원래 쌍과 2배 거친 쌍에 대해 FP32로 한 번 계산해 저장하고 해시를 기록함. 로컬 0단계 validation 앙상블 지표와 대조"
+  },
+  "students": {
+    "S1_E3": {
+      "structure": "77번 C2MS_B64D8_W64D8 (원래 해상도 backbone 64 × 8, W2 64 × 8)",
+      "parameters": 1346014,
+      "conv_gmac_256_estimate": 49.5,
+      "same_structure_control": "experiments/performance/77_full_resolution_backbone_capacity/checkpoints/C2MS_B64D8_W64D8_QB_s42/best.pt",
+      "control_rr_s42": {"psnr": 38.2622, "sam": 4.6278, "ergas": 3.7324}
+    },
+    "S2_W64D8": {
+      "structure": "75번 C2MS_W64D8 (원래 해상도 backbone 64 × 4, W2 64 × 8)",
+      "parameters": 1050590,
+      "conv_gmac_256_estimate": 30.1,
+      "same_structure_control": "experiments/performance/75_parallel_branch_width_depth/checkpoints/C2MS_W64D8_QB_s42/best.pt",
+      "control_rr_s42": {"psnr": 38.1465, "sam": 4.6785, "ergas": 3.7844}
+    },
+    "initialization": "같은 시드의 대조군과 같은 초기 가중치 (각 실험의 model.py 생성 순서를 그대로 사용)",
+    "gmac_note": "3×3 conv 곱셈 수를 파라미터로부터 추정 (W2는 1/2 해상도라 화소당 1/4). 원본 SSA-MRN 실측 19.9 GMAC과 1-2% 이내로 맞음. 학습 전에 실측으로 바꿈"
+  },
+  "official_control": {
+    "model": "53번 C2MS (2,853,918개, 추정 59.7 GMAC)",
+    "rr_s42": {"psnr": 38.2738, "sam": 4.5770, "ergas": 3.7230},
+    "checkpoints": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt"
+  },
+  "training": {
+    "same_as_controls": "53번 C2MS 학습 조건: Adam 1e-4 → 1e-6 cosine 150에폭, batch 32, FP16 AMP, 원래 쌍 + 1.0 × 2배 거친 쌍, validation MSE 최소 가중치 선택(epoch 0 포함)",
+    "loss": "각 축척에서 MSE(출력, 정답) + λ · MSE(출력, 교사 출력), λ = 1.0. 대조군과 같은 MSE 계열을 유지해 교사 항의 효과만 비교함 (L1·분광 손실은 섞지 않음)",
+    "lambda_note": "λ는 학습 전에 1.0으로 고정. 1단계를 통과하면 λ 비교를 별도로 검토",
+    "selection": "원래 축척 validation MSE(정답 기준) 최소. 교사 기준 validation은 기록만 함"
+  },
+  "stages": {
+    "stage1": {
+      "runs": "QB seed 42: S1_E3, S2_W64D8 (서버 2개 동시)",
+      "gate": "같은 구조 대조군(seed 42) 대비 test RR 세 지표가 모두 좋아지고 PSNR 이득 ≥ +0.06 dB (v2.4 단일 시드 개선 조건). validation 방향도 함께 보고",
+      "also_reported": "53번 C2MS 대비 v2.4 공식 판정, 57번 재학습 C2MS 대비 참고, 원본 대비 C2MS 이득 중 남은 비율, 75·76·77번과 같은 주파수 분해"
+    },
+    "stage2": {
+      "runs": "1단계를 통과한 학생만 QB seed 43·44",
+      "judgement": "같은 시드 53번 C2MS와 짝지은 3시드 평균, v2.4",
+      "lightweight_reference": "참고 표시(공식 판정 아님): 3시드 평균 RR PSNR이 C2MS 대비 −0.04 dB 이상이면 '경량 비열등'으로 함께 적음"
+    },
+    "stage3_optional": "GF2·WV3 확인과 WV2 전이(참고). 교사는 54·65번의 해당 센서 모델로 같은 규칙에 따라 다시 정함"
+  },
+  "not_done": "서버 실행 코드(model.py·train.py·run.py·evaluate.py)는 아직 작성하지 않았음. 1단계 시작 시 작성하고 사전 검사(초기 가중치 동일성, 교사 캐시 해시·대조)를 통과한 뒤 학습함"
+}
