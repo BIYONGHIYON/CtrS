@@ -1,8 +1,12 @@
-"""78 stage 0 (teacher check): does the QB seed-ensemble teacher sit closer to GT than its members on the TRAINING patches?
+"""78 data helpers (no side effects at import; the 54 trainer imports this file as `prepare`).
 
-Usage: python prepare.py <val|train> [--limit N]
-Reads only repository files (data/, 53/65 best.pt, 53 CoarsePairs, 54 model). Writes results/teacher_check_<part>.json.
-The decision rule was fixed in config.json (stage0) before the training-patch part was run. Inference on Apple MPS FP32.
+1. Re-exports the sensor table, Wald operators and 2x coarser pairs of experiment 54 unchanged (QB entry; the 53 construction), as 77.
+2. Teacher cache: build_teacher() writes the mean output of the six fixed teacher models (53 C2MS + 65 C2MS_L1S, QB seeds 42-44)
+   for the training and validation patches at the original and the 2x coarser scale (FP32). teacher_metrics() scores a cached
+   teacher against GT with the 53/54 validation accumulation; run.py compares it with the stage 0 result.
+3. Stage 0 teacher check (local, training-free): python prepare.py stage0 <val|train> [--limit N]
+   Reads data/, 53/65 best.pt, 53 CoarsePairs and the 54 model; writes results/teacher_check_<part>.json. The decision rule was fixed
+   in config.json (stage0) before the training-patch part was run. Inference on Apple MPS FP32.
 """
 import os, sys, json, time, argparse, hashlib, importlib.util
 from pathlib import Path
@@ -11,24 +15,79 @@ import numpy as np, h5py, torch
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[2]
 PERF = REPO / 'experiments/performance'
-sys.path.insert(0, str(REPO))
-OUT = HERE / 'results'; OUT.mkdir(exist_ok=True)
-torch.set_grad_enabled(False); torch.set_num_threads(4)
+OUT = HERE / 'results'
 
 
 def module(name, path):
     spec = importlib.util.spec_from_file_location(name, path); m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m); return m
 
 
-M54 = module('exp54_model', PERF / '54_multi_sensor_scale_mixed_training/model.py')
-sys.path.insert(0, str(PERF / '53_scale_mixed_training'))
-P53 = module('exp53_prepare', PERF / '53_scale_mixed_training/prepare.py')
+_P54 = module('exp54_prepare', PERF / '54_multi_sensor_scale_mixed_training/prepare.py')
+SENSORS, PHASE, SIZE = _P54.SENSORS, _P54.PHASE, _P54.SIZE
+data_files, gen_mtf, Wald, CoarsePairs = _P54.data_files, _P54.gen_mtf, _P54.Wald, _P54.CoarsePairs
+TEACHER_FAMILIES = ('C2MS', 'L1S')
+
+
+# ---------------------------------------------------------------- teacher cache (server prepare)
+
+def teacher_paths(cfg):
+    return [REPO / cfg['teacher']['checkpoints'][fam].replace('<seed>', str(s)) for fam in TEACHER_FAMILIES for s in cfg['teacher']['seeds']]
+
+
+def cache_name(split, coarse, key):
+    return f"{'coarse_' if coarse else ''}{split}_{key}.npy"
+
+
+@torch.inference_mode()
+def build_teacher(cfg, sensor, cache, device, micro=64):
+    """Write <coarse_>{train,val}_teacher.npy next to the input caches; returns {name: sha256}."""
+    from model import Teacher
+    teacher = Teacher(teacher_paths(cfg), SENSORS[sensor]['bands']).to(device).eval(); hashes = {}
+    for split in ('train', 'val'):
+        for coarse in (False, True):
+            src = {k: np.load(cache / cache_name(split, coarse, k), mmap_mode='r') for k in ('pan', 'lms', 'ms', 'gt')}
+            n = len(src['pan']); dest = cache / cache_name(split, coarse, 'teacher'); temp = dest.with_name(dest.stem + '_building.npy')
+            arr = np.lib.format.open_memmap(temp, mode='w+', dtype=np.float32, shape=src['gt'].shape)
+            for i in range(0, n, micro):
+                x = [torch.from_numpy(np.array(src[k][i:i + micro])).to(device) for k in ('pan', 'lms', 'ms')]
+                y = teacher(*x).float().cpu().numpy()
+                if not np.isfinite(y).all(): raise FloatingPointError('teacher nonfinite')
+                arr[i:i + len(y)] = y
+            arr.flush(); del arr; os.replace(temp, dest); hashes[dest.name] = sha(dest)
+            print('TEACHER', sensor, dest.name, flush=True)
+    return hashes
+
+
+def teacher_metrics(cache, split, coarse, chunk=256):
+    """PSNR (mean over patches of the band-mean PSNR), SAM (pixel mean) and MSE of the cached teacher, as the 53/54 validation()."""
+    t = np.load(cache / cache_name(split, coarse, 'teacher'), mmap_mode='r'); g = np.load(cache / cache_name(split, coarse, 'gt'), mmap_mode='r')
+    acc = np.zeros(3); el = px = n = 0
+    for i in range(0, len(g), chunk):
+        p = torch.from_numpy(np.array(t[i:i + chunk])).double(); q = torch.from_numpy(np.array(g[i:i + chunk])).double(); err = (p - q).square()
+        acc[0] += err.sum().item(); acc[1] += (-10 * torch.log10(err.mean((2, 3)).clamp_min(1e-15))).mean(1).sum().item()
+        norm = p.norm(dim=1) * q.norm(dim=1); mask = norm > 1e-12; cos = (p * q).sum(1) / norm.clamp_min(1e-12)
+        acc[2] += torch.acos(cos.clamp(-1, 1))[mask].sum().item(); px += int(mask.sum()); el += q.numel(); n += len(q)
+    return dict(mse=acc[0] / el, psnr=acc[1] / n, sam=float(np.degrees(acc[2] / max(px, 1))))
+
+
+# ---------------------------------------------------------------- stage 0 (local teacher check)
+
 SEEDS = (42, 43, 44)
 CKPT = {'C2MS': PERF / '53_scale_mixed_training/checkpoints/C2MS_QB_s{}/best.pt',
         'L1S': PERF / '65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s{}/best.pt'}
 DATA = {'train': (REPO / 'data/train/train_qb.h5', '7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371', 17139),
         'val': (REPO / 'data/validation/valid_qb.h5', 'b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470', 1905)}
-DEV = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
+M54 = P53 = DEV = None
+
+
+def stage0_setup():
+    """Stage 0 environment (kept out of import so the trainer is unaffected): no grad, 4 threads, 53 CoarsePairs, MPS if present."""
+    global M54, P53, DEV
+    sys.path.insert(0, str(REPO)); OUT.mkdir(exist_ok=True)
+    torch.set_grad_enabled(False); torch.set_num_threads(4)
+    M54 = module('exp54_model', PERF / '54_multi_sensor_scale_mixed_training/model.py')
+    P53 = module('exp53_prepare', PERF / '53_scale_mixed_training/prepare.py')
+    DEV = torch.device('mps' if torch.backends.mps.is_available() else 'cpu')
 
 
 def sha(p):
@@ -120,7 +179,7 @@ def run(part, limit=None, chunk=256, micro=64):
 
 
 if __name__ == '__main__':
-    ap = argparse.ArgumentParser(); ap.add_argument('part', choices=('val', 'train')); ap.add_argument('--limit', type=int)
-    a = ap.parse_args(); r = run(a.part, a.limit)
+    ap = argparse.ArgumentParser(); ap.add_argument('stage', choices=('stage0',)); ap.add_argument('part', choices=('val', 'train')); ap.add_argument('--limit', type=int)
+    a = ap.parse_args(); stage0_setup(); r = run(a.part, a.limit)
     for s in ('original', 'coarse'):
         print(s, json.dumps({g: {k: v for k, v in d.items() if k in ('d_psnr', 'd_sam', 'mse_ratio', 'pull_mean')} for g, d in r[s]['gains'].items()}))

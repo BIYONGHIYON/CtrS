@@ -2,19 +2,35 @@
  "experiment": "performance/78_seed_ensemble_distillation",
  "research_track": "performance",
  "experiment_number": 78,
- "state": "plan; stage 0 teacher check complete (training-free, local MPS): QB seed-ensemble teacher keeps 96% of its validation gain on the training patches (E_C2MS +0.183 dB / -0.079 deg), gate passed; students not trained",
+ "state": "plan; stage 0 teacher check complete (training-free, local MPS, gate passed); stage 1 server code written and smoke-tested locally on a small subset (not a result); students not trained",
  "files": {
   "README.md": {
-   "bytes": 11711,
-   "sha256": "4610cdc128e4ca6bbd34943dd2ba4789d1099bf771883401207ae4cefbd3eb3f"
+   "bytes": 13567,
+   "sha256": "2dd2678c1b4f98c727ee7ef3cbc1c7b51f325f6fc9780c1cacbcf48fbbceffff"
   },
   "config.json": {
-   "bytes": 6803,
-   "sha256": "96ef4cb5eb633ce585e47a0eb5568af20cfe17d9a197be15379caa0ca4dced93"
+   "bytes": 10928,
+   "sha256": "936f2879216a06cfed64deda613789b0472f57d1ad57c7e1f936b0950f52f03a"
+  },
+  "evaluate.py": {
+   "bytes": 9248,
+   "sha256": "174b23580a2e531b4788e0c4c0a7e0afb1ef187995453b43d70039fc80080501"
+  },
+  "model.py": {
+   "bytes": 2885,
+   "sha256": "c5c7a69f3c63f630343e84618b453698480de10ecaa6a6b941e088788daae05e"
   },
   "prepare.py": {
-   "bytes": 7191,
-   "sha256": "260ffffcb22bb243ffcd40453ae269a497c2552277c2446341dfba17c85644a3"
+   "bytes": 10920,
+   "sha256": "b37b996bc966659f86a9b9459a8c4d375005ec54f5bcadf8b9a36eb0dfd7a60c"
+  },
+  "run.py": {
+   "bytes": 15428,
+   "sha256": "ab4ea57e3801e4d8287061d74ba9ed107c204f225016fbf763255feb8ff45951"
+  },
+  "train.py": {
+   "bytes": 6151,
+   "sha256": "335924cde0682195beb156017b36d2fdf3d996a361babf93006bd0129a2df660"
   },
   "results/teacher_check_train.json": {
    "bytes": 6750,
