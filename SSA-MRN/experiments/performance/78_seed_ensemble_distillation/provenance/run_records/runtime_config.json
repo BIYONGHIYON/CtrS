@@ -1,0 +1,337 @@
+{
+  "experiment": 78,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "시드 앙상블 교사 증류로 작은 C2MS 학습",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "registered": "2026-11-11",
+  "hypothesis": "The 68 seed ensemble beats its members by +0.19 dB on QB validation and +0.26 dB on QB test. If the seed-specific (variance) part of the C2MS error can be taught through an ensemble teacher, a smaller student (77 E3, 75 W64D8) trained with GT + teacher targets beats the same structure trained on GT only, and may reach or pass C2MS with fewer parameters and operations.",
+  "stage0": {
+    "status": "사전 검증 완료 (2026-11-11, 로컬 Apple MPS FP32, 학습 없음)",
+    "purpose": "QB 학습 패치에서 시드 앙상블 교사가 구성원보다 정답에 의미 있게 가까운지 확인 (구성원이 학습 패치에 과하게 맞춰져 있으면 교사 신호가 사라짐)",
+    "code": "prepare.py",
+    "teachers": {
+      "E_C2MS": "53번 C2MS QB seed 42-44 출력 평균 (주 판정)",
+      "E_L1S": "65번 C2MS_L1S QB seed 42-44 출력 평균 (참고)",
+      "E_ALL": "여섯 출력 평균 (참고)"
+    },
+    "data": {
+      "train_original": "data/train/train_qb.h5 전체 17,139개, float32(DN)/2047 (53번 학습 캐시와 같은 좌표)",
+      "train_coarse": "같은 패치에서 53번 CoarsePairs 코드로 만든 2배 거친 쌍 (CPU float64, 8개씩)",
+      "validation": "data/validation/valid_qb.h5 1,905개 (68번 수치 재현 확인용)"
+    },
+    "metric": "53/54 학습 코드 validation()과 같은 누적: 패치·밴드별 PSNR의 평균, SAM 화소 평균, MSE",
+    "gain": "앙상블 지표 − 구성원 지표의 평균",
+    "reproduction_checks": {
+      "validation_vs_checkpoint": "각 구성원의 원래 축척 validation PSNR·SAM이 best.pt 기록과 1e-3 dB / 1e-3° 이내",
+      "validation_ensemble_vs_68": "E_C2MS validation 이득이 68번 +0.191 dB / −0.083°와 0.01 dB / 0.005° 이내",
+      "coarse_validation_vs_53": "C2MS 시드별 2배 거친 validation PSNR이 53번 기록(46.85·46.81·46.86 dB)과 0.01 dB 이내"
+    },
+    "decision_on_E_C2MS_train_original": {
+      "sufficient": "학습 패치 이득 ΔPSNR ≥ +0.10 dB 또는 ΔSAM ≤ −0.05° → 1단계 학생 학습 진행 가능",
+      "weak": "ΔPSNR ≥ +0.05 dB 또는 ΔSAM ≤ −0.025° → 정답 손실 위주에 교사 손실을 작게 두는 조건으로만 진행 검토",
+      "insufficient": "그 밖 → 앙상블 증류 보류"
+    },
+    "results": {
+      "reproduction": "통과: 구성원 validation과 best.pt 기록 차이 1e-6 dB 이내, E_C2MS validation 이득 +0.191 dB / −0.083°, C2MS 거친 validation 46.846 / 46.807 / 46.862 dB",
+      "E_C2MS_train_original": "ΔPSNR +0.183 dB, ΔSAM −0.079° (validation 이득의 96%)",
+      "decision": "sufficient"
+    }
+  },
+  "teacher": {
+    "choice": "E_ALL (53번 C2MS + 65번 C2MS_L1S, QB seed 42-44 여섯 출력의 평균)",
+    "rule": "0단계 세 교사 중 원래 축척 QB validation PSNR이 가장 높은 교사 (E_ALL 40.479 dB, E_C2MS 40.466 dB, E_L1S 40.364 dB; 거친 축척 validation도 E_ALL이 가장 높음). test는 쓰지 않음. 0단계 결과를 읽은 뒤 이 규칙으로 정함",
+    "cache": "서버 prepare 단계에서 학습·validation 패치의 원래 쌍과 2배 거친 쌍에 대해 FP32로 한 번 계산해 저장하고 해시를 기록함. 로컬 0단계 validation 앙상블 지표와 대조",
+    "checkpoints": {
+      "C2MS": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt",
+      "L1S": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt"
+    },
+    "seeds": [
+      42,
+      43,
+      44
+    ]
+  },
+  "students": {
+    "S1_E3": {
+      "structure": "77번 C2MS_B64D8_W64D8 (원래 해상도 backbone 64 × 8, W2 64 × 8)",
+      "parameters": 1346014,
+      "same_structure_control": "experiments/performance/77_full_resolution_backbone_capacity/checkpoints/C2MS_B64D8_W64D8_QB_s42/best.pt",
+      "control_rr_s42": {
+        "psnr": 38.2622,
+        "sam": 4.6278,
+        "ergas": 3.7324
+      },
+      "conv_gmac_256": 49.4315
+    },
+    "S2_W64D8": {
+      "structure": "75번 C2MS_W64D8 (원래 해상도 backbone 64 × 4, W2 64 × 8)",
+      "parameters": 1050590,
+      "same_structure_control": "experiments/performance/75_parallel_branch_width_depth/checkpoints/C2MS_W64D8_QB_s42/best.pt",
+      "control_rr_s42": {
+        "psnr": 38.1465,
+        "sam": 4.6785,
+        "ergas": 3.7844
+      },
+      "conv_gmac_256": 30.1042
+    },
+    "initialization": "같은 시드의 대조군과 같은 초기 가중치 (각 실험의 model.py 생성 순서를 그대로 사용)",
+    "gmac_note": "model.conv_macs로 실측한 Conv2d 곱셈-누산 수(256² 입력, bias·활성화·어텐션·원소 연산 제외). 원본 SSA-MRN은 19.9036 GMAC으로 기존 기록과 같음. run.py optimize에서 서버 값도 다시 기록함",
+    "arm_names": {
+      "S1_E3": "C2MS_B64D8_W64D8_KD",
+      "S2_W64D8": "C2MS_W64D8_KD"
+    }
+  },
+  "official_control": {
+    "model": "53번 C2MS (2,853,918개, 59.6321 GMAC)",
+    "rr_s42": {
+      "psnr": 38.2738,
+      "sam": 4.577,
+      "ergas": 3.723
+    },
+    "checkpoints": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt"
+  },
+  "training": {
+    "same_as_controls": "53번 C2MS 학습 조건: Adam 1e-4 → 1e-6 cosine 150에폭, batch 32, FP16 AMP, 원래 쌍 + 1.0 × 2배 거친 쌍, validation MSE 최소 가중치 선택(epoch 0 포함)",
+    "loss": "각 축척에서 MSE(출력, 정답) + λ · MSE(출력, 교사 출력), λ = 1.0. 대조군과 같은 MSE 계열을 유지해 교사 항의 효과만 비교함 (L1·분광 손실은 섞지 않음)",
+    "lambda_note": "λ는 학습 전에 1.0으로 고정. 1단계를 통과하면 λ 비교를 별도로 검토",
+    "selection": "원래 축척 validation MSE(정답 기준) 최소. 교사 기준 validation은 기록만 함"
+  },
+  "stages": {
+    "stage1": {
+      "runs": "QB seed 42: S1_E3, S2_W64D8 (서버 2개 동시)",
+      "gate": "같은 구조 대조군(seed 42) 대비 test RR 세 지표가 모두 좋아지고 PSNR 이득 ≥ +0.06 dB (v2.4 단일 시드 개선 조건). validation 방향도 함께 보고",
+      "also_reported": "53번 C2MS 대비 v2.4 공식 판정, 57번 재학습 C2MS 대비 참고, 원본 대비 C2MS 이득 중 남은 비율, 75·76·77번과 같은 주파수 분해"
+    },
+    "stage2": {
+      "runs": "1단계를 통과한 학생만 QB seed 43·44",
+      "judgement": "같은 시드 53번 C2MS와 짝지은 3시드 평균, v2.4",
+      "lightweight_reference": "참고 표시(공식 판정 아님): 3시드 평균 RR PSNR이 C2MS 대비 −0.04 dB 이상이면 '경량 비열등'으로 함께 적음"
+    },
+    "stage3_optional": "GF2·WV3 확인과 WV2 전이(참고). 교사는 54·65번의 해당 센서 모델로 같은 규칙에 따라 다시 정함"
+  },
+  "not_done": "서버에서 아직 실행하지 않았음. run.py prepare(캐시·교사 캐시·stage 0 대조) → optimize(벤치마크·preflight, 초기 가중치 해시는 서버에서 대조) → run 순서로 진행함",
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt"
+  },
+  "reference_controls": {
+    "QB": "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt"
+  },
+  "original": {
+    "QB": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s42/best.pt"
+  },
+  "same_structure_controls": {
+    "C2MS_B64D8_W64D8_KD": {
+      "seed": 42,
+      "path": "experiments/performance/77_full_resolution_backbone_capacity/checkpoints/C2MS_B64D8_W64D8_QB_s42/best.pt"
+    },
+    "C2MS_W64D8_KD": {
+      "seed": 42,
+      "path": "experiments/performance/75_parallel_branch_width_depth/checkpoints/C2MS_W64D8_QB_s42/best.pt"
+    }
+  },
+  "same_structure_initialization": {
+    "C2MS_B64D8_W64D8_KD": {
+      "seed": 42,
+      "path": "experiments/performance/77_full_resolution_backbone_capacity/results/C2MS_B64D8_W64D8_QB_s42/initialization.json"
+    },
+    "C2MS_W64D8_KD": {
+      "seed": 42,
+      "path": "experiments/performance/75_parallel_branch_width_depth/results/C2MS_W64D8_QB_s42/initialization.json"
+    }
+  },
+  "initialization_note": "초기 상태 해시는 서버(x86, C:/CtrS-p73/.venv)에서 대조함. 로컬 Apple 실리콘에서는 53번 C2MS를 그대로 만들어도 기록된 해시와 달라(같은 torch 2.7.1) 로컬 대조는 하지 않음",
+  "stage0_validation_result": "experiments/performance/78_seed_ensemble_distillation/results/teacher_check_val.json",
+  "teacher_check_tolerance": {
+    "psnr_dB": 0.002,
+    "sam_deg": 0.002
+  },
+  "teacher_weight": 1.0,
+  "coarse_weight": {
+    "C2MS_B64D8_W64D8_KD": 1.0,
+    "C2MS_W64D8_KD": 1.0
+  },
+  "runtime": "C:/CtrS-p78/run",
+  "queue": [
+    [
+      "QB",
+      "C2MS_B64D8_W64D8_KD",
+      42
+    ],
+    [
+      "QB",
+      "C2MS_W64D8_KD",
+      42
+    ]
+  ],
+  "expected_duration": "두 학생 동시 학습 약 6-7시간(77번 E3가 2개 동시 학습에서 약 6.7시간) + 교사 캐시 생성과 평가",
+  "sensors": [
+    "QB"
+  ],
+  "seeds": [
+    42
+  ],
+  "epochs": 150,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "schedule": "Adam lr = 1e-6 + 0.5 * (1e-4 - 1e-6) * (1 + cos(pi * zero_based_epoch / 149)), as 53",
+  "batch": 32,
+  "micro": 32,
+  "optimizer": "Adam (beta 0.9, 0.999), no weight decay",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training with GradScaler; FP32 transforms, loss, validation and evaluation (as 53/63)",
+  "tf32": false,
+  "cudnn_deterministic": true,
+  "layout": "channels_last",
+  "selection": "minimum original-scale validation MSE including epoch 0, earliest exact tie; test never used for selection (same rule as 53/63); the validation MSE against the teacher is recorded only",
+  "normalization": {
+    "QB": 2047
+  },
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    }
+  },
+  "max_parallel": 2,
+  "cudnn_benchmark": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "cpu_threads": 1,
+  "data_root": "C:/CtrS/PAN-MS",
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "cache_reference_manifest": "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json",
+  "teacher_check": {
+    "QB_val_original": {
+      "server": {
+        "mse": 0.00012785044325800218,
+        "psnr": 40.47908024859008,
+        "sam": 4.096624124298728
+      },
+      "stage0": {
+        "mse": 0.00012785044860502603,
+        "psnr": 40.47908008795936,
+        "sam": 4.096624150815251
+      },
+      "difference": {
+        "psnr": 1.6063071939242946e-07,
+        "sam": -2.6516523199404674e-08
+      }
+    },
+    "QB_train_original": {
+      "mse": 0.00011968311008524285,
+      "psnr": 40.6494713218945,
+      "sam": 4.0373572612501505
+    },
+    "QB_val_coarse": {
+      "server": {
+        "mse": 2.8642874260362724e-05,
+        "psnr": 47.49780378971192,
+        "sam": 2.296173874573437
+      },
+      "stage0": {
+        "mse": 2.8642874618437154e-05,
+        "psnr": 47.49780369081296,
+        "sam": 2.296173669941315
+      },
+      "difference": {
+        "psnr": 9.88989583561306e-08,
+        "sam": 2.046321219140168e-07
+      }
+    },
+    "QB_train_coarse": {
+      "mse": 2.1685597081540748e-05,
+      "psnr": 48.202467441533564,
+      "sam": 2.070911435329285
+    }
+  },
+  "source_hashes": {
+    "experiments/performance/78_seed_ensemble_distillation/model.py": "c5c7a69f3c63f630343e84618b453698480de10ecaa6a6b941e088788daae05e",
+    "experiments/performance/78_seed_ensemble_distillation/prepare.py": "b37b996bc966659f86a9b9459a8c4d375005ec54f5bcadf8b9a36eb0dfd7a60c",
+    "experiments/performance/78_seed_ensemble_distillation/train.py": "335924cde0682195beb156017b36d2fdf3d996a361babf93006bd0129a2df660",
+    "experiments/performance/78_seed_ensemble_distillation/run.py": "ab4ea57e3801e4d8287061d74ba9ed107c204f225016fbf763255feb8ff45951",
+    "experiments/performance/78_seed_ensemble_distillation/config.json": "936f2879216a06cfed64deda613789b0472f57d1ad57c7e1f936b0950f52f03a",
+    "experiments/performance/78_seed_ensemble_distillation/evaluate.py": "174b23580a2e531b4788e0c4c0a7e0afb1ef187995453b43d70039fc80080501",
+    "experiments/performance/77_full_resolution_backbone_capacity/model.py": "2e173fd31b181e99f1ddc59502259d5691de152fef9c398786691639bf29031a",
+    "experiments/performance/75_parallel_branch_width_depth/model.py": "107398906d671fccde503637eea1f9c8309b742700d542f0e458ea4ac56821f0",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/train.py": "55c150b067788191664e5f72885e065b1a222fcaeb0fe97a6b13050dc08a7dc5",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/evaluate.py": "e7e60ab17aea8d55f9d1d92fc57c1bd166e50f44d936b1d29c190c25ed818a7a",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/config.json": "821c9038a3c6fa296d96176074b3d91c86a9df3d5a9ffd115eb727de310546e4",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16",
+    "common/result_images.py": "2fc73537d7d60fa8c9d19a036ad0bb53e9ab1231b9811fd6d8e9b5159675c737",
+    "experiments/performance/57_c2ms_training_conditions/checkpoints/C2MS_QB_s42/best.pt": "61f5fc49c4c401496bc514fae32c4d070eb95f0591d01843477e91d63b61b5fa",
+    "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s42/best.pt": "f3255077687f0cfefb307961957b9ecc4973555d8b926008d778858c60f50406",
+    "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json": "5eff51d1aab2a971d850296817ec91de3fcc0560086d75969a11035e04f3d5ad",
+    "experiments/performance/78_seed_ensemble_distillation/results/teacher_check_val.json": "199189de7d9b34901f8c206e8994e6117c0c862298a4a155ee3a6a0030f39a91",
+    "experiments/performance/77_full_resolution_backbone_capacity/checkpoints/C2MS_B64D8_W64D8_QB_s42/best.pt": "c5dea430fcc8b7e37985606177ebc7fac544043beafc23e50c373585e803ee2b",
+    "experiments/performance/75_parallel_branch_width_depth/checkpoints/C2MS_W64D8_QB_s42/best.pt": "fa43a377758ce681c22d9ddfd62fe07ebb54791162fbac5d66bc237443fc0904",
+    "experiments/performance/77_full_resolution_backbone_capacity/results/C2MS_B64D8_W64D8_QB_s42/initialization.json": "6d30626203b99c424207e6bae92bf7f3b96ba3017f5b46cf6520b8558a902754",
+    "experiments/performance/75_parallel_branch_width_depth/results/C2MS_W64D8_QB_s42/initialization.json": "6bac89110872e85440252f249e6e8b6360823fd006d384a7393a766c0f980a2f",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt": "3ab7f20c2fda333f2698163af3b0b6c77030d2436f3407f1c58f3224e689de40",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s43/best.pt": "322ee8a85f8de05221403a88cefa64cdd01a224b6043b33da5694dbdd994d6e1",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s44/best.pt": "ad8bfa8eb624aae580e03460a32bf80016d28adbeb2df1bc17bb14dc9eb9e897",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s42/best.pt": "0175151f6306b275966858cbef6b66b5c9b7345ecdc581e6383a03ad09cbabbb",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s43/best.pt": "7bc31dd8bdb7f317d5678e400e7b5666628f15a3f526f6f328b2e27986bf881d",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s44/best.pt": "37870674c7922fc5285e7539be426be097c6caef8f52af78dd2779a24ba631e7"
+  },
+  "created_kst": "2026-11-11T20:49:37.411795+09:00",
+  "coarse_cache_equal_to_63": {
+    "QB_train_coarse_pan": true,
+    "QB_train_coarse_lms": true,
+    "QB_train_coarse_ms": true,
+    "QB_train_coarse_gt": true,
+    "QB_val_coarse_pan": true,
+    "QB_val_coarse_lms": true,
+    "QB_val_coarse_ms": true,
+    "QB_val_coarse_gt": true
+  },
+  "cache_manifest_sha256": "fee3829688eab3de091580500da2fc274d59bbfc4ce481f4b265387b84647189",
+  "conv_gmac_256": {
+    "C2MS_B64D8_W64D8_KD": 49.43151104,
+    "C2MS_W64D8_KD": 30.104158208,
+    "C2MS": 59.632058368,
+    "C0": 19.90361088
+  },
+  "benchmark": {
+    "QB_C2MS_B64D8_W64D8_KD": {
+      "median_step_seconds": 0.14348889999973835,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.55078125
+    },
+    "QB_C2MS_W64D8_KD": {
+      "median_step_seconds": 0.13043310000057318,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.396484375
+    }
+  },
+  "fingerprint": "77ae44ad9977b2fa7839ef6314aedb8c00cee6b7f758a85bbf3767122bc1e96a"
+}
