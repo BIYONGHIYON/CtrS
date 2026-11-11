@@ -1,0 +1,125 @@
+{
+  "experiment": 79,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "깊고 얇은 W2 가지와 L1·분광 손실, 관측 일치 사영 결합",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "registered": "2026-11-12",
+  "hypothesis": "Depth of the half-resolution W2 branch gave the largest RR gain per operation (75: 64x4 -> 64x8 +0.394 dB for +4.8 GMAC), but no W2 deeper than 8 blocks was tried. A deeper, narrower W2 (64 x 12: 34.9 GMAC, 59% of C2MS; 64 x 16: 39.8 GMAC, 67%) may keep most of the C2MS gain, and the two inference-cost-free gains already measured on C2MS (65 L1 + spectral loss: SAM -0.100 deg on 60/60 scenes; 66 observation-consistency projection: about +0.04 dB on every seed; together +0.072 dB / -0.102 deg / -0.027 against 53 C2MS over three seeds, post hoc) can lift it above C2MS with fewer operations.",
+  "evidence": {
+    "W2_depth_75": "64x4 -> 64x8: +0.394 dB for +0.30M parameters; 64x4 -> 128x4: +0.321 dB for +0.92M (seed 42)",
+    "efficiency": "share of the C2MS gain kept: W2 64x4 42% (25.3 GMAC), 64x8 86% (30.1), 128x4 78% (40.3), 77 E3 98.7% (49.4), C2MS 100% (59.6)",
+    "loss_65": "C2MS + L1 + spectral, QB 3 seeds vs 53: RR +0.028 dB, SAM -0.100 deg (60/60 scenes), ERGAS -0.008",
+    "projection_66": "projection at inference: about +0.04 dB per seed; 65 + projection vs 53 C2MS, 3 seeds: +0.072 dB / -0.102 deg / -0.027; vs C2MS + projection +0.033 dB",
+    "lesson_78": "ensemble gain did not transfer by output distillation, so this experiment uses only gains already measured on single models"
+  },
+  "arms": {
+    "C2MS_W64D12_L1S": "original SSA-MRN K4 + W2 64 channels x 12 blocks (75 SizedParallel), 65 loss; 1,346,014 parameters (used 1,227,706), 34.94 GMAC",
+    "C2MS_W64D16_L1S": "original SSA-MRN K4 + W2 64 channels x 16 blocks, 65 loss; 1,641,438 parameters (used 1,523,130), 39.77 GMAC"
+  },
+  "projection": "45/66 y' = y + D^T M^T (M D D^T M^T)^-1 M (MS - D y), interior margin 5, CG per band in float64 (tol 1e-8, at most 400 iterations), applied after every inference (prepare.Projected); parameter-free; GPU time measured at evaluation",
+  "loss": "original per-pixel L1 + 1.0 x per-pixel L1 on 2x coarser pairs + 0.46 x spectral loss (58: mean over pixels of 1 - cos between predicted and GT band vectors, zero-norm pixels skipped) on the original pair; history fields train_mse/coarse_train_mse hold mean absolute errors",
+  "coarse_weight": {
+    "C2MS_W64D12_L1S": 1.0,
+    "C2MS_W64D16_L1S": 1.0
+  },
+  "spectral_weight": {
+    "C2MS_W64D12_L1S": 0.46,
+    "C2MS_W64D16_L1S": 0.46
+  },
+  "ema_beta": 0.99,
+  "ema_note": "the 58 trainer records EMA weights (beta 0.99) as in 65; selection uses the online weights (validation MSE), EMA weights are recorded only",
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt"
+  },
+  "same_loss_controls": {
+    "QB": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt"
+  },
+  "original": {
+    "QB": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s<seed>/best.pt"
+  },
+  "comparisons": {
+    "official": "arm + projection vs plain 53 C2MS of the same seed (criteria v2.4, RR only)",
+    "fair_projection": "arm + projection vs 53 C2MS + projection",
+    "structure": "arm vs 65 C2MS_L1S (same loss and data, C2MS branch), raw and projected",
+    "reference": "65 + projection vs 53 (reproduces 66), 53 + projection vs 53, arm vs original 43 C0 (share of the C2MS gain)"
+  },
+  "stages": {
+    "stage1": "QB seed 42, both arms at once",
+    "stage1_gate": "fixed before training (evaluate.stage_gate): an arm passes when arm + projection beats plain C2MS on all three RR metrics at seed 42; if both pass the one with fewer operations (64 x 12) goes on; if none passes, stage 2 is not run",
+    "stage2": "the chosen arm, QB seeds 43 and 44 at once; judgement = mean of the three same-seed pairs (v2.4, threshold 0.04 dB)",
+    "lightweight_reference": "reported, not a judgement: 3-seed mean RR PSNR of arm + projection at or above C2MS - 0.04 dB counts as non-inferior",
+    "automation": "run.py runs stage 1, the gate and stage 2 in one controller; nothing is tuned between the stages"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "latency_seed": 42,
+  "stage2_seeds": [
+    43,
+    44
+  ],
+  "epochs": 150,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "schedule": "Adam lr = 1e-6 + 0.5 * (1e-4 - 1e-6) * (1 + cos(pi * zero_based_epoch / 149)), as 53",
+  "runtime": "C:/CtrS-p79/run",
+  "sensors": [
+    "QB"
+  ],
+  "max_parallel": 2,
+  "expected_duration": "stage 1 about 6 h (two at once), stage 2 about 6 h, plus evaluations with the projection",
+  "limits": [
+    "single-seed stage 1 screen with an exploratory reuse of the test set for the gate",
+    "the projection could also be applied to C2MS itself; both comparisons are reported",
+    "deeper branches add sequential layers, and the projection adds an iterative step, so the measured GPU time can move against the operation count",
+    "no automatic baseline replacement"
+  ],
+  "batch": 32,
+  "micro": 32,
+  "optimizer": "Adam (beta 0.9, 0.999), no weight decay",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training with GradScaler; FP32 transforms, loss, validation and evaluation (as 53/63)",
+  "tf32": false,
+  "cudnn_deterministic": true,
+  "layout": "channels_last",
+  "normalization": {
+    "QB": 2047
+  },
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    }
+  },
+  "cudnn_benchmark": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "cpu_threads": 1,
+  "data_root": "C:/CtrS/PAN-MS",
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "cache_reference_manifest": "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json",
+  "selection": "minimum original-scale validation MSE including epoch 0, earliest exact tie; test never used for selection (same rule as 53/65)"
+}
