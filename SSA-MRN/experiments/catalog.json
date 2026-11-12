@@ -2137,5 +2137,25 @@
       "QB_W64D16_L1S_vs_C2MS_L1S65_3seed": "개선 없음",
       "QB_W64D12_L1S_P_vs_C2MS53_s42": "부분 개선"
     }
+  },
+  "performance/80_multi_sensor_deep_narrow_projection": {
+    "report": "experiments/performance/80_multi_sensor_deep_narrow_projection/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "GF2, WV3 (WV2 transfer)",
+    "experiment": 80,
+    "display_name": "80. 깊고 얇은 W2 가지와 사영의 다중 센서 확인",
+    "status": "계획",
+    "improvement": "판단 보류",
+    "evaluated_seeds": [],
+    "retraining": true,
+    "epochs": 150,
+    "limits": "79번 방법(64×16 W2 + L1·분광 손실 + 추론 시 사영)을 GF2·WV3 3시드에서 같은 시드 54번 C2MS와 비교할 계획입니다. WV2 전이는 참고입니다. 아직 학습하지 않았습니다.",
+    "config": "experiments/performance/80_multi_sensor_deep_narrow_projection/config.json",
+    "model": "experiments/performance/80_multi_sensor_deep_narrow_projection/model.py",
+    "entrypoint": "experiments/performance/80_multi_sensor_deep_narrow_projection/run.py",
+    "results": "experiments/performance/80_multi_sensor_deep_narrow_projection/results",
+    "checkpoints": "experiments/performance/80_multi_sensor_deep_narrow_projection/checkpoints",
+    "manifest": "experiments/performance/80_multi_sensor_deep_narrow_projection/manifest.json"
   }
 }
