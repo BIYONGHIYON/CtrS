@@ -2102,5 +2102,40 @@
     "entrypoint": "experiments/performance/78_seed_ensemble_distillation/run.py",
     "results": "experiments/performance/78_seed_ensemble_distillation/results",
     "manifest": "experiments/performance/78_seed_ensemble_distillation/manifest.json"
+  },
+  "performance/79_deep_narrow_branch_projection": {
+    "report": "experiments/performance/79_deep_narrow_branch_projection/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB",
+    "experiment": 79,
+    "display_name": "79. 깊고 얇은 W2 가지와 L1·분광 손실, 관측 일치 사영 결합",
+    "status": "평가 완료",
+    "improvement": "개선",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
+    "retraining": true,
+    "epochs": 150,
+    "training_started_kst": "2026-11-12T03:48:02+09:00",
+    "last_checked": "2026-11-13T00:49:16+09:00",
+    "limits": "64×16 + 사영이 53번 C2MS 대비 3시드 평균 test RR PSNR +0.051 dB·SAM −0.092°·ERGAS −0.020으로 개선입니다(연산 67%, 실사용 파라미터 56%, 시드별 +0.073·+0.077·+0.004 dB). 이득의 대부분은 사영에서 나옵니다. 사영 전 64×16은 −0.001 dB·SAM −0.088°(부분 개선, C2MS와 같은 PSNR), C2MS + 사영 대비 +0.012 dB(잡음 수준), 같은 손실 65번 대비 −0.029 dB(개선 없음)입니다. 사영은 GPU 시간을 약 20배로 늘립니다. 64×12는 1단계 관문에서 탈락했습니다(−0.010 dB).",
+    "config": "experiments/performance/79_deep_narrow_branch_projection/config.json",
+    "model": "experiments/performance/79_deep_narrow_branch_projection/model.py",
+    "entrypoint": "experiments/performance/79_deep_narrow_branch_projection/run.py",
+    "results": "experiments/performance/79_deep_narrow_branch_projection/results",
+    "checkpoints": "experiments/performance/79_deep_narrow_branch_projection/checkpoints",
+    "manifest": "experiments/performance/79_deep_narrow_branch_projection/manifest.json",
+    "evaluation": "experiments/performance/79_deep_narrow_branch_projection/results/<arm>_QB_s<seed>/evaluation/QB_v2_4.json",
+    "judgements": {
+      "stage1_gate": "C2MS_W64D16_L1S 통과, C2MS_W64D12_L1S 탈락",
+      "QB_W64D16_L1S_P_vs_C2MS53_3seed": "개선",
+      "QB_W64D16_L1S_vs_C2MS53_3seed": "부분 개선",
+      "QB_W64D16_L1S_P_vs_C2MS53_P_3seed": "부분 개선",
+      "QB_W64D16_L1S_vs_C2MS_L1S65_3seed": "개선 없음",
+      "QB_W64D12_L1S_P_vs_C2MS53_s42": "부분 개선"
+    }
   }
 }

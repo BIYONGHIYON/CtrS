@@ -1,0 +1,12 @@
+{
+  "event": "server reboot during stage 1",
+  "last_boot_kst": "2026-11-12T04:31:56+09:00",
+  "state_at_interruption": "both stage 1 runs (QB seed 42, C2MS_W64D12_L1S and C2MS_W64D16_L1S) had finished epoch 19; no failure files were written",
+  "cause": "not known; the trainer account cannot read the System event log",
+  "resume": {
+    "time_kst": "2026-11-12T14:56:29+09:00",
+    "command": "run.py --mode run --resume (provenance/resume79.cmd, launched by provenance/resume79.ps1; launcher record provenance/launcher_resume1.json)",
+    "behaviour": "each run resumed from its own latest.pt (model, optimizer, scaler, EMA and RNG states); same code, config and runtime folder"
+  },
+  "after_resume": "stage 1, the gate, stage 2 (seeds 43 and 44) and the 3-seed summary finished without further interruption (all_complete.json 2026-11-13T00:49:16+09:00)"
+}
