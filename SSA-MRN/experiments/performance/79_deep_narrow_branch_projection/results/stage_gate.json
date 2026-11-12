@@ -1,0 +1,27 @@
+{
+  "time_kst": "2026-11-12T19:31:18.130475+09:00",
+  "rule": "Stage 1 rule fixed before training: an arm passes when, at seed 42, arm + P beats plain C2MS on all three RR metrics; if both pass\n    the one with fewer operations (64 x 12) goes on; if none passes, stage 2 is not run.",
+  "arms": {
+    "C2MS_W64D12_L1S": {
+      "delta_RR": {
+        "SAM": -0.06649220011966595,
+        "ERGAS": 0.007478840644322027,
+        "PSNR": -0.009643327822942638,
+        "SCC": -0.0004680193690660417,
+        "Q2n": 2.332911812941152e-05
+      },
+      "passed": false
+    },
+    "C2MS_W64D16_L1S": {
+      "delta_RR": {
+        "SAM": -0.090396743531028,
+        "ERGAS": -0.02729172542268188,
+        "PSNR": 0.07282341300550854,
+        "SCC": -4.590008889449049e-05,
+        "Q2n": 0.0009852121576808814
+      },
+      "passed": true
+    }
+  },
+  "chosen": "C2MS_W64D16_L1S"
+}

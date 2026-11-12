@@ -3,8 +3,9 @@
   "research_track": "performance",
   "experimenter": "이병현",
   "title": "깊고 얇은 W2 가지와 L1·분광 손실, 관측 일치 사영 결합",
-  "status": "계획",
-  "improvement": "판단 보류",
+  "status": "평가 완료",
+  "improvement": "개선",
+  "result_summary": "1단계: 64×16 + 사영 통과(seed 42 +0.073 dB), 64×12 탈락. 2단계 3시드 평균: 64×16 + 사영이 53번 C2MS 대비 RR PSNR +0.051 dB·SAM −0.092°·ERGAS −0.020(개선). 사영 전 64×16은 −0.001 dB·SAM −0.088°(부분 개선), C2MS + 사영 대비 +0.012 dB(부분 개선), 같은 손실 65번 대비 −0.029 dB(개선 없음). 사영은 GPU 시간을 약 20배로 늘립니다.",
   "registered": "2026-11-12",
   "hypothesis": "Depth of the half-resolution W2 branch gave the largest RR gain per operation (75: 64x4 -> 64x8 +0.394 dB for +4.8 GMAC), but no W2 deeper than 8 blocks was tried. A deeper, narrower W2 (64 x 12: 34.9 GMAC, 59% of C2MS; 64 x 16: 39.8 GMAC, 67%) may keep most of the C2MS gain, and the two inference-cost-free gains already measured on C2MS (65 L1 + spectral loss: SAM -0.100 deg on 60/60 scenes; 66 observation-consistency projection: about +0.04 dB on every seed; together +0.072 dB / -0.102 deg / -0.027 against 53 C2MS over three seeds, post hoc) can lift it above C2MS with fewer operations.",
   "evidence": {

@@ -1,0 +1,196 @@
+{
+  "experiment": 79,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "깊고 얇은 W2 가지와 L1·분광 손실, 관측 일치 사영 결합",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "registered": "2026-11-12",
+  "hypothesis": "Depth of the half-resolution W2 branch gave the largest RR gain per operation (75: 64x4 -> 64x8 +0.394 dB for +4.8 GMAC), but no W2 deeper than 8 blocks was tried. A deeper, narrower W2 (64 x 12: 34.9 GMAC, 59% of C2MS; 64 x 16: 39.8 GMAC, 67%) may keep most of the C2MS gain, and the two inference-cost-free gains already measured on C2MS (65 L1 + spectral loss: SAM -0.100 deg on 60/60 scenes; 66 observation-consistency projection: about +0.04 dB on every seed; together +0.072 dB / -0.102 deg / -0.027 against 53 C2MS over three seeds, post hoc) can lift it above C2MS with fewer operations.",
+  "evidence": {
+    "W2_depth_75": "64x4 -> 64x8: +0.394 dB for +0.30M parameters; 64x4 -> 128x4: +0.321 dB for +0.92M (seed 42)",
+    "efficiency": "share of the C2MS gain kept: W2 64x4 42% (25.3 GMAC), 64x8 86% (30.1), 128x4 78% (40.3), 77 E3 98.7% (49.4), C2MS 100% (59.6)",
+    "loss_65": "C2MS + L1 + spectral, QB 3 seeds vs 53: RR +0.028 dB, SAM -0.100 deg (60/60 scenes), ERGAS -0.008",
+    "projection_66": "projection at inference: about +0.04 dB per seed; 65 + projection vs 53 C2MS, 3 seeds: +0.072 dB / -0.102 deg / -0.027; vs C2MS + projection +0.033 dB",
+    "lesson_78": "ensemble gain did not transfer by output distillation, so this experiment uses only gains already measured on single models"
+  },
+  "arms": {
+    "C2MS_W64D12_L1S": "original SSA-MRN K4 + W2 64 channels x 12 blocks (75 SizedParallel), 65 loss; 1,346,014 parameters (used 1,227,706), 34.94 GMAC",
+    "C2MS_W64D16_L1S": "original SSA-MRN K4 + W2 64 channels x 16 blocks, 65 loss; 1,641,438 parameters (used 1,523,130), 39.77 GMAC"
+  },
+  "projection": "45/66 y' = y + D^T M^T (M D D^T M^T)^-1 M (MS - D y), interior margin 5, CG per band in float64 (tol 1e-8, at most 400 iterations), applied after every inference (prepare.Projected); parameter-free; GPU time measured at evaluation",
+  "loss": "original per-pixel L1 + 1.0 x per-pixel L1 on 2x coarser pairs + 0.46 x spectral loss (58: mean over pixels of 1 - cos between predicted and GT band vectors, zero-norm pixels skipped) on the original pair; history fields train_mse/coarse_train_mse hold mean absolute errors",
+  "coarse_weight": {
+    "C2MS_W64D12_L1S": 1.0,
+    "C2MS_W64D16_L1S": 1.0
+  },
+  "spectral_weight": {
+    "C2MS_W64D12_L1S": 0.46,
+    "C2MS_W64D16_L1S": 0.46
+  },
+  "ema_beta": 0.99,
+  "ema_note": "the 58 trainer records EMA weights (beta 0.99) as in 65; selection uses the online weights (validation MSE), EMA weights are recorded only",
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt"
+  },
+  "same_loss_controls": {
+    "QB": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt"
+  },
+  "original": {
+    "QB": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s<seed>/best.pt"
+  },
+  "comparisons": {
+    "official": "arm + projection vs plain 53 C2MS of the same seed (criteria v2.4, RR only)",
+    "fair_projection": "arm + projection vs 53 C2MS + projection",
+    "structure": "arm vs 65 C2MS_L1S (same loss and data, C2MS branch), raw and projected",
+    "reference": "65 + projection vs 53 (reproduces 66), 53 + projection vs 53, arm vs original 43 C0 (share of the C2MS gain)"
+  },
+  "stages": {
+    "stage1": "QB seed 42, both arms at once",
+    "stage1_gate": "fixed before training (evaluate.stage_gate): an arm passes when arm + projection beats plain C2MS on all three RR metrics at seed 42; if both pass the one with fewer operations (64 x 12) goes on; if none passes, stage 2 is not run",
+    "stage2": "the chosen arm, QB seeds 43 and 44 at once; judgement = mean of the three same-seed pairs (v2.4, threshold 0.04 dB)",
+    "lightweight_reference": "reported, not a judgement: 3-seed mean RR PSNR of arm + projection at or above C2MS - 0.04 dB counts as non-inferior",
+    "automation": "run.py runs stage 1, the gate and stage 2 in one controller; nothing is tuned between the stages"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "latency_seed": 42,
+  "stage2_seeds": [
+    43,
+    44
+  ],
+  "epochs": 150,
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "schedule": "Adam lr = 1e-6 + 0.5 * (1e-4 - 1e-6) * (1 + cos(pi * zero_based_epoch / 149)), as 53",
+  "runtime": "C:/CtrS-p79/run",
+  "sensors": [
+    "QB"
+  ],
+  "max_parallel": 2,
+  "expected_duration": "stage 1 about 6 h (two at once), stage 2 about 6 h, plus evaluations with the projection",
+  "limits": [
+    "single-seed stage 1 screen with an exploratory reuse of the test set for the gate",
+    "the projection could also be applied to C2MS itself; both comparisons are reported",
+    "deeper branches add sequential layers, and the projection adds an iterative step, so the measured GPU time can move against the operation count",
+    "no automatic baseline replacement"
+  ],
+  "batch": 32,
+  "micro": 32,
+  "optimizer": "Adam (beta 0.9, 0.999), no weight decay",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP core training with GradScaler; FP32 transforms, loss, validation and evaluation (as 53/63)",
+  "tf32": false,
+  "cudnn_deterministic": true,
+  "layout": "channels_last",
+  "normalization": {
+    "QB": 2047
+  },
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    }
+  },
+  "cudnn_benchmark": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "cpu_threads": 1,
+  "data_root": "C:/CtrS/PAN-MS",
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "cache_reference_manifest": "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json",
+  "selection": "minimum original-scale validation MSE including epoch 0, earliest exact tie; test never used for selection (same rule as 53/65)",
+  "source_hashes": {
+    "experiments/performance/79_deep_narrow_branch_projection/model.py": "8ac88fdead767e84bfae5cb22a230c3c53fd7afd1acecac5e7d732ff09091148",
+    "experiments/performance/79_deep_narrow_branch_projection/prepare.py": "f658efc0506affb7cc8dc76e3ae2a34b202a75f0d7cfa83766838ec0d49e6b28",
+    "experiments/performance/79_deep_narrow_branch_projection/train.py": "3fd8d9cfb8acef9be4e6d2e444e0cb73d51d9251e5d7155cc2898d58421b48cb",
+    "experiments/performance/79_deep_narrow_branch_projection/run.py": "4fa16cfe157b0beb08ccd53ed244eeda4beb2091b0382c74571b5c868c758ea1",
+    "experiments/performance/79_deep_narrow_branch_projection/config.json": "fe97a437c830612431268e9e223865e55db6a9a1ff3a63ee5cc36fd46d89f880",
+    "experiments/performance/79_deep_narrow_branch_projection/evaluate.py": "238148f0257e6f890de446a621884fdb55c3f3485f768685cf07ad77c035635d",
+    "experiments/performance/75_parallel_branch_width_depth/model.py": "107398906d671fccde503637eea1f9c8309b742700d542f0e458ea4ac56821f0",
+    "experiments/performance/58_spectral_loss_multi_sensor/train.py": "b5a8c3f5e2dbff854a1bbf09c8f1e1ccdd601cb6a53557f31e4e5b76b6f1b575",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/train.py": "55c150b067788191664e5f72885e065b1a222fcaeb0fe97a6b13050dc08a7dc5",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/evaluate.py": "e7e60ab17aea8d55f9d1d92fc57c1bd166e50f44d936b1d29c190c25ed818a7a",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/config.json": "821c9038a3c6fa296d96176074b3d91c86a9df3d5a9ffd115eb727de310546e4",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16",
+    "common/result_images.py": "2fc73537d7d60fa8c9d19a036ad0bb53e9ab1231b9811fd6d8e9b5159675c737",
+    "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json": "5eff51d1aab2a971d850296817ec91de3fcc0560086d75969a11035e04f3d5ad",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt": "3ab7f20c2fda333f2698163af3b0b6c77030d2436f3407f1c58f3224e689de40",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s43/best.pt": "322ee8a85f8de05221403a88cefa64cdd01a224b6043b33da5694dbdd994d6e1",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s44/best.pt": "ad8bfa8eb624aae580e03460a32bf80016d28adbeb2df1bc17bb14dc9eb9e897",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s42/best.pt": "0175151f6306b275966858cbef6b66b5c9b7345ecdc581e6383a03ad09cbabbb",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s43/best.pt": "7bc31dd8bdb7f317d5678e400e7b5666628f15a3f526f6f328b2e27986bf881d",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s44/best.pt": "37870674c7922fc5285e7539be426be097c6caef8f52af78dd2779a24ba631e7",
+    "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s42/best.pt": "f3255077687f0cfefb307961957b9ecc4973555d8b926008d778858c60f50406",
+    "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s43/best.pt": "6287c8aeac68a73328c55afadf1c1b4be0dc0c9af72c2c364f8fd39dd6b234e6",
+    "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s44/best.pt": "2379c5a41cf05ebb3c7240b3e5c55b23a72c58990819f91bc8cb4ea9f92002f9"
+  },
+  "created_kst": "2026-11-12T03:47:18.332134+09:00",
+  "coarse_cache_equal_to_63": {
+    "QB_train_coarse_pan": true,
+    "QB_train_coarse_lms": true,
+    "QB_train_coarse_ms": true,
+    "QB_train_coarse_gt": true,
+    "QB_val_coarse_pan": true,
+    "QB_val_coarse_lms": true,
+    "QB_val_coarse_ms": true,
+    "QB_val_coarse_gt": true
+  },
+  "cache_manifest_sha256": "d0a70a5efe10aaed25923f14a002f37f9eb452866df92c47c58c696403e50ba3",
+  "conv_gmac_256": {
+    "C2MS_W64D12_L1S": 34.935996416,
+    "C2MS_W64D16_L1S": 39.767834624,
+    "C2MS": 59.632058368,
+    "C0": 19.90361088
+  },
+  "used_parameters": {
+    "C2MS_W64D12_L1S": 1227706,
+    "C2MS_W64D16_L1S": 1523130,
+    "C2MS": 2735610,
+    "C0": 308346
+  },
+  "benchmark": {
+    "QB_C2MS_W64D12_L1S": {
+      "median_step_seconds": 0.13739780000105384,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.4296875
+    },
+    "QB_C2MS_W64D16_L1S": {
+      "median_step_seconds": 0.14317355000093812,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.478515625
+    }
+  },
+  "fingerprint": "5c6254b10389ce0c1d6dbf373b6d4314b5a0c1a0234fd902be0b451a456836ee"
+}

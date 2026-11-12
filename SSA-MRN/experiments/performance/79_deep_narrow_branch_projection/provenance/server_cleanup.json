@@ -1,0 +1,26 @@
+{
+  "time_kst": "2026-11-12T03:28:57+09:00",
+  "rule": "AGENTS.md: delete archived previous run folders before the next experiment",
+  "checked_before_removal": [
+    "no python process on the server, GPU idle",
+    "78 merged to main (PR #160); verify.py --experiment 78 --research-track performance --releases PASS (73 files, 4 release assets hashed)",
+    "79 copies its controls into C:\\CtrS-p79 and does not reference C:\\CtrS-p78"
+  ],
+  "removed": [
+    {"path": "C:\\CtrS-p78\\run", "gb": 4.89},
+    {"path": "C:\\CtrS-p78\\SSA-MRN", "gb": 0.22},
+    {"path": "C:\\CtrS-p78\\ctrs78-source.tgz", "gb": 0.20},
+    {"path": "C:\\CtrS-p78\\results78.tgz", "gb": 0.07}
+  ],
+  "freed_gb": 5.38,
+  "free_after_gb": 56.23,
+  "archived_at": [
+    "main (PR #160): SSA-MRN/experiments/performance/78_seed_ensemble_distillation",
+    "GitHub Release weights-experiments-performance-78 (verify.py --releases PASS)"
+  ],
+  "kept": [
+    "C:\\CtrS-p73\\.venv (reused by experiment 79)",
+    "C:\\CtrS-p78 small launch, manifest and verification records",
+    "C:\\CtrS-alpha (not created by this work; untouched)"
+  ]
+}
