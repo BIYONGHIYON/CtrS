@@ -1,0 +1,58 @@
+{
+  "description": "결과 비교 사이트에 올릴 데이터셋과 모델 목록입니다. 모델을 추가한 뒤 python SSA-MRN/viewer/export.py --models <id>로 예측을 만듭니다.",
+  "datasets": [
+    {
+      "id": "QB", "label": "QB", "title": "QuickBird", "rr_file": "test_qb_multiExm1.h5", "bands": 4, "scale": 2047,
+      "band_names": ["Blue", "Green", "Red", "NIR"],
+      "composites": {"RGB": [2, 1, 0], "NIR 위색": [3, 2, 1]},
+      "note": "QB 학습 · QB 평가",
+      "standard_scenes": [0, 1, 3, 7, 14, 17],
+      "scene_labels": {"0": "바다·항구 방파제", "1": "부두·곡선 방파제·수목", "3": "요트 마리나·운동장", "7": "숲 공원", "14": "언덕 공원·곡선 주택가", "17": "산지 녹지·산책로"}
+    },
+    {
+      "id": "GF2", "label": "GF2", "title": "GaoFen-2", "rr_file": "test_gf2_multiExm1.h5", "bands": 4, "scale": 1023,
+      "band_names": ["Blue", "Green", "Red", "NIR"],
+      "composites": {"RGB": [2, 1, 0], "NIR 위색": [3, 2, 1]},
+      "note": "GF2 학습 · GF2 평가 · 10bit 영상이라 PSNR(peak 2047)이 약 6 dB 높게 나옴",
+      "standard_scenes": [0, 1, 3, 7, 14, 17], "scene_labels": {}
+    },
+    {
+      "id": "WV3", "label": "WV3", "title": "WorldView-3", "rr_file": "test_wv3_multiExm1.h5", "bands": 8, "scale": 2047,
+      "band_names": ["Coastal", "Blue", "Green", "Yellow", "Red", "Red edge", "NIR1", "NIR2"],
+      "composites": {"RGB": [4, 2, 1], "NIR 위색": [6, 4, 2]},
+      "note": "WV3 학습 · WV3 평가",
+      "standard_scenes": [0, 1, 3, 7, 14, 17], "scene_labels": {}
+    },
+    {
+      "id": "WV2", "label": "WV2 전이", "title": "WorldView-2 (전이)", "rr_file": "test_wv2_multiExm1.h5", "bands": 8, "scale": 2047,
+      "band_names": ["Coastal", "Blue", "Green", "Yellow", "Red", "Red edge", "NIR1", "NIR2"],
+      "composites": {"RGB": [4, 2, 1], "NIR 위색": [6, 4, 2]},
+      "note": "WV3 학습 모델을 WV2에 그대로 적용한 전이 결과 · 판정에는 쓰지 않음",
+      "standard_scenes": [0, 1, 3, 7, 14, 17], "scene_labels": {}
+    }
+  ],
+  "models": [
+    {
+      "id": "ssa_mrn", "label": "원본 SSA-MRN", "short": "원본", "role": "비교 기준", "seed": 42,
+      "description": "원본 SSA-MRN K4입니다. QB는 성능 43번 C0, GF2·WV3는 성능 54번 C0 가중치이며 WV2에는 WV3 가중치를 적용합니다.",
+      "module": "experiments/performance/54_multi_sensor_scale_mixed_training/model.py", "factory": "Model", "args": ["C0", "{bands}", 42],
+      "checkpoints": {
+        "QB": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s42/best.pt",
+        "GF2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_GF2_s42/best.pt",
+        "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_WV3_s42/best.pt",
+        "WV2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_WV3_s42/best.pt"
+      }
+    },
+    {
+      "id": "c2ms", "label": "C2MS", "short": "C2MS", "role": "현재 기준 모델", "seed": 42,
+      "description": "원본 SSA-MRN K4에 성능 43번 W2 병렬 가지를 더하고 원래 학습 쌍과 2배 거친 학습 쌍을 섞어 학습했습니다. QB는 성능 53번, GF2·WV3는 성능 54번 가중치이며 WV2에는 WV3 가중치를 적용합니다.",
+      "module": "experiments/performance/54_multi_sensor_scale_mixed_training/model.py", "factory": "Model", "args": ["C2MS", "{bands}", 42],
+      "checkpoints": {
+        "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt",
+        "GF2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s42/best.pt",
+        "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s42/best.pt",
+        "WV2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s42/best.pt"
+      }
+    }
+  ]
+}
