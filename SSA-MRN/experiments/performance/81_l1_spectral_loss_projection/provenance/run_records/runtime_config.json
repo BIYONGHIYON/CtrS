@@ -1,0 +1,211 @@
+{
+  "experiment": 81,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "L1·분광 손실 C2MS에 관측 일치 사영 결합의 정식 판정과 사영 가속",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "registered": "2026-11-13",
+  "hypothesis": "65 C2MS_L1S with the 45/66 observation-consistency projection at inference beats the same-seed C2MS on RR on every training sensor (QB, GF2, WV3), and a cheaper projection (float32 or an early-stopped conjugate gradient) keeps that result at a fraction of the projection time.",
+  "prior_observation": "66 (post-hoc analysis, judged 'not a performance comparison') and the reference comparisons fixed in 79/80 already measured 65 + P against C2MS on these test sets: QB +0.072 dB / -0.102 deg / -0.027, GF2 +0.191 / -0.028 / -0.017, WV3 +0.130 / -0.091 / -0.017 (3 seeds each), WV2 transfer +0.171 / -0.348 / -0.087. 66 recommended a new experiment with the inference and the control fixed in advance; this is that experiment. The test numbers of the official candidate are therefore not new; the registration fixes the candidate, control and judgement before this run, and the projection variants and their GPU time are new.",
+  "candidate": "C2MS_L1S + P: the archived 65 C2MS_L1S weights (no retraining) with 79 prepare.Projected after every inference (float64, interior margin 5, conjugate gradient per band, tolerance 1e-8, at most 400 iterations), using the Wald operator of the test sensor",
+  "variants": {
+    "P32": {
+      "dtype": "float32",
+      "tol": 1e-05,
+      "max_iter": 400,
+      "note": "network output, MS and FFT operator in float32"
+    },
+    "K20": {
+      "dtype": "float64",
+      "tol": 1e-08,
+      "max_iter": 20,
+      "note": "conjugate gradient stopped after 20 iterations"
+    },
+    "K10": {
+      "dtype": "float64",
+      "tol": 1e-08,
+      "max_iter": 10,
+      "note": "stopped after 10 iterations"
+    },
+    "K5": {
+      "dtype": "float64",
+      "tol": 1e-08,
+      "max_iter": 5,
+      "note": "stopped after 5 iterations"
+    }
+  },
+  "variant_keep_rule": {
+    "max_abs_psnr_db": 0.005,
+    "rule": "fixed before evaluation: a variant keeps the projection when, on every judged sensor and every seed, its RR PSNR is within 0.005 dB of C2MS_L1S + P and its 3-seed v2.4 label against C2MS equals the official one; reported per sensor, not a separate judgement"
+  },
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt",
+    "GF2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s<seed>/best.pt",
+    "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
+  },
+  "candidates": {
+    "QB": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt",
+    "GF2": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s<seed>/best.pt",
+    "WV3": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s<seed>/best.pt"
+  },
+  "original": {
+    "QB": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s<seed>/best.pt",
+    "GF2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_GF2_s<seed>/best.pt",
+    "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_WV3_s<seed>/best.pt"
+  },
+  "comparisons": {
+    "official": "per training sensor (QB, GF2, WV3): C2MS_L1S + P vs plain C2MS of the same seed, 3-seed mean (criteria v2.4, RR only, threshold 0.04 dB)",
+    "decomposition": "C2MS_L1S + P vs C2MS + P (the loss's share with the projection on both), C2MS + P vs C2MS (the projection alone), C2MS_L1S vs C2MS (the loss alone, 65)",
+    "variants": "each variant vs C2MS (v2.4) and vs C2MS_L1S + P (difference)",
+    "reference": "WV2 transfer (WV3-trained models, all comparisons, reference only); FR QNR/D_lambda/D_s; C2MS_L1S vs the original C0",
+    "baseline": "replacing the C2MS baseline needs a 3-seed improvement (AGENTS.md); this experiment does not replace it automatically, it reports whether the condition is met"
+  },
+  "reproduction_references": {
+    "QB": {
+      "path": "experiments/performance/79_deep_narrow_branch_projection/results/summary.json",
+      "names": {
+        "C2MS": "C2MS",
+        "L1S": "L1S",
+        "C2MS+P": "C2MS+P",
+        "L1S+P": "L1S+P"
+      }
+    },
+    "GF2": {
+      "path": "experiments/performance/80_multi_sensor_deep_narrow_projection/results/summary.json",
+      "names": {
+        "C2MS": "C2MS",
+        "L1S": "L1S",
+        "C2MS+P": "C2MS+P",
+        "L1S+P": "L1S+P"
+      }
+    },
+    "WV3": {
+      "path": "experiments/performance/80_multi_sensor_deep_narrow_projection/results/summary.json",
+      "names": {
+        "C2MS": "C2MS",
+        "L1S": "L1S",
+        "C2MS+P": "C2MS+P",
+        "L1S+P": "L1S+P"
+      }
+    },
+    "WV2": {
+      "path": "experiments/performance/80_multi_sensor_deep_narrow_projection/results/summary.json",
+      "names": {
+        "C2MS": "C2MS",
+        "L1S": "L1S",
+        "C2MS+P": "C2MS+P",
+        "L1S+P": "L1S+P"
+      }
+    }
+  },
+  "sensors": [
+    "QB",
+    "GF2",
+    "WV3"
+  ],
+  "transfer_tests": {
+    "WV2": "WV3-trained models on the WV2 test set; reference only"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "latency_seed": 42,
+  "metrics": "RR (PSNR, SAM, ERGAS, SCC, Q2n) and FR (QNR, D_lambda, D_s, observation RMSE) from the 54 scene metrics; RR2 and FR_WALD are not computed (not in v2.4)",
+  "runtime": "C:/CtrS-p81/run",
+  "data_root": "C:/CtrS/PAN-MS",
+  "data_sha256": {
+    "QB": {
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    },
+    "GF2": {
+      "RR": "709a9a53b2e0f29d3dcd5c6ca4410c2913b62cc03c104fed6c049911dbe1c8ea",
+      "FR": "840698f9b3de181de9f665ca88e562fb7783dcd93045a136ace2110d414989ad"
+    },
+    "WV3": {
+      "RR": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "FR": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+    },
+    "WV2": {
+      "RR": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b",
+      "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
+    }
+  },
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "scenes_note": "QB fixed scenes; the same indices on GF2, WV3 and WV2 (as 65 stage 3 and 80); chosen before evaluation",
+  "expected_duration": "about 1 h on the GPU (9 sensor-seed evaluations, WV3 also on WV2; no training)",
+  "limits": [
+    "the official candidate's test numbers were already measured in 66/79/80 (see prior_observation)",
+    "the projection adds an iterative step at inference; GPU time is reported for every variant",
+    "65 C2MS_L1S was trained with the spectral weight calibrated on QB (0.46) on every sensor",
+    "no automatic baseline replacement"
+  ],
+  "source_hashes": {
+    "experiments/performance/81_l1_spectral_loss_projection/config.json": "6ddcb91ba91364f3f93b6217c259f985aa29b61b34d9d9b6f19f5a9c15e0be75",
+    "experiments/performance/81_l1_spectral_loss_projection/prepare.py": "6a10776740be58bb1bd0d2985f786793e8671e16c163af8abf382597486ab85c",
+    "experiments/performance/81_l1_spectral_loss_projection/evaluate.py": "b62766d166364b6e27f454055d30a3d0a4b1d2b359af35cc7772430633215e1f",
+    "experiments/performance/81_l1_spectral_loss_projection/run.py": "b97a3a517be76acee6105bf5a22caddcfa2755c50380217ddbc3554e07f95953",
+    "experiments/performance/79_deep_narrow_branch_projection/prepare.py": "f658efc0506affb7cc8dc76e3ae2a34b202a75f0d7cfa83766838ec0d49e6b28",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/evaluate.py": "e7e60ab17aea8d55f9d1d92fc57c1bd166e50f44d936b1d29c190c25ed818a7a",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/config.json": "821c9038a3c6fa296d96176074b3d91c86a9df3d5a9ffd115eb727de310546e4",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16",
+    "common/result_images.py": "2fc73537d7d60fa8c9d19a036ad0bb53e9ab1231b9811fd6d8e9b5159675c737",
+    "experiments/performance/79_deep_narrow_branch_projection/results/summary.json": "bdd0cdd16c7315a10fef6f0fb093e126562b5dcc9a23517117cfffc762234c43",
+    "experiments/performance/80_multi_sensor_deep_narrow_projection/results/summary.json": "4b44262848e54968d6830dde4e2e919c015caed76837f9461340ee900806e5e5",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt": "3ab7f20c2fda333f2698163af3b0b6c77030d2436f3407f1c58f3224e689de40",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s43/best.pt": "322ee8a85f8de05221403a88cefa64cdd01a224b6043b33da5694dbdd994d6e1",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s44/best.pt": "ad8bfa8eb624aae580e03460a32bf80016d28adbeb2df1bc17bb14dc9eb9e897",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s42/best.pt": "9960c88896d208f358282bf02c3740bba0fd3cac753b2532963587a03ca6126d",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s43/best.pt": "233e4890516cabac995d93e8f3f9ade8510f974aa443ac5993c67e3635628fbf",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s44/best.pt": "c5757d5d1e4c9cb68c59f31a59d6f2ce168ea83a4df81962bdaeb6e744841e53",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s42/best.pt": "5f1926608479fa58eaba526e82f6057df81c60b7d4a452274c93ed836fa8e8bd",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s43/best.pt": "259a5651341fcca669d3d141c74ed5f32b459e4ec5f9741cfc9e29bc61a430c9",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s44/best.pt": "76f9ed2663c4a65cc3b6ca22b082df8609a25b240acc7635b17fdab06f1ba82c",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s42/best.pt": "0175151f6306b275966858cbef6b66b5c9b7345ecdc581e6383a03ad09cbabbb",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s43/best.pt": "7bc31dd8bdb7f317d5678e400e7b5666628f15a3f526f6f328b2e27986bf881d",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s44/best.pt": "37870674c7922fc5285e7539be426be097c6caef8f52af78dd2779a24ba631e7",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s42/best.pt": "e33c04fb8b06cd1284b2d58b5d57933586a3e470ea51d0fee7e97a66da60ae31",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s43/best.pt": "f1de5fcecce3962bfb341223cafdf3b1f40e2f7ecd327b3f63041076370d4bb2",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s44/best.pt": "7ba8708acc158c9603b0bccc2a8007e705b45a24a43fddb0b94e147ff42d2deb",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s42/best.pt": "d9d9d8c67bca9f48f8e6027825041f76a8c5a7e987a26a68287e34fcbd351541",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s43/best.pt": "1f519ebbc6fe22c361763cb2d0fbec9f717b1b5745a42ff5d429c6fb43a1e5bf",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s44/best.pt": "c8f8f379c25be38fa16e0030d3e3ed2cecdb3c3a8dc00dca9a1bf3fe7a439292",
+    "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s42/best.pt": "f3255077687f0cfefb307961957b9ecc4973555d8b926008d778858c60f50406",
+    "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s43/best.pt": "6287c8aeac68a73328c55afadf1c1b4be0dc0c9af72c2c364f8fd39dd6b234e6",
+    "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s44/best.pt": "2379c5a41cf05ebb3c7240b3e5c55b23a72c58990819f91bc8cb4ea9f92002f9",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_GF2_s42/best.pt": "17583a8a267db1bc6c2004f79fa79bececc3e02865ba30d937d9ff9300d3061e",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_GF2_s43/best.pt": "31cb227dd27072c8eb77e60ee8311967d2ef08c08d6ad0a247853bd209da6dd2",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_GF2_s44/best.pt": "54d11564b4b5b28a14d36f90e9b67e92664d7932579c143418bc495dfa40bac7",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_WV3_s42/best.pt": "b4ae01f752ee1c88ad9fa72f932ba03057945b7310ff1597f19eef5173e449ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_WV3_s43/best.pt": "ebb7fd7a26c67fa3c6f8b659b613718e349fbbb8dc2a20dc47cb6e6e56f5a780",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_WV3_s44/best.pt": "67eb9df2606e50f153e15d0f73b289d0095a87b71d00d8409c7045311047c80c"
+  },
+  "created_kst": "2026-11-13T21:38:28.908097+09:00",
+  "projection_identity_check": {
+    "QB": 0.0,
+    "GF2": 0.0,
+    "WV3": 0.0,
+    "WV2": 0.0
+  },
+  "fingerprint": "20c40ecc6c897d2f628507eefc90233521110109ddc31b930a402f598dbb10ed"
+}

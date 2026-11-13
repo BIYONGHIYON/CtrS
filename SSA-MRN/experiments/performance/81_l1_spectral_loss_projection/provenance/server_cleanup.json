@@ -1,0 +1,26 @@
+{
+  "time_kst": "2026-11-13T21:34:22+09:00",
+  "rule": "AGENTS.md: delete archived previous run folders before the next experiment",
+  "checked_before_removal": [
+    "no python process on the server, GPU idle",
+    "80 merged to main (PR #162); verify.py --experiment 80 --research-track performance --releases PASS (202 files, 12 release assets hashed), rechecked before removal",
+    "81 copies its weights into C:\\CtrS-p81 and does not reference C:\\CtrS-p80"
+  ],
+  "removed": [
+    {"path": "C:\\CtrS-p80\\run", "gb": 7.88},
+    {"path": "C:\\CtrS-p80\\SSA-MRN", "gb": 0.29},
+    {"path": "C:\\CtrS-p80\\ctrs80-source.tgz", "gb": 0.27},
+    {"path": "C:\\CtrS-p80\\fetch80.tgz", "gb": 0.36}
+  ],
+  "freed_gb": 8.8,
+  "free_after_gb": 58.28,
+  "archived_at": [
+    "main (PR #162): SSA-MRN/experiments/performance/80_multi_sensor_deep_narrow_projection",
+    "GitHub Release weights-experiments-performance-80 (verify.py --releases PASS)"
+  ],
+  "kept": [
+    "C:\\CtrS-p73\\.venv (reused by experiment 81)",
+    "C:\\CtrS-p80 small launch, manifest and verification records",
+    "C:\\CtrS-alpha (not created by this work; untouched)"
+  ]
+}
