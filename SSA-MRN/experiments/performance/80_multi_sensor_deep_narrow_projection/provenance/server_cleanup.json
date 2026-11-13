@@ -1,0 +1,26 @@
+{
+  "time_kst": "2026-11-13T03:01:48+09:00",
+  "rule": "AGENTS.md: delete archived previous run folders before the next experiment",
+  "checked_before_removal": [
+    "no python process on the server, GPU idle",
+    "79 merged to main (PR #161); verify.py --experiment 79 --research-track performance --releases PASS (119 files, 8 release assets hashed)",
+    "80 copies its controls into C:\\CtrS-p80 and does not reference C:\\CtrS-p79"
+  ],
+  "removed": [
+    {"path": "C:\\CtrS-p79\\run", "gb": 3.60},
+    {"path": "C:\\CtrS-p79\\SSA-MRN", "gb": 0.20},
+    {"path": "C:\\CtrS-p79\\ctrs79-source.tgz", "gb": 0.18},
+    {"path": "C:\\CtrS-p79\\fetch79.tgz", "gb": 0.22}
+  ],
+  "freed_gb": 4.2,
+  "free_after_gb": 59.77,
+  "archived_at": [
+    "main (PR #161): SSA-MRN/experiments/performance/79_deep_narrow_branch_projection",
+    "GitHub Release weights-experiments-performance-79 (verify.py --releases PASS)"
+  ],
+  "kept": [
+    "C:\\CtrS-p73\\.venv (reused by experiment 80)",
+    "C:\\CtrS-p79 small launch, manifest and verification records",
+    "C:\\CtrS-alpha (not created by this work; untouched)"
+  ]
+}
