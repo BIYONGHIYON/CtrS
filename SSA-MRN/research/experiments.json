@@ -2838,14 +2838,28 @@
     "sensor": "QB, GF2, WV3 (WV2 transfer)",
     "experiment": 81,
     "display_name": "81. L1·분광 손실 C2MS에 관측 일치 사영 결합의 정식 판정과 사영 가속",
-    "status": "계획",
-    "improvement": "판단 보류",
-    "evaluated_seeds": [],
+    "status": "평가 완료",
+    "improvement": "개선",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
     "retraining": false,
-    "limits": "65번 C2MS_L1S + 사영을 QB·GF2·WV3 3시드에서 같은 시드 C2MS와 정식 판정하고 사영 변형의 GPU 시간을 잴 계획입니다. 후보의 test 수치는 66·79·80번에서 이미 쟀습니다. 아직 평가하지 않았습니다.",
+    "limits": "C2MS_L1S + 사영이 C2MS 대비 3시드 평균 QB +0.072 dB·SAM −0.102°·ERGAS −0.027, GF2 +0.191 dB·−0.028°·−0.017, WV3 +0.130 dB·−0.091°·−0.017로 세 센서 모두 개선이며 기준 모델 교체 조건을 충족합니다(자동 교체 안 함). 공액 기울기법 10회에서 멈춰도 결과가 0.0003 dB 이내로 같았고, QB 512² 사영 시간이 812 ms에서 128 ms로 줄었습니다. WV2 전이(참고)는 +0.171 dB였지만 시드별 편차가 컸습니다(−0.52에서 +0.76 dB).",
     "config": "experiments/performance/81_l1_spectral_loss_projection/config.json",
     "entrypoint": "experiments/performance/81_l1_spectral_loss_projection/run.py",
     "results": "experiments/performance/81_l1_spectral_loss_projection/results",
-    "manifest": "experiments/performance/81_l1_spectral_loss_projection/manifest.json"
+    "manifest": "experiments/performance/81_l1_spectral_loss_projection/manifest.json",
+    "last_checked": "2026-11-13T22:03:00+09:00",
+    "evaluation": "experiments/performance/81_l1_spectral_loss_projection/results/<sensor>_s<seed>/<target>_v2_4.json",
+    "judgements": {
+      "QB_L1S_P_vs_C2MS53_3seed": "개선",
+      "GF2_L1S_P_vs_C2MS54_3seed": "개선",
+      "WV3_L1S_P_vs_C2MS54_3seed": "개선",
+      "WV2_transfer_L1S_P_vs_C2MS54_3seed": "개선 (참고)",
+      "variants_keep_projection": "P32, K20, K10, K5 모두 유지",
+      "baseline_replacement_condition": "충족 (자동 교체 안 함)"
+    }
   }
 }
