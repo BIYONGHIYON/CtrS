@@ -2,7 +2,7 @@
 
 # CtrS · SSA-MRN 성능 개선 연구
 
-[연구 소개](#연구-소개) · [팀원](#팀원) · [구조](#ssa-mrn-구조) · [기준 모델](#기준-모델) · [결과 이미지](#기준-모델-결과-이미지) · [원본 대비 개선](#원본-대비-개선) · [다른 모델과 비교](#compare) · [다른 실험](#experiments)
+[연구 소개](#연구-소개) · [팀원](#팀원) · [구조](#ssa-mrn-구조) · [기준 모델](#기준-모델) · [결과 이미지](#기준-모델-결과-이미지) · [원본 대비 개선](#원본-대비-개선) · [다른 모델과 비교](#compare) · [다른 실험](#experiments) · **[결과 비교 사이트](https://biyonghiyon.github.io/CtrS-viewer/)**
 
 ## 연구 소개
 
@@ -124,6 +124,8 @@ C2MS 구조입니다. 주황색이 원본 SSA-MRN에 더한 W2 병렬 가지와 
 </details>
 
 **[더 많은 이미지 보기 →](SSA-MRN/docs/c2ms_result_images.md)** QB·GF2·WV3·WV2의 6장면 전체(원본 크기·확대 비교). FR(정답 없음) 비교 패널과 이전 기준 모델 F1과의 비교는 [성능 53번 보고서](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)에 있습니다.
+
+**[결과 비교 사이트 →](https://biyonghiyon.github.io/CtrS-viewer/)** 네 데이터셋의 RR test 20장면 전체에서 원본 SSA-MRN과 C2MS(seed 42)의 예측·오차 지도를 나란히 놓고, 확대할 영역을 직접 골라 영역 PSNR·SAM·ERGAS를 비교합니다. 코드와 모델 추가 방법은 [`SSA-MRN/viewer/`](SSA-MRN/viewer/README.md)에 있습니다.
 
 ## 원본 대비 개선
 

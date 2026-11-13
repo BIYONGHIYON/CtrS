@@ -2,6 +2,8 @@
 
 같은 RR test 장면에서 여러 모델의 예측 영상·오차 지도·수치를 비교하는 정적 웹페이지입니다. 현재 원본 SSA-MRN과 기준 모델 C2MS(둘 다 seed 42)를 QB·GF2·WV3·WV2 전이 데이터셋에 올렸습니다.
 
+배포 주소: **https://biyonghiyon.github.io/CtrS-viewer/** (배포 저장소 [BIYONGHIYON/CtrS-viewer](https://github.com/BIYONGHIYON/CtrS-viewer), GitHub Pages)
+
 ## 실행
 
 ```bash
@@ -40,3 +42,16 @@ python SSA-MRN/viewer/export.py --models <모델 id>
 - **저장소 코드로 만드는 모델:** `module`(SSA-MRN 기준 경로), `factory`, `args`(`"{bands}"`는 밴드 수로 바뀜)와 데이터셋별 `checkpoints`를 적습니다. 입력은 (pan, lms, ms)를 데이터셋 `scale`로 나눈 값이고 출력에 다시 곱합니다. 체크포인트의 state dict 키가 `model`이 아니면 `state_key`를 적습니다.
 - **다른 코드로 만든 예측:** 다른 팬샤프닝 연구 코드로 학습·추론했다면 `"predictions": {"QB": "<h5 경로>"}`를 적습니다. H5에는 `pred` 데이터셋을 RR test와 같은 순서·크기 `(20, C, 256, 256)`의 DN 값으로 넣습니다.
 - 체크포인트나 예측이 없는 데이터셋은 그 모델에서 건너뜁니다. `label`·`short`·`role`·`description`은 화면에 그대로 표시됩니다.
+
+## 배포 갱신
+
+모델을 추가하거나 데이터를 다시 만든 뒤 배포 저장소에 `index.html`·`app.js`·`data/`를 덮어써서 푸시하면 1-2분 뒤 사이트에 반영됩니다. 예측 데이터는 CtrS 저장소에 넣지 않고 배포 저장소에만 둡니다.
+
+```bash
+git clone https://github.com/BIYONGHIYON/CtrS-viewer.git ../CtrS-viewer
+rsync -a --delete SSA-MRN/viewer/data/ ../CtrS-viewer/data/
+cp SSA-MRN/viewer/index.html SSA-MRN/viewer/app.js ../CtrS-viewer/
+git -C ../CtrS-viewer add -A
+git -C ../CtrS-viewer commit -m "결과 비교 사이트 데이터 갱신"
+git -C ../CtrS-viewer push
+```
