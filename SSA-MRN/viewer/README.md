@@ -24,7 +24,7 @@ python -m http.server 8765 -d SSA-MRN/viewer
 
 ## 수치 확인
 
-- 예측 PSNR은 성능 53·54번이 보관한 결과 이미지 기록(`result_images.json`, CUDA)과 모든 장면에서 0.0007 dB 이내로 일치했습니다(로컬 MPS 추론).
+- 예측 PSNR은 성능 53·54번이 보관한 결과 이미지 기록(`result_images.json`, CUDA)과 네 데이터셋의 표준 6장면 모두에서 0.0007 dB 이내로 일치했습니다(로컬 MPS 추론). 나머지 14장면은 보관된 장면별 기록이 없어 대조하지 않았습니다.
 - 예측은 1/8 DN 단위 int16으로 저장합니다. 브라우저가 저장값으로 계산한 장면 전체 수치는 원래 예측으로 계산한 값과 PSNR 0.0004 dB, SAM 0.0001° 이내였습니다.
 - PSNR은 `rr_metrics`와 같이 peak 2047의 밴드별 PSNR 평균입니다(GF2는 10bit라 약 6 dB 높게 나옵니다).
 - 화면의 수치는 seed 42 가중치 한 개의 결과입니다. 실험 판정은 `docs/judgement_criteria.md`의 시드 평균을 따릅니다.
