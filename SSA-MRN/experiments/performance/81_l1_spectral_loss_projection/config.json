@@ -1,0 +1,154 @@
+{
+  "experiment": 81,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "L1·분광 손실 C2MS에 관측 일치 사영 결합의 정식 판정과 사영 가속",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "registered": "2026-11-13",
+  "hypothesis": "65 C2MS_L1S with the 45/66 observation-consistency projection at inference beats the same-seed C2MS on RR on every training sensor (QB, GF2, WV3), and a cheaper projection (float32 or an early-stopped conjugate gradient) keeps that result at a fraction of the projection time.",
+  "prior_observation": "66 (post-hoc analysis, judged 'not a performance comparison') and the reference comparisons fixed in 79/80 already measured 65 + P against C2MS on these test sets: QB +0.072 dB / -0.102 deg / -0.027, GF2 +0.191 / -0.028 / -0.017, WV3 +0.130 / -0.091 / -0.017 (3 seeds each), WV2 transfer +0.171 / -0.348 / -0.087. 66 recommended a new experiment with the inference and the control fixed in advance; this is that experiment. The test numbers of the official candidate are therefore not new; the registration fixes the candidate, control and judgement before this run, and the projection variants and their GPU time are new.",
+  "candidate": "C2MS_L1S + P: the archived 65 C2MS_L1S weights (no retraining) with 79 prepare.Projected after every inference (float64, interior margin 5, conjugate gradient per band, tolerance 1e-8, at most 400 iterations), using the Wald operator of the test sensor",
+  "variants": {
+    "P32": {
+      "dtype": "float32",
+      "tol": 1e-05,
+      "max_iter": 400,
+      "note": "network output, MS and FFT operator in float32"
+    },
+    "K20": {
+      "dtype": "float64",
+      "tol": 1e-08,
+      "max_iter": 20,
+      "note": "conjugate gradient stopped after 20 iterations"
+    },
+    "K10": {
+      "dtype": "float64",
+      "tol": 1e-08,
+      "max_iter": 10,
+      "note": "stopped after 10 iterations"
+    },
+    "K5": {
+      "dtype": "float64",
+      "tol": 1e-08,
+      "max_iter": 5,
+      "note": "stopped after 5 iterations"
+    }
+  },
+  "variant_keep_rule": {
+    "max_abs_psnr_db": 0.005,
+    "rule": "fixed before evaluation: a variant keeps the projection when, on every judged sensor and every seed, its RR PSNR is within 0.005 dB of C2MS_L1S + P and its 3-seed v2.4 label against C2MS equals the official one; reported per sensor, not a separate judgement"
+  },
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt",
+    "GF2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s<seed>/best.pt",
+    "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
+  },
+  "candidates": {
+    "QB": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt",
+    "GF2": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s<seed>/best.pt",
+    "WV3": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s<seed>/best.pt"
+  },
+  "original": {
+    "QB": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s<seed>/best.pt",
+    "GF2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_GF2_s<seed>/best.pt",
+    "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_WV3_s<seed>/best.pt"
+  },
+  "comparisons": {
+    "official": "per training sensor (QB, GF2, WV3): C2MS_L1S + P vs plain C2MS of the same seed, 3-seed mean (criteria v2.4, RR only, threshold 0.04 dB)",
+    "decomposition": "C2MS_L1S + P vs C2MS + P (the loss's share with the projection on both), C2MS + P vs C2MS (the projection alone), C2MS_L1S vs C2MS (the loss alone, 65)",
+    "variants": "each variant vs C2MS (v2.4) and vs C2MS_L1S + P (difference)",
+    "reference": "WV2 transfer (WV3-trained models, all comparisons, reference only); FR QNR/D_lambda/D_s; C2MS_L1S vs the original C0",
+    "baseline": "replacing the C2MS baseline needs a 3-seed improvement (AGENTS.md); this experiment does not replace it automatically, it reports whether the condition is met"
+  },
+  "reproduction_references": {
+    "QB": {
+      "path": "experiments/performance/79_deep_narrow_branch_projection/results/summary.json",
+      "names": {
+        "C2MS": "C2MS",
+        "L1S": "L1S",
+        "C2MS+P": "C2MS+P",
+        "L1S+P": "L1S+P"
+      }
+    },
+    "GF2": {
+      "path": "experiments/performance/80_multi_sensor_deep_narrow_projection/results/summary.json",
+      "names": {
+        "C2MS": "C2MS",
+        "L1S": "L1S",
+        "C2MS+P": "C2MS+P",
+        "L1S+P": "L1S+P"
+      }
+    },
+    "WV3": {
+      "path": "experiments/performance/80_multi_sensor_deep_narrow_projection/results/summary.json",
+      "names": {
+        "C2MS": "C2MS",
+        "L1S": "L1S",
+        "C2MS+P": "C2MS+P",
+        "L1S+P": "L1S+P"
+      }
+    },
+    "WV2": {
+      "path": "experiments/performance/80_multi_sensor_deep_narrow_projection/results/summary.json",
+      "names": {
+        "C2MS": "C2MS",
+        "L1S": "L1S",
+        "C2MS+P": "C2MS+P",
+        "L1S+P": "L1S+P"
+      }
+    }
+  },
+  "sensors": [
+    "QB",
+    "GF2",
+    "WV3"
+  ],
+  "transfer_tests": {
+    "WV2": "WV3-trained models on the WV2 test set; reference only"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "latency_seed": 42,
+  "metrics": "RR (PSNR, SAM, ERGAS, SCC, Q2n) and FR (QNR, D_lambda, D_s, observation RMSE) from the 54 scene metrics; RR2 and FR_WALD are not computed (not in v2.4)",
+  "runtime": "C:/CtrS-p81/run",
+  "data_root": "C:/CtrS/PAN-MS",
+  "data_sha256": {
+    "QB": {
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    },
+    "GF2": {
+      "RR": "709a9a53b2e0f29d3dcd5c6ca4410c2913b62cc03c104fed6c049911dbe1c8ea",
+      "FR": "840698f9b3de181de9f665ca88e562fb7783dcd93045a136ace2110d414989ad"
+    },
+    "WV3": {
+      "RR": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "FR": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+    },
+    "WV2": {
+      "RR": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b",
+      "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
+    }
+  },
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "scenes_note": "QB fixed scenes; the same indices on GF2, WV3 and WV2 (as 65 stage 3 and 80); chosen before evaluation",
+  "expected_duration": "about 1 h on the GPU (9 sensor-seed evaluations, WV3 also on WV2; no training)",
+  "limits": [
+    "the official candidate's test numbers were already measured in 66/79/80 (see prior_observation)",
+    "the projection adds an iterative step at inference; GPU time is reported for every variant",
+    "65 C2MS_L1S was trained with the spectral weight calibrated on QB (0.46) on every sensor",
+    "no automatic baseline replacement"
+  ]
+}
