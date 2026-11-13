@@ -2145,17 +2145,33 @@
     "sensor": "GF2, WV3 (WV2 transfer)",
     "experiment": 80,
     "display_name": "80. 깊고 얇은 W2 가지와 사영의 다중 센서 확인",
-    "status": "계획",
-    "improvement": "판단 보류",
-    "evaluated_seeds": [],
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "evaluated_seeds": [
+      42,
+      43,
+      44
+    ],
     "retraining": true,
     "epochs": 150,
-    "limits": "79번 방법(64×16 W2 + L1·분광 손실 + 추론 시 사영)을 GF2·WV3 3시드에서 같은 시드 54번 C2MS와 비교할 계획입니다. WV2 전이는 참고입니다. 아직 학습하지 않았습니다.",
+    "limits": "64×16 + 사영이 54번 C2MS 대비 3시드 평균 GF2 +0.073 dB·SAM −0.016°·ERGAS −0.008(개선), WV3 −0.332 dB·SAM +0.071°·ERGAS +0.118(개선 없음), WV2 전이(참고) +0.135 dB입니다. GF2 이득은 사영에서 나왔고(C2MS + 사영 대비 −0.012 dB), WV3에서는 64×16 가지가 원본 대비 이득의 54-63%만 지켰습니다. 참고로 C2MS에 사영만 붙여도 GF2 +0.085·WV3 +0.081·WV2 +0.185 dB, 65번 + 사영은 GF2 +0.191·WV3 +0.130 dB였습니다.",
     "config": "experiments/performance/80_multi_sensor_deep_narrow_projection/config.json",
     "model": "experiments/performance/80_multi_sensor_deep_narrow_projection/model.py",
     "entrypoint": "experiments/performance/80_multi_sensor_deep_narrow_projection/run.py",
     "results": "experiments/performance/80_multi_sensor_deep_narrow_projection/results",
     "checkpoints": "experiments/performance/80_multi_sensor_deep_narrow_projection/checkpoints",
-    "manifest": "experiments/performance/80_multi_sensor_deep_narrow_projection/manifest.json"
+    "manifest": "experiments/performance/80_multi_sensor_deep_narrow_projection/manifest.json",
+    "training_started_kst": "2026-11-13T03:08:15+09:00",
+    "last_checked": "2026-11-13T18:43:48+09:00",
+    "evaluation": "experiments/performance/80_multi_sensor_deep_narrow_projection/results/C2MS_W64D16_L1S_<sensor>_s<seed>/evaluation/<target>_v2_4.json",
+    "judgements": {
+      "GF2_W64D16_L1S_P_vs_C2MS54_3seed": "개선",
+      "WV3_W64D16_L1S_P_vs_C2MS54_3seed": "개선 없음",
+      "WV2_transfer_W64D16_L1S_P_vs_C2MS54_3seed": "개선 (참고)",
+      "GF2_W64D16_L1S_P_vs_C2MS54_P_3seed": "부분 개선",
+      "WV3_W64D16_L1S_P_vs_C2MS54_P_3seed": "개선 없음",
+      "GF2_W64D16_L1S_vs_C2MS_L1S65_3seed": "개선 없음",
+      "WV3_W64D16_L1S_vs_C2MS_L1S65_3seed": "개선 없음"
+    }
   }
 }
