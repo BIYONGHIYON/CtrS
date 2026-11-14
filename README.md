@@ -161,6 +161,8 @@ test 20장, 같은 시드(42·43·44) 원본과 짝지은 3시드 평균 차이�
 
 C2MS-SP·SP-Lite는 3시드 가중치를 저장소 평가 코드(`common/metrics`, DLPan-Toolbox 정의, PSNR은 밴드 평균)로 잰 값입니다. 이 코드는 이전 기준 C2MS에서 공식 DLPan MATLAB 재평가([값](SSA-MRN/docs/c2ms_matlab_evaluation_tables.md))와 PSNR·SAM·ERGAS·Q4가 소수점 셋째 자리까지 같았습니다. 다른 모델은 각 논문이 보고한 값이며, PSNR을 보고한 QB 결과를 PSNR 순으로 정렬했습니다.
 
+다른 모델을 우리 환경(같은 분할·test 장면·정규화·지표 코드)에서 직접 학습·평가한 결과는 [다른 팬샤프닝 모델 평가](SSA-MRN/benchmarks/README.md)에 모읍니다. 3시드 평가가 끝난 모델은 이 표에 `모델 (Ours 환경 재현)` 행으로 추가하고, 논문 보고값 행과 구분합니다.
+
 [QB·GF2·WV3·WV2 팬샤프닝 성능 조사 전체 보기 →](SSA-MRN/docs/pansharpening_survey/QB_GF_WV2_WV3_팬샤프닝_성능조사_2026-10-27.md) 2026-10-27 기준 논문 보고값을 센서·학습 경로(같은 센서, 다중 센서, 미학습 센서 전이)별로 정리했습니다. [QB 조사](SSA-MRN/docs/pansharpening_survey/QB_팬샤프닝_성능조사_2026-10-27.md)에는 이 표에 없는 방법과 출처별 원표가 있습니다.
 
 | 모델 | PSNR ↑ | SAM ↓ | ERGAS ↓ | Q4 ↑ | 출처 |

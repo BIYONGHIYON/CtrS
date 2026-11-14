@@ -43,6 +43,10 @@ Desktop.ini
 !SSA-MRN/research/**/checkpoints/**/*.pt
 !SSA-MRN/research/**/checkpoints/**/*.pth
 !SSA-MRN/research/**/checkpoints/**/*.ckpt
+# 다른 팬샤프닝 모델 평가(benchmarks)의 우리 학습 best 가중치도 추적합니다.
+!SSA-MRN/benchmarks/**/checkpoints/**/*.pt
+!SSA-MRN/benchmarks/**/checkpoints/**/*.pth
+!SSA-MRN/benchmarks/**/checkpoints/**/*.ckpt
 # 재개용 latest·초기 initial 가중치는 GitHub Release에 보관합니다(AGENTS.md).
 SSA-MRN/**/checkpoints/**/*latest.pt
 SSA-MRN/**/checkpoints/**/initial.pt
