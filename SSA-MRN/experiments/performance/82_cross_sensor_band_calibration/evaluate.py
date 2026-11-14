@@ -95,5 +95,50 @@ def main(out, device, threads, only=None):
         print('images done', flush=True)
 
 
-if __name__ == '__main__':
+def summarize():
+    """3-seed summary of results/evaluation.json, the pre-registered check rule and the comparison graph (no model runs)."""
+    import collections
+    cfg = json.loads((HERE / 'config.json').read_text(encoding='utf8'))
+    d = json.loads((HERE / 'results/evaluation.json').read_text(encoding='utf8'))
+    agg = collections.defaultdict(dict)
+    for k, v in d.items():
+        pair, name, seed, cond = k.split('|'); agg[(pair, name, cond)][int(seed[1:])] = v['mean']
+    m = lambda r, k: float(np.mean([x[k] for x in r.values()]))
+    means = {f'{p}|{n}|{c}': dict(seeds=sorted(r), mean={k: m(r, k) for k in r[next(iter(r))]},
+                                  per_seed={s: {k: r[s][k] for k in ('PSNR', 'SAM', 'ERGAS', 'detail_energy', 'band_bias_dn')} for s in sorted(r)}) for (p, n, c), r in agg.items()}
+    check = {}
+    for pair in cfg['pairs']:
+        rows = {}
+        for name in cfg['models']:
+            cand = agg[(pair, name, 'cal+P')]; ok = True; detail = {}
+            for ctrl in ('raw+P', 'raw'):
+                c = agg[(pair, name, ctrl)]
+                three = m(cand, 'PSNR') > m(c, 'PSNR') and m(cand, 'SAM') < m(c, 'SAM') and m(cand, 'ERGAS') < m(c, 'ERGAS')
+                every = all(cand[s]['PSNR'] > c[s]['PSNR'] for s in cand)
+                detail[ctrl] = dict(delta_PSNR=m(cand, 'PSNR') - m(c, 'PSNR'), delta_SAM=m(cand, 'SAM') - m(c, 'SAM'), delta_ERGAS=m(cand, 'ERGAS') - m(c, 'ERGAS'), three_metrics=bool(three), every_seed_psnr=bool(every))
+                ok = ok and three and every
+            rows[name] = dict(passed=bool(ok), vs=detail)
+        check[pair] = dict(models=rows, confirmed=all(r['passed'] for r in rows.values()))
+    out = dict(rule=cfg['check_rule'], check=check, means=means, note='transfer tests are reference only under criteria v2.4 (성능 비교 아님)')
+    (HERE / 'results/summary.json').write_text(json.dumps(out, indent=1, ensure_ascii=False), encoding='utf8')
+    import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt
+    plt.rcParams['font.family'] = 'AppleGothic'; plt.rcParams['axes.unicode_minus'] = False
+    conds = ['raw', 'raw+P', 'cal', 'cal+P', 'const+P', 'level+P']; colors = ['#adb5bd', '#8d99ae', '#f4a261', '#d1495b', '#2a9d8f', '#264653']
+    fig, axes = plt.subplots(3, 3, figsize=(15, 10))
+    for row, pair in zip(axes, cfg['pairs']):
+        for ax, key in zip(row, ('PSNR', 'SAM', 'detail_energy')):
+            vals = []
+            for j, name in enumerate(cfg['models']):
+                for i, c in enumerate(conds):
+                    v = [x[key] for x in agg[(pair, name, c)].values()]; vals.append(np.mean(v)); x0 = j * (len(conds) + 1) + i
+                    ax.bar(x0, np.mean(v), color=colors[i], label=c if j == 0 else None); ax.scatter([x0] * len(v), v, s=8, color='black', zorder=3)
+            lo, hi = min(vals), max(vals); ax.set_ylim(lo - 0.15 * (hi - lo), hi + 0.15 * (hi - lo))
+            ax.set_xticks([2.5, 9.5], list(cfg['models'])); ax.set_title(f'{pair.replace(">", " → ")} · {key}'); ax.grid(axis='y', alpha=.3)
+    axes[0, 0].legend(fontsize=8, ncol=2)
+    fig.suptitle('미학습 센서 적용: 조건별 RR test 20장 평균(막대 = 3시드 평균, 점 = 시드별). cal+P가 주 조건, const+P·level+P는 참고'); fig.tight_layout(rect=(0, 0, 1, .96)); fig.savefig(HERE / 'results/comparison.png', dpi=130)
+    print(json.dumps({p: v['confirmed'] for p, v in check.items()}))
+
+if __name__ == '__main__' and sys.argv[1:] == ['--summary']:
+    summarize()
+elif __name__ == '__main__':
     main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else 'cpu', int(sys.argv[3]) if len(sys.argv) > 3 else 7, sys.argv[4].split(',') if len(sys.argv) > 4 else None)
