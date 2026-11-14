@@ -1,0 +1,57 @@
+{
+ "time_kst": "2026-11-14T19:56+09:00",
+ "note": "server run folders of experiments 81 and 83 removed after archive checks; the shared environment C:/CtrS-p73/.venv and the original data C:/CtrS/PAN-MS were not touched",
+ "checks": [
+  "no Python process running on the server",
+  "experiment 81 on main via PR #165 (merged); evaluation only, no weights",
+  "experiment 83 on main via PR #166 (merged): 17 best.pt; latest/initial (34 assets) in release weights-experiments-performance-83, verify.py --releases PASS",
+  "no later experiment refers to these folders"
+ ],
+ "kept_on_server": [
+  "C:/CtrS-p81/archive81_logs.tgz (run logs)",
+  "C:/CtrS-p83/archive83_logs.tgz (run logs)",
+  "small scripts and JSON records in both folders"
+ ],
+ "recovery": "code, reports, results and best.pt: Git (main); latest.pt/initial.pt: GitHub Release weights-experiments-performance-83; caches and factorized initial weights can be rebuilt with run.py prepare/factorize",
+ "removed": [
+  {
+   "path": "C:/CtrS-p81/run",
+   "bytes": 71227380
+  },
+  {
+   "path": "C:/CtrS-p81/SSA-MRN",
+   "bytes": 385536876
+  },
+  {
+   "path": "C:/CtrS-p81/ctrs81-source.tgz",
+   "bytes": 355926922
+  },
+  {
+   "path": "C:/CtrS-p81/fetch81.tgz",
+   "bytes": 69538532
+  },
+  {
+   "path": "C:/CtrS-p83/run",
+   "bytes": 13362701822
+  },
+  {
+   "path": "C:/CtrS-p83/SSA-MRN",
+   "bytes": 259169488
+  },
+  {
+   "path": "C:/CtrS-p83/ctrs83-source.tgz",
+   "bytes": 238406910
+  },
+  {
+   "path": "C:/CtrS-p83/fetch83.tgz",
+   "bytes": 1205187010
+  },
+  {
+   "path": "C:/CtrS-p83/fetch83_list.txt",
+   "bytes": 6427
+  }
+ ],
+ "free_before_bytes": 52338085888,
+ "free_after_bytes": 68288155648,
+ "freed_bytes": 15950069760
+}

@@ -121,3 +121,61 @@ def render(baseline, candidate, data_dir, output_dir, names=('F1', 'candidate'),
             stats[i] = dict(land_cover=land_cover.get(i), scene_psnr=scene, **_zoom(a, out, names, title, out_dir / f'compare_scene_{i:02}.png', font, labels, bands))
     (out_dir / 'result_images.json').write_text(json.dumps(dict(names=list(names), seed=seed, scenes=list(scenes), stats=stats), ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     return stats
+
+
+def _full_multi(a, out, names, title, path, font, labels, bands=BANDS):
+    """Several models in one row (first = reference for the error colour scale): LR MS | PAN | models... | GT, error maps below."""
+    lo, hi = np.percentile(a['gt'][bands].transpose(1, 2, 0), [1, 99], axis=(0, 1))
+    pan = a['pan'][0]; pl, ph = np.percentile(pan, [1, 99])
+    pan_img = Image.fromarray((np.clip((pan - pl) / max(ph - pl, 1e-8), 0, 1) * 255).astype('uint8')).convert('RGB')
+    err = {k: np.abs(o - a['gt']).mean(0) for k, o in out.items()}; vmax = np.percentile(err[names[0]], 99)
+    size = a['gt'].shape[-1]
+    top = [('LR MS (최근접 확대)', _rgb(a['ms'], lo, hi, bands).resize((size, size), Image.Resampling.NEAREST)), ('PAN 입력', pan_img)] + \
+          [(labels[i], _rgb(out[n], lo, hi, bands)) for i, n in enumerate(names)] + [('정답 GT', _rgb(a['gt'], lo, hi, bands))]
+    bottom = [None, None] + [(f'{labels[i]} 오차', _heat(err[n], vmax)) for i, n in enumerate(names)] + [None]
+    cols = len(top); img = Image.new('RGB', (cols * (size + 8) + 8, 2 * (size + 30) + 36), 'white'); d = ImageDraw.Draw(img)
+    d.text((10, 6), title, fill='black', font=font)
+    for r, cells in enumerate((top, bottom)):
+        for k, cell in enumerate(cells):
+            if cell is None: continue
+            x, y = 8 + k * (size + 8), 36 + r * (size + 30)
+            d.text((x, y), cell[0], fill='black', font=font); img.paste(cell[1], (x, y + 24))
+    img.save(path)
+
+
+def _zoom_multi(a, out, names, title, path, font, labels, bands=BANDS, chooser=1):
+    """64x64 window with the largest error reduction of names[chooser] over names[0], magnified 4x: GT with box | models... | GT | errors..."""
+    size = a['gt'].shape[-1]; base, cand = names[0], names[chooser]
+    gain = np.abs(out[base] - a['gt']).mean(0) - np.abs(out[cand] - a['gt']).mean(0)
+    starts = range(0, size - WINDOW + 1, STRIDE)
+    r, c = max(((r, c) for r in starts for c in starts), key=lambda rc: gain[rc[0]:rc[0] + WINDOW, rc[1]:rc[1] + WINDOW].mean())
+    s = (slice(None), slice(r, r + WINDOW), slice(c, c + WINDOW))
+    lo, hi = np.percentile(a['gt'][bands].transpose(1, 2, 0), [1, 99], axis=(0, 1))
+    err = {k: np.abs(o - a['gt']).mean(0)[r:r + WINDOW, c:c + WINDOW] for k, o in out.items()}; vmax = np.percentile(err[base], 99)
+    full = _rgb(a['gt'], lo, hi, bands); ImageDraw.Draw(full).rectangle([c, r, c + WINDOW - 1, r + WINDOW - 1], outline=(255, 210, 0), width=2)
+    crop = {k: _psnr(o[s], a['gt'][s]) for k, o in out.items()}
+    cells = [('정답 전체 (노란 상자)', full)] + [(labels[i], _rgb(out[n][s], lo, hi, bands)) for i, n in enumerate(names)] + [('정답 (확대)', _rgb(a['gt'][s], lo, hi, bands))] + \
+            [(f'{labels[i]} 오차', _heat(err[n], vmax)) for i, n in enumerate(names)]
+    P = WINDOW * ZOOM; img = Image.new('RGB', (len(cells) * (P + 8) + 8, P + 64), 'white'); d = ImageDraw.Draw(img)
+    d.text((10, 6), f'{title} · 확대 영역({labels[chooser]} 개선이 가장 큰 64×64) PSNR ' + ' · '.join(f'{labels[i]} {crop[n]:.2f}' for i, n in enumerate(names)) + ' dB', fill='black', font=font)
+    for k, (label, im) in enumerate(cells):
+        x = 8 + k * (P + 8); d.text((x, 30), label, fill='black', font=font); img.paste(im.resize((P, P), Image.Resampling.NEAREST), (x, 56))
+    img.save(path)
+    return dict(window=[r, c], crop_psnr=crop, crop_mean_abs_err={k: float(v.mean()) for k, v in err.items()})
+
+
+def render_multi(nets, data_dir, output_dir, labels, seed=42, device='cuda', scenes=SCENES, rr_file='test_qb_multiExm1.h5', scale=2047., bands=BANDS,
+                 land_cover=LAND_COVER, chooser=1):
+    """Like render() for several models (dict name -> network, first = reference). The zoom window is the one where nets[chooser]
+    reduces the error of the reference most, so it favours that model; whole-scene PSNR of every model is in the title."""
+    names = list(nets); out_dir = Path(output_dir); out_dir.mkdir(parents=True, exist_ok=True); font, stats = _font(), {}
+    with h5py.File(next(Path(data_dir).rglob(rr_file)), 'r') as f:
+        for i in scenes:
+            a = {k: np.asarray(f[k][i], dtype=np.float64) for k in ('pan', 'lms', 'ms', 'gt')}
+            out = {k: _predict(n, a, scale, device) for k, n in nets.items()}
+            scene = {k: _psnr(o, a['gt']) for k, o in out.items()}
+            title = f'RR 장면 {i}' + (f' ({land_cover[i]})' if i in land_cover else '') + f' · seed {seed} · 장면 PSNR ' + ' · '.join(f'{labels[j]} {scene[n]:.2f}' for j, n in enumerate(names)) + ' dB'
+            _full_multi(a, out, names, title + ' · 원본 크기, 오차 지도는 같은 색 척도', out_dir / f'full_scene_{i:02}.png', font, labels, bands)
+            stats[i] = dict(land_cover=land_cover.get(i), scene_psnr=scene, **_zoom_multi(a, out, names, title, out_dir / f'compare_scene_{i:02}.png', font, labels, bands, chooser))
+    (out_dir / 'result_images.json').write_text(json.dumps(dict(names=names, labels=list(labels), seed=seed, scenes=list(scenes), chooser=names[chooser], stats=stats), ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    return stats

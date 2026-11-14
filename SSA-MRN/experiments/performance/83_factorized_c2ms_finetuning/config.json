@@ -223,5 +223,6 @@
     "WV3": "experiments/performance/65_l1_spectral_loss/provenance/stage3/run_records/data_manifest.json"
   },
   "selection": "minimum original-scale validation MSE including epoch 0 (the factorized model before fine-tuning; for FT0 the 65 weights), earliest exact tie; test never used for selection",
-  "result_summary": "validation 관문으로 고른 K2(backbone 랭크 32 + W2 CP 384, 연산 66%, 실사용 파라미터 68%) + 사영이 같은 시드 C2MS 대비 3시드 평균 QB +0.051 dB·SAM −0.100°·ERGAS −0.018, GF2 +0.157 dB·−0.024°·−0.014, WV3 +0.119 dB·−0.085°·−0.015로 세 센서 모두 개선이며 기준 모델 교체 조건을 충족합니다(자동 교체 안 함). 분해 전 65번 + 사영 대비 −0.012에서 −0.034 dB(경량 비열등)입니다. 다만 RTX 3060 Ti에서 K2의 GPU 시간은 depthwise 합성곱 때문에 C2MS보다 31-37% 깁니다(256² 19.1 → 25.0 ms). K3(51%)는 관문에서 탈락했습니다."
+  "result_summary": "validation 관문으로 고른 K2(backbone 랭크 32 + W2 CP 384, 연산 66%, 실사용 파라미터 68%) + 사영이 같은 시드 C2MS 대비 3시드 평균 QB +0.051 dB·SAM −0.100°·ERGAS −0.018, GF2 +0.157 dB·−0.024°·−0.014, WV3 +0.119 dB·−0.085°·−0.015로 세 센서 모두 개선이며 기준 모델 교체 조건을 충족합니다(자동 교체 안 함). 분해 전 65번 + 사영 대비 −0.012에서 −0.034 dB(경량 비열등)입니다. 다만 RTX 3060 Ti에서 K2의 GPU 시간은 depthwise 합성곱 때문에 C2MS보다 31-37% 깁니다(256² 19.1 → 25.0 ms). K3(51%)는 관문에서 탈락했습니다.",
+  "model_name": "C2MS-SP-Lite (K2 + K10 projection)"
 }

@@ -19,11 +19,23 @@
 
 ## SSA-MRN 구조
 
-원본 SSA-MRN은 PAN·축소 후 재확대한 PAN(LRPAN)·확대한 MS(LMS)에서 특징을 추출하고, 전체·절반·1/4 크기에서 밴드별 SSAI로 융합한 뒤 작은 크기부터 복원합니다. 현재 기준 모델 **C2MS**는 이 구조를 그대로 두고 초기 특징에서 갈라지는 **W2 병렬 가지**를 더한 뒤, 원래 학습 쌍과 **2배 거친 학습 쌍을 섞어** 학습했습니다. 추론 입력은 원본과 같습니다.
+원본 SSA-MRN은 PAN·축소 후 재확대한 PAN(LRPAN)·확대한 MS(LMS)에서 특징을 추출하고, 전체·절반·1/4 크기에서 밴드별 SSAI로 융합한 뒤 작은 크기부터 복원합니다. 현재 기준 모델 **C2MS-SP**의 네트워크는 이전 기준 모델 C2MS와 같습니다(원본 + 초기 특징에서 갈라지는 **W2 병렬 가지**, 원래 학습 쌍과 **2배 거친 학습 쌍을 섞은** 학습). 바뀐 것은 두 가지입니다. ① 손실을 **L1 + 분광 손실**로 바꿔 학습했고, ② 추론 뒤에 출력을 다시 관측했을 때 입력 MS와 정확히 맞도록 고치는 **관측 일치 사영**(파라미터 없음)을 붙였습니다.
 
 <p align="center"><img src="SSA-MRN/docs/images/ssa-mrn-c2ms.png" alt="C2MS 전체 구조도: (a) PAN·LMS·LRPAN 초기 특징과 원본 ResBlock×4 backbone, 그 옆의 W2 병렬 가지, (b) 전체·1/2·1/4 크기의 밴드별 SSAI 융합, (c) 1/4 크기부터의 단계적 복원, (d) SSAI 블록 내부, (e) 축척 혼합 학습" width="100%" /></p>
 
-C2MS 구조입니다. 주황색이 원본 SSA-MRN에 더한 W2 병렬 가지와 축척 혼합 학습이며, 나머지는 원본과 같습니다. 입력은 고해상도 PAN, 4배 확대한 MS(LMS), 저해상도 MS(1/4 크기)입니다.
+C2MS-SP·C2MS-SP-Lite가 공유하는 C2MS 네트워크 구조입니다. 주황색이 원본 SSA-MRN에 더한 W2 병렬 가지와 축척 혼합 학습이며, 나머지는 원본과 같습니다. 입력은 고해상도 PAN, 4배 확대한 MS(LMS), 저해상도 MS(1/4 크기)입니다.
+
+```mermaid
+flowchart LR
+  I["PAN · LMS · MS"] --> N["C2MS 네트워크<br>C2MS-SP: L1 + 분광 손실로 학습<br>C2MS-SP-Lite: 그 가중치를 분해(연산 66%) 후 10에폭 미세조정"]
+  N --> P["관측 일치 사영<br>y′ = y + Dᵀ(DDᵀ)⁻¹(MS − Dy)<br>공액 기울기법 10회, 파라미터 없음"] --> O["출력"]
+  I -. "MS" .-> P
+  C["학습하지 않은 센서일 때만<br>밴드별 센서 보정"] -.-> N
+```
+
+- **관측 일치 사영:** `D`는 센서의 관측 연산(MTF 블러 + 4배 축소)입니다. 출력을 줄였을 때 입력 MS와 같아지는 영상 중 원래 출력에 가장 가까운 것으로 옮깁니다([성능 66·81번](SSA-MRN/experiments/performance/81_l1_spectral_loss_projection/README.md)).
+- **C2MS-SP-Lite:** 원래 해상도 backbone의 3×3 합성곱을 랭크 32 병목으로, W2 가지의 3×3 합성곱을 1×1 · depthwise 3×3 · 1×1로 분해한 뒤 짧게 미세조정했습니다([성능 83번](SSA-MRN/experiments/performance/83_factorized_c2ms_finetuning/README.md)).
+- **밴드별 센서 보정:** 학습하지 않은 센서에 쓸 때만 입력 밴드의 밝기 비율을 학습 센서에 맞추고 출력을 되돌립니다([성능 82번](SSA-MRN/experiments/performance/82_cross_sensor_band_calibration/README.md)). 학습한 센서에는 쓰지 않습니다.
 
 <details>
 <summary>원본 SSA-MRN 구조 보기</summary>
@@ -34,119 +46,128 @@ C2MS 구조입니다. 주황색이 원본 SSA-MRN에 더한 W2 병렬 가지와 
 
 | 항목 | 내용 |
 |---|---|
-| 모델 | **C2MS** = 원본 SSA-MRN(K=4) + W2 병렬 가지, 축척 혼합 학습 |
-| 학습 | 원래 학습 쌍 MSE + 같은 패치로 만든 2배 거친 쌍 MSE, 150에폭 |
-| 파라미터 | 2,853,918개 (원본 426,654개) |
-| 채택 | 2026-10-21, [성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md) QB 3시드(42·43·44) 개선. 2026-10-22 [성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md)에서 GF2·WV3·WV2 전이도 3시드 모두 원본 대비 개선 |
-| 이전 기준 | F1(2026-10-20) → C2MS. F1 대비 3시드 평균 RR PSNR +0.679 dB, 세 시드 모두 개선 |
+| 모델 | **C2MS-SP** = C2MS(원본 SSA-MRN K=4 + W2 병렬 가지, 축척 혼합 학습)를 L1·분광 손실로 학습 + 추론 시 관측 일치 사영 |
+| 학습 | 원래 학습 쌍 L1 + 2배 거친 쌍 L1 + 0.46 × 분광 손실(1 − cos), 150에폭 ([성능 65번](SSA-MRN/experiments/performance/65_l1_spectral_loss/README.md)) |
+| 추론 | 네트워크 출력 → 관측 일치 사영(공액 기울기법 10회). 학습하지 않은 센서에는 밴드별 센서 보정을 함께 적용 |
+| 파라미터 | 2,853,918개(실사용 2,735,610개), 256² 합성곱 59.6 GMAC (원본 426,654개) |
+| 경량판 | **C2MS-SP-Lite**: 실사용 파라미터 1,873,402개(68%), 39.1 GMAC(66%). C2MS-SP보다 RR PSNR 0.01-0.03 dB 낮음. RTX 3060 Ti에서는 depthwise 합성곱 때문에 실제 시간이 C2MS-SP보다 깁니다 |
+| 채택 | 2026-11-14, [성능 81번](SSA-MRN/experiments/performance/81_l1_spectral_loss_projection/README.md) QB·GF2·WV3 3시드(42·43·44) 모두 이전 기준 C2MS 대비 개선 |
+| 이전 기준 | C2MS(2026-10-21) → C2MS-SP. C2MS 대비 3시드 평균 RR PSNR QB +0.072 dB, GF2 +0.191 dB, WV3 +0.130 dB, SAM·ERGAS도 모두 개선 |
 
-### C2MS 발전 과정
+### 기준 모델 발전 과정
 
 | 단계 | 실험 | 한 일 | 결과와 다음 단계로 이어진 점 |
 |---:|---|---|---|
 | 0 | [성능 2번](SSA-MRN/research/performance/2_paper_setting_reproduction/README.md) 외 | 원본 SSA-MRN 재현, K=4를 연구 기본값으로 확정(2026-10-09) | 이후 모든 비교의 출발점(원본) |
-| 1 | [성능 29번](SSA-MRN/experiments/performance/29_capacity_refinement/README.md) | 원본 backbone 옆에 저해상도 병렬 가지 **W2**를 처음 붙임 | RR PSNR +0.72 dB로 큰 이득이지만 RR2(더 거친 시험)가 나빠짐(당시 v2 보조 판정 미달) |
-| 2 | [성능 43번](SSA-MRN/experiments/performance/43_normalized_parallel_capacity/README.md) | 원본+W2(**C2**)를 같은 절차로 3시드 재현 | RR +0.70 dB가 재현됐지만 RR2(더 거친 시험)에서 미달 → 축척을 바꾸면 무너지는 약점 확인 |
-| 3 | [성능 47번](SSA-MRN/experiments/performance/47_ground_truth_criteria_reevaluation/README.md)·[48번](SSA-MRN/experiments/performance/48_parallel_capacity_observation_refinement/README.md) | 정답 기반 판정 기준(v2)으로 재평가, W2 뒤에 관측 오차 보정기를 붙여 봄 | RR 이득이 큰 후보는 대부분 RR2에서 미달, 보정기로는 RR2가 고쳐지지 않음 |
-| 4 | [성능 50번](SSA-MRN/experiments/performance/50_w2_branch_inference_scaling/README.md) | 학습 없이 W2 출력 세기를 줄여 보는 진단 | RR2 미달의 원인은 **축척에 따라 맞지 않는 세부 주입 세기**(고주파 오차 증가) |
-| 5 | [성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md) | 구조는 C2 그대로, 학습에 **2배 거친 학습 쌍을 섞음**(**C2MS**) | RR2 약점 해소, 원본 대비 RR +0.873 dB, 3시드 모두 개선 → **기준 모델 채택(2026-10-21)** |
-| 6 | [성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md) | 같은 C2MS를 **GF2·WV3**로 학습하고, WV3 모델을 학습하지 않은 **WV2**에 적용 | 학습한 GF2·WV3 모두 원본 대비 개선(RR +2.045·+1.007 dB, 3시드), WV2 전이도 +0.828 dB(참고) → **QB 밖에서도 기준 모델의 이득 확인(2026-10-22)** |
+| 1 | [성능 29번](SSA-MRN/experiments/performance/29_capacity_refinement/README.md) | 원본 backbone 옆에 저해상도 병렬 가지 **W2**를 처음 붙임 | RR PSNR +0.72 dB로 큰 이득이지만 RR2(더 거친 시험)가 나빠짐 |
+| 2 | [성능 43번](SSA-MRN/experiments/performance/43_normalized_parallel_capacity/README.md) | 원본+W2(**C2**)를 같은 절차로 3시드 재현 | RR +0.70 dB가 재현됐지만 축척을 바꾸면 무너지는 약점 확인 |
+| 3 | [성능 50번](SSA-MRN/experiments/performance/50_w2_branch_inference_scaling/README.md) | 학습 없이 W2 출력 세기를 줄여 보는 진단 | 약점의 원인은 **축척에 따라 맞지 않는 세부 주입 세기** |
+| 4 | [성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)·[54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md) | 구조는 C2 그대로, **2배 거친 학습 쌍을 섞어** 학습(**C2MS**) | 원본 대비 RR QB +0.873, GF2 +2.045, WV3 +1.007 dB → **기준 모델 채택(2026-10-21)** |
+| 5 | [성능 65번](SSA-MRN/experiments/performance/65_l1_spectral_loss/README.md) | 손실을 **L1 + 분광 손실**로 바꿔 학습 | SAM이 3시드 60/60장에서 줄었지만 원래 해상도 관측 일치가 나빠지고 WV2 전이에서 흐려짐 |
+| 6 | [성능 66번](SSA-MRN/experiments/performance/66_observation_error_projection_analysis/README.md)·[81번](SSA-MRN/experiments/performance/81_l1_spectral_loss_projection/README.md) | 추론 뒤 **관측 일치 사영**을 붙이고 정식 판정(**C2MS-SP**) | 세 센서 모두 C2MS 대비 3시드 개선, 사영은 10회 반복이면 충분 → **기준 모델 채택(2026-11-14)** |
+| 7 | [성능 82번](SSA-MRN/experiments/performance/82_cross_sensor_band_calibration/README.md) | 학습하지 않은 센서에 **밴드별 센서 보정** | WV2 흐림의 원인(센서 간 밴드 밝기 척도 차이)을 찾아 재학습 없이 +2 dB 회복 |
+| 8 | [성능 83번](SSA-MRN/experiments/performance/83_factorized_c2ms_finetuning/README.md) | 학습된 가중치를 **분해 + 짧은 미세조정**(**C2MS-SP-Lite**) | 연산 66%로 세 센서 모두 C2MS 대비 3시드 개선, C2MS-SP와 0.01-0.03 dB 차이 |
 
-기준 모델은 원본 → F1([성능 49번](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/README.md), 원본 + 관측 오차 보정기, 2026-10-20) → C2MS 순서로 바뀌었습니다. 같은 크기 섞기를 작은 F1에 적용한 F1MS는 개선이 없어서, C2MS의 이득은 큰 W2 가지와 크기 섞기를 함께 쓴 결과입니다.
+기준 모델은 원본 → F1([성능 49번](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/README.md), 2026-10-20) → C2MS(2026-10-21) → C2MS-SP(2026-11-14) 순서로 바뀌었습니다.
 
 ## 기준 모델 결과 이미지
 
-**학습하지 않은 센서에서도 C2MS는 원본보다 선명하고 색이 정확합니다.** 아래는 두 모델을 WV3로만 학습한 뒤, 한 번도 학습하지 않은 **WV2** test에 그대로 적용한 결과입니다. 학습한 센서(QB·GF2·WV3)에서는 두 모델 모두 정답에 가까워 장면 전체로 보면 차이가 잘 드러나지 않지만, 처음 보는 센서에서는 원본이 흐려지고 색이 틀어지는 반면 C2MS는 선명도와 색을 더 잘 유지합니다.
+**학습하지 않은 센서에서도 C2MS-SP와 C2MS-SP-Lite는 원본보다 선명하고 색이 정확합니다.** 아래는 세 모델을 WV3로만 학습한 뒤, 한 번도 학습하지 않은 **WV2** test에 적용한 결과입니다. 학습한 센서(QB·GF2·WV3)에서는 세 모델 모두 정답에 가까워 장면 전체로 보면 차이가 잘 드러나지 않지만, 처음 보는 센서에서는 원본이 흐려지고 색이 틀어집니다. C2MS-SP·SP-Lite에는 우리가 개발한 밴드별 센서 보정([성능 82번](SSA-MRN/experiments/performance/82_cross_sensor_band_calibration/README.md))을 함께 적용했고, 원본은 발표된 방식 그대로입니다.
 
-| 정답 대비 (WV2 test 20장, 3시드 평균) | 원본 SSA-MRN | C2MS |
-|---|---:|---:|
-| 선명도 (출력 고주파 세기 ÷ 정답, 1이 정답) | 0.34 | **0.47** |
-| 넣은 세부와 실제 세부의 상관 | 0.70 | **0.74** |
-| 밴드별 평균 밝기 치우침 (가장 큰 밴드) | 7.2% | **1.0%** |
+| 정답 대비 (WV2 test 20장, 3시드 평균) | 원본 SSA-MRN | C2MS-SP | C2MS-SP-Lite | 참고: C2MS-SP, 보정 없이 |
+|---|---:|---:|---:|---:|
+| RR PSNR | 28.59 dB | **31.54 dB** | **31.55 dB** | 29.58 dB |
+| 선명도 (출력 고주파 세기 ÷ 정답, 1이 정답) | 0.33 | **0.52** | **0.52** | 0.40 |
+| 넣은 세부와 실제 세부의 상관 | 0.70 | **0.84** | **0.84** | 0.76 |
+| 밴드별 평균 밝기 치우침 (가장 큰 밴드) | 7.2% | **0.1%** | **0.1%** | 1.8% |
 
-세 시드 모두 C2MS가 더 선명했고, 시드별 가장 큰 색 치우침은 원본 4.0-11.4%, C2MS 1.7-3.0%였습니다. 원본은 화면에 쓰는 파랑 밴드가 평균 7.2% 밝게 나와 전체가 회보라색으로 보입니다. 같은 모델을 학습한 센서 WV3에 쓰면 선명도는 원본 0.84·C2MS 0.88, 색 치우침은 둘 다 0.2% 이하로 비슷합니다. 측정 방법과 시드별 값은 [성능 54번 전이 분석](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/transfer_detail.json)에 있습니다.
+세 시드 모두 C2MS-SP·SP-Lite가 원본보다 선명하고 PSNR이 높았습니다(시드별 원본 대비 C2MS-SP +2.77 · +2.80 · +3.28 dB). 시드별 가장 큰 색 치우침은 원본 4.1-11.4%, C2MS-SP 0.1-0.2%였습니다. 원본은 화면에 쓰는 파랑 밴드가 밝게 나와 전체가 회보라색으로 보입니다. 보정 없이 C2MS-SP를 쓰면 원본보다는 낫지만 여전히 흐립니다(선명도 0.40). 학습한 센서 WV3에서는 세 모델 모두 색 치우침이 작습니다. 측정 방법과 시드별 값은 [baseline_metrics.json](SSA-MRN/docs/images/c2ms_sp/baseline_metrics.json)에 있습니다.
 
 ### WV2 장면별 결과 (seed 42, RGB 밴드 [4,2,1])
 
-| 장면 | 장면 PSNR 원본 → C2MS | 확대 영역 PSNR 원본 → C2MS |
-|---:|---|---|
-| 0 | 27.80 → 28.69 dB (+0.89) | 26.15 → 27.76 dB |
-| 1 | 26.02 → 26.82 dB (+0.79) | 24.14 → 25.29 dB |
-| 3 | 33.71 → 34.94 dB (+1.23) | 27.19 → 28.56 dB |
-| 7 | 28.38 → 29.18 dB (+0.80) | 24.03 → 25.14 dB |
-| 14 | 27.91 → 28.93 dB (+1.02) | 26.07 → 27.92 dB |
-| 17 | 28.43 → 29.39 dB (+0.96) | 26.41 → 27.86 dB |
+| 장면 | 장면 PSNR 원본 | C2MS-SP | C2MS-SP-Lite | 확대 영역 PSNR 원본 / SP / SP-Lite |
+|---:|---:|---:|---:|---|
+| 0 | 27.80 | 30.90 (+3.11) | 30.92 (+3.13) | 24.19 / 27.56 / 27.62 |
+| 1 | 26.02 | 29.44 (+3.41) | 29.42 (+3.40) | 23.00 / 27.77 / 27.74 |
+| 3 | 33.71 | 36.91 (+3.20) | 36.84 (+3.13) | 27.19 / 30.70 / 30.67 |
+| 7 | 28.38 | 30.67 (+2.29) | 30.69 (+2.31) | 24.03 / 26.51 / 26.51 |
+| 14 | 27.91 | 30.55 (+2.64) | 30.57 (+2.67) | 25.65 / 29.38 / 29.40 |
+| 17 | 28.43 | 30.95 (+2.52) | 30.98 (+2.55) | 27.33 / 30.43 / 30.40 |
 
-장면은 QB에서 정답 영상만 보고 정한 고정 번호(0·1·3·7·14·17)이고, 여섯 장면 모두 C2MS가 높았습니다. 장면 번호 순서로 보입니다.
+장면은 QB에서 정답 영상만 보고 정한 고정 번호(0·1·3·7·14·17)이고, 여섯 장면 모두 C2MS-SP·SP-Lite가 원본보다 높았습니다.
 
-- **원본 크기 비교:** 위 줄은 LR MS(최근접 확대) · PAN 입력 · 원본 · C2MS · 정답, 아래 줄은 원본과 C2MS의 |예측 − 정답| 지도입니다(원본 오차의 99퍼센타일을 공통 색 척도로 사용, 밝을수록 오차가 큼).
-- **확대 비교:** C2MS의 개선이 가장 큰 64×64 영역을 4배 확대한 정답 전체(노란 상자) · 원본 · C2MS · 정답 · 원본 오차 · C2MS 오차입니다. C2MS에 유리하게 고른 영역이므로 전체 차이는 표의 장면 PSNR로 확인합니다.
+- **원본 크기 비교:** 위 줄은 LR MS(최근접 확대) · PAN 입력 · 원본 · C2MS-SP · C2MS-SP-Lite · 정답, 아래 줄은 세 모델의 |예측 − 정답| 지도입니다(원본 오차의 99퍼센타일을 공통 색 척도로 사용, 밝을수록 오차가 큼).
+- **확대 비교:** C2MS-SP의 개선이 가장 큰 64×64 영역을 4배 확대한 정답 전체(노란 상자) · 원본 · C2MS-SP · C2MS-SP-Lite · 정답 · 세 모델의 오차입니다. C2MS-SP에 유리하게 고른 영역이므로 전체 차이는 표의 장면 PSNR로 확인합니다.
 
 **장면 0**
 
-![WV2 원본 크기 비교 · 장면 0](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_00.png)
+![WV2 원본 크기 비교 · 장면 0](SSA-MRN/docs/images/c2ms_sp/WV2/full_scene_00.png)
 
-![WV2 확대 비교 · 장면 0](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_00.png)
+![WV2 확대 비교 · 장면 0](SSA-MRN/docs/images/c2ms_sp/WV2/compare_scene_00.png)
 
 <details>
 <summary><b>WV2 나머지 5장면 펼치기</b> (1·3·7·14·17)</summary>
 
 **장면 1**
 
-![WV2 원본 크기 비교 · 장면 1](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_01.png)
+![WV2 원본 크기 비교 · 장면 1](SSA-MRN/docs/images/c2ms_sp/WV2/full_scene_01.png)
 
-![WV2 확대 비교 · 장면 1](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_01.png)
+![WV2 확대 비교 · 장면 1](SSA-MRN/docs/images/c2ms_sp/WV2/compare_scene_01.png)
 
 **장면 3**
 
-![WV2 원본 크기 비교 · 장면 3](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_03.png)
+![WV2 원본 크기 비교 · 장면 3](SSA-MRN/docs/images/c2ms_sp/WV2/full_scene_03.png)
 
-![WV2 확대 비교 · 장면 3](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_03.png)
+![WV2 확대 비교 · 장면 3](SSA-MRN/docs/images/c2ms_sp/WV2/compare_scene_03.png)
 
 **장면 7**
 
-![WV2 원본 크기 비교 · 장면 7](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_07.png)
+![WV2 원본 크기 비교 · 장면 7](SSA-MRN/docs/images/c2ms_sp/WV2/full_scene_07.png)
 
-![WV2 확대 비교 · 장면 7](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_07.png)
+![WV2 확대 비교 · 장면 7](SSA-MRN/docs/images/c2ms_sp/WV2/compare_scene_07.png)
 
 **장면 14**
 
-![WV2 원본 크기 비교 · 장면 14](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_14.png)
+![WV2 원본 크기 비교 · 장면 14](SSA-MRN/docs/images/c2ms_sp/WV2/full_scene_14.png)
 
-![WV2 확대 비교 · 장면 14](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_14.png)
+![WV2 확대 비교 · 장면 14](SSA-MRN/docs/images/c2ms_sp/WV2/compare_scene_14.png)
 
 **장면 17**
 
-![WV2 원본 크기 비교 · 장면 17](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/full_scene_17.png)
+![WV2 원본 크기 비교 · 장면 17](SSA-MRN/docs/images/c2ms_sp/WV2/full_scene_17.png)
 
-![WV2 확대 비교 · 장면 17](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/results/images/WV2_C2MS_vs_original/compare_scene_17.png)
+![WV2 확대 비교 · 장면 17](SSA-MRN/docs/images/c2ms_sp/WV2/compare_scene_17.png)
 
 </details>
 
-**[더 많은 이미지 보기 →](SSA-MRN/docs/c2ms_result_images.md)** QB·GF2·WV3·WV2의 6장면 전체(원본 크기·확대 비교). FR(정답 없음) 비교 패널과 이전 기준 모델 F1과의 비교는 [성능 53번 보고서](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)에 있습니다.
-
-**[결과 비교 사이트 →](https://biyonghiyon.github.io/CtrS-viewer/)** 네 데이터셋의 RR test 20장면 전체에서 원본 SSA-MRN과 C2MS(seed 42)의 예측·오차 지도를 나란히 놓고, 확대할 영역을 직접 골라 영역 PSNR·SAM·ERGAS를 비교합니다. 코드와 모델 추가 방법은 [`SSA-MRN/viewer/`](SSA-MRN/viewer/README.md)에 있습니다.
+**[더 많은 이미지 보기 →](SSA-MRN/docs/c2ms_sp_result_images.md)** QB·GF2·WV3·WV2의 6장면 전체(원본 크기·확대 비교). 장면을 직접 골라 확대하며 비교하려면 [결과 비교 사이트](https://biyonghiyon.github.io/CtrS-viewer/)를 씁니다.
 
 ## 원본 대비 개선
 
-test 20장, 같은 시드(42·43·44) 원본과 짝지은 3시드 평균 차이입니다.
+test 20장, 같은 시드(42·43·44) 원본과 짝지은 3시드 평균 차이입니다. 원본은 발표된 방식 그대로이고, C2MS-SP·SP-Lite는 사영(공액 기울기법 10회)을 포함하며 WV2에서는 밴드별 센서 보정도 포함합니다.
 
-[데이터셋·시드별 전체 평가 수치 보기 →](SSA-MRN/docs/c2ms_evaluation_tables.md) 성능 53·54번의 원본·C2MS 절대 수치와 시드별 차이, 3시드 평균을 정리했습니다.
+| 데이터셋 | 모델 | RR PSNR | 원본 대비 PSNR | SAM | ERGAS | 판정 |
+|---|---|---:|---:|---:|---:|:---:|
+| QB | 원본 SSA-MRN | 37.429 | | | | |
+|  | C2MS-SP | 38.373 | +0.944 dB | −0.467° | −0.439 | 개선 |
+|  | C2MS-SP-Lite | 38.353 | +0.924 dB | −0.466° | −0.431 | 개선 |
+| GF2 | 원본 SSA-MRN | 46.549 | | | | |
+|  | C2MS-SP | 48.785 | +2.235 dB | −0.190° | −0.204 | 개선 |
+|  | C2MS-SP-Lite | 48.751 | +2.202 dB | −0.187° | −0.201 | 개선 |
+| WV3 | 원본 SSA-MRN | 37.536 | | | | |
+|  | C2MS-SP | 38.673 | +1.137 dB | −0.509° | −0.330 | 개선 |
+|  | C2MS-SP-Lite | 38.662 | +1.126 dB | −0.504° | −0.328 | 개선 |
+| WV2 전이 | 원본 SSA-MRN | 28.586 | | | | |
+|  | C2MS-SP | 31.535 | +2.950 dB | −1.190° | −1.382 | 참고 |
+|  | C2MS-SP-Lite | 31.546 | +2.960 dB | −1.188° | −1.385 | 참고 |
 
-| 데이터셋 | RR PSNR | RR SAM | RR ERGAS | 판정 |
-|---|---:|---:|---:|:---:|
-| QB ([성능 53번](SSA-MRN/experiments/performance/53_scale_mixed_training/README.md)) | +0.873 dB | −0.365° | −0.413 | 개선 |
-| GF2 ([성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md)) | +2.045 dB | −0.163° | −0.188 | 개선 |
-| WV3 ([성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md)) | +1.007 dB | −0.419° | −0.313 | 개선 |
-| WV2 전이 ([성능 54번](SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md)) | +0.828 dB | −0.399° | −0.426 | 참고 |
-
-학습한 세 데이터셋(QB·GF2·WV3) 모두 판정 기준 v2.4의 RR 판정을 통과했고, 네 데이터셋 모두 RR PSNR이 20장 전부에서 원본보다 높았습니다. WV2는 WV3로 학습한 모델을 학습하지 않은 센서에 그대로 적용한 결과로, 판정에 쓰지 않는 참고 수치입니다. FR(원래 해상도) 방향의 일반화는 직접 확인하지 못했습니다.
+학습한 세 데이터셋(QB·GF2·WV3) 모두 두 모델이 원본보다 세 지표가 좋았고, 시드별로도 모두 원본보다 높았습니다(C2MS-SP QB +0.90-1.03 dB, GF2 +2.20-2.26 dB, WV3 +1.08-1.20 dB). WV2는 WV3로 학습한 모델을 학습하지 않은 센서에 적용한 결과로 판정에 쓰지 않는 참고 수치입니다. 수치는 `common/baseline_images.py`로 다시 계산했고, 실험 보고서(81·83번)의 기록과 0.0003 dB 이내로 같습니다. 이전 기준 모델 C2MS의 시드별 수치는 [C2MS 평가 수치](SSA-MRN/docs/c2ms_evaluation_tables.md)에 있습니다.
 
 <a id="compare"></a>
 
 ## 다른 팬샤프닝 모델과 비교 (QB RR test 20장)
 
-C2MS는 성능 53번 3시드 가중치를 공식 DLPan MATLAB 코드로 재평가한 [값](SSA-MRN/docs/c2ms_matlab_evaluation_tables.md)입니다(PSNR은 밴드 평균 정의). 다른 모델은 각 논문이 보고한 값이며, PSNR을 보고한 QB 결과를 PSNR 순으로 정렬했습니다.
+C2MS-SP·SP-Lite는 3시드 가중치를 저장소 평가 코드(`common/metrics`, DLPan-Toolbox 정의, PSNR은 밴드 평균)로 잰 값입니다. 이 코드는 이전 기준 C2MS에서 공식 DLPan MATLAB 재평가([값](SSA-MRN/docs/c2ms_matlab_evaluation_tables.md))와 PSNR·SAM·ERGAS·Q4가 소수점 셋째 자리까지 같았습니다. 다른 모델은 각 논문이 보고한 값이며, PSNR을 보고한 QB 결과를 PSNR 순으로 정렬했습니다.
 
 [QB·GF2·WV3·WV2 팬샤프닝 성능 조사 전체 보기 →](SSA-MRN/docs/pansharpening_survey/QB_GF_WV2_WV3_팬샤프닝_성능조사_2026-10-27.md) 2026-10-27 기준 논문 보고값을 센서·학습 경로(같은 센서, 다중 센서, 미학습 센서 전이)별로 정리했습니다. [QB 조사](SSA-MRN/docs/pansharpening_survey/QB_팬샤프닝_성능조사_2026-10-27.md)에는 이 표에 없는 방법과 출처별 원표가 있습니다.
 
@@ -166,7 +187,8 @@ C2MS는 성능 53번 3시드 가중치를 공식 DLPan MATLAB 코드로 재평�
 | CANNet | 38.488 | 4.496 | 3.698 | 0.937 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
 | ADWM | 38.466 | 4.450 | 3.705 | 0.937 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 | DCINN | 38.430 | 4.220 | 3.570 | — | [ABFNet](https://proceedings.mlr.press/v306/wang26hx.html) |
-| **C2MS (현재 기준, 3시드 평균)** | **38.302** | **4.576** | **3.712** | **0.934** | [MATLAB 재평가](SSA-MRN/docs/c2ms_matlab_evaluation_tables.md) |
+| **C2MS-SP (현재 기준, 3시드 평균)** | **38.373** | **4.474** | **3.685** | **0.935** | [우리 평가](SSA-MRN/docs/images/c2ms_sp/baseline_metrics.json) |
+| **C2MS-SP-Lite (경량판, 3시드 평균)** | **38.353** | **4.476** | **3.693** | **0.935** | [우리 평가](SSA-MRN/docs/images/c2ms_sp/baseline_metrics.json) |
 | HFIN | 38.247 | 4.542 | 3.813 | 0.934 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
 | HOIF | 38.242 | 4.521 | 3.825 | 0.933 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
 | ProtoFormer | 38.238 | 4.568 | 3.768 | — | [MSFFusion](https://www.mdpi.com/2072-4292/18/18/3236) |

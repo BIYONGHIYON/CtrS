@@ -2846,7 +2846,7 @@
       44
     ],
     "retraining": false,
-    "limits": "C2MS_L1S + 사영이 C2MS 대비 3시드 평균 QB +0.072 dB·SAM −0.102°·ERGAS −0.027, GF2 +0.191 dB·−0.028°·−0.017, WV3 +0.130 dB·−0.091°·−0.017로 세 센서 모두 개선이며 기준 모델 교체 조건을 충족합니다(자동 교체 안 함). 공액 기울기법 10회에서 멈춰도 결과가 0.0003 dB 이내로 같았고, QB 512² 사영 시간이 812 ms에서 128 ms로 줄었습니다. WV2 전이(참고)는 +0.171 dB였지만 시드별 편차가 컸습니다(−0.52에서 +0.76 dB).",
+    "limits": "C2MS-SP(C2MS_L1S + 사영)가 C2MS 대비 3시드 평균 QB +0.072 dB·SAM −0.102°·ERGAS −0.027, GF2 +0.191 dB·−0.028°·−0.017, WV3 +0.130 dB·−0.091°·−0.017로 세 센서 모두 개선이며 2026-11-14 기준 모델로 채택했습니다. 공액 기울기법 10회에서 멈춰도 결과가 0.0003 dB 이내로 같았고, QB 512² 사영 시간이 812 ms에서 128 ms로 줄었습니다. WV2 전이(참고)는 +0.171 dB였지만 시드별 편차가 컸습니다(−0.52에서 +0.76 dB).",
     "config": "experiments/performance/81_l1_spectral_loss_projection/config.json",
     "entrypoint": "experiments/performance/81_l1_spectral_loss_projection/run.py",
     "results": "experiments/performance/81_l1_spectral_loss_projection/results",
@@ -2859,8 +2859,9 @@
       "WV3_L1S_P_vs_C2MS54_3seed": "개선",
       "WV2_transfer_L1S_P_vs_C2MS54_3seed": "개선 (참고)",
       "variants_keep_projection": "P32, K20, K10, K5 모두 유지",
-      "baseline_replacement_condition": "충족 (자동 교체 안 함)"
-    }
+      "baseline_replacement_condition": "충족, 2026-11-14 기준 모델로 채택 (C2MS-SP)"
+    },
+    "model_name": "C2MS-SP"
   },
   "performance/83_factorized_c2ms_finetuning": {
     "report": "experiments/performance/83_factorized_c2ms_finetuning/README.md",
@@ -2877,7 +2878,7 @@
       44
     ],
     "retraining": true,
-    "limits": "validation 관문으로 고른 K2(backbone 랭크 32 + W2 CP 384, 연산 66%, 실사용 파라미터 68%) + 사영이 같은 시드 C2MS 대비 3시드 평균 QB +0.051 dB·SAM −0.100°·ERGAS −0.018, GF2 +0.157 dB·−0.024°·−0.014, WV3 +0.119 dB·−0.085°·−0.015로 세 센서 모두 개선이며 기준 모델 교체 조건을 충족합니다(자동 교체 안 함). 분해 전 65번 + 사영 대비 −0.012에서 −0.034 dB(경량 비열등)입니다. 다만 RTX 3060 Ti에서 K2의 GPU 시간은 depthwise 합성곱 때문에 C2MS보다 31-37% 깁니다(256² 19.1 → 25.0 ms). K3(51%)는 관문에서 탈락했습니다.",
+    "limits": "validation 관문으로 고른 K2(backbone 랭크 32 + W2 CP 384, 연산 66%, 실사용 파라미터 68%) + 사영(C2MS-SP-Lite)이 같은 시드 C2MS 대비 3시드 평균 QB +0.051 dB·SAM −0.100°·ERGAS −0.018, GF2 +0.157 dB·−0.024°·−0.014, WV3 +0.119 dB·−0.085°·−0.015로 세 센서 모두 개선이며 기준 모델 교체 조건을 충족합니다(자동 교체 안 함). 분해 전 65번 + 사영 대비 −0.012에서 −0.034 dB(경량 비열등)입니다. 다만 RTX 3060 Ti에서 K2의 GPU 시간은 depthwise 합성곱 때문에 C2MS보다 31-37% 깁니다(256² 19.1 → 25.0 ms). K3(51%)는 관문에서 탈락했습니다.",
     "config": "experiments/performance/83_factorized_c2ms_finetuning/config.json",
     "entrypoint": "experiments/performance/83_factorized_c2ms_finetuning/run.py",
     "results": "experiments/performance/83_factorized_c2ms_finetuning/results",
@@ -2892,8 +2893,9 @@
       "WV3_K2_P_vs_C2MS54_3seed": "개선",
       "WV2_transfer_K2_P_vs_C2MS54_3seed": "개선 (참고)",
       "lightweight_noninferiority_vs_65_P": "QB −0.020, GF2 −0.034, WV3 −0.012 dB",
-      "baseline_replacement_condition": "충족 (자동 교체 안 함)"
-    }
+      "baseline_replacement_condition": "충족, 기준 모델은 C2MS-SP로 결정(경량판으로 보고)"
+    },
+    "model_name": "C2MS-SP-Lite"
   },
   "performance/82_cross_sensor_band_calibration": {
     "report": "experiments/performance/82_cross_sensor_band_calibration/README.md",
