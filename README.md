@@ -21,17 +21,9 @@
 
 원본 SSA-MRN은 PAN·축소 후 재확대한 PAN(LRPAN)·확대한 MS(LMS)에서 특징을 추출하고, 전체·절반·1/4 크기에서 밴드별 SSAI로 융합한 뒤 작은 크기부터 복원합니다. 현재 기준 모델 **C2MS-SP**의 네트워크는 이전 기준 모델 C2MS와 같습니다(원본 + 초기 특징에서 갈라지는 **W2 병렬 가지**, 원래 학습 쌍과 **2배 거친 학습 쌍을 섞은** 학습). 바뀐 것은 두 가지입니다. ① 손실을 **L1 + 분광 손실**로 바꿔 학습했고, ② 추론 뒤에 출력을 다시 관측했을 때 입력 MS와 정확히 맞도록 고치는 **관측 일치 사영**(파라미터 없음)을 붙였습니다.
 
-<p align="center"><img src="SSA-MRN/docs/images/ssa-mrn-c2ms.png" alt="C2MS 전체 구조도: (a) PAN·LMS·LRPAN 초기 특징과 원본 ResBlock×4 backbone, 그 옆의 W2 병렬 가지, (b) 전체·1/2·1/4 크기의 밴드별 SSAI 융합, (c) 1/4 크기부터의 단계적 복원, (d) SSAI 블록 내부, (e) 축척 혼합 학습" width="100%" /></p>
+<p align="center"><img src="SSA-MRN/docs/images/ssa-mrn-c2ms.png" alt="C2MS-SP 전체 구조도: (a) PAN·LMS·LRPAN 초기 특징과 원본 ResBlock×4 backbone, 그 옆의 W2 병렬 가지, (b) 전체·1/2·1/4 크기의 밴드별 SSAI 융합, (c) 단계적 복원과 출력 뒤 관측 일치 사영, (d) SSAI 블록 내부, (e) L1·분광 손실을 쓰는 축척 혼합 학습" width="100%" /></p>
 
-C2MS-SP·C2MS-SP-Lite가 공유하는 C2MS 네트워크 구조입니다. 주황색이 원본 SSA-MRN에 더한 W2 병렬 가지와 축척 혼합 학습이며, 나머지는 원본과 같습니다. 입력은 고해상도 PAN, 4배 확대한 MS(LMS), 저해상도 MS(1/4 크기)입니다.
-
-```mermaid
-flowchart LR
-  I["PAN · LMS · MS"] --> N["C2MS 네트워크<br>C2MS-SP: L1 + 분광 손실로 학습<br>C2MS-SP-Lite: 그 가중치를 분해(연산 66%) 후 10에폭 미세조정"]
-  N --> P["관측 일치 사영<br>y′ = y + Dᵀ(DDᵀ)⁻¹(MS − Dy)<br>공액 기울기법 10회, 파라미터 없음"] --> O["출력"]
-  I -. "MS" .-> P
-  C["학습하지 않은 센서일 때만<br>밴드별 센서 보정"] -.-> N
-```
+C2MS-SP 구조입니다. 주황색이 원본 SSA-MRN에 더한 부분(W2 병렬 가지, 출력 뒤 관측 일치 사영, L1·분광 손실을 쓰는 축척 혼합 학습)이며, 나머지는 원본과 같습니다. 입력은 고해상도 PAN, 4배 확대한 MS(LMS), 저해상도 MS(1/4 크기)입니다. C2MS-SP-Lite는 같은 구조에서 학습된 3×3 합성곱을 분해한 경량판입니다.
 
 - **관측 일치 사영:** `D`는 센서의 관측 연산(MTF 블러 + 4배 축소)입니다. 출력을 줄였을 때 입력 MS와 같아지는 영상 중 원래 출력에 가장 가까운 것으로 옮깁니다([성능 66·81번](SSA-MRN/experiments/performance/81_l1_spectral_loss_projection/README.md)).
 - **C2MS-SP-Lite:** 원래 해상도 backbone의 3×3 합성곱을 랭크 32 병목으로, W2 가지의 3×3 합성곱을 1×1 · depthwise 3×3 · 1×1로 분해한 뒤 짧게 미세조정했습니다([성능 83번](SSA-MRN/experiments/performance/83_factorized_c2ms_finetuning/README.md)).
@@ -187,8 +179,8 @@ C2MS-SP·SP-Lite는 3시드 가중치를 저장소 평가 코드(`common/metrics
 | CANNet | 38.488 | 4.496 | 3.698 | 0.937 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
 | ADWM | 38.466 | 4.450 | 3.705 | 0.937 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 | DCINN | 38.430 | 4.220 | 3.570 | — | [ABFNet](https://proceedings.mlr.press/v306/wang26hx.html) |
-| **C2MS-SP (현재 기준, 3시드 평균)** | **38.373** | **4.474** | **3.685** | **0.935** | [우리 평가](SSA-MRN/docs/images/c2ms_sp/baseline_metrics.json) |
-| **C2MS-SP-Lite (경량판, 3시드 평균)** | **38.353** | **4.476** | **3.693** | **0.935** | [우리 평가](SSA-MRN/docs/images/c2ms_sp/baseline_metrics.json) |
+| **C2MS-SP (현재 기준, 3시드 평균)** | **38.373** | **4.474** | **3.685** | **0.935** | [Ours](SSA-MRN/docs/images/c2ms_sp/baseline_metrics.json) |
+| **C2MS-SP-Lite (경량판, 3시드 평균)** | **38.353** | **4.476** | **3.693** | **0.935** | [Ours](SSA-MRN/docs/images/c2ms_sp/baseline_metrics.json) |
 | HFIN | 38.247 | 4.542 | 3.813 | 0.934 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
 | HOIF | 38.242 | 4.521 | 3.825 | 0.933 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
 | ProtoFormer | 38.238 | 4.568 | 3.768 | — | [MSFFusion](https://www.mdpi.com/2072-4292/18/18/3236) |
