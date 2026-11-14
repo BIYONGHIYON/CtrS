@@ -166,3 +166,33 @@ def summarize(cfg,arm,seeds):
             wins={name:{k:sum(per[s]['scene_wins'][name][k] for s in seeds) for k in ('PSNR','SAM')} for name in per[seeds[0]]['scene_wins']}
             out['targets'][target]=dict(training_sensor=sensor,transfer=target!=sensor,means=mean,judgement=judgement,per_seed_delta_RR=per_seed,scene_wins=wins)
     write(runtime/'summary.json',out);return out
+
+
+def figures(results=HERE/'results'):
+    """Local, after archiving: stage-1 arm comparison and the 3-seed K2 comparison from the stored evaluation records (no model runs)."""
+    import matplotlib;matplotlib.use('Agg');import matplotlib.pyplot as plt
+    import matplotlib.font_manager as fm;plt.rcParams['font.family']=[f for f in ('AppleGothic','Malgun Gothic') if any(x.name==f for x in fm.fontManager.ttflist)] or ['DejaVu Sans'];plt.rcParams['axes.unicode_minus']=False
+    arms=['FT0','K1','K2','K3','K2L'];gmac={'FT0':59.63,'K1':51.04,'K2':39.06,'K3':30.17,'K2L':39.06}
+    fig,axes=plt.subplots(1,3,figsize=(16,4.2))
+    for ax,(sensor,key,title) in zip(axes,(('QB','official_arm_P_vs_C2MS','갈래 + 사영 대 C2MS'),('WV3','official_arm_P_vs_C2MS','갈래 + 사영 대 C2MS'),('QB','vs_65_P','갈래 + 사영 대 65번 + 사영'))):
+        for sname,mk in (('QB','o'),('WV3','s')):
+            if key=='vs_65_P' or sname==sensor:
+                ys=[json.loads((results/f'{a}_{sname}_s42/evaluation_complete.json').read_text(encoding='utf8'))['targets'][sname]['judgement'][key]['delta_RR']['PSNR'] for a in arms]
+                ax.plot([gmac[a] for a in arms],ys,mk+'-' if key!='vs_65_P' else mk,label=sname)
+                for a,x,y in zip(arms,[gmac[a] for a in arms],ys):ax.annotate(a,(x,y),textcoords='offset points',xytext=(4,4),fontsize=8)
+        ax.axhline(0,color='k',lw=.8);ax.axhline(0.06 if key!='vs_65_P' else -0.04,color='gray',ls='--',lw=.8)
+        ax.set(xlabel='256² 합성곱 연산량 (GMAC, QB 기준)',ylabel='test RR PSNR 차이 (dB)',title=f'1단계 seed 42 · {title}'+('' if key=='vs_65_P' else f' · {sensor}'));ax.grid(alpha=.3)
+        if key=='vs_65_P':ax.legend()
+    fig.tight_layout();fig.savefig(results/'stage1_arms.png',dpi=130);plt.close(fig)
+    s=json.loads((results/'summary.json').read_text(encoding='utf8'));names=['C0','C2MS+P','L1S','L1S+P','K2','K2+P'];labels={'C0':'원본 C0','C2MS+P':'C2MS + 사영','L1S':'65번','L1S+P':'65번 + 사영','K2':'K2','K2+P':'K2 + 사영'}
+    colors={'C0':'#8d99ae','C2MS+P':'#adb5bd','L1S':'#f4a261','L1S+P':'#e9c46a','K2':'#e76f51','K2+P':'#d1495b'}
+    fig,axes=plt.subplots(len(s['targets']),3,figsize=(15,3.3*len(s['targets'])),squeeze=False)
+    for row,(t,v) in zip(axes,s['targets'].items()):
+        for ax,key in zip(row,('PSNR','SAM','ERGAS')):
+            vals=[v['means'][n]['RR'][key]-v['means']['C2MS']['RR'][key] for n in names];ax.bar([labels[n] for n in names],vals,color=[colors[n] for n in names]);ax.axhline(0,color='k',lw=.8)
+            if key=='PSNR' and 'C0' in names:ax.set_ylim(min(vals[1:])-0.1,max(vals[1:])+0.1)
+            ax.set_title(f'{t} RR {key} − C2MS (3시드 평균)'+(' · 전이, 참고' if v['transfer'] else ''));ax.grid(axis='y',alpha=.3);ax.tick_params(axis='x',labelsize=8)
+    fig.tight_layout();fig.savefig(results/'k2_3seed_comparison.png',dpi=130);plt.close(fig)
+
+
+if __name__=='__main__' and sys.argv[1:]==['--figures']:figures()

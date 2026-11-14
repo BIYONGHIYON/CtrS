@@ -1,0 +1,674 @@
+{
+  "experiment": 83,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "학습된 C2MS 가중치의 저랭크·depthwise 분해와 짧은 미세조정",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "registered": "2026-11-14",
+  "hypothesis": "65 C2MS_L1S의 원래 해상도 backbone을 랭크 32 병목으로, W2 가지를 1x1·depthwise 3x3·1x1(CP 랭크 384 또는 256)로 분해한 뒤 65 손실로 짧게 미세조정하면, 연산 51-86%에서 65번과 같은 validation 정확도를 회복하고, 사영(K10)을 붙여 같은 시드 C2MS보다 RR 세 지표가 좋아진다.",
+  "evidence": {
+    "stage0_lowrank_no_finetune": "QB seed 42, 53 C2MS: backbone rank 32 test -0.063 dB (86% conv MACs), rank 24 -0.262 dB; W2 bottleneck rank 96 -0.248 dB, rank 64 -0.731 dB (activation-aware SVD); 65 C2MS_L1S the same pattern (provenance/stage0/lowrank_s42.json)",
+    "stage0_cp_no_finetune": "W2 CP rank 512 -0.076 dB (95%), 384 -0.318 dB (80%), 256 -1.114 dB (65%) vs weight-space bottleneck rank 96 -1.178 dB (provenance/stage0/cp_test.json)",
+    "stage0_short_finetune": "backbone rank 32 + W2 CP 384 (66%, 1,873,402 used parameters): -0.400 dB after factorization -> -0.045 dB / SAM +0.027 deg after 750 steps of batch 16 (C2MS MSE loss, lr 5e-5 cosine, about 0.7 epoch); CP 256 (51%): -1.186 -> -0.190 dB after 250 steps (stopped) (provenance/stage0/ft_test.json, ft_test.log). Local MPS, QB seed 42 only, post-hoc on test",
+    "stage0_from_scratch_mimic": "depthwise blocks trained from scratch to imitate the trained W2 output converged much slower than plain blocks (1500 steps: plain 64x8 -2.36 dB, inverted residual 128x8 -4.08 dB); weak evidence (provenance/stage0/mimic.json)",
+    "result_81": "65 C2MS_L1S + projection vs same-seed C2MS, 3 seeds: QB +0.072, GF2 +0.191, WV3 +0.130 dB (improvement); K10 projection equal to the full projection within 0.0003 dB",
+    "result_80": "a W2 branch trained from scratch at 64x16 kept 94-103% of the C2MS gain on QB/GF2 but only 54-63% on WV3 (8 bands)"
+  },
+  "arms": {
+    "FT0": "65 C2MS_L1S unchanged + the same fine-tuning (control for the fine-tuning itself)",
+    "K1": "backbone 8 convs 64->64 3x3 -> 3x3 64->32 (no bias) + 1x1 32->64; activation-aware truncated SVD over 512 training patches",
+    "K2": "K1 + W2 16 convs 128->128 3x3 -> 1x1 128->384 (no bias), depthwise 3x3 (384), 1x1 384->128; CP-ALS rank 384, 150 iterations, seed 0, balanced factors",
+    "K3": "K1 + W2 at CP rank 256",
+    "K2L": "K2 with 40 fine-tuning epochs (schedule-length check)"
+  },
+  "stage0_cost_qb": {
+    "C2MS": {
+      "used_parameters": 2735610,
+      "conv_gmac_256": 59.63
+    },
+    "K1": {
+      "used_parameters": 2604538,
+      "conv_gmac_256": 51.04
+    },
+    "K2": {
+      "used_parameters": 1873402,
+      "conv_gmac_256": 39.06
+    },
+    "K3": {
+      "used_parameters": 1330682,
+      "conv_gmac_256": 30.17
+    },
+    "note": "local count; recounted per sensor by run.py optimize"
+  },
+  "init_from": {
+    "QB": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt",
+    "GF2": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s<seed>/best.pt",
+    "WV3": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s<seed>/best.pt"
+  },
+  "controls": {
+    "QB": "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s<seed>/best.pt",
+    "GF2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s<seed>/best.pt",
+    "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s<seed>/best.pt"
+  },
+  "original": {
+    "QB": "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s<seed>/best.pt",
+    "GF2": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_GF2_s<seed>/best.pt",
+    "WV3": "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_WV3_s<seed>/best.pt"
+  },
+  "loss": "65 loss: original per-pixel L1 + 1.0 x per-pixel L1 on 2x coarser pairs + 0.46 x spectral loss on the original pair (history fields train_mse/coarse_train_mse hold mean absolute errors)",
+  "coarse_weight": {
+    "FT0": 1.0,
+    "K1": 1.0,
+    "K2": 1.0,
+    "K3": 1.0,
+    "K2L": 1.0
+  },
+  "spectral_weight": {
+    "FT0": 0.46,
+    "K1": 0.46,
+    "K2": 0.46,
+    "K3": 0.46,
+    "K2L": 0.46
+  },
+  "ema_beta": 0.99,
+  "ema_note": "EMA recorded only (as 65); selection uses the online weights",
+  "epochs": {
+    "FT0": 10,
+    "K1": 10,
+    "K2": 10,
+    "K3": 10,
+    "K2L": 40
+  },
+  "lr_start": 5e-05,
+  "lr_end": 1e-06,
+  "schedule": "Adam lr = 1e-6 + 0.5 * (5e-5 - 1e-6) * (1 + cos(pi * zero_based_epoch / (E - 1))), E = 10 (K2L 40); epoch 0 validation is the factorized model before any update",
+  "projection": "prepare.Projected: the 45/66 observation-consistency projection with the test sensor's Wald operator, conjugate gradient stopped at 10 iterations (K10, 81)",
+  "sensors": [
+    "QB",
+    "GF2",
+    "WV3"
+  ],
+  "stage1_sensors": [
+    "QB",
+    "WV3"
+  ],
+  "transfer_tests": {
+    "WV2": "WV3-trained runs are also evaluated on WV2 (reference only under v2.4)"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "latency_seed": 42,
+  "gate": {
+    "basis": "validation only (selected weights vs the same-seed 65 checkpoint the arm started from); test is never used for the gate",
+    "val_psnr_min": -0.04,
+    "val_sam_max": 0.02,
+    "sensors": "every stage-1 sensor (QB and WV3)",
+    "order": [
+      "K3",
+      "K2",
+      "K2L",
+      "K1"
+    ],
+    "note": "the lightest passing arm goes to stage 2; FT0 is a control and is never chosen; if no arm passes, stage 2 is not run"
+  },
+  "comparisons": {
+    "official": "chosen arm + K10 projection vs plain same-seed C2MS (QB 53, GF2/WV3 54), per training sensor, 3-seed mean, criteria v2.4 (RR only, threshold 0.04 dB); the experiment is an improvement only if QB, GF2 and WV3 all are",
+    "lightweight_reference": "arm + P vs 65 + P (same weights before factorization): 3-seed mean RR PSNR at or above -0.04 dB is reported as lightweight non-inferiority (not a judgement)",
+    "fine_tuning_control": "arm vs FT0 (stage 1, seed 42): separates the effect of fine-tuning from factorization",
+    "projection_fair": "arm + P vs C2MS + P",
+    "transfer": "WV2 (WV3-trained runs), reference only",
+    "cost": "used parameters, conv GMAC at 256x256 and GPU time at 256 and 512 (with and without K10 projection), seed 42"
+  },
+  "stages": {
+    "0": "local diagnostics (provenance/stage0), post-hoc on the QB test; not a judgement",
+    "1": "QB and WV3, seed 42, five arms, two trainings at once, then evaluation and the validation gate",
+    "2": "the chosen arm on QB, GF2, WV3 x seeds 42-44 (the stage-1 runs are reused), then the 3-seed summary",
+    "3": "optional, user decision after stage 2: the chosen structure trained from scratch for 150 epochs (QB seed 42) to separate structure from initialization"
+  },
+  "not_run": {
+    "K2P": "fine-tuning through the projection was planned but is not run: with the evaluation margin of 5 MS pixels the projection constrains only 6x6 of the 16x16 MS pixels of a 64x64 training patch, so its training definition would differ from inference; left for a later experiment"
+  },
+  "runtime": "C:/CtrS-p83/run",
+  "max_parallel": 2,
+  "expected_duration": "stage 1 about 3-4 h (QB 5 arms, 80 epochs in total; WV3 about half the steps), evaluations about 1.5 h; stage 2 about 3-4 h",
+  "limits": [
+    "stage 0 numbers are post-hoc on the QB test (local, seed 42) and only motivated the arms; the gate uses validation",
+    "QB has shown validation gains that did not reach the test (59, 73); the fine-tuning is kept short and FT0 is the control",
+    "depthwise convolutions may not be faster on the GPU in proportion to MACs; GPU time is reported",
+    "no automatic baseline replacement"
+  ],
+  "batch": 32,
+  "micro": 32,
+  "optimizer": "Adam (beta 0.9, 0.999), no weight decay",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP training with GradScaler; FP32 loss, validation and evaluation; factorization in float64 on the CPU",
+  "tf32": false,
+  "cudnn_deterministic": true,
+  "layout": "channels_last",
+  "cudnn_benchmark": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "cpu_threads": 1,
+  "normalization": {
+    "QB": 2047,
+    "GF2": 1023,
+    "WV3": 2047,
+    "WV2": 2047
+  },
+  "data_root": "C:/CtrS/PAN-MS",
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    },
+    "GF2": {
+      "train": "243a0bc8a4cc0a2740ed24409f9e87afe531d87e9d57524c6bcbec2b5f937621",
+      "val": "ae15b19ccc6ece799ebfeb3fb374b1a333238226397441e3d523b0195dff4f43",
+      "RR": "709a9a53b2e0f29d3dcd5c6ca4410c2913b62cc03c104fed6c049911dbe1c8ea",
+      "FR": "840698f9b3de181de9f665ca88e562fb7783dcd93045a136ace2110d414989ad"
+    },
+    "WV3": {
+      "train": "f9e7ec381390ff36ddffd0714df7af07a3c5f456078b219a25f3e18372228f82",
+      "val": "ba883e57408d1f3c2263cc2818a9fbbf2dbe8e62554c531288f9e8bf9f59dc87",
+      "RR": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "FR": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+    }
+  },
+  "transfer_data_sha256": {
+    "WV2": {
+      "RR": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b",
+      "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
+    }
+  },
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    },
+    "GF2": {
+      "train": 19809,
+      "val": 2201,
+      "RR": 20,
+      "FR": 20
+    },
+    "WV3": {
+      "train": 9714,
+      "val": 1080,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "scenes_note": "fixed QB scene indices reused on GF2, WV3 and WV2 (as 65/80); images for seed 42 only",
+  "cache_reference_manifest": {
+    "QB": "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json",
+    "GF2": "experiments/performance/65_l1_spectral_loss/provenance/stage3/run_records/data_manifest.json",
+    "WV3": "experiments/performance/65_l1_spectral_loss/provenance/stage3/run_records/data_manifest.json"
+  },
+  "selection": "minimum original-scale validation MSE including epoch 0 (the factorized model before fine-tuning; for FT0 the 65 weights), earliest exact tie; test never used for selection",
+  "source_hashes": {
+    "experiments/performance/83_factorized_c2ms_finetuning/model.py": "dfe46a05afdcf624b910b4101cb08ee0bea111a665bc451f8236f3e42ab886d2",
+    "experiments/performance/83_factorized_c2ms_finetuning/prepare.py": "ddd9b71d3d7dc19cf1d9d40ae895f4311efc76cf6dd8466fb1f5aac91958fb5f",
+    "experiments/performance/83_factorized_c2ms_finetuning/train.py": "e7bf1b984dd34d9677cae1211382eb877636d11375c5bd90020478f79c9d5695",
+    "experiments/performance/83_factorized_c2ms_finetuning/run.py": "b456f7e5f355ff70ca8d5542fad31432cf07210b8cb215df0bed53f18cada430",
+    "experiments/performance/83_factorized_c2ms_finetuning/config.json": "e9ccb7c308e8b9a69b5572e062c8679d2da42766ea1ded17417ee46ab895b33d",
+    "experiments/performance/83_factorized_c2ms_finetuning/evaluate.py": "0fab86334eb6bebb2285be06f4d48a4e7054ddf45e9e9514156b1a86167657a3",
+    "experiments/performance/79_deep_narrow_branch_projection/model.py": "8ac88fdead767e84bfae5cb22a230c3c53fd7afd1acecac5e7d732ff09091148",
+    "experiments/performance/79_deep_narrow_branch_projection/prepare.py": "f658efc0506affb7cc8dc76e3ae2a34b202a75f0d7cfa83766838ec0d49e6b28",
+    "experiments/performance/75_parallel_branch_width_depth/model.py": "107398906d671fccde503637eea1f9c8309b742700d542f0e458ea4ac56821f0",
+    "experiments/performance/58_spectral_loss_multi_sensor/train.py": "b5a8c3f5e2dbff854a1bbf09c8f1e1ccdd601cb6a53557f31e4e5b76b6f1b575",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/train.py": "55c150b067788191664e5f72885e065b1a222fcaeb0fe97a6b13050dc08a7dc5",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/evaluate.py": "e7e60ab17aea8d55f9d1d92fc57c1bd166e50f44d936b1d29c190c25ed818a7a",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/config.json": "821c9038a3c6fa296d96176074b3d91c86a9df3d5a9ffd115eb727de310546e4",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16",
+    "common/result_images.py": "2fc73537d7d60fa8c9d19a036ad0bb53e9ab1231b9811fd6d8e9b5159675c737",
+    "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json": "5eff51d1aab2a971d850296817ec91de3fcc0560086d75969a11035e04f3d5ad",
+    "experiments/performance/65_l1_spectral_loss/provenance/stage3/run_records/data_manifest.json": "9d62325a7dac32f67f766af12869643e2974250e562ce7afc1909556eb723751",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s42/best.pt": "3ab7f20c2fda333f2698163af3b0b6c77030d2436f3407f1c58f3224e689de40",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s43/best.pt": "322ee8a85f8de05221403a88cefa64cdd01a224b6043b33da5694dbdd994d6e1",
+    "experiments/performance/53_scale_mixed_training/checkpoints/C2MS_QB_s44/best.pt": "ad8bfa8eb624aae580e03460a32bf80016d28adbeb2df1bc17bb14dc9eb9e897",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s42/best.pt": "9960c88896d208f358282bf02c3740bba0fd3cac753b2532963587a03ca6126d",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s43/best.pt": "233e4890516cabac995d93e8f3f9ade8510f974aa443ac5993c67e3635628fbf",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_GF2_s44/best.pt": "c5757d5d1e4c9cb68c59f31a59d6f2ce168ea83a4df81962bdaeb6e744841e53",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s42/best.pt": "5f1926608479fa58eaba526e82f6057df81c60b7d4a452274c93ed836fa8e8bd",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s43/best.pt": "259a5651341fcca669d3d141c74ed5f32b459e4ec5f9741cfc9e29bc61a430c9",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C2MS_WV3_s44/best.pt": "76f9ed2663c4a65cc3b6ca22b082df8609a25b240acc7635b17fdab06f1ba82c",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s42/best.pt": "0175151f6306b275966858cbef6b66b5c9b7345ecdc581e6383a03ad09cbabbb",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s43/best.pt": "7bc31dd8bdb7f317d5678e400e7b5666628f15a3f526f6f328b2e27986bf881d",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s44/best.pt": "37870674c7922fc5285e7539be426be097c6caef8f52af78dd2779a24ba631e7",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s42/best.pt": "e33c04fb8b06cd1284b2d58b5d57933586a3e470ea51d0fee7e97a66da60ae31",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s43/best.pt": "f1de5fcecce3962bfb341223cafdf3b1f40e2f7ecd327b3f63041076370d4bb2",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s44/best.pt": "7ba8708acc158c9603b0bccc2a8007e705b45a24a43fddb0b94e147ff42d2deb",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s42/best.pt": "d9d9d8c67bca9f48f8e6027825041f76a8c5a7e987a26a68287e34fcbd351541",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s43/best.pt": "1f519ebbc6fe22c361763cb2d0fbec9f717b1b5745a42ff5d429c6fb43a1e5bf",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s44/best.pt": "c8f8f379c25be38fa16e0030d3e3ed2cecdb3c3a8dc00dca9a1bf3fe7a439292",
+    "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s42/best.pt": "f3255077687f0cfefb307961957b9ecc4973555d8b926008d778858c60f50406",
+    "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s43/best.pt": "6287c8aeac68a73328c55afadf1c1b4be0dc0c9af72c2c364f8fd39dd6b234e6",
+    "experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s44/best.pt": "2379c5a41cf05ebb3c7240b3e5c55b23a72c58990819f91bc8cb4ea9f92002f9",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_GF2_s42/best.pt": "17583a8a267db1bc6c2004f79fa79bececc3e02865ba30d937d9ff9300d3061e",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_GF2_s43/best.pt": "31cb227dd27072c8eb77e60ee8311967d2ef08c08d6ad0a247853bd209da6dd2",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_GF2_s44/best.pt": "54d11564b4b5b28a14d36f90e9b67e92664d7932579c143418bc495dfa40bac7",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_WV3_s42/best.pt": "b4ae01f752ee1c88ad9fa72f932ba03057945b7310ff1597f19eef5173e449ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_WV3_s43/best.pt": "ebb7fd7a26c67fa3c6f8b659b613718e349fbbb8dc2a20dc47cb6e6e56f5a780",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_WV3_s44/best.pt": "67eb9df2606e50f153e15d0f73b289d0095a87b71d00d8409c7045311047c80c"
+  },
+  "created_kst": "2026-11-14T10:43:36.206229+09:00",
+  "coarse_cache_equal_to_reference": {
+    "QB_train_coarse_pan": true,
+    "QB_train_coarse_lms": true,
+    "QB_train_coarse_ms": true,
+    "QB_train_coarse_gt": true,
+    "QB_val_coarse_pan": true,
+    "QB_val_coarse_lms": true,
+    "QB_val_coarse_ms": true,
+    "QB_val_coarse_gt": true,
+    "GF2_train_coarse_pan": true,
+    "GF2_train_coarse_lms": true,
+    "GF2_train_coarse_ms": true,
+    "GF2_train_coarse_gt": true,
+    "GF2_val_coarse_pan": true,
+    "GF2_val_coarse_lms": true,
+    "GF2_val_coarse_ms": true,
+    "GF2_val_coarse_gt": true,
+    "WV3_train_coarse_pan": true,
+    "WV3_train_coarse_lms": true,
+    "WV3_train_coarse_ms": true,
+    "WV3_train_coarse_gt": true,
+    "WV3_val_coarse_pan": true,
+    "WV3_val_coarse_lms": true,
+    "WV3_val_coarse_ms": true,
+    "WV3_val_coarse_gt": true
+  },
+  "cache_manifest_sha256": "884a433635285ccd76052c9400b1aec41a987ca10013436e0a4d4bd1d2c6bb59",
+  "init_sha256": {
+    "QB_FT0_s42": "49a1945e2275c42e298acdb18ba7acd638c5629d36542fcd6d0e5efe1e7f897d",
+    "QB_K1_s42": "05e7271886a873115992c3ffc7abfdb761739065307c0cade5f91ef47a3b448b",
+    "QB_K2_s42": "52241276dd8cf8d7a126f8d7e7da5a0a1645dc1b7f78d0f301aea30e8b1a635b",
+    "QB_K3_s42": "fe01b29d72d72ad17a69f3086c59c1ac9b9048ffdc3e0d6351a6f46c54568324",
+    "QB_K2L_s42": "3ed025c105195541d653b890118f6b35117620fc5e3c9af65d7fe6a734d469d9",
+    "QB_FT0_s43": "325a5ccfa10b908d4edcf2a7584a78b0952ce184c135ae2601a4c9a4d6e222ee",
+    "QB_K1_s43": "fa240050b553c4d753ffa3ed981f02949b205a34808546d5bf73c362d231f1d8",
+    "QB_K2_s43": "4231cd27fa9944d27e5e28890efa57518bd4b231bcd05b37732e769409df0f89",
+    "QB_K3_s43": "cbd9b5d02d40e28493f37bf46b411af939f4eaea42764401828e44ec5d743817",
+    "QB_K2L_s43": "1ef893d7eca96e4459948725e1485142eb3659536d709c04c9113c7f92bfc6e5",
+    "QB_FT0_s44": "2a48d1e9c7089c5efc2fe4a058a09bcc6282d601734fc857aa3068c132d36beb",
+    "QB_K1_s44": "27e13a1d9411a6c101a1429ae8a67a2160b382daab04bdcfa4b2ed79c746dd25",
+    "QB_K2_s44": "e03fac502d24a5e5001509292433442dcd9ed8d12ea65f6d37bbd5d69f99a33b",
+    "QB_K3_s44": "61a8d8a81206b341ee2641a0dc3ae3ede4ca6f74dcc0311491de37d7f856d9fa",
+    "QB_K2L_s44": "b45a86e070c2bfaa29045a9bef2769a2003639a3ba959ef2116cb73bb7a743ca",
+    "GF2_FT0_s42": "b1c4ebc568f73b2aa6a04104f76ce557ba4641874dabf7ec4486e30d454cbd73",
+    "GF2_K1_s42": "b315ad6e13aab329cd7587a93b60ad5ed5d8aae3dc1da0aca8cf43fd7a728eb2",
+    "GF2_K2_s42": "c8e2b32a4d8561cbdaf4638809da9f62db1266f3f8f2615fef03604f981fa10a",
+    "GF2_K3_s42": "501e524e297ecbefb9a5657db145bdca6bc2f1dacfc8de4e98a90593b690e8e0",
+    "GF2_K2L_s42": "e976cfc141fa4e050aacea4d6458b7e70ba3d59a2c37fc2077537d5d702a6f8b",
+    "GF2_FT0_s43": "63af325839693f75c021ae7bb368e5fd34ee5f126bd13d0c6bc247c15e169839",
+    "GF2_K1_s43": "07f7afe7ae79c5939b4a2008cd9568ab40a38c01389026d9a5bcae2647328449",
+    "GF2_K2_s43": "cd5dc19375492c43b25d5e5da877494416eeaff58dc694196fc511d32504acae",
+    "GF2_K3_s43": "3f54f4b6d65b1a64dbfc7a935546ee8e1d7d1101242e769ab32fb1a64e4cb5db",
+    "GF2_K2L_s43": "cda43daf12cf6a03f3d4654e11e7525e274a928a7de442a2a65190743a2f8f39",
+    "GF2_FT0_s44": "cbf79de0405ac814963f35776af5b2646a7d200f7c9a78608130f5c2abad1156",
+    "GF2_K1_s44": "0c6b8f4b871463dcee0b35c847650c567095c487f1e21397d19d67704231da0c",
+    "GF2_K2_s44": "97d2c990d919197f95277d23f8487dd490dcdf108068a434b045e0c7f784c314",
+    "GF2_K3_s44": "b73fd8b1d8ef278f113b16e0aa9a3bb334d497417c84a6538f31a76f54b292a9",
+    "GF2_K2L_s44": "658f12954b6d329e6b83207428151672eaa08eca4e2306bb8119d2dfeaeed95d",
+    "WV3_FT0_s42": "f250a82cfb0b9c36dfe95ffb6f8469d0d401fb77265dfd6293d7181003e649e3",
+    "WV3_K1_s42": "feaf4d45f6e3df8711322b49652cff8007e93310d54b3fac83a23ceb0e0223c4",
+    "WV3_K2_s42": "d7455bd1712dc7febe917d9f381dbf679d8e31248417d9da468fcb443c188b32",
+    "WV3_K3_s42": "f2c794778a12285824a9af658754cc0c58a952a27fcf04238a5a664b8d724b59",
+    "WV3_K2L_s42": "e376c2fc9295e6a76554615b3e5d186332e61da3e57c533c2c794afd1f2e5026",
+    "WV3_FT0_s43": "10daa8c9f998e1d2800d9da4094840ceb29565a09c71bd7615fdf6f8f9eab5a4",
+    "WV3_K1_s43": "c6d4dbc74fef1888883460f345161677978c59dfe302d9bb602802608f5bea0d",
+    "WV3_K2_s43": "438a3d515f7f6fe4d0330187d40fff69d5fe79d829741b121cbd2a68e32a900d",
+    "WV3_K3_s43": "0f4adc56af0333d487cce487326606b40f5be36a6994d93162f35ef0d9d226ac",
+    "WV3_K2L_s43": "69af2919a4005798a1ea105e4972e6ee25ff6f4500137cc7acc0b95a651a919c",
+    "WV3_FT0_s44": "0febd19ee8b08e5c211602c0bef7e1f83a1cdb7205f0cdef2a377a5a68bf08d0",
+    "WV3_K1_s44": "b2a2b113a9703ef038b38d9cceffe6dcaf15d703c93587fa43c8691cccce5e00",
+    "WV3_K2_s44": "1c6c9e722dc3e02ea97a13ba0a55575a538fef5beead315c0807f0783162a6e0",
+    "WV3_K3_s44": "9049c7434567b46c1b239b7cf6aeba9c077e597bc4ed1d72d168440199fcd785",
+    "WV3_K2L_s44": "324f24a891bf4055bfedc0e9fab9559f02c6336ca5f0c6298c0772b2e09ddb88"
+  },
+  "factorization_report": {
+    "QB_FT0_s42": {
+      "bb_energy_lost": null,
+      "w2_relative_error": null
+    },
+    "QB_K1_s42": {
+      "bb_energy_lost": 0.003926473223242841,
+      "w2_relative_error": null
+    },
+    "QB_K2_s42": {
+      "bb_energy_lost": 0.003926473223242841,
+      "w2_relative_error": 0.05858526625054989
+    },
+    "QB_K3_s42": {
+      "bb_energy_lost": 0.003926473223242841,
+      "w2_relative_error": 0.185428420777834
+    },
+    "QB_K2L_s42": {
+      "bb_energy_lost": 0.003926473223242841,
+      "w2_relative_error": 0.05858526625054989
+    },
+    "QB_FT0_s43": {
+      "bb_energy_lost": null,
+      "w2_relative_error": null
+    },
+    "QB_K1_s43": {
+      "bb_energy_lost": 0.005605074288577178,
+      "w2_relative_error": null
+    },
+    "QB_K2_s43": {
+      "bb_energy_lost": 0.005605074288577178,
+      "w2_relative_error": 0.05947939078306409
+    },
+    "QB_K3_s43": {
+      "bb_energy_lost": 0.005605074288577178,
+      "w2_relative_error": 0.18848840897078023
+    },
+    "QB_K2L_s43": {
+      "bb_energy_lost": 0.005605074288577178,
+      "w2_relative_error": 0.05947939078306409
+    },
+    "QB_FT0_s44": {
+      "bb_energy_lost": null,
+      "w2_relative_error": null
+    },
+    "QB_K1_s44": {
+      "bb_energy_lost": 0.0052093176805407815,
+      "w2_relative_error": null
+    },
+    "QB_K2_s44": {
+      "bb_energy_lost": 0.0052093176805407815,
+      "w2_relative_error": 0.05778105521583107
+    },
+    "QB_K3_s44": {
+      "bb_energy_lost": 0.0052093176805407815,
+      "w2_relative_error": 0.18297588921332222
+    },
+    "QB_K2L_s44": {
+      "bb_energy_lost": 0.0052093176805407815,
+      "w2_relative_error": 0.05778105521583107
+    },
+    "GF2_FT0_s42": {
+      "bb_energy_lost": null,
+      "w2_relative_error": null
+    },
+    "GF2_K1_s42": {
+      "bb_energy_lost": 0.0020239448959703116,
+      "w2_relative_error": null
+    },
+    "GF2_K2_s42": {
+      "bb_energy_lost": 0.0020239448959703116,
+      "w2_relative_error": 0.056746768739933444
+    },
+    "GF2_K3_s42": {
+      "bb_energy_lost": 0.0020239448959703116,
+      "w2_relative_error": 0.17941220958438364
+    },
+    "GF2_K2L_s42": {
+      "bb_energy_lost": 0.0020239448959703116,
+      "w2_relative_error": 0.056746768739933444
+    },
+    "GF2_FT0_s43": {
+      "bb_energy_lost": null,
+      "w2_relative_error": null
+    },
+    "GF2_K1_s43": {
+      "bb_energy_lost": 0.0035399739786622364,
+      "w2_relative_error": null
+    },
+    "GF2_K2_s43": {
+      "bb_energy_lost": 0.0035399739786622364,
+      "w2_relative_error": 0.05810331040024543
+    },
+    "GF2_K3_s43": {
+      "bb_energy_lost": 0.0035399739786622364,
+      "w2_relative_error": 0.18505819912603105
+    },
+    "GF2_K2L_s43": {
+      "bb_energy_lost": 0.0035399739786622364,
+      "w2_relative_error": 0.05810331040024543
+    },
+    "GF2_FT0_s44": {
+      "bb_energy_lost": null,
+      "w2_relative_error": null
+    },
+    "GF2_K1_s44": {
+      "bb_energy_lost": 0.0036518555054912,
+      "w2_relative_error": null
+    },
+    "GF2_K2_s44": {
+      "bb_energy_lost": 0.0036518555054912,
+      "w2_relative_error": 0.05703375087402389
+    },
+    "GF2_K3_s44": {
+      "bb_energy_lost": 0.0036518555054912,
+      "w2_relative_error": 0.1807650147470075
+    },
+    "GF2_K2L_s44": {
+      "bb_energy_lost": 0.0036518555054912,
+      "w2_relative_error": 0.05703375087402389
+    },
+    "WV3_FT0_s42": {
+      "bb_energy_lost": null,
+      "w2_relative_error": null
+    },
+    "WV3_K1_s42": {
+      "bb_energy_lost": 0.00361179652018484,
+      "w2_relative_error": null
+    },
+    "WV3_K2_s42": {
+      "bb_energy_lost": 0.00361179652018484,
+      "w2_relative_error": 0.06116266011554011
+    },
+    "WV3_K3_s42": {
+      "bb_energy_lost": 0.00361179652018484,
+      "w2_relative_error": 0.19390324493647074
+    },
+    "WV3_K2L_s42": {
+      "bb_energy_lost": 0.00361179652018484,
+      "w2_relative_error": 0.06116266011554011
+    },
+    "WV3_FT0_s43": {
+      "bb_energy_lost": null,
+      "w2_relative_error": null
+    },
+    "WV3_K1_s43": {
+      "bb_energy_lost": 0.005895326501054232,
+      "w2_relative_error": null
+    },
+    "WV3_K2_s43": {
+      "bb_energy_lost": 0.005895326501054232,
+      "w2_relative_error": 0.061486603744978295
+    },
+    "WV3_K3_s43": {
+      "bb_energy_lost": 0.005895326501054232,
+      "w2_relative_error": 0.1951081771350661
+    },
+    "WV3_K2L_s43": {
+      "bb_energy_lost": 0.005895326501054232,
+      "w2_relative_error": 0.061486603744978295
+    },
+    "WV3_FT0_s44": {
+      "bb_energy_lost": null,
+      "w2_relative_error": null
+    },
+    "WV3_K1_s44": {
+      "bb_energy_lost": 0.006301205849852165,
+      "w2_relative_error": null
+    },
+    "WV3_K2_s44": {
+      "bb_energy_lost": 0.006301205849852165,
+      "w2_relative_error": 0.059470647509288245
+    },
+    "WV3_K3_s44": {
+      "bb_energy_lost": 0.006301205849852165,
+      "w2_relative_error": 0.18851203315461562
+    },
+    "WV3_K2L_s44": {
+      "bb_energy_lost": 0.006301205849852165,
+      "w2_relative_error": 0.059470647509288245
+    }
+  },
+  "conv_gmac_256": {
+    "QB": {
+      "FT0": 59.632058368,
+      "K1": 51.042123776,
+      "K2": 39.063191552,
+      "K3": 30.171267072,
+      "K2L": 39.063191552,
+      "C2MS": 59.632058368,
+      "C0": 19.90361088
+    },
+    "GF2": {
+      "FT0": 59.632058368,
+      "K1": 51.042123776,
+      "K2": 39.063191552,
+      "K3": 30.171267072,
+      "K2L": 39.063191552,
+      "C2MS": 59.632058368,
+      "C0": 19.90361088
+    },
+    "WV3": {
+      "FT0": 60.3799552,
+      "K1": 51.790020608,
+      "K2": 39.811088384,
+      "K3": 30.919163904,
+      "K2L": 39.811088384,
+      "C2MS": 60.3799552,
+      "C0": 20.651507712
+    }
+  },
+  "used_parameters": {
+    "QB": {
+      "FT0": 2735610,
+      "K1": 2604538,
+      "K2": 1873402,
+      "K3": 1330682,
+      "K2L": 1873402,
+      "C2MS": 2735610,
+      "C0": 308346
+    },
+    "GF2": {
+      "FT0": 2735610,
+      "K1": 2604538,
+      "K2": 1873402,
+      "K3": 1330682,
+      "K2L": 1873402,
+      "C2MS": 2735610,
+      "C0": 308346
+    },
+    "WV3": {
+      "FT0": 2755942,
+      "K1": 2624870,
+      "K2": 1893734,
+      "K3": 1351014,
+      "K2L": 1893734,
+      "C2MS": 2755942,
+      "C0": 328678
+    }
+  },
+  "benchmark": {
+    "QB_FT0": {
+      "median_step_seconds": 0.19497850000016115,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.533203125
+    },
+    "QB_K1": {
+      "median_step_seconds": 0.14525830000002316,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.609375
+    },
+    "QB_K2": {
+      "median_step_seconds": 0.15819299999998293,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 1.546875
+    },
+    "QB_K3": {
+      "median_step_seconds": 0.15623895000021548,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 1.2109375
+    },
+    "QB_K2L": {
+      "median_step_seconds": 0.15926435000005768,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 1.546875
+    },
+    "GF2_FT0": {
+      "median_step_seconds": 0.20178484999996726,
+      "steps_per_epoch": 620,
+      "peak_reserved_gib": 0.533203125
+    },
+    "GF2_K1": {
+      "median_step_seconds": 0.14537780000023304,
+      "steps_per_epoch": 620,
+      "peak_reserved_gib": 0.609375
+    },
+    "GF2_K2": {
+      "median_step_seconds": 0.1571305500001472,
+      "steps_per_epoch": 620,
+      "peak_reserved_gib": 1.546875
+    },
+    "GF2_K3": {
+      "median_step_seconds": 0.15306445000010171,
+      "steps_per_epoch": 620,
+      "peak_reserved_gib": 1.2109375
+    },
+    "GF2_K2L": {
+      "median_step_seconds": 0.1578276499999447,
+      "steps_per_epoch": 620,
+      "peak_reserved_gib": 1.546875
+    },
+    "WV3_FT0": {
+      "median_step_seconds": 0.25020165000000816,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 0.611328125
+    },
+    "WV3_K1": {
+      "median_step_seconds": 0.19588800000019546,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 0.6796875
+    },
+    "WV3_K2": {
+      "median_step_seconds": 0.20906735000016852,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 1.63671875
+    },
+    "WV3_K3": {
+      "median_step_seconds": 0.20513194999989537,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 1.30078125
+    },
+    "WV3_K2L": {
+      "median_step_seconds": 0.20972299999993993,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 1.63671875
+    }
+  },
+  "fingerprint": "524e19f0f5f63c2189d7968ed1bd74d1a0e09edba30570f12b7f94bf2b561424"
+}

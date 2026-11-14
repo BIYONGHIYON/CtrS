@@ -3,8 +3,8 @@
   "research_track": "performance",
   "experimenter": "이병현",
   "title": "학습된 C2MS 가중치의 저랭크·depthwise 분해와 짧은 미세조정",
-  "status": "계획",
-  "improvement": "판단 보류",
+  "status": "평가 완료",
+  "improvement": "개선",
   "registered": "2026-11-14",
   "hypothesis": "65 C2MS_L1S의 원래 해상도 backbone을 랭크 32 병목으로, W2 가지를 1x1·depthwise 3x3·1x1(CP 랭크 384 또는 256)로 분해한 뒤 65 손실로 짧게 미세조정하면, 연산 51-86%에서 65번과 같은 validation 정확도를 회복하고, 사영(K10)을 붙여 같은 시드 C2MS보다 RR 세 지표가 좋아진다.",
   "evidence": {
@@ -222,5 +222,6 @@
     "GF2": "experiments/performance/65_l1_spectral_loss/provenance/stage3/run_records/data_manifest.json",
     "WV3": "experiments/performance/65_l1_spectral_loss/provenance/stage3/run_records/data_manifest.json"
   },
-  "selection": "minimum original-scale validation MSE including epoch 0 (the factorized model before fine-tuning; for FT0 the 65 weights), earliest exact tie; test never used for selection"
+  "selection": "minimum original-scale validation MSE including epoch 0 (the factorized model before fine-tuning; for FT0 the 65 weights), earliest exact tie; test never used for selection",
+  "result_summary": "validation 관문으로 고른 K2(backbone 랭크 32 + W2 CP 384, 연산 66%, 실사용 파라미터 68%) + 사영이 같은 시드 C2MS 대비 3시드 평균 QB +0.051 dB·SAM −0.100°·ERGAS −0.018, GF2 +0.157 dB·−0.024°·−0.014, WV3 +0.119 dB·−0.085°·−0.015로 세 센서 모두 개선이며 기준 모델 교체 조건을 충족합니다(자동 교체 안 함). 분해 전 65번 + 사영 대비 −0.012에서 −0.034 dB(경량 비열등)입니다. 다만 RTX 3060 Ti에서 K2의 GPU 시간은 depthwise 합성곱 때문에 C2MS보다 31-37% 깁니다(256² 19.1 → 25.0 ms). K3(51%)는 관문에서 탈락했습니다."
 }

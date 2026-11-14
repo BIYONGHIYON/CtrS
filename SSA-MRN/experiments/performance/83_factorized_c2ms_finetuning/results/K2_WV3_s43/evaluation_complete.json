@@ -1,0 +1,377 @@
+{
+  "time_kst": "2026-11-14T15:35:42.820614+09:00",
+  "weights": {
+    "path": "C:\\CtrS-p83\\run\\runs\\WV3_K2_s43\\checkpoints\\best.pt",
+    "sha256": "3bb36a1b9d46659a4a5bb167f01b15e3bd97e2090d53307cc5a540b30795f66d",
+    "best_epoch": 10
+  },
+  "cost": {
+    "parameters": 2083886,
+    "used_parameters": 1893734,
+    "conv_gmac_256": 39.811088384
+  },
+  "validation": {
+    "arm": {
+      "val_mse": 0.0003149804955798907,
+      "val_psnr": 38.113313886854385,
+      "val_sam": 3.432636695807719
+    },
+    "control_C2MS": {
+      "val_mse": 0.0003003559726849884,
+      "val_psnr": 38.14264972651446,
+      "val_sam": 3.503142495023371
+    },
+    "control_65": {
+      "val_mse": 0.0003135147077547643,
+      "val_psnr": 38.139173864435264,
+      "val_sam": 3.424155247946082
+    },
+    "delta_psnr_vs_C2MS": -0.029335839660078022,
+    "delta_sam_vs_C2MS": -0.07050579921565214,
+    "delta_psnr_vs_65": -0.02585997758087899,
+    "delta_sam_vs_65": 0.008481447861636848,
+    "epoch0": {
+      "epoch": 0,
+      "train_mse": null,
+      "val_mse": 0.0003661684768242882,
+      "val_psnr": 37.2084864086575,
+      "val_sam": 3.801482029721091,
+      "coarse_val_mse": 0.00014087855952684108,
+      "coarse_val_psnr": 40.97030384628861,
+      "coarse_val_sam": 2.407110500144672
+    }
+  },
+  "targets": {
+    "WV3": {
+      "judgement": {
+        "official_arm_P_vs_C2MS": {
+          "delta_RR": {
+            "SAM": -0.07126665295111101,
+            "ERGAS": -0.004901246939128967,
+            "PSNR": 0.0807483370155424,
+            "SCC": -0.000623498600242689,
+            "Q2n": 0.012505746980688848
+          },
+          "delta_FR_reference": {
+            "D_lambda": -0.00014512876994254853,
+            "D_s": -0.0001955008005618819,
+            "QNR": 0.0002942562884546973
+          },
+          "rr_components_improved": {
+            "PSNR": true,
+            "SAM": true,
+            "ERGAS": true
+          },
+          "noise_threshold": 0.06,
+          "above_noise": true,
+          "label": "개선"
+        },
+        "arm_vs_C2MS": {
+          "delta_RR": {
+            "SAM": -0.05790066874895183,
+            "ERGAS": 0.017679804294786106,
+            "PSNR": -0.012566314957275893,
+            "SCC": -0.0009455760811213354,
+            "Q2n": 0.010048852145117748
+          },
+          "delta_FR_reference": {
+            "D_lambda": -0.005184239722366382,
+            "D_s": -0.0023214155168976187,
+            "QNR": 0.007485421193026753
+          },
+          "rr_components_improved": {
+            "PSNR": false,
+            "SAM": true,
+            "ERGAS": false
+          },
+          "noise_threshold": 0.06,
+          "above_noise": false,
+          "label": "부분 개선"
+        },
+        "arm_P_vs_C2MS_P": {
+          "delta_RR": {
+            "SAM": -0.05122580888869299,
+            "ERGAS": 0.013096021425845095,
+            "PSNR": 0.0007304101078347003,
+            "SCC": -0.0008623994773480081,
+            "Q2n": 0.009961962948782488
+          },
+          "delta_FR_reference": {
+            "D_lambda": -0.0070351853514746265,
+            "D_s": -0.01278274981718168,
+            "QNR": 0.01923876341634234
+          },
+          "rr_components_improved": {
+            "PSNR": true,
+            "SAM": true,
+            "ERGAS": false
+          },
+          "noise_threshold": 0.06,
+          "above_noise": false,
+          "label": "부분 개선"
+        },
+        "vs_65_raw": {
+          "delta_RR": {
+            "SAM": 0.006090979876883562,
+            "ERGAS": 0.0037687680299276494,
+            "PSNR": -0.01833424203438483,
+            "SCC": -6.300342491194488e-05,
+            "Q2n": -0.0006784177873410124
+          },
+          "delta_FR_reference": {
+            "D_lambda": 0.0002588003186428066,
+            "D_s": 0.0009972336473924592,
+            "QNR": -0.001230648871407447
+          },
+          "rr_components_improved": {
+            "PSNR": false,
+            "SAM": false,
+            "ERGAS": false
+          },
+          "noise_threshold": 0.06,
+          "above_noise": false,
+          "label": "개선 없음"
+        },
+        "vs_65_P": {
+          "delta_RR": {
+            "SAM": 0.00539258169224377,
+            "ERGAS": 0.003181834904095293,
+            "PSNR": -0.01568102934794524,
+            "SCC": -5.632907475505711e-05,
+            "Q2n": -0.0006166455801830395
+          },
+          "delta_FR_reference": {
+            "D_lambda": -8.418445183133033e-06,
+            "D_s": -6.345228344521725e-06,
+            "QNR": 1.4501768408892168e-05
+          },
+          "rr_components_improved": {
+            "PSNR": false,
+            "SAM": false,
+            "ERGAS": false
+          },
+          "noise_threshold": 0.06,
+          "above_noise": false,
+          "label": "개선 없음"
+        },
+        "reference_65_P_vs_C2MS": {
+          "delta_RR": {
+            "SAM": -0.07665923464335478,
+            "ERGAS": -0.00808308184322426,
+            "PSNR": 0.09642936636348765,
+            "SCC": -0.0005671695254876319,
+            "Q2n": 0.013122392560871887
+          },
+          "delta_FR_reference": {
+            "D_lambda": -0.0001367103247594155,
+            "D_s": -0.00018915557221736018,
+            "QNR": 0.00027975452004580514
+          },
+          "rr_components_improved": {
+            "PSNR": true,
+            "SAM": true,
+            "ERGAS": true
+          },
+          "noise_threshold": 0.06,
+          "above_noise": true,
+          "label": "개선"
+        },
+        "reference_arm_vs_original": {
+          "delta_RR": {
+            "SAM": -0.47572632983345464,
+            "ERGAS": -0.29820827507984937,
+            "PSNR": 1.020906830957145,
+            "SCC": 0.005938799482379298,
+            "Q2n": 0.02601210352042982
+          },
+          "delta_FR_reference": {
+            "D_lambda": -0.001325340554140849,
+            "D_s": -0.00858918865551946,
+            "QNR": 0.009753270338757725
+          },
+          "rr_components_improved": {
+            "PSNR": true,
+            "SAM": true,
+            "ERGAS": true
+          },
+          "noise_threshold": 0.06,
+          "above_noise": true,
+          "label": "개선"
+        }
+      },
+      "retention": {
+        "c2ms_gain_dB": 1.0334731459144209,
+        "arm_share": 0.9878406952256538,
+        "arm_P_share": 1.0781329803631192
+      },
+      "timing": null,
+      "transfer": false
+    },
+    "WV2": {
+      "judgement": {
+        "official_arm_P_vs_C2MS": {
+          "delta_RR": {
+            "SAM": -0.32567497204383766,
+            "ERGAS": -0.11605161348357917,
+            "PSNR": 0.24324074138698748,
+            "SCC": 0.006226559772937623,
+            "Q2n": 0.010348178622993975
+          },
+          "delta_FR_reference": {
+            "D_lambda": -0.0166425988867668,
+            "D_s": -0.023146225763771823,
+            "QNR": 0.03795861042543436
+          },
+          "rr_components_improved": {
+            "PSNR": true,
+            "SAM": true,
+            "ERGAS": true
+          },
+          "noise_threshold": 0.06,
+          "above_noise": true,
+          "label": "개선"
+        },
+        "arm_vs_C2MS": {
+          "delta_RR": {
+            "SAM": -0.07046199017608945,
+            "ERGAS": 0.09363494089928626,
+            "PSNR": -0.1967840513946406,
+            "SCC": 0.005304899855094636,
+            "Q2n": -0.0030196190247985255
+          },
+          "delta_FR_reference": {
+            "D_lambda": -0.021203878409073586,
+            "D_s": -0.04279228517048143,
+            "QNR": 0.061449550970655076
+          },
+          "rr_components_improved": {
+            "PSNR": false,
+            "SAM": true,
+            "ERGAS": false
+          },
+          "noise_threshold": 0.06,
+          "above_noise": false,
+          "label": "부분 개선"
+        },
+        "arm_P_vs_C2MS_P": {
+          "delta_RR": {
+            "SAM": -0.18417903445225026,
+            "ERGAS": -0.04046345327761891,
+            "PSNR": 0.09516108822539948,
+            "SCC": 0.0037999019446047777,
+            "Q2n": 0.004866303418188389
+          },
+          "delta_FR_reference": {
+            "D_lambda": -0.018011037754885488,
+            "D_s": -0.03498540488628437,
+            "QNR": 0.05046578926089029
+          },
+          "rr_components_improved": {
+            "PSNR": true,
+            "SAM": true,
+            "ERGAS": true
+          },
+          "noise_threshold": 0.06,
+          "above_noise": true,
+          "label": "개선"
+        },
+        "vs_65_raw": {
+          "delta_RR": {
+            "SAM": 0.030016326356389733,
+            "ERGAS": 0.023780399871796476,
+            "PSNR": -0.037870217465219014,
+            "SCC": -0.0003662407024980219,
+            "Q2n": -0.0005877224088702837
+          },
+          "delta_FR_reference": {
+            "D_lambda": 0.002065548739548645,
+            "D_s": 0.0013292918445636306,
+            "QNR": -0.0033122897263927475
+          },
+          "rr_components_improved": {
+            "PSNR": false,
+            "SAM": false,
+            "ERGAS": false
+          },
+          "noise_threshold": 0.06,
+          "above_noise": false,
+          "label": "개선 없음"
+        },
+        "vs_65_P": {
+          "delta_RR": {
+            "SAM": 0.039349540412990436,
+            "ERGAS": 0.017329723425423715,
+            "PSNR": -0.025833573036887714,
+            "SCC": -0.00039330733785947203,
+            "Q2n": -0.0008001729101989596
+          },
+          "delta_FR_reference": {
+            "D_lambda": 0.00010165257912130021,
+            "D_s": -0.0011428063268553168,
+            "QNR": 0.0010063709582676106
+          },
+          "rr_components_improved": {
+            "PSNR": false,
+            "SAM": false,
+            "ERGAS": false
+          },
+          "noise_threshold": 0.06,
+          "above_noise": false,
+          "label": "개선 없음"
+        },
+        "reference_65_P_vs_C2MS": {
+          "delta_RR": {
+            "SAM": -0.3650245124568281,
+            "ERGAS": -0.1333813369090029,
+            "PSNR": 0.2690743144238752,
+            "SCC": 0.006619867110797095,
+            "Q2n": 0.011148351533192935
+          },
+          "delta_FR_reference": {
+            "D_lambda": -0.0167442514658881,
+            "D_s": -0.022003419436916506,
+            "QNR": 0.03695223946716675
+          },
+          "rr_components_improved": {
+            "PSNR": true,
+            "SAM": true,
+            "ERGAS": true
+          },
+          "noise_threshold": 0.06,
+          "above_noise": true,
+          "label": "개선"
+        },
+        "reference_arm_vs_original": {
+          "delta_RR": {
+            "SAM": -0.2774311256792217,
+            "ERGAS": -0.12326776846347176,
+            "PSNR": 0.2685013948239643,
+            "SCC": 0.015844900076627755,
+            "Q2n": 0.00734961188449379
+          },
+          "delta_FR_reference": {
+            "D_lambda": -0.003701323938521805,
+            "D_s": -0.0208461529018066,
+            "QNR": 0.023822948276971512
+          },
+          "rr_components_improved": {
+            "PSNR": true,
+            "SAM": true,
+            "ERGAS": true
+          },
+          "noise_threshold": 0.06,
+          "above_noise": true,
+          "label": "개선"
+        }
+      },
+      "retention": {
+        "c2ms_gain_dB": 0.4652854462186049,
+        "arm_share": 0.5770681137914088,
+        "arm_P_share": 1.5227774549232425
+      },
+      "timing": null,
+      "transfer": true
+    }
+  },
+  "scope": "full 20-scene RR (judgement on the training sensor) and FR QNR (reference); WV2 transfer reference only; v2.4; per seed; K10 projection; no automatic baseline promotion"
+}
