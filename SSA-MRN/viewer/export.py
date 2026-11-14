@@ -7,13 +7,14 @@ thumbs.jpg, one row of ground-truth thumbnails for the scene picker.
 
 A model is either
 - built from code: "module" (path below SSA-MRN), "factory" and "args" ("{bands}" is replaced by the band count) and one
-  "checkpoints" entry per dataset (torch file with the state dict under "state_key", default "model"); inputs are
+  "checkpoints" entry per dataset (torch file with the state dict under "state_key", default "model"; "{dataset}" in args is replaced by the
+  dataset id and "kwargs_by_dataset" adds keyword arguments for one dataset); inputs are
   (pan, lms, ms) divided by the dataset "scale" and the output is multiplied back, or
 - given as precomputed predictions: "predictions": {"<dataset>": "<h5 path>"} with dataset "pred" of shape (N, C, H, W) in DN.
 Datasets without an entry for a model are skipped for that model. Existing results of models that are not exported
 again are kept in index.json.
 
-Usage: python SSA-MRN/viewer/export.py [--models ssa_mrn c2ms] [--datasets QB GF2] [--device mps|cuda|cpu]
+Usage: python SSA-MRN/viewer/export.py [--models ssa_mrn c2ms_sp c2ms_sp_lite] [--datasets QB GF2] [--device mps|cuda|cpu]
 """
 import argparse, hashlib, importlib.util, json, sys, time
 from pathlib import Path
@@ -61,8 +62,9 @@ def thumbnails(path, scenes, bands):
 def build(model, dataset, device):
     spec = importlib.util.spec_from_file_location(f'viewer_{model["id"]}', ROOT / model['module'])
     module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
-    args = [dataset['bands'] if a == '{bands}' else a for a in model.get('args', [])]
-    net = getattr(module, model['factory'])(*args, **model.get('kwargs', {}))
+    args = [dataset['bands'] if a == '{bands}' else dataset['id'] if a == '{dataset}' else a for a in model.get('args', [])]
+    kwargs = {**model.get('kwargs', {}), **model.get('kwargs_by_dataset', {}).get(dataset['id'], {})}
+    net = getattr(module, model['factory'])(*args, **kwargs)
     path = ROOT / model['checkpoints'][dataset['id']]
     ck = torch.load(path, map_location='cpu', weights_only=False)
     state = ck[model.get('state_key', 'model')] if isinstance(ck, dict) and model.get('state_key', 'model') in ck else ck
@@ -134,7 +136,7 @@ def main():
             mean = {k: float(np.mean([r[k] for r in rows])) for k in METRICS}
             entry['results'][model['id']] = dict(scene_metrics=rows, mean=mean, clipped_values=clipped, device=a.device, **info)
             print(f'{ds["id"]} {model["id"]}: PSNR {mean["PSNR"]:.4f} SAM {mean["SAM"]:.4f} ERGAS {mean["ERGAS"]:.4f} ({time.time() - t:.0f}s, clipped {clipped})', flush=True)
-    models = [{k: v for k, v in m.items() if k not in ('module', 'factory', 'args', 'kwargs', 'state_key')} for m in reg['models']]
+    models = [{k: v for k, v in m.items() if k not in ('module', 'factory', 'args', 'kwargs', 'kwargs_by_dataset', 'state_key')} for m in reg['models']]
     index = dict(generated=time.strftime('%Y-%m-%d %H:%M'), storage=dict(dtype='int16 little endian', layout='CHW', factor=FACTOR),
                  metrics=dict(source='common/metrics.rr_metrics, float predictions', psnr_peak=2047), datasets=datasets, models=models)
     index_path.parent.mkdir(parents=True, exist_ok=True)
