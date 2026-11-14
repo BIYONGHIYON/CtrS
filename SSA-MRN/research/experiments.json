@@ -2861,5 +2861,22 @@
       "variants_keep_projection": "P32, K20, K10, K5 모두 유지",
       "baseline_replacement_condition": "충족 (자동 교체 안 함)"
     }
+  },
+  "performance/83_factorized_c2ms_finetuning": {
+    "report": "experiments/performance/83_factorized_c2ms_finetuning/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "experiment": 83,
+    "display_name": "83. 학습된 C2MS 가중치의 저랭크·depthwise 분해와 짧은 미세조정",
+    "status": "계획",
+    "improvement": "판단 보류",
+    "evaluated_seeds": [],
+    "retraining": true,
+    "limits": "65번 C2MS_L1S 가중치의 backbone을 랭크 32 병목으로, W2를 1×1·depthwise·1×1(CP 랭크 384·256)로 분해하고 65번 손실로 10에폭 미세조정한 뒤 사영(K10)을 붙여 같은 시드 C2MS와 비교할 계획입니다(연산 51-86%). 1단계 QB·WV3 seed 42 다섯 갈래, validation 관문, 2단계 QB·GF2·WV3 3시드. 아직 학습하지 않았습니다.",
+    "config": "experiments/performance/83_factorized_c2ms_finetuning/config.json",
+    "entrypoint": "experiments/performance/83_factorized_c2ms_finetuning/run.py",
+    "results": "experiments/performance/83_factorized_c2ms_finetuning/results",
+    "manifest": "experiments/performance/83_factorized_c2ms_finetuning/manifest.json"
   }
 }
