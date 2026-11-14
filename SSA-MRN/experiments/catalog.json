@@ -2221,5 +2221,22 @@
     "entrypoint": "experiments/performance/83_factorized_c2ms_finetuning/run.py",
     "results": "experiments/performance/83_factorized_c2ms_finetuning/results",
     "manifest": "experiments/performance/83_factorized_c2ms_finetuning/manifest.json"
+  },
+  "performance/82_cross_sensor_band_calibration": {
+    "report": "experiments/performance/82_cross_sensor_band_calibration/README.md",
+    "research_track": "performance",
+    "experimenter": "이병현",
+    "sensor": "WV3→WV2, QB→GF2, GF2→QB (transfer)",
+    "experiment": 82,
+    "display_name": "82. 미학습 센서 적용 시 밴드별 센서 보정",
+    "status": "계획",
+    "improvement": "성능 비교 아님",
+    "evaluated_seeds": [],
+    "retraining": false,
+    "limits": "학습하지 않은 센서에 모델을 쓸 때 입력 MS의 밴드마다 배율 하나를 곱해 학습 센서의 밴드 평균 ÷ PAN 평균 비율에 맞추고 출력을 되돌린 뒤 사영(K10)을 붙일 계획입니다. 사전 진단(test 사후, 3시드)에서 WV3→WV2 65번 + 사영 29.58 → 32.35 dB, C2MS 29.41 → 32.25 dB였습니다. 같은 센서에는 적용하지 않습니다. 아직 정식 평가하지 않았습니다.",
+    "config": "experiments/performance/82_cross_sensor_band_calibration/config.json",
+    "entrypoint": "experiments/performance/82_cross_sensor_band_calibration/evaluate.py",
+    "results": "experiments/performance/82_cross_sensor_band_calibration/results",
+    "manifest": "experiments/performance/82_cross_sensor_band_calibration/manifest.json"
   }
 }
