@@ -71,6 +71,20 @@
 - 학습·평가·예시 선택 기준은 유지하고 실제 확인한 결과만 작성합니다. validation 선택을 test 결과로 바꾸지 않습니다. README의 8개 절·최신순 표·합니다체를 계속 사용합니다.
 - 큰 폴더 이동은 별도 checkout에서 수행합니다. 실행 중 checkout은 pull·이동·덮어쓰기하지 않습니다. 기존 runtime을 새 코드로 재개하지 않으며 새 실행은 별도 runtime을 사용합니다.
 
+## 다른 팬샤프닝 모델 평가
+
+- 다른 연구의 팬샤프닝 모델을 우리 환경에서 학습·평가한 결과는 `SSA-MRN/benchmarks/<모델>/` 한 곳에 모읍니다. 폴더 이름은 소문자 snake_case 모델 이름(`adwm`, `cannet`, `u2net_pakan`)이며 번호·평가자·서버·날짜·센서를 붙이지 않습니다. 같은 모델의 다른 설정·센서·시드는 같은 폴더에서 설정 이름으로 구분합니다. 우리 모델의 개선 실험(`experiments/`, `research/`)과 섞지 않습니다.
+- 시작 전에 최신 main, 열린 PR, `SSA-MRN/benchmarks/catalog.json`에서 같은 모델을 다른 팀원이 맡았는지 확인합니다. 맡은 사람이 없으면 catalog와 [평가 표](SSA-MRN/benchmarks/README.md#models)에 실제 평가자(`evaluator`)와 계획 상태로 먼저 등록합니다. 이미 있는 모델은 새 폴더를 만들지 않고 해당 평가자와 협의해 같은 폴더에 설정·센서·시드를 추가합니다. 커밋·PR 생성·PR 업데이트 직전에 다시 확인합니다.
+- 폴더에는 `README.md`(`SSA-MRN/docs/benchmark_template.md` 8절), `config.json`, 어댑터 `model.py`, 우리 데이터로 학습할 때의 `train.py`, `upstream/`, `checkpoints/`, `results/`, `provenance/`, `manifest.json`만 둡니다. `config.json`에는 논문 서지·URL, 공식 코드 URL·고정 커밋·라이선스, 저자 가중치 URL·SHA-256·재배포 가능 여부, 설정별 손실·에폭·배치·옵티마이저·학습률·가중치 선택 기준, 정규화, 센서, 시드, 후처리를 적습니다.
+- 공식 코드는 고정 커밋의 Git 하위 모듈 `SSA-MRN/benchmarks/<모델>/upstream/`으로 연결하고 수정하지 않습니다. 고쳐야 하면 어댑터에서 감싸고, 불가피한 수정은 `provenance/upstream.diff`로 남깁니다. 하위 모듈로 연결할 수 없는 코드(압축 파일 배포 등)는 라이선스가 재배포를 허용할 때만 `provenance/`에 snapshot으로 넣고, 허용하지 않거나 라이선스가 없으면 URL·버전·SHA-256만 기록합니다.
+- 어댑터 `model.py`는 `build(bands, sensor, setting, seed)`로 `forward(pan, lms, ms)` 네트워크를 돌려줍니다. 입력·출력은 DN을 정규화 값으로 나눈 값입니다. 공식 코드의 입력 순서·패딩·정규화 차이는 어댑터에서 맞추고, 저장 형식이 다른 가중치는 `load(net, path)`로 읽습니다.
+- 설정 이름은 `author`(저자 배포 가중치를 학습 없이 평가)와 `retrain`(공식 코드·논문 설정으로 우리 학습 데이터에서 학습)을 씁니다. `retrain`의 에폭은 논문이나 공식 코드에 공개된 값을 쓰고, 공개되지 않았으면 C2MS-SP와 같은 150에폭으로 학습합니다. 에폭과 그 출처를 config와 보고서에 적습니다. 그 밖의 조건이 C2MS-SP와 다른 점도 보고서에 표로 적습니다.
+- 공정 비교를 위해 PanCollection의 같은 학습·validation·test 분할, test RR·FR 각 20장 전체, 같은 정규화(QB·WV3·WV2 2047, GF2 1023)를 쓰고 `SSA-MRN/common/benchmark_evaluate.py`(`common/metrics`)로 평가합니다. 우리가 학습하는 설정은 3시드(42·43·44)로 하고 가중치는 validation으로만 고릅니다. test를 보고 에폭·설정·장면을 고르지 않습니다. 축척 혼합·관측 일치 사영·밴드별 센서 보정 같은 우리 방법은 다른 모델에 붙이지 않습니다. 붙여 본 결과는 별도 참고로만 적습니다. 자기 앙상블·TTA를 쓰면 쓰지 않은 결과도 함께 적습니다. WV2는 WV3 가중치 전이로 참고만 보고합니다.
+- 우리가 학습한 `best.pt`는 `checkpoints/<설정>_<센서>_s<시드>/best.pt`로 Git에 넣고, `latest.pt`·`initial.pt`는 `python SSA-MRN/common/release_weights.py SSA-MRN/benchmarks/<모델>`로 Release `weights-benchmarks-<모델>`에 올립니다. 저자 배포 가중치는 라이선스가 재배포를 허용할 때만 `checkpoints/author_<센서>/best.pt`에 넣고, 아니면 받은 주소와 SHA-256만 config에 적습니다. 데이터·예측 배열·상세 로그·캐시는 올리지 않습니다.
+- 결과는 `results/<설정>_<센서>_s<시드>/metrics.json`(장면별 RR·FR, 가중치·데이터 해시), 학습 시 `history.json`과 `results/learning.png`, `results/summary.json`(`--summary`, 시드 평균과 같은 시드 C2MS-SP와의 차이), `results/images/`(`--figures`, 고정 6장면 두 형식, C2MS-SP · 해당 모델)로 보관합니다. `--limit`으로 만든 `metrics_smoke.json`은 결과로 쓰지 않습니다.
+- 다른 모델 평가에는 판정(개선 여부, C2MS-SP 대비 우열)을 붙이지 않습니다. RR test 지표의 시드 평균·시드별 값과 같은 시드 C2MS-SP와의 차이를 숫자로만 보고합니다. 논문 보고값과 재현값이 다르면 원인 후보를 적되 숫자를 보정하지 않습니다. 다른 모델 결과로 기준 모델을 교체하지 않으며, 가져올 아이디어는 성능 개선 연구의 새 실험으로 등록합니다.
+- 평가를 추가하거나 상태를 바꾸면 모델 보고서, `SSA-MRN/benchmarks/README.md` 평가 표(최근 등록 순, 첫 열 `보고서 링크<br>[평가자]`), `catalog.json`, `manifest.json`을 함께 갱신하고 `python SSA-MRN/common/verify.py --benchmark <모델>`(Release까지는 `--releases`)로 확인합니다. 루트 README의 "다른 팬샤프닝 모델과 비교" 표에는 3시드 평가가 끝난 결과만 `모델 (Ours 환경 재현)` 행으로 넣고 모델 보고서로 연결합니다. 논문 보고값 행과 구분하며, 같은 모델의 논문 행은 지우지 않습니다. 결과 비교 사이트에 넣을 때는 `SSA-MRN/viewer/registry.json`에 어댑터를 등록하고 예측 배열은 배포 저장소에만 둡니다.
+
 ## 신규 계열별 실험 보관
 
 - 사용자 지시에 따라 신규 실험은 `SSA-MRN/experiments/<ssai|variable_scale|performance>/<계열 내 번호>_<변경명>/`에 모읍니다. 각 계열은 독립적으로1부터 증가하며 기존 단일번호 실험과 서버 runtime은 이동하지 않습니다. 보고서·catalog·manifest는 계열과번호를 함께 표시합니다. 새 결과는 `experiments/catalog.json`과 기존 연구목록의 참조를 함께 갱신하며 번호가 겹치는 검증은 `--research-track`을 명시합니다.

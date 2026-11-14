@@ -77,6 +77,13 @@
 - 학습·평가·예시 선택 기준은 유지하고 실제 확인한 결과만 작성합니다. validation 선택을 test 결과로 바꾸지 않습니다. README의 8개 절·최신순 표·합니다체를 계속 사용합니다.
 - 큰 폴더 이동은 별도 checkout에서 수행합니다. 실행 중 checkout은 pull·이동·덮어쓰기하지 않습니다. 기존 runtime을 새 코드로 재개하지 않으며 새 실행은 별도 runtime을 사용합니다.
 
+## 다른 팬샤프닝 모델 평가
+
+- 다른 연구의 모델을 우리 환경에서 학습·평가한 결과는 `benchmarks/<소문자 snake_case 모델 이름>/`에 모은다. 세부 규칙은 [공통 규칙](../AGENTS.md#다른-팬샤프닝-모델-평가)과 [평가 안내](benchmarks/README.md)를 따른다.
+- 같은 분할·test 20장 전체·같은 정규화로 `common/benchmark_evaluate.py`를 써서 평가하고, 우리가 학습하는 설정(`retrain`)은 3시드·validation 선택으로 한다. 에폭은 논문·공식 코드에 공개된 값을 쓰고, 공개되지 않았으면 C2MS-SP와 같은 150에폭으로 한다. 우리 방법(축척 혼합·사영·밴드 보정)은 다른 모델에 붙이지 않는다.
+- 판정(개선 여부, C2MS-SP 대비 우열)은 붙이지 않고 같은 시드 C2MS-SP와의 RR 차이를 숫자로만 보고한다. 다른 모델 결과로 기준 모델을 바꾸지 않는다.
+- 공식 코드는 고정 커밋 하위 모듈로 연결하고 수정하지 않는다. 저자 가중치·코드 snapshot은 라이선스가 재배포를 허용할 때만 넣는다. 우리 학습 best는 Git, latest·initial은 Release `weights-benchmarks-<모델>`에 둔다.
+
 ## 신규 계열별 실험 보관
 
 - 사용자 지시에 따라 신규 실험은 `SSA-MRN/experiments/<ssai|variable_scale|performance>/<계열 내 번호>_<변경명>/`에 모읍니다. 각 계열은 독립적으로1부터 증가하며 기존 단일번호 실험과 서버 runtime은 이동하지 않습니다. 보고서·catalog·manifest는 계열과번호를 함께 표시합니다. 새 결과는 `experiments/catalog.json`과 기존 연구목록의 참조를 함께 갱신하며 번호가 겹치는 검증은 `--research-track`을 명시합니다.

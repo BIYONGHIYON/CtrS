@@ -1,0 +1,24 @@
+{
+  "description": "다른 팬샤프닝 모델을 우리 환경에서 학습·평가한 목록입니다. 키는 benchmarks/ 아래 폴더 이름입니다. 등록·상태 변경 시 benchmarks/README.md 평가 표와 함께 갱신합니다.",
+  "fields": {
+    "display_name": "표시 이름 (논문의 모델 이름)",
+    "paper": "논문 서지 정보와 DOI·URL",
+    "code": "공식 코드 URL",
+    "commit": "평가에 쓴 공식 코드 커밋 (upstream 하위 모듈과 같아야 함)",
+    "license": "공식 코드·저자 가중치 라이선스, 재배포 가능 여부",
+    "evaluator": "실제 평가자 (확인되지 않으면 확인 필요)",
+    "settings": "평가한 설정: author / retrain",
+    "epochs": "retrain 학습 에폭과 출처 (논문 / 공식 코드 / 미공개라 C2MS-SP와 같은 150)",
+    "sensors": "평가한 센서 (WV2는 WV3 가중치 전이, 참고)",
+    "seeds": "설정별 평가 시드",
+    "status": "계획 / 학습 중 / 학습 완료·평가 대기 / 학습 완료·일부 평가 / 평가 완료",
+    "vs_c2ms_sp": "설정·센서별 같은 시드 C2MS-SP와의 RR 평균 차이 (숫자만, 판정 없음)",
+    "paper_reported": "논문 보고값 (QB RR PSNR·SAM·ERGAS·Q4, 출처)",
+    "report": "보고서 경로",
+    "config": "config.json 경로",
+    "summary": "results/summary.json 경로",
+    "manifest": "manifest.json 경로",
+    "last_checked": "마지막 확인 시각 (KST, ISO 8601)"
+  },
+  "models": {}
+}

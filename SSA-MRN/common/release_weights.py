@@ -1,13 +1,14 @@
 """Upload an experiment's resume and initial weights (latest.pt, initial.pt) to its GitHub Release and record them in manifest.json.
 
 Git keeps best.pt only; latest.pt and initial.pt are ignored by .gitignore and kept as Release assets:
-  release   weights-<experiments|research>-<track>-<number>, pointing at the empty weights-anchor commit
+  release   weights-<experiments|research>-<track>-<number> (other models: weights-benchmarks-<model>), pointing at the empty weights-anchor commit
   asset     the path inside the experiment folder with '/' replaced by '__'
   manifest  release_assets[path] = release, asset, url, bytes, sha256 (the entry is removed from files)
 Existing assets with the same name are kept and must have the same sha256. Every upload is checked against the sha256
 GitHub reports for the asset. Requires the GitHub CLI (gh) logged in with write access.
 
 python SSA-MRN/common/release_weights.py SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training
+python SSA-MRN/common/release_weights.py SSA-MRN/benchmarks/adwm
 python SSA-MRN/common/release_weights.py <folder> --dry-run
 """
 import argparse
@@ -23,6 +24,7 @@ ANCHOR = 'weights-anchor'
 URL = 'https://github.com/{}/releases/download/{}/{}'
 WEIGHTS = re.compile(r'(^|/)([^/]*latest\.pt|initial\.pt)$')
 FOLDER = re.compile(r'(?:^|/)SSA-MRN/(experiments|research)/([^/]+)/(\d+)_[^/]+$')
+BENCHMARK = re.compile(r'(?:^|/)SSA-MRN/benchmarks/([a-z0-9][a-z0-9_]*)$')
 
 
 def digest(path):
@@ -42,12 +44,13 @@ def assets(tag):
 
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument('folder', type=Path, help='experiment folder, e.g. SSA-MRN/experiments/performance/54_...')
+    p.add_argument('folder', type=Path, help='experiment folder (SSA-MRN/experiments/performance/54_...) or other-model folder (SSA-MRN/benchmarks/<model>)')
     p.add_argument('--dry-run', action='store_true', help='list what would be uploaded without changing anything')
     a = p.parse_args()
-    folder = a.folder.resolve(); m = FOLDER.search(folder.as_posix())
-    if not m: p.error('not an experiment folder: SSA-MRN/<experiments|research>/<track>/<number>_<name>')
-    tag = 'weights-{}-{}-{}'.format(*m.groups())
+    folder = a.folder.resolve(); m = FOLDER.search(folder.as_posix()); b = BENCHMARK.search(folder.as_posix())
+    if not m and not b: p.error('not an experiment folder: SSA-MRN/<experiments|research>/<track>/<number>_<name> or SSA-MRN/benchmarks/<model>')
+    tag = 'weights-{}-{}-{}'.format(*m.groups()) if m else f'weights-benchmarks-{b.group(1)}'
+    repo_root = next(q for q in folder.parents if q.name == 'SSA-MRN').parent
     files = sorted(f for f in folder.rglob('*.pt') if f.is_file() and WEIGHTS.search(f.relative_to(folder).as_posix()))
     if not files: print('no latest.pt / initial.pt in', folder); return
     local = {f.relative_to(folder).as_posix(): dict(file=f, bytes=f.stat().st_size, sha256=digest(f)) for f in files}
@@ -56,7 +59,7 @@ def main():
     if not json.loads(gh('release', 'list', '-R', REPO, '--limit', '1000', '--json', 'tagName', '-q', f'[.[]|select(.tagName=="{tag}")]')):
         anchor = json.loads(gh('api', f'repos/{REPO}/git/ref/tags/{ANCHOR}'))['object']['sha']
         gh('release', 'create', tag, '-R', REPO, '--target', anchor, '--title', tag,
-           '--notes', f'`{folder.relative_to(folder.parents[3]).as_posix()}`의 재개용(latest)·초기(initial) 가중치입니다. 경로·크기·SHA-256은 해당 실험의 manifest.json `release_assets`에 있습니다.')
+           '--notes', f'`{folder.relative_to(repo_root).as_posix()}`의 재개용(latest)·초기(initial) 가중치입니다. 경로·크기·SHA-256은 해당 실험의 manifest.json `release_assets`에 있습니다.')
     have = assets(tag)
     with tempfile.TemporaryDirectory() as stage:
         todo = []

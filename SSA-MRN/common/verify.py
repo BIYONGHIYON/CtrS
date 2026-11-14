@@ -41,6 +41,7 @@ def main():
     p.add_argument('--experiment',default='all',help='Number, numbered folder name, or all')
     p.add_argument('--research-track', choices=('ssai','variable_scale','performance'), help='Disambiguate independent research numbering')
     p.add_argument('--artifact-root',type=Path,help='Verify a new export report_manifest.json')
+    p.add_argument('--benchmark',help='Other-model folder name under benchmarks/, or all (instead of --experiment)')
     p.add_argument('--releases',action='store_true',help='Also download and hash the release assets (latest.pt, initial.pt)')
     a=p.parse_args()
     if a.artifact_root:
@@ -51,6 +52,13 @@ def main():
             path=a.artifact_root/name
             if path.stat().st_size!=e['bytes'] or digest(path)!=e['sha256']:raise ValueError(name)
         print(f'PASS: {len(files)} export hashes');return
+    if a.benchmark:
+        folders=sorted(f for f in (ROOT/'benchmarks').glob('*/') if (f/'manifest.json').is_file() and a.benchmark in ('all',f.name))
+        if not folders:p.error('Unknown benchmark (no benchmarks/<model>/manifest.json)')
+        total=weights=released=0
+        for folder in folders:
+            count,pts,assets=verify(folder,a.releases);total+=count;weights+=pts;released+=assets
+        print(f'PASS: {len(folders)} benchmark models, {total} files, {weights} checkpoints; release assets {released} ({"hashes checked" if a.releases else "listed, use --releases to check"}); hashes only');return
     folders=sorted(list((ROOT/'research').glob('*/[0-9]*_*'))+list((ROOT/'experiments').glob('*/[0-9]*_*')),key=lambda x:(x.parent.name,int(x.name.split('_')[0])))
     if a.research_track:folders=[f for f in folders if f.parent.name==a.research_track]
     if a.experiment!='all':folders=[f for f in folders if a.experiment in (f.name,f.name.split('_',1)[0],f.name.split('_',1)[1])]
