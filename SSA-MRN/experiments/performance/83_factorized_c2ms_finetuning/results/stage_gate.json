@@ -1,0 +1,86 @@
+{
+  "time_kst": "2026-11-14T14:05:02.794674+09:00",
+  "rule": {
+    "basis": "validation only (selected weights vs the same-seed 65 checkpoint the arm started from); test is never used for the gate",
+    "val_psnr_min": -0.04,
+    "val_sam_max": 0.02,
+    "sensors": "every stage-1 sensor (QB and WV3)",
+    "order": [
+      "K3",
+      "K2",
+      "K2L",
+      "K1"
+    ],
+    "note": "the lightest passing arm goes to stage 2; FT0 is a control and is never chosen; if no arm passes, stage 2 is not run"
+  },
+  "validation": {
+    "FT0": {
+      "QB": {
+        "dpsnr_vs_65": 0.007988112241889667,
+        "dsam_vs_65": -0.002893535085340737,
+        "best_epoch": null
+      },
+      "WV3": {
+        "dpsnr_vs_65": 0.022885635164044515,
+        "dsam_vs_65": -0.007298468632574107,
+        "best_epoch": null
+      }
+    },
+    "K1": {
+      "QB": {
+        "dpsnr_vs_65": 0.006295802399243655,
+        "dsam_vs_65": -0.0019059463670059174,
+        "best_epoch": null
+      },
+      "WV3": {
+        "dpsnr_vs_65": 0.015509504742091451,
+        "dsam_vs_65": -0.004637363749269152,
+        "best_epoch": null
+      }
+    },
+    "K2": {
+      "QB": {
+        "dpsnr_vs_65": -0.023470030056209623,
+        "dsam_vs_65": 0.008370315808703843,
+        "best_epoch": null
+      },
+      "WV3": {
+        "dpsnr_vs_65": -0.023012638092041016,
+        "dsam_vs_65": 0.007437370614608696,
+        "best_epoch": null
+      }
+    },
+    "K3": {
+      "QB": {
+        "dpsnr_vs_65": -0.10288224908623533,
+        "dsam_vs_65": 0.03719292042573841,
+        "best_epoch": null
+      },
+      "WV3": {
+        "dpsnr_vs_65": -0.12849056809037052,
+        "dsam_vs_65": 0.04151516474154793,
+        "best_epoch": null
+      }
+    },
+    "K2L": {
+      "QB": {
+        "dpsnr_vs_65": 0.0026926596333680664,
+        "dsam_vs_65": -0.0017351658461253194,
+        "best_epoch": null
+      },
+      "WV3": {
+        "dpsnr_vs_65": 0.0631578975253646,
+        "dsam_vs_65": -0.01755505948378966,
+        "best_epoch": null
+      }
+    }
+  },
+  "passed": {
+    "FT0": true,
+    "K1": true,
+    "K2": true,
+    "K3": false,
+    "K2L": true
+  },
+  "chosen": "K2"
+}
