@@ -1,0 +1,331 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1496" width="1800" height="1496">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#3a3a38"/></marker><marker id="aho" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d4741f"/></marker></defs>
+<rect width="1800" height="1496" fill="#ffffff"/>
+<rect x="20" y="95" width="130" height="58" rx="5" fill="#f2f2f0" stroke="#555" stroke-width="1.6"/>
+<text x="85.0" y="119.875" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">PAN <tspan font-family="'Times New Roman', Times, serif" font-style="italic">P</tspan></text>
+<text x="85.0" y="138.625" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">1×H×W</text>
+<rect x="20" y="300" width="130" height="58" rx="5" fill="#f2f2f0" stroke="#555" stroke-width="1.6"/>
+<text x="85.0" y="324.875" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">LMS</text>
+<text x="85.0" y="343.625" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">C×H×W</text>
+<rect x="20" y="720" width="130" height="58" rx="5" fill="#f2f2f0" stroke="#555" stroke-width="1.6"/>
+<text x="85.0" y="744.875" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">MS</text>
+<text x="85.0" y="763.625" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">C×H/4×W/4</text>
+<text x="85" y="812" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">low-res MS</text>
+<text x="85" y="828" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">(original input)</text>
+<text x="85" y="395" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">MS upsampled ×4</text>
+<rect x="180" y="30" width="1600" height="450" rx="8" fill="none" stroke="#9a9a94" stroke-width="1.4" stroke-dasharray="7 5"/>
+<text x="194" y="56" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#1d1d1b" text-anchor="start">(a) Shallow feature extraction and backbone</text>
+<polyline points="150,124 221,124" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="240" cy="124" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="240" y="129.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">↓4</text>
+<polyline points="257,124 291,124" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="310" cy="124" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="310" y="129.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">↑4</text>
+<polyline points="327,124 350,124" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="350" y="104" width="110" height="40" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="405.0" y="129.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Conv 3×3</text>
+<text x="405.0" y="161" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">1→1</text>
+<polyline points="460,124 480,124" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="480" y="104" width="80" height="40" rx="5" fill="#e6f2e1" stroke="#4f8a3c" stroke-width="1.6"/>
+<text x="520.0" y="129.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">PReLU</text>
+<text x="600" y="114" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#6b6b66" text-anchor="middle">LRPAN</text>
+<polyline points="560,124 640,124 640,251" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="640" cy="270" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="640" y="275.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">©</text>
+<circle cx="200" cy="124" r="3.6" fill="#3a3a38"/>
+<polyline points="200,124 200,270 621,270" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<polyline points="150,329 640,329 640,289" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="175" cy="329" r="3.6" fill="#3a3a38"/>
+<rect x="690" y="250" width="140" height="40" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="760.0" y="275.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Conv 3×3</text>
+<text x="760.0" y="307" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">(C+2)→64</text>
+<polyline points="657,270 690,270" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="856" y="258" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="17" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">F</tspan><tspan font-size='12' dy='4'>0</tspan></text>
+<polyline points="830,270 880,270" fill="none" stroke="#3a3a38" stroke-width="1.6"/>
+<circle cx="880" cy="270" r="3.6" fill="#3a3a38"/>
+<polyline points="880,270 880,170 918,170" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="920" y="148" width="100" height="44" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="970.0" y="175.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">ResBlock</text>
+<polyline points="1020,170 1040,170" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="1040" y="148" width="100" height="44" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="1090.0" y="175.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">ResBlock</text>
+<polyline points="1140,170 1160,170" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="1160" y="148" width="100" height="44" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="1210.0" y="175.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">ResBlock</text>
+<polyline points="1260,170 1280,170" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="1280" y="148" width="100" height="44" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="1330.0" y="175.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">ResBlock</text>
+<text x="1130" y="134" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#6b6b66" text-anchor="middle">Original SSA-MRN backbone: ResBlock ×4 (64 ch, H×W)</text>
+<polyline points="1380,170 1640,170 1640,251" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="895" y="300" width="700" height="140" rx="8" fill="none" stroke="#d4741f" stroke-width="1.4" stroke-dasharray="7 5"/>
+<text x="910" y="322" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#d4741f" text-anchor="start">W2 parallel branch (added to SSA-MRN)</text>
+<polyline points="880,270 880,365 905,365" fill="none" stroke="#d4741f" stroke-width="1.6" marker-end="url(#aho)"/>
+<rect x="905" y="343" width="120" height="44" rx="5" fill="#fde9d6" stroke="#d4741f" stroke-width="1.6"/>
+<text x="965.0" y="369.9" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1d1d1b" text-anchor="middle">PixelUnshuffle</text>
+<text x="965.0" y="404" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">×2 → 256×H/2</text>
+<polyline points="1025,365 1045,365" fill="none" stroke="#d4741f" stroke-width="1.6" marker-end="url(#aho)"/>
+<rect x="1045" y="343" width="105" height="44" rx="5" fill="#fde9d6" stroke="#d4741f" stroke-width="1.6"/>
+<text x="1097.5" y="369.9" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1d1d1b" text-anchor="middle">Conv 1×1</text>
+<text x="1097.5" y="404" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">256→128</text>
+<polyline points="1150,365 1170,365" fill="none" stroke="#d4741f" stroke-width="1.6" marker-end="url(#aho)"/>
+<rect x="1170" y="343" width="150" height="44" rx="5" fill="#fde9d6" stroke="#d4741f" stroke-width="1.6"/>
+<text x="1245.0" y="369.9" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1d1d1b" text-anchor="middle">ResBlock ×8</text>
+<text x="1245.0" y="404" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">128 ch, H/2×W/2</text>
+<polyline points="1320,365 1340,365" fill="none" stroke="#d4741f" stroke-width="1.6" marker-end="url(#aho)"/>
+<rect x="1340" y="343" width="105" height="44" rx="5" fill="#fde9d6" stroke="#d4741f" stroke-width="1.6"/>
+<text x="1392.5" y="369.9" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1d1d1b" text-anchor="middle">Conv 1×1</text>
+<text x="1392.5" y="404" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">128→256, zero-init</text>
+<polyline points="1445,365 1465,365" fill="none" stroke="#d4741f" stroke-width="1.6" marker-end="url(#aho)"/>
+<rect x="1465" y="343" width="115" height="44" rx="5" fill="#fde9d6" stroke="#d4741f" stroke-width="1.6"/>
+<text x="1522.5" y="369.9" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1d1d1b" text-anchor="middle">PixelShuffle</text>
+<text x="1522.5" y="404" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">×2 → 64×H×W</text>
+<polyline points="1580,365 1640,365 1640,289" fill="none" stroke="#d4741f" stroke-width="1.6" marker-end="url(#aho)"/>
+<circle cx="1640" cy="270" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="1640" y="275.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">+</text>
+<polyline points="1657,270 1670,270" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="1670" y="250" width="100" height="40" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="1720.0" y="275.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Conv 3×3</text>
+<text x="1720" y="242" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">64→C</text>
+<polyline points="175,329 175,458 1701,458" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="540" y="451" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">global residual: + LMS</text>
+<polyline points="1720,290 1720,441" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="1720" cy="458" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="1720" y="463.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">+</text>
+<polyline points="1720,475 1720,500 215,500 215,620 298,620" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="960" y="494" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="17" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">R</tspan><tspan font-size='12' dy='4'>1</tspan></text>
+<rect x="180" y="520" width="1080" height="450" rx="8" fill="none" stroke="#9a9a94" stroke-width="1.4" stroke-dasharray="7 5"/>
+<text x="230" y="546" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#1d1d1b" text-anchor="start">(b) Multi-scale band-wise SSAI fusion</text>
+<text x="1250" y="578" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="end" font-style="italic">scale 1 · H×W</text>
+<rect x="300" y="590" width="220" height="60" rx="5" fill="#efe7f6" stroke="#7354a3" stroke-width="1.6"/>
+<text x="410.0" y="615.875" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Band-wise SSAI ×C</text>
+<text x="410.0" y="634.625" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">guide, [<tspan font-family="'Times New Roman', Times, serif" font-style="italic">R</tspan>, MS band <tspan font-family="'Times New Roman', Times, serif" font-style="italic">b</tspan>]</text>
+<text x="360" y="564" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">P</tspan></text>
+<polyline points="360,569 360,589" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="462" y="564" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="normal" fill="#1d1d1b" text-anchor="middle">LMS</text>
+<polyline points="462,569 462,589" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<polyline points="520,620 560,620" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="560" y="600" width="120" height="40" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="620.0" y="625.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Conv 3×3</text>
+<text x="620.0" y="657" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">CK→C</text>
+<polyline points="680,620 705,620" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="705" y="600" width="80" height="40" rx="5" fill="#e6f2e1" stroke="#4f8a3c" stroke-width="1.6"/>
+<text x="745.0" y="625.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">PReLU</text>
+<circle cx="250" cy="620" r="3.6" fill="#3a3a38"/>
+<polyline points="250,620 250,665 840,665 840,638" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<polyline points="785,620 823,620" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="840" cy="620" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="840" y="625.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">+</text>
+<polyline points="857,620 1308,620" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1000" y="612" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="17" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">R′</tspan><tspan font-size='12' dy='4'>1</tspan></text>
+<circle cx="900" cy="620" r="3.6" fill="#3a3a38"/>
+<polyline points="900,620 900,672" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="900" cy="689" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="900" y="694.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">↓2</text>
+<polyline points="883,689 215,689 215,760 298,760" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="560" y="683" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">R</tspan><tspan font-size='12' dy='4'>2</tspan></text>
+<text x="1250" y="718" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="end" font-style="italic">scale 1/2 · H/2×W/2</text>
+<rect x="300" y="730" width="220" height="60" rx="5" fill="#efe7f6" stroke="#7354a3" stroke-width="1.6"/>
+<text x="410.0" y="755.875" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Band-wise SSAI ×C</text>
+<text x="410.0" y="774.625" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">guide, [<tspan font-family="'Times New Roman', Times, serif" font-style="italic">R</tspan>, MS band <tspan font-family="'Times New Roman', Times, serif" font-style="italic">b</tspan>]</text>
+<text x="360" y="704" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="normal" fill="#1d1d1b" text-anchor="middle">↓2(<tspan font-family="'Times New Roman', Times, serif" font-style="italic">P</tspan>)</text>
+<polyline points="360,709 360,729" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="462" y="704" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="normal" fill="#1d1d1b" text-anchor="middle">↑2(MS)</text>
+<polyline points="462,709 462,729" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<polyline points="520,760 560,760" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="560" y="740" width="120" height="40" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="620.0" y="765.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Conv 3×3</text>
+<text x="620.0" y="797" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">CK→C</text>
+<polyline points="680,760 705,760" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="705" y="740" width="80" height="40" rx="5" fill="#e6f2e1" stroke="#4f8a3c" stroke-width="1.6"/>
+<text x="745.0" y="765.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">PReLU</text>
+<circle cx="250" cy="760" r="3.6" fill="#3a3a38"/>
+<polyline points="250,760 250,805 840,805 840,778" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<polyline points="785,760 823,760" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="840" cy="760" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="840" y="765.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">+</text>
+<polyline points="857,760 1308,760" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1000" y="752" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="17" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">R′</tspan><tspan font-size='12' dy='4'>2</tspan></text>
+<circle cx="900" cy="760" r="3.6" fill="#3a3a38"/>
+<polyline points="900,760 900,812" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="900" cy="829" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="900" y="834.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">↓2</text>
+<polyline points="883,829 215,829 215,900 298,900" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="560" y="823" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">R</tspan><tspan font-size='12' dy='4'>3</tspan></text>
+<text x="1250" y="858" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="end" font-style="italic">scale 1/4 · H/4×W/4</text>
+<rect x="300" y="870" width="220" height="60" rx="5" fill="#efe7f6" stroke="#7354a3" stroke-width="1.6"/>
+<text x="410.0" y="895.875" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Band-wise SSAI ×C</text>
+<text x="410.0" y="914.625" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">guide, [<tspan font-family="'Times New Roman', Times, serif" font-style="italic">R</tspan>, MS band <tspan font-family="'Times New Roman', Times, serif" font-style="italic">b</tspan>]</text>
+<text x="360" y="844" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="normal" fill="#1d1d1b" text-anchor="middle">↓4(<tspan font-family="'Times New Roman', Times, serif" font-style="italic">P</tspan>)</text>
+<polyline points="360,849 360,869" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="462" y="844" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="normal" fill="#1d1d1b" text-anchor="middle">MS</text>
+<polyline points="462,849 462,869" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<polyline points="520,900 560,900" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="560" y="880" width="120" height="40" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="620.0" y="905.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Conv 3×3</text>
+<text x="620.0" y="937" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">CK→C</text>
+<polyline points="680,900 705,900" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="705" y="880" width="80" height="40" rx="5" fill="#e6f2e1" stroke="#4f8a3c" stroke-width="1.6"/>
+<text x="745.0" y="905.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">PReLU</text>
+<polyline points="785,900 1308,900" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1000" y="892" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="17" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">F</tspan><tspan font-size='12' dy='4'>3</tspan></text>
+<text x="840" y="948" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">no residual at 1/4</text>
+<rect x="1280" y="520" width="500" height="450" rx="8" fill="none" stroke="#9a9a94" stroke-width="1.4" stroke-dasharray="7 5"/>
+<text x="1294" y="546" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#1d1d1b" text-anchor="start">(c) Progressive reconstruction</text>
+<circle cx="1328" cy="620" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="1328" y="625.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">©</text>
+<polyline points="1345,620 1375,620" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="1375" y="600" width="120" height="40" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="1435.0" y="625.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Conv 3×3</text>
+<text x="1435.0" y="657" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">2C→C</text>
+<circle cx="1328" cy="760" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="1328" y="765.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">©</text>
+<polyline points="1345,760 1375,760" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="1375" y="740" width="120" height="40" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="1435.0" y="765.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Conv 3×3</text>
+<text x="1435.0" y="797" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">2C→C</text>
+<circle cx="1328" cy="900" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="1328" y="905.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">©</text>
+<polyline points="1345,900 1375,900" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="1375" y="880" width="120" height="40" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="1435.0" y="905.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Conv 3×3</text>
+<text x="1435.0" y="937" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">2C→C</text>
+<text x="1292" y="870" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#1d1d1b" text-anchor="middle">MS</text>
+<polyline points="1300,875 1315,887" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<polyline points="1495,900 1560,900 1560,872" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="1560" cy="855" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="1560" y="860.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">↑2</text>
+<polyline points="1560,838 1560,808 1328,808 1328,778" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<polyline points="1495,760 1560,760 1560,732" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="1560" cy="715" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="1560" y="720.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">↑2</text>
+<polyline points="1560,698 1560,668 1328,668 1328,638" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<polyline points="1495,620 1512,620" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1504" y="612" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">Y</tspan></text>
+<rect x="1512" y="593" width="128" height="54" rx="5" fill="#fde9d6" stroke="#d4741f" stroke-width="1.6"/>
+<text x="1576.0" y="615.875" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Projection</text>
+<text x="1576.0" y="634.625" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">obs.-consistent</text>
+<text x="1576" y="570" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#1d1d1b" text-anchor="middle">MS</text>
+<polyline points="1576,575 1576,592" fill="none" stroke="#d4741f" stroke-width="1.6" marker-end="url(#aho)"/>
+<polyline points="1640,620 1660,620" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="1660" y="590" width="110" height="60" rx="5" fill="#f2f2f0" stroke="#555" stroke-width="1.6"/>
+<text x="1715.0" y="615.875" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">HRMS <tspan font-family="'Times New Roman', Times, serif" font-style="italic">Ŷ</tspan></text>
+<text x="1715.0" y="634.625" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">C×H×W</text>
+<text x="1584" y="668" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#d4741f" text-anchor="start">parameter-free, CG ×10</text>
+<text x="1584" y="690" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#1d1d1b" text-anchor="start"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">Ŷ</tspan> = <tspan font-family="'Times New Roman', Times, serif" font-style="italic">Y</tspan> + <tspan font-family="'Times New Roman', Times, serif" font-style="italic">D</tspan><tspan font-size='11' dy='-6'>T</tspan><tspan dy='6'>(</tspan><tspan font-family="'Times New Roman', Times, serif" font-style="italic">DD</tspan><tspan font-size='11' dy='-6'>T</tspan><tspan dy='6'>)</tspan><tspan font-size='11' dy='-6'>−1</tspan><tspan dy='6'>(MS − </tspan><tspan font-family="'Times New Roman', Times, serif" font-style="italic">DY</tspan>)</text>
+<text x="1584" y="710" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="start"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">D</tspan>: sensor MTF blur + ↓4</text>
+<rect x="20" y="1000" width="900" height="360" rx="8" fill="none" stroke="#9a9a94" stroke-width="1.4" stroke-dasharray="7 5"/>
+<text x="34" y="1026" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#1d1d1b" text-anchor="start">(d) SSAI block (one band b, K = 4 maps)</text>
+<rect x="40" y="1056" width="150" height="48" rx="5" fill="#f2f2f0" stroke="#555" stroke-width="1.6"/>
+<text x="115.0" y="1075.875" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">guide <tspan font-family="'Times New Roman', Times, serif" font-style="italic">g</tspan></text>
+<text x="115.0" y="1094.625" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">1×h×w</text>
+<rect x="40" y="1201" width="150" height="48" rx="5" fill="#f2f2f0" stroke="#555" stroke-width="1.6"/>
+<text x="115.0" y="1220.875" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">[<tspan font-family="'Times New Roman', Times, serif" font-style="italic">R</tspan>, MS band <tspan font-family="'Times New Roman', Times, serif" font-style="italic">b</tspan>]</text>
+<text x="115.0" y="1239.625" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">(C+1)×h×w</text>
+<polyline points="190,1080 215,1080" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="215" y="1060" width="110" height="40" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="270.0" y="1085.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Conv 3×3</text>
+<text x="270.0" y="1117" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">1→K</text>
+<polyline points="325,1080 345,1080" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="345" y="1060" width="70" height="40" rx="5" fill="#e6f2e1" stroke="#4f8a3c" stroke-width="1.6"/>
+<text x="380.0" y="1085.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">ReLU</text>
+<polyline points="415,1080 435,1080" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="435" y="1060" width="110" height="40" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="490.0" y="1085.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Conv 3×3</text>
+<text x="490.0" y="1117" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">K→K</text>
+<text x="570" y="1072" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">G</tspan></text>
+<polyline points="190,1225 215,1225" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="215" y="1205" width="130" height="40" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="280.0" y="1230.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Conv 3×3</text>
+<text x="280.0" y="1262" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">(C+1)→K</text>
+<text x="370" y="1217" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">M</tspan></text>
+<polyline points="345,1225 435,1225" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="435" y="1205" width="110" height="40" rx="5" fill="#efe7f6" stroke="#7354a3" stroke-width="1.6"/>
+<text x="490.0" y="1230.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Transpose</text>
+<text x="490.0" y="1262" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">swap h ↔ w</text>
+<text x="572" y="1217" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">M</tspan><tspan font-size='12' dy='-7'>T</tspan></text>
+<polyline points="545,1080 870,1080 870,1134" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="612" cy="1080" r="3.6" fill="#3a3a38"/>
+<polyline points="612,1080 612,1134" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<polyline points="545,1225 612,1225 612,1170" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="612" cy="1152" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="612" y="1157.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">⊙</text>
+<polyline points="629,1152 660,1152" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="660" y="1130" width="130" height="44" rx="5" fill="#e6f2e1" stroke="#4f8a3c" stroke-width="1.6"/>
+<text x="725.0" y="1148.15" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1d1d1b" text-anchor="middle">Softmax</text>
+<text x="725.0" y="1165.65" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12" font-weight="normal" fill="#6b6b66" text-anchor="middle">over h·w</text>
+<text x="820" y="1144" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">A</tspan></text>
+<polyline points="790,1152 852,1152" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="870" cy="1152" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="870" y="1157.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">⊙</text>
+<polyline points="870,1170 870,1255" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="870" y="1275" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">O</tspan><tspan font-size='12' dy='4'>b</tspan> · K×h×w</text>
+<text x="40" y="1318" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="17" font-weight="normal" fill="#1d1d1b" text-anchor="start"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">A</tspan> = Softmax<tspan font-size='12' dy='4'>hw</tspan><tspan dy='-4'>(</tspan><tspan font-family="'Times New Roman', Times, serif" font-style="italic">G</tspan> ⊙ <tspan font-family="'Times New Roman', Times, serif" font-style="italic">M</tspan><tspan font-size='12' dy='-7'>T</tspan><tspan dy='7'>),   </tspan><tspan font-family="'Times New Roman', Times, serif" font-style="italic">O</tspan><tspan font-size='12' dy='4'>b</tspan><tspan dy='-4'> = </tspan><tspan font-family="'Times New Roman', Times, serif" font-style="italic">G</tspan> ⊙ <tspan font-family="'Times New Roman', Times, serif" font-style="italic">A</tspan></text>
+<text x="40" y="1343" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#6b6b66" text-anchor="start">C band outputs are concatenated (C·K maps) and fused by Conv 3×3 (CK→C) in (b).</text>
+<rect x="940" y="1000" width="840" height="360" rx="8" fill="none" stroke="#d4741f" stroke-width="1.4" stroke-dasharray="7 5"/>
+<text x="954" y="1026" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="18" font-weight="700" fill="#d4741f" text-anchor="start">(e) Scale-mixed training of C2MS-SP (L1 + spectral loss)</text>
+<rect x="960" y="1060" width="160" height="112" rx="5" fill="#f2f2f0" stroke="#555" stroke-width="1.6"/>
+<text x="1040.0" y="1093.125" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">Training patch</text>
+<text x="1040.0" y="1111.875" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">PAN 64×64</text>
+<text x="1040.0" y="1130.625" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">LMS 64×64</text>
+<text x="1040.0" y="1149.375" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">MS 16×16 · GT 64×64</text>
+<polyline points="1120,1085 1350,1085" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1235" y="1077" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">original pair</text>
+<rect x="1350" y="1061" width="120" height="48" rx="5" fill="#fde9d6" stroke="#d4741f" stroke-width="1.6"/>
+<text x="1410.0" y="1090.6" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#1d1d1b" text-anchor="middle">C2MS</text>
+<polyline points="1470,1085 1500,1085" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1485" y="1077" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">Y</tspan></text>
+<rect x="1500" y="1059" width="180" height="52" rx="5" fill="#fbf3d9" stroke="#a8841e" stroke-width="1.6"/>
+<text x="1590.0" y="1080.875" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">L1(<tspan font-family="'Times New Roman', Times, serif" font-style="italic">Y</tspan>, GT)</text>
+<text x="1590.0" y="1099.625" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">+ 0.46 · (1 − cos)</text>
+<circle cx="1040" cy="1172" r="3.6" fill="#3a3a38"/>
+<polyline points="1040,1172 1040,1210 1135,1210" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="1135" y="1192" width="175" height="36" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="1222.5" y="1214.9" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1d1d1b" text-anchor="middle">MTF blur + ↓2</text>
+<text x="1222" y="1244" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">GT′, PAN′ 32×32</text>
+<polyline points="1222,1250 1222,1262" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="1135" y="1262" width="175" height="32" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="1222.5" y="1282.9" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1d1d1b" text-anchor="middle">Wald ×4 observation</text>
+<text x="1222" y="1306" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="middle">MS′ 8×8</text>
+<polyline points="1222,1310 1222,1318" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<rect x="1135" y="1318" width="175" height="30" rx="5" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.6"/>
+<text x="1222.5" y="1337.9" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="600" fill="#1d1d1b" text-anchor="middle">23-tap interpolation</text>
+<polyline points="1310,1333 1330,1333 1330,1265 1350,1265" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<polyline points="1310,1210 1330,1210 1330,1245 1350,1245" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1336" y="1353" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="start">LMS′ 32×32</text>
+<rect x="1350" y="1231" width="120" height="48" rx="5" fill="#fde9d6" stroke="#d4741f" stroke-width="1.6"/>
+<text x="1410.0" y="1260.6" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="600" fill="#1d1d1b" text-anchor="middle">C2MS</text>
+<polyline points="1410,1109 1410,1231" fill="none" stroke="#d4741f" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="1418" y="1174" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#d4741f" text-anchor="start">shared weights</text>
+<polyline points="1470,1255 1500,1255" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<text x="1485" y="1247" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="16" font-weight="normal" fill="#1d1d1b" text-anchor="middle"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">Y′</tspan></text>
+<rect x="1500" y="1235" width="180" height="40" rx="5" fill="#fbf3d9" stroke="#a8841e" stroke-width="1.6"/>
+<text x="1590.0" y="1260.25" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">L1(<tspan font-family="'Times New Roman', Times, serif" font-style="italic">Y′</tspan>, GT′)</text>
+<polyline points="1680,1085 1730,1085 1730,1152" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<polyline points="1680,1255 1730,1255 1730,1188" fill="none" stroke="#3a3a38" stroke-width="1.6" marker-end="url(#ah)"/>
+<circle cx="1730" cy="1170" r="17" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="1730" y="1175.4" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="15" font-weight="600" fill="#1d1d1b" text-anchor="middle">+</text>
+<text x="1752" y="1176" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="20" font-weight="normal" fill="#1d1d1b" text-anchor="start"><tspan font-family="'Times New Roman', Times, serif" font-style="italic">L</tspan></text>
+<text x="1760" y="1342" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="normal" fill="#6b6b66" text-anchor="end">inference: PAN · LMS · MS → network → projection</text>
+<rect x="20" y="1394" width="34" height="22" rx="4" fill="#e3ecf7" stroke="#3f6aa1" stroke-width="1.5"/>
+<text x="62" y="1410" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#1d1d1b" text-anchor="start">convolution</text>
+<rect x="153.6" y="1394" width="34" height="22" rx="4" fill="#e6f2e1" stroke="#4f8a3c" stroke-width="1.5"/>
+<text x="195.6" y="1410" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#1d1d1b" text-anchor="start">activation / softmax</text>
+<rect x="355.6" y="1394" width="34" height="22" rx="4" fill="#efe7f6" stroke="#7354a3" stroke-width="1.5"/>
+<text x="397.6" y="1410" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#1d1d1b" text-anchor="start">attention op</text>
+<rect x="496.8" y="1394" width="34" height="22" rx="4" fill="#fde9d6" stroke="#d4741f" stroke-width="1.5"/>
+<text x="538.8" y="1410" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#1d1d1b" text-anchor="start">added in C2MS-SP</text>
+<circle cx="681.4" cy="1405" r="13" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="681.4" y="1409.68" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1d1d1b" text-anchor="middle">↓2</text>
+<text x="702.4" y="1410" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#1d1d1b" text-anchor="start">bilinear resize</text>
+<circle cx="835.4" cy="1405" r="13" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="835.4" y="1409.68" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1d1d1b" text-anchor="middle">©</text>
+<text x="856.4" y="1410" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#1d1d1b" text-anchor="start">concat</text>
+<circle cx="921.0" cy="1405" r="13" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="921.0" y="1409.68" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1d1d1b" text-anchor="middle">+</text>
+<text x="942.0" y="1410" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#1d1d1b" text-anchor="start">add</text>
+<circle cx="983.8" cy="1405" r="13" fill="#fff" stroke="#3a3a38" stroke-width="1.6"/>
+<text x="983.8" y="1409.68" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#1d1d1b" text-anchor="middle">⊙</text>
+<text x="1004.8" y="1410" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#1d1d1b" text-anchor="start">element-wise product</text>
+<text x="20" y="1448" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#6b6b66" text-anchor="start">C = 4 bands, K = 4.  ResBlock = Conv3×3 – ReLU – Conv3×3 + skip.  Parameters: original SSA-MRN 426,654 + W2 2,427,264 = 2,853,918 (the projection has none).  Inputs at inference: PAN <tspan font-family="'Times New Roman', Times, serif" font-style="italic">P</tspan> (H×W), LMS (H×W), MS (H/4×W/4).</text>
+<text x="20" y="1474" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="14" font-weight="normal" fill="#6b6b66" text-anchor="start">C2MS-SP-Lite: the trained 3×3 convs factorized (backbone rank 32; W2 1×1 – depthwise 3×3 – 1×1, CP rank 384; 66% MACs) and fine-tuned 10 epochs.  Unseen sensor (e.g. WV2): per-band calibration of the inputs before the network.</text>
+</svg>
