@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CtrS — 위성영상 팬샤프닝 연구</title>
-<meta name="description" content="SSA-MRN을 개선한 팬샤프닝 기준 모델 C2MS. 병렬 가지와 축척 혼합 학습으로 QB·GF2·WV3에서 원본보다 높은 성능을 확인하고, 학습하지 않은 센서 WV2에서도 선명도와 색을 더 잘 유지합니다.">
+<meta name="description" content="SSA-MRN을 개선한 팬샤프닝 기준 모델 C2MS-SP. 병렬 가지·축척 혼합 학습·L1·분광 손실·관측 일치 사영으로 QB·GF2·WV3에서 원본보다 높은 성능을 확인하고, 학습하지 않은 센서 WV2에서도 선명도와 색을 유지합니다.">
 <link rel="icon" href="assets/icon.png" type="image/png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="style.css?v=3">
@@ -36,7 +36,7 @@
   <section class="hero">
     <p class="hero-meta">딥러닝 연구 · 위성영상 팬샤프닝 · 동국대학교 종합설계1</p>
     <h1>학습하지 않은 위성 센서에서도 선명도와 색을 유지하는 팬샤프닝 모델</h1>
-    <p class="lead">흑백 고해상도 영상(PAN)과 저해상도 다중분광 영상(MS)을 합쳐 고해상도 컬러 영상을 복원합니다. 오픈소스 모델 SSA-MRN을 재현한 뒤, 구조와 학습 방식을 바꾼 새 기준 모델 <strong>C2MS</strong>로 성능을 개선했습니다.</p>
+    <p class="lead">흑백 고해상도 영상(PAN)과 저해상도 다중분광 영상(MS)을 합쳐 고해상도 컬러 영상을 복원합니다. 오픈소스 모델 SSA-MRN을 재현한 뒤, 구조·학습·추론을 바꾼 기준 모델 <strong>C2MS-SP</strong>와 경량판 <strong>C2MS-SP-Lite</strong>로 성능을 개선했습니다.</p>
     <div class="actions">
       <a class="btn primary" href="https://github.com/BIYONGHIYON/CtrS">GitHub 저장소</a>
       <a class="btn" href="#results">결과 보기</a>
@@ -44,15 +44,15 @@
     <dl class="facts">
       <div><dt>역할</dt><dd>팀장 · 4인</dd></div>
       <div><dt>기간</dt><dd>2026.09 — 현재</dd></div>
-      <div><dt>기준 모델</dt><dd>C2MS (2026.10 채택)</dd></div>
+      <div><dt>기준 모델</dt><dd>C2MS-SP (2026.11 채택)</dd></div>
     </dl>
   </section>
 
   <div class="stats" aria-label="원본 SSA-MRN 대비 주요 결과">
-    <div class="stat"><b>+0.87 dB</b><span>QB RR PSNR · 3시드 평균</span></div>
-    <div class="stat"><b>+2.05 dB</b><span>GF2 RR PSNR · 3시드 평균</span></div>
-    <div class="stat"><b>+1.01 dB</b><span>WV3 RR PSNR · 3시드 평균</span></div>
-    <div class="stat"><b>7.2% → 1.0%</b><span>학습하지 않은 WV2의 색 치우침</span></div>
+    <div class="stat"><b>+0.94 dB</b><span>QB RR PSNR · 3시드 평균</span></div>
+    <div class="stat"><b>+2.24 dB</b><span>GF2 RR PSNR · 3시드 평균</span></div>
+    <div class="stat"><b>+1.14 dB</b><span>WV3 RR PSNR · 3시드 평균</span></div>
+    <div class="stat"><b>7.2% → 0.1%</b><span>학습하지 않은 WV2의 색 치우침</span></div>
   </div>
 
   <section class="section" id="about">
@@ -63,31 +63,37 @@
         <div class="item"><h4>SSA-MRN 재현</h4><p>PAN·LRPAN·LMS에서 특징을 뽑아 전체·절반·1/4 크기에서 밴드별로 융합(SSAI)하고, 작은 크기부터 복원하는 원본 모델을 재현해 비교 기준으로 삼았습니다.</p></div>
         <div class="item"><h4>가설 → 실험 → 판정</h4><p>validation으로 후보를 고르고 실제 test의 RR 지표(PSNR·SAM·ERGAS)로 개선 여부를 판정합니다. 같은 시드의 대조군과 짝지어 비교합니다.</p></div>
         <div class="item"><h4>네 개의 위성 센서</h4><p>QuickBird(QB)·GaoFen-2(GF2)·WorldView-3(WV3)로 학습하고, 학습하지 않은 WorldView-2(WV2)에 적용해 일반화도 확인했습니다.</p></div>
-        <div class="item"><h4>기준 모델 교체 규칙</h4><p>새 후보가 기준 모델이 되려면 3시드 이상에서 개선이 확인되어야 합니다. C2MS도 이 기준을 통과해 채택했습니다.</p></div>
+        <div class="item"><h4>기준 모델 교체 규칙</h4><p>새 후보가 기준 모델이 되려면 3시드 이상에서 개선이 확인되어야 합니다. C2MS(2026.10)와 C2MS-SP(2026.11)도 이 기준을 통과해 차례로 채택했습니다.</p></div>
       </div>
     </div>
   </section>
 
   <section class="section" id="model">
-    <div class="section-head"><h2>기준 모델 C2MS</h2><p>병렬 가지 + 축척 혼합 학습</p></div>
+    <div class="section-head"><h2>기준 모델 C2MS-SP</h2><p>병렬 가지 + 축척 혼합 학습 + L1·분광 손실 + 관측 일치 사영</p></div>
     <div class="section-body">
       <p><strong>입력.</strong> 원본과 같이 고해상도 PAN, 4배 확대한 MS(LMS), 저해상도 MS 세 가지를 받습니다. PAN·LMS·축소 후 재확대한 PAN(LRPAN)에서 초기 특징을 만들고, 전체·1/2·1/4 크기에서 밴드별 SSAI로 PAN의 공간 정보를 주입한 뒤 1/4 크기부터 단계적으로 복원합니다.</p>
-      <p><strong>W2 병렬 가지.</strong> 원본 구조는 그대로 두고, 초기 특징(64채널)에서 갈라져 원본 backbone(ResBlock 4개)과 나란히 흐르는 가지를 더했습니다. 해상도를 절반으로 접고(PixelUnshuffle) 128채널 잔차 블록 8개를 거친 뒤 다시 펼쳐(PixelShuffle) backbone 출력에 더합니다. 마지막 1×1 Conv를 0으로 초기화해 학습 시작 시 출력은 원본과 같습니다. 파라미터는 원본 426,654개에서 2,853,918개로 늘었습니다.</p>
-      <p><strong>축척 혼합 학습.</strong> 병렬 가지만 붙였을 때는 RR PSNR이 크게 올랐지만, 한 단계 더 거친 시험(RR2)에서 성능이 무너졌습니다. 원인을 진단해 보니 축척에 따라 세부를 넣는 세기가 맞지 않았습니다. 그래서 같은 패치로 만든 <strong>2배 거친 학습 쌍</strong>을 원래 학습 쌍과 함께 학습해 이 약점을 없앴습니다. 추론 입력은 원본과 같습니다.</p>
-      <p><strong>채택.</strong> 2026-10-21 QB 3시드(42·43·44) 모두 개선을 확인해 팀 결정으로 채택했고, 다음 날 GF2·WV3·WV2에서도 3시드 모두 원본 대비 개선을 확인했습니다.</p>
+      <p><strong>W2 병렬 가지.</strong> 원본 구조는 그대로 두고, 초기 특징(64채널)에서 갈라져 원본 backbone(ResBlock 4개)과 나란히 흐르는 가지를 더했습니다. 해상도를 절반으로 접고(PixelUnshuffle) 128채널 잔차 블록 8개를 거친 뒤 다시 펼쳐(PixelShuffle) backbone 출력에 더합니다. 파라미터는 원본 426,654개에서 2,853,918개로 늘었습니다.</p>
+      <p><strong>축척 혼합 학습.</strong> 병렬 가지만 붙였을 때는 한 단계 더 거친 시험(RR2)에서 성능이 무너졌습니다. 원인은 축척에 따라 세부를 넣는 세기가 맞지 않는 것이었고, 같은 패치로 만든 <strong>2배 거친 학습 쌍</strong>을 함께 학습해 이 약점을 없앴습니다. 여기까지가 이전 기준 모델 C2MS입니다.</p>
+      <p><strong>L1·분광 손실.</strong> 손실을 제곱 오차에서 <strong>L1 + 분광 손실</strong>(픽셀별 색 방향 차이)로 바꿔 색(SAM)을 더 정확하게 학습했습니다.</p>
+      <p><strong>관측 일치 사영.</strong> 출력을 다시 흐리게 줄였을 때 입력 MS와 정확히 같아지도록, 그 조건을 만족하는 가장 가까운 영상으로 옮기는 단계를 추론 뒤에 붙였습니다. 파라미터가 없고 공액 기울기법 10회면 충분합니다. 답을 검산해서 어긋난 부분만 고치는 것과 같습니다.</p>
+      <p><strong>경량판 C2MS-SP-Lite.</strong> 학습된 C2MS-SP 가중치의 3×3 합성곱을 작은 조각(backbone 랭크 32, W2 가지 1×1 · depthwise 3×3 · 1×1)으로 분해하고 10에폭만 다시 다듬었습니다. 연산 66%·파라미터 68%로 C2MS-SP와 0.01-0.03 dB 차이입니다.</p>
+      <p><strong>학습하지 않은 센서.</strong> 위성마다 밴드별 밝기 기준이 달라, 처음 보는 센서에서는 세부를 덜 넣고 흐려졌습니다. 입력 밴드의 밝기 비율을 학습 센서에 맞추는 <strong>밴드별 센서 보정</strong>으로 재학습 없이 해결했습니다. 학습한 센서에는 쓰지 않습니다.</p>
+      <p><strong>채택.</strong> 2026-11-14 QB·GF2·WV3 모두 3시드(42·43·44)에서 이전 기준 C2MS보다 RR 세 지표가 좋아(PSNR +0.07·+0.19·+0.13 dB) 기준 모델로 채택했습니다.</p>
       <figure class="structure-figure">
-        <a href="assets/c2ms-structure.png?v=2" target="_blank" rel="noopener"><img class="frame" src="assets/c2ms-structure.png?v=2" alt="C2MS 전체 구조도: (a) PAN·LMS·LRPAN 초기 특징과 원본 ResBlock×4 backbone, 그 옆의 W2 병렬 가지(PixelUnshuffle·1×1 Conv·ResBlock×8·1×1 Conv·PixelShuffle), (b) 전체·1/2·1/4 크기의 밴드별 SSAI 융합, (c) 1/4 크기부터의 단계적 복원, (d) SSAI 블록 내부, (e) 2배 거친 학습 쌍을 섞은 축척 혼합 학습" width="3600" height="2940" loading="lazy"></a>
-        <figcaption>C2MS 구조. 주황색이 원본 SSA-MRN에 더한 W2 병렬 가지와 학습 방법입니다. 이미지를 누르면 원본 크기로 볼 수 있습니다.</figcaption>
+        <a href="assets/c2ms-structure.png?v=3" target="_blank" rel="noopener"><img class="frame" src="assets/c2ms-structure.png?v=3" alt="C2MS-SP 전체 구조도: (a) PAN·LMS·LRPAN 초기 특징과 원본 ResBlock×4 backbone, 그 옆의 W2 병렬 가지, (b) 전체·1/2·1/4 크기의 밴드별 SSAI 융합, (c) 단계적 복원과 출력 뒤 관측 일치 사영, (d) SSAI 블록 내부, (e) L1·분광 손실을 쓰는 축척 혼합 학습" width="3600" height="2992" loading="lazy"></a>
+        <figcaption>C2MS-SP 구조. 주황색이 원본 SSA-MRN에 더한 부분(W2 병렬 가지, 관측 일치 사영, 학습 방법)입니다. 이미지를 누르면 원본 크기로 볼 수 있습니다.</figcaption>
       </figure>
 
-      <h3>C2MS까지의 과정</h3>
+      <h3>C2MS-SP까지의 과정</h3>
       <ol class="history">
         <li><span class="n">단계 0</span><div><b>원본 SSA-MRN 재현</b><span>K=4를 연구 기본값으로 확정하고, 이후 모든 비교의 출발점으로 삼았습니다.</span></div></li>
         <li><span class="n">단계 1</span><div><b>저해상도 병렬 가지 W2 추가</b><span>RR PSNR +0.72 dB로 큰 이득이었지만 더 거친 시험(RR2)에서 성능이 나빠졌습니다.</span></div></li>
-        <li><span class="n">단계 2</span><div><b>3시드 재현과 보정기 시도</b><span>이득과 RR2 약점이 모두 재현됐고, 관측 오차 보정기로는 고쳐지지 않았습니다.</span></div></li>
-        <li><span class="n">단계 3</span><div><b>원인 진단</b><span>학습 없이 W2 출력 세기를 줄여 보며, 축척에 맞지 않는 세부 주입 세기가 원인임을 찾았습니다.</span></div></li>
-        <li class="on"><span class="n">단계 4</span><div><b>축척 혼합 학습 → C2MS 채택</b><span>RR2 약점을 없애고 원본 대비 QB RR +0.873 dB, 3시드 모두 개선했습니다.</span></div></li>
-        <li class="on"><span class="n">단계 5</span><div><b>다른 센서로 확장</b><span>GF2·WV3 학습과 학습하지 않은 WV2 적용에서도 원본 대비 이득을 확인했습니다.</span></div></li>
+        <li><span class="n">단계 2</span><div><b>원인 진단</b><span>학습 없이 W2 출력 세기를 줄여 보며, 축척에 맞지 않는 세부 주입 세기가 원인임을 찾았습니다.</span></div></li>
+        <li><span class="n">단계 3</span><div><b>축척 혼합 학습 → C2MS 채택 (2026.10)</b><span>RR2 약점을 없애고 QB·GF2·WV3 모두 원본 대비 3시드 개선했습니다.</span></div></li>
+        <li><span class="n">단계 4</span><div><b>L1·분광 손실</b><span>색(SAM)은 좋아졌지만 처음 보는 센서(WV2)에서 결과가 흐려지는 문제가 보였습니다.</span></div></li>
+        <li class="on"><span class="n">단계 5</span><div><b>관측 일치 사영 → C2MS-SP 채택 (2026.11)</b><span>세 센서 모두 C2MS 대비 3시드 개선했고, 사영은 10회 반복이면 충분했습니다.</span></div></li>
+        <li class="on"><span class="n">단계 6</span><div><b>밴드별 센서 보정</b><span>WV2 흐림의 원인(위성 간 밴드 밝기 차이)을 찾아 재학습 없이 PSNR을 약 2 dB 회복했습니다.</span></div></li>
+        <li class="on"><span class="n">단계 7</span><div><b>분해 + 짧은 미세조정 → C2MS-SP-Lite</b><span>연산 66%로 C2MS-SP와 거의 같은 수치를 냈습니다.</span></div></li>
       </ol>
     </div>
   </section>
@@ -95,39 +101,43 @@
   <section class="section" id="results">
     <div class="section-head"><h2>결과</h2><p>test 20장 · 3시드 평균</p></div>
     <div class="section-body">
-      <p class="intro">같은 시드(42·43·44)의 원본 SSA-MRN과 짝지은 평균 차이입니다. 네 데이터셋 모두 20장 전부에서 RR PSNR이 원본보다 높았습니다.</p>
+      <p class="intro">같은 시드(42·43·44)의 원본 SSA-MRN과 짝지은 평균 차이입니다. 학습한 세 데이터셋 모두 두 모델이 세 지표에서 원본보다 좋았고, 시드별로도 모두 원본보다 높았습니다.</p>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>데이터셋</th><th class="num">RR PSNR</th><th class="num">RR SAM</th><th class="num">RR ERGAS</th><th class="num">판정</th></tr></thead>
+          <thead><tr><th>데이터셋</th><th>모델</th><th class="num">RR PSNR</th><th class="num">RR SAM</th><th class="num">RR ERGAS</th><th class="num">판정</th></tr></thead>
           <tbody>
-            <tr><td>QB</td><td class="num good">+0.873 dB</td><td class="num">−0.365°</td><td class="num">−0.413</td><td class="num">개선</td></tr>
-            <tr><td>GF2</td><td class="num good">+2.045 dB</td><td class="num">−0.163°</td><td class="num">−0.188</td><td class="num">개선</td></tr>
-            <tr><td>WV3</td><td class="num good">+1.007 dB</td><td class="num">−0.419°</td><td class="num">−0.313</td><td class="num">개선</td></tr>
-            <tr><td>WV2 전이 (학습하지 않은 센서)</td><td class="num good">+0.828 dB</td><td class="num">−0.399°</td><td class="num">−0.426</td><td class="num">참고</td></tr>
+            <tr><td>QB</td><td>C2MS-SP</td><td class="num good">+0.944 dB</td><td class="num">−0.467°</td><td class="num">−0.439</td><td class="num">개선</td></tr>
+            <tr><td></td><td>C2MS-SP-Lite</td><td class="num good">+0.924 dB</td><td class="num">−0.466°</td><td class="num">−0.431</td><td class="num">개선</td></tr>
+            <tr><td>GF2</td><td>C2MS-SP</td><td class="num good">+2.235 dB</td><td class="num">−0.190°</td><td class="num">−0.204</td><td class="num">개선</td></tr>
+            <tr><td></td><td>C2MS-SP-Lite</td><td class="num good">+2.202 dB</td><td class="num">−0.187°</td><td class="num">−0.201</td><td class="num">개선</td></tr>
+            <tr><td>WV3</td><td>C2MS-SP</td><td class="num good">+1.137 dB</td><td class="num">−0.509°</td><td class="num">−0.330</td><td class="num">개선</td></tr>
+            <tr><td></td><td>C2MS-SP-Lite</td><td class="num good">+1.126 dB</td><td class="num">−0.504°</td><td class="num">−0.328</td><td class="num">개선</td></tr>
+            <tr><td>WV2 전이 (학습하지 않은 센서)</td><td>C2MS-SP</td><td class="num good">+2.950 dB</td><td class="num">−1.190°</td><td class="num">−1.382</td><td class="num">참고</td></tr>
+            <tr><td></td><td>C2MS-SP-Lite</td><td class="num good">+2.960 dB</td><td class="num">−1.188°</td><td class="num">−1.385</td><td class="num">참고</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="note">PSNR은 높을수록, SAM·ERGAS는 낮을수록 좋습니다. WV2는 WV3로 학습한 모델을 그대로 적용한 결과로, 판정에 쓰지 않는 참고 수치입니다.</p>
+      <p class="note">PSNR은 높을수록, SAM·ERGAS는 낮을수록 좋습니다. WV2는 WV3로 학습한 모델을 적용한 결과로 판정에 쓰지 않는 참고 수치이며, C2MS-SP·SP-Lite에는 밴드별 센서 보정을 함께 적용했습니다(원본은 발표된 방식 그대로).</p>
 
       <h3>처음 보는 센서에서 차이가 커집니다</h3>
-      <p>학습한 센서에서는 두 모델 모두 정답에 가까워 눈으로는 차이가 잘 드러나지 않습니다. 하지만 학습하지 않은 WV2에 적용하면 원본은 흐려지고 파랑 밴드가 밝게 나와 전체가 회보라색으로 보이는 반면, C2MS는 선명도와 색을 더 잘 유지합니다.</p>
+      <p>학습한 센서에서는 세 모델 모두 정답에 가까워 눈으로는 차이가 잘 드러나지 않습니다. 하지만 학습하지 않은 WV2에 적용하면 원본은 흐려지고 파랑 밴드가 밝게 나와 전체가 회보라색으로 보이는 반면, C2MS-SP·SP-Lite는 선명도와 색을 유지합니다.</p>
       <figure>
-        <a class="compare-img" href="assets/wv2-comparison.png" target="_blank" rel="noopener" aria-label="WV2 전이 결과 비교 이미지 원본 크기로 보기">
-          <img src="assets/wv2-comparison.png" alt="학습하지 않은 WV2 센서 장면 0: 원본 SSA-MRN, C2MS, 정답과 오차 지도 비교" width="1592" height="320" loading="lazy">
+        <a class="compare-img" href="assets/wv2-comparison.png?v=2" target="_blank" rel="noopener" aria-label="WV2 전이 결과 비교 이미지 원본 크기로 보기">
+          <img src="assets/wv2-comparison.png?v=2" alt="학습하지 않은 WV2 센서 장면 0: 원본 SSA-MRN, C2MS-SP, C2MS-SP-Lite, 정답과 오차 지도 비교" width="2120" height="320" loading="lazy">
         </a>
-        <figcaption>WV3로 학습한 모델을 WV2 장면 0에 적용한 결과(seed 42). 장면 PSNR 27.80 → 28.69 dB. 확대 영역은 C2MS의 개선이 가장 큰 64×64 영역입니다. 이미지를 누르면 원본 크기로 볼 수 있습니다.</figcaption>
+        <figcaption>WV3로 학습한 모델을 WV2 장면 0에 적용한 결과(seed 42). 장면 PSNR 원본 27.80 → C2MS-SP 30.90 · C2MS-SP-Lite 30.92 dB. 확대 영역은 C2MS-SP의 개선이 가장 큰 64×64 영역입니다. 이미지를 누르면 원본 크기로 볼 수 있습니다.</figcaption>
       </figure>
       <div class="table-wrap" style="margin-top:24px">
         <table>
-          <thead><tr><th>WV2 test · 3시드 평균</th><th class="num">원본</th><th class="num">C2MS</th></tr></thead>
+          <thead><tr><th>WV2 test · 3시드 평균</th><th class="num">원본</th><th class="num">C2MS-SP</th><th class="num">C2MS-SP-Lite</th></tr></thead>
           <tbody>
-            <tr><td>선명도 (출력 고주파 세기 ÷ 정답, 1이 정답)</td><td class="num">0.34</td><td class="num good">0.47</td></tr>
-            <tr><td>넣은 세부와 실제 세부의 상관</td><td class="num">0.70</td><td class="num good">0.74</td></tr>
-            <tr><td>가장 큰 밴드의 평균 밝기 치우침</td><td class="num">7.2%</td><td class="num good">1.0%</td></tr>
+            <tr><td>선명도 (출력 고주파 세기 ÷ 정답, 1이 정답)</td><td class="num">0.33</td><td class="num good">0.52</td><td class="num good">0.52</td></tr>
+            <tr><td>넣은 세부와 실제 세부의 상관</td><td class="num">0.70</td><td class="num good">0.84</td><td class="num good">0.84</td></tr>
+            <tr><td>가장 큰 밴드의 평균 밝기 치우침</td><td class="num">7.2%</td><td class="num good">0.1%</td><td class="num good">0.1%</td></tr>
           </tbody>
         </table>
       </div>
-      <p class="note">세 시드 모두 C2MS가 더 선명했습니다. 시드별 가장 큰 색 치우침은 원본 4.0-11.4%, C2MS 1.7-3.0%입니다.</p>
+      <p class="note">세 시드 모두 C2MS-SP·SP-Lite가 원본보다 선명하고 PSNR이 높았습니다(C2MS-SP +2.77 · +2.80 · +3.28 dB). 시드별 가장 큰 색 치우침은 원본 4.1-11.4%, C2MS-SP 0.1-0.2%입니다. 장면을 직접 골라 확대해 보려면 <a href="https://biyonghiyon.github.io/CtrS-viewer/">결과 비교 사이트</a>를 이용하세요.</p>
 
       <h3>다른 팬샤프닝 모델과 비교 (QB RR test 20장)</h3>
       <div class="table-wrap">
@@ -135,7 +145,8 @@
           <thead><tr><th>모델</th><th class="num">PSNR ↑</th><th class="num">SAM ↓</th><th class="num">ERGAS ↓</th><th class="num">Q4 ↑</th></tr></thead>
           <tbody>
             <tr><td>DCINN</td><td class="num">38.430</td><td class="num">4.220</td><td class="num">3.570</td><td class="num">—</td></tr>
-            <tr class="hl"><td>C2MS (현재 기준, 3시드 평균)</td><td class="num">38.302</td><td class="num">4.576</td><td class="num">3.712</td><td class="num">0.934</td></tr>
+            <tr class="hl"><td>C2MS-SP (Ours, 현재 기준, 3시드 평균)</td><td class="num">38.373</td><td class="num">4.474</td><td class="num">3.685</td><td class="num">0.935</td></tr>
+            <tr class="hl"><td>C2MS-SP-Lite (Ours, 경량판, 3시드 평균)</td><td class="num">38.353</td><td class="num">4.476</td><td class="num">3.693</td><td class="num">0.935</td></tr>
             <tr><td>HFIN</td><td class="num">38.247</td><td class="num">4.542</td><td class="num">3.813</td><td class="num">0.934</td></tr>
             <tr><td>U2Net</td><td class="num">38.065</td><td class="num">4.642</td><td class="num">3.987</td><td class="num">0.931</td></tr>
             <tr><td>SSA-MRN 원 논문</td><td class="num">37.665</td><td class="num">4.848</td><td class="num">4.073</td><td class="num">0.924</td></tr>
@@ -143,7 +154,7 @@
           </tbody>
         </table>
       </div>
-      <p class="note">C2MS와 원본 재현은 공식 DLPan MATLAB 코드로 재평가한 값이고, 다른 모델은 각 논문이 보고한 값입니다. 논문마다 데이터 분할·구현이 달라 공인 순위가 아닌 참고용입니다. 전체 표와 출처는 <a href="https://github.com/BIYONGHIYON/CtrS#compare">저장소 README</a>에 있습니다.</p>
+      <p class="note">Ours와 원본 재현은 저장소 평가 코드(DLPan 정의, 공식 MATLAB 재평가와 일치 확인)로 잰 값이고, 다른 모델은 각 논문이 보고한 값입니다. 논문마다 데이터 분할·구현이 달라 공인 순위가 아닌 참고용입니다. 전체 표와 출처는 <a href="https://github.com/BIYONGHIYON/CtrS#compare">저장소 README</a>에 있습니다.</p>
     </div>
   </section>
 
