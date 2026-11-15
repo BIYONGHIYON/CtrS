@@ -31,7 +31,7 @@ def diagnose(number):
     torch.set_num_threads(1)
     records = []
     for sensor, channels in [('QB', 4), ('GF2', 4), ('WV3', 8)]:
-        checkpoint = ROOT / f'research/performance/12_feature_dimension/checkpoints/runs/01_{sensor}_k4_s42/best.pt'
+        checkpoint = ROOT / f'experiments/performance/12_feature_dimension/checkpoints/runs/01_{sensor}_k4_s42/best.pt'
         ck = torch.load(checkpoint, map_location='cpu', weights_only=False)
         torch.manual_seed(42)
         base = RestoredPansharpeningNet(channels, 4).eval()

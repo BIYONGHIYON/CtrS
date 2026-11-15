@@ -1,42 +1,20 @@
-# MS 기준 가역 정규화의 반복 시드 검증
+# 38. MS 기준 가역 정규화의 반복 시드 검증
 
-**연구 분야:** 기존 성능 개선
+| 분야 | 실험자 | 상태 | 판정 |
+|:---:|:---:|:---:|:---:|
+| 성능 개선 | 김경찬 | 평가 완료 | **개선**<br>작성 당시 부분 개선 |
 
-**실험자:** 김경찬
+**변경:** 33번의 LR MS 기준 공유 정규화·역변환을 유지하고 시드43·44로 독립 반복했습니다.
 
-**변경 내용:** 33번의 LR MS 기준 공유 정규화·역변환을 유지하고 시드43·44로 독립 반복했습니다.
+**결과:** 세 시드의 RR 평균 5지표가 모두 개선됐으나 seed44의 잠정 FR QNR·Ds가 악화했습니다.
 
-| 확인된 결과 | 상태 | 개선 여부 |
-|---|:---:|:---:|
-| 세 시드의 RR 평균 5지표가 모두 개선됐으나 seed44의 잠정 FR QNR·Ds가 악화했습니다. | 평가 완료 | 부분 개선 |
+[실험 표](../README.md#experiments) · [결과](#results) · [해석과 판정](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
 
 > **현재 표 판정 (2026-11-04, [판정 기준 v2.4](../../../docs/judgement_criteria.md#보조-판정-삭제-v23--v24)):** **개선**. QB 3시드 평균: N1 개선(v2.4). RR ΔPSNR +0.180dB·ΔSAM −0.074°·ΔERGAS −0.093. 33·38번을 합친 반복 시드 결과입니다. 위 요약 표는 작성 당시 판정입니다.
 
-[실험 목록](../../../research/performance/README.md#experiments) · [선행 실험](../33_ms_anchored_reversible_normalization/README.md)
-
-## 1. 목적과 상태
-
-33번의 단일 시드 이득이 다른 초기값에서도 반복되는지 확인했습니다. 시드43·44의 N0·N1 학습을 각각100에폭 완료했고 validation best로 RR·FR 각각20장 전체를 평가했습니다. 시드42는33번에 보관된 결과를 참조하며 다시 학습하지 않았습니다.
-
-## 2. 변경한 구조와 비교 조건
-
-N0는 초기 LRPAN을 포함한 원본 SSA-MRN K4입니다. N1은 LR MS의 C·H·W 전체에서 샘플별 스칼라 평균 μ와 모집단 표준편차 σ를 구하고 s=max(σ,0.01)로 설정합니다. PAN·LMS·MS에 같은 (x−μ)/s를 적용하고 원본 모델의 출력에 s를 곱한 뒤 μ를 더합니다. GT는 입력 통계 계산에 사용하지 않습니다. 추가 학습 파라미터는 없습니다.
-
-| 항목 | 실제 조건 |
-|---|---|
-| 데이터 | QuickBird; train17,139·validation1,905패치; RR20·FR20장 |
-| 내부 특징 차원·공간 배율 | K=4·4배 |
-| 시드 | 선행42·추가43,44; 시드별 N0/N1 공통 초기 모델·동일 학습 순서 |
-| 학습 | fresh initialization; 100에폭; effective batch64·micro batch32 |
-| 최적화·손실 | Adam·고정 LR0.0001·원래 DN/2047 단위 MSE |
-| 입력 범위 | DN/2047·clipping 없음 |
-| 장치 | Kaggle Tesla T4 두 장; GPU0 N0·GPU1 N1 독립 프로세스 |
-| 정밀도 | 학습 FP16 AMP; 통계·역변환·손실·validation·test FP32; TF32 off |
-| 가중치 선택 | epoch0 포함 최소 validation MSE; 정확한 동률이면 이른 에폭 |
-
 <a id="results"></a>
 
-## 3. 정량 결과
+## 결과
 
 RR은 정답이 있는 축소 해상도 평가이며 PSNR·SCC·Q2n은 높을수록, SAM·ERGAS는 낮을수록 좋습니다. FR은 정답 없는 원해상도 평가이며 QNR은 높을수록, Dλ·Ds는 낮을수록 좋습니다. QNR·Q2n·SCC는 MATLAB 수치 대응이 완전히 확인되지 않은 잠정 지표입니다. 아래 차이는 N1−N0입니다.
 
@@ -90,27 +68,65 @@ RR은 정답이 있는 축소 해상도 평가이며 PSNR·SCC·Q2n은 높을수
 | FR_D_lambda | -0.002790 | 0.001327 |
 | FR_D_s | -0.005148 | 0.008586 |
 
-## 4. 기준선 대비 차이와 해석
+<a id="verdict"></a>
+
+## 해석과 판정
 
 세 시드 모두 RR의 평균5지표가 개선했습니다. 다만 seed44는 개별 장면에서 PSNR17/20·ERGAS18/20·SCC16/20장만 개선했으므로 모든 장면의 일관된 개선으로 해석하지 않습니다. seed43은 잠정 FR도 개선했지만 seed44는 QNR−0.000938·Ds+0.002439로 악화했습니다. 세 시드의 평균 잠정 QNR 차이는 양수이지만 FR 이득의 일관성은 확보하지 못했습니다.
 
 시드42 단독 결과의 기록은33번에 유지합니다. 이번 반복 검증은 같은 QB test를 사용한 탐색 결과이며 독립 holdout 검증이나 다른 센서의 개선을 의미하지 않습니다.
 
+### 판정과 다음 단계
+
+**부분 개선·최종 채택 보류**로 판정합니다. RR 이득은 세 시드에서 반복됐으나 FR 개선은 일관되지 않습니다. 다음에는 지표의 수치 대응을 확인하고, 동일 조건의 추가 센서·독립 holdout에서 검증합니다. 이번 test 결과에 맞춰 사후 선택한 설정을 독립 검증 성능으로 보고하지 않습니다.
+
+<a id="method"></a>
+
+<details>
+<summary><b>방법</b> · 목적과 상태 · 변경한 구조와 비교 조건</summary>
+
+### 목적과 상태
+
+33번의 단일 시드 이득이 다른 초기값에서도 반복되는지 확인했습니다. 시드43·44의 N0·N1 학습을 각각100에폭 완료했고 validation best로 RR·FR 각각20장 전체를 평가했습니다. 시드42는33번에 보관된 결과를 참조하며 다시 학습하지 않았습니다.
+
+### 변경한 구조와 비교 조건
+
+N0는 초기 LRPAN을 포함한 원본 SSA-MRN K4입니다. N1은 LR MS의 C·H·W 전체에서 샘플별 스칼라 평균 μ와 모집단 표준편차 σ를 구하고 s=max(σ,0.01)로 설정합니다. PAN·LMS·MS에 같은 (x−μ)/s를 적용하고 원본 모델의 출력에 s를 곱한 뒤 μ를 더합니다. GT는 입력 통계 계산에 사용하지 않습니다. 추가 학습 파라미터는 없습니다.
+
+| 항목 | 실제 조건 |
+|---|---|
+| 데이터 | QuickBird; train17,139·validation1,905패치; RR20·FR20장 |
+| 내부 특징 차원·공간 배율 | K=4·4배 |
+| 시드 | 선행42·추가43,44; 시드별 N0/N1 공통 초기 모델·동일 학습 순서 |
+| 학습 | fresh initialization; 100에폭; effective batch64·micro batch32 |
+| 최적화·손실 | Adam·고정 LR0.0001·원래 DN/2047 단위 MSE |
+| 입력 범위 | DN/2047·clipping 없음 |
+| 장치 | Kaggle Tesla T4 두 장; GPU0 N0·GPU1 N1 독립 프로세스 |
+| 정밀도 | 학습 FP16 AMP; 통계·역변환·손실·validation·test FP32; TF32 off |
+| 가중치 선택 | epoch0 포함 최소 validation MSE; 정확한 동률이면 이른 에폭 |
+
+</details>
+
+<a id="figures"></a>
+
+<details>
+<summary><b>그림</b> · 학습·평가 그래프 · 결과 이미지</summary>
+
 <a id="graphs"></a>
 
-## 5. 학습·평가 그래프
+### 학습·평가 그래프
 
 원본 실측 train MSE·validation PSNR·SAM 곡선과 각 시드의 baseline 비교 그래프를 표시합니다. 통합 그래프의 막대는 원래 지표 단위의 N1−N0이며 녹색이 개선 방향입니다.
 
 ![세 시드 지표 차이](results/seed_deltas.svg)
 
-### 시드43
+#### 시드43
 
 ![시드43 학습 곡선](results/seed43/curves.png)
 
 ![시드43 기준선 비교](results/seed43/comparison.png)
 
-### 시드44
+#### 시드44
 
 ![시드44 학습 곡선](results/seed44/curves.png)
 
@@ -118,11 +134,11 @@ RR은 정답이 있는 축소 해상도 평가이며 PSNR·SCC·Q2n은 높을수
 
 <a id="images"></a>
 
-## 6. 결과 이미지
+### 결과 이미지
 
 학습 전에 고정한 0부터 시작하는 RR 장면1·8·11·13·19를 각 반복 시드에서 표시합니다. 패널 순서는 LR MS nearest 확대·PAN·N1 예측·GT입니다. RGB 밴드[2,1,0]를 사용하고 MS 패널은 해당 장면 GT의1·99백분위 대비를 공유합니다. 전체 장면을 표시하며 별도 crop을 선택하지 않았습니다. FR에는 GT가 없습니다. N0의 같은 장면 이미지는 각 결과 폴더에 함께 보관했습니다.
 
-### 시드43 N1
+#### 시드43 N1
 
 ![시드43 RR 장면1](results/seed43/N1/results/RR_scene_001.png)
 
@@ -134,7 +150,7 @@ RR은 정답이 있는 축소 해상도 평가이며 PSNR·SCC·Q2n은 높을수
 
 ![시드43 RR 장면19](results/seed43/N1/results/RR_scene_019.png)
 
-### 시드44 N1
+#### 시드44 N1
 
 ![시드44 RR 장면1](results/seed44/N1/results/RR_scene_001.png)
 
@@ -146,9 +162,12 @@ RR은 정답이 있는 축소 해상도 평가이며 PSNR·SCC·Q2n은 높을수
 
 ![시드44 RR 장면19](results/seed44/N1/results/RR_scene_019.png)
 
+</details>
+
 <a id="evidence"></a>
 
-## 7. 재현 자료
+<details>
+<summary><b>재현 자료</b> · 코드, 가중치, 설정, 실행 기록</summary>
 
 [집계 설정](config.json) · [검증·집계 코드](prepare.py) · [통합 숫자](results/summary.json) · [보존 검증](results/retention_verification.json) · [manifest](manifest.json)
 
@@ -163,6 +182,4 @@ python SSA-MRN/common/verify.py --research-track performance --experiment 38
 
 이번 보관 검증은 원본 manifest와 복사된 파일의 바이트 일치, 기록된 validation best, RR·FR 전체 장면 평균을 확인했습니다. 원본 H5로 추론·지표를 다시 계산하거나 반복 가중치를 strict load한 검증은 수행하지 않았습니다. 학습 당시 preflight 기록은 별도로 보존했습니다.
 
-## 8. 개선 여부와 다음 단계
-
-**부분 개선·최종 채택 보류**로 판정합니다. RR 이득은 세 시드에서 반복됐으나 FR 개선은 일관되지 않습니다. 다음에는 지표의 수치 대응을 확인하고, 동일 조건의 추가 센서·독립 holdout에서 검증합니다. 이번 test 결과에 맞춰 사후 선택한 설정을 독립 검증 성능으로 보고하지 않습니다.
+</details>

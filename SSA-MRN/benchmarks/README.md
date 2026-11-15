@@ -1,14 +1,14 @@
 # 다른 팬샤프닝 모델 평가
 
-다른 연구의 팬샤프닝 모델을 우리 환경에서 직접 학습·평가해 기준 모델 C2MS-SP와 같은 조건으로 비교합니다. 같은 데이터 분할, 같은 test 장면, 같은 정규화, 같은 지표 코드를 씁니다. 그래서 논문 보고값과 달리 학습·평가 조건 차이 없이 직접 비교할 수 있습니다. 우리 모델을 바꾸는 개선 실험은 [성능 개선 연구](../research/performance/README.md)(`experiments/performance/`)에 둡니다. 이 폴더에는 다른 모델의 재현·평가만 둡니다.
+다른 연구의 팬샤프닝 모델을 우리 환경(같은 데이터 분할·test 장면·정규화·지표 코드)에서 직접 학습·평가해 기준 모델 C2MS-SP와 비교합니다. 우리 모델을 바꾸는 실험은 [성능 개선](../experiments/performance/README.md)에 둡니다.
 
-[관리 규칙](../../AGENTS.md#다른-팬샤프닝-모델-평가) · [보고서 양식](../docs/benchmark_template.md) · [모델 목록](catalog.json) · [논문 보고값 조사](../docs/pansharpening_survey/QB_GF_WV2_WV3_팬샤프닝_성능조사_2026-10-27.md)
+[관리 규칙](../../AGENTS.md#8-다른-팬샤프닝-모델-평가) · [보고서 양식](../docs/benchmark_template.md) · [모델 목록](catalog.json) · [논문 보고값 조사](../docs/pansharpening_survey/QB_GF_WV2_WV3_팬샤프닝_성능조사_2026-10-27.md)
 
 <a id="models"></a>
 
 ## 평가 표
 
-최근에 등록한 모델부터 적습니다. 첫 열은 모델 보고서 링크와 실제 평가자입니다. 판정은 하지 않고, 확인된 결과에 같은 시드 C2MS-SP와의 RR 차이를 숫자로 적습니다.
+최근에 등록한 모델이 위입니다. 판정은 붙이지 않고 같은 시드 C2MS-SP와의 RR 차이를 숫자로 적습니다.
 
 | 모델 | 출처·학습 조건 | 확인된 결과 | 상태 |
 |---|---|---|:---:|
@@ -21,7 +21,7 @@ benchmarks/
 ├── README.md                  이 안내와 평가 표
 ├── catalog.json               모델별 출처·라이선스·평가자·상태
 └── <모델>/                    소문자 snake_case 모델 이름 (예: adwm, cannet, lformer)
-    ├── README.md              8절 보고서 (docs/benchmark_template.md)
+    ├── README.md              보고서 (docs/benchmark_template.md)
     ├── config.json            출처·고정 커밋·라이선스·설정별 학습 조건
     ├── model.py               어댑터: build(bands, sensor, setting, seed)
     ├── train.py               우리 데이터로 학습할 때만

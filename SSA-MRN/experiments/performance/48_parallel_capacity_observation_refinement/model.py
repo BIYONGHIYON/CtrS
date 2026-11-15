@@ -21,7 +21,7 @@ def _load(name, path):
 
 # 43 model inserts its preserved source (common/model.py, upstream network.py) on sys.path first.
 M43 = _load('exp43_model', PERF / '43_normalized_parallel_capacity/model.py')
-M28 = _load('exp28_model', ROOT / 'research/performance/28_residual_refinement/model.py')
+M28 = _load('exp28_model', ROOT / 'experiments/performance/28_residual_refinement/model.py')
 CALIBRATION = json.loads((PERF / '29_capacity_refinement/calibration.json').read_text(encoding='utf8'))
 Parallel = M43.Parallel
 

@@ -1,72 +1,18 @@
-# W2 추가 특징의 고주파 선택 제어
+# 52. W2 추가 특징의 고주파 선택 제어
 
-**연구 분야:** 기존 성능 개선
+| 분야 | 실험자 | 상태 | 판정 |
+|:---:|:---:|:---:|:---:|
+| 성능 개선 | 송준현 | 평가 완료 · 3seed | **부분 개선** |
 
-**실험자:** 송준현
+**변경:** 원본 + W2(C2)에서 W2 추가 특징을 저주파·고주파로 분리하고, 샘플별 에너지 게이트로 고주파만 0–1배 조절했습니다. 저주파 경로와 기존 최종 출력 MSE는 유지했습니다.
 
-**변경 내용:** 원본 + W2(C2)에서 W2 추가 특징을 저주파·고주파로 분리하고, 샘플별 에너지 게이트로 고주파만 0–1배 조절했습니다. 저주파 경로와 기존 최종 출력 MSE는 유지했습니다.
+**결과:** W2 C2 대비 3seed 평균 RR PSNR +0.01737dB·SAM −0.00021°입니다. 현재 v2.3 잡음 문턱 0.04dB 미만이며 RR2 SAM +0.07235°로 허용폭 +0.06°를 초과했습니다. F1 대비 비교가 아닙니다.
 
-| 확인된 결과 | 상태 | 개선 여부 |
-|---|:---:|:---:|
-| W2 C2 대비 3seed 평균 RR PSNR +0.01737dB·SAM −0.00021°입니다. 현재 v2.3 잡음 문턱 0.04dB 미만이며 RR2 SAM +0.07235°로 허용폭 +0.06°를 초과했습니다. F1 대비 비교가 아닙니다. | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |
-
-[실험 목록](../../../research/performance/README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [재현 자료](#evidence)
-
-## 1. 목적과 상태
-
-[50번](../50_w2_branch_inference_scaling/README.md)은 W2 가지의 세기를 높일 때 거친 축척(RR2)에서 고주파 오차가 늘어나는 현상을 보였습니다. 가지 전체를 고정 상수로 줄이는 대신 저주파는 남기고 고주파만 입력 특징에 따라 조절하면 W2의 이득을 지키면서 축척 일반화가 좋아지는지 확인했습니다.
-
-seed42·43·44의 두 군 모두 새 초기값에서 100epoch 학습과 validation-selected best/latest의 RR·RR2·FR_WALD·FR 각 20장 평가를 완료했습니다. 마지막 기록은 2026-10-21 01:15:39 KST입니다. smoke·연속 실행 reference는 최종 비교에서 제외했습니다.
-
-**실제 대조군은 W2 C2입니다.** 실험 조건을 고정한 뒤 팀 기준 모델이 [49번 F1](../49_observation_refinement_seed_repeat/README.md)으로 교체됐지만, 이미 수행한 비교의 대조군·가중치를 바꾸지 않았습니다. 이번 결과로 현재 F1 대비 우위나 원본 단독 대비 RR2 회복을 주장하지 않습니다. 이후 신규 실험은 현행 F1 기준을 따라야 합니다.
-
-실행 당시 v2.2 판정과 JSON·소스는 원본 그대로 보존했습니다. 게시 시에는 동일 측정값에 현재 [v2.3](../../../docs/judgement_criteria.md)을 적용했습니다. 잡음 문턱만 반영한 재집계이며 새 학습·추론·test 선택은 없습니다.
-
-## 2. 변경한 구조와 비교 조건
-
-기준군은 원본 N0의 backbone과 [43번 C2](../43_normalized_parallel_capacity/README.md)의 W2 병렬 가지 합입니다. W2는 PixelUnshuffle2 → Conv256→128 → 잔차블록 8개 → Conv128→256 → PixelShuffle2 구조입니다. 변경군은 이 가지의 출력 B를 `L(B) + g × (B−L(B))`로 바꿉니다. 원본 backbone 경로·입력·손실은 유지했습니다.
-
-L은 `[1,4,6,4,1]/16`의 가로·세로 분리 필터, reflect 경계, 축소 없는 특징 저역통과입니다. 센서 MTF나 정확한 관측 nullspace 사영이 아닙니다. 따라서 특징 저역을 유지한다는 것과 출력 영상의 관측 저역이 정확히 보존된다는 것은 구분합니다.
-
-게이트 입력은 B와 backbone 입력 x에서 각각 계산한 `E_high/(E_low+E_high+1e-8)`입니다. 에너지는 샘플별 채널·공간 평균 제곱이며 두 통계는 detach했습니다. 2→8→1 SiLU/sigmoid MLP가 샘플당 스칼라 g를 만들어 모든 특징 채널·위치에 공유합니다. GT·batch 공동 통계·입력 크기·평가 종류는 사용하지 않습니다. 0벡터 통계는 유한한 0입니다. 마지막 Linear를 0으로 초기화한 sigmoid 초기값이 0.5이며, 50번 test에서 최적 α를 가져온 고정 계수가 아닙니다.
-
-```mermaid
-flowchart LR
- X[동일 backbone 입력 x] --> O[원본 backbone]
- X --> W[동일 W2 가지]
- W --> B[추가 특징 B]
- B --> L[고정 저역 L]
- B --> H[고역 B-L]
- X --> E[샘플별 detached 상대 에너지]
- B --> E
- E --> G[MLP sigmoid · g]
- H --> M[g 곱하기 고역]
- G --> M
- O --> Y[합산]
- L --> Y
- M --> Y
-```
-
-| 조건 | 두 군 공통 |
-|---|---|
-| 데이터 | QuickBird만 사용, train17,139·validation1,905·RR20·FR20 |
-| K / 공간 배율 | K4 / 4배 |
-| 입력·전처리 | 원시 DN/2047·제공 LMS, clipping 없음 |
-| 학습 | seed42·43·44 각각 100epoch 새 학습, micro32·유효 64 |
-| optimizer / LR / 손실 | Adam 기본 옵션·고정 1e-4·scheduler 없음·기존 최종 출력 MSE |
-| 정밀도 | core 학습 AMP FP16, 특징 필터·게이트·MSE FP32, 보정 특징을 branch dtype으로 되돌려 residual add, validation/test FP32·TF32 off |
-| 초기값 | 같은 seed core/W2/게이트 state 일치, W2 마지막 Conv0으로 초기 전체 출력 일치 |
-| 난수 | 모델 초기화와 CUDA sampler(seed+100000) 분리, gate hidden은 별도 고정 RNG |
-| 선택 | epoch0 포함 원본 전체 validation MSE 최저, 정확한 동률이면 먼저 나온 epoch |
-| 장치 | 동일 Tesla T4×2, GPU0 W2 C2·GPU1 HF selective |
-
-각각 총 2,853,951개 파라미터입니다. 기준군은 같은 초기 state를 맞추기 위해 33개 게이트 파라미터를 갖지만 forward에서 우회해 gradient와 Adam 상태가 생기지 않습니다. 기준군의 실제 활성 C2는 2,853,918개입니다. 초기 tensor·epoch별 실제 순서 해시가 같고,6개 학습의 AMP skip은 모두 0회입니다. 두 군의 마지막 불완전 유효 batch는 실제 원소 수로 평균했습니다. 추가 손실·EMA·N1·증강은 없습니다.
-
-과거 43번의 150epoch·batch32·cosine 학습을 재현한 실험은 아닙니다. 이번 100epoch·유효 64·고정LR의 동시 대조군으로만 해석하며 과거 절대 수치를 섞지 않습니다.
+[실험 표](../README.md#experiments) · [결과](#results) · [해석과 판정](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
 
 <a id="results"></a>
 
-## 3. 정량 결과
+## 결과
 
 ### Validation 선택
 
@@ -172,7 +118,9 @@ latest 평균은 RR PSNR·SAM·ERGAS가 모두 악화했습니다. RR2 SAM 허�
 
 평가는 고정된 공통 평가 프로토콜로 수행했습니다. MS는 QB DLPan41tap·4배·위상 2, PAN은 QB GNyq0.15·41tap·동일 위상, LMS는 23tap입니다. RR2 정답은 RR MS, FR_WALD 정답은 실제 FR MS입니다. 원해상도 FR에는 정답이 없습니다. FR_OBS는 MS 좌표 가장자리 5화소를 제외한 RMSE(DN)입니다. 패키지의 측정 연산 코드가 현재 main과 줄바꿈을 제외하고 같은지 검증했습니다. 원해상도 고주파 정확도나 다른 센서의 개선까지 입증한 것은 아닙니다.
 
-## 4. 기준선 대비 차이와 해석
+<a id="verdict"></a>
+
+## 해석과 판정
 
 고주파를 선택적으로 조절했지만 W2 대비 RR 이득은 잡음 문턱보다 작았고, 해결하려던 RR2 분광각 악화도 남았습니다. 따라서 이번 구조로 축척 일반화 문제가 해결됐다는 가설은 지지되지 않았습니다. 참고 QNR은 +0.00420이나 판정에는 사용하지 않았습니다.
 
@@ -204,9 +152,79 @@ Best에서 관측한 gate 평균은 아래와 같습니다. 각 값은 해당 �
 
 첫 장면에서 warmup3회 후 5회 forward 중앙값이며 전송·지표 계산을 제외합니다. 독립 하드웨어 속도 벤치마크가 아니므로 실제 두 GPU 동시 실행의 기록으로 해석합니다. validation 합계·전체 장면별 forward 시간·평가 peak 메모리는 원본 JSON에 있습니다.
 
+### 판정과 다음 단계
+
+**W2 C2 대비 부분 개선·채택 보류**입니다. 현재 v2.3에서 RR PSNR 이득이 잡음 수준이고 RR2 SAM도 허용폭을 초과해, 고주파 선택 제어로 축척 약점을 해결했다고 판단하지 않습니다. 현재 F1 대비 우위는 평가하지 않았으며 기준 모델 교체를 제안하지 않습니다.
+
+후속에서는 스칼라 gate의 축척 구분 능력과 공동 학습 중 W2의 보상 여부를 먼저 진단할 수 있습니다. train/validation으로 고정한 별도 실험에서 다루고, 이번 test를 보고 계수나 checkpoint를 바꾼 결과를 같은 반복 비교에 합치지 않습니다. 신규 비교는 현행 F1 대조군을 따릅니다. QB 한 센서·탐색에 반복 사용한 test 범위이며, 다른 센서·원해상도 세부의 참값까지 검증하지 않았습니다.
+
+<a id="method"></a>
+
+<details>
+<summary><b>방법</b> · 목적과 상태 · 변경한 구조와 비교 조건</summary>
+
+### 목적과 상태
+
+[50번](../50_w2_branch_inference_scaling/README.md)은 W2 가지의 세기를 높일 때 거친 축척(RR2)에서 고주파 오차가 늘어나는 현상을 보였습니다. 가지 전체를 고정 상수로 줄이는 대신 저주파는 남기고 고주파만 입력 특징에 따라 조절하면 W2의 이득을 지키면서 축척 일반화가 좋아지는지 확인했습니다.
+
+seed42·43·44의 두 군 모두 새 초기값에서 100epoch 학습과 validation-selected best/latest의 RR·RR2·FR_WALD·FR 각 20장 평가를 완료했습니다. 마지막 기록은 2026-10-21 01:15:39 KST입니다. smoke·연속 실행 reference는 최종 비교에서 제외했습니다.
+
+**실제 대조군은 W2 C2입니다.** 실험 조건을 고정한 뒤 팀 기준 모델이 [49번 F1](../49_observation_refinement_seed_repeat/README.md)으로 교체됐지만, 이미 수행한 비교의 대조군·가중치를 바꾸지 않았습니다. 이번 결과로 현재 F1 대비 우위나 원본 단독 대비 RR2 회복을 주장하지 않습니다. 이후 신규 실험은 현행 F1 기준을 따라야 합니다.
+
+실행 당시 v2.2 판정과 JSON·소스는 원본 그대로 보존했습니다. 게시 시에는 동일 측정값에 현재 [v2.3](../../../docs/judgement_criteria.md)을 적용했습니다. 잡음 문턱만 반영한 재집계이며 새 학습·추론·test 선택은 없습니다.
+
+### 변경한 구조와 비교 조건
+
+기준군은 원본 N0의 backbone과 [43번 C2](../43_normalized_parallel_capacity/README.md)의 W2 병렬 가지 합입니다. W2는 PixelUnshuffle2 → Conv256→128 → 잔차블록 8개 → Conv128→256 → PixelShuffle2 구조입니다. 변경군은 이 가지의 출력 B를 `L(B) + g × (B−L(B))`로 바꿉니다. 원본 backbone 경로·입력·손실은 유지했습니다.
+
+L은 `[1,4,6,4,1]/16`의 가로·세로 분리 필터, reflect 경계, 축소 없는 특징 저역통과입니다. 센서 MTF나 정확한 관측 nullspace 사영이 아닙니다. 따라서 특징 저역을 유지한다는 것과 출력 영상의 관측 저역이 정확히 보존된다는 것은 구분합니다.
+
+게이트 입력은 B와 backbone 입력 x에서 각각 계산한 `E_high/(E_low+E_high+1e-8)`입니다. 에너지는 샘플별 채널·공간 평균 제곱이며 두 통계는 detach했습니다. 2→8→1 SiLU/sigmoid MLP가 샘플당 스칼라 g를 만들어 모든 특징 채널·위치에 공유합니다. GT·batch 공동 통계·입력 크기·평가 종류는 사용하지 않습니다. 0벡터 통계는 유한한 0입니다. 마지막 Linear를 0으로 초기화한 sigmoid 초기값이 0.5이며, 50번 test에서 최적 α를 가져온 고정 계수가 아닙니다.
+
+```mermaid
+flowchart LR
+ X[동일 backbone 입력 x] --> O[원본 backbone]
+ X --> W[동일 W2 가지]
+ W --> B[추가 특징 B]
+ B --> L[고정 저역 L]
+ B --> H[고역 B-L]
+ X --> E[샘플별 detached 상대 에너지]
+ B --> E
+ E --> G[MLP sigmoid · g]
+ H --> M[g 곱하기 고역]
+ G --> M
+ O --> Y[합산]
+ L --> Y
+ M --> Y
+```
+
+| 조건 | 두 군 공통 |
+|---|---|
+| 데이터 | QuickBird만 사용, train17,139·validation1,905·RR20·FR20 |
+| K / 공간 배율 | K4 / 4배 |
+| 입력·전처리 | 원시 DN/2047·제공 LMS, clipping 없음 |
+| 학습 | seed42·43·44 각각 100epoch 새 학습, micro32·유효 64 |
+| optimizer / LR / 손실 | Adam 기본 옵션·고정 1e-4·scheduler 없음·기존 최종 출력 MSE |
+| 정밀도 | core 학습 AMP FP16, 특징 필터·게이트·MSE FP32, 보정 특징을 branch dtype으로 되돌려 residual add, validation/test FP32·TF32 off |
+| 초기값 | 같은 seed core/W2/게이트 state 일치, W2 마지막 Conv0으로 초기 전체 출력 일치 |
+| 난수 | 모델 초기화와 CUDA sampler(seed+100000) 분리, gate hidden은 별도 고정 RNG |
+| 선택 | epoch0 포함 원본 전체 validation MSE 최저, 정확한 동률이면 먼저 나온 epoch |
+| 장치 | 동일 Tesla T4×2, GPU0 W2 C2·GPU1 HF selective |
+
+각각 총 2,853,951개 파라미터입니다. 기준군은 같은 초기 state를 맞추기 위해 33개 게이트 파라미터를 갖지만 forward에서 우회해 gradient와 Adam 상태가 생기지 않습니다. 기준군의 실제 활성 C2는 2,853,918개입니다. 초기 tensor·epoch별 실제 순서 해시가 같고,6개 학습의 AMP skip은 모두 0회입니다. 두 군의 마지막 불완전 유효 batch는 실제 원소 수로 평균했습니다. 추가 손실·EMA·N1·증강은 없습니다.
+
+과거 43번의 150epoch·batch32·cosine 학습을 재현한 실험은 아닙니다. 이번 100epoch·유효 64·고정LR의 동시 대조군으로만 해석하며 과거 절대 수치를 섞지 않습니다.
+
+</details>
+
+<a id="figures"></a>
+
+<details>
+<summary><b>그림</b> · 학습·평가 그래프 · 결과 이미지</summary>
+
 <a id="graphs"></a>
 
-## 5. 학습·평가 그래프
+### 학습·평가 그래프
 
 ![학습 MSE·validation MSE·SAM](results/learning.png)
 
@@ -222,35 +240,38 @@ Best에서 관측한 gate 평균은 아래와 같습니다. 각 값은 해당 �
 
 <a id="images"></a>
 
-## 6. 결과 이미지
+### 결과 이미지
 
 평가 전에 고정한 seed42의 0기준 장면 1·8·11·13·19를 같은 순서로 표시합니다. 전체 장면이며 **LR MS 최근접 표시 · PAN 입력 · HF selective 예측 · GT** 순서입니다. RGB[2,1,0], GT 밴드별 1/99 percentile의 공통 대비를 사용했습니다. 표시 범위 제한은 학습·평가 clipping과 다릅니다. FR에 GT를 만들지 않았습니다.
 
-### 장면 1
+#### 장면 1
 
 ![HF selective 장면 1](results/seed_42/hf_gate/evaluations/best/RR_scene_001.png)
 
-### 장면 8
+#### 장면 8
 
 ![HF selective 장면 8](results/seed_42/hf_gate/evaluations/best/RR_scene_008.png)
 
-### 장면 11
+#### 장면 11
 
 ![HF selective 장면 11](results/seed_42/hf_gate/evaluations/best/RR_scene_011.png)
 
-### 장면 13
+#### 장면 13
 
 ![HF selective 장면 13](results/seed_42/hf_gate/evaluations/best/RR_scene_013.png)
 
-### 장면 19
+#### 장면 19
 
 ![HF selective 장면 19](results/seed_42/hf_gate/evaluations/best/RR_scene_019.png)
 
 [seed43 동일 장면](results/seed_43/hf_gate/evaluations/best/)과 [seed44 동일 장면](results/seed_44/hf_gate/evaluations/best/)도 보존했습니다. 기준군·latest의 같은 장면 패널도 원본 결과 폴더에 있습니다. 기준 모델 교체를 제안하는 결과가 아니며 F1과의 FR·RR2 비교 이미지는 확보하지 않았습니다.
 
+</details>
+
 <a id="evidence"></a>
 
-## 7. 재현 자료
+<details>
+<summary><b>재현 자료</b> · 코드, 가중치, 설정, 실행 기록</summary>
 
 - [설정·고정 예시](config.json), [원본 프로토콜](provenance/experiment.json), [원본 소스](provenance/code/), [군별 설정](provenance/configs/), [환경](provenance/environment_contract.json), [데이터 해시](provenance/data_contract.json)를 보존했습니다.
 - [초기·best/latest15개 원본 가중치](checkpoints/), [원본 ZIP 해시](provenance/archive.json), [파일 manifest](manifest.json), [원본 대응](results/source_artifact_map.json)을 남겼습니다. 원본 소스와 checkpoint 내부 설정은 바꾸지 않았습니다.
@@ -266,8 +287,4 @@ python SSA-MRN/experiments/performance/52_w2_frequency_selective_attenuation/eva
 
 `evaluate.py`는 보존된 best 측정값에서 v2.3 판정만 재계산합니다. `run.py`는 당시 소스를 포함한 기본smoke Kaggle 셀이며 v2.2와 W2 C2 대조군을 포함한 **과거 조건 재현용**입니다. 현재 F1을 대조군으로 하는 신규 실험 코드는 별도로 구성해야 합니다. 코드 버전·해시는 provenance에 보존했고, 원본 데이터·다른 실험·학습 중 checkout은 변경하지 않았습니다.
 
-## 8. 개선 여부와 다음 단계
-
-**W2 C2 대비 부분 개선·채택 보류**입니다. 현재 v2.3에서 RR PSNR 이득이 잡음 수준이고 RR2 SAM도 허용폭을 초과해, 고주파 선택 제어로 축척 약점을 해결했다고 판단하지 않습니다. 현재 F1 대비 우위는 평가하지 않았으며 기준 모델 교체를 제안하지 않습니다.
-
-후속에서는 스칼라 gate의 축척 구분 능력과 공동 학습 중 W2의 보상 여부를 먼저 진단할 수 있습니다. train/validation으로 고정한 별도 실험에서 다루고, 이번 test를 보고 계수나 checkpoint를 바꾼 결과를 같은 반복 비교에 합치지 않습니다. 신규 비교는 현행 F1 대조군을 따릅니다. QB 한 센서·탐색에 반복 사용한 test 범위이며, 다른 센서·원해상도 세부의 참값까지 검증하지 않았습니다.
+</details>

@@ -199,7 +199,7 @@ def export(case,out,data_root,threads=2,limit=None):
     # importlib-loaded retained modules need not be registered in sys.modules.
     explicit=[HERE/'suite.py',HERE/'report.py',HERE/'score_suite.m',EXP[53]/'model.py',EXP[54]/'model.py',
               EXP[54]/'prepare.py',EXP[43]/'model.py',EXP[48]/'model.py',
-              PERF/'29_capacity_refinement/calibration.json',SSA/'research/performance/28_residual_refinement/model.py']
+              PERF/'29_capacity_refinement/calibration.json',SSA/'experiments/performance/28_residual_refinement/model.py']
     for path in explicit:imported[path.relative_to(REPO).as_posix()]=sha(path)
     git_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip()
     meta=dict(case=case,checkpoint=cp.relative_to(REPO).as_posix(),checkpoint_sha256=expected,

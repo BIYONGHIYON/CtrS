@@ -305,7 +305,7 @@ def prepare(a):
         with h5py.File(paths[0]) as f:assert len(f['pan'])==20
         manifest[proto]=dict(path=str(paths[0]),sha256=sha(paths[0]))
     plan=dict(seed=42,sensor='QB',channels=4,peak=2047.,epochs=150,milestones=[50,100,150],effective_batch=32,micro=32,workers=1,max_parallel=2,variants=list(VARIANTS),cache_root=str(cache),calibration=json.loads(Path(__file__).with_name('calibration.json').read_text()),selection='minimum validation MSE; earliest exact tie',precision='AMP FP16 train; FP32 validation/test',schedule='cosine epoch0 LR1e-4 to epoch149 LR1e-6',source_hashes={})
-    paths=list((ROOT/'common').glob('*.py'))+[ROOT/'references/upstream/network.py',Path(__file__),Path(__file__).with_name('model.py'),ROOT/'research/performance/17_structural_ablation/model.py',ROOT/'research/performance/28_residual_refinement/model.py']
+    paths=list((ROOT/'common').glob('*.py'))+[ROOT/'references/upstream/network.py',Path(__file__),Path(__file__).with_name('model.py'),ROOT/'experiments/performance/17_structural_ablation/model.py',ROOT/'experiments/performance/28_residual_refinement/model.py']
     plan['source_hashes']={str(p.relative_to(ROOT)).replace('\\','/'):sha(p) for p in paths}
     write(run/'data_manifest.json',manifest);write(run/'plan.json',plan);write(a.runtime/'suite_plan.json',plan)
     print('PREPARED verified cache and RR20/FR20',flush=True)
