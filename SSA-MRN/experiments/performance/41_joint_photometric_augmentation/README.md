@@ -1,61 +1,18 @@
-# 공통 밝기·대비 증강
+# 41. 공통 밝기·대비 증강
 
-**연구 분야:** 기존 성능 개선
+| 분야 | 실험자 | 상태 | 판정 |
+|:---:|:---:|:---:|:---:|
+| 성능 개선 | 송준현 | 평가 완료 · seed42·43·44 | **부분 개선** |
 
-**실험자:** 송준현
+**변경:** 원본 SSA-MRN의 학습 PAN·제공 LMS·MS에 샘플별 같은 gain·offset을 적용하고, 예측을 원래 좌표로 되돌려 MSE를 계산했습니다. 네트워크와 validation/test 입력은 유지했습니다.
 
-**변경 내용:** 원본 SSA-MRN의 학습 PAN·제공 LMS·MS에 샘플별 같은 gain·offset을 적용하고, 예측을 원래 좌표로 되돌려 MSE를 계산했습니다. 네트워크와 validation/test 입력은 유지했습니다.
+**결과:** 3 seed 평균 RR PSNR +0.02416 dB·SAM −0.00144°, 잠정 FR QNR −0.00422입니다. validation은2/3 seed에서 불리하고 FR 이득은 반복되지 않았습니다. 채택을 보류합니다.
 
-| 확인된 결과 | 상태 | 개선 여부 |
-|---|:---:|:---:|
-| 3 seed 평균 RR PSNR +0.02416 dB·SAM −0.00144°, 잠정 FR QNR −0.00422입니다. validation은2/3 seed에서 불리하고 FR 이득은 반복되지 않았습니다. 채택을 보류합니다. | 평가&nbsp;완료<br>seed42·43·44 | 부분&nbsp;개선 |
-
-[실험 목록](../../../README.md#performance-experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [재현 자료](#evidence)
-
-## 1. 목적과 상태
-
-학습 중 공통 밝기·대비 변화에 노출하면 특정 입력 분포에 대한 의존을 줄이고 RR 정확도와 FR 분광·공간 일관성을 높일 수 있는지 확인했습니다. 실제 센서 변화가 공통 affine 변환을 정확히 따른다는 가정은 독립 검증하지 않았습니다.
-
-seed42·43·44의 두 군 모두 새 초기 가중치에서100 epoch 학습을 완료했습니다. validation MSE로 고른 best와 마지막 latest에 대해 RR·FR 각각20장 전체를 평가했습니다. 마지막 확인 기록은 2026-10-18 15:31:44 KST입니다. smoke와 연속 실행 reference는 최종 성능 비교에서 제외했습니다.
-
-두 군 모두 **원본 N0**입니다. [33번](../33_ms_anchored_reversible_normalization/README.md)의 보존 N0 코드와 학습 설정을 사용하되, N1 정규화나 [39번 LocalNorm](../39_local_ms_anchored_reversible_normalization/README.md)을 추가하지 않았습니다. N1이 공통 gain·offset 효과를 상쇄할 수 있어 별개의 원본 모델 실험으로 구성했습니다. 과거 N0 보고서와 비트 단위 재현을 주장하지 않고 이번 동일 실행기 안의 비교를 해석합니다.
-
-## 2. 변경한 구조와 비교 조건
-
-각 학습 샘플에서 gain `a∈[0.9,1.1]`, offset `b∈[-0.01,0.01]`를 균등 분포로 독립 추출해 PAN·제공 LMS·MS에 같은 `a×x+b`를 적용했습니다. 모든 밴드·위치에 공통인 스칼라이며 샘플·epoch마다 바뀝니다. 범위는 학습 전에 고정했고 별도 sweep/select는 하지 않았습니다. offset은 DN/2047 좌표이며 약±20.47DN입니다.
-
-```mermaid
-flowchart LR
-  X[PAN·제공 LMS·MS] --> T[학습 샘플별 공통 a×x+b]
-  T --> N[동일 K4 SSA-MRN N0]
-  N --> I[학습 예측만 역변환 · p−b 나누기 a]
-  I --> M[원본 GT에 MSE]
-  G[변경하지 않은 GT] --> M
-  E[validation/test 원본 입력] --> F[같은 모델 직접 forward · 증강·역변환 없음]
-```
-
-변경군은 `mean(((f(T(x))−b)/a−GT)²)`를 학습했습니다. 이는 변환 GT에 대한 `mean((f(T(x))−(a×GT+b))²/a²)`와 같아 gain이 큰 샘플을 a²만큼 더 가중하는 효과를 제거합니다. 원본 GT·H5는 수정하지 않았고 별도 손실 항은 없습니다. baseline은 원본 입력에 대한 기존 MSE입니다.
-
-validation/test에는 **증강·역변환·추론 평균**을 적용하지 않았습니다. 두 군이 사용하는 네트워크·추론 경로·초기 가중치와 초기 출력은 같습니다. bandwise gain, crop, 회전, 센서 잡음은 추가하지 않았습니다. 입력·예측을 clip하지 않아 증강 입력에 음수나1 초과 값이 생길 수 있습니다. saturation을 포함한 물리 센서 시뮬레이터는 아닙니다.
-
-| 조건 | 두 군 공통 |
-|---|---|
-| 데이터 | QuickBird만 사용, train17,139·validation1,905, RR20·FR20 |
-| 내부 특징 차원 / 공간 배율 | K=4 / 4배 |
-| 전처리 | 원시 DN/2047, 제공 LMS, clip 없음 |
-| 모델 / 파라미터 | 동일 SSA-MRN N0 / 각각426,654 |
-| 학습 | seed42·43·44 각각100 epoch, micro32·유효64 |
-| optimizer / LR | Adam 기본 옵션 / 고정1e-4, scheduler 없음 |
-| 정밀도 | 학습 AMP FP16, 변환·역변환·MSE·validation/test FP32, TF32 끔, GradScaler 시작1024 |
-| 난수 | 모델 초기화 / CUDA 샘플 순서(seed+100000) / CUDA 증강(seed+200000) 분리 |
-| 선택 | epoch0 포함 전체 validation MSE 최저, 정확히 동률이면 먼저 나온 checkpoint |
-| 장치 | 동일 Tesla T4×2, GPU0 baseline·GPU1 aug |
-
-두 군이 같은 epoch 샘플 순서·증강 계획을 기록하되 baseline은 gain1·offset0을 적용합니다. 각 epoch 실제 적용 범위·샘플 수와 계획 해시를 확인했습니다. 6개 학습 모두 AMP 업데이트 생략0회였습니다. 마지막 불완전 유효 batch는 실제 원소 수로 평균했습니다. EMA·FFL·W2·N1·국소 정규화는 사용하지 않았습니다.
+[실험 표](../README.md#experiments) · [결과](#results) · [해석과 판정](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
 
 <a id="results"></a>
 
-## 3. 정량 결과
+## 결과
 
 ### Validation 선택
 
@@ -125,7 +82,9 @@ validation/test에는 **증강·역변환·추론 평균**을 적용하지 않�
 
 FR에는 GT가 없습니다. 공간비율4의 보관된 metrics를 그대로 사용했습니다. SCC·Q2n의 독립 기준 대응과 FR PAN 열화의 공식 센서 MTF/위상·MATLAB 대응은 미검증이어서 잠정 지표로 표시합니다. 표시된 QNR 차이를 검증된 물리적 품질 차이로 확대 해석하지 않습니다.
 
-## 4. 기준선 대비 차이와 해석
+<a id="verdict"></a>
+
+## 해석과 판정
 
 RR PSNR은 seed42·43에서 각각+0.02750·+0.04569dB, seed44에서−0.00071dB였습니다. 평균+0.02416dB는 작고 paired 시드 SD도0.02338dB입니다. SAM 평균 이득은−0.00144°로 매우 작으며 장면별 개선은26/60개 paired 평가에 그쳤습니다. 평균 개선이 대부분 장면의 개선을 뜻하지 않습니다. Q2n 평균은 세 seed 모두 좋아졌지만 ERGAS·SCC는 seed44에서 불리했습니다.
 
@@ -143,7 +102,68 @@ latest의 평균 QNR 변화는+0.0015567로 best와 부호가 다르고 paired S
 
 학습 구간에는 구간 내 checkpoint 비용이 포함되고 데이터 적재·validation·test·ZIP은 제외됩니다. 전체 세션 시간이나 이론 연산량과 다릅니다. peak 메모리와 장면별 forward 시간·warmup3회 후 첫 장면5회 중앙값은 원본 validation/evaluation JSON에 보존했습니다. 이전 FP32·유효32 실험과 같은 조건의 속도 비교는 아닙니다.
 
-## 5. 학습·평가 그래프
+### 판정과 다음 단계
+
+**부분 개선·채택 보류**입니다. RR에는 작지만 관측된 이득이 있어 기록하며 FR 왜곡·QNR의 안정적인 개선과 validation 우위를 확인하지 못해 기준 모델로 채택하지 않습니다. seed44 RR 일부 악화와 seed별 FR 상충도 함께 남깁니다.
+
+계획한3 seed의 학습·평가는 완료했습니다. 후속으로 gain만 적용하는 경우와 offset만 적용하는 경우를 분리하거나 강도를 바꾸려면 별도 실험에서 사전 고정하고 validation으로 선택해야 합니다. 현재 test를 보고 범위를 조정한 결과를 같은 반복 비교로 합치거나, latest를 주 결과로 바꾸지 않습니다. 공식 지표 대응과 센서 일반화는 별도 검증이 필요합니다.
+
+<a id="method"></a>
+
+<details>
+<summary><b>방법</b> · 목적과 상태 · 변경한 구조와 비교 조건</summary>
+
+### 목적과 상태
+
+학습 중 공통 밝기·대비 변화에 노출하면 특정 입력 분포에 대한 의존을 줄이고 RR 정확도와 FR 분광·공간 일관성을 높일 수 있는지 확인했습니다. 실제 센서 변화가 공통 affine 변환을 정확히 따른다는 가정은 독립 검증하지 않았습니다.
+
+seed42·43·44의 두 군 모두 새 초기 가중치에서100 epoch 학습을 완료했습니다. validation MSE로 고른 best와 마지막 latest에 대해 RR·FR 각각20장 전체를 평가했습니다. 마지막 확인 기록은 2026-10-18 15:31:44 KST입니다. smoke와 연속 실행 reference는 최종 성능 비교에서 제외했습니다.
+
+두 군 모두 **원본 N0**입니다. [33번](../33_ms_anchored_reversible_normalization/README.md)의 보존 N0 코드와 학습 설정을 사용하되, N1 정규화나 [39번 LocalNorm](../39_local_ms_anchored_reversible_normalization/README.md)을 추가하지 않았습니다. N1이 공통 gain·offset 효과를 상쇄할 수 있어 별개의 원본 모델 실험으로 구성했습니다. 과거 N0 보고서와 비트 단위 재현을 주장하지 않고 이번 동일 실행기 안의 비교를 해석합니다.
+
+### 변경한 구조와 비교 조건
+
+각 학습 샘플에서 gain `a∈[0.9,1.1]`, offset `b∈[-0.01,0.01]`를 균등 분포로 독립 추출해 PAN·제공 LMS·MS에 같은 `a×x+b`를 적용했습니다. 모든 밴드·위치에 공통인 스칼라이며 샘플·epoch마다 바뀝니다. 범위는 학습 전에 고정했고 별도 sweep/select는 하지 않았습니다. offset은 DN/2047 좌표이며 약±20.47DN입니다.
+
+```mermaid
+flowchart LR
+  X[PAN·제공 LMS·MS] --> T[학습 샘플별 공통 a×x+b]
+  T --> N[동일 K4 SSA-MRN N0]
+  N --> I[학습 예측만 역변환 · p−b 나누기 a]
+  I --> M[원본 GT에 MSE]
+  G[변경하지 않은 GT] --> M
+  E[validation/test 원본 입력] --> F[같은 모델 직접 forward · 증강·역변환 없음]
+```
+
+변경군은 `mean(((f(T(x))−b)/a−GT)²)`를 학습했습니다. 이는 변환 GT에 대한 `mean((f(T(x))−(a×GT+b))²/a²)`와 같아 gain이 큰 샘플을 a²만큼 더 가중하는 효과를 제거합니다. 원본 GT·H5는 수정하지 않았고 별도 손실 항은 없습니다. baseline은 원본 입력에 대한 기존 MSE입니다.
+
+validation/test에는 **증강·역변환·추론 평균**을 적용하지 않았습니다. 두 군이 사용하는 네트워크·추론 경로·초기 가중치와 초기 출력은 같습니다. bandwise gain, crop, 회전, 센서 잡음은 추가하지 않았습니다. 입력·예측을 clip하지 않아 증강 입력에 음수나1 초과 값이 생길 수 있습니다. saturation을 포함한 물리 센서 시뮬레이터는 아닙니다.
+
+| 조건 | 두 군 공통 |
+|---|---|
+| 데이터 | QuickBird만 사용, train17,139·validation1,905, RR20·FR20 |
+| 내부 특징 차원 / 공간 배율 | K=4 / 4배 |
+| 전처리 | 원시 DN/2047, 제공 LMS, clip 없음 |
+| 모델 / 파라미터 | 동일 SSA-MRN N0 / 각각426,654 |
+| 학습 | seed42·43·44 각각100 epoch, micro32·유효64 |
+| optimizer / LR | Adam 기본 옵션 / 고정1e-4, scheduler 없음 |
+| 정밀도 | 학습 AMP FP16, 변환·역변환·MSE·validation/test FP32, TF32 끔, GradScaler 시작1024 |
+| 난수 | 모델 초기화 / CUDA 샘플 순서(seed+100000) / CUDA 증강(seed+200000) 분리 |
+| 선택 | epoch0 포함 전체 validation MSE 최저, 정확히 동률이면 먼저 나온 checkpoint |
+| 장치 | 동일 Tesla T4×2, GPU0 baseline·GPU1 aug |
+
+두 군이 같은 epoch 샘플 순서·증강 계획을 기록하되 baseline은 gain1·offset0을 적용합니다. 각 epoch 실제 적용 범위·샘플 수와 계획 해시를 확인했습니다. 6개 학습 모두 AMP 업데이트 생략0회였습니다. 마지막 불완전 유효 batch는 실제 원소 수로 평균했습니다. EMA·FFL·W2·N1·국소 정규화는 사용하지 않았습니다.
+
+</details>
+
+<a id="figures"></a>
+
+<details>
+<summary><b>그림</b> · 학습·평가 그래프 · 결과 이미지</summary>
+
+<a id="graphs"></a>
+
+### 학습·평가 그래프
 
 ![3 seed 학습 MSE와 validation MSE·SAM](results/learning.png)
 
@@ -157,35 +177,38 @@ latest의 평균 QNR 변화는+0.0015567로 best와 부호가 다르고 paired S
 
 <a id="images"></a>
 
-## 6. 결과 이미지
+### 결과 이미지
 
 평가 전에 고정한 seed42의0기준 장면1·8·11·13·19를 같은 순서로 표시합니다. tile은 전체 장면입니다. 각 그림은 **LR MS 최근접 표시 · PAN 입력 · aug 예측 · GT** 순서입니다. baseline은 수치 비교에 남기고 본문 예측 패널에는 추가하지 않았습니다. RGB[2,1,0], 동일 GT 밴드별1/99 percentile 대비이며 화면 표시 범위 제한과 학습·평가 clipping은 구분합니다. FR에 GT를 만들지 않았습니다.
 
-### 장면 1
+#### 장면 1
 
 ![밝기·대비 증강 장면 1](results/seed_42/aug/evaluations/best/RR_scene_001.png)
 
-### 장면 8
+#### 장면 8
 
 ![밝기·대비 증강 장면 8](results/seed_42/aug/evaluations/best/RR_scene_008.png)
 
-### 장면 11
+#### 장면 11
 
 ![밝기·대비 증강 장면 11](results/seed_42/aug/evaluations/best/RR_scene_011.png)
 
-### 장면 13
+#### 장면 13
 
 ![밝기·대비 증강 장면 13](results/seed_42/aug/evaluations/best/RR_scene_013.png)
 
-### 장면 19
+#### 장면 19
 
 ![밝기·대비 증강 장면 19](results/seed_42/aug/evaluations/best/RR_scene_019.png)
 
 [seed43의 동일 장면](results/seed_43/aug/evaluations/best/)과 [seed44의 동일 장면](results/seed_44/aug/evaluations/best/)도 원본 그대로 보존했습니다. 모든 seed·군의 best/latest 예시와 원본 장면별 수치는 결과 폴더에 있습니다.
 
+</details>
+
 <a id="evidence"></a>
 
-## 7. 재현 자료
+<details>
+<summary><b>재현 자료</b> · 코드, 가중치, 설정, 실행 기록</summary>
 
 - [조건·예시 선택](config.json), [원본 프로토콜](provenance/experiment.json), [군별 설정](provenance/configs/), [환경](provenance/environment_contract.json), [데이터 해시](provenance/data_contract.json)를 보존했습니다.
 - [초기·best/latest15개 가중치](checkpoints/), [실제 학습 소스](provenance/code/), [원본 ZIP 해시](provenance/archive.json), [파일 manifest](manifest.json)를 보존했습니다. 원본 소스와 checkpoint 내부 설정은 변경하지 않았습니다.
@@ -199,8 +222,4 @@ python SSA-MRN/experiments/performance/41_joint_photometric_augmentation/prepare
 
 `model.py`는 같은 N0를 로드하는 진입점입니다. `run.py`는 당시 고정 소스를 포함한 Kaggle 단일 셀이며 기본은smoke입니다. 원본 QB를 연결하고 PHASE를smoke→final_train→final_test, SEED를42·43·44 순서로 진행합니다. 새 실행은 새 RUN_TAG, 재개는 동일 설정의 최신 누적 결과를 사용합니다. 과거 N1/LocalNorm checkpoint를 이 코드로 재개하지 않습니다. 코드 기반 버전과 해시는 원본 출처·snapshot에 보존했습니다.
 
-## 8. 개선 여부와 다음 단계
-
-**부분 개선·채택 보류**입니다. RR에는 작지만 관측된 이득이 있어 기록하며 FR 왜곡·QNR의 안정적인 개선과 validation 우위를 확인하지 못해 기준 모델로 채택하지 않습니다. seed44 RR 일부 악화와 seed별 FR 상충도 함께 남깁니다.
-
-계획한3 seed의 학습·평가는 완료했습니다. 후속으로 gain만 적용하는 경우와 offset만 적용하는 경우를 분리하거나 강도를 바꾸려면 별도 실험에서 사전 고정하고 validation으로 선택해야 합니다. 현재 test를 보고 범위를 조정한 결과를 같은 반복 비교로 합치거나, latest를 주 결과로 바꾸지 않습니다. 공식 지표 대응과 센서 일반화는 별도 검증이 필요합니다.
+</details>

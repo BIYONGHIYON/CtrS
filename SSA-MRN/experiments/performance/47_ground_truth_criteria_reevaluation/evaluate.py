@@ -16,7 +16,7 @@ import h5py, numpy as np, torch
 ROOT = Path(__file__).resolve().parents[3]
 HERE = Path(__file__).resolve().parent
 EXP = ROOT / 'experiments/performance'
-RESEARCH = ROOT / 'research/performance'
+RESEARCH = ROOT / 'experiments/performance'
 sys.path.insert(0, str(ROOT))
 from common import evaluation_protocol as protocol
 from common.model import RestoredPansharpeningNet

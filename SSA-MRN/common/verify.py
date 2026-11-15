@@ -59,7 +59,7 @@ def main():
         for folder in folders:
             count,pts,assets=verify(folder,a.releases);total+=count;weights+=pts;released+=assets
         print(f'PASS: {len(folders)} benchmark models, {total} files, {weights} checkpoints; release assets {released} ({"hashes checked" if a.releases else "listed, use --releases to check"}); hashes only');return
-    folders=sorted(list((ROOT/'research').glob('*/[0-9]*_*'))+list((ROOT/'experiments').glob('*/[0-9]*_*')),key=lambda x:(x.parent.name,int(x.name.split('_')[0])))
+    folders=sorted((ROOT/'experiments').glob('*/[0-9]*_*'),key=lambda x:(x.parent.name,int(x.name.split('_')[0])))
     if a.research_track:folders=[f for f in folders if f.parent.name==a.research_track]
     if a.experiment!='all':folders=[f for f in folders if a.experiment in (f.name,f.name.split('_',1)[0],f.name.split('_',1)[1])]
     if not folders:p.error('Unknown experiment')

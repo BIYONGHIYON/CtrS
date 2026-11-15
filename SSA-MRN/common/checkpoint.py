@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT))
 RESEARCH_TRACK = "performance"
 
 def experiment(number):
-    matches = list((ROOT / 'research' / RESEARCH_TRACK).glob(f'{number}_*')) + list((ROOT / 'experiments' / RESEARCH_TRACK).glob(f'{number}_*'))
+    matches = list((ROOT / 'experiments' / RESEARCH_TRACK).glob(f'{number}_*'))
     if len(matches) != 1:
         raise ValueError(f'Unknown experiment number: {number}')
     return matches[0]

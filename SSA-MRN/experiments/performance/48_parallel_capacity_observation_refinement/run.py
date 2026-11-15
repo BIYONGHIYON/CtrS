@@ -10,7 +10,7 @@ from datetime import datetime,timedelta
 
 def source_hashes():
     perf=HERE.parent;e43=perf/'43_normalized_parallel_capacity'
-    paths=[HERE/'model.py',HERE/'train.py',HERE/'run.py',HERE/'config.json',e43/'model.py',*sorted((e43/'provenance/source').rglob('*.py')),perf.parents[1]/'research/performance/28_residual_refinement/model.py',perf/'29_capacity_refinement/calibration.json']
+    paths=[HERE/'model.py',HERE/'train.py',HERE/'run.py',HERE/'config.json',e43/'model.py',*sorted((e43/'provenance/source').rglob('*.py')),perf.parents[1]/'experiments/performance/28_residual_refinement/model.py',perf/'29_capacity_refinement/calibration.json']
     return {str(p.relative_to(perf.parents[1])).replace('\\','/'):sha(p) for p in paths}
 def fingerprint(cfg):
     c={k:v for k,v in cfg.items() if k!='fingerprint'}

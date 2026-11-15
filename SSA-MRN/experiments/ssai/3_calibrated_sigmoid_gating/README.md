@@ -1,22 +1,66 @@
 # 3. 기준 크기 sigmoid 게이트
 
-**연구 분야:** SSAI 개선 (`ssai`)<br>
-**실험자:** 이병현<br>
-**변경 내용:** 원본 전치를 유지하고 공간 softmax를 기준 크기 sigmoid 게이트로 교체했습니다.
+| 분야 | 실험자 | 상태 | 판정 |
+|:---:|:---:|:---:|:---:|
+| SSAI 개선 | 이병현 | 평가 완료 | **부분 개선**<br>작성 당시 판단 보류 |
 
-| 확인된 결과 | 상태 | 개선 여부 |
-|---|---|:---:|
-| 원본 대비 RR PSNR +0.022617dB, SAM -0.025014°, 잠정 FR QNR +0.009032입니다. | 평가 완료 | 판단 보류 |
+**변경:** 원본 전치를 유지하고 공간 softmax를 기준 크기 sigmoid 게이트로 교체했습니다.
 
-[전체 SSAI 표](../../../README.md#ssai-experiments) · [연구 분석](../../../research/ssai/README.md) · [실행 설정](config.json)
+**결과:** 원본 대비 RR PSNR +0.022617dB, SAM -0.025014°, 잠정 FR QNR +0.009032입니다.
 
-## 1. 목적과 상태
+[실험 표](../README.md#experiments) · [결과](#results) · [해석과 판정](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
+
+[전체 SSAI 표](../../ssai/README.md#experiments) · [연구 분석](../README.md) · [실행 설정](config.json)
+
+<a id="results"></a>
+
+## 결과
+
+RR·FR은 각각 원본 H5의20개 전체 장면 평균입니다. 예측을 자르거나 clipping하지 않았습니다. validation PSNR은 정규화global MSE 기반이며, 아래 test PSNR은 공통 코드의 밴드별 평균·peak2047입니다. 두 정의를 혼용하지 않습니다. FR에는GT가 없으며 QNR·Q2n·SCC의 MATLAB parity는 미검증입니다.
+
+| 모델 | best epoch | validation MSE ↓ | RR PSNR ↑ | SAM ↓ | ERGAS ↓ | SCC ↑ | Q2n ↑ | FR Dλ ↓ | Ds ↓ | 잠정 QNR ↑ |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| A0 | 98 | 0.000172125583 | 37.417961 | 4.964835 | 4.129406 | 0.976691 | 0.921426 | 0.046719 | 0.042283 | 0.913482 |
+| A2 | 98 | 0.000171701993 | 37.440578 | 4.939821 | 4.120005 | 0.976758 | 0.922445 | 0.039728 | 0.039773 | 0.922514 |
+
+후보−A0 차이는 PSNR +0.022617dB, SAM -0.025014°, ERGAS -0.009401, 잠정 QNR +0.009032입니다. validation MSE 차이는 -0.2461%입니다. A2는20장 중 PSNR 17장, SAM 20장, 잠정 QNR 20장에서 개선했습니다. [장면별 원본과 공유 평균](results/evaluation/summary.json)을 보존했습니다.
+
+전체 등록 파라미터는 두 모델 모두426,654개입니다. 사용하지 않는 원본 계층도 포함한 수이며 Conv MACs는 실제 forward에서 실행한 연산만 셌습니다.
+
+| 입력 크기 | Conv GMACs | A0 median ms | 후보 median ms | peak allocated MiB A0 / 후보 |
+|---|---:|---:|---:|---:|
+| 64×64 | 1.244 | 15.249 | 15.327 | 6.90 / 6.90 |
+| 256×256 | 19.904 | 16.863 | 15.975 | 85.01 / 85.01 |
+| 512×512 | 79.614 | 29.158 | 28.419 | 334.95 / 334.95 |
+
+비용은 단독 CUDA FP32에서 같은 합성 입력·3회 워밍업·10회 동기화 측정의 median입니다. p95와 예약메모리는 [profile 원본](results/evaluation/A2/profile.json)에 있습니다. Conv MACs는 보간·softmax/sigmoid·메모리 이동을 포함한 전체FLOPs가 아니며 짧은 합성 측정값을 실제 서비스 속도로 확대 해석하지 않습니다.
+
+<a id="verdict"></a>
+
+## 해석과 판정
+
+RR·잠정 FR의 관측 지표는 나아졌지만 A0는 처음3에폭 micro4, A2는 처음부터 micro32입니다. 시드·초기값·샘플 순서·유효 배치가 같아도 FP32 합산 경로 차이가 포함되므로 SSAI만의 효과로 확정하지 않습니다. 처음부터 같은 micro batch 경로의 새 대조군과 반복 비교하기 전 판단을 보류합니다.
+
+실험들을 서로 합치거나 학습 조건이 다른 과거K6·AMP 결과와 절댓값 순위를 매기지 않았습니다. 기존 test는 선행 탐색에 사용됐으므로 독립 최종 holdout으로 주장하지 않습니다. 작은 단일 시드 차이에 통계적 유의성을 부여하지 않습니다.
+
+### 판정과 다음 단계
+
+**판정: 판단 보류.** RR·잠정 FR의 관측 지표는 나아졌지만 A0는 처음3에폭 micro4, A2는 처음부터 micro32입니다. 시드·초기값·샘플 순서·유효 배치가 같아도 FP32 합산 경로 차이가 포함되므로 SSAI만의 효과로 확정하지 않습니다. 처음부터 같은 micro batch 경로의 새 대조군과 반복 비교하기 전 판단을 보류합니다.
+
+다음 단계는 가설을 고정한 동일 조건의 QB 반복 seed43·44와 필요시 GF2·WV3 확장입니다. 이 보고서의 후속 학습은 실행하지 않았습니다. 기준 모델은 원본 K4·MSE로 유지합니다.
+
+<a id="method"></a>
+
+<details>
+<summary><b>방법</b> · 목적과 상태 · 변경한 구조와 비교 조건</summary>
+
+### 목적과 상태
 
 공간 전체의 경쟁을 픽셀별 기여 조절로 바꿨을 때 나타나는 관측 차이를 비교했습니다.
 
 2026-10-14에 학습 완료 원본과 validation-selected best를 확인하고 RR·FR 각20개 전체 장면 평가를 마쳤습니다. A0와 후보를 각100에폭 학습했습니다. best는100에폭 중 validation MSE가 가장 낮은98에폭이고 latest는100에폭입니다. 학습 완료와 전체 평가 완료를 실제 checkpoint·complete·장면별 JSON으로 각각 확인했습니다.
 
-## 2. 변경한 구조와 비교 조건
+### 변경한 구조와 비교 조건
 
 대조군 A0는 **원본 SSA-MRN·K=4·기본 MSE·단일 복원·공간 확대4배**입니다. 최신 반복 복원이나 backbone 개선 후보로 대체하지 않았습니다.
 
@@ -47,34 +91,16 @@ W --> Y
 
 SSAI 외 backbone·복원 구조·연결부·손실·보간(`bilinear`, `align_corners=True`)·데이터 처리는 바꾸지 않았습니다. 내부 특징 차원K=4와 공간 확대4배는 서로 다른 설정입니다.
 
-## 3. 정량 결과
+</details>
 
-RR·FR은 각각 원본 H5의20개 전체 장면 평균입니다. 예측을 자르거나 clipping하지 않았습니다. validation PSNR은 정규화global MSE 기반이며, 아래 test PSNR은 공통 코드의 밴드별 평균·peak2047입니다. 두 정의를 혼용하지 않습니다. FR에는GT가 없으며 QNR·Q2n·SCC의 MATLAB parity는 미검증입니다.
+<a id="figures"></a>
 
-| 모델 | best epoch | validation MSE ↓ | RR PSNR ↑ | SAM ↓ | ERGAS ↓ | SCC ↑ | Q2n ↑ | FR Dλ ↓ | Ds ↓ | 잠정 QNR ↑ |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| A0 | 98 | 0.000172125583 | 37.417961 | 4.964835 | 4.129406 | 0.976691 | 0.921426 | 0.046719 | 0.042283 | 0.913482 |
-| A2 | 98 | 0.000171701993 | 37.440578 | 4.939821 | 4.120005 | 0.976758 | 0.922445 | 0.039728 | 0.039773 | 0.922514 |
+<details>
+<summary><b>그림</b> · 학습·평가 그래프 · 결과 이미지</summary>
 
-후보−A0 차이는 PSNR +0.022617dB, SAM -0.025014°, ERGAS -0.009401, 잠정 QNR +0.009032입니다. validation MSE 차이는 -0.2461%입니다. A2는20장 중 PSNR 17장, SAM 20장, 잠정 QNR 20장에서 개선했습니다. [장면별 원본과 공유 평균](results/evaluation/summary.json)을 보존했습니다.
+<a id="graphs"></a>
 
-전체 등록 파라미터는 두 모델 모두426,654개입니다. 사용하지 않는 원본 계층도 포함한 수이며 Conv MACs는 실제 forward에서 실행한 연산만 셌습니다.
-
-| 입력 크기 | Conv GMACs | A0 median ms | 후보 median ms | peak allocated MiB A0 / 후보 |
-|---|---:|---:|---:|---:|
-| 64×64 | 1.244 | 15.249 | 15.327 | 6.90 / 6.90 |
-| 256×256 | 19.904 | 16.863 | 15.975 | 85.01 / 85.01 |
-| 512×512 | 79.614 | 29.158 | 28.419 | 334.95 / 334.95 |
-
-비용은 단독 CUDA FP32에서 같은 합성 입력·3회 워밍업·10회 동기화 측정의 median입니다. p95와 예약메모리는 [profile 원본](results/evaluation/A2/profile.json)에 있습니다. Conv MACs는 보간·softmax/sigmoid·메모리 이동을 포함한 전체FLOPs가 아니며 짧은 합성 측정값을 실제 서비스 속도로 확대 해석하지 않습니다.
-
-## 4. 기준선 대비 차이와 해석
-
-RR·잠정 FR의 관측 지표는 나아졌지만 A0는 처음3에폭 micro4, A2는 처음부터 micro32입니다. 시드·초기값·샘플 순서·유효 배치가 같아도 FP32 합산 경로 차이가 포함되므로 SSAI만의 효과로 확정하지 않습니다. 처음부터 같은 micro batch 경로의 새 대조군과 반복 비교하기 전 판단을 보류합니다.
-
-실험들을 서로 합치거나 학습 조건이 다른 과거K6·AMP 결과와 절댓값 순위를 매기지 않았습니다. 기존 test는 선행 탐색에 사용됐으므로 독립 최종 holdout으로 주장하지 않습니다. 작은 단일 시드 차이에 통계적 유의성을 부여하지 않습니다.
-
-## 5. 학습·평가 그래프
+### 학습·평가 그래프
 
 ![실제 학습·validation 기록](results/learning.png)
 
@@ -84,7 +110,9 @@ RR·잠정 FR의 관측 지표는 나아졌지만 A0는 처음3에폭 micro4, A2
 
 ![장면별 기준선 대비 차이](results/scene_differences.png)
 
-## 6. 결과 이미지
+<a id="images"></a>
+
+### 결과 이미지
 
 사전 고정한 RR zero-based index1·8·11·13·19를 전체 장면·오름차순으로 표시합니다. 패널은 **LR MS·PAN·예측·GT** 순서입니다. QB RGB 표시밴드는 `[2,1,0]` 가정이며 LR MS는 nearest 확대, MS·예측·GT는 해당 GT의1-99% 대비를 공유하고 PAN은 별도 대비를 사용했습니다. 이는 표시용이며 수치평가에는 적용하지 않았습니다. FR에는GT를 만들지 않았습니다.
 
@@ -98,7 +126,12 @@ RR·잠정 FR의 관측 지표는 나아졌지만 A0는 처음3에폭 micro4, A2
 
 ![A2 RR 장면 19](results/evaluation/A2/scene_19.png)
 
-## 7. 재현 자료
+</details>
+
+<a id="evidence"></a>
+
+<details>
+<summary><b>재현 자료</b> · 코드, 가중치, 설정, 실행 기록</summary>
 
 [원본 best/latest](checkpoints) · [compact 학습 기록](results/training) · [전체 RR·FR 원본](results/evaluation) · [모델](model.py) · [설정](config.json) · [학습 당시 소스](provenance/training_source.zip) · [실제 실행 plan](provenance/plan.json) · [평가 당시 소스](provenance/evaluator.py) · [파일 해시](manifest.json)
 
@@ -117,8 +150,4 @@ python SSA-MRN/common/ssai_evaluate.py --source-root SSA-MRN --runtime SSA-MRN/e
 
 기본 재평가는 CUDA FP32이며 `--device cpu`를 지정할 수 있습니다. 평가 당시 원본 코드는 provenance에 그대로 보존했습니다.
 
-## 8. 개선 여부와 다음 단계
-
-**판정: 판단 보류.** RR·잠정 FR의 관측 지표는 나아졌지만 A0는 처음3에폭 micro4, A2는 처음부터 micro32입니다. 시드·초기값·샘플 순서·유효 배치가 같아도 FP32 합산 경로 차이가 포함되므로 SSAI만의 효과로 확정하지 않습니다. 처음부터 같은 micro batch 경로의 새 대조군과 반복 비교하기 전 판단을 보류합니다.
-
-다음 단계는 가설을 고정한 동일 조건의 QB 반복 seed43·44와 필요시 GF2·WV3 확장입니다. 이 보고서의 후속 학습은 실행하지 않았습니다. 기준 모델은 원본 K4·MSE로 유지합니다.
+</details>

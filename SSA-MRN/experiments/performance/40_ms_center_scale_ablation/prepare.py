@@ -52,7 +52,7 @@ def report(s):
 |---|:---:|:---:|
 | seed42 네 군의100epoch 학습을 완료했습니다. A3 validation MSE가 가장 낮았고 A1·A2는 반복 진행 기준을 넘었습니다. RR·FR은 미평가입니다. | 학습&nbsp;완료<br>평가&nbsp;대기 | 판단&nbsp;보류 |
 
-[실험 목록](../../../research/performance/README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [재현 자료](#evidence)
+[실험 목록](../../../experiments/performance/README.md#experiments) · [수치](#results) · [그래프](#graphs) · [이미지](#images) · [재현 자료](#evidence)
 
 ## 1. 목적과 상태
 
@@ -149,7 +149,7 @@ def register():
  item=dict(report='experiments/performance/'+ROOT.name+'/README.md',research_track='performance',experiment=40,display_name='40. MS 기준 평균 제거와 대비 정규화의 기여 분리',experimenter='김경찬',status='학습 완료·평가 대기',improvement='판단 보류',sensor='QB',trained_seeds=[42],evaluated_seeds=[],test_scored=False,checkpoints='experiments/performance/'+ROOT.name+'/checkpoints',results='experiments/performance/'+ROOT.name+'/results',manifest='experiments/performance/'+ROOT.name+'/manifest.json',config='experiments/performance/'+ROOT.name+'/config.json',entrypoint='experiments/performance/'+ROOT.name+'/run.py',verification='experiments/performance/'+ROOT.name+'/prepare.py',limits='seed42 validation만 확인. A1·A2의A3 대비MSE +1.220%·+1.810%로 사전 반복 기준 미달. RR·FR 미평가, 최종 개선 판단 보류.')
  for p in [ssa/'experiments/catalog.json',ssa/'research/experiments.json']:
   d=json.loads(p.read_text());d[key]=item;p.write_text(json.dumps(d,indent=2,ensure_ascii=False)+'\n', newline="\n")
- for p,link in [(repo/'README.md','SSA-MRN/'),(ssa/'README.md',''),(ssa/'research/performance/README.md','../../')]:
+ for p,link in [(repo/'README.md','SSA-MRN/'),(ssa/'README.md',''),(ssa/'experiments/performance/README.md','../../')]:
   s=p.read_text();row=f'| [40. MS 기준 평균 제거와 대비 정규화의 기여 분리]({link}experiments/performance/{ROOT.name}/README.md)<br>[김경찬] | 전역 공유 정규화의 평균 제거·대비 조절을 네 군으로 분리했습니다. | seed42 validation: A3 MSE 최저; A1·A2는A3 대비 +1.220%·+1.810%로 반복 중단. RR·FR 미평가 | 학습&nbsp;완료<br>평가&nbsp;대기 | 판단&nbsp;보류 |'
   lines=s.splitlines();found=[i for i,x in enumerate(lines) if x.startswith('| [40.')]
   if found:lines[found[0]]=row

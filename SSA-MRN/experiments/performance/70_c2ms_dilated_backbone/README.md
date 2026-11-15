@@ -1,35 +1,18 @@
 # 70. C2MS 원래 해상도 가지의 합성곱 참조 범위 확장
 
-**연구 분야:** 성능 개선 · **실험자:** 이병현
+| 분야 | 실험자 | 상태 | 판정 |
+|:---:|:---:|:---:|:---:|
+| 성능 개선 | 이병현 | 평가 완료 · seed42 | **부분 개선** |
 
-**변경 내용:** C2MS 원래 해상도 가지의 블록 2·4에서 두 번째 3×3 합성곱 두 개만 dilation·padding 1에서 2로 바꿨습니다.
+**변경:** C2MS 원래 해상도 가지의 블록 2·4에서 두 번째 3×3 합성곱 두 개만 dilation·padding 1에서 2로 바꿨습니다.
 
-| 확인된 결과 | 상태 | 개선 여부 |
-|---|:---:|:---:|
-| dilation은 QB RR에서 공식 기준 대비 +0.009 dB·SAM −0.004°였지만 PSNR 잡음 문턱과 RR2 PSNR에 미달했습니다. WV3·WV2는 PSNR·SAM 모두 악화했습니다. | 평가&nbsp;완료<br>seed42 | 부분&nbsp;개선 |
+**결과:** dilation은 QB RR에서 공식 기준 대비 +0.009 dB·SAM −0.004°였지만 PSNR 잡음 문턱과 RR2 PSNR에 미달했습니다. WV3·WV2는 PSNR·SAM 모두 악화했습니다.
 
-[실험 목록](../../../research/performance/README.md) · [전체 수치](results/summary.json)
+[실험 표](../README.md#experiments) · [결과](#results) · [해석과 판정](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
 
-## 1. 목적과 상태
+<a id="results"></a>
 
-PSNR·SAM 동시 개선과 WV2 전이 개선을 검증했습니다. 사용자 지시로 seed 42만 실행했습니다. 70번 4회와 71번 2회 모두 150에폭 학습 및 전체 RR·RR2·FR_WALD·FR 관측 일치 평가를 마쳤으며, 전체 실행은 2026-10-30 17:43 KST에 완료됐습니다. validation으로 체크포인트를 고르고 모든 사전 등록 군을 test에서 보고했습니다. 추가 시드와 결합 실험은 실행하지 않았습니다.
-
-## 2. 변경한 구조와 비교 조건
-
-| 항목 | 조건 |
-|---|---|
-| 구조 | 원본 SSA-MRN K4 + W2인 C2MS |
-| 학습 | Adam, batch32, AMP FP16, 150에폭 cosine 1e-4에서 1e-6 |
-| 손실 | 원래 쌍 MSE + 가중치 1의 2배 거친 쌍 MSE |
-| 선택 | 원래 축척 validation MSE 최소, 정확한 동률은 먼저 나온 checkpoint |
-| 추론 | 단일 모델 한 번, 사영·앙상블·후처리 없음 |
-| 공식 비교 | QB 53번, WV3 및 WV2 전이 54번, 같은 seed42 |
-| 추가 비교 | 이번 실행기의 C2MS_R 재학습 대조군 |
-| 장치 | RTX 3060 Ti, 한 번에 한 학습 |
-
-C2MS_D는 `core.backbone.original[1].conv21`과 `[3].conv21`의 dilation/padding만 2로 바꿉니다. W2는 그대로이며 파라미터 수·초기 가중치·표본 순서를 맞췄습니다. dilation은 state_dict에 저장되지 않으므로 평가 모델 생성 때 실제 geometry를 확인했습니다.
-
-## 3. 정량 결과
+## 결과
 
 각 test는 20장 전체 평균입니다. Δ는 후보 − 대조군이며 PSNR은 양수, SAM·ERGAS는 음수가 좋습니다. **단일시드 PSNR 잡음 문턱은 0.06 dB**입니다. 공식 기준과 이번 재학습 대조군 비교를 구분합니다. QB RR2 공식 판정은 57번 고정값 PSNR 39.1148 dB·SAM 4.2410°를 유지합니다.
 
@@ -59,7 +42,6 @@ C2MS_D는 `core.backbone.original[1].conv21`과 `[3].conv21`의 dilation/padding
 
 blur validation은 σ 0.4·0.8·1.2의 산술평균이며 전이의 대리 진단입니다. 70번은 clean PSNR·SAM 동시 개선을 요구했고 QB만 통과했습니다. 71번은 clean PSNR ≥ −0.03 dB·SAM ≤ +0.02° 및 blur 평균 PSNR 상승·SAM 감소를 요구했으나 두 군 모두 clean 항목에서 미달했습니다. test를 보고 후보나 강도를 고르지 않았습니다.
 
-
 **실제 업데이트 기록** (AMP overflow로 건너뛴 횟수를 포함합니다. 센서별 표본 순서 해시는 모든 군에서 같았습니다.)
 
 | 실행 | 시도 | 적용 | 건너뜀 |
@@ -69,13 +51,52 @@ blur validation은 σ 0.4·0.8·1.2의 산술평균이며 전이의 대리 진�
 | WV3_C2MS_D_s42 | 45600 | 45595 | 5 |
 | WV3_C2MS_R_s42 | 45600 | 45596 | 4 |
 
-## 4. 기준선 대비 차이와 해석
+<a id="verdict"></a>
+
+## 해석과 판정
 
 dilation은 QB RR에서 공식 기준 대비 +0.009 dB·SAM −0.004°였지만 PSNR 잡음 문턱과 RR2 PSNR에 미달했습니다. WV3·WV2는 PSNR·SAM 모두 악화했습니다.
 
 같은 실행기의 대조군 대비 dilation은 QB +0.022 dB·SAM −0.0075°, WV3 −0.085 dB·+0.016°, WV2 −0.259 dB·+0.094°입니다. QB의 작은 이득은 잡음 문턱 미만이며 RR2가 악화했습니다. 원본 42번의 이득을 C2MS에서 재현했다는 근거는 없습니다. W2와 기능이 겹쳤다는 설명은 가설입니다.
 
-## 5. 학습·평가 그래프
+### 판정과 다음 단계
+
+**부분 개선**입니다(seed42 한 번). dilation은 QB RR에서 공식 기준 대비 +0.009 dB·SAM −0.004°였지만 PSNR 잡음 문턱과 RR2 PSNR에 미달했습니다. WV3·WV2는 PSNR·SAM 모두 악화했습니다. 현재 기준 모델은 C2MS로 유지합니다. 원래 센서 PSNR·SAM 동시 개선과 WV2 전이 개선을 함께 달성하지 못했고 사전 관문도 전 센서에서 통과하지 못했습니다. 추가 시드·결합 실험은 시작하지 않습니다.
+
+<a id="method"></a>
+
+<details>
+<summary><b>방법</b> · 목적과 상태 · 변경한 구조와 비교 조건</summary>
+
+### 목적과 상태
+
+PSNR·SAM 동시 개선과 WV2 전이 개선을 검증했습니다. 사용자 지시로 seed 42만 실행했습니다. 70번 4회와 71번 2회 모두 150에폭 학습 및 전체 RR·RR2·FR_WALD·FR 관측 일치 평가를 마쳤으며, 전체 실행은 2026-10-30 17:43 KST에 완료됐습니다. validation으로 체크포인트를 고르고 모든 사전 등록 군을 test에서 보고했습니다. 추가 시드와 결합 실험은 실행하지 않았습니다.
+
+### 변경한 구조와 비교 조건
+
+| 항목 | 조건 |
+|---|---|
+| 구조 | 원본 SSA-MRN K4 + W2인 C2MS |
+| 학습 | Adam, batch32, AMP FP16, 150에폭 cosine 1e-4에서 1e-6 |
+| 손실 | 원래 쌍 MSE + 가중치 1의 2배 거친 쌍 MSE |
+| 선택 | 원래 축척 validation MSE 최소, 정확한 동률은 먼저 나온 checkpoint |
+| 추론 | 단일 모델 한 번, 사영·앙상블·후처리 없음 |
+| 공식 비교 | QB 53번, WV3 및 WV2 전이 54번, 같은 seed42 |
+| 추가 비교 | 이번 실행기의 C2MS_R 재학습 대조군 |
+| 장치 | RTX 3060 Ti, 한 번에 한 학습 |
+
+C2MS_D는 `core.backbone.original[1].conv21`과 `[3].conv21`의 dilation/padding만 2로 바꿉니다. W2는 그대로이며 파라미터 수·초기 가중치·표본 순서를 맞췄습니다. dilation은 state_dict에 저장되지 않으므로 평가 모델 생성 때 실제 geometry를 확인했습니다.
+
+</details>
+
+<a id="figures"></a>
+
+<details>
+<summary><b>그림</b> · 학습·평가 그래프 · 결과 이미지</summary>
+
+<a id="graphs"></a>
+
+### 학습·평가 그래프
 
 실제 history의 학습 MSE·validation PSNR·SAM과 공식 대조군 대비 평가 비교입니다. EMA는 기존 학습기의 기록으로만 보존하며 주 결과는 일반 best.pt입니다.
 
@@ -103,7 +124,9 @@ dilation은 QB RR에서 공식 기준 대비 +0.009 dB·SAM −0.004°였지만 
 
 ![공식 대조군 비교](results/WV3_C2MS_R_s42/evaluation/comparison.png)
 
-## 6. 결과 이미지
+<a id="images"></a>
+
+### 결과 이미지
 
 고정 장면 0·1·3·7·14·17에 대해 원본 크기 비교와 확대 비교를 모두 보존했습니다. 원본 형식은 LR MS·PAN·현재 기준 C2MS·후보·정답 및 공통 척도의 두 오차 지도입니다. 확대 형식은 후보 개선이 가장 큰 64×64 창을 4배 확대하므로 **후보에 유리하게 고른 창**입니다. 전체 장면 PSNR과 함께 봅니다. QB RGB는 [2,1,0], WV3·WV2는 [4,2,1]입니다.
 
@@ -227,7 +250,12 @@ dilation은 QB RR에서 공식 기준 대비 +0.009 dB·SAM −0.004°였지만 
 
 </details>
 
-## 7. 재현 자료
+</details>
+
+<a id="evidence"></a>
+
+<details>
+<summary><b>재현 자료</b> · 코드, 가중치, 설정, 실행 기록</summary>
 
 [설정](config.json) · [전체 수치 요약](results/summary.json) · [manifest](manifest.json)
 
@@ -235,6 +263,4 @@ dilation은 QB RR에서 공식 기준 대비 +0.009 dB·SAM −0.004°였지만 
 
 70번 학습 완료 후 validation 공통 모듈 검색 경로 누락으로 중단됐다가 PYTHONPATH를 지정한 외부 실행기로 검증부터 재개했습니다. 서버의 학습 당시 소스·가중치를 바꾸지 않았고 네 학습의 best·history 해시 불변을 확인했습니다. 원본 validation과 복구 근거는 각 provenance/recovery_20261030 및 70번 복구 기록에 있습니다. 재현 시 run_suite 실행 환경의 PYTHONPATH에 SSA-MRN을 지정합니다. 현행 validation.py에는 같은 경로 등록을 명시했습니다.
 
-## 8. 개선 여부와 다음 단계
-
-**부분 개선**입니다(seed42 한 번). dilation은 QB RR에서 공식 기준 대비 +0.009 dB·SAM −0.004°였지만 PSNR 잡음 문턱과 RR2 PSNR에 미달했습니다. WV3·WV2는 PSNR·SAM 모두 악화했습니다. 현재 기준 모델은 C2MS로 유지합니다. 원래 센서 PSNR·SAM 동시 개선과 WV2 전이 개선을 함께 달성하지 못했고 사전 관문도 전 센서에서 통과하지 못했습니다. 추가 시드·결합 실험은 시작하지 않습니다.
+</details>

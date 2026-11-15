@@ -183,7 +183,7 @@ def report(per_seed, aggregate, checks):
            '**변경 내용:** 33번의 LR MS 기준 공유 정규화·역변환을 유지하고 시드43·44로 독립 반복했습니다.', '',
            '| 확인된 결과 | 상태 | 개선 여부 |', '|---|:---:|:---:|',
            '| 세 시드의 RR 평균 5지표가 모두 개선됐으나 seed44의 잠정 FR QNR·Ds가 악화했습니다. | 평가 완료 | 부분 개선 |', '',
-           '[실험 목록](../../../research/performance/README.md#experiments) · [선행 실험](../33_ms_anchored_reversible_normalization/README.md)', '',
+           '[실험 목록](../../../experiments/performance/README.md#experiments) · [선행 실험](../33_ms_anchored_reversible_normalization/README.md)', '',
            '## 1. 목적과 상태', '',
            '33번의 단일 시드 이득이 다른 초기값에서도 반복되는지 확인했습니다. 시드43·44의 N0·N1 학습을 각각100에폭 완료했고 validation best로 RR·FR 각각20장 전체를 평가했습니다. 시드42는33번에 보관된 결과를 참조하며 다시 학습하지 않았습니다.', '',
            '## 2. 변경한 구조와 비교 조건', '',
@@ -271,7 +271,7 @@ def register():
     for relative, link in (
         ('README.md', f'SSA-MRN/{prefix}/README.md'),
         ('SSA-MRN/README.md', prefix + '/README.md'),
-        ('SSA-MRN/research/performance/README.md', f'../../{prefix}/README.md')):
+        ('SSA-MRN/experiments/performance/README.md', f'../../{prefix}/README.md')):
         path = ROOT / relative
         text = path.read_text(encoding='utf-8-sig')
         lines = text.splitlines()

@@ -1,63 +1,20 @@
-# MS 기준 가역 정규화와 저해상도 병렬 특징 용량 확장
+# 43. MS 기준 가역 정규화와 저해상도 병렬 특징 용량 확장
 
-**연구 분야:** 기존 성능 개선
+| 분야 | 실험자 | 상태 | 판정 |
+|:---:|:---:|:---:|:---:|
+| 성능 개선 | 이병현 | 평가 완료·3seed | **개선**<br>작성 당시 부분 개선 |
 
-**실험자:** 이병현
+**변경:** 원본 SSA-MRN에 입력별 MS 공통 가역 정규화(N1)와 저해상도 병렬 특징 가지(W2)를 단독·결합 적용한 네 군을 세 시드에서 비교했습니다.
 
-**변경 내용:** 원본 SSA-MRN에 입력별 MS 공통 가역 정규화(N1)와 저해상도 병렬 특징 가지(W2)를 단독·결합 적용한 네 군을 세 시드에서 비교했습니다.
+**결과:** C3는 원본 대비 PSNR +0.7381dB이나 잠정 QNR -0.11599였습니다. 정규화 단독 C1의 평균 RR·FR은 개선됐으나 결합의 FR 악화 완화는 실패했습니다.
 
-| 확인된 결과 | 상태 | 개선 여부 |
-|---|:---:|:---:|
-| C3는 원본 대비 PSNR +0.7381dB이나 잠정 QNR -0.11599였습니다. 정규화 단독 C1의 평균 RR·FR은 개선됐으나 결합의 FR 악화 완화는 실패했습니다. | 평가 완료·3seed | 부분 개선 |
+[실험 표](../README.md#experiments) · [결과](#results) · [해석과 판정](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
 
 > **현재 표 판정 (2026-11-04, [판정 기준 v2.4](../../../docs/judgement_criteria.md#보조-판정-삭제-v23--v24)):** **개선**. QB 3시드 평균: C1·C2·C3 개선(v2.4). C3 RR ΔPSNR +0.738dB·ΔSAM −0.323°. 위 요약 표는 작성 당시 판정입니다.
 
-## 1. 목적과 상태
+<a id="results"></a>
 
-29번 W2의 RR 이득을 유지하면서 FR 공간 왜곡을 줄일 수 있는지 확인했습니다. 네 군×seed42·43·44의150에폭 학습과 각 validation best의 RR20·FR20 전체 평가를 마쳤습니다. 최종 학습은2026-10-19 17:43, 전체 평가는17:45(KST)에 끝났습니다. 같은20장면을12개 모델로 평가한 RR240·FR240회이며,480개 독립 영상 실험이 아닙니다. 기존 원본 기준 모델을 유지합니다.
-
-## 2. 변경한 구조와 비교 조건
-
-| 군 | 입력·출력 변환 | Backbone | 파라미터 수 |
-|---|---|---|---:|
-| C0 | 없음 | 원본 | 426,654 |
-| C1 | N1 가역 정규화 | 원본 | 426,654 |
-| C2 | 없음 | 원본+W2 | 2,853,918 |
-| C3 | N1 가역 정규화 | 원본+W2 | 2,853,918 |
-
-N1은 해당 LR MS의 밴드·공간 전체 모집단 평균 μ와 s=max(표준편차,0.01)를 구해 PAN·제공 LMS·MS에 같은(x−μ)/s를 적용하고 출력에 sy+μ를 적용합니다. GT·다른 샘플은 통계에 포함하지 않았습니다. W2는 backbone 입력 특징에 PixelUnshuffle(2) →256에서128채널1×1 Conv →128채널 잔차 블록8개 →128에서256채널1×1 Conv →PixelShuffle(2)를 병렬 적용해 원본 backbone 출력에 더합니다. 마지막 Conv는0으로 초기화했습니다. 실제 backbone과 추가 가지에는 BatchNorm이 없습니다.
-
-아래는 C3의 흐름이며 다른 군의 차이는 위 표와 같습니다.
-
-```mermaid
-flowchart LR
-    A[PAN · 제공 LMS · MS] --> N{C1·C3: MS 공통 정규화}
-    N --> C[원본 특징 추출]
-    C --> B[원본 backbone]
-    C --> W[C2·C3: 저해상도 W2 가지]
-    B --> S[특징 합산]
-    W --> S
-    S --> R[원본 SSAI·다중 해상도 복원]
-    R --> I[C1·C3: 역변환]
-    I --> O[최종 출력]
-```
-
-| 조건 | 실제 수행 |
-|---|---|
-| 데이터 | QB train17,139·validation1,905·RR20·FR20, 원본 해시 확인 |
-| 모델·배율 | K4·공간4배, LRPAN·제공 LMS·원본 SSAI 유지 |
-| 초기화·순서 | 시드별 공통 core 초기값·150개 epoch 순서 해시 일치 |
-| 학습량 | 각150에폭, 전체 패치 사용·drop 없음, epoch당536회 업데이트 시도 |
-| 배치·optimizer | effective/micro32, Adam 기본 betas·eps·weight_decay0 |
-| 학습률 | 첫 에폭1e-4 →마지막 에폭1e-6, 에폭별 cosine |
-| 손실·선택 | DN/2047 좌표의 최종 출력 MSE; epoch0 포함 최소 validation MSE, 동률은 먼저 나온 에폭 |
-| 정밀도 | core AMP FP16; 통계·역변환·손실·validation·평가 FP32; TF32 off |
-| 실행 | RTX3060Ti8GB, 최대2개 병렬, CPU1스레드·공유 FP32 mmap·pinned 전송·channels-last |
-| CUDA 설정 | cuDNN autotune·deterministic convolution, deterministic algorithms warn-only·CUBLAS workspace 고정 |
-
-실행 배치는 본 학습 전 두 W2 군의 처리 속도·메모리로 선택했습니다. validation/test로 최적화 조건을 고르지 않았습니다. 짧은 AMP 재개 검사를 통과했으며 첫 에폭 뒤 완료 로그 오류는 기존 모델·optimizer·scaler·RNG·shuffle·커서를 보존해 수정 후 재개했습니다. 원본 초기 학습 소스·설정·첫 에폭 가중치와 재개 근거는 provenance에 보존했습니다. FP16의 실제 업데이트 건너뜀은 아래에 모두 기록했으며 네 군의 실제 optimizer 업데이트 수가 완전히 같지는 않습니다.
-
-## 3. 정량 결과
+## 결과
 
 ### Validation 선택과 업데이트
 
@@ -120,7 +77,9 @@ flowchart LR
 
 각60회는 동일20장면의3시드 반복입니다. 정확한 시드·장면별 차이는[전체 paired 기록](results/paired_scene_deltas.json)에 보존했습니다.
 
-## 4. 기준선 대비 차이와 해석
+<a id="verdict"></a>
+
+## 해석과 판정
 
 C1 정규화 단독은 원본 대비 세 시드 평균 PSNR +0.100950dB·SAM -0.036497°·잠정 QNR +0.009998였습니다. RR의 PSNR·SAM·ERGAS는3/3시드에서 개선됐지만 잠정 FR QNR은2/3시드에서만 개선됐습니다. seed43은 QNR −0.003282·Ds +0.001276·Dλ +0.002060으로 모두 악화했고, seed42도 Dλ는 +0.000631로 악화했습니다. 따라서 C1도 부분 개선이며 FR 이득의 시드 안정성을 확정하지 않습니다. 단일 센서·기존 탐색 benchmark 결과이며 기준 모델로 승격하지 않습니다.
 
@@ -128,7 +87,70 @@ C3 결합군은 원본 대비 PSNR +0.738092dB이나 잠정 QNR -0.115991였습�
 
 요인 상호작용(C3−C2)−(C1−C0)의 평균은 PSNR -0.065257dB·QNR -0.052623입니다. 이는 이 조건에서 두 변경의 결합이 단독 이득의 합보다 불리했다는 관측이며 FR 악화의 물리적 원인까지 입증하지는 않습니다. 원본 대비 개선을 논문 수치 대비 개선으로 해석하지 않습니다. 29·33·40번과 학습량·정밀도·샘플 순서가 완전히 같지 않으므로 기존 숫자를 이 실험의 대조군으로 대신 쓰지 않습니다.
 
-## 5. 학습·평가 그래프
+### 판정과 다음 단계
+
+**부분 개선·결합 후보 채택 보류**입니다. 정규화 단독의 평균 이득과 결합군의 RR·FR 상충을 분리합니다. 다음에는 결합군의 공간 왜곡이 커진 장면과 추가 가지의 기여를 분석한 뒤 새 가설을 정합니다. 현재 결과만으로 통계 증강·고주파 제한·게이트 추가 학습을 자동 실행하지 않습니다. 추가 센서·독립 holdout 및 MATLAB 수치 대응은 미실시이며 기존 원본 기준을 유지합니다.
+
+<a id="method"></a>
+
+<details>
+<summary><b>방법</b> · 목적과 상태 · 변경한 구조와 비교 조건</summary>
+
+### 목적과 상태
+
+29번 W2의 RR 이득을 유지하면서 FR 공간 왜곡을 줄일 수 있는지 확인했습니다. 네 군×seed42·43·44의150에폭 학습과 각 validation best의 RR20·FR20 전체 평가를 마쳤습니다. 최종 학습은2026-10-19 17:43, 전체 평가는17:45(KST)에 끝났습니다. 같은20장면을12개 모델로 평가한 RR240·FR240회이며,480개 독립 영상 실험이 아닙니다. 기존 원본 기준 모델을 유지합니다.
+
+### 변경한 구조와 비교 조건
+
+| 군 | 입력·출력 변환 | Backbone | 파라미터 수 |
+|---|---|---|---:|
+| C0 | 없음 | 원본 | 426,654 |
+| C1 | N1 가역 정규화 | 원본 | 426,654 |
+| C2 | 없음 | 원본+W2 | 2,853,918 |
+| C3 | N1 가역 정규화 | 원본+W2 | 2,853,918 |
+
+N1은 해당 LR MS의 밴드·공간 전체 모집단 평균 μ와 s=max(표준편차,0.01)를 구해 PAN·제공 LMS·MS에 같은(x−μ)/s를 적용하고 출력에 sy+μ를 적용합니다. GT·다른 샘플은 통계에 포함하지 않았습니다. W2는 backbone 입력 특징에 PixelUnshuffle(2) →256에서128채널1×1 Conv →128채널 잔차 블록8개 →128에서256채널1×1 Conv →PixelShuffle(2)를 병렬 적용해 원본 backbone 출력에 더합니다. 마지막 Conv는0으로 초기화했습니다. 실제 backbone과 추가 가지에는 BatchNorm이 없습니다.
+
+아래는 C3의 흐름이며 다른 군의 차이는 위 표와 같습니다.
+
+```mermaid
+flowchart LR
+    A[PAN · 제공 LMS · MS] --> N{C1·C3: MS 공통 정규화}
+    N --> C[원본 특징 추출]
+    C --> B[원본 backbone]
+    C --> W[C2·C3: 저해상도 W2 가지]
+    B --> S[특징 합산]
+    W --> S
+    S --> R[원본 SSAI·다중 해상도 복원]
+    R --> I[C1·C3: 역변환]
+    I --> O[최종 출력]
+```
+
+| 조건 | 실제 수행 |
+|---|---|
+| 데이터 | QB train17,139·validation1,905·RR20·FR20, 원본 해시 확인 |
+| 모델·배율 | K4·공간4배, LRPAN·제공 LMS·원본 SSAI 유지 |
+| 초기화·순서 | 시드별 공통 core 초기값·150개 epoch 순서 해시 일치 |
+| 학습량 | 각150에폭, 전체 패치 사용·drop 없음, epoch당536회 업데이트 시도 |
+| 배치·optimizer | effective/micro32, Adam 기본 betas·eps·weight_decay0 |
+| 학습률 | 첫 에폭1e-4 →마지막 에폭1e-6, 에폭별 cosine |
+| 손실·선택 | DN/2047 좌표의 최종 출력 MSE; epoch0 포함 최소 validation MSE, 동률은 먼저 나온 에폭 |
+| 정밀도 | core AMP FP16; 통계·역변환·손실·validation·평가 FP32; TF32 off |
+| 실행 | RTX3060Ti8GB, 최대2개 병렬, CPU1스레드·공유 FP32 mmap·pinned 전송·channels-last |
+| CUDA 설정 | cuDNN autotune·deterministic convolution, deterministic algorithms warn-only·CUBLAS workspace 고정 |
+
+실행 배치는 본 학습 전 두 W2 군의 처리 속도·메모리로 선택했습니다. validation/test로 최적화 조건을 고르지 않았습니다. 짧은 AMP 재개 검사를 통과했으며 첫 에폭 뒤 완료 로그 오류는 기존 모델·optimizer·scaler·RNG·shuffle·커서를 보존해 수정 후 재개했습니다. 원본 초기 학습 소스·설정·첫 에폭 가중치와 재개 근거는 provenance에 보존했습니다. FP16의 실제 업데이트 건너뜀은 아래에 모두 기록했으며 네 군의 실제 optimizer 업데이트 수가 완전히 같지는 않습니다.
+
+</details>
+
+<a id="figures"></a>
+
+<details>
+<summary><b>그림</b> · 학습·평가 그래프 · 결과 이미지</summary>
+
+<a id="graphs"></a>
+
+### 학습·평가 그래프
 
 ![학습 MSE](results/figures/train_mse.png)
 
@@ -142,7 +164,9 @@ C3 결합군은 원본 대비 PSNR +0.738092dB이나 잠정 QNR -0.115991였습�
 
 ![장면별 차이](results/figures/scene_deltas.png)
 
-## 6. 결과 이미지
+<a id="images"></a>
+
+### 결과 이미지
 
 사전 고정한0기준 RR 장면1·8·11·13·19를 사용했습니다. LR MS nearest·PAN 입력·예측·GT 순서이며 RGB[2,1,0], MS 패널은 해당 장면 GT의1/99백분위 대비를 공유합니다. PAN은 별도 grayscale 대비입니다. 아래는 결합군 C3 seed42의 고정5장면이며 네 군·세 시드의 총60개 원본 패널도 모두 보존했습니다. test 결과로 장면·순서를 바꾸지 않았습니다. 지표에는 clipping·타일 분할·TTA를 사용하지 않았고 FR에는 GT를 만들지 않았습니다.
 
@@ -156,7 +180,12 @@ C3 결합군은 원본 대비 PSNR +0.738092dB이나 잠정 QNR -0.115991였습�
 
 ![C3 seed42 RR 장면19](results/C3_QB_s42/evaluation/RR_scene_019.png)
 
-## 7. 재현 자료
+</details>
+
+<a id="evidence"></a>
+
+<details>
+<summary><b>재현 자료</b> · 코드, 가중치, 설정, 실행 기록</summary>
 
 [현행 모델](model.py) · [실제 학습·평가 실행기](train.py) · [2슬롯 제어기](run.py) · [설정](config.json) · [검증·보고서 재생성](prepare.py) · [요약](results/summary.json) · [시드·장면 차이](results/paired_scene_deltas.json) · [보관 검증](results/verification.json) · [가중치](checkpoints) · [원본 source snapshots](provenance/source_snapshots) · [원본 실행 설정](provenance/runtime_config.json) · [초기 학습 설정](provenance/initial_runtime_config.json) · [데이터·캐시 해시](provenance/data_manifest.json) · [서버 export manifest](provenance/server_export_manifest.json) · [완료 기록](provenance/all_complete.json) · [최종 보존 manifest](manifest.json)
 
@@ -169,6 +198,4 @@ python SSA-MRN/common/verify.py --research-track performance --experiment 43
 
 실제 서버 실행 폴더와 소스 경로는 provenance 원본 설정에 보존했습니다. 새 학습은 데이터 경로·runtime을 새 실행 위치로 명시적으로 구성하고 기존 완료 runtime을 덮어쓰지 않습니다. 자동 평가에는 validation best만 사용했으며 latest나 중간 에폭을 test로 재선택하지 않았습니다.
 
-## 8. 개선 여부와 다음 단계
-
-**부분 개선·결합 후보 채택 보류**입니다. 정규화 단독의 평균 이득과 결합군의 RR·FR 상충을 분리합니다. 다음에는 결합군의 공간 왜곡이 커진 장면과 추가 가지의 기여를 분석한 뒤 새 가설을 정합니다. 현재 결과만으로 통계 증강·고주파 제한·게이트 추가 학습을 자동 실행하지 않습니다. 추가 센서·독립 holdout 및 MATLAB 수치 대응은 미실시이며 기존 원본 기준을 유지합니다.
+</details>

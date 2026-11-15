@@ -229,7 +229,7 @@ def register(summary):
  entry['limits']='QNR 등 MATLAB 수치 대응 미검증; 기존 QB 탐색 benchmark; AMP skip으로 실제 업데이트 수 차이; 원본 기준 유지'
  for filename in ['experiments/catalog.json','research/experiments.json']:
   p=ROOT/'SSA-MRN'/filename;x=read(p);x['performance/'+name]=entry;write(p,x)
- for filename,prefix in [('README.md','SSA-MRN/experiments/performance/'),('SSA-MRN/README.md','experiments/performance/'),('SSA-MRN/research/performance/README.md','../../experiments/performance/')]:
+ for filename,prefix in [('README.md','SSA-MRN/experiments/performance/'),('SSA-MRN/README.md','experiments/performance/'),('SSA-MRN/experiments/performance/README.md','../../experiments/performance/')]:
   p=ROOT/filename;lines=p.read_text(encoding='utf8').splitlines();row=f'| [43. MS 기준 가역 정규화와 저해상도 병렬 특징 용량 확장]({prefix}{name}/README.md)<br>[이병현] | 정규화와 W2 가지를 네 군·세 시드로 비교했습니다. | {text} | 평가&nbsp;완료<br>3seed | 부분&nbsp;개선 |'
   matches=[i for i,x in enumerate(lines) if x.startswith('| [43.')]
   if matches:lines[matches[0]]=row
