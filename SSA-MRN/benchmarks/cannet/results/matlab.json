@@ -1,0 +1,88 @@
+{
+ "model": "cannet",
+ "setting": "author",
+ "description": "실제 MATLAB R2025b + DLPan a34f884 score_suite.m로 채점한 RR test 20장 평균 (자르기·값 자르기 없음). 예측은 공식 test 스크립트 1회차(Release predictions-benchmarks-cannet-author). PSNR_bandmean은 센서 peak(GF2 1023), PSNR_bandmean_peak2047은 CtrS Python PSNR과 같은 peak 2047 기준.",
+ "workflow": ".github/workflows/matlab-benchmark-author.yml",
+ "run": "https://github.com/BIYONGHIYON/CtrS/actions/runs/43897177708",
+ "release": "https://github.com/BIYONGHIYON/CtrS/releases/tag/predictions-benchmarks-cannet-author",
+ "release_assets": {
+  "cannet_author_QB_rr.zip": "37228356b0c177149020badad6620253f41ec0b1147c49ee75c07f4e36d5ba09",
+  "cannet_author_GF2_rr.zip": "25d80b77d6f33d6d2091c6bb94823b60f29509f6eea21af6340482d05bebe0e3",
+  "cannet_author_WV3_rr.zip": "273cbe069ec6f0d6d6b4a8250e1bd29e07baeafe6d52f9d93c061c960bfd2c63",
+  "cannet_author_WV2_rr.zip": "f5df835c1cce05a3a6acddde19818f38e01dc1370a890cd85886e9708bf89158"
+ },
+ "matlab_mean": {
+  "QB": {
+   "Q": 0.93485,
+   "SAM": 4.55196,
+   "ERGAS": 3.73416,
+   "SCC": 0.98215,
+   "Q2n": 0.93499,
+   "PSNR_global": 37.80476,
+   "PSNR_bandmean": 38.26589,
+   "PSNR_bandmean_peak2047": 38.26589
+  },
+  "GF2": {
+   "Q": 0.983,
+   "SAM": 0.72121,
+   "ERGAS": 0.6511,
+   "SCC": 0.99057,
+   "Q2n": 0.9822,
+   "PSNR_global": 43.1902,
+   "PSNR_bandmean": 43.25362,
+   "PSNR_bandmean_peak2047": 49.27846
+  },
+  "WV3": {
+   "Q": 0.91845,
+   "SAM": 2.92485,
+   "ERGAS": 2.16019,
+   "SCC": 0.98534,
+   "Q2n": 0.91452,
+   "PSNR_global": 37.45104,
+   "PSNR_bandmean": 38.97756,
+   "PSNR_bandmean_peak2047": 38.97756
+  },
+  "WV2": {
+   "Q": 0.84076,
+   "SAM": 5.49155,
+   "ERGAS": 4.34332,
+   "SCC": 0.91598,
+   "Q2n": 0.83924,
+   "PSNR_global": 28.96467,
+   "PSNR_bandmean": 29.96477,
+   "PSNR_bandmean_peak2047": 29.96477
+  }
+ },
+ "python_mean_same_arrays": {
+  "QB": {
+   "SAM": 4.551956224039469,
+   "ERGAS": 3.7341553921093515,
+   "PSNR": 38.265894146355876,
+   "SCC": 0.9821468001195948,
+   "Q2n": 0.9349873615994229
+  },
+  "GF2": {
+   "SAM": 0.7212068596734974,
+   "ERGAS": 0.6510961154013399,
+   "PSNR": 49.27846183975472,
+   "SCC": 0.990565062554196,
+   "Q2n": 0.9821972646937743
+  },
+  "WV3": {
+   "SAM": 2.9248501903591544,
+   "ERGAS": 2.16019479583752,
+   "PSNR": 38.977560019990584,
+   "SCC": 0.9853437389950332,
+   "Q2n": 0.9145464944442361
+  },
+  "WV2": {
+   "SAM": 5.491554069895577,
+   "ERGAS": 4.343322414484422,
+   "PSNR": 29.96476968882785,
+   "SCC": 0.9159817557360486,
+   "Q2n": 0.8392374302512217
+  }
+ },
+ "matlab_minus_python_max_abs": 2.6494444236080383e-05,
+ "note": "MATLAB Q는 DLPan 밴드 평균 Q, Q2n은 Q4(4밴드)·Q8(8밴드)입니다. 결과 원본은 Actions artifact(30일 보존)이며 이 파일은 작업 로그의 값을 옮긴 것입니다."
+}

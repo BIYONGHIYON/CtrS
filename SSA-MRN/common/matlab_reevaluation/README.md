@@ -47,3 +47,7 @@ case별 `matlab-e53_...` / `matlab-e54_...` artifact에는 장면별 CSV·MATLAB
 ```powershell
 python SSA-MRN/common/matlab_reevaluation/test_suite.py
 ```
+
+## 다른 모델 저자 가중치 예측 채점
+
+CUDA 전용이라 CPU에서 다시 추론할 수 없는 다른 모델(CANNet)은 Kaggle GPU에서 만든 RR 예측을 GitHub Release에 두고, `.github/workflows/matlab-benchmark-author.yml`이 채점합니다. `benchmark_prepare.py`가 원본 test 파일을 SHA-256으로 확인해 받은 뒤 같은 `score_suite.m` 입력을 만들고 같은 배열의 Python 지표를 기록합니다. `benchmark_report.py`가 MATLAB과 Python 평균을 비교합니다. 결과는 각 모델 보고서(`SSA-MRN/benchmarks/<모델>/results/matlab.json`)에 옮깁니다.
