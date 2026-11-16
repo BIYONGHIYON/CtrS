@@ -11,39 +11,94 @@
   "code": {
     "url": "https://github.com/Duanyll/CANConv",
     "commit": "0b7cc6f4ed257fcdca806d1d4fe8ec2ebf4beee9",
-    "submodules": {"kmcuda": {"url": "https://github.com/Duanyll/kmcuda", "commit": "6906cc32dcccaea628ff1a03174233d06f7663bc"}},
+    "submodules": {
+      "kmcuda": {
+        "url": "https://github.com/Duanyll/kmcuda",
+        "commit": "6906cc32dcccaea628ff1a03174233d06f7663bc"
+      }
+    },
     "license": "GPL-3.0",
     "redistribution": true,
     "native_build": "upstream/build.sh (CMake, CUDA): canconv/layers/pwac/pwacnative.so, canconv/layers/kmeans/libKMCUDA.so; CUDA_ARCH and CMAKE_CUDA_ARCHITECTURES set to the GPU (Kaggle T4: 75)"
   },
   "author_weights": {
-    "QB": {"path": "upstream/weights/cannet_qb.pth", "sha256": "032a39113396ec21a0762039ab501ee8879de8477ea073dbf9cb8d938100c864"},
-    "GF2": {"path": "upstream/weights/cannet_gf2.pth", "sha256": "07ef3f77d181c5ea428e53016ad29e8806ceffe25af2b60e1c377d178a130ad2"},
-    "WV3": {"path": "upstream/weights/cannet_wv3.pth", "sha256": "06566c98f6a228d74e50a5c1314a6f89919832b376e5dd61fced736a7e4ccc0b"},
+    "QB": {
+      "path": "upstream/weights/cannet_qb.pth",
+      "sha256": "032a39113396ec21a0762039ab501ee8879de8477ea073dbf9cb8d938100c864"
+    },
+    "GF2": {
+      "path": "upstream/weights/cannet_gf2.pth",
+      "sha256": "07ef3f77d181c5ea428e53016ad29e8806ceffe25af2b60e1c377d178a130ad2"
+    },
+    "WV3": {
+      "path": "upstream/weights/cannet_wv3.pth",
+      "sha256": "06566c98f6a228d74e50a5c1314a6f89919832b376e5dd61fced736a7e4ccc0b"
+    },
     "redistribution": "GPL-3.0 저장소에 포함, 하위 모듈로 참조하고 checkpoints/에 복사하지 않음",
     "training_data": "PanCollection (저자 학습 분할과 시드는 공개되지 않음)"
   },
-  "normalization": {"QB": 2047, "GF2": 1023, "WV3": 2047, "WV2": 2047},
-  "architecture": {"channels": 32, "cluster_num": 32, "filter_threshold": 0.005, "source": "canconv/models/cannet/default.json"},
+  "normalization": {
+    "QB": 2047,
+    "GF2": 1023,
+    "WV3": 2047,
+    "WV2": 2047
+  },
+  "architecture": {
+    "channels": 32,
+    "cluster_num": 32,
+    "filter_threshold": 0.005,
+    "source": "canconv/models/cannet/default.json"
+  },
   "settings": {
-    "author": {"description": "저자 배포 가중치를 학습 없이 평가"},
+    "author": {
+      "description": "저자 배포 가중치를 학습 없이 평가"
+    },
     "retrain": {
       "loss": "L1",
       "epochs": 500,
       "epochs_source": "공식 코드 canconv/models/cannet/default.json",
       "batch": 32,
       "optimizer": "Adam (weight decay 0)",
-      "lr": {"QB": "5e-4, StepLR step 500 (presets.json)", "GF2": "5e-4, StepLR step 500 (presets.json)", "WV3": "1e-3, StepLR step 250 (default.json)"},
-      "kmeans_cache_update": [[10, 1], [100, 10], [300, 20], 50],
+      "lr": {
+        "QB": "5e-4, StepLR step 500 (presets.json)",
+        "GF2": "5e-4, StepLR step 500 (presets.json)",
+        "WV3": "1e-3, StepLR step 250 (default.json)"
+      },
+      "kmeans_cache_update": [
+        [
+          10,
+          1
+        ],
+        [
+          100,
+          10
+        ],
+        [
+          300,
+          20
+        ],
+        50
+      ],
       "selection": "validation L1 최소 (공식 기준 손실, 공식 설정과 같이 10에폭마다 평가). 공식 trainer는 고정 에폭만 저장하고 선택하지 않아 이 부분을 추가함",
       "resume": "latest.pt로 재개. k-means 캐시는 저장하지 않으므로 재개 직후 1에폭은 캐시를 새로 만들고(init) 다음 에폭부터 공식 정책을 따름",
       "deterministic": "공식 seed_everything 사용 (cuDNN 비활성)",
-      "environment": "Kaggle GPU T4 x2, 한 GPU에 한 시드"
+      "environment": "Kaggle GPU T4 x2 (버전 1은 GPU마다 시드 42·43, 버전 2부터 시드 42만)"
     }
   },
-  "sensors": ["QB"],
-  "author_sensors": ["QB", "GF2", "WV3"],
-  "transfer": {"WV2": "WV3 가중치 적용, 참고"},
-  "seeds": [42, 43, 44],
-  "post_processing": "없음"
+  "sensors": [
+    "QB"
+  ],
+  "author_sensors": [
+    "QB",
+    "GF2",
+    "WV3"
+  ],
+  "transfer": {
+    "WV2": "WV3 가중치 적용, 참고"
+  },
+  "seeds": [
+    42
+  ],
+  "post_processing": "없음",
+  "seeds_note": "2026-11-16 사용자 결정으로 3시드(42·43·44)에서 단일 시드 42로 줄임. Kaggle 버전 1에서 함께 시작한 시드 43은 이어서 학습하지 않으며 결과로 쓰지 않음"
 }

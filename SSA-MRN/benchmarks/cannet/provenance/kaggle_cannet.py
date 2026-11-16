@@ -1,4 +1,4 @@
-# Kaggle notebook for the CANNet benchmark (version 1, 2026-11-16), percent format: each "# %%" is one notebook cell.
+# Kaggle notebook for the CANNet benchmark (from version 2, 2026-11-16: single seed 42), percent format: each "# %%" is one notebook cell.
 # Import into Kaggle with File > Import Notebook. Inputs: dataset ctrs-pan-sharpening-dataset; accelerator GPU T4 x2; internet on.
 
 # %% [markdown]
@@ -9,7 +9,7 @@
 #
 # 1. build the native operators (pwacnative, libKMCUDA) for this GPU
 # 2. `author`: evaluate the published weights (QB, GF2, WV3 and WV2 = WV3 weights, reference)
-# 3. `retrain`: official recipe, seeds 42/43/44 on QB, one run per GPU, resumable; stops before the 12 h limit.
+# 3. `retrain`: official recipe, seed 42 on QB (single seed, user decision 2026-11-16; version 1 also trained seed 43, not continued), resumable; stops before the 12 h limit.
 #    To continue in the next version, add this notebook's previous output as an input: `latest.pt` is picked up automatically.
 
 # %%
@@ -17,7 +17,7 @@ import os, sys, time, json, glob, shutil, subprocess
 from pathlib import Path
 T0 = time.time()
 TRAIN_HOURS = 10.8          # training stops before this; the rest is left for evaluation and saving the output
-JOBS = [('QB', 42), ('QB', 43), ('QB', 44)]   # queue, one run per GPU at a time
+JOBS = [('QB', 42)]   # single seed (user decision 2026-11-16); version 1 ran [('QB', 42), ('QB', 43), ('QB', 44)]
 W = Path('/kaggle/working'); TMP = Path('/tmp/ctrs'); TMP.mkdir(exist_ok=True)
 def sh(cmd, cwd=None):
     print('$', cmd, flush=True); r = subprocess.run(cmd, shell=True, cwd=cwd, text=True, capture_output=True)
