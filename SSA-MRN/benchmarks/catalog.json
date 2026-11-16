@@ -20,5 +20,62 @@
     "manifest": "manifest.json 경로",
     "last_checked": "마지막 확인 시각 (KST, ISO 8601)"
   },
-  "models": {}
+  "models": {
+    "cannet": {
+      "display_name": "CANNet",
+      "paper": "Duan, Wu, Deng, Deng. Content-Adaptive Non-Local Convolution for Remote Sensing Pansharpening. CVPR 2024. https://arxiv.org/abs/2404.07543",
+      "code": "https://github.com/Duanyll/CANConv",
+      "commit": "0b7cc6f4ed257fcdca806d1d4fe8ec2ebf4beee9",
+      "license": "GPL-3.0 (코드·저자 가중치, 재배포 가능)",
+      "evaluator": "이병현",
+      "settings": [
+        "author"
+      ],
+      "epochs": "재학습하지 않음 (저자 가중치 재현, 2026-11-17 사용자 결정)",
+      "sensors": {
+        "author": [
+          "QB",
+          "GF2",
+          "WV3",
+          "WV2"
+        ]
+      },
+      "seeds": {
+        "author": null
+      },
+      "status": "평가 완료",
+      "vs_c2ms_sp": {
+        "author_QB": {
+          "PSNR": -0.112,
+          "SAM": 0.078,
+          "ERGAS": 0.051
+        },
+        "author_GF2": {
+          "PSNR": 0.489,
+          "SAM": -0.042,
+          "ERGAS": -0.04
+        },
+        "author_WV3": {
+          "PSNR": 0.304,
+          "SAM": -0.06,
+          "ERGAS": -0.081
+        },
+        "note": "저자 가중치는 시드가 없어 C2MS-SP 3시드 평균과의 차이"
+      },
+      "paper_reported": {
+        "QB_RR": {
+          "SAM": 4.507,
+          "ERGAS": 3.652,
+          "Q4": 0.937,
+          "PSNR_other": 38.488,
+          "source": "CANNet Table 2, PSNR은 S2WMamba Table 3"
+        }
+      },
+      "report": "SSA-MRN/benchmarks/cannet/README.md",
+      "config": "SSA-MRN/benchmarks/cannet/config.json",
+      "summary": "SSA-MRN/benchmarks/cannet/results/summary.json",
+      "manifest": "SSA-MRN/benchmarks/cannet/manifest.json",
+      "last_checked": "2026-11-17T01:00:00+09:00"
+    }
+  }
 }
