@@ -135,10 +135,10 @@ python SSA-MRN/common/index.py --check                  # catalog와 실험 표 
 세부 절차는 [평가 안내](SSA-MRN/benchmarks/README.md)와 [양식](SSA-MRN/docs/benchmark_template.md)을 따릅니다.
 
 - 결과는 `SSA-MRN/benchmarks/<소문자 snake_case 모델 이름>/` 한 곳에 모읍니다. 시작 전에 `benchmarks/catalog.json`과 열린 PR에서 같은 모델을 누가 맡았는지 확인하고 계획 상태로 먼저 등록합니다.
-- 같은 분할·test RR·FR 각 20장·정규화로 `common/benchmark_evaluate.py`를 써서 평가합니다. 우리가 학습하는 설정은 3시드(42·43·44), validation 선택입니다.
+- 같은 분할·test RR·FR 각 20장·정규화로 `common/benchmark_evaluate.py`를 써서 평가합니다. 우리가 학습하는 설정은 단일 시드(42)로 측정하고 validation으로 선택합니다.
 - **학습 장소:** 공용 서버가 사용 중이 아니면 공용 서버에서 학습합니다. 이때는 **시작 전에 팀에 반드시 알립니다.** 공용 서버가 사용 중이면 각자 Kaggle에서 학습합니다. 어느 환경(GPU)에서 학습했는지 보고서에 적습니다.
 - 에폭은 논문이나 공식 코드에 공개된 값을 쓰고, 없으면 C2MS-SP와 같은 150에폭으로 합니다.
 - 축척 혼합·관측 일치 사영·밴드별 보정 같은 우리 방법은 다른 모델에 붙이지 않습니다.
 - 공식 코드는 고정 커밋 하위 모듈로 연결하고 수정하지 않습니다. 저자 가중치와 코드 snapshot은 라이선스가 재배포를 허용할 때만 넣습니다.
 - 판정을 붙이지 않고 같은 시드 C2MS-SP와의 RR 차이를 숫자로만 보고합니다. 이 결과로 기준 모델을 바꾸지 않습니다.
-- 루트 README 비교 표에는 3시드 평가가 끝난 결과만 `모델 (Ours 환경 재현)` 행으로 넣습니다.
+- 루트 README 비교 표에는 평가가 끝난 결과만 `모델 (Ours 환경 재현)` 행으로 넣습니다.
