@@ -1,0 +1,61 @@
+# GitHub Pages: 사이트 루트는 결과 비교 사이트(SSA-MRN/viewer), /portfolio/<GitHub ID>/는 팀원별 포트폴리오(portfolio/)입니다.
+# 예측 데이터는 Git에 넣지 않고 Release viewer-data에서 SSA-MRN/viewer/data.sha256에 적힌 자산을 받아 해시를 확인합니다.
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - SSA-MRN/viewer/index.html
+      - SSA-MRN/viewer/app.js
+      - SSA-MRN/viewer/data.sha256
+      - portfolio/**
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            SSA-MRN/viewer
+            portfolio
+
+      - name: 뷰어 데이터 받기·해시 확인
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          name=$(awk '{print $2}' SSA-MRN/viewer/data.sha256)
+          gh release download viewer-data -R "$GITHUB_REPOSITORY" -p "$name" -D "$RUNNER_TEMP"
+          (cd "$RUNNER_TEMP" && sha256sum -c "$GITHUB_WORKSPACE/SSA-MRN/viewer/data.sha256")
+
+      - name: 사이트 조립
+        run: |
+          mkdir -p _site/data _site/portfolio
+          cp SSA-MRN/viewer/index.html SSA-MRN/viewer/app.js _site/
+          tar -xzf "$RUNNER_TEMP/$(awk '{print $2}' SSA-MRN/viewer/data.sha256)" -C _site/data
+          cp -R portfolio/. _site/portfolio/
+          rm -f _site/portfolio/README.md
+          touch _site/.nojekyll
+          du -sh _site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
