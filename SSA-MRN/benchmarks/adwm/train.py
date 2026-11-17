@@ -6,6 +6,10 @@ Follows the official main_train.py and the paper's implementation details, with 
     seed 42 (CtrS rule; official default 1), cudnn deterministic as in main_train.py
     validation L1 every epoch on the validation H5, best.pt = lowest validation L1 (CtrS rule: select with validation only;
     the official script validates every 10 epochs and keeps every 10th epoch instead)
+    gradient accumulation: batch 64 needs about 19 GB of activations (paper: RTX 3090, 24 GB), more than a Kaggle T4 (15 GB).
+    --accum N splits every batch of 64 into N equal chunks, back-propagates each (loss / N) and steps once, so the loss and the
+    update are those of the full batch; only BatchNorm sees N-times smaller batches. --accum auto (default) tries 1, 2, 4, 8
+    on one real batch before training and keeps the smallest that fits; the choice is stored in history.json and latest.pt.
 Inputs are DN / sensor scale (QB, WV3 2047; GF2 1023), the same as common/data.py and the evaluator.
 
 Outputs in --out (default SSA-MRN/benchmarks/adwm/checkpoints/retrain_<sensor>_s<seed>/):
@@ -62,6 +66,31 @@ def set_rng_state(s):
     if s.get('cuda') is not None and torch.cuda.is_available(): torch.cuda.set_rng_state_all(s['cuda'])
 
 
+def choose_accum(value, net, dataset, batch, device):
+    if value != 'auto':
+        n = int(value)
+        if batch % n: raise SystemExit(f'batch {batch} is not divisible by --accum {n}')
+        return n
+    if not str(device).startswith('cuda'): return 1
+    state = {k: v.clone() for k, v in net.state_dict().items()}; rng = rng_state()   # the probe must not change the run
+    idx = list(range(min(batch, len(dataset)))); b = [dataset[i] for i in idx]
+    ms = torch.stack([x['ms'] for x in b]).to(device); pan = torch.stack([x['pan'] for x in b]).to(device)
+    try:
+        for n in (1, 2, 4, 8):
+            if batch % n: continue
+            try:
+                net.train(True); net.zero_grad(set_to_none=True)
+                net.net(ms[:batch // n], pan[:batch // n]).mean().backward()
+                return n
+            except torch.OutOfMemoryError:
+                print(f'accum {n} (micro-batch {batch // n}) does not fit in GPU memory', flush=True)
+            finally:
+                net.zero_grad(set_to_none=True); torch.cuda.empty_cache()
+        raise SystemExit('even micro-batch 8 does not fit')
+    finally:
+        net.load_state_dict(state); set_rng_state(rng)
+
+
 def validate(net, loader, device):
     net.train(False); total, count = 0.0, 0
     with torch.no_grad():
@@ -81,6 +110,7 @@ def main():
     p.add_argument('--step-size', type=int, default=150); p.add_argument('--gamma', type=float, default=0.5)
     p.add_argument('--seed', type=int, default=42); p.add_argument('--device', default='cuda')
     p.add_argument('--workers', type=int, default=4)
+    p.add_argument('--accum', default='auto', help='chunks per batch (1, 2, 4, 8) or auto: smallest that fits in GPU memory')
     p.add_argument('--out', type=Path, help='default checkpoints/retrain_<sensor>_s<seed>')
     p.add_argument('--resume', action='store_true', help='continue from <out>/latest.pt')
     p.add_argument('--limit', type=int, help='smoke test: first N training and validation samples')
@@ -105,15 +135,20 @@ def main():
     net = adapter().build(BANDS[a.sensor], a.sensor, 'retrain', a.seed).to(a.device)
     optimizer = torch.optim.Adam(net.parameters(), lr=a.lr, weight_decay=0)
     scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=a.step_size, gamma=a.gamma)
+    accum = choose_accum(a.accum, net, train_set, a.batch_size, a.device)
+    print(f'batch {a.batch_size} = {accum} x micro-batch {a.batch_size // accum}', flush=True)
     out.mkdir(parents=True, exist_ok=True); hist_path = out / 'history.json'
     meta = dict(model='adwm', setting='retrain', sensor=a.sensor, seed=a.seed, epochs=epochs, batch_size=a.batch_size,
                 lr=a.lr, step_size=a.step_size, gamma=a.gamma, loss='L1', selection='validation L1 minimum, every epoch',
+                accum=accum, micro_batch=a.batch_size // accum,
                 train=a.train.name, val=a.val.name, limit=a.limit, device=a.device,
                 gpu=torch.cuda.get_device_name(0) if a.device.startswith('cuda') else None, torch=torch.__version__)
     start, best, history = 0, float('inf'), []
     if a.resume:
         ck = torch.load(out / 'latest.pt', map_location='cpu', weights_only=False)
-        if {k: ck['meta'][k] for k in ('sensor', 'seed', 'epochs', 'batch_size', 'lr')} != {k: meta[k] for k in ('sensor', 'seed', 'epochs', 'batch_size', 'lr')}:
+        keys = ('sensor', 'seed', 'epochs', 'batch_size', 'lr', 'accum')
+        if a.accum == 'auto' and 'accum' in ck['meta']: meta['accum'] = ck['meta']['accum']; meta['micro_batch'] = a.batch_size // meta['accum']; accum = meta['accum']
+        if {k: ck['meta'].get(k) for k in keys} != {k: meta[k] for k in keys}:
             p.error('latest.pt was made with different settings')
         net.net.load_state_dict(ck["model"]); optimizer.load_state_dict(ck['optimizer']); scheduler.load_state_dict(ck['scheduler'])
         set_rng_state(ck['rng']); g.set_state(ck['loader_rng']); start, best = ck['epoch'], ck['best_val_l1']
@@ -127,9 +162,11 @@ def main():
         net.train(True); t0 = time.time(); losses = []
         for b in train_loader:
             pan, ms, gt = b['pan'].to(a.device, non_blocking=True), b['ms'].to(a.device, non_blocking=True), b['gt'].to(a.device, non_blocking=True)
-            optimizer.zero_grad(set_to_none=True)
-            loss = torch.nn.functional.l1_loss(net.net(ms, pan), gt)
-            loss.backward(); optimizer.step(); losses.append(loss.item())
+            optimizer.zero_grad(set_to_none=True); total = 0.0
+            for m_, p_, g_ in zip(ms.chunk(accum), pan.chunk(accum), gt.chunk(accum)):
+                loss = torch.nn.functional.l1_loss(net.net(m_, p_), g_) / accum   # equal chunks: sum = full-batch mean
+                loss.backward(); total += loss.item()
+            optimizer.step(); losses.append(total)
         lr = optimizer.param_groups[0]['lr']; scheduler.step()
         val = validate(net, val_loader, a.device)
         row = dict(epoch=epoch + 1, train_l1=float(np.mean(losses)), val_l1=val, lr=lr, seconds=round(time.time() - t0, 1))

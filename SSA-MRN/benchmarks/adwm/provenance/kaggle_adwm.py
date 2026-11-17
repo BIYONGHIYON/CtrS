@@ -2,7 +2,9 @@
 # Import with File > Import Notebook. Inputs: dataset ctrs-pan-sharpening-dataset (PanCollection train/valid/test H5);
 # accelerator GPU T4 x2; internet on.
 #
-# 1. author : WV3 author weights (no training) -> RR+FR metrics for WV3 and WV2 transfer, RR predictions for MATLAB
+# 1. author : WV3 author weights (no training) -> RR+FR metrics for WV3 and WV2 transfer, RR predictions for MATLAB.
+#             Both readings of the weight file's missing covariance LayerNorm are evaluated: 'author' (no LayerNorm) and
+#             'author_ln' (parameter-free LayerNorm); see model.py.
 # 2. retrain: QB (200 epochs) on GPU 0 and GF2 (500 epochs) on GPU 1 in parallel, seed 42, resumable; stops before the 12 h limit.
 #             To continue in the next session, add this notebook's previous output as an input: latest.pt is picked up automatically.
 # 3. retrain runs that reached their last epoch -> RR+FR metrics and RR predictions
@@ -103,13 +105,14 @@ def export_rr(setting, sensor, seed, checkpoint=None):
 PRED = json.loads((OUT / 'predictions.json').read_text()) if (OUT / 'predictions.json').exists() else {}
 
 # %%
-# 1. author: WV3 author weights, WV3 and WV2 transfer (RR + FR), then RR predictions
-for sensor in ('WV3', 'WV2'):
-    if (BENCH / f'results/author_{sensor}/metrics.json').exists(): continue
-    sh(f'{EVAL} --setting author --sensor {sensor} --checkpoint {AUTHOR}')
-    PRED[f'author_{sensor}'] = export_rr('author', sensor, None, AUTHOR)
+# 1. author: WV3 author weights, WV3 and WV2 transfer (RR + FR), then RR predictions; both LayerNorm readings
+for setting in ('author', 'author_ln'):
+    for sensor in ('WV3', 'WV2'):
+        if (BENCH / f'results/{setting}_{sensor}/metrics.json').exists(): continue
+        sh(f'{EVAL} --setting {setting} --sensor {sensor} --checkpoint {AUTHOR}')
+        PRED[f'{setting}_{sensor}'] = export_rr(setting, sensor, None, AUTHOR)
 (OUT / 'predictions.json').write_text(json.dumps(PRED, indent=1) + '\n')
-for p in sorted((BENCH / 'results').glob('author_*/metrics.json')):
+for p in sorted((BENCH / 'results').glob('author*/metrics.json')):
     m = json.loads(p.read_text()); print(p.parent.name, {k: round(v, 4) for k, v in m['rr']['mean'].items()})
 print('paper WV3: PSNR 39.170 SAM 2.913 ERGAS 2.145 Q8 0.921')
 
@@ -135,7 +138,8 @@ for gpu, sensor in enumerate(('QB', 'GF2')):
     resume = ' --resume' if (run / 'latest.pt').exists() else ''
     cmd = (f'{sys.executable} {BENCH}/train.py --sensor {sensor} --train {DATA}/train_{STEM[sensor]}.h5 --val {DATA}/valid_{STEM[sensor]}.h5 '
            f'--device cuda --workers 2 --out {run} --deadline {DEADLINE}{resume}')
-    env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(gpu % max(1, torch.cuda.device_count())))
+    env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(gpu % max(1, torch.cuda.device_count())),
+               PYTORCH_CUDA_ALLOC_CONF='expandable_segments:True')   # batch 64 is split into chunks (train.py --accum auto)
     print('$', cmd, f'(GPU {env["CUDA_VISIBLE_DEVICES"]})', flush=True)
     procs[sensor] = subprocess.Popen(cmd, shell=True, env=env, stdout=open(run / 'train.log', 'a'), stderr=subprocess.STDOUT)
 while procs:

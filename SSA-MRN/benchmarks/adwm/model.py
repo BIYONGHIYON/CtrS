@@ -15,6 +15,11 @@ were evidently trained with a CovBlock without that LayerNorm, so for setting 'a
 with an identity before a strict load. Leaving a fresh LayerNorm in place (strict=False) would change the computation the
 weights were trained with. Whether this reproduces the paper is checked on WV3 RR test (paper: PSNR 39.170, SAM 2.913,
 ERGAS 2.145). retrain uses the official code as published, LayerNorm included.
+
+A LayerNorm without learnable parameters (elementwise_affine=False) also leaves no keys in a state_dict, and the official
+LayerNorm at its initial values (weight 1, bias 0) computes exactly that. Setting 'author_ln' (diagnostic) therefore keeps the
+LayerNorm at its initial values and loads the author weights with only those 14 tensors missing. Both readings of the same file
+are evaluated and reported.
 """
 import importlib.util
 from pathlib import Path
@@ -49,16 +54,21 @@ class Adapter(nn.Module):
 
 def build(bands, sensor, setting, seed):
     train_sensor = 'WV3' if sensor == 'WV2' else sensor
-    if setting == 'author':
+    if setting in ('author', 'author_ln'):
         if train_sensor != 'WV3':
             raise ValueError('ADWM author weights exist for WV3 only (WV2 uses them as transfer); QB and GF2 are retrain')
-        return Adapter(bands, 0.8, covariance_layernorm=False)
+        return Adapter(bands, 0.8, covariance_layernorm=setting == 'author_ln')
     if setting == 'retrain':
         return Adapter(bands, CACW_RATIO.get(train_sensor, 0.8))
     raise ValueError(f'unknown setting {setting}')
 
 
 def load(net, path):
-    """Author weights are a bare BWNet state_dict; our checkpoints store it under 'model'."""
+    """Author weights are a bare BWNet state_dict; our checkpoints store it under 'model'. Only the parameter-free reading of
+    the covariance LayerNorm ('author_ln') may leave keys missing, and only those LayerNorm keys."""
     state = torch.load(path, map_location='cpu', weights_only=False)
-    net.net.load_state_dict(state['model'] if isinstance(state, dict) and 'model' in state else state, strict=True)
+    state = state['model'] if isinstance(state, dict) and 'model' in state else state
+    missing, unexpected = net.net.load_state_dict(state, strict=False)
+    allowed = {k for k in net.net.state_dict() if '.ln.' in k}
+    if unexpected or (set(missing) - allowed) or (missing and not all(isinstance(b.ln, nn.LayerNorm) for b in net.net.bw_output.CovBlockList)):
+        raise RuntimeError(f'weights do not match: missing {missing}, unexpected {unexpected}')

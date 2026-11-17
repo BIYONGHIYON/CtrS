@@ -28,7 +28,7 @@
     "WV3": {
       "path": "upstream/weights/BWNET_LAGConv_WV3/model.pth",
       "sha256": "793e5eccfe6a03995a98a15ee8e4c8911eb129f3c4bb03aa24ae143b41928e2c",
-      "load": "공식 코드와 키·크기가 모두 같고 CovBlock의 LayerNorm 14개 텐서만 없음. LayerNorm 없이 학습한 가중치로 보고 author 설정에서는 LayerNorm을 항등으로 바꾼 뒤 strict load. 논문 WV3 값 재현 여부로 확인"
+      "load": "공식 코드와 키·크기가 모두 같고 CovBlock의 LayerNorm 14개 텐서만 없음. author는 LayerNorm을 항등으로 바꿈, author_ln은 파라미터 없는 LayerNorm(초깃값과 같은 계산)으로 읽음. 논문 WV3 값 재현 여부로 확인하고 둘 다 보고"
     },
     "QB": null,
     "GF2": null,
@@ -44,12 +44,17 @@
   },
   "settings": {
     "author": {
-      "sensors": ["WV3"],
-      "description": "저자 WV3 가중치를 학습 없이 평가. WV2는 같은 가중치를 적용한 전이(참고)",
+      "sensors": [
+        "WV3"
+      ],
+      "description": "저자 WV3 가중치를 학습 없이 평가. WV2는 같은 가중치를 적용한 전이(참고). 공분산 블록의 LayerNorm을 항등으로 바꾼 해석",
       "checkpoint_argument": "--checkpoint SSA-MRN/benchmarks/adwm/upstream/weights/BWNET_LAGConv_WV3/model.pth"
     },
     "retrain": {
-      "sensors": ["QB", "GF2"],
+      "sensors": [
+        "QB",
+        "GF2"
+      ],
       "script": "train.py",
       "loss": "L1",
       "optimizer": "Adam, weight decay 0",
@@ -66,22 +71,52 @@
       },
       "seed": 42,
       "selection": "매 에폭 validation L1 최소 (공식 코드는 10에폭마다 저장)",
-      "deterministic": "cudnn.deterministic = True, benchmark = False (공식 main_train.py와 같음)"
+      "deterministic": "cudnn.deterministic = True, benchmark = False (공식 main_train.py와 같음)",
+      "accumulation": "배치 64를 조각으로 나눠 기울기 누적 후 한 번 갱신(--accum auto: 1, 2, 4, 8 중 메모리에 들어가는 가장 작은 값). 배치 64는 활성값 약 19 GB로 T4 15 GB를 넘음. 손실·기울기는 배치 64와 같고 BatchNorm만 조각 통계 사용"
+    },
+    "author_ln": {
+      "sensors": [
+        "WV3"
+      ],
+      "description": "진단: 같은 저자 WV3 가중치를 파라미터 없는 LayerNorm 해석으로 평가 (model.py). WV2는 전이",
+      "checkpoint_argument": "--checkpoint SSA-MRN/benchmarks/adwm/upstream/weights/BWNET_LAGConv_WV3/model.pth"
     }
   },
-  "sensors": ["QB", "GF2", "WV3"],
+  "sensors": [
+    "QB",
+    "GF2",
+    "WV3"
+  ],
   "transfer": {
     "WV2": "WV3 저자 가중치 적용, 참고"
   },
   "seeds": {
     "author": null,
-    "retrain": [42]
+    "retrain": [
+      42
+    ]
   },
   "paper_reported": {
     "source": "ADWM 논문 Table 1 (RR), Table 5 (FR)",
-    "QB": {"PSNR": 38.466, "SAM": 4.45, "ERGAS": 3.705, "Q4": 0.937},
-    "GF2": {"PSNR": 43.884, "SAM": 0.672, "ERGAS": 0.597, "Q4": 0.985, "note": "GF2 PSNR은 논문마다 약 43-45 dB와 49-50 dB 계열이 공존함(성능조사 문서). 우리 평가기와 직접 비교하지 않음"},
-    "WV3": {"PSNR": 39.17, "SAM": 2.913, "ERGAS": 2.145, "Q8": 0.921}
+    "QB": {
+      "PSNR": 38.466,
+      "SAM": 4.45,
+      "ERGAS": 3.705,
+      "Q4": 0.937
+    },
+    "GF2": {
+      "PSNR": 43.884,
+      "SAM": 0.672,
+      "ERGAS": 0.597,
+      "Q4": 0.985,
+      "note": "GF2 PSNR은 논문마다 약 43-45 dB와 49-50 dB 계열이 공존함(성능조사 문서). 우리 평가기와 직접 비교하지 않음"
+    },
+    "WV3": {
+      "PSNR": 39.17,
+      "SAM": 2.913,
+      "ERGAS": 2.145,
+      "Q8": 0.921
+    }
   },
   "post_processing": "없음"
 }
