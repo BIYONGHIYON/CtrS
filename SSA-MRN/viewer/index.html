@@ -68,6 +68,9 @@ main { padding-top: 12px; padding-bottom: 48px; }
 .group { display: inline-flex; align-items: center; gap: 8px; }
 .group > .lab { font-size: 12px; color: var(--ink-3); white-space: nowrap; }
 .spacer { flex: 1 1 0; }
+.models .fixed { white-space: nowrap; }
+.models .fixed::after { content: ' ·'; color: var(--ink-3); }
+.bar select.cmp { height: 28px; max-width: 220px; background: var(--bg); border: 1px solid var(--rule-2); border-radius: 4px; padding: 0 6px; }
 .check { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; white-space: nowrap; }
 .check input { accent-color: var(--ink); margin: 0; width: 14px; height: 14px; }
 .seg { display: inline-flex; border: 1px solid var(--rule-2); border-radius: 4px; overflow: hidden; }
@@ -154,7 +157,7 @@ table.numbers { border-collapse: collapse; width: 100%; margin-top: 16px; border
 </head>
 <body>
 <header class="top"><div class="wrap top-in">
-  <div class="brand"><strong>팬샤프닝 결과 비교</strong><span>RR test · seed 42</span></div>
+  <div class="brand"><strong>팬샤프닝 결과 비교</strong><span>RR test · 원본 · 기준 모델 · 비교군</span></div>
   <nav class="tabs" id="dsTabs" aria-label="데이터셋"></nav>
   <button class="theme" id="theme" type="button"></button>
 </div></header>

@@ -11,6 +11,8 @@ A model is either
   dataset id and "kwargs_by_dataset" adds keyword arguments for one dataset); inputs are
   (pan, lms, ms) divided by the dataset "scale" and the output is multiplied back, or
 - given as precomputed predictions: "predictions": {"<dataset>": "<h5 path>"} with dataset "pred" of shape (N, C, H, W) in DN.
+- read from another model's predictions Release: "benchmark": {"model", "setting", "datasets"} takes
+  predictions-benchmarks-<model>-<setting>/<model>_<setting>_<dataset>_rr.zip through common/benchmark_predictions.py (no weights).
 Datasets without an entry for a model are skipped for that model. Existing results of models that are not exported
 again are kept in index.json.
 
@@ -73,6 +75,10 @@ def build(model, dataset, device):
 
 
 def predictor(model, dataset, device):
+    if 'benchmark' in model:
+        from common import benchmark_predictions
+        b = model['benchmark']; pred, info = benchmark_predictions.load(b['model'], b['setting'], dataset['id'])
+        return (lambda i, a: pred[i]), info
     if 'predictions' in model:
         path = ROOT / model['predictions'][dataset['id']]
         with h5py.File(path, 'r') as f:
@@ -91,6 +97,7 @@ def predictor(model, dataset, device):
 
 
 def available(model, dataset):
+    if 'benchmark' in model: return dataset['id'] in model['benchmark']['datasets']
     return dataset['id'] in model.get('predictions', model.get('checkpoints', {}))
 
 
