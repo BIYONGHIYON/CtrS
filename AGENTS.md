@@ -135,7 +135,8 @@ python SSA-MRN/common/index.py --check                  # catalog와 실험 표 
 세부 절차는 [평가 안내](SSA-MRN/benchmarks/README.md)와 [양식](SSA-MRN/docs/benchmark_template.md)을 따릅니다.
 
 - 결과는 `SSA-MRN/benchmarks/<소문자 snake_case 모델 이름>/` 한 곳에 모읍니다. 시작 전에 `benchmarks/catalog.json`과 열린 PR에서 같은 모델을 누가 맡았는지 확인하고 계획 상태로 먼저 등록합니다.
-- 같은 분할·test RR·FR 각 20장·정규화로 `common/benchmark_evaluate.py`를 써서 평가합니다. 우리가 학습하는 설정은 단일 시드(42)로 측정하고 validation으로 선택합니다.
+- **직접 학습:** 저자 가중치가 공개된 센서는 재학습하지 않고 그 가중치로 평가합니다(`author`). 학습 센서 QB·GF2·WV3 중 저자 가중치·평가가 없는 데이터셋은 공식 코드와 논문 설정으로 우리 학습 데이터에서 직접 학습하고(`retrain`), 가중치·예측·결과를 함께 올립니다. 단일 시드(42)로 측정하고 validation으로 선택합니다. WV2는 C2MS-SP와 같이 학습하지 않고 WV3 가중치(저자 또는 직접 학습)를 적용한 전이로 평가합니다. 저자 WV3 가중치가 없으면 WV3를 직접 학습한 뒤 WV2에 적용합니다.
+- **MATLAB 평가:** 같은 분할·test RR·FR 각 20장·정규화를 씁니다. 보고서·표의 RR 수치는 실제 MATLAB(DLPan-Toolbox `a34f884`의 `score_suite.m`)으로 채점한 값입니다. 장면별 예측(DN `.mat`)을 Release `predictions-benchmarks-<모델>-<설정>`에 `<모델>_<설정>_<센서>_rr.zip`으로 올리고 `.github/workflows/matlab-benchmark-author.yml`(model·setting·release 입력)로 채점합니다. `common/benchmark_evaluate.py`(Python)는 어댑터 확인, FR QNR(참고), 이미지에 쓰고, 같은 배열에서 MATLAB과의 차이를 함께 적습니다.
 - **학습 장소:** 공용 서버가 사용 중이 아니면 공용 서버에서 학습합니다. 이때는 **시작 전에 팀에 반드시 알립니다.** 공용 서버가 사용 중이면 각자 Kaggle에서 학습합니다. 어느 환경(GPU)에서 학습했는지 보고서에 적습니다.
 - 에폭은 논문이나 공식 코드에 공개된 값을 쓰고, 없으면 C2MS-SP와 같은 150에폭으로 합니다.
 - 축척 혼합·관측 일치 사영·밴드별 보정 같은 우리 방법은 다른 모델에 붙이지 않습니다.
