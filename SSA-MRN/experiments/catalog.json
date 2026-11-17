@@ -2892,5 +2892,25 @@
     "common_initialization_matches": true,
     "round_sample_order_matches": true,
     "limits": "3·4배 RR 개선·2배 악화. FR 미평가·원본 장면 분할 미검증·합성 Gaussian proxy·단일 seed42; 실제 H5 재평가·GPU 재개 미검증."
+  },
+  "performance/84_long_training_decay_branches": {
+    "display_name": "84. C2MS-SP 학습 길이 확장: 일정 학습률 학습과 감쇠 갈래로 150-1000에폭 한계 측정",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "result": "validation 선택 B1000이 C2MS-SP 대비 GF2 +0.218·WV3 +0.433 dB 개선, QB −0.277 dB (seed 42)",
+    "report": "experiments/performance/84_long_training_decay_branches/README.md",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "limits": "seed 42 한 개. 세 센서 모두 validation이 1000에폭을 골랐고, GF2·WV3는 개선, QB는 validation과 test가 반대로 움직여 개선 없음입니다. 같은 150에폭에서 일정만 바꾼 B150은 세 센서 모두 C2MS-SP보다 좋았습니다(QB +0.060, GF2 +0.184, WV3 +0.342 dB).",
+    "config": "experiments/performance/84_long_training_decay_branches/config.json",
+    "entrypoint": "experiments/performance/84_long_training_decay_branches/run.py",
+    "last_checked": "2026-11-18T04:19:00+09:00",
+    "results": "experiments/performance/84_long_training_decay_branches/results",
+    "summary": "experiments/performance/84_long_training_decay_branches/results/summary.json",
+    "manifest": "experiments/performance/84_long_training_decay_branches/manifest.json"
   }
 }
