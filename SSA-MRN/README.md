@@ -13,7 +13,7 @@
 | 기준 모델 이미지·수치 전체 | [C2MS-SP 결과 이미지](docs/c2ms_sp_result_images.md) · 이전 기준 C2MS: [이미지](docs/c2ms_result_images.md), [수치](docs/c2ms_evaluation_tables.md), [MATLAB 재평가](docs/c2ms_matlab_evaluation_tables.md) |
 | 논문 보고값 조사 | [QB·GF2·WV3·WV2](docs/pansharpening_survey/QB_GF_WV2_WV3_팬샤프닝_성능조사_2026-10-27.md) · [QB](docs/pansharpening_survey/QB_팬샤프닝_성능조사_2026-10-27.md) |
 | 보고서 양식 | [실험](docs/experiment_template.md) · [다른 모델 평가](docs/benchmark_template.md) |
-| 결과 비교 사이트 | [viewer](viewer/README.md) |
+| 결과 비교 사이트 | [CtrS Viewer 열기](https://biyonghiyon.github.io/CtrS/) · [실행·배포 안내](viewer/README.md) |
 | 공식 코드와 원 논문 | [references](references/README.md) |
 
 ## 폴더 구조
