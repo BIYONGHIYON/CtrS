@@ -73,6 +73,8 @@ python SSA-MRN/common/verify.py --benchmark adwm
 
 보고서·표의 RR 수치는 실제 MATLAB으로 채점합니다. 위 평가기로 만든 장면별 예측(DN, `H × W × C` `.mat` 20개)을 `<모델>_<설정>_<센서>_rr.zip`으로 묶어 Release `predictions-benchmarks-<모델>-<설정>`에 올립니다. 이어서 GitHub Actions의 `MATLAB score benchmark author-weight predictions` 워크플로(`.github/workflows/matlab-benchmark-author.yml`)를 model·setting·release·sensors를 입력해 실행합니다. 워크플로는 test 원본의 SHA-256을 확인합니다. 그다음 DLPan-Toolbox(`a34f884`) `score_suite.m`을 MATLAB R2025b로 실행해 RR 지표를 내고, 같은 배열의 Python 값과 비교합니다. 결과는 `results/matlab.json`으로 보관합니다.
 
+평가 완료로 표시하려면 네 센서(QB·GF2·WV3·WV2 전이)의 예측 zip이 모두 Release에 있어야 합니다. zip 안의 파일 이름은 `output_mulExm_<0-19>.mat`, 변수는 `sr`입니다. 이 Release는 MATLAB 채점과 결과 비교 사이트 비교군이 함께 쓰는 원본이므로 지우거나 같은 이름으로 다른 내용을 덮어쓰지 않습니다. 저자 가중치를 재배포할 수 없는 모델도 우리가 추론한 예측은 올립니다.
+
 ```bash
 gh workflow run matlab-benchmark-author.yml -f model=adwm -f setting=retrain -f release=predictions-benchmarks-adwm-retrain -f sensors='["QB","GF2","WV3","WV2"]'
 ```
