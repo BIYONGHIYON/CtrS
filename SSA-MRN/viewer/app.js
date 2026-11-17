@@ -50,15 +50,15 @@ async function loadScene(dsId, i, ids) {             // inputs and GT once per s
 const dataset = id => S.index.datasets.find(d => d.id === id);
 const model = id => S.index.models.find(m => m.id === id);
 const modelsIn = ds => S.index.models.filter(m => ds.results && ds.results[m.id]);
-const COMPARE_GROUPS = [['ours', '우리 모델'], ['benchmark', '다른 연구 모델 · 저자 가중치']];
+const COMPARE_GROUPS = [['original', '원본'], ['ours', '우리 모델'], ['benchmark', '다른 연구 모델 · 저자 가중치']];
 const comparable = ds => modelsIn(ds).filter(m => COMPARE_GROUPS.some(([g]) => g === m.group));
-function pickModels(ds) {                           // original SSA-MRN, the baseline and one chosen comparison model
-  const avail = modelsIn(ds), cmps = comparable(ds);
-  if (!cmps.some(m => m.id === S.cmp)) S.cmp = cmps.length ? cmps[0].id : null;
-  S.visible = [avail.find(m => m.group === 'original'), avail.find(m => m.group === 'baseline'), cmps.find(m => m.id === S.cmp)].filter(Boolean).map(m => m.id);
+function pickModels(ds) {                           // the baseline C2MS-SP and one chosen model (default: original SSA-MRN)
+  const avail = modelsIn(ds), cmps = comparable(ds), base = avail.find(m => m.group === 'baseline');
+  if (!cmps.some(m => m.id === S.cmp)) S.cmp = (cmps.find(m => m.group === 'original') || cmps[0] || {}).id || null;
+  S.visible = [base, cmps.find(m => m.id === S.cmp)].filter(Boolean).map(m => m.id);
   if (!S.visible.length) S.visible = avail.slice(0, 1).map(m => m.id);
-  if (!S.visible.includes(S.ref)) S.ref = S.visible[0];
-  if (!S.visible.includes(S.cand) || S.cand === S.ref) S.cand = S.visible.find(v => v !== S.ref) || null;
+  S.ref = S.cmp && S.visible.includes(S.cmp) ? S.cmp : S.visible[0];      // differences are baseline - chosen model
+  S.cand = base && S.visible.includes(base.id) && base.id !== S.ref ? base.id : null;
 }
 
 // ---------- numeric helpers ----------
@@ -238,19 +238,17 @@ function build() {
   // toolbar
   const settings = el('details', { class: 'pop', id: 'pop', open: S.popOpen, ontoggle: e => { S.popOpen = e.target.open; } }, el('summary', {}, '표시 설정'),
     el('div', { class: 'pop-body' },
-      el('span', { class: 'lab' }, '비교 기준'), el('select', { onchange: e => { S.ref = e.target.value; if (S.cand === S.ref) S.cand = S.visible.find(v => v !== S.ref) || null; build(); } }, vis.map(m => opt(m.id, m.label, S.ref))),
-      others.length > 1 ? [el('span', { class: 'lab' }, '비교 대상'), el('select', { onchange: e => { S.cand = e.target.value; build(); } }, others.map(m => opt(m.id, m.label, S.cand)))] : null,
       el('span', { class: 'lab' }, '오차 밴드'), el('select', { onchange: e => { S.errBand = e.target.value; renderAll(); } }, opt('mean', '전체 밴드 평균', S.errBand), ds.band_names.map((n, b) => opt(b, `${b} · ${n}`, S.errBand))),
       el('span', { class: 'lab' }, '오차 색 범위'), el('div', { class: 'pair' },
-        el('select', { onchange: e => { S.errScale = e.target.value; build(); } }, opt('ref', '기준 모델 99%', S.errScale), opt('max', '모델 중 최대 99%', S.errScale), opt('manual', '직접 입력', S.errScale)),
+        el('select', { onchange: e => { S.errScale = e.target.value; build(); } }, opt('ref', `${ref.short} 99%`, S.errScale), opt('max', '두 모델 중 최대 99%', S.errScale), opt('manual', '직접 입력', S.errScale)),
         S.errScale === 'manual' ? el('input', { type: 'number', min: 1, step: 1, value: S.errManual, title: 'DN', style: 'width:84px', onchange: e => { S.errManual = Math.max(0.1, +e.target.value || 1); renderAll(); } }) : null),
       el('span', { class: 'lab' }, '확대 색 범위'), el('select', { onchange: e => { S.zoomScale = e.target.value; renderZoom(); } }, opt('scene', '전체 장면과 같게', S.zoomScale), opt('region', '확대 영역에 맞춤', S.zoomScale)),
       el('span', { class: 'lab' }, '확대 밝기'), el('select', { onchange: e => { S.zoomStretch = e.target.value; renderZoom(); } }, opt('scene', '전체 장면과 같게', S.zoomStretch), opt('region', '확대 영역에 맞춤', S.zoomStretch)),
       el('span', { class: 'lab' }, '입력 영상'), el('label', { class: 'check' }, el('input', { type: 'checkbox', checked: S.inputs, onchange: e => { S.inputs = e.target.checked; build(); } }), 'LR MS · PAN 함께 보기')));
   const bar = el('div', { class: 'bar' },
     el('div', { class: 'scene-title', id: 'sceneTitle' }),
-    el('span', { class: 'group models' }, el('span', { class: 'fixed' }, vis.filter(m => m.group === 'original' || m.group === 'baseline').map(m => m.label).join(' · ')),
-      comparable(ds).length ? [el('span', { class: 'lab' }, '비교군'), el('select', { class: 'cmp', 'aria-label': '비교군 모델', onchange: e => setCompare(e.target.value) },
+    el('span', { class: 'group models' }, el('span', { class: 'fixed' }, vis.filter(m => m.group === 'baseline').map(m => m.label).join('')),
+      comparable(ds).length ? [el('span', { class: 'lab' }, '비교 모델'), el('select', { class: 'cmp', 'aria-label': '비교 모델', onchange: e => setCompare(e.target.value) },
         COMPARE_GROUPS.map(([g, label]) => { const ms = comparable(ds).filter(m => m.group === g); return ms.length ? el('optgroup', { label }, ms.map(m => opt(m.id, m.label, S.cmp))) : null; }))] : null),
     el('span', { class: 'spacer' }),
     Object.keys(ds.composites).length > 1 ? el('span', { class: 'group' }, el('span', { class: 'lab' }, '밴드'), seg(Object.keys(ds.composites).map(k => [k, k]), S.comp, v => { S.comp = v; build(); })) : null,
@@ -263,7 +261,7 @@ function build() {
   // layers: one column per image, whole scene on top and the selected region below
   tiles = [];
   if (S.inputs) tiles.push({ kind: 'lr', title: 'LR MS', sub: '입력 · 최근접 확대' }, { kind: 'pan', title: 'PAN', sub: '입력' });
-  vis.forEach(m => tiles.push({ kind: 'pred', id: m.id, title: m.label, tag: m.id === S.ref && vis.length > 1 ? '기준' : null }));
+  vis.forEach(m => tiles.push({ kind: 'pred', id: m.id, title: m.label, tag: m.group === 'baseline' ? '기준 모델' : null }));
   tiles.push({ kind: 'gt', title: '정답', sub: 'GT' });
   vis.forEach(m => tiles.push({ kind: 'err', id: m.id, title: `${m.short} 오차`, sub: '|예측 − 정답|' }));
   others.forEach(m => tiles.push({ kind: 'gain', id: m.id, title: `${m.short} 개선`, sub: `${ref.short} 오차 − ${m.short} 오차` }));
@@ -384,8 +382,8 @@ function renderNumbers(rm) {
     el('thead', {},
       el('tr', { class: 'groups' }, el('th', {}), el('th', { class: 'g', colspan: REGION_COLS.length }, `확대 영역 ${S.win}×${S.win}`), el('th', { class: 'g', colspan: SCENE_COLS.length }, `장면 ${S.scene} 전체`),
         el('th', { class: 'g', colspan: MEAN_COLS.length + (multi ? 1 : 0) }, `데이터셋 평균 · ${ds.scenes}장면`)),
-      el('tr', {}, el('th', {}, '모델'), heads(REGION_COLS), heads(SCENE_COLS), heads(MEAN_COLS), multi ? el('th', { title: '비교 기준보다 PSNR이 높은 장면 수' }, 'PSNR 우세 장면') : null)),
-    el('tbody', {}, S.visible.map(id => el('tr', {}, el('td', {}, model(id).label, multi && id === ref ? [' ', el('span', { class: 'tag' }, '기준')] : null),
+      el('tr', {}, el('th', {}, '모델'), heads(REGION_COLS), heads(SCENE_COLS), heads(MEAN_COLS), multi ? el('th', { title: `${model(ref).short}보다 PSNR이 높은 장면 수` }, 'PSNR 우세 장면') : null)),
+    el('tbody', {}, S.visible.map(id => el('tr', {}, el('td', {}, model(id).label, model(id).group === 'baseline' ? [' ', el('span', { class: 'tag' }, '기준 모델')] : null),
       cells(REGION_COLS, i => rm[i], id), cells(SCENE_COLS, i => res[i].scene_metrics[S.scene], id), cells(MEAN_COLS, i => res[i].mean, id),
       multi ? el('td', {}, id === ref ? '' : `${wins(id)}/${ds.scenes}`) : null))));
   $('#numbers').replaceChildren(table);
@@ -486,7 +484,7 @@ let urlTimer = 0;
 function syncURL() {
   clearTimeout(urlTimer);
   urlTimer = setTimeout(() => {
-    const p = new URLSearchParams({ ds: S.ds, scene: S.scene, x: S.x, y: S.y, w: S.win, comp: S.comp, ref: S.ref, cmp: S.cmp || '' });
+    const p = new URLSearchParams({ ds: S.ds, scene: S.scene, x: S.x, y: S.y, w: S.win, comp: S.comp, cmp: S.cmp || '' });
     history.replaceState(null, '', '#' + p.toString());
   }, 200);
 }
@@ -515,7 +513,6 @@ function applyURL() {                              // also runs when a link is p
   S.x = u.x; S.y = u.y; S.win = WINDOWS.includes(u.w) ? u.w : S.win; if (u.comp) S.comp = u.comp;
   const old = u.models ? u.models.split(',').find(id => model(id) && COMPARE_GROUPS.some(([g]) => g === model(id).group)) : null;   // links made before cmp=
   if (u.cmp && model(u.cmp)) S.cmp = u.cmp; else if (old) S.cmp = old;
-  if (u.ref && model(u.ref)) S.ref = u.ref;
   S.scene = u.scene;
   setDataset(ready.some(d => d.id === u.ds) ? u.ds : S.ds || ready[0].id);
 }
