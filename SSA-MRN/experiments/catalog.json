@@ -2892,5 +2892,20 @@
     "common_initialization_matches": true,
     "round_sample_order_matches": true,
     "limits": "3·4배 RR 개선·2배 악화. FR 미평가·원본 장면 분할 미검증·합성 Gaussian proxy·단일 seed42; 실제 H5 재평가·GPU 재개 미검증."
+  },
+  "performance/84_long_training_decay_branches": {
+    "display_name": "84. C2MS-SP 학습 길이 확장: 일정 학습률 학습과 감쇠 갈래로 150-1000에폭 한계 측정",
+    "experimenter": "이병현",
+    "status": "학습 중",
+    "improvement": "판단 보류",
+    "result": "아직 평가를 마치지 않았습니다(QB·GF2 평가 끝, WV3 학습 중, seed 42)",
+    "report": "experiments/performance/84_long_training_decay_branches/README.md",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "evaluated_seeds": [],
+    "retraining": true,
+    "limits": "seed 42 한 개. 학습 길이는 validation으로만 고르고 그 길이만 test로 판정합니다.",
+    "config": "experiments/performance/84_long_training_decay_branches/config.json",
+    "entrypoint": "experiments/performance/84_long_training_decay_branches/run.py",
+    "last_checked": "2026-11-17T20:39:00+09:00"
   }
 }
