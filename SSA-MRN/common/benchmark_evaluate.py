@@ -18,10 +18,13 @@ checkpoint and data SHA-256, parameter count. WV2 is evaluated with the WV3 weig
 --summary pools the runs into results/summary.json: per setting and sensor the seed mean and the paired difference to C2MS-SP
 (same seeds, docs/images/c2ms_sp/baseline_metrics.json). No judgement is attached; the numbers are reported as they are.
 --figures renders the fixed six scenes in both formats (common/result_images.render_multi): C2MS-SP, then the model.
+--figures --release takes the model's saved predictions from Release predictions-benchmarks-<model>-<setting> instead of running
+its weights (common/benchmark_predictions.py), so images can be made for author weights that are not redistributed.
 
 python SSA-MRN/common/benchmark_evaluate.py --model adwm --setting retrain --sensor QB --seed 42 --device cuda
 python SSA-MRN/common/benchmark_evaluate.py --model adwm --summary
 python SSA-MRN/common/benchmark_evaluate.py --model adwm --setting retrain --sensor QB --seed 42 --figures --device cuda
+python SSA-MRN/common/benchmark_evaluate.py --model arconv --setting author --sensor GF2 --figures --release
 """
 import argparse
 import hashlib
@@ -158,7 +161,12 @@ def figures(a, folder):
     from common import baseline_models as B
     from common import result_images
     stem, scale, _, bands = SENSORS[a.sensor]; seed = 42 if a.seed is None else a.seed
-    net, _ = load_model(folder, a.setting, a.sensor, a.seed, a.checkpoint, a.device)
+    if a.release:
+        from common import benchmark_predictions
+        net, info = benchmark_predictions.load(folder.name, a.setting, a.sensor)
+        print(f"{info['release']}/{info['asset']} sha256 {info['asset_sha256']}", flush=True)
+    else:
+        net, _ = load_model(folder, a.setting, a.sensor, a.seed, a.checkpoint, a.device)
     name = json.loads((folder / 'config.json').read_text(encoding='utf-8')).get('display_name', folder.name) if (folder / 'config.json').exists() else folder.name
     nets = {'c2ms_sp': B.build('c2ms_sp', a.sensor, seed, device=a.device), folder.name: net}
     result_images.render_multi(nets, Path(a.data), folder / 'results/images' / run_name(a.setting, a.sensor, a.seed), ['C2MS-SP', name], seed=seed,
@@ -179,9 +187,10 @@ def main():
     p.add_argument('--limit', type=int, help='smoke test on the first N scenes (writes metrics_smoke.json, excluded from --summary)')
     p.add_argument('--skip-fr', action='store_true', help='RR only (the run is then marked incomplete)')
     p.add_argument('--summary', action='store_true'); p.add_argument('--figures', action='store_true')
+    p.add_argument('--release', action='store_true', help='--figures from the saved predictions Release instead of the weights')
     a = p.parse_args()
     folder = (a.folder or (ROOT / 'benchmarks' / (a.model or ''))).resolve()
-    if not (folder / 'model.py').is_file() and not a.summary: p.error(f'no adapter: {folder}/model.py')
+    if not (folder / 'model.py').is_file() and not a.summary and not (a.figures and a.release): p.error(f'no adapter: {folder}/model.py')
     if a.summary: summary(folder)
     elif a.figures: figures(a, folder)
     else: evaluate(a, folder)

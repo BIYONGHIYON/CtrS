@@ -166,13 +166,14 @@ def _zoom_multi(a, out, names, title, path, font, labels, bands=BANDS, chooser=1
 
 def render_multi(nets, data_dir, output_dir, labels, seed=42, device='cuda', scenes=SCENES, rr_file='test_qb_multiExm1.h5', scale=2047., bands=BANDS,
                  land_cover=LAND_COVER, chooser=1):
-    """Like render() for several models (dict name -> network, first = reference). The zoom window is the one where nets[chooser]
+    """Like render() for several models (dict name -> network, first = reference). A value may instead be saved predictions,
+    an array (N, C, H, W) in DN indexed by scene (common/benchmark_predictions.load). The zoom window is the one where nets[chooser]
     reduces the error of the reference most, so it favours that model; whole-scene PSNR of every model is in the title."""
     names = list(nets); out_dir = Path(output_dir); out_dir.mkdir(parents=True, exist_ok=True); font, stats = _font(), {}
     with h5py.File(next(Path(data_dir).rglob(rr_file)), 'r') as f:
         for i in scenes:
             a = {k: np.asarray(f[k][i], dtype=np.float64) for k in ('pan', 'lms', 'ms', 'gt')}
-            out = {k: _predict(n, a, scale, device) for k, n in nets.items()}
+            out = {k: np.asarray(n[i], dtype=np.float64) if isinstance(n, np.ndarray) else _predict(n, a, scale, device) for k, n in nets.items()}
             scene = {k: _psnr(o, a['gt']) for k, o in out.items()}
             title = f'RR 장면 {i}' + (f' ({land_cover[i]})' if i in land_cover else '') + f' · seed {seed} · 장면 PSNR ' + ' · '.join(f'{labels[j]} {scene[n]:.2f}' for j, n in enumerate(names)) + ' dB'
             _full_multi(a, out, names, title + ' · 원본 크기, 오차 지도는 같은 색 척도', out_dir / f'full_scene_{i:02}.png', font, labels, bands)
