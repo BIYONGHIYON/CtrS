@@ -67,4 +67,4 @@ WV3�� `hw_range=[1,18]`�� ������ ���� �߷� �ڵ
 
 - [MATLAB �� ���](results/matlab.json), [FR ��麰 ��](results/summary.json), [�Է¡�����ġ �ؽ�](provenance/metadata.json).
 - [RR ���� Release](https://github.com/BIYONGHIYON/CtrS/releases/tag/predictions-benchmarks-arconv-author), [MATLAB ���� ���](https://github.com/BIYONGHIYON/CtrS/actions/runs/44121444016).
-- �̿Ϸ�: ���� �ڵ� ���� ��� �� ������ �����, ���� ���� �ڵ塤����ġ ����, manifest ����, ǥ��catalog ���. �� �ʾ��� ������ �غ� ���� �ʾҽ��ϴ�.
+- �̿Ϸ�: ���� �ڵ� ���� ��� �� ������ �����, ���� ���� �ڵ塤����ġ ����, manifest ����, ǥ��catalog ���. ���� �򰡱��� GF2 ����ȭ�� ���� ����ȭ�� ��ȯ�ϴ� ����� ���迡�� ���� ������ ���� �Է� �ݿø� ���̰� ��¿� ������ �־� ���� ��� ���� ���� Ȯ���� �ʿ��մϴ�. �� �ʾ��� ������ �غ� ���� �ʾҽ��ϴ�.
