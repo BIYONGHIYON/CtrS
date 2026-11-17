@@ -12,6 +12,7 @@
 
 | 모델 | 출처·학습 조건 | 확인된 결과 | 상태 |
 |---|---|---|:---:|
+| [U2Net](u2net/README.md)<br>[송준현] | ACM MM 2023 · `author` WV3 공개 가중치 · Kaggle T4 · Python 공통 지표 | WV3 RR PSNR 38.844(C2MS-SP 3seed 평균 대비 +0.171dB), WV2 전이 30.497(−1.039dB). 고정6장면 RR 이미지 센서별12개. 실제 MATLAB 미실행 | 평가 완료<br>WV3·WV2만<br>QB·GF2 미평가 |
 | [CANNet](cannet/README.md)<br>[이병현] | CVPR 2024 · `author` 저자 가중치 재현(재학습 없음) · Kaggle T4 · 실제 MATLAB 채점 | QB RR PSNR 38.261(C2MS-SP 평균 대비 −0.112dB), GF2 49.274(+0.489), WV3 38.977(+0.304). WV3는 논문값 재현, QB·GF2는 논문보다 조금 낮음 | 평가 완료 |
 
 ## 폴더 구조

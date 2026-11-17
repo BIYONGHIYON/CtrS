@@ -1,0 +1,78 @@
+{
+  "display_name": "U2Net",
+  "evaluator": "송준현",
+  "status": "평가 완료 (WV3·WV2); QB·GF2 미평가",
+  "setting": "author",
+  "code_url": "https://github.com/PSRben/U2Net",
+  "upstream_commit": "32e214c19b4b1dea72258b4da3157258f67612b9",
+  "ctrs_commit": "632a0531485f88030b0e77d04a931f4e216715d9",
+  "license": "GPL-3.0; upstream/LICENSE 동봉, 공식 소스 수정 없음",
+  "weight": "200000_iter.pth",
+  "weight_sha256": "e5ef136cdf95cf3cd4ad91bc7d2cea16fba9d8070d82eb1165822d458054bef0",
+  "training_sensor": "WV3",
+  "evaluation_sensors_ready": [
+    "WV3",
+    "WV2"
+  ],
+  "evaluation_sensors_not_ready": [
+    "QB",
+    "GF2"
+  ],
+  "seed": null,
+  "inference": {
+    "core_tile": 64,
+    "halo": 4,
+    "network_input": 72,
+    "clipping": [
+      0,
+      1
+    ],
+    "scale": 2047
+  },
+  "note": "저자 test.py의 타일·clipping을 유지. Full-scene 무타일 C2MS-SP와 추론 방식 차이를 보고할 것. 학습하지 않음.",
+  "model": "u2net",
+  "code": {
+    "url": "https://github.com/PSRben/U2Net",
+    "commit": "32e214c19b4b1dea72258b4da3157258f67612b9",
+    "license": "GPL-3.0",
+    "redistribution": true
+  },
+  "settings": {
+    "author": {
+      "training": "저자 WV3 공개 가중치, 재학습 없음",
+      "seed": null,
+      "weight_filename": "200000_iter.pth",
+      "training_epochs": "가중치 학습 이력 미제공, 파일명 200000iter. 논문360epoch와 코드기본500epoch를 해당 가중치의 확정 학습량으로 간주하지 않음"
+    }
+  },
+  "sensors": {
+    "author": [
+      "WV3",
+      "WV2"
+    ]
+  },
+  "pending_sensors": [
+    "QB",
+    "GF2"
+  ],
+  "normalization": {
+    "WV3": 2047,
+    "WV2": 2047
+  },
+  "full_four_sensor_complete": false,
+  "images": {
+    "baseline_seed": 42,
+    "candidate_seed": null,
+    "scenes": [
+      0,
+      1,
+      3,
+      7,
+      14,
+      17
+    ],
+    "zoom": "candidate-favourable 64px GT-error-reduction window"
+  },
+  "numeric_reference": "C2MS-SP three-seed mean",
+  "matlab_evaluated": false
+}

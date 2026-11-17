@@ -1,0 +1,12 @@
+{
+  "torch": "2.11.0+cu130",
+  "cuda": "13.0",
+  "device": "cuda:0",
+  "gpu": "Tesla T4",
+  "baseline": "C2MS-SP seed42, K10 projection; WV2 includes experiment82 scene band calibration",
+  "candidate": "U2Net official author WV3 weights, seed unknown; 64px tiles, halo4, clipping[0,1]",
+  "package_sha256": "965d1da523b37638b9a2a44eedb81ab9db72b9a7a5d7e11d27d1cf3f4cc995b7",
+  "baseline_weight_sha256": "d9d9d8c67bca9f48f8e6027825041f76a8c5a7e987a26a68287e34fcbd351541",
+  "u2net_weight_sha256": "e5ef136cdf95cf3cd4ad91bc7d2cea16fba9d8070d82eb1165822d458054bef0",
+  "note": "Images use one baseline seed; existing aggregate table uses C2MS-SP 3seed mean. No new training or test selection."
+}

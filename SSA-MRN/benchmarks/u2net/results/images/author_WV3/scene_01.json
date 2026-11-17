@@ -1,0 +1,53 @@
+{
+  "sensor": "WV3",
+  "scene": 1,
+  "baseline_seed": 42,
+  "u2net_seed": null,
+  "package_sha256": "965d1da523b37638b9a2a44eedb81ab9db72b9a7a5d7e11d27d1cf3f4cc995b7",
+  "data_sha256": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+  "metrics": {
+    "c2ms_sp_s42": {
+      "SAM": 3.1901649416631805,
+      "ERGAS": 2.7193199092364804,
+      "PSNR": 37.490019651792466,
+      "SCC": 0.9783967968891822,
+      "Q2n": 0.9133918865490496
+    },
+    "u2net_author": {
+      "SAM": 2.949386822897489,
+      "ERGAS": 2.4315466574942395,
+      "PSNR": 38.34869076785002,
+      "SCC": 0.9835511619706793,
+      "Q2n": 0.9321724256355278
+    }
+  },
+  "rr_delta_u2net_minus_baseline": {
+    "PSNR": 0.8586711160575575,
+    "SAM": -0.24077811876569166,
+    "ERGAS": -0.2877732517422409,
+    "SCC": 0.0051543650814970254,
+    "Q2n": 0.018780539086478254
+  },
+  "prior_u2net_psnr": 38.34869076785002,
+  "reproduction_psnr_abs_error": 0.0,
+  "seconds": 1.9911279739999372,
+  "zoom": {
+    "window": [
+      32,
+      64
+    ],
+    "crop_psnr": {
+      "c2ms_sp_s42": 31.85438497774051,
+      "u2net_author": 32.948047303650725
+    },
+    "crop_mean_abs_err": {
+      "c2ms_sp_s42": 33.43354709133218,
+      "u2net_author": 28.626367475640905
+    }
+  },
+  "selection": "Fixed scenes before inference; zoom chosen in favour of U2Net using GT error reduction.",
+  "images": {
+    "full_scene_01.png": "fa7a53bdbd0cc92fbf6461b7607c842de32d565f0c7056bc555580f64e50d3d6",
+    "compare_scene_01.png": "4cb6a2f7f2a354e4ba73d6cfc7851516c981e7911d5f6cd2388b525facbb25ed"
+  }
+}
