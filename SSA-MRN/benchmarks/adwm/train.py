@@ -16,7 +16,7 @@ Outputs in --out (default SSA-MRN/benchmarks/adwm/checkpoints/retrain_<sensor>_s
 
 python SSA-MRN/benchmarks/adwm/train.py --sensor QB --train data/train_qb.h5 --val data/valid_qb.h5 --device cuda
 python SSA-MRN/benchmarks/adwm/train.py --sensor QB --train ... --val ... --device cuda --resume   # continue from latest.pt
-python SSA-MRN/benchmarks/adwm/train.py ... --stop-after 60     # end this session after 60 epochs (Kaggle time limit)
+python SSA-MRN/benchmarks/adwm/train.py ... --deadline $(( $(date +%s) + 39000 ))   # stop before a Kaggle 12 h session ends
 python SSA-MRN/benchmarks/adwm/train.py --sensor QB --train ... --val ... --epochs 1 --limit 64 --out /tmp/adwm_smoke  # smoke
 """
 import argparse
@@ -85,6 +85,7 @@ def main():
     p.add_argument('--resume', action='store_true', help='continue from <out>/latest.pt')
     p.add_argument('--limit', type=int, help='smoke test: first N training and validation samples')
     p.add_argument('--stop-after', type=int, help='exit after this many epochs in this session (resume later with --resume)')
+    p.add_argument('--deadline', type=float, help='unix time; stop after the epoch that would otherwise run past it (Kaggle 12 h)')
     a = p.parse_args()
     epochs = a.epochs or EPOCHS[a.sensor]
     out = a.out or HERE / 'checkpoints' / f'retrain_{a.sensor}_s{a.seed}'
@@ -138,12 +139,15 @@ def main():
             best = val
             torch.save(dict(model=cpu(net.net.state_dict()), epoch=epoch + 1, val_l1=val, meta=meta), out / 'best.pt')
         torch.save(dict(model=cpu(net.net.state_dict()), optimizer=optimizer.state_dict(), scheduler=scheduler.state_dict(),
-                        rng=rng_state(), loader_rng=g.get_state(), epoch=epoch + 1, best_val_l1=best, meta=meta), out / 'latest.pt')
+                        rng=rng_state(), loader_rng=g.get_state(), epoch=epoch + 1, best_val_l1=best, meta=meta), out / 'latest.tmp')
+        (out / 'latest.tmp').replace(out / 'latest.pt')   # never leave a half-written latest.pt if the session is killed
         hist_path.write_text(json.dumps(dict(meta=meta, best_epoch=min(history, key=lambda h: h['val_l1'])['epoch'],
                                              updated=datetime.now(KST).isoformat(timespec='seconds'), epochs=history),
                                         ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
         print(f"epoch {epoch + 1}/{epochs} train_l1 {row['train_l1']:.6f} val_l1 {val:.6f} lr {lr:.2e} {row['seconds']}s"
               + (' *best' if improved else ''), flush=True)
+        if a.deadline and epoch + 1 < stop and time.time() + 1.5 * row['seconds'] > a.deadline:
+            print(f'deadline: stopping after epoch {epoch + 1} (continue with --resume)', flush=True); break
 
 
 if __name__ == '__main__':

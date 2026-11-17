@@ -88,6 +88,6 @@ GF2 PSNR은 논문마다 약 43-45 dB와 49-50 dB 계열이 함께 있습니다(
 
 - 공식 코드: `upstream/` 하위 모듈 (고정 커밋은 [config.json](config.json))
 - 저자 WV3 가중치: `upstream/weights/BWNET_LAGConv_WV3/model.pth` (SHA-256은 config.json)
-- 어댑터: [model.py](model.py) · 학습: [train.py](train.py)
+- 어댑터: [model.py](model.py) · 학습: [train.py](train.py) · Kaggle 실행 원본: [provenance/kaggle_adwm.py](provenance/kaggle_adwm.py)
 
 </details>

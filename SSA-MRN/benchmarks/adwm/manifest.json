@@ -1,0 +1,28 @@
+{
+ "model": "adwm",
+ "description": "ADWM 평가 등록 단계 보관 파일 (코드·설정). 저자 WV3 가중치는 upstream 하위 모듈 안에 있고 SHA-256은 config.json에 있습니다. 결과·가중치·예측은 평가 후 추가합니다.",
+ "upstream": {
+  "path": "upstream",
+  "url": "https://github.com/Jie-1203/ADWM",
+  "commit": "aa185a64cac00a8c31581290de276568da2eb106"
+ },
+ "files": {
+  "config.json": {
+   "bytes": 4215,
+   "sha256": "6492a27b74c7a83394eba7002b57434ea6754b8c2887b3fb3d278b17eca3fb6c"
+  },
+  "model.py": {
+   "bytes": 3869,
+   "sha256": "5009e2dd464847e69045c93376cc2cc3a6f4675abe1564b5a2616bbd56e3d72e"
+  },
+  "train.py": {
+   "bytes": 9903,
+   "sha256": "616103b7810c82b894e5fa4ceedc8a4b0c7d97af12deaf0a06bcc11340f616f1"
+  },
+  "provenance/kaggle_adwm.py": {
+   "bytes": 10018,
+   "sha256": "4b77eabd0bdea1c40f72d42a5dbda462d173dfe7761a6a6fe7c798b79ec223d7"
+  }
+ },
+ "release_assets": {}
+}
