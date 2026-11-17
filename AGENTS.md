@@ -5,6 +5,8 @@
 ## 1. Git·서버
 
 - 작업 전에 브랜치·열린 PR·변경사항을 확인합니다. 다른 채팅과 팀원의 변경·미추적 파일은 건드리지 않습니다.
+- **이슈 확인:** 작업을 시작하기 전에 열린 GitHub 이슈(`gh issue list --state open`)에서 관련 이슈와 담당자를 확인하고, 이슈의 내용과 할 일을 따라 진행합니다. 다른 사람이 담당자인 이슈는 그 사람과 협의한 뒤 진행합니다. 진행하면서 바뀐 점이나 막힌 점은 이슈에 댓글로 남깁니다.
+- **이슈 닫기:** PR 본문에 해결하는 이슈를 `Closes #번호`로 적습니다. PR로 이슈를 해결했으면 이슈를 닫는 것까지 합니다. 병합 후 자동으로 닫히지 않았으면 결과(PR·보고서) 링크를 댓글로 남기고 `gh issue close`로 닫습니다. 일부만 해결했으면 닫지 않고, 끝난 할 일을 체크하고 남은 일을 댓글로 남깁니다.
 - 브랜치 이름은 작업 이름만 씁니다(`ssa-controlled-suite`). `codex/` 같은 접두사를 붙이지 않습니다.
 - 정확한 파일만 커밋합니다. `git add .`은 쓰지 않습니다. 커밋 메시지는 간결한 한국어로 씁니다.
 - 푸시 요청에는 PR 생성까지 포함합니다. 같은 head/base의 열린 PR이 있으면 거기에 반영하고, 없으면 main 대상으로 만들어 URL을 보고합니다. main 병합은 사용자가 합니다.
@@ -134,6 +136,7 @@ python SSA-MRN/common/index.py --check                  # catalog와 실험 표 
 
 세부 절차는 [평가 안내](SSA-MRN/benchmarks/README.md)와 [양식](SSA-MRN/docs/benchmark_template.md)을 따릅니다.
 
+- 평가할 모델은 모델마다 GitHub 이슈로 관리합니다. 맡을 때 이슈 담당자로 자신을 지정하고, 할 일 목록을 따라 진행합니다.
 - 결과는 `SSA-MRN/benchmarks/<소문자 snake_case 모델 이름>/` 한 곳에 모읍니다. 시작 전에 `benchmarks/catalog.json`과 열린 PR에서 같은 모델을 누가 맡았는지 확인하고 계획 상태로 먼저 등록합니다.
 - **직접 학습:** 저자 가중치가 공개된 센서는 재학습하지 않고 그 가중치로 평가합니다(`author`). 학습 센서 QB·GF2·WV3 중 저자 가중치·평가가 없는 데이터셋은 공식 코드와 논문 설정으로 우리 학습 데이터에서 직접 학습하고(`retrain`), 가중치·예측·결과를 함께 올립니다. 단일 시드(42)로 측정하고 validation으로 선택합니다. WV2는 C2MS-SP와 같이 학습하지 않고 WV3 가중치(저자 또는 직접 학습)를 적용한 전이로 평가합니다. 저자 WV3 가중치가 없으면 WV3를 직접 학습한 뒤 WV2에 적용합니다.
 - **MATLAB 평가:** 같은 분할·test RR·FR 각 20장·정규화를 씁니다. 보고서·표의 RR 수치는 실제 MATLAB(DLPan-Toolbox `a34f884`의 `score_suite.m`)으로 채점한 값입니다. 장면별 예측(DN `.mat`)을 Release `predictions-benchmarks-<모델>-<설정>`에 `<모델>_<설정>_<센서>_rr.zip`으로 올리고 `.github/workflows/matlab-benchmark-author.yml`(model·setting·release 입력)로 채점합니다. `common/benchmark_evaluate.py`(Python)는 어댑터 확인, FR QNR(참고), 이미지에 쓰고, 같은 배열에서 MATLAB과의 차이를 함께 적습니다.
