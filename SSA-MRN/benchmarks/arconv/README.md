@@ -67,4 +67,6 @@ MATLAB과 Python의 PSNR·SAM·ERGAS·SCC는 표시 정밀도에서 일치하며
 
 - [MATLAB 상세 결과](results/matlab.json), [FR 장면별 값](results/summary.json), [입력·가중치 해시](provenance/metadata.json).
 - [RR 예측 Release](https://github.com/BIYONGHIYON/CtrS/releases/tag/predictions-benchmarks-arconv-author), [MATLAB 실행 기록](https://github.com/BIYONGHIYON/CtrS/actions/runs/44121444016).
-- GF2 실제 RR 장면 0·1·2를 CPU에서 저자 정규화와 어댑터 정규화로 비교했습니다. 평균 절대 출력 차이 0.000036–0.000048 DN, 최대 차이 0.002167 DN, 전체 화소 PSNR 최대 차이 0.000005 dB입니다. 전체 20장 재실행이나 원래 GPU 출력과 배열 대조를 대신하지는 않습니다.\n- 미완료: 전체 장면 어댑터 재평가, 가중치 재배포 조건 확인과 원본 학습·평가 실행 코드 보관. 이 초안은 병합할 준비가 되지 않았습니다.
+- GF2 실제 RR 장면 0·1·2를 CPU에서 저자 정규화와 어댑터 정규화로 비교했습니다. 평균 절대 출력 차이 0.000036–0.000048 DN, 최대 차이 0.002167 DN, 전체 화소 PSNR 최대 차이 0.000005 dB입니다. 전체 20장 재실행이나 원래 GPU 출력과 배열 대조를 대신하지는 않습니다.
+- [저자 가중치 Release](https://github.com/BIYONGHIYON/CtrS/releases/tag/weights-benchmarks-arconv)에서 QB·GF2·WV3 원본 체크포인트를 받을 수 있습니다. [추론 실행기](run_author.py)는 노트북의 계산 과정을 재구성했으며 GF2 장면 0에서 CPU 직접 추론과 PSNR이 일치했습니다.
+- 원본 코드 저장소는 GPL-3.0입니다. 가중치에 별도로 적용되는 조건은 명시적으로 확인되지 않았습니다. 전체 장면의 어댑터 출력과 기존 GPU 출력의 배열 대조는 남아 있습니다.
