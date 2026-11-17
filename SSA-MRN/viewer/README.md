@@ -2,7 +2,7 @@
 
 같은 RR test 장면에서 여러 모델의 예측 영상·오차 지도·수치를 비교하는 정적 웹페이지입니다. 현재 원본 SSA-MRN, 기준 모델 C2MS-SP(성능 81번), 경량판 C2MS-SP-Lite(성능 83번)를 seed 42로 QB·GF2·WV3·WV2 전이 데이터셋에 올렸습니다(2026-11-14). C2MS-SP·SP-Lite는 관측 일치 사영(공액 기울기법 10회)을 포함하고, WV2에서는 성능 82번 밴드별 센서 보정도 포함합니다. 원본은 발표된 방식 그대로입니다. 모델 정의는 `common/baseline_models.py`에 있습니다.
 
-배포 주소: **https://biyonghiyon.github.io/CtrS-viewer/** (배포 저장소 [BIYONGHIYON/CtrS-viewer](https://github.com/BIYONGHIYON/CtrS-viewer), GitHub Pages)
+배포 주소: **https://biyonghiyon.github.io/CtrS/** (이 저장소의 GitHub Pages 루트, 배포 워크플로 [`.github/workflows/pages.yml`](../../.github/workflows/pages.yml)). 같은 사이트의 `/portfolio/<GitHub ID>/`에는 팀원별 소개 페이지([`portfolio/`](../../portfolio/README.md))가 있고, 이 사이트에서 그쪽으로 가는 링크는 두지 않습니다.
 
 ## 실행
 
@@ -45,13 +45,11 @@ python SSA-MRN/viewer/export.py --models <모델 id>
 
 ## 배포 갱신
 
-모델을 추가하거나 데이터를 다시 만든 뒤 배포 저장소에 `index.html`·`app.js`·`data/`를 덮어써서 푸시하면 1-2분 뒤 사이트에 반영됩니다. 예측 데이터는 CtrS 저장소에 넣지 않고 배포 저장소에만 둡니다.
+예측 데이터(약 250MB)는 Git에 넣지 않고 Release [`viewer-data`](https://github.com/BIYONGHIYON/CtrS/releases/tag/viewer-data)에 묶음 하나로 올립니다. `release_data.py`가 `data/`를 같은 내용이면 같은 해시가 나오도록 묶어 `viewer-data-<해시 12자>.tar.gz`로 올리고, GitHub가 보고한 SHA-256으로 업로드를 확인한 뒤 그 이름과 해시를 `data.sha256`에 씁니다. 이전 버전 자산은 지우지 않습니다.
 
 ```bash
-git clone https://github.com/BIYONGHIYON/CtrS-viewer.git ../CtrS-viewer
-rsync -a --delete SSA-MRN/viewer/data/ ../CtrS-viewer/data/
-cp SSA-MRN/viewer/index.html SSA-MRN/viewer/app.js ../CtrS-viewer/
-git -C ../CtrS-viewer add -A
-git -C ../CtrS-viewer commit -m "결과 비교 사이트 데이터 갱신"
-git -C ../CtrS-viewer push
+python SSA-MRN/viewer/export.py --models <모델 id>
+python SSA-MRN/viewer/release_data.py
 ```
+
+그다음 새 브랜치에서 `data.sha256`(코드를 바꿨다면 `index.html`·`app.js`도)을 커밋하고 PR을 올립니다. main에 병합되면 Pages 워크플로가 `data.sha256`에 적힌 자산을 받아 해시를 확인하고 `index.html`·`app.js`와 함께 배포합니다(1-2분). 해시가 맞지 않으면 배포하지 않습니다. 사이트가 돌아가는 데 로컬 데이터는 필요하지 않습니다.

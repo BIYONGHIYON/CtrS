@@ -2,7 +2,7 @@
 
 # CtrS · SSA-MRN 성능 개선 연구
 
-[기준 모델](#기준-모델) · [결과](#결과) · [다른 모델과 비교](#compare) · [실험과 문서](#experiments) · [팀원](#팀원) · **[결과 비교 사이트](https://biyonghiyon.github.io/CtrS-viewer/)**
+[기준 모델](#기준-모델) · [결과](#결과) · [다른 모델과 비교](#compare) · [실험과 문서](#experiments) · [팀원](#팀원) · **[결과 비교 사이트](https://biyonghiyon.github.io/CtrS/)**
 
 고해상도 흑백 위성영상 **PAN**과 저해상도 다중분광영상 **MS**를 합쳐 고해상도 MS를 복원하는 팬샤프닝 연구입니다. [SSA-MRN](https://ieeexplore.ieee.org/abstract/document/10902025)을 기반으로 성능을 개선합니다.
 
@@ -147,7 +147,7 @@ C2MS-SP의 개선이 가장 큰 64×64 영역을 4배 확대했습니다. C2MS-S
 
 </details>
 
-**[네 데이터셋의 6장면 전체 보기 →](SSA-MRN/docs/c2ms_sp_result_images.md)** · [결과 비교 사이트](https://biyonghiyon.github.io/CtrS-viewer/)에서 장면을 골라 확대해 볼 수 있습니다.
+**[네 데이터셋의 6장면 전체 보기 →](SSA-MRN/docs/c2ms_sp_result_images.md)** · [결과 비교 사이트](https://biyonghiyon.github.io/CtrS/)에서 장면을 골라 확대해 볼 수 있습니다.
 
 <a id="compare"></a>
 

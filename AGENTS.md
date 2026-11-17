@@ -34,7 +34,8 @@
 ```text
 README.md                      연구 소개 (기준 모델과 대표 결과만)
 AGENTS.md                      이 규칙
-docs/                          소개 웹페이지 (GitHub Pages)
+portfolio/<GitHub ID>/         팀원별 소개 웹페이지 (Pages /portfolio/<GitHub ID>/)
+.github/workflows/pages.yml    GitHub Pages 배포 (루트는 결과 비교 사이트)
 SSA-MRN/
 ├── README.md                  실행 안내
 ├── experiments/
@@ -53,6 +54,7 @@ SSA-MRN/
 - 실험 폴더에는 `README.md`, 필요한 `model.py`·`train.py`·`run.py`·`evaluate.py`·`prepare.py`·`config.json`, `checkpoints/`, `results/`, `provenance/`, `manifest.json`만 둡니다. 빈 파일과 중복 구현을 만들지 않습니다.
 - `provenance/`의 원본 학습 소스와 체크포인트 내부 설정은 보존 근거이므로 내용을 바꾸지 않습니다.
 - IDE 설정·캐시·OS 메타데이터·데이터·예측 배열·실행 로그는 추적하지 않습니다.
+- GitHub Pages(https://biyonghiyon.github.io/CtrS/)의 루트는 결과 비교 사이트이고, 팀원별 포트폴리오는 `portfolio/<GitHub ID>/`에 각자 관리합니다([안내](portfolio/README.md)). 결과 비교 사이트에는 포트폴리오로 가는 링크를 두지 않습니다. 뷰어 예측 데이터는 Git에 넣지 않고 `python SSA-MRN/viewer/release_data.py`로 Release `viewer-data`에 올린 뒤 `SSA-MRN/viewer/data.sha256`을 커밋합니다.
 
 ## 4. 실험 등록과 번호
 
