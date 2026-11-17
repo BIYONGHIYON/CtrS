@@ -1,0 +1,54 @@
+{
+  "model": "arconv",
+  "setting": "author",
+  "evaluator": "김윤지",
+  "upstream_url": "https://github.com/Xueyangwang-will/ARConv",
+  "upstream_commit": "f568bef7e45f8a7c3758b2fa8e9d2b62f4b62617",
+  "supplement_url": "https://openaccess.thecvf.com/content/CVPR2025/supplemental/Wang_Adaptive_Rectangular_Convolution_CVPR_2025_supplemental.pdf",
+  "source_license": "공식 저장소 및 저자 가중치 재배포 조건 확인 필요",
+  "input_normalization": 2047,
+  "team_normalization": {
+    "QB": 2047,
+    "GF2": 1023,
+    "WV3": 2047,
+    "WV2": 2047
+  },
+  "hw_range": {
+    "QB": [
+      1,
+      9
+    ],
+    "GF2": [
+      1,
+      18
+    ],
+    "WV3": [
+      1,
+      18
+    ],
+    "WV2": [
+      1,
+      18
+    ]
+  },
+  "hw_range_source": "논문 보충자료 표 9",
+  "epoch_argument": 1000,
+  "seeds": null,
+  "checkpoint_note": "저자 제공 최종 에폭, 시드와 선택 절차 미확인",
+  "weights": {
+    "QB": {
+      "epoch": 200,
+      "sha256": "ffcde76f43b93c06a8f87e24dd0bc36c1861345be928269a31e1c8304b801d79"
+    },
+    "GF2": {
+      "epoch": 630,
+      "sha256": "d5f715fdc3774b5187c16b58273ae56d87aed096c2dc184fc601b237b0b55517"
+    },
+    "WV3": {
+      "epoch": 600,
+      "sha256": "0e97387d7a9285c8ac1816d94f513a06c544e0b01288df243c004ec5a94f9408"
+    }
+  },
+  "weights_source": "https://pan.baidu.com/s/1xFWSLX9611E2CukCpnOp1w?pwd=37ic",
+  "private_backup": "https://www.kaggle.com/datasets/kimyunjiji/arconv-author-checkpoints-ctrs"
+}

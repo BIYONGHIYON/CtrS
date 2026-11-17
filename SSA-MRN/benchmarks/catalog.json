@@ -133,6 +133,51 @@
       "summary": "SSA-MRN/benchmarks/cannet/results/summary.json",
       "manifest": "SSA-MRN/benchmarks/cannet/manifest.json",
       "last_checked": "2026-11-17T01:00:00+09:00"
+    },
+    "arconv": {
+      "display_name": "ARConv",
+      "paper": "Wang et al. Adaptive Rectangular Convolution for Remote Sensing Pansharpening. CVPR 2025. https://arxiv.org/abs/2503.00467",
+      "code": "https://github.com/Xueyangwang-will/ARConv",
+      "commit": "f568bef7e45f8a7c3758b2fa8e9d2b62f4b62617",
+      "license": "공식 저장소 및 가중치 재배포 조건 확인 필요",
+      "evaluator": "김윤지",
+      "settings": [
+        "author"
+      ],
+      "epochs": "QB 200, GF2 630, WV3 600; 저자 제공",
+      "sensors": {
+        "author": [
+          "QB",
+          "GF2",
+          "WV3",
+          "WV2"
+        ]
+      },
+      "seeds": {
+        "author": null
+      },
+      "status": "평가 완료",
+      "status_scope": "RR MATLAB·FR Python 완료, 재현·보관 검증 진행 중",
+      "vs_c2ms_sp": {
+        "note": "저자 모델은 시드 미공개, C2MS-SP 3시드 평균과 차이",
+        "author_QB": {
+          "PSNR": 0.0515917919533
+        },
+        "author_GF2": {
+          "PSNR": 0.599682430605
+        },
+        "author_WV3": {
+          "PSNR": 0.493340475134
+        },
+        "author_WV2": {
+          "PSNR": -1.682056335162
+        }
+      },
+      "report": "SSA-MRN/benchmarks/arconv/README.md",
+      "config": "SSA-MRN/benchmarks/arconv/config.json",
+      "summary": "SSA-MRN/benchmarks/arconv/results/summary.json",
+      "manifest": "SSA-MRN/benchmarks/arconv/manifest.json",
+      "last_checked": "2026-11-18"
     }
   }
 }
