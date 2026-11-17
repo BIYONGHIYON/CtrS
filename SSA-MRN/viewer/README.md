@@ -34,6 +34,8 @@ python -m http.server 8765 -d SSA-MRN/viewer
 
 ## 모델 추가
 
+뷰어 데이터 갱신(모델 추가·설명 수정 포함)은 BIYONGHIYON이 합니다. 다른 연구 모델의 평가자는 예측 Release와 평가 PR까지 하고 이 절차는 하지 않습니다. `export.py`는 로컬 `data/index.json`에 있는 다른 모델의 결과에 이어 붙이므로, 현재 배포 데이터 전체가 없는 컴퓨터에서 만든 데이터를 올리면 다른 모델이 사이트에서 빠집니다.
+
 `registry.json`의 `models`에 항목을 추가한 뒤 그 모델만 내보냅니다. 기존 모델의 결과는 그대로 유지됩니다. `group`은 `original`(원본)·`baseline`(기준 모델)·`ours`(우리 다른 모델)·`benchmark`(다른 연구 모델)이며, `baseline`을 뺀 나머지가 비교 모델 목록에 나옵니다.
 
 ```bash

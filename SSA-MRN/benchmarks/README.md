@@ -76,7 +76,7 @@ python SSA-MRN/common/verify.py --benchmark adwm
 
 평가 완료로 표시하려면 네 센서(QB·GF2·WV3·WV2 전이)의 예측 zip이 모두 Release에 있어야 합니다. zip 안의 파일 이름은 `output_mulExm_<0-19>.mat`, 변수는 `sr`입니다. 이 Release는 MATLAB 채점과 결과 비교 사이트 비교군이 함께 쓰는 원본이므로 지우거나 같은 이름으로 다른 내용을 덮어쓰지 않습니다. 저자 가중치를 재배포할 수 없는 모델도 우리가 추론한 예측은 올립니다.
 
-평가가 끝나면 같은 Release로 결과 비교 사이트의 비교군에 올립니다. `viewer/registry.json`에 `"group": "benchmark"`, `"benchmark": {"model", "setting", "datasets"}` 항목을 넣고 `python SSA-MRN/viewer/export.py --models <id>`, `python SSA-MRN/viewer/release_data.py`를 실행한 뒤 `data.sha256`과 함께 PR을 올립니다([안내](../viewer/README.md#모델-추가)). 고정 6장면 이미지도 가중치 없이 같은 Release에서 만들 수 있습니다(`benchmark_evaluate.py --figures --release`).
+평가자는 예측 Release와 평가 PR까지 합니다. 평가 PR이 병합되면 BIYONGHIYON이 같은 Release로 결과 비교 사이트의 비교군에 올립니다(`viewer/registry.json` 등록, `export.py --models <id>`, `release_data.py`, `data.sha256` PR, [안내](../viewer/README.md#모델-추가)). 평가자는 뷰어 데이터를 직접 만들거나 올리지 않습니다. `export.py`는 로컬에 있는 기존 뷰어 데이터에 새 모델을 이어 붙이므로, 기존 데이터가 없는 컴퓨터에서 만든 데이터를 올리면 다른 모델이 사이트에서 빠집니다. 고정 6장면 이미지도 가중치 없이 같은 Release에서 만들 수 있습니다(`benchmark_evaluate.py --figures --release`).
 
 ```bash
 gh workflow run matlab-benchmark-author.yml -f model=adwm -f setting=retrain -f release=predictions-benchmarks-adwm-retrain -f sensors='["QB","GF2","WV3","WV2"]'
