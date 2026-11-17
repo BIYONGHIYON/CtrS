@@ -21,6 +21,63 @@
     "last_checked": "마지막 확인 시각 (KST, ISO 8601)"
   },
   "models": {
+    "u2net": {
+      "display_name": "U2Net",
+      "paper": "Peng et al. U2Net: A General Framework with Spatial-Spectral-Integrated Double U-Net for Image Fusion. ACM MM 2023. https://doi.org/10.1145/3581783.3612084",
+      "code": "https://github.com/PSRben/U2Net",
+      "commit": "32e214c19b4b1dea72258b4da3157258f67612b9",
+      "license": "GPL-3.0 (official code; author weight distributed in the same repository)",
+      "evaluator": "송준현",
+      "settings": [
+        "author"
+      ],
+      "epochs": "재학습 없음; WV3 공개 200000_iter.pth",
+      "sensors": {
+        "author": [
+          "WV3",
+          "WV2"
+        ]
+      },
+      "pending_sensors": [
+        "QB",
+        "GF2"
+      ],
+      "full_four_sensor_complete": false,
+      "seeds": {
+        "author": null
+      },
+      "status": "평가 완료",
+      "status_scope": "WV3·WV2만, QB·GF2 미평가",
+      "vs_c2ms_sp": {
+        "author_WV3": {
+          "paired_seeds": [],
+          "difference": {
+            "PSNR": 0.1709317917730857,
+            "SAM": -0.08743429578207795,
+            "ERGAS": -0.040945465441239115,
+            "SCC": 0.0015379848238662452,
+            "Q2n": 0.0053017033109302725
+          },
+          "note": "같은 시드 짝 없음: C2MS-SP 3시드 평균과의 차이"
+        },
+        "author_WV2": {
+          "paired_seeds": [],
+          "difference": {
+            "PSNR": -1.0386870200121834,
+            "SAM": 0.19525376733462618,
+            "ERGAS": 0.4124290942378832,
+            "SCC": -0.004855139664232344,
+            "Q2n": -0.03022857160026482
+          },
+          "note": "같은 시드 짝 없음: C2MS-SP 3시드 평균과의 차이"
+        }
+      },
+      "report": "SSA-MRN/benchmarks/u2net/README.md",
+      "config": "SSA-MRN/benchmarks/u2net/config.json",
+      "summary": "SSA-MRN/benchmarks/u2net/results/summary.json",
+      "manifest": "SSA-MRN/benchmarks/u2net/manifest.json",
+      "last_checked": "2026-11-17"
+    },
     "cannet": {
       "display_name": "CANNet",
       "paper": "Duan, Wu, Deng, Deng. Content-Adaptive Non-Local Convolution for Remote Sensing Pansharpening. CVPR 2024. https://arxiv.org/abs/2404.07543",

@@ -14,7 +14,7 @@
 
 ## 결과
 
-RR test 20장 PSNR·SAM·ERGAS·SCC·Q2n의 시드 평균과 시드별 값을 적습니다. 논문 보고값, 우리 환경 재현값, 같은 시드 C2MS-SP를 한 표에 놓고 차이를 적습니다. FR QNR·Dλ·Ds와 WV2 전이는 참고로 따로 표시합니다. 숫자는 `results/summary.json`과 일치해야 합니다.
+실제 MATLAB으로 채점한 RR test 20장 PSNR·SAM·ERGAS·SCC·Q2n을 적습니다(`results/matlab.json`). 같은 배열에서 Python 공통 평가기와의 차이도 함께 적습니다. 센서마다 `author`(저자 가중치) / `retrain`(직접 학습, seed 42) 중 어느 결과인지 표시합니다. 논문 보고값, 우리 환경 재현값, 같은 시드 C2MS-SP를 한 표에 놓고 차이를 적습니다. FR QNR·Dλ·Ds와 WV2 전이는 참고로 따로 표시합니다. 숫자는 `results/summary.json`과 일치해야 합니다.
 
 <a id="verdict"></a>
 

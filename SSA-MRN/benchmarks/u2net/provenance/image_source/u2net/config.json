@@ -1,0 +1,18 @@
+{
+  "display_name": "U2Net (official author WV3 weights, tiled and clipped)",
+  "evaluator": "송준현",
+  "status": "사전 검증 완료; 실제 데이터 평가 전",
+  "setting": "author",
+  "code_url": "https://github.com/PSRben/U2Net",
+  "upstream_commit": "32e214c19b4b1dea72258b4da3157258f67612b9",
+  "ctrs_commit": "632a0531485f88030b0e77d04a931f4e216715d9",
+  "license": "GPL-3.0; upstream/LICENSE 동봉, 공식 소스 수정 없음",
+  "weight": "200000_iter.pth",
+  "weight_sha256": "e5ef136cdf95cf3cd4ad91bc7d2cea16fba9d8070d82eb1165822d458054bef0",
+  "training_sensor": "WV3",
+  "evaluation_sensors_ready": ["WV3", "WV2"],
+  "evaluation_sensors_not_ready": ["QB", "GF2"],
+  "seed": null,
+  "inference": {"core_tile": 64, "halo": 4, "network_input": 72, "clipping": [0,1], "scale":2047},
+  "note": "저자 test.py의 타일·clipping을 유지. Full-scene 무타일 C2MS-SP와 추론 방식 차이를 보고할 것. 학습하지 않음."
+}
