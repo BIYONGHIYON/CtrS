@@ -2892,5 +2892,19 @@
     "common_initialization_matches": true,
     "round_sample_order_matches": true,
     "limits": "3·4배 RR 개선·2배 악화. FR 미평가·원본 장면 분할 미검증·합성 Gaussian proxy·단일 seed42; 실제 H5 재평가·GPU 재개 미검증."
+  },
+  "performance/85_hidden_width_reduction_fast_projection": {
+    "display_name": "85. C2MS-SP 잔차 블록의 가운데 채널 축소·40에폭 미세조정과 빠른 사영 구현",
+    "experimenter": "이병현",
+    "status": "계획",
+    "improvement": "판단 보류",
+    "result": "아직 학습하지 않았습니다. 목표는 C2MS-SP보다 가볍고 빠르며 RR 세 지표가 좋은 모델",
+    "report": "experiments/performance/85_hidden_width_reduction_fast_projection/README.md",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "evaluated_seeds": [],
+    "retraining": true,
+    "limits": "65번 C2MS_L1S 가중치에서 backbone·W2 잔차 블록의 가운데 채널을 줄인 일반 3×3 구조(연산 51-84%)로 바꾸고 65번 손실로 40에폭 미세조정한 뒤, K10 사영을 같은 수식의 내부 저해상도 연산으로 계산해 같은 시드 C2MS-SP와 비교할 계획입니다. 0단계 사영 동일성·시간 측정, 1단계 QB·WV3 seed 42 validation 관문(FT0L 대조군 포함), 2단계 QB·GF2·WV3 3시드. 아직 학습하지 않았습니다(84번 종료 후 서버에서 자동 시작).",
+    "config": "experiments/performance/85_hidden_width_reduction_fast_projection/config.json",
+    "entrypoint": "experiments/performance/85_hidden_width_reduction_fast_projection/run.py"
   }
 }

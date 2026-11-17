@@ -20,6 +20,7 @@ SSA-MRN의 구조·학습·손실을 바꿔 수치를 개선하는 연구입니�
 <!-- experiments:start -->
 | 실험 | 핵심 결과 | 상태 | 판정 |
 |---|---|:---:|:---:|
+| [85. C2MS-SP 잔차 블록의 가운데 채널 축소·40에폭 미세조정과 빠른 사영 구현](85_hidden_width_reduction_fast_projection/README.md)<br>이병현 | 아직 학습하지 않았습니다. 목표는 C2MS-SP보다 가볍고 빠르며 RR 세 지표가 좋은 모델 | 계획 | 판단&nbsp;보류 |
 | [83. 학습된 C2MS 가중치의 저랭크·depthwise 분해와 짧은 미세조정](83_factorized_c2ms_finetuning/README.md)<br>이병현 | C2MS-SP-Lite(연산 66%)가 C2MS 대비 3시드 QB +0.051·GF2 +0.157·WV3 +0.119 dB, SAM·ERGAS도 개선 | 평가&nbsp;완료 | **개선** |
 | [82. 미학습 센서 적용 시 밴드별 센서 보정](82_cross_sensor_band_calibration/README.md)<br>이병현 | 미학습 센서에서 보정 + 사영이 사영만보다 WV3→WV2 +2.15 dB(C2MS, 3시드). 같은 센서에는 쓰지 않음 | 평가&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 | [81. L1·분광 손실 C2MS에 관측 일치 사영 결합의 정식 판정과 사영 가속](81_l1_spectral_loss_projection/README.md)<br>이병현 | C2MS-SP가 C2MS 대비 3시드 QB +0.072·GF2 +0.191·WV3 +0.130 dB로 개선, 기준 모델 채택(2026-11-14) | 평가&nbsp;완료 | **개선** |
