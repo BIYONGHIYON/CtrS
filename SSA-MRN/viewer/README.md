@@ -2,7 +2,7 @@
 
 같은 RR test 장면에서 여러 모델의 예측 영상·오차 지도·수치를 비교하는 정적 웹페이지입니다. 현재 원본 SSA-MRN, 기준 모델 C2MS-SP(성능 81번), 경량판 C2MS-SP-Lite(성능 83번)를 seed 42로 QB·GF2·WV3·WV2 전이 데이터셋에 올렸습니다(2026-11-14). C2MS-SP·SP-Lite는 관측 일치 사영(공액 기울기법 10회)을 포함하고, WV2에서는 성능 82번 밴드별 센서 보정도 포함합니다. 원본은 발표된 방식 그대로입니다. 모델 정의는 `common/baseline_models.py`에 있습니다.
 
-배포 주소: **https://biyonghiyon.github.io/CtrS/** (이 저장소의 GitHub Pages 루트, 배포 워크플로 [`.github/workflows/pages.yml`](../../.github/workflows/pages.yml)). 같은 사이트의 `/portfolio/<GitHub ID>/`에는 팀원별 소개 페이지([`portfolio/`](../../portfolio/README.md))가 있고, 이 사이트에서 그쪽으로 가는 링크는 두지 않습니다.
+배포 주소: **[CtrS Viewer 열기](https://biyonghiyon.github.io/CtrS/)** (이 저장소의 GitHub Pages 루트, 배포 워크플로 [`.github/workflows/pages.yml`](../../.github/workflows/pages.yml)). 같은 사이트의 `/portfolio/<GitHub ID>/`에는 팀원별 소개 페이지([`portfolio/`](../../portfolio/README.md))가 있고, 이 사이트에서 그쪽으로 가는 링크는 두지 않습니다.
 
 ## 실행
 
