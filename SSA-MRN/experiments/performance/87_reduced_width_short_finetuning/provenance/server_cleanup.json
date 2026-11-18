@@ -1,0 +1,14 @@
+{
+  "time_kst": "2026-11-18T14:43:47+09:00",
+  "reason": "experiment 85 archived and verified before cleanup (PR #186 pushed; verify.py --experiment 85 --releases PASS); the cleanup ran in the 86/87 server chain after 86 finished, and 86/87 run in C:/CtrS-p86 and C:/CtrS-p87 without referencing C:/CtrS-p85",
+  "deleted": {
+    "C:/CtrS-p85/run": {"what": "85 runtime: caches rebuilt from the H5, runs (checkpoints, records), controls", "recovery": "best/best_ema, records and results in Git (experiments/performance/85_hidden_width_reduction_fast_projection); latest/initial in Release weights-experiments-performance-85; caches can be rebuilt from C:/CtrS/PAN-MS"},
+    "C:/CtrS-p85/SSA-MRN, src85.tgz, source_manifest.json": {"what": "85 server source copy", "recovery": "same files in Git; hashes in 85 provenance/source_manifest.json"},
+    "C:/CtrS-p85 transfer bundle, scripts and top-level logs": {"what": "fetch bundle of the 85 results, launch/status scripts; logs kept in the log bundle"}
+  },
+  "kept": ["C:/CtrS-p85/archive85_logs.tgz (0.1 MB: train/evaluate logs and events of every 85 run, top-level logs and scripts)", "C:/CtrS/PAN-MS", "C:/CtrS-p73/.venv", "C:/CtrS-p86", "C:/CtrS-p87"],
+  "free_before_gib": 65.72,
+  "free_after_gib": 77.49,
+  "reclaimed_gib": 11.77,
+  "note": "GiB values are the PowerShell GB (2^30 bytes) printed by the cleanup script in C:/CtrS-p87/chain.log"
+}

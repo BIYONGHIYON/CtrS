@@ -1,0 +1,338 @@
+{
+  "experiment": "performance/85_hidden_width_reduction_fast_projection",
+  "research_track": "performance",
+  "experiment_number": 85,
+  "state": "evaluation complete (seed 42): no reduced arm passed the stage-0 speed gate (not trained); the fast K10 projection equals the 79/83 projection on every test scene; FT0L control (65 + 40 epochs) on QB and WV3 reported as reference; no candidate judged.",
+  "files": {
+    "README.md": {
+      "bytes": 23259,
+      "sha256": "97c68befbd748697691f0bf2e0ff3348919ddb05328d917b02bb01c6236a9811"
+    },
+    "checkpoints/QB_FT0L_s42/best.pt": {
+      "bytes": 12700211,
+      "sha256": "5c36b3058023839338e84194393d3083144ee0490c025b8a04b26051e708baba"
+    },
+    "checkpoints/QB_FT0L_s42/best_ema.pt": {
+      "bytes": 12708947,
+      "sha256": "d60c7dd118140affe324e834b6d46f3127793a6c615b18357d14f99db2752862"
+    },
+    "checkpoints/WV3_FT0L_s42/best.pt": {
+      "bytes": 13095507,
+      "sha256": "5abd72271d33715679879ac72fe35efbbf66385531b1f17108045c199482aae3"
+    },
+    "checkpoints/WV3_FT0L_s42/best_ema.pt": {
+      "bytes": 13105587,
+      "sha256": "eb37f0774e36369ee5966887002d421deaff0184761b7a90ee31214fede39466"
+    },
+    "config.json": {
+      "bytes": 9608,
+      "sha256": "5d841a8dcba793db61d4ad8508bebe404919e73642b509a3287c263eef5d8d3d"
+    },
+    "evaluate.py": {
+      "bytes": 15422,
+      "sha256": "3ad284b39b2953f3ccb16a1d05ff56e3672eb5e9e9a85759e543f3628840a824"
+    },
+    "model.py": {
+      "bytes": 5352,
+      "sha256": "dc0ab1e55fd6b9eb685b1ef577c1d271d92ed900c71c0593b5849a584be2bf9a"
+    },
+    "prepare.py": {
+      "bytes": 4736,
+      "sha256": "0fdb04c5efbc6205beb03c79c5aba53d385fa7d8c59e36735da8cb9706412549"
+    },
+    "provenance/finish85.py": {
+      "bytes": 2467,
+      "sha256": "f264495b1723b2985b07b246ee4e1837c3b74ef505ec982a458605a556568b96"
+    },
+    "provenance/projection_op_timing.json": {
+      "bytes": 1141,
+      "sha256": "8e4590e672c85bc9a8a341e76c47d0dece3ce2e74a20f5eb2e96a3f512c3bed7"
+    },
+    "provenance/run_records/all_complete.json": {
+      "bytes": 262,
+      "sha256": "3737f6b3ef9d39b53a12338d6cdf8181a67b217b9e597e8e201853d22c0da8e9"
+    },
+    "provenance/run_records/controller_started.json": {
+      "bytes": 175,
+      "sha256": "b9150caf1f3f6e698d401c3cf2b3311b639deab5f1bd9af17036b8bcf53fb7e8"
+    },
+    "provenance/run_records/data_manifest.json": {
+      "bytes": 18526,
+      "sha256": "884a433635285ccd76052c9400b1aec41a987ca10013436e0a4d4bd1d2c6bb59"
+    },
+    "provenance/run_records/environment.json": {
+      "bytes": 442,
+      "sha256": "8b684a3223dbca626c33ba5dc5786720f18765c9180b704211da8639ce1314fe"
+    },
+    "provenance/run_records/preflight/benchmark_n1_GF2_FT0L.json": {
+      "bytes": 442,
+      "sha256": "504856bcb72ceaf3cf26d33a406c84583afc879150e5bb5f1f1ba3f1595b5a2b"
+    },
+    "provenance/run_records/preflight/benchmark_n1_QB_FT0L.json": {
+      "bytes": 441,
+      "sha256": "fd04a87060f91185638d62f37fac64c9348194254752f2dc4a4fe74d7a000a17"
+    },
+    "provenance/run_records/preflight/benchmark_n1_WV3_FT0L.json": {
+      "bytes": 442,
+      "sha256": "77d8f2c3043f814ca6f7af2815f910f09f26c3cb077f3d22c65c36c4f41b1cda"
+    },
+    "provenance/run_records/preflight/checks.json": {
+      "bytes": 7747,
+      "sha256": "db1b712bbe32e6fd230df7304836672ae1500c770258007080c038966a06b5ca"
+    },
+    "provenance/run_records/preflight/optimization.json": {
+      "bytes": 1636,
+      "sha256": "a4398193b4b0f2a8812fc564c76450be8d6f17c90bff80cbbd2f184bb4c49436"
+    },
+    "provenance/run_records/queue_status.json": {
+      "bytes": 1458,
+      "sha256": "0005a756acfafe3938e1557658263d8e7bd9c7999d27b7af262fce15da370e5b"
+    },
+    "provenance/run_records/runtime_config.json": {
+      "bytes": 71942,
+      "sha256": "c7543fede0af4f26370a5c024c10cf883526667551900dae39a033ed270e016f"
+    },
+    "provenance/server_cleanup.json": {
+      "bytes": 1389,
+      "sha256": "fb4301ee1a1793f3044236db8ec38bb077a0b74607b2a6d63f6d1932e30658e3"
+    },
+    "provenance/source_manifest.json": {
+      "bytes": 13571,
+      "sha256": "30d2face05e657d3de697eff8b0b5307fa9b3bd423f8b389d42e129fe1163932"
+    },
+    "results/QB_FT0L_s42/evaluation/QB/compare_scene_00.png": {
+      "bytes": 229259,
+      "sha256": "8c417cc587c54f28216e3a2be58f074a2910c8a4a658db91447577b7e870048f"
+    },
+    "results/QB_FT0L_s42/evaluation/QB/compare_scene_01.png": {
+      "bytes": 240984,
+      "sha256": "f1234ddef2349a576d7795c4fc7e15f2844c7e9132e96254edb4736c3509883c"
+    },
+    "results/QB_FT0L_s42/evaluation/QB/compare_scene_03.png": {
+      "bytes": 239152,
+      "sha256": "e8c53f4a7f495e59067fc688d94222c37ea9e62242adb053c4dbe581c20fbec4"
+    },
+    "results/QB_FT0L_s42/evaluation/QB/compare_scene_07.png": {
+      "bytes": 222549,
+      "sha256": "f7c4c1d1641bb1e596423171ae8ac9ad4d4d06a614760d16f84ace6d9c74ba94"
+    },
+    "results/QB_FT0L_s42/evaluation/QB/compare_scene_14.png": {
+      "bytes": 225706,
+      "sha256": "9a6c4a7434565557ff03b1317f83e2f64f339535f93daeca3257ea8f2a20b83c"
+    },
+    "results/QB_FT0L_s42/evaluation/QB/compare_scene_17.png": {
+      "bytes": 225940,
+      "sha256": "6bdac2ee61c61e8a6aaa2edd9d2a1693dbaf0b81a46f907dfd448d0e38492e9c"
+    },
+    "results/QB_FT0L_s42/evaluation/QB/full_scene_00.png": {
+      "bytes": 731000,
+      "sha256": "1faf3e481cb228e44c2f9580399371dbd05e4c4968c5d30c86aaa15a0863934d"
+    },
+    "results/QB_FT0L_s42/evaluation/QB/full_scene_01.png": {
+      "bytes": 766307,
+      "sha256": "f7de44a242c407324f407c2531d1365ec4a23558599a6fb3e705925214dbfc32"
+    },
+    "results/QB_FT0L_s42/evaluation/QB/full_scene_03.png": {
+      "bytes": 789864,
+      "sha256": "227bb4b95a84a1b2db9a98ccf0bd5349b6dac40c5cce53d23d7b698cd5e9b20f"
+    },
+    "results/QB_FT0L_s42/evaluation/QB/full_scene_07.png": {
+      "bytes": 713937,
+      "sha256": "8d66d11cd1448d9f05a80444508ff18672137d6368b1687808955e677f28224a"
+    },
+    "results/QB_FT0L_s42/evaluation/QB/full_scene_14.png": {
+      "bytes": 737421,
+      "sha256": "f9007760d84dd8a397a39809ef8d9642f77b68e14ac1edd7ea6e3a99aaa928b7"
+    },
+    "results/QB_FT0L_s42/evaluation/QB/full_scene_17.png": {
+      "bytes": 729974,
+      "sha256": "15ece82052008fe51351ae2de5626e79a4000b364ee7466103a44035915674ed"
+    },
+    "results/QB_FT0L_s42/evaluation/QB/result_images.json": {
+      "bytes": 2836,
+      "sha256": "bff98e39cd071a282f60434e8d59cae89ebb2424776174869bbf1177eb2dc14d"
+    },
+    "results/QB_FT0L_s42/evaluation/QB_v2_4.json": {
+      "bytes": 44603,
+      "sha256": "1e098bcdc1009f9c6b4e02902ce517183eef058c0eabed62525e84417332eafc"
+    },
+    "results/QB_FT0L_s42/evaluation/learning.png": {
+      "bytes": 106229,
+      "sha256": "2f341d83aa757b6d33e296d68e6b9926270946334744390e1c0e2952e1d37de2"
+    },
+    "results/QB_FT0L_s42/evaluation_complete.json": {
+      "bytes": 2809,
+      "sha256": "8c0c22053d1ed8c10807130def9a0c8f8ec116a4e30d52acb8d1555205f76e02"
+    },
+    "results/QB_FT0L_s42/history.json": {
+      "bytes": 28632,
+      "sha256": "5ad63b299fd7c2c40c09edb0d2c57942275fa5dd7075842186d8a660e8eafb4c"
+    },
+    "results/QB_FT0L_s42/initialization.json": {
+      "bytes": 168,
+      "sha256": "539c89f2876060abc06d93bfeafe5f0427b8815e0afb73b57894e46b409ca90c"
+    },
+    "results/QB_FT0L_s42/training_complete.json": {
+      "bytes": 778,
+      "sha256": "69db193437283f354667ca9d394e2409ed8e74d13397ac66ba777a97495d488b"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV2_v2_4.json": {
+      "bytes": 44734,
+      "sha256": "096b0135a2f65d343cf45055d6b654ce5217a4341cfc245ff601d5e3ae4f567d"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV3/compare_scene_00.png": {
+      "bytes": 210030,
+      "sha256": "a2442ea696230f9f638341f60d5dd0ec85fad9ad48336d08aeb048cfcb590179"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV3/compare_scene_01.png": {
+      "bytes": 229659,
+      "sha256": "5a423bcc3b7f70dd215c2b6ff5edb99ec85045b2911f463043338c9281a5f232"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV3/compare_scene_03.png": {
+      "bytes": 206985,
+      "sha256": "daaad4bc50e64db0b3dc8c43524bfd7f89be3fdaf03095081a7c83aae768554f"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV3/compare_scene_07.png": {
+      "bytes": 226271,
+      "sha256": "6e34a6ebb95df8b7f207ec146c0da1fb06b985c8e92c6facba5cf39c48005a0c"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV3/compare_scene_14.png": {
+      "bytes": 260695,
+      "sha256": "4a86fa78f9e37491569d41e911a4e1c8cda98e07a37fd1eb34f6b6391203453c"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV3/compare_scene_17.png": {
+      "bytes": 245130,
+      "sha256": "8aa19c1b1df1d10a61d878c6e82342a67d4e5c65d6190deb28a59f3dcfb679e3"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV3/full_scene_00.png": {
+      "bytes": 505922,
+      "sha256": "8d8e1d9bb7825a196233de3f758e0b7a5bbd3253a42abba11bb9ebc7e542a1a1"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV3/full_scene_01.png": {
+      "bytes": 717486,
+      "sha256": "3122632019c131fb096eb55b1e00c28136afee29dd5658d06d2ab443c961b0b0"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV3/full_scene_03.png": {
+      "bytes": 672283,
+      "sha256": "138af238952f3f224d8cc6daf5994ec96ae4da8cd829c2c8f0c4dbaf79eea205"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV3/full_scene_07.png": {
+      "bytes": 706884,
+      "sha256": "8e08583a7e5b66333ca72855a9d198c649f7f6a6a94bfc87a45be236802b13f1"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV3/full_scene_14.png": {
+      "bytes": 847866,
+      "sha256": "8d547b57258f6e90c56fa6101c0a5d1cb76362419a54a723191078ab3499c092"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV3/full_scene_17.png": {
+      "bytes": 862193,
+      "sha256": "9d90617d52368be0a834d9afcdeccb49e00231db9a67d1563a97e1b17063c4f2"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV3/result_images.json": {
+      "bytes": 2838,
+      "sha256": "51340f380ff3173ed5bbe2a1f8ef8246f0bc358c814895897153c79b4173092e"
+    },
+    "results/WV3_FT0L_s42/evaluation/WV3_v2_4.json": {
+      "bytes": 44723,
+      "sha256": "9a292b94d517a3505edc2ff95a0af48a6fa4a16ab26abf7ce4c2c15eed33c6fc"
+    },
+    "results/WV3_FT0L_s42/evaluation/learning.png": {
+      "bytes": 106218,
+      "sha256": "957ca2382eefad684614e585e097ea8fa456828c2c187ac9cf984d1ffd0eee1d"
+    },
+    "results/WV3_FT0L_s42/evaluation_complete.json": {
+      "bytes": 4306,
+      "sha256": "7ca851d9dcf6af3e24641e6aa8cac38309fdba36ebca3ac87fe547d9c03fdff8"
+    },
+    "results/WV3_FT0L_s42/history.json": {
+      "bytes": 28637,
+      "sha256": "d10ccd197339669196b89158de4bb756fe2ffb247ed2a6d27d22c7a3f32e2074"
+    },
+    "results/WV3_FT0L_s42/initialization.json": {
+      "bytes": 169,
+      "sha256": "fba4703a26bccae6bd0eeb256dbec9b99001f50c312e4b9cb6faf0d7dbe8214e"
+    },
+    "results/WV3_FT0L_s42/training_complete.json": {
+      "bytes": 780,
+      "sha256": "f04d19964b17be9ed53b7b1b5390d21756e00a34e5a4cdb473c01d9d5fac6cf9"
+    },
+    "results/controls/QB_s42_QB.json": {
+      "bytes": 20931,
+      "sha256": "e8f9f13f0ba549599312bedd7e59751974394218a03c4cec1a59270956eee0a8"
+    },
+    "results/controls/WV3_s42_WV2.json": {
+      "bytes": 20951,
+      "sha256": "5f66b4a38ca156268402d08a5399659f27c230ad7a7f1f6049e12aecc8fcd17b"
+    },
+    "results/controls/WV3_s42_WV3.json": {
+      "bytes": 20989,
+      "sha256": "541da8b7ef3da0f30f9b0c273820cde30d2057dbe2db3e72788ae4badf5d7ab4"
+    },
+    "results/evaluation_fix.json": {
+      "bytes": 724,
+      "sha256": "1f61bbc464038a8f6bee6252e8db2658f30c24d47e09567f7d5d87b81e8c7e4a"
+    },
+    "results/final_timing.json": {
+      "bytes": 15079,
+      "sha256": "1fbfd5357d3c6a14f144d30de353b0eba81098d30adaeba3f5a03c8991468f0a"
+    },
+    "results/projection_identity.json": {
+      "bytes": 3110,
+      "sha256": "f2f0a1163458fb463016f7addcf4806a780a0640417aaac82774e0fc357ccc10"
+    },
+    "results/stage0.json": {
+      "bytes": 53213,
+      "sha256": "f0a636421329a848c74fe5e5dca2899460cc61e2925e47025867b31e7abaf609"
+    },
+    "results/stage0_timing.json": {
+      "bytes": 9469,
+      "sha256": "427287bf2e78e8577cf20913ece9bcd42faaa2fc1dca7fde7db0fedbc9567994"
+    },
+    "results/stage_gate.json": {
+      "bytes": 838,
+      "sha256": "61e02573d2d79089cdefa70f3dfb5334ec5e10339347d72c6da7377f26aefbcd"
+    },
+    "results/timing.png": {
+      "bytes": 99366,
+      "sha256": "d95e1392760ad7566678027b927132bb63f13c095da5c9bf3f1413ecae7f47f8"
+    },
+    "run.py": {
+      "bytes": 24695,
+      "sha256": "326f678b5b4d0249dd54799e50c803850887010e465e1b8e0997259bb170110c"
+    },
+    "train.py": {
+      "bytes": 5167,
+      "sha256": "ad18ad5ad2bdbedbdd31a9fa2ca643d8fe7f8d27d26571e6f337786a16bf1b3c"
+    }
+  },
+  "release_assets": {
+    "checkpoints/QB_FT0L_s42/initial.pt": {
+      "release": "weights-experiments-performance-85",
+      "asset": "checkpoints__QB_FT0L_s42__initial.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-85/checkpoints__QB_FT0L_s42__initial.pt",
+      "bytes": 12708315,
+      "sha256": "fa2532f0ccc0e5cfb58c74f8d06b80ef47fd656c8393fd4e7efcd5e9fa5d6fc9"
+    },
+    "checkpoints/QB_FT0L_s42/latest.pt": {
+      "release": "weights-experiments-performance-85",
+      "asset": "checkpoints__QB_FT0L_s42__latest.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-85/checkpoints__QB_FT0L_s42__latest.pt",
+      "bytes": 60083379,
+      "sha256": "a8a715b6aa14d502d3098cbbc5b01a2075a22bab03e842abcb1ceb04a76bb091"
+    },
+    "checkpoints/WV3_FT0L_s42/initial.pt": {
+      "release": "weights-experiments-performance-85",
+      "asset": "checkpoints__WV3_FT0L_s42__initial.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-85/checkpoints__WV3_FT0L_s42__initial.pt",
+      "bytes": 13104859,
+      "sha256": "63fb21800cbeebcd0c032fcbe5ec7852f2407b9fb0aa80624efb24c68d0211c2"
+    },
+    "checkpoints/WV3_FT0L_s42/latest.pt": {
+      "release": "weights-experiments-performance-85",
+      "asset": "checkpoints__WV3_FT0L_s42__latest.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-85/checkpoints__WV3_FT0L_s42__latest.pt",
+      "bytes": 61492675,
+      "sha256": "b59303debcdaacb9d2b43350956505ec40f90343714d7e034e0b4d667f684cdb"
+    }
+  }
+}

@@ -12,7 +12,7 @@
 
 | 모델 | 출처·학습 조건 | 확인된 결과 | 상태 |
 |---|---|---|:---:|
-| [ADWM](adwm/README.md)<br>[김경찬] | CVPR 2025 · `author` WV3 저자 가중치 · `retrain` QB 200·GF2 500에폭(논문), seed 42 | 아직 평가하지 않았습니다 | 계획 |
+| [ARConv](arconv/README.md)<br>[김윤지] | CVPR 2025 · `author` 저자 가중치 · 실제 MATLAB 채점 | QB 38.425, GF2 49.385, WV3 39.167 dB. C2MS-SP 3시드 평균 대비 각각 +0.052, +0.600, +0.493 dB; WV2 전이(참고) 29.853 dB(−1.682). 네 데이터셋 고정 6장면 이미지 | 평가 완료 |
 | [U2Net](u2net/README.md)<br>[송준현] | ACM MM 2023 · `author` WV3 공개 가중치 · Kaggle T4 · Python 공통 지표 | WV3 RR PSNR 38.844(C2MS-SP 3seed 평균 대비 +0.171dB), WV2 전이 30.497(−1.039dB). 고정6장면 RR 이미지 센서별12개. 실제 MATLAB 미실행 | 평가 완료<br>WV3·WV2만<br>QB·GF2 미평가 |
 | [CANNet](cannet/README.md)<br>[이병현] | CVPR 2024 · `author` 저자 가중치 재현(재학습 없음) · Kaggle T4 · 실제 MATLAB 채점 | QB RR PSNR 38.261(C2MS-SP 평균 대비 −0.112dB), GF2 49.274(+0.489), WV3 38.977(+0.304). WV3는 논문값 재현, QB·GF2는 논문보다 조금 낮음 | 평가 완료 |
 
@@ -73,6 +73,10 @@ python SSA-MRN/common/verify.py --benchmark adwm
 ```
 
 보고서·표의 RR 수치는 실제 MATLAB으로 채점합니다. 위 평가기로 만든 장면별 예측(DN, `H × W × C` `.mat` 20개)을 `<모델>_<설정>_<센서>_rr.zip`으로 묶어 Release `predictions-benchmarks-<모델>-<설정>`에 올립니다. 이어서 GitHub Actions의 `MATLAB score benchmark author-weight predictions` 워크플로(`.github/workflows/matlab-benchmark-author.yml`)를 model·setting·release·sensors를 입력해 실행합니다. 워크플로는 test 원본의 SHA-256을 확인합니다. 그다음 DLPan-Toolbox(`a34f884`) `score_suite.m`을 MATLAB R2025b로 실행해 RR 지표를 내고, 같은 배열의 Python 값과 비교합니다. 결과는 `results/matlab.json`으로 보관합니다.
+
+평가 완료로 표시하려면 네 센서(QB·GF2·WV3·WV2 전이)의 예측 zip이 모두 Release에 있어야 합니다. zip 안의 파일 이름은 `output_mulExm_<0-19>.mat`, 변수는 `sr`입니다. 이 Release는 MATLAB 채점과 결과 비교 사이트 비교군이 함께 쓰는 원본이므로 지우거나 같은 이름으로 다른 내용을 덮어쓰지 않습니다. 저자 가중치를 재배포할 수 없는 모델도 우리가 추론한 예측은 올립니다.
+
+평가자는 예측 Release와 평가 PR까지 합니다. 평가 PR이 병합되면 BIYONGHIYON이 같은 Release로 결과 비교 사이트의 비교군에 올립니다(`viewer/registry.json` 등록, `export.py --models <id>`, `release_data.py`, `data.sha256` PR, [안내](../viewer/README.md#모델-추가)). 평가자는 뷰어 데이터를 직접 만들거나 올리지 않습니다. `export.py`는 로컬에 있는 기존 뷰어 데이터에 새 모델을 이어 붙이므로, 기존 데이터가 없는 컴퓨터에서 만든 데이터를 올리면 다른 모델이 사이트에서 빠집니다. 고정 6장면 이미지도 가중치 없이 같은 Release에서 만들 수 있습니다(`benchmark_evaluate.py --figures --release`).
 
 ```bash
 gh workflow run matlab-benchmark-author.yml -f model=adwm -f setting=retrain -f release=predictions-benchmarks-adwm-retrain -f sensors='["QB","GF2","WV3","WV2"]'

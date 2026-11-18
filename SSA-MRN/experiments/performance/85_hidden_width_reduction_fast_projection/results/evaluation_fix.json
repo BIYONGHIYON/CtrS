@@ -1,0 +1,12 @@
+{
+  "time_kst": "2026-11-18T12:59:56.094411+09:00",
+  "failure": "WV3 FT0L evaluation, WV2 transfer: RuntimeError cuda:0 and cpu (82 Calibrated r_train on the CPU)",
+  "fix": "evaluate.Calibrated moves r_train to the input device (as 84 evaluate.py); no other source change",
+  "changed": {
+    "experiments/performance/85_hidden_width_reduction_fast_projection/evaluate.py": {
+      "sealed": "ccbbef33f3cbc4a6d09926fd202a8785705e715f18bc5a9f25437f650abc3507",
+      "now": "3ad284b39b2953f3ccb16a1d05ff56e3672eb5e9e9a85759e543f3628840a824"
+    }
+  },
+  "scope": "WV3 FT0L evaluation, validation gate, final latency; training runs and the QB FT0L evaluation used the sealed code; runtime_config.json unchanged"
+}

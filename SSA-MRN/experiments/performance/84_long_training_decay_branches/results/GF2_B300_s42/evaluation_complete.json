@@ -1,0 +1,120 @@
+{
+  "time_kst": "2026-11-16T13:17:03.309885+09:00",
+  "weights": {
+    "path": "C:\\CtrS-p84\\run\\runs\\GF2_B300_s42\\checkpoints\\best.pt",
+    "sha256": "26f4cfaa65a9bc7989e81d7d7d4c310a9da584eb356b90fc8670fdd436ae19b6",
+    "best_epoch": 297,
+    "metrics": {
+      "val_mse": 4.195284548275469e-05,
+      "val_psnr": 44.92489800806319,
+      "val_sam": 0.649092989699052
+    }
+  },
+  "epochs": 300,
+  "branch": {
+    "trunk_epoch": 240,
+    "decay_epochs": 60
+  },
+  "validation": {
+    "run": {
+      "val_mse": 4.195284548275469e-05,
+      "val_psnr": 44.92489800806319,
+      "val_sam": 0.649092989699052
+    },
+    "best_epoch": 297,
+    "control_65": {
+      "val_mse": 4.6006266796310406e-05,
+      "val_psnr": 44.544863982072805,
+      "val_sam": 0.6793133738594345
+    },
+    "delta_psnr_vs_65": 0.3800340259903834,
+    "delta_sam_vs_65": -0.03022038416038242,
+    "delta_mse_vs_65": -4.053421313555715e-06
+  },
+  "targets": {
+    "GF2": {
+      "official": [
+        "B300+P",
+        "L1S+P"
+      ],
+      "judgement": {
+        "official_vs_C2MS_SP": {
+          "delta_RR": {
+            "SAM": -0.0239044822470722,
+            "ERGAS": -0.019398812260879028,
+            "PSNR": 0.23415460513145092,
+            "SCC": 0.0005801603871257166,
+            "Q2n": 0.000822787131549596
+          },
+          "delta_FR_reference": {
+            "D_lambda": -0.0013544713725559196,
+            "D_s": -0.0008195080012817629,
+            "QNR": 0.0021310259104782014
+          },
+          "rr_components_improved": {
+            "PSNR": true,
+            "SAM": true,
+            "ERGAS": true
+          },
+          "noise_threshold": 0.06,
+          "above_noise": true,
+          "label": "개선"
+        },
+        "raw_vs_65_raw": {
+          "delta_RR": {
+            "SAM": -0.02522327358119225,
+            "ERGAS": -0.020768176017692874,
+            "PSNR": 0.24845335983212635,
+            "SCC": 0.0006114568258972497,
+            "Q2n": 0.0009022157813073362
+          },
+          "delta_FR_reference": {
+            "D_lambda": -0.0021205785268296855,
+            "D_s": -0.006041823496253443,
+            "QNR": 0.007931897040410196
+          },
+          "rr_components_improved": {
+            "PSNR": true,
+            "SAM": true,
+            "ERGAS": true
+          },
+          "noise_threshold": 0.06,
+          "above_noise": true,
+          "label": "개선"
+        }
+      },
+      "means": {
+        "B300+P": {
+          "RR": {
+            "SAM": 0.7436996843562611,
+            "ERGAS": 0.6760716296840201,
+            "PSNR": 48.966652960402875,
+            "SCC": 0.989622984952042,
+            "Q2n": 0.9810398244983587
+          },
+          "FR": {
+            "D_lambda": 0.02089410321501005,
+            "D_s": 0.015199712047774021,
+            "QNR": 0.9642473718464315
+          }
+        },
+        "L1S+P": {
+          "RR": {
+            "SAM": 0.7676041666033333,
+            "ERGAS": 0.6954704419448992,
+            "PSNR": 48.732498355271424,
+            "SCC": 0.9890428245649163,
+            "Q2n": 0.9802170373668091
+          },
+          "FR": {
+            "D_lambda": 0.022248574587565968,
+            "D_s": 0.016019220049055784,
+            "QNR": 0.9621163459359533
+          }
+        }
+      },
+      "transfer": false
+    }
+  },
+  "scope": "full 20-scene RR (judgement on the training sensor) and FR QNR (reference); WV2 reference only; v2.4; single seed; K10 projection; no automatic baseline promotion"
+}

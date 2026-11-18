@@ -2892,5 +2892,80 @@
     "common_initialization_matches": true,
     "round_sample_order_matches": true,
     "limits": "3·4배 RR 개선·2배 악화. FR 미평가·원본 장면 분할 미검증·합성 Gaussian proxy·단일 seed42; 실제 H5 재평가·GPU 재개 미검증."
+  },
+  "performance/84_long_training_decay_branches": {
+    "display_name": "84. C2MS-SP 학습 길이 확장: 일정 학습률 학습과 감쇠 갈래로 150-1000에폭 한계 측정",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "result": "validation 선택 B1000이 C2MS-SP 대비 GF2 +0.218·WV3 +0.433 dB 개선, QB −0.277 dB (seed 42)",
+    "report": "experiments/performance/84_long_training_decay_branches/README.md",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "limits": "seed 42 한 개. 세 센서 모두 validation이 1000에폭을 골랐고, GF2·WV3는 개선, QB는 validation과 test가 반대로 움직여 개선 없음입니다. 같은 150에폭에서 일정만 바꾼 B150은 세 센서 모두 C2MS-SP보다 좋았습니다(QB +0.060, GF2 +0.184, WV3 +0.342 dB).",
+    "config": "experiments/performance/84_long_training_decay_branches/config.json",
+    "entrypoint": "experiments/performance/84_long_training_decay_branches/run.py",
+    "last_checked": "2026-11-18T04:19:00+09:00",
+    "results": "experiments/performance/84_long_training_decay_branches/results",
+    "summary": "experiments/performance/84_long_training_decay_branches/results/summary.json",
+    "manifest": "experiments/performance/84_long_training_decay_branches/manifest.json"
+  },
+  "performance/85_hidden_width_reduction_fast_projection": {
+    "display_name": "85. C2MS-SP 잔차 블록의 가운데 채널 축소·40에폭 미세조정과 빠른 사영 구현",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "성능 비교 아님",
+    "result": "축소 갈래 셋 모두 시간 관문 탈락(학습 안 함). 빠른 사영은 결과 동일·256² 2.2-2.9배, FT0L WV3 +0.105 dB(참고)",
+    "report": "experiments/performance/85_hidden_width_reduction_fast_projection/README.md",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "limits": "축소 갈래(B64W96·B32W96·B32W64)는 256² 네트워크 시간이 C2MS 대비 94-98%라 학습 전 시간 관문(0.95)을 통과하지 못했습니다. 빠른 사영은 모든 test 장면에서 지금 사영과 같았지만, cuDNN 자동 탐색을 끈 공식 설정의 512²에서는 전치 합성곱이 느려 지금 구현보다 느렸습니다. FT0L(65 + 40에폭)은 참고로 C2MS-SP 대비 QB +0.007, WV3 +0.105 dB(seed 42)입니다.",
+    "config": "experiments/performance/85_hidden_width_reduction_fast_projection/config.json",
+    "entrypoint": "experiments/performance/85_hidden_width_reduction_fast_projection/run.py",
+    "results": "experiments/performance/85_hidden_width_reduction_fast_projection/results",
+    "manifest": "experiments/performance/85_hidden_width_reduction_fast_projection/manifest.json",
+    "last_checked": "2026-11-18T13:22:00+09:00"
+  },
+  "performance/86_fft_adjoint_fast_inference": {
+    "display_name": "86. K10 사영 전치 연산의 FFT 계산과 C2MS-SP 추론 설정 측정",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "성능 비교 아님",
+    "result": "FFT 사영이 79번과 동일(1.3e-14), C2MS-SP 공식 설정 QB 256² 58.6→26.1 ms, graph_fp16 13.3 ms",
+    "report": "experiments/performance/86_fft_adjoint_fast_inference/README.md",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "evaluated_seeds": [],
+    "retraining": false,
+    "limits": "학습하지 않았습니다. 85번 빠른 사영의 Dᵀ를 FFT로 바꿔 65번 3시드 모든 test 장면에서 79번 사영과 같음을 확인하고, C2MS-SP의 프로파일과 추론 설정별 시간·RR 변화(최대 0.0013 dB)를 쟀습니다.",
+    "config": "experiments/performance/86_fft_adjoint_fast_inference/config.json",
+    "entrypoint": "experiments/performance/86_fft_adjoint_fast_inference/run.py",
+    "manifest": "experiments/performance/86_fft_adjoint_fast_inference/manifest.json",
+    "results": "experiments/performance/86_fft_adjoint_fast_inference/results",
+    "last_checked": "2026-11-18T17:40:00+09:00"
+  },
+  "performance/87_reduced_width_short_finetuning": {
+    "display_name": "87. C2MS-SP 잔차 블록 가운데 채널 축소 구조의 20에폭 미세조정 단일 시드 확인",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "result": "B32W96 −0.076/−0.253/−0.146, B32W64 −0.236/−0.510/−0.443 dB (QB/GF2/WV3, 1시드)",
+    "report": "experiments/performance/87_reduced_width_short_finetuning/README.md",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "limits": "85번 축소 구조 두 가지를 65번 가중치에서 만들어 20에폭 미세조정하고 86번 사영을 붙였습니다(seed 42). 세 센서 모두 C2MS-SP보다 낮고, 같은 시드 Lite(K2)의 손실보다 3-25배 큽니다.",
+    "config": "experiments/performance/87_reduced_width_short_finetuning/config.json",
+    "entrypoint": "experiments/performance/87_reduced_width_short_finetuning/run.py",
+    "manifest": "experiments/performance/87_reduced_width_short_finetuning/manifest.json",
+    "results": "experiments/performance/87_reduced_width_short_finetuning/results",
+    "last_checked": "2026-11-18T17:40:00+09:00"
   }
 }

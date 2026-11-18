@@ -1,0 +1,51 @@
+{
+  "time_kst": "2026-11-18T13:22:45.273716+09:00",
+  "phase": "complete",
+  "active": [],
+  "runs": [
+    {
+      "sensor": "QB",
+      "arm": "FT0L",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-11-18T06:20:16.024539+09:00",
+        "pid": 2012,
+        "sensor": "QB",
+        "arm": "FT0L",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.0561671257019043,
+        "reserved_gb": 0.552734375,
+        "best_epoch": 39
+      }
+    },
+    {
+      "sensor": "WV3",
+      "arm": "FT0L",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-11-18T05:20:51.945598+09:00",
+        "pid": 31604,
+        "sensor": "WV3",
+        "arm": "FT0L",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.060530662536621094,
+        "reserved_gb": 0.62109375,
+        "best_epoch": 37
+      }
+    }
+  ],
+  "epoch_seconds": {
+    "QB_FT0L": 88.23499999998603,
+    "GF2_FT0L": 138.14760020234098,
+    "WV3_FT0L": 66.51500000001397
+  },
+  "training_remaining_seconds": 0.0,
+  "training_end_kst": "2026-11-18T13:22:45.273716+09:00",
+  "eta_basis": "sum of the remaining epochs x recent epoch seconds of every queued run; two runs share the GPU, so the real end is earlier; excludes evaluation"
+}

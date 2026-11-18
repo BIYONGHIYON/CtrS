@@ -16,7 +16,7 @@ const el = (tag, attrs = {}, ...kids) => {
 };
 
 const S = {
-  index: null, ds: null, scene: 0, visible: [], ref: null, cand: null, comp: 'RGB', win: 64, x: 96, y: 96,
+  index: null, ds: null, scene: 0, visible: [], cmp: null, ref: null, cand: null, comp: 'RGB', win: 64, x: 96, y: 96,
   errBand: 'mean', errScale: 'ref', errManual: 30, zoomScale: 'scene', zoomStretch: 'scene', inputs: false, popOpen: false, theme: 'auto',
 };
 const cache = new Map();
@@ -33,21 +33,33 @@ async function loadArray(url) {
   return f;
 }
 
-async function loadScene(dsId, i) {
-  const key = `${dsId}/${i}`;
-  if (cache.has(key)) return cache.get(key);
-  const ds = dataset(dsId), dir = `data/${dsId}/s${String(i).padStart(2, '0')}/`;
-  const ids = Object.keys(ds.results);
-  const [gt, pan, ms, ...preds] = await Promise.all(['gt', 'pan', 'ms', ...ids].map(n => loadArray(dir + n + '.i16')));
-  const sc = { key, ds: dsId, i, C: ds.bands, H: ds.size, W: ds.size, h: ds.ms_size, gt, pan, ms, pred: Object.fromEntries(ids.map((id, k) => [id, preds[k]])), err: {}, stretch: {}, stat: {} };
-  cache.set(key, sc);
-  if (cache.size > 12) cache.delete(cache.keys().next().value);
+async function loadScene(dsId, i, ids) {             // inputs and GT once per scene, predictions only for the shown models
+  const key = `${dsId}/${i}`, ds = dataset(dsId), dir = `data/${dsId}/s${String(i).padStart(2, '0')}/`;
+  let sc = cache.get(key);
+  if (!sc) {
+    const [gt, pan, ms] = await Promise.all(['gt', 'pan', 'ms'].map(n => loadArray(dir + n + '.i16')));
+    sc = { key, ds: dsId, i, C: ds.bands, H: ds.size, W: ds.size, h: ds.ms_size, gt, pan, ms, pred: {}, err: {}, stretch: {}, stat: {} };
+    cache.set(key, sc);
+    if (cache.size > 12) cache.delete(cache.keys().next().value);
+  }
+  const need = ids.filter(id => !sc.pred[id]);
+  (await Promise.all(need.map(id => loadArray(dir + id + '.i16')))).forEach((a, k) => { sc.pred[need[k]] = a; });
   return sc;
 }
 
 const dataset = id => S.index.datasets.find(d => d.id === id);
 const model = id => S.index.models.find(m => m.id === id);
 const modelsIn = ds => S.index.models.filter(m => ds.results && ds.results[m.id]);
+const COMPARE_GROUPS = [['original', '원본'], ['ours', '우리 모델'], ['benchmark', '다른 연구 모델 · 저자 가중치']];
+const comparable = ds => modelsIn(ds).filter(m => COMPARE_GROUPS.some(([g]) => g === m.group));
+function pickModels(ds) {                           // the baseline C2MS-SP and one chosen model (default: original SSA-MRN)
+  const avail = modelsIn(ds), cmps = comparable(ds), base = avail.find(m => m.group === 'baseline');
+  if (!cmps.some(m => m.id === S.cmp)) S.cmp = (cmps.find(m => m.group === 'original') || cmps[0] || {}).id || null;
+  S.visible = [base, cmps.find(m => m.id === S.cmp)].filter(Boolean).map(m => m.id);
+  if (!S.visible.length) S.visible = avail.slice(0, 1).map(m => m.id);
+  S.ref = S.cmp && S.visible.includes(S.cmp) ? S.cmp : S.visible[0];      // differences are baseline - chosen model
+  S.cand = base && S.visible.includes(base.id) && base.id !== S.ref ? base.id : null;
+}
 
 // ---------- numeric helpers ----------
 function percentile(arr, p) {
@@ -208,7 +220,7 @@ function layer(t) {
 }
 
 function build() {
-  const ds = dataset(S.ds), app = $('#app'), all = modelsIn(ds), vis = S.visible.map(model), ref = model(S.ref), others = vis.filter(m => m.id !== S.ref), cand = S.cand && model(S.cand);
+  const ds = dataset(S.ds), app = $('#app'), vis = S.visible.map(model), ref = model(S.ref), others = vis.filter(m => m.id !== S.ref), cand = S.cand && model(S.cand);
   document.querySelectorAll('#dsTabs button').forEach(b => b.setAttribute('aria-pressed', b.dataset.id === S.ds));
   const opt = (v, t, cur) => el('option', { value: v, selected: String(v) === String(cur) }, t);
 
@@ -226,18 +238,18 @@ function build() {
   // toolbar
   const settings = el('details', { class: 'pop', id: 'pop', open: S.popOpen, ontoggle: e => { S.popOpen = e.target.open; } }, el('summary', {}, '표시 설정'),
     el('div', { class: 'pop-body' },
-      el('span', { class: 'lab' }, '비교 기준'), el('select', { onchange: e => { S.ref = e.target.value; if (S.cand === S.ref) S.cand = S.visible.find(v => v !== S.ref) || null; build(); } }, vis.map(m => opt(m.id, m.label, S.ref))),
-      others.length > 1 ? [el('span', { class: 'lab' }, '비교 대상'), el('select', { onchange: e => { S.cand = e.target.value; build(); } }, others.map(m => opt(m.id, m.label, S.cand)))] : null,
       el('span', { class: 'lab' }, '오차 밴드'), el('select', { onchange: e => { S.errBand = e.target.value; renderAll(); } }, opt('mean', '전체 밴드 평균', S.errBand), ds.band_names.map((n, b) => opt(b, `${b} · ${n}`, S.errBand))),
       el('span', { class: 'lab' }, '오차 색 범위'), el('div', { class: 'pair' },
-        el('select', { onchange: e => { S.errScale = e.target.value; build(); } }, opt('ref', '기준 모델 99%', S.errScale), opt('max', '모델 중 최대 99%', S.errScale), opt('manual', '직접 입력', S.errScale)),
+        el('select', { onchange: e => { S.errScale = e.target.value; build(); } }, opt('ref', `${ref.short} 99%`, S.errScale), opt('max', '두 모델 중 최대 99%', S.errScale), opt('manual', '직접 입력', S.errScale)),
         S.errScale === 'manual' ? el('input', { type: 'number', min: 1, step: 1, value: S.errManual, title: 'DN', style: 'width:84px', onchange: e => { S.errManual = Math.max(0.1, +e.target.value || 1); renderAll(); } }) : null),
       el('span', { class: 'lab' }, '확대 색 범위'), el('select', { onchange: e => { S.zoomScale = e.target.value; renderZoom(); } }, opt('scene', '전체 장면과 같게', S.zoomScale), opt('region', '확대 영역에 맞춤', S.zoomScale)),
       el('span', { class: 'lab' }, '확대 밝기'), el('select', { onchange: e => { S.zoomStretch = e.target.value; renderZoom(); } }, opt('scene', '전체 장면과 같게', S.zoomStretch), opt('region', '확대 영역에 맞춤', S.zoomStretch)),
       el('span', { class: 'lab' }, '입력 영상'), el('label', { class: 'check' }, el('input', { type: 'checkbox', checked: S.inputs, onchange: e => { S.inputs = e.target.checked; build(); } }), 'LR MS · PAN 함께 보기')));
   const bar = el('div', { class: 'bar' },
     el('div', { class: 'scene-title', id: 'sceneTitle' }),
-    el('span', { class: 'group' }, all.map(m => el('label', { class: 'check' }, el('input', { type: 'checkbox', checked: S.visible.includes(m.id), onchange: e => toggleModel(m.id, e.target.checked) }), m.label))),
+    el('span', { class: 'group models' }, el('span', { class: 'fixed' }, vis.filter(m => m.group === 'baseline').map(m => m.label).join('')),
+      comparable(ds).length ? [el('span', { class: 'lab' }, '비교 모델'), el('select', { class: 'cmp', 'aria-label': '비교 모델', onchange: e => setCompare(e.target.value) },
+        COMPARE_GROUPS.map(([g, label]) => { const ms = comparable(ds).filter(m => m.group === g); return ms.length ? el('optgroup', { label }, ms.map(m => opt(m.id, m.label, S.cmp))) : null; }))] : null),
     el('span', { class: 'spacer' }),
     Object.keys(ds.composites).length > 1 ? el('span', { class: 'group' }, el('span', { class: 'lab' }, '밴드'), seg(Object.keys(ds.composites).map(k => [k, k]), S.comp, v => { S.comp = v; build(); })) : null,
     el('span', { class: 'group' }, el('span', { class: 'lab' }, '확대 영역'), seg(WINDOWS.map(w => [w, w]), S.win, setWindow)),
@@ -249,7 +261,7 @@ function build() {
   // layers: one column per image, whole scene on top and the selected region below
   tiles = [];
   if (S.inputs) tiles.push({ kind: 'lr', title: 'LR MS', sub: '입력 · 최근접 확대' }, { kind: 'pan', title: 'PAN', sub: '입력' });
-  vis.forEach(m => tiles.push({ kind: 'pred', id: m.id, title: m.label, tag: m.id === S.ref && vis.length > 1 ? '기준' : null }));
+  vis.forEach(m => tiles.push({ kind: 'pred', id: m.id, title: m.label, tag: m.group === 'baseline' ? '기준 모델' : null }));
   tiles.push({ kind: 'gt', title: '정답', sub: 'GT' });
   vis.forEach(m => tiles.push({ kind: 'err', id: m.id, title: `${m.short} 오차`, sub: '|예측 − 정답|' }));
   others.forEach(m => tiles.push({ kind: 'gain', id: m.id, title: `${m.short} 개선`, sub: `${ref.short} 오차 − ${m.short} 오차` }));
@@ -257,11 +269,11 @@ function build() {
 
   // about
   const about = el('details', { class: 'about' }, el('summary', {}, '모델과 수치 설명'),
-    el('dl', {}, all.map(m => [el('dt', {}, m.label), el('dd', {}, m.description || '', el('br'), el('code', {}, ds.results[m.id].checkpoint || ds.results[m.id].predictions || ''))])),
+    el('dl', {}, vis.map(m => { const r = ds.results[m.id]; return [el('dt', {}, m.label, ' ', el('span', { class: 'tag' }, m.role)), el('dd', {}, m.description || '', el('br'), el('code', {}, r.checkpoint || r.predictions || (r.asset ? `${r.release}/${r.asset}` : '')))]; })),
     el('ul', {},
       el('li', {}, '장면과 데이터셋 수치는 export.py가 원래 예측으로 계산했습니다(common/metrics.rr_metrics, PSNR은 peak 2047의 밴드별 평균).'),
       el('li', {}, `확대 영역 수치는 브라우저가 1/${factor} DN 단위로 저장한 값으로 계산합니다. 장면 전체에서 두 계산의 차이는 PSNR 0.0004 dB 이내였습니다.`),
-      el('li', {}, 'seed 42 가중치 하나의 결과입니다. 실험 판정은 연구 문서의 시드 평균을 따릅니다.'),
+      el('li', {}, '우리 모델은 seed 42 가중치 하나의 결과이고, 다른 연구 모델은 저자 공개 가중치(시드 미공개)의 예측입니다. 실험 판정은 연구 문서의 시드 평균을 따르며, 다른 연구 모델에는 판정을 붙이지 않습니다.'),
       el('li', {}, `데이터 생성 ${S.index.generated}`)));
 
   app.replaceChildren(
@@ -370,8 +382,8 @@ function renderNumbers(rm) {
     el('thead', {},
       el('tr', { class: 'groups' }, el('th', {}), el('th', { class: 'g', colspan: REGION_COLS.length }, `확대 영역 ${S.win}×${S.win}`), el('th', { class: 'g', colspan: SCENE_COLS.length }, `장면 ${S.scene} 전체`),
         el('th', { class: 'g', colspan: MEAN_COLS.length + (multi ? 1 : 0) }, `데이터셋 평균 · ${ds.scenes}장면`)),
-      el('tr', {}, el('th', {}, '모델'), heads(REGION_COLS), heads(SCENE_COLS), heads(MEAN_COLS), multi ? el('th', { title: '비교 기준보다 PSNR이 높은 장면 수' }, 'PSNR 우세 장면') : null)),
-    el('tbody', {}, S.visible.map(id => el('tr', {}, el('td', {}, model(id).label, multi && id === ref ? [' ', el('span', { class: 'tag' }, '기준')] : null),
+      el('tr', {}, el('th', {}, '모델'), heads(REGION_COLS), heads(SCENE_COLS), heads(MEAN_COLS), multi ? el('th', { title: `${model(ref).short}보다 PSNR이 높은 장면 수` }, 'PSNR 우세 장면') : null)),
+    el('tbody', {}, S.visible.map(id => el('tr', {}, el('td', {}, model(id).label, model(id).group === 'baseline' ? [' ', el('span', { class: 'tag' }, '기준 모델')] : null),
       cells(REGION_COLS, i => rm[i], id), cells(SCENE_COLS, i => res[i].scene_metrics[S.scene], id), cells(MEAN_COLS, i => res[i].mean, id),
       multi ? el('td', {}, id === ref ? '' : `${wins(id)}/${ds.scenes}`) : null))));
   $('#numbers').replaceChildren(table);
@@ -440,13 +452,9 @@ document.addEventListener('keydown', e => {
 });
 document.addEventListener('click', e => { const pop = $('#pop'); if (pop && pop.open && !pop.contains(e.target)) pop.open = false; });
 
-function toggleModel(id, on) {
-  const order = modelsIn(dataset(S.ds)).map(m => m.id);
-  S.visible = order.filter(m => (m === id ? on : S.visible.includes(m)));
-  if (!S.visible.length) S.visible = [id];
-  if (!S.visible.includes(S.ref)) S.ref = S.visible[0];
-  if (!S.visible.includes(S.cand) || S.cand === S.ref) S.cand = S.visible.find(v => v !== S.ref) || null;
-  build();
+function setCompare(id) {
+  S.cmp = id; pickModels(dataset(S.ds));
+  setScene(S.scene, true);
 }
 
 let loadToken = 0;
@@ -454,7 +462,7 @@ async function setScene(i, rebuild = false) {
   S.scene = i; const token = ++loadToken;
   const slow = setTimeout(() => { $('#loading').style.display = 'block'; }, 150);
   try {
-    const sc = await loadScene(S.ds, i);
+    const sc = await loadScene(S.ds, i, S.visible);
     if (token !== loadToken) return;
     current = sc; clampBox();
     if (rebuild || !$('#layers')) build(); else renderAll();
@@ -465,10 +473,7 @@ async function setScene(i, rebuild = false) {
 
 function setDataset(id) {
   const ds = dataset(id); S.ds = id;
-  const ids = modelsIn(ds).map(m => m.id);
-  S.visible = S.visible.filter(v => ids.includes(v)); if (!S.visible.length) S.visible = ids.slice();
-  if (!S.visible.includes(S.ref)) S.ref = S.visible[0];
-  if (!S.visible.includes(S.cand) || S.cand === S.ref) S.cand = S.visible.find(v => v !== S.ref) || null;
+  pickModels(ds);
   if (!ds.composites[S.comp]) S.comp = Object.keys(ds.composites)[0];
   if (S.errBand !== 'mean' && +S.errBand >= ds.bands) S.errBand = 'mean';
   current = null;
@@ -479,14 +484,14 @@ let urlTimer = 0;
 function syncURL() {
   clearTimeout(urlTimer);
   urlTimer = setTimeout(() => {
-    const p = new URLSearchParams({ ds: S.ds, scene: S.scene, x: S.x, y: S.y, w: S.win, comp: S.comp, ref: S.ref, models: S.visible.join(',') });
+    const p = new URLSearchParams({ ds: S.ds, scene: S.scene, x: S.x, y: S.y, w: S.win, comp: S.comp, cmp: S.cmp || '' });
     history.replaceState(null, '', '#' + p.toString());
   }, 200);
 }
 function readURL() {
   const p = new URLSearchParams(location.hash.slice(1));
   const n = (k, d) => (p.has(k) && !isNaN(+p.get(k)) ? +p.get(k) : d);
-  return { ds: p.get('ds'), scene: n('scene', 0), x: n('x', S.x), y: n('y', S.y), w: n('w', S.win), comp: p.get('comp'), ref: p.get('ref'), models: p.get('models') };
+  return { ds: p.get('ds'), scene: n('scene', 0), x: n('x', S.x), y: n('y', S.y), w: n('w', S.win), comp: p.get('comp'), ref: p.get('ref'), cmp: p.get('cmp'), models: p.get('models') };
 }
 
 // ---------- theme ----------
@@ -506,8 +511,8 @@ applyTheme();
 function applyURL() {                              // also runs when a link is pasted into an open tab
   const u = readURL(), ready = S.index.datasets.filter(d => d.scenes && Object.keys(d.results || {}).length);
   S.x = u.x; S.y = u.y; S.win = WINDOWS.includes(u.w) ? u.w : S.win; if (u.comp) S.comp = u.comp;
-  if (u.models) { const ids = u.models.split(',').filter(id => model(id)); if (ids.length) S.visible = ids; }
-  if (u.ref && model(u.ref)) S.ref = u.ref;
+  const old = u.models ? u.models.split(',').find(id => model(id) && COMPARE_GROUPS.some(([g]) => g === model(id).group)) : null;   // links made before cmp=
+  if (u.cmp && model(u.cmp)) S.cmp = u.cmp; else if (old) S.cmp = old;
   S.scene = u.scene;
   setDataset(ready.some(d => d.id === u.ds) ? u.ds : S.ds || ready[0].id);
 }

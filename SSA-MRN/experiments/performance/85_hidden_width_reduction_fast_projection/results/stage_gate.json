@@ -1,0 +1,29 @@
+{
+  "time_kst": "2026-11-18T13:01:06.175274+09:00",
+  "rule": {
+    "basis": "validation only (selected weights vs the same-seed 65 checkpoint the arm started from); test is never used for the gate",
+    "val_psnr_min": 0.0,
+    "val_sam_max": 0.0,
+    "sensors": "every stage-1 sensor (QB and WV3)",
+    "order_rule": "arms passing the speed gate, shortest stage-0 network time first (filled by run.py stage0)",
+    "order": []
+  },
+  "validation": {
+    "FT0L": {
+      "QB": {
+        "dpsnr_vs_65": 0.028441966299624255,
+        "dsam_vs_65": -0.009662374603600199,
+        "best_epoch": null
+      },
+      "WV3": {
+        "dpsnr_vs_65": 0.10065819245797769,
+        "dsam_vs_65": -0.028806499533606367,
+        "best_epoch": null
+      }
+    }
+  },
+  "passed": {
+    "FT0L": true
+  },
+  "chosen": null
+}
