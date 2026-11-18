@@ -2,52 +2,63 @@
 
 | 평가자 | 설정 | 상태 |
 |:---:|:---:|:---:|
-| 김윤지 | `author` QB·WV3, WV2 전이 / `retrain` GF2 seed 42 | 학습 완료 · 일부 정리 |
+| 김윤지 | 저자 가중치 QB·WV3, WV2 전이 / GF2 직접 학습 seed 42 | 학습 완료<br>일부 평가 |
 
-**출처:** Deng et al., Detail Injection-based Deep Convolutional Neural Networks for Pansharpening, IEEE TGRS · [공식 DLPan-Toolbox](https://github.com/liangjiandeng/DLPan-Toolbox) · GPL-3.0.
+**출처:** Deng 외, Detail Injection-based Deep Convolutional Neural Networks for Pansharpening · [DLPan-Toolbox 공식 코드](https://github.com/liangjiandeng/DLPan-Toolbox). 공식 코드의 라이선스와 저자 가중치의 별도 재배포 조건은 구분합니다.
 
-**상태:** QB·WV3 저자 가중치를 공식 PyTorch 구조에 strict load했습니다. 세 센서의 RR·FR 예비 평가는 Python으로 실행했으나 저자 학습 데이터 분할이 확인되지 않았고 결과 차이 검토 및 MATLAB 채점이 남아 있습니다. GF2는 저자 가중치가 없어 400에폭 직접 학습했고 validation MSE 최저인 382에폭을 선택했습니다. 수치는 아직 최종 비교표에 넣지 않습니다.
+**확인된 결과:** 네 센서 RR 각 20장의 실제 MATLAB 채점과 FR 각 20장의 Python 평가를 마쳤습니다. GF2는 400에폭 학습하고 validation MSE 최저인 382에폭을 선택했습니다. 저자 가중치의 학습 데이터 분할은 확인되지 않았으며 논문 조건을 완전히 재현했다고 판단할 수 없습니다. 고정 장면 비교 이미지는 작성 전입니다.
+
+[평가 표](../README.md#models) · [결과](#results) · [해석](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
+
+<a id="results"></a>
 
 ## 결과
 
-저자 PyTorch 가중치, 공통 Python 지표, RR 20장 기준 예비 평균 PSNR은 QB 31.485 dB, WV3 32.519 dB, WV2 전이 27.058 dB였습니다. 공식 `val_step`처럼 `lms + net(lms, pan)`을 사용했으며 별도 클리핑은 하지 않았습니다. 이 수치는 MATLAB 채점값이 아닙니다. 공개 가중치의 정확한 학습 데이터·분할은 확인되지 않았습니다. 원본 TensorFlow 저장소 가중치로 별도 실행한 참고 수치와 섞지 않습니다.
+### RR 실제 MATLAB 채점
 
-GF2 재학습의 Python 예비 결과(각 20장)는 RR PSNR 45.547 dB · SAM 0.985 · ERGAS 1.007, FR QNR 0.8708입니다. 실제 MATLAB 채점 결과가 아니며 비교표에 넣기 전입니다. 체크포인트와 평가 파일, 실행 링크는 [진행 기록](provenance/progress_20261119.md)에 있습니다.
+| 센서 | 설정 | PSNR (dB) | SAM | ERGAS | Q2n |
+|---|---|---:|---:|---:|---:|
+| QB | 저자 | 31.485 | 7.3719 | 8.2911 | 0.8047 |
+| GF2 | 직접 학습 seed 42 | 45.547 | 0.9847 | 1.0072 | 0.9623 |
+| WV3 | 저자 | 32.519 | 4.9298 | 4.6888 | 0.8058 |
+| WV2 | WV3 가중치 전이 | 27.058 | 7.4858 | 6.0711 | 0.7099 |
 
-### 실제 MATLAB 채점 (저자 가중치)
+각 센서 RR test 20장입니다. PSNR은 band mean과 peak 2047을 사용했습니다. GF2의 원래 범위 peak 1023을 쓰면 PSNR은 39.522 dB입니다. 같은 배열의 Python과 MATLAB 결과에서 PSNR·SAM·ERGAS는 표시 정밀도에서 일치했습니다. Q2n은 구현에 따른 작은 차이가 있습니다. [저자 설정 장면별 채점](results/matlab_author.json) · [GF2 장면별 채점](results/matlab_retrain.json).
 
-| 센서 | PSNR (band mean, peak 2047) | SAM | ERGAS | Q2n |
-|---|---:|---:|---:|---:|
-| QB | 31.485 | 7.3719 | 8.2911 | 0.8047 |
-| WV3 | 32.519 | 4.9298 | 4.6888 | 0.8058 |
-| WV2 전이 | 27.058 | 7.4858 | 6.0711 | 0.7099 |
+### 기준 모델과 비교
 
-RR 각 20장, DLPan MATLAB 채점입니다. Python과 PSNR·SAM·ERGAS는 표시 정밀도에서 같고 Q2n은 구현 차이가 있습니다. 논문값 재현과 정확한 저자 학습 분할은 확인되지 않았습니다. [장면별 결과](results/matlab_author.json). GF2 MATLAB 채점도 완료했습니다.
+사용자가 제공한 작업 규칙에 따라 기준 모델은 C2MS입니다. QB에서 C2MS seed 42의 실제 MATLAB RR PSNR은 [38.274 dB](../../experiments/performance/53_scale_mixed_training/results/matlab_reevaluation/40202998202/e53_QB_C2MS_s42/summary.json), FusionNet 저자 가중치는 31.485 dB로 차이는 -6.788 dB입니다. FusionNet 저자 가중치의 학습 시드는 확인되지 않아 같은 시드 쌍 비교가 아닙니다. 다른 센서는 C2MS 대조 결과의 조건을 확인한 뒤 비교합니다.
 
-### GF2 직접 학습의 MATLAB 채점
+### FR 참고 결과
 
-GF2 RR 20장의 PSNR은 팀 비교와 같은 peak 2047 기준 45.547 dB, GF2 원래 범위인 peak 1023 기준 39.522 dB입니다. SAM 0.9847, ERGAS 1.0072, Q2n 0.96235입니다. Python과 PSNR·SAM·ERGAS는 표시 정밀도에서 같고 Q2n 차이는 약 0.0000032입니다. [장면별 결과](results/matlab_retrain.json).
+FR에는 정답이 없으며 Python 공통 평가기로 각 20장을 평가했습니다. GF2 QNR은 0.8708입니다. QNR·Dλ·Ds는 참고 지표이며 개선 판정에 사용하지 않습니다. 다른 센서와 장면별 수치는 [실행 기록](provenance/progress_20261119.md)과 Kaggle 실행 결과에서 확인할 수 있습니다.
 
-팀 기준 C2MS-SP의 3시드 평균 PSNR(동일 peak 2047 기준) 대비 차이는 QB -6.888 dB, GF2 -3.238 dB, WV3 -6.154 dB, WV2 전이 -4.477 dB입니다. FusionNet은 저자 가중치 또는 재학습 1시드이므로 동일 시드 짝 비교는 아닙니다. WV2 기준 모델에는 센서 보정이 적용됩니다. 가중치 학습 출처가 불확실하므로 논문 재현 여부나 우열 판정은 보류합니다.
+<a id="verdict"></a>
 
 ## 해석과 정리
 
-공개 가중치에 대응하는 센서는 학습 없이 평가합니다. 가중치의 학습 데이터·분할과 예비 결과 차이를 추가 조사합니다. 센서 전이는 참고로 표시합니다.
+QB 결과는 지정한 C2MS 기준보다 낮지만, 저자 가중치의 학습 데이터와 분할이 불명확해 차이의 원인을 단정하지 않습니다. WV2는 WV3 가중치로 평가한 전이 결과입니다. 서로 다른 정규화 범위와 평가 설정을 섞어 논문 보고값 재현이나 모델의 우열을 확정하지 않습니다.
 
-<details><summary>방법</summary>
+<a id="method"></a>
 
-저자 네트워크는 PAN을 밴드 수만큼 복제해 LMS를 뺀 뒤 합성곱과 네 개의 잔차 블록으로 세부 성분을 예측합니다. 어댑터는 이 성분을 LMS에 더합니다. QB·WV3의 입력은 DN / 2047이며 WV2는 WV3 가중치를 적용합니다. GF2는 DN / 1023, 400에폭, 배치 32, Adam 학습률 0.0003, MSE, seed 42로 학습하고 validation MSE로 가중치를 고릅니다. 공식 학습 설정은 DLPan `option_fusionnet.py`와 `fusionnet_main.py`를 따릅니다.
+## 방법
 
-</details>
+공식 FusionNet은 PAN을 밴드 수만큼 복제한 뒤 LMS와의 차이에서 세부 성분을 예측하고 LMS에 더합니다. QB·WV3·WV2 입력은 DN/2047, GF2 입력은 DN/1023입니다. 출력은 별도로 클리핑하지 않았습니다. GF2 학습은 Adam, 학습률 0.0003, 배치 32, MSE, 400에폭, seed 42를 사용했습니다. 400에폭은 DLPan 공식 학습 설정의 기본값으로, 논문의 모든 실험 설정과 일치한다고 확인된 것은 아닙니다.
 
-<details><summary>그림</summary>
+저자 가중치는 QB·WV3에 적용했고 WV2에는 WV3 가중치를 사용했습니다. GF2는 우리 데이터의 학습 분할로 학습했으며 validation MSE를 이용해 best를 선택하고 test로 재선택하지 않았습니다. 학습 데이터 분할과 정규화 조건이 다른 기준 모델 간 직접 비교에는 한계가 있습니다.
 
-네 센서 채점은 완료했고 고정 장면 비교는작성 전입니다.
+<a id="figures"></a>
 
-</details>
+## 그림
 
-<details><summary>재현 자료</summary>
+C2MS seed 42와 QB RR 고정 장면 0·1·3·7·14·17의 원본 크기 및 확대 비교 이미지는 아직 만들지 않았습니다. 확대 창은 후보의 오차 감소가 가장 큰 영역을 선택하므로 후보에 유리하게 선택된 영역임을 함께 표시할 예정입니다.
 
-공식 코드와 설정은 `upstream/` 및 `config.json`을 참고합니다. [Kaggle 실행](https://www.kaggle.com/code/kimyunjiji/fusionnet-gf2-training-and-dlpan-evaluation)에서 저자 가중치 로드, 예비 평가, GF2 학습을 수행합니다. 코드와 가중치·데이터 해시 및 평가 산출물의 보관이 완료되면 manifest를 갱신합니다.
+<a id="evidence"></a>
 
-</details>
+## 재현 자료
+
+[설정](config.json) · [GF2 best 가중치](checkpoints/retrain_GF2_seed42/best.pt) · [manifest](manifest.json) · [진행 기록](provenance/progress_20261119.md) · [Kaggle 학습](https://www.kaggle.com/code/kimyunjiji/fusionnet-gf2-training-and-dlpan-evaluation) · [Kaggle 체크포인트 검증과 평가](https://www.kaggle.com/code/kimyunjiji/fusionnet-gf2-checkpoint-validation-and-evaluation?scriptVersionId=371079856).
+
+[GF2 initial·latest Release](https://github.com/BIYONGHIYON/CtrS/releases/tag/weights-benchmarks-fusionnet-retrain) · [저자 예측 Release](https://github.com/BIYONGHIYON/CtrS/releases/tag/predictions-benchmarks-fusionnet-author) · [GF2 예측 Release](https://github.com/BIYONGHIYON/CtrS/releases/tag/predictions-benchmarks-fusionnet-retrain).
+
+[저자 MATLAB 실행](https://github.com/BIYONGHIYON/CtrS/actions/runs/44337025831) · [GF2 MATLAB 실행](https://github.com/BIYONGHIYON/CtrS/actions/runs/44337153698). 저자 가중치의 재배포 허용 여부는 별도 확인되지 않았으며 출처 확인이 필요합니다.
