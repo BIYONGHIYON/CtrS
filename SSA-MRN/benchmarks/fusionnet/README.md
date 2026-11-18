@@ -2,15 +2,17 @@
 
 | 평가자 | 설정 | 상태 |
 |:---:|:---:|:---:|
-| 김윤지 | `author` QB·WV3, WV2 전이 / `retrain` GF2 seed 42 | 학습 중 · 일부 평가 |
+| 김윤지 | `author` QB·WV3, WV2 전이 / `retrain` GF2 seed 42 | 학습 완료 · MATLAB 채점 중 |
 
 **출처:** Deng et al., Detail Injection-based Deep Convolutional Neural Networks for Pansharpening, IEEE TGRS · [공식 DLPan-Toolbox](https://github.com/liangjiandeng/DLPan-Toolbox) · GPL-3.0.
 
-**상태:** QB·WV3 저자 가중치를 공식 PyTorch 구조에 strict load했습니다. 세 센서의 RR·FR 예비 평가는 Python으로 실행했으나 저자 학습 데이터 분할이 확인되지 않았고 결과 차이 검토 및 MATLAB 채점이 남아 있습니다. GF2는 저자 가중치가 없어 재학습 중입니다. 수치는 아직 최종 비교표에 넣지 않습니다.
+**상태:** QB·WV3 저자 가중치를 공식 PyTorch 구조에 strict load했습니다. 세 센서의 RR·FR 예비 평가는 Python으로 실행했으나 저자 학습 데이터 분할이 확인되지 않았고 결과 차이 검토 및 MATLAB 채점이 남아 있습니다. GF2는 저자 가중치가 없어 400에폭 직접 학습했고 validation MSE 최저인 382에폭을 선택했습니다. 수치는 아직 최종 비교표에 넣지 않습니다.
 
 ## 결과
 
 저자 PyTorch 가중치, 공통 Python 지표, RR 20장 기준 예비 평균 PSNR은 QB 31.485 dB, WV3 32.519 dB, WV2 전이 27.058 dB였습니다. 공식 `val_step`처럼 `lms + net(lms, pan)`을 사용했으며 별도 클리핑은 하지 않았습니다. 이 수치는 MATLAB 채점값이 아닙니다. 공개 가중치의 정확한 학습 데이터·분할은 확인되지 않았습니다. 원본 TensorFlow 저장소 가중치로 별도 실행한 참고 수치와 섞지 않습니다.
+
+GF2 재학습의 Python 예비 결과(각 20장)는 RR PSNR 45.547 dB · SAM 0.985 · ERGAS 1.007, FR QNR 0.8708입니다. 실제 MATLAB 채점 결과가 아니며 비교표에 넣기 전입니다. 체크포인트와 평가 파일, 실행 링크는 [진행 기록](provenance/progress_20261119.md)에 있습니다.
 
 ## 해석과 정리
 
@@ -24,7 +26,7 @@
 
 <details><summary>그림</summary>
 
-GF2 학습 종료 및 네 센서 채점 후 고정 장면 비교를 작성합니다.
+네 센서 채점 후 고정 장면 비교를 작성합니다.
 
 </details>
 
