@@ -2,7 +2,7 @@
 
 | 평가자 | 설정 | 상태 |
 |:---:|:---:|:---:|
-| 김윤지 | `author` QB·WV3, WV2 전이 / `retrain` GF2 seed 42 | 학습 완료 · MATLAB 채점 중 |
+| 김윤지 | `author` QB·WV3, WV2 전이 / `retrain` GF2 seed 42 | 학습 완료 · 일부 정리 |
 
 **출처:** Deng et al., Detail Injection-based Deep Convolutional Neural Networks for Pansharpening, IEEE TGRS · [공식 DLPan-Toolbox](https://github.com/liangjiandeng/DLPan-Toolbox) · GPL-3.0.
 
@@ -22,7 +22,13 @@ GF2 재학습의 Python 예비 결과(각 20장)는 RR PSNR 45.547 dB · SAM 0.9
 | WV3 | 32.519 | 4.9298 | 4.6888 | 0.8058 |
 | WV2 전이 | 27.058 | 7.4858 | 6.0711 | 0.7099 |
 
-RR 각 20장, DLPan MATLAB 채점입니다. Python과 PSNR·SAM·ERGAS는 표시 정밀도에서 같고 Q2n은 구현 차이가 있습니다. 논문값 재현과 정확한 저자 학습 분할은 확인되지 않았습니다. [장면별 결과](results/matlab_author.json). GF2 MATLAB 채점은 진행 중입니다.
+RR 각 20장, DLPan MATLAB 채점입니다. Python과 PSNR·SAM·ERGAS는 표시 정밀도에서 같고 Q2n은 구현 차이가 있습니다. 논문값 재현과 정확한 저자 학습 분할은 확인되지 않았습니다. [장면별 결과](results/matlab_author.json). GF2 MATLAB 채점도 완료했습니다.
+
+### GF2 직접 학습의 MATLAB 채점
+
+GF2 RR 20장의 PSNR은 팀 비교와 같은 peak 2047 기준 45.547 dB, GF2 원래 범위인 peak 1023 기준 39.522 dB입니다. SAM 0.9847, ERGAS 1.0072, Q2n 0.96235입니다. Python과 PSNR·SAM·ERGAS는 표시 정밀도에서 같고 Q2n 차이는 약 0.0000032입니다. [장면별 결과](results/matlab_retrain.json).
+
+팀 기준 C2MS-SP의 3시드 평균 PSNR(동일 peak 2047 기준) 대비 차이는 QB -6.888 dB, GF2 -3.238 dB, WV3 -6.154 dB, WV2 전이 -4.477 dB입니다. FusionNet은 저자 가중치 또는 재학습 1시드이므로 동일 시드 짝 비교는 아닙니다. WV2 기준 모델에는 센서 보정이 적용됩니다. 가중치 학습 출처가 불확실하므로 논문 재현 여부나 우열 판정은 보류합니다.
 
 ## 해석과 정리
 
@@ -36,7 +42,7 @@ RR 각 20장, DLPan MATLAB 채점입니다. Python과 PSNR·SAM·ERGAS는 표시
 
 <details><summary>그림</summary>
 
-네 센서 채점 후 고정 장면 비교를 작성합니다.
+네 센서 채점은 완료했고 고정 장면 비교는작성 전입니다.
 
 </details>
 
