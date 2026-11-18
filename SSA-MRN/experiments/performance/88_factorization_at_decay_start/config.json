@@ -101,7 +101,7 @@
   "1": "TRUNK on QB, GF2, WV3 (two at once), epoch-120 state saved with hashes",
   "2": "per sensor: FULL and K2D from the epoch-120 state (two at once), then K2F from the FULL best",
   "3": "evaluation (validation-selected weights + P, RR/FR test, WV2 transfer), summary and timing",
-  "4": "stage 2 (seeds 43 and 44, TRUNK + K2D), started automatically after stage 1 only if the gate passes; 3-seed summary (summary_3seeds.json)"
+  "4": "stage 2 (seeds 43 and 44, TRUNK + K2D) with the pre-registered gate; deferred, not started automatically (user decision 2026-11-19); 3-seed summary (summary_3seeds.json)"
  },
  "runtime": "C:/CtrS-p88/run",
  "max_parallel": 2,
@@ -226,6 +226,7 @@
   "gate": "run.py --stage 2 --mode gate: start only if the seed-42 summary.json reports K2D + P vs C2MS-SP as an improvement on QB, GF2 and WV3 (all_training_sensors_improved) or light non-inferior (within -0.04 dB on every training sensor); otherwise stage 2 is not run",
   "scope": "TRUNK (120 epochs) and K2D (factorized at epoch 120, 30 decay epochs) only; FULL and K2F stay seed-42 references; no 84 B150 control (seed 42 only)",
   "judgement": "K2D + P vs C2MS-SP, mean of the same-seed pairs over seeds 42, 43, 44 (v2.4, threshold 0.04 dB), an improvement only if QB, GF2 and WV3 all are; K2D + P vs C2MS-SP-Lite reference; seed 42 read from the stage-1 runtime",
-  "expected_duration": "about 15 h of training (2 seeds x 3 sensors x (TRUNK 120 + K2D 30 epochs), two at once) plus about 1 h of evaluation (estimate)"
+  "expected_duration": "about 15 h of training (2 seeds x 3 sensors x (TRUNK 120 + K2D 30 epochs), two at once) plus about 1 h of evaluation (estimate)",
+  "status": "deferred (user decision 2026-11-19 02:10, before the seed-42 result): the automatic start was cancelled; stage 2 runs later only on a new user decision, with the same pre-registered gate and settings"
  }
 }

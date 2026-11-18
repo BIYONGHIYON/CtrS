@@ -2970,7 +2970,7 @@
     "sensor": "QB, GF2, WV3 (WV2 transfer)",
     "evaluated_seeds": [],
     "retraining": true,
-    "limits": "원래 크기 C2MS를 학습률 1e-4로 120에폭 학습하고 감쇠 시작 시점에 83번 K2로 분해해 남은 30에폭 감쇠를 K2로 학습합니다(seed 42, QB·GF2·WV3). 같은 줄기의 원래 크기 감쇠(FULL)와 감쇠 후 분해(K2F)를 참고로 봅니다. 조건을 만족하면 seed 43·44(TRUNK + K2D)를 자동으로 이어 학습합니다.",
+    "limits": "원래 크기 C2MS를 학습률 1e-4로 120에폭 학습하고 감쇠 시작 시점에 83번 K2로 분해해 남은 30에폭 감쇠를 K2로 학습합니다(seed 42, QB·GF2·WV3). 같은 줄기의 원래 크기 감쇠(FULL)와 감쇠 후 분해(K2F)를 참고로 봅니다. seed 43·44(TRUNK + K2D)는 조건과 코드를 등록해 두고 보류했습니다.",
     "config": "experiments/performance/88_factorization_at_decay_start/config.json",
     "entrypoint": "experiments/performance/88_factorization_at_decay_start/run.py"
   }
