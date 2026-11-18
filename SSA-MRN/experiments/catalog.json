@@ -2963,15 +2963,20 @@
   "performance/88_factorization_at_decay_start": {
     "display_name": "88. 일정 학습률 학습 뒤 감쇠 시작 시점의 저랭크 분해(K2)와 감쇠 구간 학습: 150에폭 경량 C2MS-SP 단일 시드 확인",
     "experimenter": "이병현",
-    "status": "학습 중",
-    "improvement": "판단 보류",
-    "result": "seed 42 학습 중. 같은 150에폭에서 감쇠 직전 K2 분해, C2MS-SP와 비교",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "result": "K2D(연산 66%) +0.036/+0.154/+0.310 dB (QB/GF2/WV3, 1시드), Lite보다 세 센서 모두 개선",
     "report": "experiments/performance/88_factorization_at_decay_start/README.md",
     "sensor": "QB, GF2, WV3 (WV2 transfer)",
-    "evaluated_seeds": [],
+    "evaluated_seeds": [
+      42
+    ],
     "retraining": true,
-    "limits": "원래 크기 C2MS를 학습률 1e-4로 120에폭 학습하고 감쇠 시작 시점에 83번 K2로 분해해 남은 30에폭 감쇠를 K2로 학습합니다(seed 42, QB·GF2·WV3). 같은 줄기의 원래 크기 감쇠(FULL)와 감쇠 후 분해(K2F)를 참고로 봅니다. seed 43·44(TRUNK + K2D)는 조건과 코드를 등록해 두고 보류했습니다.",
+    "limits": "C2MS를 1e-4 고정 120에폭 학습한 뒤 83번 K2로 분해하고 30에폭 감쇠를 K2로 학습했습니다(seed 42, 150에폭). QB는 문턱 안이라 부분 개선, 세 센서 경량 비열등입니다. seed 43·44는 보류했습니다.",
     "config": "experiments/performance/88_factorization_at_decay_start/config.json",
-    "entrypoint": "experiments/performance/88_factorization_at_decay_start/run.py"
+    "entrypoint": "experiments/performance/88_factorization_at_decay_start/run.py",
+    "manifest": "experiments/performance/88_factorization_at_decay_start/manifest.json",
+    "results": "experiments/performance/88_factorization_at_decay_start/results",
+    "last_checked": "2026-11-19T05:20:00+09:00"
   }
 }
