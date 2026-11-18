@@ -1,0 +1,126 @@
+{
+  "time_kst": "2026-11-18T17:00:30.784636+09:00",
+  "phase": "complete",
+  "active": [],
+  "runs": [
+    {
+      "sensor": "QB",
+      "arm": "B32W96",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-11-18T15:27:23.285372+09:00",
+        "pid": 4456,
+        "sensor": "QB",
+        "arm": "B32W96",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.0424342155456543,
+        "reserved_gb": 0.4765625,
+        "best_epoch": 19
+      }
+    },
+    {
+      "sensor": "QB",
+      "arm": "B32W64",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-11-18T15:27:18.012611+09:00",
+        "pid": 30040,
+        "sensor": "QB",
+        "arm": "B32W64",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.0314478874206543,
+        "reserved_gb": 0.43359375,
+        "best_epoch": 19
+      }
+    },
+    {
+      "sensor": "GF2",
+      "arm": "B32W96",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-11-18T16:13:15.750301+09:00",
+        "pid": 5916,
+        "sensor": "GF2",
+        "arm": "B32W96",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.038571834564208984,
+        "reserved_gb": 0.4765625,
+        "best_epoch": 20
+      }
+    },
+    {
+      "sensor": "GF2",
+      "arm": "B32W64",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-11-18T16:13:08.210194+09:00",
+        "pid": 23468,
+        "sensor": "GF2",
+        "arm": "B32W64",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.027585506439208984,
+        "reserved_gb": 0.43359375,
+        "best_epoch": 20
+      }
+    },
+    {
+      "sensor": "WV3",
+      "arm": "B32W96",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-11-18T16:42:28.233336+09:00",
+        "pid": 18284,
+        "sensor": "WV3",
+        "arm": "B32W96",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.046797752380371094,
+        "reserved_gb": 0.5546875,
+        "best_epoch": 20
+      }
+    },
+    {
+      "sensor": "WV3",
+      "arm": "B32W64",
+      "seed": 42,
+      "training_complete": true,
+      "evaluation_complete": true,
+      "status": {
+        "time_kst": "2026-11-18T16:42:26.371524+09:00",
+        "pid": 7040,
+        "sensor": "WV3",
+        "arm": "B32W64",
+        "seed": 42,
+        "phase": "training_complete",
+        "allocated_gb": 0.036665916442871094,
+        "reserved_gb": 0.580078125,
+        "best_epoch": 20
+      }
+    }
+  ],
+  "epoch_seconds": {
+    "QB_B32W96": 118.23399999999674,
+    "QB_B32W64": 117.39000000001397,
+    "GF2_B32W96": 135.92199999999139,
+    "GF2_B32W64": 135.68700000000536,
+    "WV3_B32W96": 86.4210000000021,
+    "WV3_B32W64": 86.25
+  },
+  "training_remaining_seconds": 0.0,
+  "training_end_kst": "2026-11-18T17:00:30.784636+09:00",
+  "eta_basis": "sum of the remaining epochs x recent epoch seconds of every queued run; two runs share the GPU, so the real end is earlier; excludes evaluation"
+}

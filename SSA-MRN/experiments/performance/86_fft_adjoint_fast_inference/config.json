@@ -1,0 +1,108 @@
+{
+ "experiment": 86,
+ "research_track": "performance",
+ "experimenter": "이병현",
+ "title": "K10 사영 전치 연산의 FFT 계산과 C2MS-SP 추론 설정 측정",
+ "status": "계획",
+ "improvement": "성능 비교 아님",
+ "registered": "2026-11-18",
+ "hypothesis": "Computing D^T of the interior-grid K10 projection by FFT keeps the result (rounding only) and removes the slow float64 transposed-convolution algorithm that 85 hit at 512^2 without cuDNN autotune, so the projection costs a few ms at 256^2 and 512^2 in every setting; the profiler shows where the C2MS network time goes at 256^2; cuDNN autotune, TF32, FP16 and CUDA graphs reduce the network time with RR changes far below the 0.04 dB threshold.",
+ "evidence": {
+  "85_projection": "85 FastProjector equal to the 79 projection (max 1.3e-14); official setting 256^2 QB 55.9 -> 24.9 ms, WV3 87.1 -> 30.2 ms; 512^2 QB 169 -> 452 ms, WV3 275 -> 842 ms because D^T (float64 stride-4 transposed convolution) took 388/776 ms without autotune and 5.2/10.3 ms with it",
+  "85_network": "256^2 network time barely followed MACs (B32W64 51% MACs -> 94-96% time) but did at 512^2 (73-75%); autotune + TF32 brought C2MS 19.1 -> 13.4 ms at QB 256^2"
+ },
+ "c2ms_sp": {
+  "QB": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt",
+  "GF2": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s<seed>/best.pt",
+  "WV3": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s<seed>/best.pt"
+ },
+ "lite": {
+  "QB": "experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_QB_s<seed>/best.pt",
+  "GF2": "experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_GF2_s<seed>/best.pt",
+  "WV3": "experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_WV3_s<seed>/best.pt"
+ },
+ "sensors": [
+  "QB",
+  "GF2",
+  "WV3"
+ ],
+ "transfer": {
+  "WV3": [
+   "WV2"
+  ]
+ },
+ "seeds": [
+  42,
+  43,
+  44
+ ],
+ "latency_sensors": [
+  "QB",
+  "WV3"
+ ],
+ "latency_seed": 42,
+ "identity": {
+  "tol_max_abs": 1e-08,
+  "tol_psnr_db": 1e-05,
+  "scope": "65 outputs, seeds 42-44, QB/GF2/WV3 and the WV2 transfer, every RR and FR test scene; CG iteration counts equal"
+ },
+ "settings": {
+  "official": {
+   "deterministic": true,
+   "cudnn_benchmark": false,
+   "tf32": false,
+   "fp16": false,
+   "cuda_graph": false
+  },
+  "autotune": {
+   "deterministic": false,
+   "cudnn_benchmark": true,
+   "tf32": false,
+   "fp16": false,
+   "cuda_graph": false
+  },
+  "autotune_tf32": {
+   "deterministic": false,
+   "cudnn_benchmark": true,
+   "tf32": true,
+   "fp16": false,
+   "cuda_graph": false
+  },
+  "fp16": {
+   "deterministic": false,
+   "cudnn_benchmark": true,
+   "tf32": false,
+   "fp16": true,
+   "cuda_graph": false
+  },
+  "graph_tf32": {
+   "deterministic": false,
+   "cudnn_benchmark": true,
+   "tf32": true,
+   "fp16": false,
+   "cuda_graph": true
+  },
+  "graph_fp16": {
+   "deterministic": false,
+   "cudnn_benchmark": true,
+   "tf32": false,
+   "fp16": true,
+   "cuda_graph": true
+  }
+ },
+ "settings_note": "official = the 81/85 latency setting (float32, TF32 off, cuDNN deterministic, no autotune); the others are inference options for the network only, the projection always runs in float64",
+ "latency": "one process, nothing else on the GPU, batch 1, test scene 0 (RR 256^2, FR 512^2), NCHW; 5 warm-up, 50 timed runs per system interleaved, 3 rounds, median of the round medians",
+ "runtime": "C:/CtrS-p86/run",
+ "data_root": "C:/CtrS/PAN-MS",
+ "normalization": {
+  "QB": 2047,
+  "GF2": 1023,
+  "WV3": 2047,
+  "WV2": 2047
+ },
+ "limits": [
+  "timings are for one RTX 3060 Ti and batch 1",
+  "the accuracy change is measured on C2MS-SP seed 42 only",
+  "no training; not a performance comparison"
+ ]
+}

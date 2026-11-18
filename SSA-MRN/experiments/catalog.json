@@ -2931,5 +2931,41 @@
     "results": "experiments/performance/85_hidden_width_reduction_fast_projection/results",
     "manifest": "experiments/performance/85_hidden_width_reduction_fast_projection/manifest.json",
     "last_checked": "2026-11-18T13:22:00+09:00"
+  },
+  "performance/86_fft_adjoint_fast_inference": {
+    "display_name": "86. K10 사영 전치 연산의 FFT 계산과 C2MS-SP 추론 설정 측정",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "성능 비교 아님",
+    "result": "FFT 사영이 79번과 동일(1.3e-14), C2MS-SP 공식 설정 QB 256² 58.6→26.1 ms, graph_fp16 13.3 ms",
+    "report": "experiments/performance/86_fft_adjoint_fast_inference/README.md",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "evaluated_seeds": [],
+    "retraining": false,
+    "limits": "학습하지 않았습니다. 85번 빠른 사영의 Dᵀ를 FFT로 바꿔 65번 3시드 모든 test 장면에서 79번 사영과 같음을 확인하고, C2MS-SP의 프로파일과 추론 설정별 시간·RR 변화(최대 0.0013 dB)를 쟀습니다.",
+    "config": "experiments/performance/86_fft_adjoint_fast_inference/config.json",
+    "entrypoint": "experiments/performance/86_fft_adjoint_fast_inference/run.py",
+    "manifest": "experiments/performance/86_fft_adjoint_fast_inference/manifest.json",
+    "results": "experiments/performance/86_fft_adjoint_fast_inference/results",
+    "last_checked": "2026-11-18T17:40:00+09:00"
+  },
+  "performance/87_reduced_width_short_finetuning": {
+    "display_name": "87. C2MS-SP 잔차 블록 가운데 채널 축소 구조의 20에폭 미세조정 단일 시드 확인",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "개선 없음",
+    "result": "B32W96 −0.076/−0.253/−0.146, B32W64 −0.236/−0.510/−0.443 dB (QB/GF2/WV3, 1시드)",
+    "report": "experiments/performance/87_reduced_width_short_finetuning/README.md",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "limits": "85번 축소 구조 두 가지를 65번 가중치에서 만들어 20에폭 미세조정하고 86번 사영을 붙였습니다(seed 42). 세 센서 모두 C2MS-SP보다 낮고, 같은 시드 Lite(K2)의 손실보다 3-25배 큽니다.",
+    "config": "experiments/performance/87_reduced_width_short_finetuning/config.json",
+    "entrypoint": "experiments/performance/87_reduced_width_short_finetuning/run.py",
+    "manifest": "experiments/performance/87_reduced_width_short_finetuning/manifest.json",
+    "results": "experiments/performance/87_reduced_width_short_finetuning/results",
+    "last_checked": "2026-11-18T17:40:00+09:00"
   }
 }

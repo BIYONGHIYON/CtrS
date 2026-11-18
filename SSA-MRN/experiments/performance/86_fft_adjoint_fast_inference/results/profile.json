@@ -1,0 +1,395 @@
+{
+ "time_kst": "2026-11-18T14:21:57.294713+09:00",
+ "setting": "official",
+ "note": "self device/host time per forward (mean of 10), torch.profiler",
+ "result": {
+  "QB_RR_256": {
+   "device_ms": 27.1861861999997,
+   "host_ms": 21.416009999999936,
+   "cuda_kernels_per_forward": 832.0,
+   "top": [
+    {
+     "op": "aten::cudnn_convolution",
+     "device_ms": 8.690037199999995,
+     "share": 0.31964899879925385,
+     "calls": 71.0
+    },
+    {
+     "op": "_5x_cudnn_ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+     "device_ms": 7.374595100000015,
+     "share": 0.2712625833483071,
+     "calls": 25.0
+    },
+    {
+     "op": "aten::add_",
+     "device_ms": 1.6263003999999273,
+     "share": 0.05982083650997525,
+     "calls": 71.0
+    },
+    {
+     "op": "_ZN2at6native18elementwise_kernelILi128ELi2EZNS0_22gpu_kernel_impl_nocastINS0_15CUDAFunctor_addIfEEEEvRNS_18TensorIteratorBaseERKT_EUliE_EEviT1_",
+     "device_ms": 1.6263003999999273,
+     "share": 0.05982083650997525,
+     "calls": 71.0
+    },
+    {
+     "op": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_15CUDAFunctor_addIfEESt5arrayIPcLy3EEEEviT0_T1_",
+     "device_ms": 1.2345957999999422,
+     "share": 0.04541261473446231,
+     "calls": 70.0
+    },
+    {
+     "op": "aten::add",
+     "device_ms": 1.1968359999999254,
+     "share": 0.04402368140919813,
+     "calls": 61.0
+    },
+    {
+     "op": "_ZN2at6native29vectorized_elementwise_kernelILi4EZZZNS0_49_GLOBAL__N__97375e57_16_TensorCompare_cu_71e06f4e19launch_clamp_scalarERNS_18TensorIteratorBaseEN3c106ScalarES6_NS0_6detail11ClampLimitsEENKUlvE_clEvENKUlvE5_clEvEUlfE_St5arrayIPcLy2EEEEviT0_T1_",
+     "device_ms": 0.731265399999977,
+     "share": 0.026898417991413046,
+     "calls": 60.0
+    },
+    {
+     "op": "aten::clamp_min_",
+     "device_ms": 0.6702064999999923,
+     "share": 0.024652464860996197,
+     "calls": 12.0
+    },
+    {
+     "op": "_ZN5cudnn3cnn28conv2d_grouped_direct_kernelILb0ELb1ELb0ELb0ELb0ELb0ELi0ELi0EiffffffEEvNS0_24GroupedDirectFpropParamsEPKT9_PKT11_PT10_T12_SB_PKSB_SD_PKS9_PKT13_21cudnnActivationStruct",
+     "device_ms": 0.5724591999999903,
+     "share": 0.021056988125829748,
+     "calls": 18.0
+    },
+    {
+     "op": "aten::copy_",
+     "device_ms": 0.4244788999999644,
+     "share": 0.015613771526363236,
+     "calls": 134.0
+    },
+    {
+     "op": "aten::fill_",
+     "device_ms": 0.2616866000000417,
+     "share": 0.009625719403041702,
+     "calls": 192.0
+    },
+    {
+     "op": "_ZN2at6native18elementwise_kernelILi128ELi2EZNS0_22gpu_kernel_impl_nocastIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE5_clEvEUlfE_EEvS4_RKT_EUliE_EEviT1_",
+     "device_ms": 0.2565238999999994,
+     "share": 0.009435817812503699,
+     "calls": 26.0
+    },
+    {
+     "op": "_5x_cudnn_ampere_scudnn_128x128_relu_interior_nn_v1",
+     "device_ms": 0.24215939999999062,
+     "share": 0.008907442854194581,
+     "calls": 2.0
+    },
+    {
+     "op": "aten::index",
+     "device_ms": 0.17266930000000102,
+     "share": 0.006351361633799261,
+     "calls": 36.0
+    },
+    {
+     "op": "_ZN2at6native24index_elementwise_kernelILi128ELi4EZNS0_16gpu_index_kernelIZNS0_17index_kernel_implINS0_10OpaqueTypeILi4EEEEEvRNS_18TensorIteratorBaseEN3c108ArrayRefIxEESA_EUlPcPKcxE_EEvS7_SA_SA_RKT_EUliE_EEvxT1_",
+     "device_ms": 0.17266930000000102,
+     "share": 0.006351361633799261,
+     "calls": 36.0
+    }
+   ]
+  },
+  "QB_FR_512": {
+   "device_ms": 103.28075269999997,
+   "host_ms": 50.14445999999995,
+   "cuda_kernels_per_forward": 832.0,
+   "top": [
+    {
+     "op": "aten::cudnn_convolution",
+     "device_ms": 33.77508510000007,
+     "share": 0.3270220657483655,
+     "calls": 71.0
+    },
+    {
+     "op": "_5x_cudnn_ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+     "device_ms": 29.282802200000017,
+     "share": 0.28352622763176305,
+     "calls": 25.0
+    },
+    {
+     "op": "aten::add_",
+     "device_ms": 6.462153999999994,
+     "share": 0.06256881201060414,
+     "calls": 71.0
+    },
+    {
+     "op": "_ZN2at6native18elementwise_kernelILi128ELi2EZNS0_22gpu_kernel_impl_nocastINS0_15CUDAFunctor_addIfEEEEvRNS_18TensorIteratorBaseERKT_EUliE_EEviT1_",
+     "device_ms": 6.462153999999994,
+     "share": 0.06256881201060414,
+     "calls": 71.0
+    },
+    {
+     "op": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_15CUDAFunctor_addIfEESt5arrayIPcLy3EEEEviT0_T1_",
+     "device_ms": 4.83750700000001,
+     "share": 0.04683841735789375,
+     "calls": 70.0
+    },
+    {
+     "op": "aten::add",
+     "device_ms": 4.654061599999976,
+     "share": 0.045062235492402423,
+     "calls": 61.0
+    },
+    {
+     "op": "_ZN2at6native29vectorized_elementwise_kernelILi4EZZZNS0_49_GLOBAL__N__97375e57_16_TensorCompare_cu_71e06f4e19launch_clamp_scalarERNS_18TensorIteratorBaseEN3c106ScalarES6_NS0_6detail11ClampLimitsEENKUlvE_clEvENKUlvE5_clEvEUlfE_St5arrayIPcLy2EEEEviT0_T1_",
+     "device_ms": 2.771605499999917,
+     "share": 0.026835643888562768,
+     "calls": 60.0
+    },
+    {
+     "op": "aten::clamp_min_",
+     "device_ms": 2.6245333000000177,
+     "share": 0.02541163993666381,
+     "calls": 12.0
+    },
+    {
+     "op": "_ZN5cudnn3cnn28conv2d_grouped_direct_kernelILb0ELb1ELb0ELb0ELb0ELb0ELi0ELi0EiffffffEEvNS0_24GroupedDirectFpropParamsEPKT9_PKT11_PT10_T12_SB_PKSB_SD_PKS9_PKT13_21cudnnActivationStruct",
+     "device_ms": 2.288695200000015,
+     "share": 0.02215993919649286,
+     "calls": 18.0
+    },
+    {
+     "op": "aten::copy_",
+     "device_ms": 1.210535300000075,
+     "share": 0.011720821821625581,
+     "calls": 134.0
+    },
+    {
+     "op": "_ZN2at6native18elementwise_kernelILi128ELi2EZNS0_22gpu_kernel_impl_nocastIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE5_clEvEUlfE_EEvS4_RKT_EUliE_EEviT1_",
+     "device_ms": 0.9636361999999706,
+     "share": 0.00933025926717487,
+     "calls": 26.0
+    },
+    {
+     "op": "_5x_cudnn_ampere_scudnn_128x128_relu_interior_nn_v1",
+     "device_ms": 0.8794701000000029,
+     "share": 0.008515333951473063,
+     "calls": 2.0
+    },
+    {
+     "op": "aten::fill_",
+     "device_ms": 0.6657320999998274,
+     "share": 0.006445848646490621,
+     "calls": 192.0
+    },
+    {
+     "op": "_ZN5cudnn3cnn28conv2d_grouped_direct_kernelILb0ELb1ELb0ELb0ELb0ELb0ELi4ELi3EiffffffEEvNS0_24GroupedDirectFpropParamsEPKT9_PKT11_PT10_T12_SB_PKSB_SD_PKS9_PKT13_21cudnnActivationStruct",
+     "device_ms": 0.5283952000000413,
+     "share": 0.005116105239229549,
+     "calls": 12.0
+    },
+    {
+     "op": "aten::_softmax",
+     "device_ms": 0.4919384000000275,
+     "share": 0.004763117881498821,
+     "calls": 12.0
+    }
+   ]
+  },
+  "WV3_RR_256": {
+   "device_ms": 31.03429359999982,
+   "host_ms": 26.318190000000154,
+   "cuda_kernels_per_forward": 1030.0,
+   "top": [
+    {
+     "op": "aten::cudnn_convolution",
+     "device_ms": 9.85353329999998,
+     "share": 0.3175046748929396,
+     "calls": 107.0
+    },
+    {
+     "op": "_5x_cudnn_ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+     "device_ms": 7.805364000000023,
+     "share": 0.25150770630075076,
+     "calls": 31.0
+    },
+    {
+     "op": "aten::add_",
+     "device_ms": 1.7381075000000614,
+     "share": 0.056006027474073766,
+     "calls": 107.0
+    },
+    {
+     "op": "_ZN2at6native18elementwise_kernelILi128ELi2EZNS0_22gpu_kernel_impl_nocastINS0_15CUDAFunctor_addIfEEEEvRNS_18TensorIteratorBaseERKT_EUliE_EEviT1_",
+     "device_ms": 1.7381075000000614,
+     "share": 0.056006027474073766,
+     "calls": 107.0
+    },
+    {
+     "op": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_15CUDAFunctor_addIfEESt5arrayIPcLy3EEEEviT0_T1_",
+     "device_ms": 1.3151668999999524,
+     "share": 0.04237785840886548,
+     "calls": 70.0
+    },
+    {
+     "op": "aten::add",
+     "device_ms": 1.2449783999999717,
+     "share": 0.040116215179454864,
+     "calls": 61.0
+    },
+    {
+     "op": "_ZN5cudnn3cnn28conv2d_grouped_direct_kernelILb0ELb1ELb0ELb0ELb0ELb0ELi0ELi0EiffffffEEvNS0_24GroupedDirectFpropParamsEPKT9_PKT11_PT10_T12_SB_PKSB_SD_PKS9_PKT13_21cudnnActivationStruct",
+     "device_ms": 0.9332684000000069,
+     "share": 0.030072165070965634,
+     "calls": 24.0
+    },
+    {
+     "op": "_ZN2at6native29vectorized_elementwise_kernelILi4EZZZNS0_49_GLOBAL__N__97375e57_16_TensorCompare_cu_71e06f4e19launch_clamp_scalarERNS_18TensorIteratorBaseEN3c106ScalarES6_NS0_6detail11ClampLimitsEENKUlvE_clEvENKUlvE5_clEvEUlfE_St5arrayIPcLy2EEEEviT0_T1_",
+     "device_ms": 0.7534136000000311,
+     "share": 0.024276808414290297,
+     "calls": 72.0
+    },
+    {
+     "op": "aten::clamp_min_",
+     "device_ms": 0.6708084000000033,
+     "share": 0.02161506907958128,
+     "calls": 12.0
+    },
+    {
+     "op": "aten::copy_",
+     "device_ms": 0.5205452999999114,
+     "share": 0.01677322856802239,
+     "calls": 158.0
+    },
+    {
+     "op": "_ZN2at6native18elementwise_kernelILi128ELi2EZNS0_22gpu_kernel_impl_nocastIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE5_clEvEUlfE_EEvS4_RKT_EUliE_EEviT1_",
+     "device_ms": 0.348580399999984,
+     "share": 0.011232103572029944,
+     "calls": 50.0
+    },
+    {
+     "op": "aten::fill_",
+     "device_ms": 0.30772119999990866,
+     "share": 0.009915521325090205,
+     "calls": 216.0
+    },
+    {
+     "op": "_ZN5cudnn3cnn28conv2d_grouped_direct_kernelILb0ELb1ELb0ELb0ELb0ELb0ELi4ELi3EiffffffEEvNS0_24GroupedDirectFpropParamsEPKT9_PKT11_PT10_T12_SB_PKSB_SD_PKS9_PKT13_21cudnnActivationStruct",
+     "device_ms": 0.2963548000000177,
+     "share": 0.009549268426074935,
+     "calls": 24.0
+    },
+    {
+     "op": "_5x_cudnn_ampere_scudnn_128x64_relu_medium_nn_v1",
+     "device_ms": 0.25771429999996837,
+     "share": 0.008304178059331433,
+     "calls": 17.0
+    },
+    {
+     "op": "_5x_cudnn_ampere_scudnn_128x128_relu_interior_nn_v1",
+     "device_ms": 0.2467579000000029,
+     "share": 0.007951136351948553,
+     "calls": 2.0
+    }
+   ]
+  },
+  "WV3_FR_512": {
+   "device_ms": 117.61522999999991,
+   "host_ms": 55.03880999999987,
+   "cuda_kernels_per_forward": 1029.9,
+   "top": [
+    {
+     "op": "aten::cudnn_convolution",
+     "device_ms": 37.14812180000001,
+     "share": 0.31584448544631544,
+     "calls": 107.0
+    },
+    {
+     "op": "_5x_cudnn_ampere_scudnn_winograd_128x128_ldg1_ldg4_relu_tile148t_nt_v1",
+     "device_ms": 30.218666799999983,
+     "share": 0.2569281784340345,
+     "calls": 31.0
+    },
+    {
+     "op": "aten::add_",
+     "device_ms": 6.848748999999944,
+     "share": 0.0582301203679145,
+     "calls": 107.0
+    },
+    {
+     "op": "_ZN2at6native18elementwise_kernelILi128ELi2EZNS0_22gpu_kernel_impl_nocastINS0_15CUDAFunctor_addIfEEEEvRNS_18TensorIteratorBaseERKT_EUliE_EEviT1_",
+     "device_ms": 6.848748999999944,
+     "share": 0.0582301203679145,
+     "calls": 107.0
+    },
+    {
+     "op": "_ZN2at6native29vectorized_elementwise_kernelILi4ENS0_15CUDAFunctor_addIfEESt5arrayIPcLy3EEEEviT0_T1_",
+     "device_ms": 5.237547299999935,
+     "share": 0.04453119974343407,
+     "calls": 70.0
+    },
+    {
+     "op": "aten::add",
+     "device_ms": 4.891382799999927,
+     "share": 0.04158800522687351,
+     "calls": 61.0
+    },
+    {
+     "op": "_ZN5cudnn3cnn28conv2d_grouped_direct_kernelILb0ELb1ELb0ELb0ELb0ELb0ELi0ELi0EiffffffEEvNS0_24GroupedDirectFpropParamsEPKT9_PKT11_PT10_T12_SB_PKSB_SD_PKS9_PKT13_21cudnnActivationStruct",
+     "device_ms": 3.645245399999991,
+     "share": 0.030992970893310278,
+     "calls": 24.0
+    },
+    {
+     "op": "_ZN2at6native29vectorized_elementwise_kernelILi4EZZZNS0_49_GLOBAL__N__97375e57_16_TensorCompare_cu_71e06f4e19launch_clamp_scalarERNS_18TensorIteratorBaseEN3c106ScalarES6_NS0_6detail11ClampLimitsEENKUlvE_clEvENKUlvE5_clEvEUlfE_St5arrayIPcLy2EEEEviT0_T1_",
+     "device_ms": 2.873778900000114,
+     "share": 0.02443373107377434,
+     "calls": 72.0
+    },
+    {
+     "op": "aten::clamp_min_",
+     "device_ms": 2.6245694999999967,
+     "share": 0.022314877928649196,
+     "calls": 12.0
+    },
+    {
+     "op": "aten::copy_",
+     "device_ms": 1.5158052999998284,
+     "share": 0.012887831788449758,
+     "calls": 158.0
+    },
+    {
+     "op": "Command Buffer Full",
+     "device_ms": 1.3673054000000033,
+     "share": 0.011625241050840137,
+     "calls": 2.0
+    },
+    {
+     "op": "_ZN2at6native18elementwise_kernelILi128ELi2EZNS0_22gpu_kernel_impl_nocastIZZZNS0_23direct_copy_kernel_cudaERNS_18TensorIteratorBaseEENKUlvE1_clEvENKUlvE5_clEvEUlfE_EEvS4_RKT_EUliE_EEviT1_",
+     "device_ms": 1.2663652999998787,
+     "share": 0.010767018012887274,
+     "calls": 50.0
+    },
+    {
+     "op": "_ZN5cudnn3cnn28conv2d_grouped_direct_kernelILb0ELb1ELb0ELb0ELb0ELb0ELi4ELi3EiffffffEEvNS0_24GroupedDirectFpropParamsEPKT9_PKT11_PT10_T12_SB_PKSB_SD_PKS9_PKT13_21cudnnActivationStruct",
+     "device_ms": 1.0590122999999962,
+     "share": 0.009004040548150074,
+     "calls": 24.0
+    },
+    {
+     "op": "aten::_softmax",
+     "device_ms": 0.9851691000000173,
+     "share": 0.008376203489973349,
+     "calls": 24.0
+    },
+    {
+     "op": "_ZN2at6native43_GLOBAL__N__c5dc35cd_10_SoftMax_cu_0af7be2119cunn_SoftMaxForwardILi4EfffNS1_22SoftMaxForwardEpilogueEEEvPT2_PKT0_i",
+     "device_ms": 0.9851691000000173,
+     "share": 0.008376203489973349,
+     "calls": 24.0
+    }
+   ]
+  }
+ }
+}
