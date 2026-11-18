@@ -29,6 +29,12 @@ NOISE={1:0.06}  # docs/judgement_criteria.md v2.4: single seed 0.06 dB, two or m
 TRANSFER={'WV3':['WV2']}
 
 
+class Calibrated(C82.Calibrated):
+    """82 calibration ('scene') with its reference ratios moved to the input device (82 ran on the CPU; as 84 evaluate.py)."""
+    def forward(self,pan,lms,ms):
+        self.r_train=self.r_train.to(pan.device);return super().forward(pan,lms,ms)
+
+
 def targets(sensor):return [sensor]+TRANSFER.get(sensor,[])
 
 
@@ -38,7 +44,7 @@ def projected(cfg,net,target):return FastProjected(net,target) if cfg.get('proje
 def systems(cfg,net,sensor,target,name):
     """{name: net, name+'+P': projected} on the training sensor; on a transfer target both are wrapped in the 82 calibration first."""
     if target!=sensor:
-        ref=json.loads((HERE.parent/'82_cross_sensor_band_calibration'/'results/reference_stats'/f'{sensor}.json').read_text(encoding='utf8'));net=C82.Calibrated(net,ref,'scene')
+        ref=json.loads((HERE.parent/'82_cross_sensor_band_calibration'/'results/reference_stats'/f'{sensor}.json').read_text(encoding='utf8'));net=Calibrated(net,ref,'scene')
     return {name:net,name+'+P':projected(cfg,net,target)}
 
 
