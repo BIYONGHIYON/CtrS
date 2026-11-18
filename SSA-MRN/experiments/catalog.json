@@ -2896,15 +2896,20 @@
   "performance/85_hidden_width_reduction_fast_projection": {
     "display_name": "85. C2MS-SP 잔차 블록의 가운데 채널 축소·40에폭 미세조정과 빠른 사영 구현",
     "experimenter": "이병현",
-    "status": "계획",
-    "improvement": "판단 보류",
-    "result": "아직 학습하지 않았습니다. 목표는 C2MS-SP보다 가볍고 빠르며 RR 세 지표가 좋은 모델",
+    "status": "평가 완료",
+    "improvement": "성능 비교 아님",
+    "result": "축소 갈래 셋 모두 시간 관문 탈락(학습 안 함). 빠른 사영은 결과 동일·256² 2.2-2.9배, FT0L WV3 +0.105 dB(참고)",
     "report": "experiments/performance/85_hidden_width_reduction_fast_projection/README.md",
     "sensor": "QB, GF2, WV3 (WV2 transfer)",
-    "evaluated_seeds": [],
+    "evaluated_seeds": [
+      42
+    ],
     "retraining": true,
-    "limits": "65번 C2MS_L1S 가중치에서 backbone·W2 잔차 블록의 가운데 채널을 줄인 일반 3×3 구조(연산 51-84%)로 바꾸고 65번 손실로 40에폭 미세조정한 뒤, K10 사영을 같은 수식의 내부 저해상도 연산으로 계산해 같은 시드 C2MS-SP와 비교할 계획입니다. 0단계 사영 동일성·시간 측정, 1단계 QB·WV3 seed 42 validation 관문(FT0L 대조군 포함), 2단계 QB·GF2·WV3 3시드. 아직 학습하지 않았습니다(84번 종료 후 서버에서 자동 시작).",
+    "limits": "축소 갈래(B64W96·B32W96·B32W64)는 256² 네트워크 시간이 C2MS 대비 94-98%라 학습 전 시간 관문(0.95)을 통과하지 못했습니다. 빠른 사영은 모든 test 장면에서 지금 사영과 같았지만, cuDNN 자동 탐색을 끈 공식 설정의 512²에서는 전치 합성곱이 느려 지금 구현보다 느렸습니다. FT0L(65 + 40에폭)은 참고로 C2MS-SP 대비 QB +0.007, WV3 +0.105 dB(seed 42)입니다.",
     "config": "experiments/performance/85_hidden_width_reduction_fast_projection/config.json",
-    "entrypoint": "experiments/performance/85_hidden_width_reduction_fast_projection/run.py"
+    "entrypoint": "experiments/performance/85_hidden_width_reduction_fast_projection/run.py",
+    "results": "experiments/performance/85_hidden_width_reduction_fast_projection/results",
+    "manifest": "experiments/performance/85_hidden_width_reduction_fast_projection/manifest.json",
+    "last_checked": "2026-11-18T13:22:00+09:00"
   }
 }

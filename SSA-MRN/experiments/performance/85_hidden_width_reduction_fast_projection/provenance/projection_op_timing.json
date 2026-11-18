@@ -1,0 +1,11 @@
+{
+  "time_kst": "2026-11-18T13:30:00+09:00",
+  "script": "opdiag.py (server, GPU idle after 85 finished): FastProjector operations on random float64 inputs, batch 1, 3 warm-up + 10 timed runs, mean ms",
+  "cudnn_benchmark_false_deterministic_true": {
+    "QB 256": {"D": 0.54, "A": 0.2, "Dt": 1.3, "full": 5.76}, "QB 512": {"D": 1.08, "A": 0.33, "Dt": 388.09, "full": 394.57},
+    "WV3 256": {"D": 0.53, "A": 0.19, "Dt": 2.37, "full": 7.02}, "WV3 512": {"D": 1.57, "A": 0.46, "Dt": 775.92, "full": 784.94}},
+  "cudnn_benchmark_true_deterministic_false": {
+    "QB 256": {"D": 0.51, "A": 0.18, "Dt": 1.25, "full": 5.33}, "QB 512": {"D": 1.01, "A": 0.3, "Dt": 5.17, "full": 11.19},
+    "WV3 256": {"D": 0.51, "A": 0.18, "Dt": 2.38, "full": 6.66}, "WV3 512": {"D": 1.53, "A": 0.45, "Dt": 10.27, "full": 18.4}},
+  "finding": "the float64 stride-4 transposed convolution (D^T) at 512^2 gets a very slow cuDNN algorithm without autotune; stage 0 ran its 512^2 timing after the identity check had run with autotune on, so its 512^2 fast-projection times (67/81 ms) used autotuned algorithms, while the final official timing (452/842 ms) did not"
+}

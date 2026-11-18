@@ -1,0 +1,2186 @@
+{
+  "experiment": 85,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "C2MS-SP 잔차 블록의 가운데 채널 축소·40에폭 미세조정과 빠른 사영 구현",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "registered": "2026-11-17",
+  "hypothesis": "(1) The K10 projection computed on the interior MS grid (interior samples read no padded pixel because the 5-pixel MS margin equals the 41-tap kernel half width; M D D^T M is a 21x21 convolution) gives the same result in float64 and takes a few ms. (2) Reducing the middle channels of the residual blocks keeps plain 3x3 convolutions without extra 1x1 layers, so fewer MACs mean less GPU time (83 K1/K2 factorizations were not faster). (3) Channel selection + least-squares refit from the 65 weights and 40 epochs of fine-tuning give a model + projection better than the same-seed C2MS-SP on RR PSNR, SAM and ERGAS.",
+  "evidence": {
+    "projection_share_81": "81 seed 42 scene 0, RTX 3060 Ti: network 13.6/50.3 ms (QB 256/512), 15.7/56.0 ms (WV3); + K10 37/128 ms and 59/203 ms; the projection is 61-73% of the C2MS-SP time",
+    "lite_speed_83": "83 K2 (66% MACs) 25.0 vs 19.1 ms (256^2) and 76.0 vs 55.4 ms (512^2), 31-37% slower; K1 (86% MACs) 19.0 ms, the same as C2MS",
+    "long_finetune_83": "83 K2L (40 epochs) vs K2 (10 epochs), seed 42 test with projection: QB +0.030 dB / SAM -0.007 / ERGAS -0.012, WV3 +0.074 / -0.025 / -0.018; vs C2MS-SP QB +0.005, WV3 +0.064 dB; validation best at epochs 38 and 39",
+    "ssai_share_68": "68: SSAI is about 0.3% of the MACs; folding it did not change the time"
+  },
+  "arms": {
+    "FT0L": "65 C2MS_L1S unchanged + the same 40-epoch fine-tuning (control for the longer fine-tuning)",
+    "B64W96": "W2 branch blocks 128 -> 96 -> 128 (backbone unchanged); 49.97 GMAC (84%), 2,145,530 used parameters (4 bands)",
+    "B32W96": "backbone blocks 64 -> 32 -> 64 and W2 blocks 128 -> 96 -> 128; 40.30 GMAC (68%), 1,997,946 (73%)",
+    "B32W64": "backbone blocks 64 -> 32 -> 64 and W2 blocks 128 -> 64 -> 128; 30.64 GMAC (51%), 1,407,866 (51%)"
+  },
+  "reduction": "per block in forward order: kept channels = top contribution energy E[h_c^2]*||W_b[:,c]||^2 over 512 training patches (fixed generator, seed 0); first 3x3 keeps its rows; second 3x3 weights and bias refit by ridge least squares (1e-6 x mean diagonal) to the original block residual output, with the inputs of the already-reduced model",
+  "init_from": {
+    "QB": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt",
+    "GF2": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s<seed>/best.pt",
+    "WV3": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s<seed>/best.pt"
+  },
+  "lite": {
+    "QB": "experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_QB_s<seed>/best.pt",
+    "WV3": "experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_WV3_s<seed>/best.pt"
+  },
+  "loss": "65 loss: original per-pixel L1 + 1.0 x per-pixel L1 on 2x coarser pairs + 0.46 x spectral loss on the original pair (history fields train_mse/coarse_train_mse hold mean absolute errors)",
+  "coarse_weight": {
+    "FT0L": 1.0,
+    "B64W96": 1.0,
+    "B32W96": 1.0,
+    "B32W64": 1.0
+  },
+  "spectral_weight": {
+    "FT0L": 0.46,
+    "B64W96": 0.46,
+    "B32W96": 0.46,
+    "B32W64": 0.46
+  },
+  "ema_beta": 0.99,
+  "ema_note": "EMA recorded only (as 65); selection uses the online weights",
+  "epochs": {
+    "FT0L": 40,
+    "B64W96": 40,
+    "B32W96": 40,
+    "B32W64": 40
+  },
+  "lr_start": 5e-05,
+  "lr_end": 1e-06,
+  "schedule": "Adam lr = 1e-6 + 0.5 * (5e-5 - 1e-6) * (1 + cos(pi * zero_based_epoch / (E - 1))), E = 40; epoch 0 validation is the reduced model before any update",
+  "projection_note": "K10 (conjugate gradient stopped at 10 iterations, float64, tolerance 1e-8) with the test sensor's Wald operator; prepare.FastProjected if stage 0 finds it equal to the 79/83 projection, else 83 Projected (run.py writes runtime 'projection')",
+  "projection_identity": {
+    "tol_max_abs": 1e-08,
+    "tol_psnr_db": 1e-05,
+    "scope": "65 outputs, seeds 42-44, QB/GF2/WV3 and the WV2 transfer, every RR and FR test scene; CG iteration counts must be equal"
+  },
+  "speed_gate": {
+    "basis": "stage-0 network time without projection, official latency setting, RR 256^2 scene 0, seed 42 weights",
+    "max_ratio": 0.95,
+    "sensors": "QB and WV3 (both must pass)",
+    "network_time_ratio_vs_C2MS": {
+      "B64W96": {
+        "QB": 0.9676396908921022,
+        "WV3": 0.983672955244795
+      },
+      "B32W96": {
+        "QB": 0.9410647901334167,
+        "WV3": 0.9780165979870559
+      },
+      "B32W64": {
+        "QB": 0.9392769555578792,
+        "WV3": 0.9568493298775621
+      }
+    }
+  },
+  "latency": {
+    "setting": "one process, no training on the GPU, batch 1, test scene 0 (RR 256^2, FR 512^2), float32, TF32 off, cuDNN deterministic, autotune off, NCHW; 5 warm-up, 50 timed runs per system interleaved, 3 rounds, median of the round medians",
+    "reference": "cuDNN autotune + TF32 and FP16 autocast timings and the FP16 RR change (never a judgement)"
+  },
+  "latency_sensors": [
+    "QB",
+    "WV3"
+  ],
+  "sensors": [
+    "QB",
+    "GF2",
+    "WV3"
+  ],
+  "stage1_sensors": [
+    "QB",
+    "WV3"
+  ],
+  "transfer_tests": {
+    "WV2": "WV3-trained runs are also evaluated on WV2 with the 82 per-band calibration (reference only under v2.4)"
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "latency_seed": 42,
+  "gate": {
+    "basis": "validation only (selected weights vs the same-seed 65 checkpoint the arm started from); test is never used for the gate",
+    "val_psnr_min": 0.0,
+    "val_sam_max": 0.0,
+    "sensors": "every stage-1 sensor (QB and WV3)",
+    "order_rule": "arms passing the speed gate, shortest stage-0 network time first (filled by run.py stage0)",
+    "order": []
+  },
+  "comparisons": {
+    "official": "chosen arm + projection vs the same-seed C2MS-SP (65 + the same projection), per training sensor, 3-seed mean, v2.4 (RR only, threshold 0.04 dB); the experiment is an improvement only if QB, GF2 and WV3 all are",
+    "control": "arm vs FT0L (stage 1): the reduction without the effect of the longer fine-tuning",
+    "goals": "lighter: used parameters and MACs below C2MS-SP; faster: below C2MS-SP with the same projection implementation at QB and WV3 256^2 and 512^2; more accurate: the official judgement is an improvement"
+  },
+  "stages": {
+    "0": "no training: reduced initial weights, projection identity, latency, speed gate",
+    "1": "QB and WV3, seed 42, FT0L and the arms passing the speed gate, two trainings at once, evaluation, validation gate",
+    "2": "the chosen arm on QB and WV3 seeds 43-44 and GF2 seeds 42-44 (stage-1 runs reused)",
+    "3": "final latency with the trained weights"
+  },
+  "runtime": "C:/CtrS-p85/run",
+  "max_parallel": 2,
+  "expected_duration": "stage 0 1-2 h, stage 1 4-5 h, stage 2 about 5 h, evaluation and timing about 2 h (estimates)",
+  "limits": [
+    "QB: 83 K2L was +0.005 dB vs C2MS-SP at seed 42; QB validation gains did not reach the test before (59, 73)",
+    "the loss right after the channel reduction was not measured beforehand (no local torch)",
+    "the speed of the reduced convolutions depends on the cuDNN algorithms, hence the stage-0 speed gate"
+  ],
+  "batch": 32,
+  "micro": 32,
+  "optimizer": "Adam (beta 0.9, 0.999), no weight decay",
+  "K": 4,
+  "spatial_ratio": 4,
+  "precision": "FP16 AMP training with GradScaler; FP32 loss, validation and evaluation; channel reduction in float32 with float64 accumulation on the GPU",
+  "tf32": false,
+  "cudnn_deterministic": true,
+  "layout": "channels_last",
+  "cudnn_benchmark": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "cpu_threads": 1,
+  "normalization": {
+    "QB": 2047,
+    "GF2": 1023,
+    "WV3": 2047,
+    "WV2": 2047
+  },
+  "data_root": "C:/CtrS/PAN-MS",
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    },
+    "GF2": {
+      "train": "243a0bc8a4cc0a2740ed24409f9e87afe531d87e9d57524c6bcbec2b5f937621",
+      "val": "ae15b19ccc6ece799ebfeb3fb374b1a333238226397441e3d523b0195dff4f43",
+      "RR": "709a9a53b2e0f29d3dcd5c6ca4410c2913b62cc03c104fed6c049911dbe1c8ea",
+      "FR": "840698f9b3de181de9f665ca88e562fb7783dcd93045a136ace2110d414989ad"
+    },
+    "WV3": {
+      "train": "f9e7ec381390ff36ddffd0714df7af07a3c5f456078b219a25f3e18372228f82",
+      "val": "ba883e57408d1f3c2263cc2818a9fbbf2dbe8e62554c531288f9e8bf9f59dc87",
+      "RR": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "FR": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+    }
+  },
+  "transfer_data_sha256": {
+    "WV2": {
+      "RR": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b",
+      "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
+    }
+  },
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    },
+    "GF2": {
+      "train": 19809,
+      "val": 2201,
+      "RR": 20,
+      "FR": 20
+    },
+    "WV3": {
+      "train": 9714,
+      "val": 1080,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "scenes_note": "fixed QB scene indices reused on GF2, WV3 and WV2 (as 65/80); images for seed 42 only",
+  "cache_reference_manifest": {
+    "QB": "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json",
+    "GF2": "experiments/performance/65_l1_spectral_loss/provenance/stage3/run_records/data_manifest.json",
+    "WV3": "experiments/performance/65_l1_spectral_loss/provenance/stage3/run_records/data_manifest.json"
+  },
+  "selection": "minimum original-scale validation MSE including epoch 0 (the reduced model before fine-tuning; for FT0L the 65 weights), earliest exact tie; test never used for selection",
+  "source_hashes": {
+    "experiments/performance/85_hidden_width_reduction_fast_projection/model.py": "dc0ab1e55fd6b9eb685b1ef577c1d271d92ed900c71c0593b5849a584be2bf9a",
+    "experiments/performance/85_hidden_width_reduction_fast_projection/prepare.py": "0fdb04c5efbc6205beb03c79c5aba53d385fa7d8c59e36735da8cb9706412549",
+    "experiments/performance/85_hidden_width_reduction_fast_projection/train.py": "ad18ad5ad2bdbedbdd31a9fa2ca643d8fe7f8d27d26571e6f337786a16bf1b3c",
+    "experiments/performance/85_hidden_width_reduction_fast_projection/run.py": "326f678b5b4d0249dd54799e50c803850887010e465e1b8e0997259bb170110c",
+    "experiments/performance/85_hidden_width_reduction_fast_projection/config.json": "5d841a8dcba793db61d4ad8508bebe404919e73642b509a3287c263eef5d8d3d",
+    "experiments/performance/85_hidden_width_reduction_fast_projection/evaluate.py": "ccbbef33f3cbc4a6d09926fd202a8785705e715f18bc5a9f25437f650abc3507",
+    "experiments/performance/83_factorized_c2ms_finetuning/model.py": "dfe46a05afdcf624b910b4101cb08ee0bea111a665bc451f8236f3e42ab886d2",
+    "experiments/performance/83_factorized_c2ms_finetuning/prepare.py": "ddd9b71d3d7dc19cf1d9d40ae895f4311efc76cf6dd8466fb1f5aac91958fb5f",
+    "experiments/performance/79_deep_narrow_branch_projection/model.py": "8ac88fdead767e84bfae5cb22a230c3c53fd7afd1acecac5e7d732ff09091148",
+    "experiments/performance/79_deep_narrow_branch_projection/prepare.py": "f658efc0506affb7cc8dc76e3ae2a34b202a75f0d7cfa83766838ec0d49e6b28",
+    "experiments/performance/75_parallel_branch_width_depth/model.py": "107398906d671fccde503637eea1f9c8309b742700d542f0e458ea4ac56821f0",
+    "experiments/performance/58_spectral_loss_multi_sensor/train.py": "b5a8c3f5e2dbff854a1bbf09c8f1e1ccdd601cb6a53557f31e4e5b76b6f1b575",
+    "experiments/performance/82_cross_sensor_band_calibration/prepare.py": "ff7e7eb65b8d4c3e99e2347db0a4a61be65e5f8349026da2928bfb918dfa06f8",
+    "experiments/performance/82_cross_sensor_band_calibration/results/reference_stats/WV3.json": "0f9d4d243337f48760c6389d696250b4358802cab4246cfeda0cfbea91635a91",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/train.py": "55c150b067788191664e5f72885e065b1a222fcaeb0fe97a6b13050dc08a7dc5",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/evaluate.py": "e7e60ab17aea8d55f9d1d92fc57c1bd166e50f44d936b1d29c190c25ed818a7a",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/config.json": "821c9038a3c6fa296d96176074b3d91c86a9df3d5a9ffd115eb727de310546e4",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16",
+    "common/result_images.py": "5f07d9d3cf69f7850215d40dfd70fe8576ae4403e801f5e49ca30aeb49a2ce4e",
+    "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json": "5eff51d1aab2a971d850296817ec91de3fcc0560086d75969a11035e04f3d5ad",
+    "experiments/performance/65_l1_spectral_loss/provenance/stage3/run_records/data_manifest.json": "9d62325a7dac32f67f766af12869643e2974250e562ce7afc1909556eb723751",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s42/best.pt": "0175151f6306b275966858cbef6b66b5c9b7345ecdc581e6383a03ad09cbabbb",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s43/best.pt": "7bc31dd8bdb7f317d5678e400e7b5666628f15a3f526f6f328b2e27986bf881d",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s44/best.pt": "37870674c7922fc5285e7539be426be097c6caef8f52af78dd2779a24ba631e7",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s42/best.pt": "e33c04fb8b06cd1284b2d58b5d57933586a3e470ea51d0fee7e97a66da60ae31",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s43/best.pt": "f1de5fcecce3962bfb341223cafdf3b1f40e2f7ecd327b3f63041076370d4bb2",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s44/best.pt": "7ba8708acc158c9603b0bccc2a8007e705b45a24a43fddb0b94e147ff42d2deb",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s42/best.pt": "d9d9d8c67bca9f48f8e6027825041f76a8c5a7e987a26a68287e34fcbd351541",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s43/best.pt": "1f519ebbc6fe22c361763cb2d0fbec9f717b1b5745a42ff5d429c6fb43a1e5bf",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s44/best.pt": "c8f8f379c25be38fa16e0030d3e3ed2cecdb3c3a8dc00dca9a1bf3fe7a439292",
+    "experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_QB_s42/best.pt": "d831b52dcf5ce9ea1fbab10f5f5da746437c1af31e286d19ac6f68a1614573d0",
+    "experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_WV3_s42/best.pt": "e209eb2b959a7894b79904d2eee126de778f7caa4e858911af86b3c2668d5255"
+  },
+  "created_kst": "2026-11-18T04:23:54.772122+09:00",
+  "coarse_cache_equal_to_reference": {
+    "QB_train_coarse_pan": true,
+    "QB_train_coarse_lms": true,
+    "QB_train_coarse_ms": true,
+    "QB_train_coarse_gt": true,
+    "QB_val_coarse_pan": true,
+    "QB_val_coarse_lms": true,
+    "QB_val_coarse_ms": true,
+    "QB_val_coarse_gt": true,
+    "GF2_train_coarse_pan": true,
+    "GF2_train_coarse_lms": true,
+    "GF2_train_coarse_ms": true,
+    "GF2_train_coarse_gt": true,
+    "GF2_val_coarse_pan": true,
+    "GF2_val_coarse_lms": true,
+    "GF2_val_coarse_ms": true,
+    "GF2_val_coarse_gt": true,
+    "WV3_train_coarse_pan": true,
+    "WV3_train_coarse_lms": true,
+    "WV3_train_coarse_ms": true,
+    "WV3_train_coarse_gt": true,
+    "WV3_val_coarse_pan": true,
+    "WV3_val_coarse_lms": true,
+    "WV3_val_coarse_ms": true,
+    "WV3_val_coarse_gt": true
+  },
+  "cache_manifest_sha256": "884a433635285ccd76052c9400b1aec41a987ca10013436e0a4d4bd1d2c6bb59",
+  "init_sha256": {
+    "QB_FT0L_s42": "dc4c6965c901be00be42acfe67b1e60efaf6abbee1611291017fdd69420c308a",
+    "QB_B64W96_s42": "7f1af709e4b4035989fec5e41c54ba6dcda9922822b26375dba5a5f624314c3f",
+    "QB_B32W96_s42": "a052dbf8c741ab09401237f656b85395e5e86f536b41f04cc4d679e286348383",
+    "QB_B32W64_s42": "8ddd093bebc511d1e11749ec18de6128d13c1b70c6ae1b69c4fc622ac59a8f4d",
+    "QB_FT0L_s43": "4472a1a0d3200f9553e6720b89755d86dfc230c2247db37126ba8304ad916200",
+    "QB_B64W96_s43": "b003ce040f4dcf1728255754fa8c5d9489c863e8029f20c2ce0518cae073c3fd",
+    "QB_B32W96_s43": "7f0cdda126b476ba7384862bbc798adfd74f0a7d5ccd73679ebbb865b8b8e152",
+    "QB_B32W64_s43": "9cf457047269b47d4ab7f510cdaed8f23455b4ac8eea1c4e0566a79ff841070c",
+    "QB_FT0L_s44": "94ffd8567e7a7f71d512e2393c6098a31406f934ec1939ac2626de48bd8b9d9b",
+    "QB_B64W96_s44": "0f9e1fa622b89cd62321f84a1c2fe80364c9a91041c43ffed9112e550147498b",
+    "QB_B32W96_s44": "dee1189a87dd8bd4cbdd96cfa2b7fe5adcdfd7e2096700ad84393c0f4d4fbc1a",
+    "QB_B32W64_s44": "ddd0b930a50c086cdda71316a60830dbb156cf22049785adb9618b9e7dd9a710",
+    "GF2_FT0L_s42": "970fbc0ee847387ae778a2d05f51ab6e42ff6fbe70235cb9811c58547bf6a812",
+    "GF2_B64W96_s42": "dccc2b62ee50a7aa9f3b80947baa6da262be350a3d6e554b516de67b2a4f6f32",
+    "GF2_B32W96_s42": "806db93db3086233faa085a8032271a97f29815adc614da09fb62dbdfdadad16",
+    "GF2_B32W64_s42": "d3cbabc6c35f12b761f7b04378a41a8c3503f320d3e2ce67a18bb782ffd6f269",
+    "GF2_FT0L_s43": "ee8a756d242ac183a18dd0a60453d64f4e2866e324cde42c33f5b7ba3e9b087f",
+    "GF2_B64W96_s43": "57d29c57e0ec65c13764456531e6cbf78f697d8c9040f1d872c634803ad07dd1",
+    "GF2_B32W96_s43": "ea5cad35993d2a78dbc7691271ed6a810a2e5a85083b4373b203c08c59940224",
+    "GF2_B32W64_s43": "658d9a0b94f93f08d94a5d6303409566902c459b001bab0847c974bcf5a4f83b",
+    "GF2_FT0L_s44": "38e0407d3a5703a65a160931b049601c5fd57de92a25b39bcb9d4f0ddf8e1a58",
+    "GF2_B64W96_s44": "8cb14bf1e6238b71bbdabacf6f6c51f4b330f2ae33463e694b9b2db256525f0b",
+    "GF2_B32W96_s44": "d122147294b51afd5d6c058d0447bcca68d3410a5e30639944a18117c87dc9a9",
+    "GF2_B32W64_s44": "c1052b0b0e5cfdca21dd0505c29d19a23473a4f85add115eb2d399c774e1b638",
+    "WV3_FT0L_s42": "7421476ebeab420194787c0ea2033d7fb2a3f51ceb1a07a89b723c1a62569ccb",
+    "WV3_B64W96_s42": "fc4084d3c8ead01959345eab31b90bb3da83392fe29c5e84d4c25a846b0a2081",
+    "WV3_B32W96_s42": "8f0520907cb02ab6812b20c1ea3e13406f358a1f6987e6a749628f98cfe4a834",
+    "WV3_B32W64_s42": "263a80932c50dff2ba340a048bd901a63da95f879d270bb2e88ebd780be42c88",
+    "WV3_FT0L_s43": "dbb328977b5a690945bc5eed05f704f7aadbfbcb2633cc6615821e0908b20a1d",
+    "WV3_B64W96_s43": "1b7d7229aa1e615b8d20655b1231884aa95a89e49a7fff82dfe6b3cfa5b4da93",
+    "WV3_B32W96_s43": "3155e62d696da801d03e365e7d9f48e5f9618f197e738a8203bb0ef41e64b622",
+    "WV3_B32W64_s43": "871b85b0254553777663559ea6df2d69568b4b7036ef692818291b378a910f35",
+    "WV3_FT0L_s44": "f9a2f42793ec1e6baace4dd15a7b8054e13281017722da41a7f64250da8f781f",
+    "WV3_B64W96_s44": "bcb44d38d77e824832289b0b6e1ab52c414fbc97a62e965da1c5676d2f5edbb1",
+    "WV3_B32W96_s44": "a2e7d4f2ec7427431e01f2852db39362bd31fcd0eec28a93413f7dc2a5083aa9",
+    "WV3_B32W64_s44": "51a177be12b54f86da7d249c1728f89ba476a92385b41a7ffb12ff39550c16ba"
+  },
+  "reduction_report": {
+    "QB_FT0L_s42": {},
+    "QB_B64W96_s42": {
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.919568836280494,
+        "relative_residual_error": 0.010566504315706634
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8941272825026974,
+        "relative_residual_error": 0.017573244236722612
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.889491890159369,
+        "relative_residual_error": 0.02773552675862864
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8900378972146971,
+        "relative_residual_error": 0.03239578455381074
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9144868700814094,
+        "relative_residual_error": 0.023600422847983245
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.943340155768129,
+        "relative_residual_error": 0.015833714612867856
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.960389210159612,
+        "relative_residual_error": 0.014710113470610787
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.96426600927995,
+        "relative_residual_error": 0.010223424170220497
+      }
+    },
+    "QB_B32W96_s42": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.9208480884292314,
+        "relative_residual_error": 0.0003722980758491546
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8734568409853624,
+        "relative_residual_error": 0.00231079177177278
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8646836758404379,
+        "relative_residual_error": 0.002659583178167692
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8672194013277807,
+        "relative_residual_error": 0.003150007410466871
+      },
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.919568836280494,
+        "relative_residual_error": 0.010566504315706634
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8941272825026974,
+        "relative_residual_error": 0.017573244236722612
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.889491890159369,
+        "relative_residual_error": 0.02773552675862864
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8900378972146971,
+        "relative_residual_error": 0.03239578455381074
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9144868700814094,
+        "relative_residual_error": 0.023600422847983245
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.943340155768129,
+        "relative_residual_error": 0.015833714612867856
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.960389210159612,
+        "relative_residual_error": 0.014710113470610787
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.96426600927995,
+        "relative_residual_error": 0.010223424170220497
+      }
+    },
+    "QB_B32W64_s42": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.9208480884292314,
+        "relative_residual_error": 0.0003722980758491546
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8734568409853624,
+        "relative_residual_error": 0.00231079177177278
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8646836758404379,
+        "relative_residual_error": 0.002659583178167692
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8672194013277807,
+        "relative_residual_error": 0.003150007410466871
+      },
+      "w2_2": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7701600642315921,
+        "relative_residual_error": 0.02768394823494113
+      },
+      "w2_3": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7409082085911288,
+        "relative_residual_error": 0.05415443571136465
+      },
+      "w2_4": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7322348950940858,
+        "relative_residual_error": 0.07083359806633688
+      },
+      "w2_5": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7087107929711289,
+        "relative_residual_error": 0.07823584334939448
+      },
+      "w2_6": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7474073259283468,
+        "relative_residual_error": 0.051977880760413826
+      },
+      "w2_7": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8148385469209917,
+        "relative_residual_error": 0.040181155085271175
+      },
+      "w2_8": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8652377225965879,
+        "relative_residual_error": 0.037386134389575366
+      },
+      "w2_9": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8939895127618475,
+        "relative_residual_error": 0.025985983450784057
+      }
+    },
+    "QB_FT0L_s43": {},
+    "QB_B64W96_s43": {
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9172769260683089,
+        "relative_residual_error": 0.008395710239344295
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8917196478389757,
+        "relative_residual_error": 0.026155021331469592
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8760829019137694,
+        "relative_residual_error": 0.038144459546699476
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8859430146164105,
+        "relative_residual_error": 0.03187582761984409
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9178280422952559,
+        "relative_residual_error": 0.025023305699916662
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9370595090387441,
+        "relative_residual_error": 0.016602927537303455
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.967827389464362,
+        "relative_residual_error": 0.011477971640202825
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9605057343480219,
+        "relative_residual_error": 0.01347279399183076
+      }
+    },
+    "QB_B32W96_s43": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.922576916969462,
+        "relative_residual_error": 0.001371147736212279
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.7870636962567541,
+        "relative_residual_error": 0.0021507834076304852
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.787280753347719,
+        "relative_residual_error": 0.004332984095156876
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8351320128853937,
+        "relative_residual_error": 0.00466907259604435
+      },
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9172769260683089,
+        "relative_residual_error": 0.008395710239344295
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8917196478389757,
+        "relative_residual_error": 0.026155021331469592
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8760829019137694,
+        "relative_residual_error": 0.038144459546699476
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8859430146164105,
+        "relative_residual_error": 0.03187582761984409
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9178280422952559,
+        "relative_residual_error": 0.025023305699916662
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9370595090387441,
+        "relative_residual_error": 0.016602927537303455
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.967827389464362,
+        "relative_residual_error": 0.011477971640202825
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9605057343480219,
+        "relative_residual_error": 0.01347279399183076
+      }
+    },
+    "QB_B32W64_s43": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.922576916969462,
+        "relative_residual_error": 0.001371147736212279
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.7870636962567541,
+        "relative_residual_error": 0.0021507834076304852
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.787280753347719,
+        "relative_residual_error": 0.004332984095156876
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8351320128853937,
+        "relative_residual_error": 0.00466907259604435
+      },
+      "w2_2": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7785265294216653,
+        "relative_residual_error": 0.023441849927417033
+      },
+      "w2_3": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7183534178195866,
+        "relative_residual_error": 0.0714418611172408
+      },
+      "w2_4": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.6984092157282334,
+        "relative_residual_error": 0.09140222752460014
+      },
+      "w2_5": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7054501699902123,
+        "relative_residual_error": 0.09376930166956345
+      },
+      "w2_6": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7525327066155787,
+        "relative_residual_error": 0.056866683230919556
+      },
+      "w2_7": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7711459870480435,
+        "relative_residual_error": 0.04243092148084163
+      },
+      "w2_8": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8736663972428067,
+        "relative_residual_error": 0.03218193852089676
+      },
+      "w2_9": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8703984595594102,
+        "relative_residual_error": 0.03414654174424157
+      }
+    },
+    "QB_FT0L_s44": {},
+    "QB_B64W96_s44": {
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9271704817798662,
+        "relative_residual_error": 0.008491512126723912
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8883077955540342,
+        "relative_residual_error": 0.035899167607273914
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8920514975219137,
+        "relative_residual_error": 0.02827286338753232
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9141066913286855,
+        "relative_residual_error": 0.024596857700298774
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.929273926517859,
+        "relative_residual_error": 0.0197318819336159
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9444036982840193,
+        "relative_residual_error": 0.013512145031271464
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9709150330441771,
+        "relative_residual_error": 0.012670993835540028
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9555356992350958,
+        "relative_residual_error": 0.014500196661986216
+      }
+    },
+    "QB_B32W96_s44": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.9446658215624056,
+        "relative_residual_error": 0.0008733466813994156
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.922521965912459,
+        "relative_residual_error": 0.0029792444291281894
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8539676507779866,
+        "relative_residual_error": 0.0036297837396657854
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.887004111755466,
+        "relative_residual_error": 0.003451664340449205
+      },
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9271704817798662,
+        "relative_residual_error": 0.008491512126723912
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8883077955540342,
+        "relative_residual_error": 0.035899167607273914
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8920514975219137,
+        "relative_residual_error": 0.02827286338753232
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9141066913286855,
+        "relative_residual_error": 0.024596857700298774
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.929273926517859,
+        "relative_residual_error": 0.0197318819336159
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9444036982840193,
+        "relative_residual_error": 0.013512145031271464
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9709150330441771,
+        "relative_residual_error": 0.012670993835540028
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9555356992350958,
+        "relative_residual_error": 0.014500196661986216
+      }
+    },
+    "QB_B32W64_s44": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.9446658215624056,
+        "relative_residual_error": 0.0008733466813994156
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.922521965912459,
+        "relative_residual_error": 0.0029792444291281894
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8539676507779866,
+        "relative_residual_error": 0.0036297837396657854
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.887004111755466,
+        "relative_residual_error": 0.003451664340449205
+      },
+      "w2_2": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7813446649245637,
+        "relative_residual_error": 0.02469604329702752
+      },
+      "w2_3": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7139033060849272,
+        "relative_residual_error": 0.08948041159006213
+      },
+      "w2_4": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7212791450397413,
+        "relative_residual_error": 0.0733751477572798
+      },
+      "w2_5": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.758039204512454,
+        "relative_residual_error": 0.06029037813439922
+      },
+      "w2_6": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7774109824429113,
+        "relative_residual_error": 0.04691888764833058
+      },
+      "w2_7": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8134582885685744,
+        "relative_residual_error": 0.03233130629523886
+      },
+      "w2_8": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8954235270293565,
+        "relative_residual_error": 0.03493417309605621
+      },
+      "w2_9": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8551923777012728,
+        "relative_residual_error": 0.03384317009568816
+      }
+    },
+    "GF2_FT0L_s42": {},
+    "GF2_B64W96_s42": {
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9436655221448292,
+        "relative_residual_error": 0.012707596648495783
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8916276947953402,
+        "relative_residual_error": 0.024818774661864284
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8964568673255511,
+        "relative_residual_error": 0.031553039902059786
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9057954211086586,
+        "relative_residual_error": 0.037280901064541135
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9376867410234566,
+        "relative_residual_error": 0.02642294831793851
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.958854287580414,
+        "relative_residual_error": 0.012243520638088368
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9795541594550701,
+        "relative_residual_error": 0.009321723434574308
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.972104846180934,
+        "relative_residual_error": 0.009729364507051705
+      }
+    },
+    "GF2_B32W96_s42": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.9416386003506352,
+        "relative_residual_error": 0.00024412578061483247
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8776229175884529,
+        "relative_residual_error": 0.000917398515192084
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.9224654210431956,
+        "relative_residual_error": 0.0010876302242862838
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.9126661711534443,
+        "relative_residual_error": 0.0023899140164538677
+      },
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9436655221448292,
+        "relative_residual_error": 0.012707596648495783
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8916276947953402,
+        "relative_residual_error": 0.024818774661864284
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8964568673255511,
+        "relative_residual_error": 0.031553039902059786
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9057954211086586,
+        "relative_residual_error": 0.037280901064541135
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9376867410234566,
+        "relative_residual_error": 0.02642294831793851
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.958854287580414,
+        "relative_residual_error": 0.012243520638088368
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9795541594550701,
+        "relative_residual_error": 0.009321723434574308
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.972104846180934,
+        "relative_residual_error": 0.009729364507051705
+      }
+    },
+    "GF2_B32W64_s42": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.9416386003506352,
+        "relative_residual_error": 0.00024412578061483247
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8776229175884529,
+        "relative_residual_error": 0.000917398515192084
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.9224654210431956,
+        "relative_residual_error": 0.0010876302242862838
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.9126661711534443,
+        "relative_residual_error": 0.0023899140164538677
+      },
+      "w2_2": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7720926997278689,
+        "relative_residual_error": 0.02862487302779265
+      },
+      "w2_3": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7104502774925197,
+        "relative_residual_error": 0.06236944712868975
+      },
+      "w2_4": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7198153186056521,
+        "relative_residual_error": 0.08157159544900539
+      },
+      "w2_5": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7278837044494486,
+        "relative_residual_error": 0.09030669544633577
+      },
+      "w2_6": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.814263988114538,
+        "relative_residual_error": 0.07404373859249878
+      },
+      "w2_7": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.88575591688361,
+        "relative_residual_error": 0.031802361560824076
+      },
+      "w2_8": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.9567374418644106,
+        "relative_residual_error": 0.015384171390636234
+      },
+      "w2_9": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.922844788404413,
+        "relative_residual_error": 0.01563040252668895
+      }
+    },
+    "GF2_FT0L_s43": {},
+    "GF2_B64W96_s43": {
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9233612457920166,
+        "relative_residual_error": 0.008875583030398676
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.886276290721174,
+        "relative_residual_error": 0.027344210769607927
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9112834575667262,
+        "relative_residual_error": 0.02983247162760182
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9056517427492982,
+        "relative_residual_error": 0.038512018511028125
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9327143628330277,
+        "relative_residual_error": 0.026087060313821162
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.970443204016074,
+        "relative_residual_error": 0.010116717221508387
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9635084711808166,
+        "relative_residual_error": 0.013196275184320512
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9727003325008248,
+        "relative_residual_error": 0.00703596144731221
+      }
+    },
+    "GF2_B32W96_s43": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.9337274692155626,
+        "relative_residual_error": 0.000488951620279547
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8479422715510898,
+        "relative_residual_error": 0.0019247794248131085
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.7912886166918673,
+        "relative_residual_error": 0.0044050054579102774
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.88689753644615,
+        "relative_residual_error": 0.002855337924081902
+      },
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9233612457920166,
+        "relative_residual_error": 0.008875583030398676
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.886276290721174,
+        "relative_residual_error": 0.027344210769607927
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9112834575667262,
+        "relative_residual_error": 0.02983247162760182
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9056517427492982,
+        "relative_residual_error": 0.038512018511028125
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9327143628330277,
+        "relative_residual_error": 0.026087060313821162
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.970443204016074,
+        "relative_residual_error": 0.010116717221508387
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9635084711808166,
+        "relative_residual_error": 0.013196275184320512
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9727003325008248,
+        "relative_residual_error": 0.00703596144731221
+      }
+    },
+    "GF2_B32W64_s43": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.9337274692155626,
+        "relative_residual_error": 0.000488951620279547
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8479422715510898,
+        "relative_residual_error": 0.0019247794248131085
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.7912886166918673,
+        "relative_residual_error": 0.0044050054579102774
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.88689753644615,
+        "relative_residual_error": 0.002855337924081902
+      },
+      "w2_2": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7583235595848055,
+        "relative_residual_error": 0.029387530511949696
+      },
+      "w2_3": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7030439247315264,
+        "relative_residual_error": 0.07393921940541923
+      },
+      "w2_4": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7610966881734728,
+        "relative_residual_error": 0.07411078337888809
+      },
+      "w2_5": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7438669841998301,
+        "relative_residual_error": 0.0950158115991223
+      },
+      "w2_6": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.795749247322227,
+        "relative_residual_error": 0.06216426496984697
+      },
+      "w2_7": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.9087817509050061,
+        "relative_residual_error": 0.019711777650025106
+      },
+      "w2_8": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8923954531387039,
+        "relative_residual_error": 0.024686657511159126
+      },
+      "w2_9": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8812379374383614,
+        "relative_residual_error": 0.021189107891418184
+      }
+    },
+    "GF2_FT0L_s44": {},
+    "GF2_B64W96_s44": {
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9406280773336438,
+        "relative_residual_error": 0.011761154062390155
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9080656738481572,
+        "relative_residual_error": 0.028022463434571883
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.90294937454218,
+        "relative_residual_error": 0.04048543768761563
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9104172357141825,
+        "relative_residual_error": 0.038692794705478956
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9393355925234319,
+        "relative_residual_error": 0.020329473457404715
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9832507754490966,
+        "relative_residual_error": 0.008737598599873173
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9606793668611348,
+        "relative_residual_error": 0.013196760985660817
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9553689772072733,
+        "relative_residual_error": 0.014980107133242358
+      }
+    },
+    "GF2_B32W96_s44": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.9003326423750957,
+        "relative_residual_error": 0.0005147218096601124
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8670174602384705,
+        "relative_residual_error": 0.0022196321606158644
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8756350567668358,
+        "relative_residual_error": 0.002395089982359112
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8758668187425079,
+        "relative_residual_error": 0.002368260907715641
+      },
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9406280773336438,
+        "relative_residual_error": 0.011761154062390155
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9080656738481572,
+        "relative_residual_error": 0.028022463434571883
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.90294937454218,
+        "relative_residual_error": 0.04048543768761563
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9104172357141825,
+        "relative_residual_error": 0.038692794705478956
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9393355925234319,
+        "relative_residual_error": 0.020329473457404715
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9832507754490966,
+        "relative_residual_error": 0.008737598599873173
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9606793668611348,
+        "relative_residual_error": 0.013196760985660817
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9553689772072733,
+        "relative_residual_error": 0.014980107133242358
+      }
+    },
+    "GF2_B32W64_s44": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.9003326423750957,
+        "relative_residual_error": 0.0005147218096601124
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8670174602384705,
+        "relative_residual_error": 0.0022196321606158644
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8756350567668358,
+        "relative_residual_error": 0.002395089982359112
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8758668187425079,
+        "relative_residual_error": 0.002368260907715641
+      },
+      "w2_2": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.777017126179879,
+        "relative_residual_error": 0.02856248621095336
+      },
+      "w2_3": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7418145345211363,
+        "relative_residual_error": 0.07987330116119679
+      },
+      "w2_4": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7254243558663026,
+        "relative_residual_error": 0.0878637798015359
+      },
+      "w2_5": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7624793092488873,
+        "relative_residual_error": 0.09839327638666277
+      },
+      "w2_6": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8238445264037386,
+        "relative_residual_error": 0.05198090100758651
+      },
+      "w2_7": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.9491527574889754,
+        "relative_residual_error": 0.022203023437167655
+      },
+      "w2_8": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8958425520034934,
+        "relative_residual_error": 0.030454160542658797
+      },
+      "w2_9": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.862125071867453,
+        "relative_residual_error": 0.0349937364163824
+      }
+    },
+    "WV3_FT0L_s42": {},
+    "WV3_B64W96_s42": {
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9260994509650292,
+        "relative_residual_error": 0.010715917934814748
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8725266791768115,
+        "relative_residual_error": 0.02001995527219593
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.883587089926319,
+        "relative_residual_error": 0.014954432504336335
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9001940274533475,
+        "relative_residual_error": 0.014399074673961025
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9237347409184357,
+        "relative_residual_error": 0.010946134380660848
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9513825318304306,
+        "relative_residual_error": 0.005165936129623198
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9680400382859322,
+        "relative_residual_error": 0.006745267162775929
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9299507376125835,
+        "relative_residual_error": 0.008035145536410633
+      }
+    },
+    "WV3_B32W96_s42": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.885156401180528,
+        "relative_residual_error": 0.004182498116856974
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8519164546255206,
+        "relative_residual_error": 0.0012631361306731472
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8104866045679653,
+        "relative_residual_error": 0.003170670772541003
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8672042898591986,
+        "relative_residual_error": 0.004925908618560502
+      },
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9260994509650292,
+        "relative_residual_error": 0.010715917934814748
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.8725266791768115,
+        "relative_residual_error": 0.02001995527219593
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.883587089926319,
+        "relative_residual_error": 0.014954432504336335
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9001940274533475,
+        "relative_residual_error": 0.014399074673961025
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9237347409184357,
+        "relative_residual_error": 0.010946134380660848
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9513825318304306,
+        "relative_residual_error": 0.005165936129623198
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9680400382859322,
+        "relative_residual_error": 0.006745267162775929
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9299507376125835,
+        "relative_residual_error": 0.008035145536410633
+      }
+    },
+    "WV3_B32W64_s42": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.885156401180528,
+        "relative_residual_error": 0.004182498116856974
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8519164546255206,
+        "relative_residual_error": 0.0012631361306731472
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8104866045679653,
+        "relative_residual_error": 0.003170670772541003
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8672042898591986,
+        "relative_residual_error": 0.004925908618560502
+      },
+      "w2_2": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7830153763687053,
+        "relative_residual_error": 0.028224906567372022
+      },
+      "w2_3": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.6828224401483552,
+        "relative_residual_error": 0.04688960386963757
+      },
+      "w2_4": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.6908438764186006,
+        "relative_residual_error": 0.04568609614790029
+      },
+      "w2_5": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7310881821289482,
+        "relative_residual_error": 0.03946888628435864
+      },
+      "w2_6": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7874589279444614,
+        "relative_residual_error": 0.02794053243450717
+      },
+      "w2_7": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8403378221532007,
+        "relative_residual_error": 0.014437322088184443
+      },
+      "w2_8": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8915860026196485,
+        "relative_residual_error": 0.01676654749220953
+      },
+      "w2_9": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7919016432434166,
+        "relative_residual_error": 0.02176019639358777
+      }
+    },
+    "WV3_FT0L_s43": {},
+    "WV3_B64W96_s43": {
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9174776092629909,
+        "relative_residual_error": 0.00968935295539284
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9125416935209132,
+        "relative_residual_error": 0.017944090003199537
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.905954130280774,
+        "relative_residual_error": 0.016628371099573557
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9242070793869117,
+        "relative_residual_error": 0.014072320456343133
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.937159257490452,
+        "relative_residual_error": 0.010563410491565565
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.943313883079359,
+        "relative_residual_error": 0.004964098563935144
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9645301540608853,
+        "relative_residual_error": 0.00545541680253349
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9392397468753109,
+        "relative_residual_error": 0.007242675984300714
+      }
+    },
+    "WV3_B32W96_s43": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8812358967554945,
+        "relative_residual_error": 0.0018498590072087537
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8119859122024045,
+        "relative_residual_error": 0.005566204227818432
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.7891007035922888,
+        "relative_residual_error": 0.004672244771667749
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8140496444091523,
+        "relative_residual_error": 0.006817920605081057
+      },
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9174776092629909,
+        "relative_residual_error": 0.00968935295539284
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9125416935209132,
+        "relative_residual_error": 0.017944090003199537
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.905954130280774,
+        "relative_residual_error": 0.016628371099573557
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9242070793869117,
+        "relative_residual_error": 0.014072320456343133
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.937159257490452,
+        "relative_residual_error": 0.010563410491565565
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.943313883079359,
+        "relative_residual_error": 0.004964098563935144
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9645301540608853,
+        "relative_residual_error": 0.00545541680253349
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9392397468753109,
+        "relative_residual_error": 0.007242675984300714
+      }
+    },
+    "WV3_B32W64_s43": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8812358967554945,
+        "relative_residual_error": 0.0018498590072087537
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8119859122024045,
+        "relative_residual_error": 0.005566204227818432
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.7891007035922888,
+        "relative_residual_error": 0.004672244771667749
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8140496444091523,
+        "relative_residual_error": 0.006817920605081057
+      },
+      "w2_2": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7525380891861057,
+        "relative_residual_error": 0.0301992649502321
+      },
+      "w2_3": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7604709168119802,
+        "relative_residual_error": 0.046323353643482904
+      },
+      "w2_4": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7479088186213941,
+        "relative_residual_error": 0.04014654517307374
+      },
+      "w2_5": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7901813860094566,
+        "relative_residual_error": 0.0403981298282273
+      },
+      "w2_6": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7891846931053419,
+        "relative_residual_error": 0.03254810525476125
+      },
+      "w2_7": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.817329993527,
+        "relative_residual_error": 0.014340053607462886
+      },
+      "w2_8": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8690993922413179,
+        "relative_residual_error": 0.01556750404335357
+      },
+      "w2_9": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8120027725548433,
+        "relative_residual_error": 0.01947943883610827
+      }
+    },
+    "WV3_FT0L_s44": {},
+    "WV3_B64W96_s44": {
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9264830942938763,
+        "relative_residual_error": 0.009960739660021914
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9180248716048558,
+        "relative_residual_error": 0.017993741724153533
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9031790369344737,
+        "relative_residual_error": 0.012329964607132968
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9101885018674806,
+        "relative_residual_error": 0.011599038973694277
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9471441181589136,
+        "relative_residual_error": 0.010854719224906198
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9500852334847563,
+        "relative_residual_error": 0.005960756274266111
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9586206236074264,
+        "relative_residual_error": 0.005364434428942143
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9403353219887566,
+        "relative_residual_error": 0.007186021174430564
+      }
+    },
+    "WV3_B32W96_s44": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.882650263845738,
+        "relative_residual_error": 0.004514004394167389
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8446908829413898,
+        "relative_residual_error": 0.0020582647767342518
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8292568604308911,
+        "relative_residual_error": 0.004584304925841592
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8312243577935434,
+        "relative_residual_error": 0.006401930880598248
+      },
+      "w2_2": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9264830942938763,
+        "relative_residual_error": 0.009960739660021914
+      },
+      "w2_3": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9180248716048558,
+        "relative_residual_error": 0.017993741724153533
+      },
+      "w2_4": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9031790369344737,
+        "relative_residual_error": 0.012329964607132968
+      },
+      "w2_5": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9101885018674806,
+        "relative_residual_error": 0.011599038973694277
+      },
+      "w2_6": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9471441181589136,
+        "relative_residual_error": 0.010854719224906198
+      },
+      "w2_7": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9500852334847563,
+        "relative_residual_error": 0.005960756274266111
+      },
+      "w2_8": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9586206236074264,
+        "relative_residual_error": 0.005364434428942143
+      },
+      "w2_9": {
+        "kept": 96,
+        "of": 128,
+        "energy_kept": 0.9403353219887566,
+        "relative_residual_error": 0.007186021174430564
+      }
+    },
+    "WV3_B32W64_s44": {
+      "bb0": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.882650263845738,
+        "relative_residual_error": 0.004514004394167389
+      },
+      "bb1": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8446908829413898,
+        "relative_residual_error": 0.0020582647767342518
+      },
+      "bb2": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8292568604308911,
+        "relative_residual_error": 0.004584304925841592
+      },
+      "bb3": {
+        "kept": 32,
+        "of": 64,
+        "energy_kept": 0.8312243577935434,
+        "relative_residual_error": 0.006401930880598248
+      },
+      "w2_2": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7564421200396427,
+        "relative_residual_error": 0.02802975166914237
+      },
+      "w2_3": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7665745840360969,
+        "relative_residual_error": 0.05518494005770843
+      },
+      "w2_4": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7395850038485305,
+        "relative_residual_error": 0.034858696748096614
+      },
+      "w2_5": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.7352251712396047,
+        "relative_residual_error": 0.029467264870776447
+      },
+      "w2_6": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8360925087686633,
+        "relative_residual_error": 0.025558633966591533
+      },
+      "w2_7": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8354378680314452,
+        "relative_residual_error": 0.015471654597581137
+      },
+      "w2_8": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.8476660865083403,
+        "relative_residual_error": 0.014028885536263662
+      },
+      "w2_9": {
+        "kept": 64,
+        "of": 128,
+        "energy_kept": 0.802378784471431,
+        "relative_residual_error": 0.019515594428899614
+      }
+    }
+  },
+  "projection": "fast",
+  "trained_arms": [
+    "FT0L"
+  ],
+  "conv_gmac_256": {
+    "QB": {
+      "FT0L": 59.632058368,
+      "B64W96": 49.968381952,
+      "B32W96": 40.304705536,
+      "B32W64": 30.64102912,
+      "C2MS": 59.632058368
+    },
+    "GF2": {
+      "FT0L": 59.632058368,
+      "B64W96": 49.968381952,
+      "B32W96": 40.304705536,
+      "B32W64": 30.64102912,
+      "C2MS": 59.632058368
+    },
+    "WV3": {
+      "FT0L": 60.3799552,
+      "B64W96": 50.716278784,
+      "B32W96": 41.052602368,
+      "B32W64": 31.388925952,
+      "C2MS": 60.3799552
+    }
+  },
+  "used_parameters": {
+    "QB": {
+      "FT0L": 2735610,
+      "B64W96": 2145530,
+      "B32W96": 1997946,
+      "B32W64": 1407866,
+      "C2MS": 2735610
+    },
+    "GF2": {
+      "FT0L": 2735610,
+      "B64W96": 2145530,
+      "B32W96": 1997946,
+      "B32W64": 1407866,
+      "C2MS": 2735610
+    },
+    "WV3": {
+      "FT0L": 2755942,
+      "B64W96": 2165862,
+      "B32W96": 2018278,
+      "B32W64": 1428198,
+      "C2MS": 2755942
+    }
+  },
+  "benchmark": {
+    "QB_FT0L": {
+      "median_step_seconds": 0.18965560001379345,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.533203125
+    },
+    "GF2_FT0L": {
+      "median_step_seconds": 0.19375540000328328,
+      "steps_per_epoch": 620,
+      "peak_reserved_gib": 0.533203125
+    },
+    "WV3_FT0L": {
+      "median_step_seconds": 0.22162559999560472,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 0.611328125
+    }
+  },
+  "fingerprint": "857d9135bf0763a79d54edeb0c7628a9c5769e31d4c2799bd56558b14aed563a"
+}
