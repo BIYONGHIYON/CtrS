@@ -1,0 +1,71 @@
+{
+  "time_kst": "2026-11-18T14:47:18.614222+09:00",
+  "max_parallel": 2,
+  "benchmark": {
+    "QB_B32W96": {
+      "median_step_seconds": 0.18717730000207666,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.451171875
+    },
+    "QB_B32W64": {
+      "median_step_seconds": 0.13517594999575522,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.431640625
+    },
+    "GF2_B32W96": {
+      "median_step_seconds": 0.18820699999923818,
+      "steps_per_epoch": 620,
+      "peak_reserved_gib": 0.451171875
+    },
+    "GF2_B32W64": {
+      "median_step_seconds": 0.13566795000224374,
+      "steps_per_epoch": 620,
+      "peak_reserved_gib": 0.431640625
+    },
+    "WV3_B32W96": {
+      "median_step_seconds": 0.2044558500056155,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 0.533203125
+    },
+    "WV3_B32W64": {
+      "median_step_seconds": 0.18592784999054857,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 0.505859375
+    }
+  },
+  "conv_gmac_256": {
+    "QB": {
+      "B32W96": 40.304705536,
+      "B32W64": 30.64102912,
+      "C2MS": 59.632058368
+    },
+    "GF2": {
+      "B32W96": 40.304705536,
+      "B32W64": 30.64102912,
+      "C2MS": 59.632058368
+    },
+    "WV3": {
+      "B32W96": 41.052602368,
+      "B32W64": 31.388925952,
+      "C2MS": 60.3799552
+    }
+  },
+  "used_parameters": {
+    "QB": {
+      "B32W96": 1997946,
+      "B32W64": 1407866,
+      "C2MS": 2735610
+    },
+    "GF2": {
+      "B32W96": 1997946,
+      "B32W64": 1407866,
+      "C2MS": 2735610
+    },
+    "WV3": {
+      "B32W96": 2018278,
+      "B32W64": 1428198,
+      "C2MS": 2755942
+    }
+  },
+  "fingerprint": "004511b46f96693a01af493c0ea30386e91cfbafd66212f5249c23ff6d9a3793"
+}
