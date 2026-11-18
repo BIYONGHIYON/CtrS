@@ -1,0 +1,176 @@
+{
+  "time_kst": "2026-11-18T14:47:18.069013+09:00",
+  "initial_state_sha256": {
+    "QB_B32W96_s42": "e5ff72845274676ddaeceeb58509ad0a461769a05d72e705eadcfc2bc19af537",
+    "QB_B32W64_s42": "ce99a5e8984eddd41364df34bdc8c037b7802936f26f24c2515db7eeba6560f9",
+    "GF2_B32W96_s42": "e5ff72845274676ddaeceeb58509ad0a461769a05d72e705eadcfc2bc19af537",
+    "GF2_B32W64_s42": "ce99a5e8984eddd41364df34bdc8c037b7802936f26f24c2515db7eeba6560f9",
+    "WV3_B32W96_s42": "4c99a33f9b79b272ab3078f709dcd5eb4831620d3f138f3a0546dd6ede7d024e",
+    "WV3_B32W64_s42": "13aa65b1325dc8a6a213b4523f63acc00d35a84276c4c8dff6925dc638e33521"
+  },
+  "four_band_initial_equal_to_43": true,
+  "genmtf_x4_max_abs_diff": {
+    "QB": 0.0,
+    "WV3": 0.0
+  },
+  "sensors": {
+    "QB": {
+      "coarse_cache_vs_fresh_max_abs": 0.0,
+      "coarse_kernel_dc_gain": {
+        "ms": [
+          0.9997148461933067,
+          0.999698054003819,
+          0.9996803400723344,
+          0.9995969484942354
+        ],
+        "pan": 0.9994961777612154
+      },
+      "coarse_ms_vs_2x_reduced_given_ms_relative_rmse": 0.03967642784118652,
+      "coarse_shapes": {
+        "pan": [
+          17139,
+          1,
+          32,
+          32
+        ],
+        "lms": [
+          17139,
+          4,
+          32,
+          32
+        ],
+        "ms": [
+          17139,
+          4,
+          8,
+          8
+        ],
+        "gt": [
+          17139,
+          4,
+          32,
+          32
+        ]
+      },
+      "checks": {
+        "B32W96": {
+          "parameters": 2116254,
+          "resume_max_abs": 0.0,
+          "loss": 0.7952646613121033
+        },
+        "B32W64": {
+          "parameters": 1526174,
+          "resume_max_abs": 0.0,
+          "loss": 0.8190454244613647
+        }
+      }
+    },
+    "GF2": {
+      "coarse_cache_vs_fresh_max_abs": 0.0,
+      "coarse_kernel_dc_gain": {
+        "ms": [
+          0.9996803400723346,
+          0.9996803400723344,
+          0.9996803400723344,
+          0.9996803400723344
+        ],
+        "pan": 0.9994961777612154
+      },
+      "coarse_ms_vs_2x_reduced_given_ms_relative_rmse": 0.01630464382469654,
+      "coarse_shapes": {
+        "pan": [
+          19809,
+          1,
+          32,
+          32
+        ],
+        "lms": [
+          19809,
+          4,
+          32,
+          32
+        ],
+        "ms": [
+          19809,
+          4,
+          8,
+          8
+        ],
+        "gt": [
+          19809,
+          4,
+          32,
+          32
+        ]
+      },
+      "checks": {
+        "B32W96": {
+          "parameters": 2116254,
+          "resume_max_abs": 0.0,
+          "loss": 0.564467191696167
+        },
+        "B32W64": {
+          "parameters": 1526174,
+          "resume_max_abs": 0.0,
+          "loss": 0.5587934851646423
+        }
+      }
+    },
+    "WV3": {
+      "coarse_cache_vs_fresh_max_abs": 0.0,
+      "coarse_kernel_dc_gain": {
+        "ms": [
+          0.9997023336931097,
+          0.999726903588933,
+          0.9997308285514188,
+          0.9997229324733354,
+          0.9997347086704862,
+          0.9997308285514187,
+          0.9997107280478814,
+          0.9996937168315838
+        ],
+        "pan": 0.9994781518325394
+      },
+      "coarse_ms_vs_2x_reduced_given_ms_relative_rmse": 0.04328946769237518,
+      "coarse_shapes": {
+        "pan": [
+          9714,
+          1,
+          32,
+          32
+        ],
+        "lms": [
+          9714,
+          8,
+          32,
+          32
+        ],
+        "ms": [
+          9714,
+          8,
+          8,
+          8
+        ],
+        "gt": [
+          9714,
+          8,
+          32,
+          32
+        ]
+      },
+      "checks": {
+        "B32W96": {
+          "parameters": 2208430,
+          "resume_max_abs": 0.0,
+          "loss": 0.7426604628562927
+        },
+        "B32W64": {
+          "parameters": 1618350,
+          "resume_max_abs": 0.0,
+          "loss": 0.7910103797912598
+        }
+      }
+    }
+  },
+  "scope": "tiny AMP forward/backward on both scales and two-update resume; not long-session crash proof"
+}
