@@ -196,6 +196,44 @@
           "Q8": 0.921
         }
       }
+    },
+    "fusionnet": {
+      "display_name": "FusionNet",
+      "paper": "Deng et al. Detail Injection-based Deep Convolutional Neural Networks for Pansharpening. IEEE TGRS.",
+      "code": "https://github.com/liangjiandeng/DLPan-Toolbox",
+      "commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+      "license": "GPL-3.0 공식 저장소 포함 가중치; 학습 분할 미확인",
+      "evaluator": "김윤지",
+      "settings": [
+        "author",
+        "retrain"
+      ],
+      "epochs": "GF2 400 (DLPan 공식 기본값), seed 42",
+      "sensors": {
+        "author": [
+          "QB",
+          "WV3",
+          "WV2"
+        ],
+        "retrain": [
+          "GF2"
+        ]
+      },
+      "seeds": {
+        "author": null,
+        "retrain": [
+          42
+        ]
+      },
+      "status": "학습 중",
+      "status_scope": "GF2 학습 실행본 진행, QB·WV3·WV2 Python 예비 평가; MATLAB 미실행",
+      "vs_c2ms_sp": {
+        "note": "MATLAB 평가 전"
+      },
+      "report": "SSA-MRN/benchmarks/fusionnet/README.md",
+      "config": "SSA-MRN/benchmarks/fusionnet/config.json",
+      "manifest": "SSA-MRN/benchmarks/fusionnet/manifest.json",
+      "last_checked": "2026-11-18"
     }
   }
 }
