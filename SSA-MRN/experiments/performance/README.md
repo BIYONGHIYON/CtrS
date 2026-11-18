@@ -20,6 +20,8 @@ SSA-MRN의 구조·학습·손실을 바꿔 수치를 개선하는 연구입니�
 <!-- experiments:start -->
 | 실험 | 핵심 결과 | 상태 | 판정 |
 |---|---|:---:|:---:|
+| [87. C2MS-SP 잔차 블록 가운데 채널 축소 구조의 20에폭 미세조정 단일 시드 확인](87_reduced_width_short_finetuning/README.md)<br>이병현 | 아직 학습하지 않았습니다. B32W96·B32W64를 20에폭 미세조정해 C2MS-SP와 비교(seed 42) | 계획 | 판단&nbsp;보류 |
+| [86. K10 사영 전치 연산의 FFT 계산과 C2MS-SP 추론 설정 측정](86_fft_adjoint_fast_inference/README.md)<br>이병현 | 아직 측정하지 않았습니다. 학습 없는 사영 구현·추론 설정 측정 | 계획 | 성능&nbsp;비교&nbsp;아님 |
 | [85. C2MS-SP 잔차 블록의 가운데 채널 축소·40에폭 미세조정과 빠른 사영 구현](85_hidden_width_reduction_fast_projection/README.md)<br>이병현 | 축소 갈래 셋 모두 시간 관문 탈락(학습 안 함). 빠른 사영은 결과 동일·256² 2.2-2.9배, FT0L WV3 +0.105 dB(참고) | 평가&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 | [84. C2MS-SP 학습 길이 확장: 일정 학습률 학습과 감쇠 갈래로 150-1000에폭 한계 측정](84_long_training_decay_branches/README.md)<br>이병현 | validation 선택 B1000이 C2MS-SP 대비 GF2 +0.218·WV3 +0.433 dB 개선, QB −0.277 dB (seed 42) | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [83. 학습된 C2MS 가중치의 저랭크·depthwise 분해와 짧은 미세조정](83_factorized_c2ms_finetuning/README.md)<br>이병현 | C2MS-SP-Lite(연산 66%)가 C2MS 대비 3시드 QB +0.051·GF2 +0.157·WV3 +0.119 dB, SAM·ERGAS도 개선 | 평가&nbsp;완료 | **개선** |
