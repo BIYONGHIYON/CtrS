@@ -133,6 +133,69 @@
       "summary": "SSA-MRN/benchmarks/cannet/results/summary.json",
       "manifest": "SSA-MRN/benchmarks/cannet/manifest.json",
       "last_checked": "2026-11-17T01:00:00+09:00"
+    },
+    "arconv": {
+      "display_name": "ARConv",
+      "paper": "Wang et al. Adaptive Rectangular Convolution for Remote Sensing Pansharpening. CVPR 2025. https://arxiv.org/abs/2503.00467",
+      "code": "https://github.com/Xueyangwang-will/ARConv",
+      "commit": "f568bef7e45f8a7c3758b2fa8e9d2b62f4b62617",
+      "license": "공식 코드 GPL-3.0; 저자 가중치는 재배포 조건 미확인으로 재배포하지 않음",
+      "evaluator": "김윤지",
+      "settings": [
+        "author"
+      ],
+      "epochs": "QB 200, GF2 630, WV3 600; 저자 제공",
+      "sensors": {
+        "author": [
+          "QB",
+          "GF2",
+          "WV3",
+          "WV2"
+        ]
+      },
+      "seeds": {
+        "author": null
+      },
+      "status": "평가 완료",
+      "status_scope": "RR 실제 MATLAB·FR Python·고정 6장면 이미지(네 데이터셋) 완료",
+      "vs_c2ms_sp": {
+        "note": "저자 모델은 시드 미공개, C2MS-SP 3시드 평균과 차이",
+        "author_QB": {
+          "PSNR": 0.0515917919533
+        },
+        "author_GF2": {
+          "PSNR": 0.599682430605
+        },
+        "author_WV3": {
+          "PSNR": 0.493340475134
+        },
+        "author_WV2": {
+          "PSNR": -1.682056335162
+        }
+      },
+      "report": "SSA-MRN/benchmarks/arconv/README.md",
+      "config": "SSA-MRN/benchmarks/arconv/config.json",
+      "summary": "SSA-MRN/benchmarks/arconv/results/summary.json",
+      "manifest": "SSA-MRN/benchmarks/arconv/manifest.json",
+      "last_checked": "2026-11-18T12:00:00+09:00",
+      "paper_reported": {
+        "source": "ARConv 논문 표 1-3 (RR PSNR 미보고)",
+        "QB": {
+          "SAM": 4.43,
+          "ERGAS": 3.633,
+          "Q4": 0.939
+        },
+        "GF2": {
+          "SAM": 0.698,
+          "ERGAS": 0.626,
+          "Q4": 0.983
+        },
+        "WV3": {
+          "SAM": 2.885,
+          "ERGAS": 2.139,
+          "Q8": 0.921
+        }
+      }
     }
   }
 }

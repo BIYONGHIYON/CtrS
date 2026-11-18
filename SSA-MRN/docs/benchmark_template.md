@@ -72,7 +72,7 @@
 <details>
 <summary><b>재현 자료</b> · 코드, 가중치, 설정, 환경</summary>
 
-best 가중치, Release의 latest·initial, 장면별 지표, 학습 기록, config, 공식 코드 커밋·수정분, 환경(torch·CUDA·GPU), manifest를 연결합니다. 저자 가중치를 재배포할 수 없으면 받은 주소와 SHA-256을 적습니다.
+best 가중치, Release의 latest·initial, 장면별 지표, 학습 기록, config, 공식 코드 커밋·수정분, 환경(torch·CUDA·GPU), manifest를 연결합니다. 저자 가중치는 가중치 자체의 재배포 허용(가중치에 적용된다고 명시된 라이선스나 저자 허락)이 확인될 때만 올리고, 아니면 받은 주소와 SHA-256만 적습니다. 공식 코드의 라이선스를 가중치에 그대로 적용하지 않습니다. 네 센서 RR 예측 Release(`predictions-benchmarks-<모델>-<설정>`)와 자산 SHA-256을 함께 연결합니다.
 
 </details>
 

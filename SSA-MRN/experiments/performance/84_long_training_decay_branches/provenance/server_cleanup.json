@@ -1,0 +1,15 @@
+{
+  "time_kst": "2026-11-15T23:41:00+09:00",
+  "reason": "user-requested storage cleanup after a server restart (the GPU had been stuck in P5 / SW power cap); no python process was running",
+  "deleted": {
+    "C:/Users/trainer/ctrs-kaggle-upload": {"gib": 20.277, "what": "2026-10-08 Kaggle upload staging copy of the PanCollection H5 (upload verified then)", "recovery": "original data C:/CtrS/PAN-MS (hashes re-checked by 84 prepare, 2026-11-14)"},
+    "C:/Users/trainer/AppData/Local/pip": {"gib": 3.279, "what": "pip download cache", "recovery": "re-downloaded on demand; installed environments unaffected"},
+    "C:/CtrS-p74 .. C:/CtrS-p83": {"gib": 0.22, "what": "launcher scripts, source manifests and log bundles of experiments 74-83 (archive77.tgz, archive81_logs.tgz, archive83_logs.tgz)", "recovery": "results, weights and run records of 74-83 are in Git and the GitHub Releases (verified)"},
+    "C:/CtrS-p84/smoke": {"gib": 3.61, "what": "84 smoke test runtime (caches were hard links to C:/CtrS-p84/run/cache)", "recovery": "not an experimental result; smoke.log kept in C:/CtrS-p84"},
+    "C:/CtrS-p84/du*.ps1, peek*.py": {"gib": 0.0, "what": "inspection scripts"}
+  },
+  "free_before_gib": 50.95,
+  "free_after_gib": 74.97,
+  "reclaimed_gib": 24.02,
+  "kept": ["C:/CtrS/PAN-MS", "C:/CtrS-p73/.venv", "C:/CtrS-p84 (run, source, caches)", "C:/CtrS-alpha (other work)", "C:/Users/trainer/.vscode-server", "C:/Users/trainer/ssa-result-export-20261004", "system and program folders"]
+}

@@ -1,5 +1,5 @@
 {
-  "description": "결과 비교 사이트에 올릴 데이터셋과 모델 목록입니다. 모델을 추가한 뒤 python SSA-MRN/viewer/export.py --models <id>로 예측을 만듭니다.",
+  "description": "결과 비교 사이트에 올릴 데이터셋과 모델 목록입니다. group은 original(원본 SSA-MRN)·baseline(기준 모델)·ours(우리 다른 모델)·benchmark(다른 연구 모델)이며, 화면은 원본·기준 모델과 ours·benchmark 중 고른 비교군 하나를 함께 보여 줍니다. 모델을 추가한 뒤 python SSA-MRN/viewer/export.py --models <id>로 예측을 만듭니다.",
   "datasets": [
     {
       "id": "QB",
@@ -167,6 +167,7 @@
       "label": "원본 SSA-MRN",
       "short": "원본",
       "role": "비교 기준",
+      "group": "original",
       "seed": 42,
       "description": "원본 SSA-MRN K4입니다(발표된 방식 그대로, 사영·보정 없음). QB는 성능 43번 C0, GF2·WV3는 성능 54번 C0 가중치이며 WV2에는 WV3 가중치를 그대로 적용합니다.",
       "module": "experiments/performance/54_multi_sensor_scale_mixed_training/model.py",
@@ -188,6 +189,7 @@
       "label": "C2MS-SP",
       "short": "SP",
       "role": "현재 기준 모델",
+      "group": "baseline",
       "seed": 42,
       "description": "C2MS 구조를 L1·분광 손실로 학습한 성능 65번 가중치에 관측 일치 사영(공액 기울기법 10회)을 붙인 모델입니다(성능 81번, 2026-11-14 기준 모델). WV2에는 WV3 가중치에 성능 82번 밴드별 센서 보정을 더해 적용합니다.",
       "module": "common/baseline_models.py",
@@ -214,6 +216,7 @@
       "label": "C2MS-SP-Lite",
       "short": "SP-Lite",
       "role": "경량 모델",
+      "group": "ours",
       "seed": 42,
       "description": "C2MS-SP 가중치를 분해(backbone 랭크 32, W2 가지 1×1·depthwise·1×1)하고 10에폭 미세조정한 뒤 같은 사영을 붙인 모델입니다(성능 83번, 연산 66%·파라미터 68%). WV2에는 WV3 가중치에 성능 82번 밴드별 센서 보정을 더해 적용합니다.",
       "module": "common/baseline_models.py",
@@ -233,6 +236,44 @@
         "GF2": "experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_GF2_s42/best.pt",
         "WV3": "experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_WV3_s42/best.pt",
         "WV2": "experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_WV3_s42/best.pt"
+      }
+    },
+    {
+      "id": "cannet",
+      "label": "CANNet",
+      "short": "CANNet",
+      "role": "다른 모델 · 저자 가중치",
+      "group": "benchmark",
+      "seed": null,
+      "description": "CANNet(Duan 외, CVPR 2024)의 저자 공개 가중치로 추론한 예측입니다(재학습 없음, 시드 미공개). WV2에는 WV3 가중치를 그대로 적용했고, 사영·밴드별 보정 같은 우리 방법은 붙이지 않았습니다. 평가 보고서: benchmarks/cannet (평가자 이병현).",
+      "benchmark": {
+        "model": "cannet",
+        "setting": "author",
+        "datasets": [
+          "QB",
+          "GF2",
+          "WV3",
+          "WV2"
+        ]
+      }
+    },
+    {
+      "id": "arconv",
+      "label": "ARConv",
+      "short": "ARConv",
+      "role": "다른 모델 · 저자 가중치",
+      "group": "benchmark",
+      "seed": null,
+      "description": "ARConv(Wang 외, CVPR 2025)의 저자 공개 가중치로 추론한 예측입니다(재학습 없음, 시드 미공개). WV2에는 WV3 가중치를 그대로 적용했고, 사영·밴드별 보정 같은 우리 방법은 붙이지 않았습니다. 평가 보고서: benchmarks/arconv (평가자 김윤지).",
+      "benchmark": {
+        "model": "arconv",
+        "setting": "author",
+        "datasets": [
+          "QB",
+          "GF2",
+          "WV3",
+          "WV2"
+        ]
       }
     }
   ]
