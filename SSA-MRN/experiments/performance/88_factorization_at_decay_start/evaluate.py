@@ -57,9 +57,12 @@ def judge(cand,ctrl,seeds=1):
     return dict(delta_RR=d,delta_FR_reference={k:cand['FR'][k]-ctrl['FR'][k] for k in cand['FR']},rr_components_improved=parts,noise_threshold=threshold,above_noise=d['PSNR']>=threshold,label=label)
 
 
-def comparisons(arm):
-    """(name, candidate, control): vs C2MS-SP first (official for K2D, reference for the other arms)."""
-    return [('arm_P_vs_C2MS_SP',arm+'+P','L1S+P'),('arm_P_vs_Lite_P',arm+'+P','Lite+P'),('arm_P_vs_84_B150_P',arm+'+P','B150+P'),('arm_vs_65_raw',arm,'L1S')]
+def comparisons(arm,b150=True):
+    """(name, candidate, control): vs C2MS-SP first (official for K2D, reference for the other arms); the 84 B150 control exists for seed 42 only."""
+    return [('arm_P_vs_C2MS_SP',arm+'+P','L1S+P'),('arm_P_vs_Lite_P',arm+'+P','Lite+P')]+([('arm_P_vs_84_B150_P',arm+'+P','B150+P')] if b150 else [])+[('arm_vs_65_raw',arm,'L1S')]
+
+
+def has_b150(cfg,seed):return seed in cfg.get('reference_84_seeds',[42])
 
 
 def scene(net,a,b,wald):
@@ -102,6 +105,7 @@ def control_rows(cfg,sensor,target,seed):
     if p.exists():return json.loads(p.read_text(encoding='utf8'))
     models={};w={}
     for name,key in CONTROLS:
+        if name=='B150' and not has_b150(cfg,seed):continue
         net,w[name]=load(seeded(cfg,key,sensor,seed),name,SENSORS[sensor]['bands'],seed);models.update(systems(cfg,net,sensor,target,name))
     rows,iters=run_systems(cfg,target,models);rec=dict(rows=rows,projection_iterations=iters,weights=w,projection='fast (86)',time_kst=now())
     write(p,rec);return rec
@@ -117,8 +121,8 @@ def evaluate(cfg,sensor,arm,seed):
         rows,iters=run_systems(cfg,target,models);rows.update(ctrl['rows']);iters.update(ctrl['projection_iterations'])
         means={n:{part:{k:float(np.mean([x['metrics'][part][k] for x in v])) for k in v[0]['metrics'][part]} for part in ('RR','FR')} for n,v in rows.items()}
         obs={n:float(np.mean([x['metrics']['OBS_RMSE_DN'] for x in v])) for n,v in rows.items()}
-        judgement={name:judge(means[c],means[k]) for name,c,k in comparisons(arm)}
-        wins={name:dict(PSNR=sum(x['metrics']['RR']['PSNR']>y['metrics']['RR']['PSNR'] for x,y in zip(rows[c],rows[k])),SAM=sum(x['metrics']['RR']['SAM']<y['metrics']['RR']['SAM'] for x,y in zip(rows[c],rows[k]))) for name,c,k in comparisons(arm)}
+        cmp=comparisons(arm,has_b150(cfg,seed));judgement={name:judge(means[c],means[k]) for name,c,k in cmp}
+        wins={name:dict(PSNR=sum(x['metrics']['RR']['PSNR']>y['metrics']['RR']['PSNR'] for x,y in zip(rows[c],rows[k])),SAM=sum(x['metrics']['RR']['SAM']<y['metrics']['RR']['SAM'] for x,y in zip(rows[c],rows[k]))) for name,c,k in cmp}
         rr=Path(cfg['data_root'])/data_files(target)['RR']
         if seed==cfg['latency_seed'] and target==sensor:
             l1,_=load(seeded(cfg,'init_from',sensor,seed),'L1S',bands,seed)
@@ -143,18 +147,31 @@ def evaluate(cfg,sensor,arm,seed):
                     scope='full 20-scene RR (judgement on the training sensor) and FR QNR (reference); WV2 transfer reference only; v2.4; per seed; no automatic baseline promotion'))
 
 
-def summarize(cfg,arm,seeds):
-    runtime=Path(cfg['runtime']);out=dict(time_kst=now(),arm=arm,seeds=seeds,criteria='v2.4, mean of same-seed pairs; WV2 transfer reference only',targets={})
+def summarize(cfg,arm,seeds,roots=None,name='summary.json'):
+    """Mean of the same-seed pairs over `seeds`; roots maps a seed to the runtime holding its runs (default cfg['runtime'])."""
+    runtime=Path(cfg['runtime']);roots=roots or {};cmp=comparisons(arm,all(has_b150(cfg,s) for s in seeds))
+    out=dict(time_kst=now(),arm=arm,seeds=seeds,criteria='v2.4, mean of same-seed pairs; WV2 transfer reference only',runtimes={s:str(roots.get(s,runtime)) for s in seeds},targets={})
     for sensor in cfg['sensors']:
         for target in targets(sensor):
-            per={s:json.loads((runtime/'runs'/run_name(sensor,arm,s)/'evaluation'/f'{target}_v2_4.json').read_text(encoding='utf8')) for s in seeds}
-            names=list(per[seeds[0]]['means'])
+            per={s:json.loads((Path(roots.get(s,runtime))/'runs'/run_name(sensor,arm,s)/'evaluation'/f'{target}_v2_4.json').read_text(encoding='utf8')) for s in seeds}
+            names=[n for n in per[seeds[0]]['means'] if all(n in per[s]['means'] for s in seeds)]
             mean={n:{part:{k:float(np.mean([per[s]['means'][n][part][k] for s in seeds])) for k in per[seeds[0]]['means'][n][part]} for part in ('RR','FR')} for n in names}
-            judgement={name:judge(mean[c],mean[k],len(seeds)) for name,c,k in comparisons(arm)}
-            per_seed={s:{name:{k:per[s]['judgement'][name]['delta_RR'][k] for k in ('PSNR','SAM','ERGAS')} for name,_,_ in comparisons(arm)} for s in seeds}
-            wins={name:{k:sum(per[s]['scene_wins'][name][k] for s in seeds) for k in ('PSNR','SAM')} for name in per[seeds[0]]['scene_wins']}
+            judgement={nm:judge(mean[c],mean[k],len(seeds)) for nm,c,k in cmp}
+            per_seed={s:{nm:{k:per[s]['judgement'][nm]['delta_RR'][k] for k in ('PSNR','SAM','ERGAS')} for nm,_,_ in cmp} for s in seeds}
+            wins={nm:{k:sum(per[s]['scene_wins'][nm][k] for s in seeds) for k in ('PSNR','SAM')} for nm,_,_ in cmp}
             out['targets'][target]=dict(training_sensor=sensor,transfer=target!=sensor,means=mean,judgement=judgement,per_seed_delta_RR=per_seed,scene_wins=wins)
-    write(runtime/'summary.json',out);return out
+    write(runtime/name,out);return out
+
+
+def summarize_seeds(cfg):
+    """Stage 2: K2D over seeds 42 (stage-1 runtime), 43 and 44 (this runtime). Official: K2D + P vs C2MS-SP (v2.4, 0.04 dB), an improvement
+    only if QB, GF2 and WV3 all are; K2D + P vs Lite + P reference."""
+    s2=cfg['stage2'];seeds=[cfg['latency_seed']]+list(s2['seeds']);roots={cfg['latency_seed']:Path(s2['seed42_runtime'])}
+    s=summarize(cfg,OFFICIAL,seeds,roots,'summary_3seeds.json')
+    s['official_label']={t:v['judgement']['arm_P_vs_C2MS_SP']['label'] for t,v in s['targets'].items()}
+    s['all_training_sensors_improved']=all(v['judgement']['arm_P_vs_C2MS_SP']['label']=='개선' for v in s['targets'].values() if not v['transfer'])
+    s['light_non_inferior']=all(v['judgement']['arm_P_vs_C2MS_SP']['delta_RR']['PSNR']>=-0.04 for v in s['targets'].values() if not v['transfer'])
+    write(Path(cfg['runtime'])/'summary_3seeds.json',s);return s
 
 
 def _inputs(cfg,sensor):

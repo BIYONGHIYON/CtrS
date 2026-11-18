@@ -5,7 +5,11 @@ it depends on is complete:
                      -> factorize the TRUNK epoch-120 weights -> K2D (30 decay epochs)
   FULL complete      -> factorize the FULL best weights -> K2F (10 epochs)
 -> evaluation of every run -> single-seed summary -> final latency. `--mode factorize` (run by the controller) writes the factorized
-initial weights and their hash record. Nothing is tuned while it runs."""
+initial weights and their hash record. Nothing is tuned while it runs.
+
+Stage 2 (`--stage 2`, runtime C:/CtrS-p88s/run): `gate` checks the pre-registered condition on the seed-42 summary (K2D + P an improvement
+on QB, GF2 and WV3, or light non-inferior); if it passes, prepare -> optimize -> run train TRUNK and K2D for seeds 43 and 44 and write the
+3-seed summary (summary_3seeds.json, seed 42 read from the stage-1 runtime)."""
 import os
 os.environ.setdefault('OMP_NUM_THREADS','1');os.environ.setdefault('MKL_NUM_THREADS','1')
 import sys,json,time,hashlib,subprocess,platform
@@ -18,6 +22,15 @@ from model import ARMS,FACTORIZED,SOURCE
 from datetime import datetime,timedelta
 
 PERF=HERE.parent;ROOT=PERF.parents[1]
+STAGE={'n':1}
+
+
+def load_conf():
+    """config.json; with --stage 2 the runtime, seeds and trained arms of stage 2 (seeds 43 and 44, TRUNK + K2D)."""
+    conf=json.loads((HERE/'config.json').read_text(encoding='utf8'))
+    if STAGE['n']==2:
+        s=conf['stage2'];conf={**conf,'runtime':s['runtime'],'seeds':list(s['seeds']),'stage':2}
+    return conf
 
 
 def source_hashes():
@@ -27,9 +40,9 @@ def source_hashes():
            PERF/'75_parallel_branch_width_depth/model.py',PERF/'58_spectral_loss_multi_sensor/train.py',PERF/'82_cross_sensor_band_calibration/prepare.py',PERF/'82_cross_sensor_band_calibration/results/reference_stats/WV3.json',
            e54/'model.py',e54/'prepare.py',e54/'train.py',e54/'evaluate.py',e54/'config.json',e43/'model.py',*sorted((e43/'provenance/source').rglob('*.py')),
            ROOT/'common/interpolation.py',ROOT/'common/metrics.py',ROOT/'common/observation.py',ROOT/'common/evaluation_protocol.py',ROOT/'common/result_images.py']
-    conf=json.loads((HERE/'config.json').read_text(encoding='utf8'))
+    conf=load_conf()
     paths+=[ROOT/p for p in conf['cache_reference_manifest'].values()]
-    paths+=[ROOT/conf[k][s].replace('<seed>',str(x)) for k in ('init_from','lite','reference_84') for s in conf['sensors'] for x in conf['seeds']]
+    paths+=[ROOT/conf[k][s].replace('<seed>',str(x)) for k in ('init_from','lite','reference_84') for s in conf['sensors'] for x in conf['seeds'] if k!='reference_84' or x in conf['reference_84_seeds']]
     paths=list(dict.fromkeys(paths))
     return {str(p.relative_to(ROOT)).replace('\\','/'):sha(p) for p in paths}
 
@@ -40,7 +53,7 @@ def fingerprint(cfg):
 
 
 def runtime_cfg():
-    conf=json.loads((HERE/'config.json').read_text(encoding='utf8'));root=Path(conf['runtime']);cp=root/'runtime_config.json'
+    conf=load_conf();root=Path(conf['runtime']);cp=root/'runtime_config.json'
     return root,cp,json.loads(cp.read_text(encoding='utf8'))
 
 
@@ -49,7 +62,7 @@ def prepare():
     # manifests (must match); coarse arrays are recorded (GPU/torch dependent).
     import torch,shutil
     from prepare import CoarsePairs
-    cfg=json.loads((HERE/'config.json').read_text(encoding='utf8'));root=Path(cfg['runtime']);root.mkdir(parents=True,exist_ok=True)
+    cfg=load_conf();root=Path(cfg['runtime']);root.mkdir(parents=True,exist_ok=True)
     if (root/'runtime_config.json').exists():raise RuntimeError('runtime already prepared; do not overwrite')
     if shutil.disk_usage(root).free<20*1024**3:raise RuntimeError('less than 20 GiB free')
     old={s:json.loads((ROOT/p).read_text(encoding='utf8'))[s] for s,p in cfg['cache_reference_manifest'].items()};records={};matches={}
@@ -160,7 +173,7 @@ def optimize():
     for sensor in cfg['sensors']:
         nb=SENSORS[sensor]['bands'];shapes=[(1,1,256,256),(1,nb,256,256),(1,nb,64,64)];nets={'C2MS':Model('C2MS',nb,42),'K2':Model('K2',nb,42)}
         cfg['conv_gmac_256'][sensor]={k:conv_macs(m,shapes)/1e9 for k,m in nets.items()};cfg['used_parameters'][sensor]={k:used_parameters(m) for k,m in nets.items()}
-    cfg['trained_arms']=list(ARMS);cfg['max_parallel']=int(cfg['max_parallel']);cfg['benchmark']={k:dict(median_step_seconds=v['median_step_seconds'],steps_per_epoch=v['steps_per_epoch'],peak_reserved_gib=v['peak_reserved_bytes']/2**30) for k,v in rows.items()}
+    cfg['trained_arms']=list(cfg['stage2']['arms']) if cfg.get('stage')==2 else list(ARMS);cfg['max_parallel']=int(cfg['max_parallel']);cfg['benchmark']={k:dict(median_step_seconds=v['median_step_seconds'],steps_per_epoch=v['steps_per_epoch'],peak_reserved_gib=v['peak_reserved_bytes']/2**30) for k,v in rows.items()}
     cfg['source_hashes']=source_hashes();cfg['fingerprint']=fingerprint(cfg);write(cp,cfg)
     subprocess.run([sys.executable,'-u',str(HERE/'train.py'),'--config',str(cp),'--mode','preflight'],check=True)
     write(out/'optimization.json',dict(time_kst=now(),max_parallel=cfg['max_parallel'],benchmark=cfg['benchmark'],conv_gmac_256=cfg['conv_gmac_256'],used_parameters=cfg['used_parameters'],fingerprint=cfg['fingerprint']))
@@ -215,8 +228,21 @@ def final_measure(cfg,chosen):
     out['fp16_rr_change_reference']=fp16;write(root/'final_timing.json',out);return out
 
 
+def gate():
+    """Stage 2 gate (pre-registered): the stage-1 (seed 42) run is complete and its summary reports K2D + P vs C2MS-SP as an improvement on
+    QB, GF2 and WV3 or light non-inferior. Writes <stage-2 runtime>/../gate.json; exit code 0 = start stage 2, 3 = do not start."""
+    conf=load_conf();s1=Path(conf['stage2']['seed42_runtime']);out=Path(conf['runtime']).parent;out.mkdir(parents=True,exist_ok=True)
+    if not (s1/'all_complete.json').exists():raise RuntimeError('stage 1 not complete: '+str(s1))
+    s=json.loads((s1/'summary.json').read_text(encoding='utf8'));k=s['arms']['K2D']
+    rec=dict(time_kst=now(),rule=conf['stage2']['gate'],summary=str(s1/'summary.json'),summary_sha256=sha(s1/'summary.json'),official_label=s['official_label'],
+             all_training_sensors_improved=k['all_training_sensors_improved'],light_non_inferior=k['light_non_inferior'],
+             delta_psnr={t:v['judgement']['arm_P_vs_C2MS_SP']['delta_RR']['PSNR'] for t,v in k['targets'].items()})
+    rec['open']=bool(rec['all_training_sensors_improved'] or rec['light_non_inferior']);write(out/'gate.json',rec)
+    print('GATE','OPEN' if rec['open'] else 'CLOSED',json.dumps(rec['delta_psnr']),flush=True);sys.exit(0 if rec['open'] else 3)
+
+
 def run(resume=False):
-    conf=json.loads((HERE/'config.json').read_text(encoding='utf8'));root=Path(conf['runtime']);guard=lock(root/'controller.lock');cp=root/'runtime_config.json';cfg=json.loads(cp.read_text(encoding='utf8'))
+    conf=load_conf();root=Path(conf['runtime']);guard=lock(root/'controller.lock');cp=root/'runtime_config.json';cfg=json.loads(cp.read_text(encoding='utf8'))
     if fingerprint(cfg)!=cfg['fingerprint'] or source_hashes()!=cfg['source_hashes']:raise RuntimeError('sealed config/source changed')
     if not (root/'preflight/checks.json').exists():raise RuntimeError('preflight missing')
     if sha(root/'data_manifest.json')!=cfg['cache_manifest_sha256']:raise RuntimeError('cache manifest changed')
@@ -245,10 +271,11 @@ def run(resume=False):
         return True
     def factorize_job(key):
         sensor,arm,seed=key;log=(root/'init'/f'factorize_{run_name(*key)}.log');log.parent.mkdir(exist_ok=True)
-        with log.open('a',encoding='utf8') as f:code=subprocess.run([sys.executable,'-u',str(HERE/'run.py'),'--mode','factorize','--sensor',sensor,'--arm',arm,'--seed',str(seed)],stdout=f,stderr=subprocess.STDOUT).returncode
+        with log.open('a',encoding='utf8') as f:code=subprocess.run([sys.executable,'-u',str(HERE/'run.py'),'--stage',str(STAGE['n']),'--mode','factorize','--sensor',sensor,'--arm',arm,'--seed',str(seed)],stdout=f,stderr=subprocess.STDOUT).returncode
         if code:write(root/'controller_failure.json',dict(time_kst=now(),phase='factorize',job=list(key),returncode=code));raise RuntimeError(f'factorize failed {key}')
-    # priority: every TRUNK first, then per sensor FULL, K2D, K2F
-    seed=cfg['latency_seed'];queue=[(s,'TRUNK',seed) for s in cfg['sensors']]+[(s,a,seed) for s in cfg['sensors'] for a in ('FULL','K2D','K2F')]
+    # priority: every TRUNK first, then per seed and sensor FULL, K2D, K2F (the arms of this stage only)
+    seeds=cfg['seeds'];arms=cfg['trained_arms']
+    queue=[(s,'TRUNK',x) for x in seeds for s in cfg['sensors']]+[(s,a,x) for x in seeds for s in cfg['sensors'] for a in ('FULL','K2D','K2F') if a in arms]
     pending=[k for k in queue if not complete(k)];running={}
     while pending or running:
         for key in [k for k in pending if ready(k)]:
@@ -265,16 +292,20 @@ def run(resume=False):
         if pending and not running and not any(ready(k) for k in pending):raise RuntimeError('no runnable job: '+str(pending))
     for key in queue:
         if not (root/'runs'/run_name(*key)/'evaluation_complete.json').exists():job('evaluate',*key)
-    from evaluate import summarize_arms
-    summary=summarize_arms(cfg);print(json.dumps(dict(time_kst=now(),phase='summary',official=summary['official_label'],light_non_inferior=summary['arms']['K2D']['light_non_inferior'])),flush=True)
-    snapshot(cfg,[],'final timing',queue);final_measure(cfg,None)
+    if cfg.get('stage')==2:
+        from evaluate import summarize_seeds
+        summary=summarize_seeds(cfg);print(json.dumps(dict(time_kst=now(),phase='summary_3seeds',official=summary['official_label'],light_non_inferior=summary['light_non_inferior'])),flush=True)
+    else:
+        from evaluate import summarize_arms
+        summary=summarize_arms(cfg);print(json.dumps(dict(time_kst=now(),phase='summary',official=summary['official_label'],light_non_inferior=summary['arms']['K2D']['light_non_inferior'])),flush=True)
+        snapshot(cfg,[],'final timing',queue);final_measure(cfg,None)
     snapshot(cfg,[],'complete',queue);write(root/'all_complete.json',dict(time_kst=now(),fingerprint=cfg['fingerprint'],runs=len(queue)))
 
 
 if __name__=='__main__':
     import argparse
-    p=argparse.ArgumentParser(description='88 controller: prepare -> optimize -> run (resume with --mode run --resume); factorize is run by the controller')
-    p.add_argument('--mode',choices=['prepare','optimize','run','factorize'],required=True);p.add_argument('--resume',action='store_true')
-    p.add_argument('--sensor');p.add_argument('--arm',choices=FACTORIZED);p.add_argument('--seed',type=int,default=42);a=p.parse_args()
+    p=argparse.ArgumentParser(description='88 controller: prepare -> optimize -> run (resume with --mode run --resume); factorize is run by the controller. --stage 2: gate -> prepare -> optimize -> run for seeds 43 and 44 (TRUNK + K2D)')
+    p.add_argument('--mode',choices=['prepare','optimize','run','factorize','gate'],required=True);p.add_argument('--resume',action='store_true');p.add_argument('--stage',type=int,choices=[1,2],default=1)
+    p.add_argument('--sensor');p.add_argument('--arm',choices=FACTORIZED);p.add_argument('--seed',type=int,default=42);a=p.parse_args();STAGE['n']=a.stage
     if a.mode=='factorize':factorize(a.sensor,a.arm,a.seed)
-    else:{'prepare':prepare,'optimize':optimize}.get(a.mode,lambda:run(a.resume))()
+    else:{'prepare':prepare,'optimize':optimize,'gate':gate}.get(a.mode,lambda:run(a.resume))()

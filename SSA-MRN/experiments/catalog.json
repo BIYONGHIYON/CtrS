@@ -2963,14 +2963,14 @@
   "performance/88_factorization_at_decay_start": {
     "display_name": "88. 일정 학습률 학습 뒤 감쇠 시작 시점의 저랭크 분해(K2)와 감쇠 구간 학습: 150에폭 경량 C2MS-SP 단일 시드 확인",
     "experimenter": "이병현",
-    "status": "계획",
+    "status": "학습 중",
     "improvement": "판단 보류",
-    "result": "아직 학습하지 않았습니다. 같은 150에폭에서 감쇠 직전 K2 분해, C2MS-SP와 비교(seed 42)",
+    "result": "seed 42 학습 중. 같은 150에폭에서 감쇠 직전 K2 분해, C2MS-SP와 비교",
     "report": "experiments/performance/88_factorization_at_decay_start/README.md",
     "sensor": "QB, GF2, WV3 (WV2 transfer)",
     "evaluated_seeds": [],
     "retraining": true,
-    "limits": "원래 크기 C2MS를 학습률 1e-4로 120에폭 학습하고 감쇠 시작 시점에 83번 K2로 분해해 남은 30에폭 감쇠를 K2로 학습할 계획입니다(seed 42, QB·GF2·WV3). 같은 줄기의 원래 크기 감쇠(FULL)와 감쇠 후 분해(K2F)를 참고로 함께 봅니다.",
+    "limits": "원래 크기 C2MS를 학습률 1e-4로 120에폭 학습하고 감쇠 시작 시점에 83번 K2로 분해해 남은 30에폭 감쇠를 K2로 학습합니다(seed 42, QB·GF2·WV3). 같은 줄기의 원래 크기 감쇠(FULL)와 감쇠 후 분해(K2F)를 참고로 봅니다. 조건을 만족하면 seed 43·44(TRUNK + K2D)를 자동으로 이어 학습합니다.",
     "config": "experiments/performance/88_factorization_at_decay_start/config.json",
     "entrypoint": "experiments/performance/88_factorization_at_decay_start/run.py"
   }
