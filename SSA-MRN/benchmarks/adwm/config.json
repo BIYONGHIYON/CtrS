@@ -1,0 +1,80 @@
+{
+  "model": "adwm",
+  "display_name": "ADWM",
+  "evaluator": "김경찬",
+  "issue": "https://github.com/BIYONGHIYON/CtrS/issues/183",
+  "paper": {
+    "title": "A General Adaptive Dual-level Weighting Mechanism for Remote Sensing Pansharpening",
+    "authors": "Jie Huang, Haorui Chen, Jiaxuan Ren, Siran Peng, Liang-Jian Deng",
+    "venue": "CVPR 2025",
+    "url": "https://openaccess.thecvf.com/content/CVPR2025/html/Huang_A_General_Adaptive_Dual-level_Weighting_Mechanism_for_Remote_Sensing_Pansharpening_CVPR_2025_paper.html",
+    "arxiv": "https://arxiv.org/abs/2503.13214"
+  },
+  "code": {
+    "url": "https://github.com/Jie-1203/ADWM",
+    "commit": "aa185a64cac00a8c31581290de276568da2eb106",
+    "license": "MIT",
+    "redistribution": true,
+    "modified": false
+  },
+  "main_model": {
+    "file": "upstream/model/bwnet_lagconv_sota.py (BWNet)",
+    "source": "논문 3.2절: \"We incorporated ADWM into the classic LAGNet as our proposed method.\"",
+    "structure": "PAN과 bicubic 4배 보간한 MS를 이어 붙여 LAConv로 48채널로 올림 → LAConv 잔차 블록 6개 → 블록 출력 6개를 CACW로 채널 내(IFW)·블록 간(CFW) 가중합 → LAConv로 밴드 수로 내린 뒤 보간 MS에 더함",
+    "adapter": "공식 입력 순서 (ms, pan)으로 호출, 데이터의 lms는 쓰지 않음(네트워크가 직접 보간). 추론 출력만 [0, 1]로 자름(공식 main_test.py와 같음)",
+    "cacw_hidden": {"QB": "round(0.6 × 48) = 29 (논문 부록 D)", "GF2": "round(0.8 × 48) = 38 (논문 부록 D: WV3와 같음, 공식 코드 고정값)", "WV3": "38 (공식 코드 고정값)"}
+  },
+  "author_weights": {
+    "WV3": {
+      "path": "upstream/weights/BWNET_LAGConv_WV3/model.pth",
+      "sha256": "793e5eccfe6a03995a98a15ee8e4c8911eb129f3c4bb03aa24ae143b41928e2c",
+      "choice": "주 모델(LAGConv 적용판)과 이름이 맞는 파일을 평가 전에 정함. test 결과로 다른 파일과 바꾸지 않음",
+      "layernorm": "파일에 CovBlock LayerNorm(7개 블록, 텐서 14개)이 없음. 해석 두 가지(none: LayerNorm 없이 학습, parameter_free: 파라미터 없는 LayerNorm)는 모두 strict로 읽히며, WV3 validation L1이 낮은 쪽을 author 설정으로 씀(results/author_selection.json). test로 고르지 않음"
+    },
+    "QB": null,
+    "GF2": null,
+    "other_files": {
+      "upstream/weights/BWNET_FusionNet_WV3/model.pth": "601e34e04e0f142e8daa7aac136d79989f3ceb3878ce3cb4b496a44bf1055d9e: 공식 마지막 커밋(aa185a6 'update pth')에서 교체됨. bwnet_fusionnet.py와 맞지 않고 bwnet_lagconv_sota.py와 키·크기가 같은(LayerNorm 제외) 다른 가중치. 평가에 쓰지 않음",
+      "upstream/weights/BWNET_LGPNet_WV3/model.pth": "9ef6d5bee11edf4bf207e4521fea16c68e24e4a1090f89c0505b55d9f9121e4a: LGPNet 적용판(주 모델 아님). 공식 코드에 없는 bw_output.temperature가 있음. 평가에 쓰지 않음"
+    },
+    "redistribution": "공식 저장소(MIT) 안에 있어 하위 모듈로 참조. checkpoints/에 복사하지 않음",
+    "training_data": "PanCollection (저자 학습 분할·시드·에폭 선택 방식은 공개되지 않음)"
+  },
+  "normalization": {"QB": 2047, "GF2": 1023, "WV3": 2047, "WV2": 2047},
+  "settings": {
+    "author": {
+      "sensors": ["WV3"],
+      "transfer": {"WV2": "WV3 저자 가중치 적용, 참고"},
+      "checkpoint_argument": "--checkpoint SSA-MRN/benchmarks/adwm/upstream/weights/BWNET_LAGConv_WV3/model.pth",
+      "selection": "LayerNorm 해석: python SSA-MRN/benchmarks/adwm/model.py --select-author --val valid_wv3.h5"
+    },
+    "retrain": {
+      "sensors": ["QB", "GF2"],
+      "script": "train.py",
+      "loss": "L1",
+      "optimizer": "Adam, weight decay 0",
+      "lr": "2e-3, StepLR 150에폭마다 0.5배 (공식 main_train.py처럼 last_epoch=0으로 만들어 149·299·449에폭 뒤에 줄어듦)",
+      "batch": 64,
+      "epochs": {"QB": 200, "GF2": 500},
+      "epochs_source": "논문 부록 D: WV3 500에폭, QB 200에폭(d = 0.6n), GF2는 WV3와 같은 설정. 공식 main_train.py 기본값은 모든 센서 500",
+      "seed": 42,
+      "seed_note": "공식 기본 SEED 1 대신 팀 규칙의 42",
+      "selection": "매 에폭 validation L1(전체 픽셀 평균, 자르지 않은 출력) 최소. 공식 코드는 10에폭마다 검증·저장",
+      "deterministic": "cudnn.deterministic = True, benchmark = False (공식 main_train.py와 같음)",
+      "memory": "T4(15 GB)에서 배치 64가 들어가지 않으면 LAConv 층을 역전파 때 다시 계산(torch.utils.checkpoint). 배치·손실·기울기·BatchNorm 통계는 배치 64 그대로이고 시간만 더 듦. 켰는지는 history.json meta.checkpointing에 기록",
+      "data": "train_<센서>.h5 / valid_<센서>.h5 (팀 고정 PanCollection, SHA-256은 성능 53·54번 config.json)"
+    }
+  },
+  "sensors": ["QB", "GF2", "WV3"],
+  "transfer": {"WV2": "WV3 저자 가중치 적용, 참고"},
+  "seeds": {"author": null, "retrain": [42]},
+  "paper_reported": {
+    "source": "ADWM 논문 표 1 (RR test 20장)",
+    "WV3": {"PSNR": 39.17, "SAM": 2.913, "ERGAS": 2.145, "Q8": 0.921},
+    "QB": {"PSNR": 38.466, "SAM": 4.45, "ERGAS": 3.705, "Q4": 0.937},
+    "GF2": {"PSNR": 43.884, "SAM": 0.672, "ERGAS": 0.597, "Q4": 0.985, "note": "GF2 PSNR은 논문마다 약 43-45 dB와 49-50 dB 계열이 함께 있어 우리 평가기 값과 직접 비교하지 않음"}
+  },
+  "environment": "Kaggle GPU T4 x2 (provenance/kaggle_adwm.py), 실제 GPU·버전은 결과의 progress.json·history.json에 기록",
+  "predictions_release": {"author": "predictions-benchmarks-adwm-author", "retrain": "predictions-benchmarks-adwm-retrain"},
+  "post_processing": "없음"
+}

@@ -196,6 +196,63 @@
           "Q8": 0.921
         }
       }
+    },
+    "adwm": {
+      "display_name": "ADWM",
+      "paper": "Huang et al. A General Adaptive Dual-level Weighting Mechanism for Remote Sensing Pansharpening. CVPR 2025. https://arxiv.org/abs/2503.13214",
+      "code": "https://github.com/Jie-1203/ADWM",
+      "commit": "aa185a64cac00a8c31581290de276568da2eb106",
+      "license": "MIT (공식 코드와 WV3 저자 가중치가 같은 저장소, 재배포 가능)",
+      "evaluator": "김경찬",
+      "settings": [
+        "author",
+        "retrain"
+      ],
+      "epochs": "author: 재학습 없음, WV3 BWNET_LAGConv_WV3/model.pth; retrain: QB 200, GF2 500 (논문 부록 D, GF2는 WV3와 같은 설정)",
+      "sensors": {
+        "author": [
+          "WV3",
+          "WV2"
+        ],
+        "retrain": [
+          "QB",
+          "GF2"
+        ]
+      },
+      "seeds": {
+        "author": null,
+        "retrain": [
+          42
+        ]
+      },
+      "status": "계획",
+      "vs_c2ms_sp": null,
+      "paper_reported": {
+        "source": "ADWM 논문 표 1 (RR)",
+        "QB": {
+          "PSNR": 38.466,
+          "SAM": 4.45,
+          "ERGAS": 3.705,
+          "Q4": 0.937
+        },
+        "GF2": {
+          "PSNR": 43.884,
+          "SAM": 0.672,
+          "ERGAS": 0.597,
+          "Q4": 0.985
+        },
+        "WV3": {
+          "PSNR": 39.17,
+          "SAM": 2.913,
+          "ERGAS": 2.145,
+          "Q8": 0.921
+        }
+      },
+      "report": "SSA-MRN/benchmarks/adwm/README.md",
+      "config": "SSA-MRN/benchmarks/adwm/config.json",
+      "summary": null,
+      "manifest": "SSA-MRN/benchmarks/adwm/manifest.json",
+      "last_checked": "2026-11-18T22:51:58+09:00"
     }
   }
 }
