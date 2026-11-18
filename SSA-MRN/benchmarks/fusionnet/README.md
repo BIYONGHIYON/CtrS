@@ -6,7 +6,7 @@
 
 **출처:** Deng 외, Detail Injection-based Deep Convolutional Neural Networks for Pansharpening · [DLPan-Toolbox 공식 코드](https://github.com/liangjiandeng/DLPan-Toolbox). 공식 코드의 라이선스와 저자 가중치의 별도 재배포 조건은 구분합니다.
 
-**확인된 결과:** 네 센서 RR 각 20장의 실제 MATLAB 채점과 FR 각 20장의 Python 평가를 마쳤습니다. GF2는 400에폭 학습하고 validation MSE 최저인 382에폭을 선택했습니다. 저자 가중치의 학습 데이터 분할은 확인되지 않았으며 논문 조건을 완전히 재현했다고 판단할 수 없습니다. 고정 장면 비교 이미지는 작성 전입니다.
+**확인된 결과:** 네 센서 RR 각 20장의 실제 MATLAB 채점과 FR 각 20장의 Python 평가를 마쳤습니다. GF2는 400에폭 학습하고 validation MSE 최저인 382에폭을 선택했습니다. 저자 가중치의 학습 데이터 분할은 확인되지 않았으며 논문 조건을 완전히 재현했다고 판단할 수 없습니다. QB 고정 6장면의 C2MS 비교 이미지를 보관했습니다. 나머지 센서의 C2MS 대조 조건은 확인이 필요합니다.
 
 [평가 표](../README.md#models) · [결과](#results) · [해석](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
 
@@ -51,7 +51,43 @@ QB 결과는 지정한 C2MS 기준보다 낮지만, 저자 가중치의 학습 �
 
 ## 그림
 
-C2MS seed 42와 QB RR 고정 장면 0·1·3·7·14·17의 원본 크기 및 확대 비교 이미지는 아직 만들지 않았습니다. 확대 창은 후보의 오차 감소가 가장 큰 영역을 선택하므로 후보에 유리하게 선택된 영역임을 함께 표시할 예정입니다.
+QB RR 고정 6장면(0·1·3·7·14·17)을 C2MS seed 42와 비교했습니다. 원본 비교는 LR MS · PAN · C2MS · FusionNet · 정답 순서이며 오차 지도는 같은 색 척도를 사용합니다. 확대 창은 FusionNet의 오차 감소가 가장 큰 64×64 영역이므로 FusionNet에 유리하게 선택된 창입니다. 전체 장면 PSNR과 창 위치는 [장면별 기록](results/images/author_QB_c2ms_s42/result_images.json)에 보관했습니다. FusionNet 저자 가중치의 학습 시드는 확인되지 않았습니다.
+
+### 장면 0
+
+![장면 0 원본 크기 비교](results/images/author_QB_c2ms_s42/full_scene_00.png)
+
+![장면 0 확대 비교](results/images/author_QB_c2ms_s42/compare_scene_00.png)
+
+### 장면 1
+
+![장면 1 원본 크기 비교](results/images/author_QB_c2ms_s42/full_scene_01.png)
+
+![장면 1 확대 비교](results/images/author_QB_c2ms_s42/compare_scene_01.png)
+
+### 장면 3
+
+![장면 3 원본 크기 비교](results/images/author_QB_c2ms_s42/full_scene_03.png)
+
+![장면 3 확대 비교](results/images/author_QB_c2ms_s42/compare_scene_03.png)
+
+### 장면 7
+
+![장면 7 원본 크기 비교](results/images/author_QB_c2ms_s42/full_scene_07.png)
+
+![장면 7 확대 비교](results/images/author_QB_c2ms_s42/compare_scene_07.png)
+
+### 장면 14
+
+![장면 14 원본 크기 비교](results/images/author_QB_c2ms_s42/full_scene_14.png)
+
+![장면 14 확대 비교](results/images/author_QB_c2ms_s42/compare_scene_14.png)
+
+### 장면 17
+
+![장면 17 원본 크기 비교](results/images/author_QB_c2ms_s42/full_scene_17.png)
+
+![장면 17 확대 비교](results/images/author_QB_c2ms_s42/compare_scene_17.png)
 
 <a id="evidence"></a>
 
