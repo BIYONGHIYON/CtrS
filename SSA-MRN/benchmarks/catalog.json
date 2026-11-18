@@ -21,68 +21,6 @@
     "last_checked": "마지막 확인 시각 (KST, ISO 8601)"
   },
   "models": {
-    "adwm": {
-      "display_name": "ADWM",
-      "paper": "Huang et al. A General Adaptive Dual-level Weighting Mechanism for Remote Sensing Pansharpening. CVPR 2025. https://arxiv.org/abs/2503.13214",
-      "code": "https://github.com/Jie-1203/ADWM",
-      "commit": "aa185a64cac00a8c31581290de276568da2eb106",
-      "license": "MIT (official code and WV3 author weights in the same repository; redistributable)",
-      "evaluator": "김경찬",
-      "settings": [
-        "author",
-        "author_ln",
-        "retrain"
-      ],
-      "epochs": "author: 재학습 없음, WV3 공개 BWNET_LAGConv_WV3/model.pth; retrain: QB 200, GF2 500 (논문)",
-      "sensors": {
-        "author": [
-          "WV3",
-          "WV2"
-        ],
-        "retrain": [
-          "QB",
-          "GF2"
-        ],
-        "author_ln": [
-          "WV3",
-          "WV2"
-        ]
-      },
-      "seeds": {
-        "author": null,
-        "retrain": [
-          42
-        ]
-      },
-      "status": "계획",
-      "vs_c2ms_sp": null,
-      "paper_reported": {
-        "source": "ADWM 논문 Table 1",
-        "QB": {
-          "PSNR": 38.466,
-          "SAM": 4.45,
-          "ERGAS": 3.705,
-          "Q4": 0.937
-        },
-        "GF2": {
-          "PSNR": 43.884,
-          "SAM": 0.672,
-          "ERGAS": 0.597,
-          "Q4": 0.985
-        },
-        "WV3": {
-          "PSNR": 39.17,
-          "SAM": 2.913,
-          "ERGAS": 2.145,
-          "Q8": 0.921
-        }
-      },
-      "report": "benchmarks/adwm/README.md",
-      "config": "benchmarks/adwm/config.json",
-      "summary": null,
-      "manifest": null,
-      "last_checked": "2026-11-18T01:36:07+09:00"
-    },
     "u2net": {
       "display_name": "U2Net",
       "paper": "Peng et al. U2Net: A General Framework with Spatial-Spectral-Integrated Double U-Net for Image Fusion. ACM MM 2023. https://doi.org/10.1145/3581783.3612084",
