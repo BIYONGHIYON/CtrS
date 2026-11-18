@@ -20,6 +20,7 @@ SSA-MRN의 구조·학습·손실을 바꿔 수치를 개선하는 연구입니�
 <!-- experiments:start -->
 | 실험 | 핵심 결과 | 상태 | 판정 |
 |---|---|:---:|:---:|
+| [89. 분광 손실 계수(λ)와 2배 거친 쌍 계수(c) 탐색: K2D 학습법, W2 2×2 합성곱 구현](89_spectral_coarse_loss_weights/README.md)<br>이병현 | 계획. λ·c 곡선을 validation으로 골라 K2D 150에폭 seed 42로 88번 K2D와 비교 | 계획 | 판단&nbsp;보류 |
 | [88. 일정 학습률 학습 뒤 감쇠 시작 시점의 저랭크 분해(K2)와 감쇠 구간 학습: 150에폭 경량 C2MS-SP 단일 시드 확인](88_factorization_at_decay_start/README.md)<br>이병현 | seed 42 학습 중. 같은 150에폭에서 감쇠 직전 K2 분해, C2MS-SP와 비교 | 학습&nbsp;중 | 판단&nbsp;보류 |
 | [87. C2MS-SP 잔차 블록 가운데 채널 축소 구조의 20에폭 미세조정 단일 시드 확인](87_reduced_width_short_finetuning/README.md)<br>이병현 | 아직 학습하지 않았습니다. B32W96·B32W64를 20에폭 미세조정해 C2MS-SP와 비교(seed 42) | 계획 | 판단&nbsp;보류 |
 | [86. K10 사영 전치 연산의 FFT 계산과 C2MS-SP 추론 설정 측정](86_fft_adjoint_fast_inference/README.md)<br>이병현 | 아직 측정하지 않았습니다. 학습 없는 사영 구현·추론 설정 측정 | 계획 | 성능&nbsp;비교&nbsp;아님 |
