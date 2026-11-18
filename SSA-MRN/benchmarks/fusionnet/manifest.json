@@ -1,6 +1,6 @@
 {
   "model": "fusionnet",
-  "description": "초안 보관 해시; 학습·평가 산출물 보관 대기",
+  "description": "FusionNet 진행 중 보관 해시; MATLAB 채점과 이미지 검증 대기",
   "upstream": {
     "path": "upstream",
     "commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5"
@@ -21,7 +21,42 @@
     "provenance/kaggle_training_cell.py": {
       "bytes": 3205,
       "sha256": "643eebe617beef744dd72dda73acabf2bc69f444686d5fb18508417a139dcc33"
+    },
+    "checkpoints/retrain_GF2_seed42/best.pt": {
+      "bytes": 975839,
+      "sha256": "9b685d6826b13ff741f978449af6b623252b969ff10808fd3159bc6206cc70a7"
     }
   },
-  "release_assets": {}
+  "release_assets": {
+    "fusionnet_author_QB_rr.zip": {
+      "bytes": 29334616,
+      "sha256": "30f912f17cf8d6e69cace8582d58f726d8a0e7a5665b961ec598fde19736bec7",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/predictions-benchmarks-fusionnet-author/fusionnet_author_QB_rr.zip"
+    },
+    "fusionnet_author_WV2_rr.zip": {
+      "bytes": 57821684,
+      "sha256": "5625ca2b76fbbdeb4e499afa4f167d3264fdb3bfeceda1c4bb31eb5298b99037",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/predictions-benchmarks-fusionnet-author/fusionnet_author_WV2_rr.zip"
+    },
+    "fusionnet_author_WV3_rr.zip": {
+      "bytes": 57809681,
+      "sha256": "447ac81e342cef87fb574f5ba4c6806f4381b03c74cf1ac7308282a03af6bd80",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/predictions-benchmarks-fusionnet-author/fusionnet_author_WV3_rr.zip"
+    },
+    "fusionnet_retrain_GF2_rr.zip": {
+      "bytes": 27684014,
+      "sha256": "f43be414602629aa409ad7f85736c841ef0ab3c3030a5d028e9a85714f92fa2d",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/predictions-benchmarks-fusionnet-retrain/fusionnet_retrain_GF2_rr.zip"
+    },
+    "initial.pt": {
+      "bytes": 329950,
+      "sha256": "d1d64d17322b3f16d2ef285d5d5ffd09af869ec26c8728b5c178904954fa310d",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-benchmarks-fusionnet-retrain/initial.pt"
+    },
+    "latest.pt": {
+      "bytes": 977105,
+      "sha256": "473476ef0bc917893153eb22dfbb5ebef67eeda85326fdf986bfde91c2578375",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-benchmarks-fusionnet-retrain/latest.pt"
+    }
+  }
 }
