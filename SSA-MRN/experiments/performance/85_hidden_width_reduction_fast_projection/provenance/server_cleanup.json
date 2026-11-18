@@ -1,0 +1,14 @@
+{
+  "time_kst": "2026-11-18T05:30:00+09:00",
+  "reason": "experiment 84 archived and verified before cleanup (PR #185 pushed; verify.py --experiment 84 --releases PASS: 175 files, 18 Release assets); 85 runs in C:/CtrS-p85 and does not reference C:/CtrS-p84",
+  "deleted": {
+    "C:/CtrS-p84/run": {"gib": 13.11, "what": "84 runtime: caches rebuilt from the H5, runs (checkpoints, TRUNK snapshots, records), controls", "recovery": "best/best_ema, records and results in Git (experiments/performance/84_long_training_decay_branches); latest/initial in Release weights-experiments-performance-84; caches can be rebuilt from C:/CtrS/PAN-MS"},
+    "C:/CtrS-p84/SSA-MRN, src84.tgz, source_manifest.json": {"gib": 0.07, "what": "84 server source copy", "recovery": "same files in Git; hashes in 84 provenance/source_manifest.json"},
+    "C:/CtrS-p84/fetch84.tgz": {"gib": 1.16, "what": "transfer bundle of the 84 results", "recovery": "contents archived in Git and the Release"},
+    "C:/CtrS-p84 scripts and top-level logs": {"gib": 0.0, "what": "launch, status and image scripts; prepare/optimize/run logs (kept in the log bundle)"}
+  },
+  "kept": ["C:/CtrS-p84/archive84_logs.tgz (4.1 MB: train/evaluate logs and events of every 84 run, top-level logs)", "C:/CtrS/PAN-MS", "C:/CtrS-p73/.venv", "C:/CtrS-p85"],
+  "free_before_gib": 60.55,
+  "free_after_gib": 74.89,
+  "reclaimed_gib": 14.33
+}

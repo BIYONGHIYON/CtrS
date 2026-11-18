@@ -2912,5 +2912,24 @@
     "results": "experiments/performance/84_long_training_decay_branches/results",
     "summary": "experiments/performance/84_long_training_decay_branches/results/summary.json",
     "manifest": "experiments/performance/84_long_training_decay_branches/manifest.json"
+  },
+  "performance/85_hidden_width_reduction_fast_projection": {
+    "display_name": "85. C2MS-SP 잔차 블록의 가운데 채널 축소·40에폭 미세조정과 빠른 사영 구현",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "성능 비교 아님",
+    "result": "축소 갈래 셋 모두 시간 관문 탈락(학습 안 함). 빠른 사영은 결과 동일·256² 2.2-2.9배, FT0L WV3 +0.105 dB(참고)",
+    "report": "experiments/performance/85_hidden_width_reduction_fast_projection/README.md",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "limits": "축소 갈래(B64W96·B32W96·B32W64)는 256² 네트워크 시간이 C2MS 대비 94-98%라 학습 전 시간 관문(0.95)을 통과하지 못했습니다. 빠른 사영은 모든 test 장면에서 지금 사영과 같았지만, cuDNN 자동 탐색을 끈 공식 설정의 512²에서는 전치 합성곱이 느려 지금 구현보다 느렸습니다. FT0L(65 + 40에폭)은 참고로 C2MS-SP 대비 QB +0.007, WV3 +0.105 dB(seed 42)입니다.",
+    "config": "experiments/performance/85_hidden_width_reduction_fast_projection/config.json",
+    "entrypoint": "experiments/performance/85_hidden_width_reduction_fast_projection/run.py",
+    "results": "experiments/performance/85_hidden_width_reduction_fast_projection/results",
+    "manifest": "experiments/performance/85_hidden_width_reduction_fast_projection/manifest.json",
+    "last_checked": "2026-11-18T13:22:00+09:00"
   }
 }
