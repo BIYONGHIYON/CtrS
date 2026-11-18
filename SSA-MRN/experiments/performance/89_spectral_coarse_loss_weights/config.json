@@ -209,7 +209,7 @@
   ],
   "reference_note": "the (lambda*, 1.0) point is trained again in stage B and used as the stage-B reference; the difference to the stage-A run of the same setting is reported as rerun spread",
   "reduced_fallback": "if the schedule is tight: c = 0, 0.5, 1.0, 1.5, 2.0 on all three sensors (15 runs); the QB moving average then uses the 0.5 grid with centers 0.5-1.5",
-  "start": "after the user confirms lambda*"
+  "start": "automatic after stage A with the rule-chosen lambda* (user decision 2026-11-19 04h: schedule through the lambda/c search, results checked the next day); stage-B arms are named BL<lam>C<c>"
  },
  "selection_rule": {
   "metric": "Delta_s(x) = original-scale validation PSNR of candidate x on sensor s minus that of the same-sensor reference point (network output, screening-selected epoch)",
@@ -226,7 +226,7 @@
   "boundary": "if the choice is at the edge of the range (centers 0.1/1.9 or 0.25/1.75, shared points 0/2.0) report that the optimum may lie outside; the range is not extended",
   "c_zero": "c = 0 is accepted if chosen; the report states that scale mixing is removed",
   "test": "test RR (with projection) measured for every candidate and tabulated, never used for selection",
-  "user_confirmation": "lambda* and c* are reported (curves, choice, rule trace) and confirmed by the user before the next stage starts"
+  "user_confirmation": "lambda* and c* are chosen automatically by this rule (user decision 2026-11-19 04h); the confirmation stage starts only after the user checks the curves and choices"
  },
  "screening_check": {
   "note": "reference only, not used for selection",
@@ -361,5 +361,33 @@
  "latency": {
   "setting": "one process, no training on the GPU, batch 1, test scene 0 (RR 256^2, FR 512^2), float32, TF32 off, cuDNN deterministic, autotune off, NCHW; 5 warm-up, 50 timed runs per system interleaved, 3 rounds, median of the round medians",
   "reference": "cuDNN autotune + TF32 and FP16 autocast timings and the FP16 RR change (never a judgement)"
- }
+ },
+ "stage0": {
+  "runtime": "C:/CtrS-p88/run",
+  "gate": "88 seed-42 run complete (all_complete.json, no controller_failure.json), summary.json present, K2D evaluation finite on QB, GF2 and WV3. K2D is taken as adopted (user decision 2026-11-19 04h, before the 88 result); no performance gate"
+ },
+ "controls": {
+  "c2ms_sp": {
+   "QB": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt",
+   "GF2": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s<seed>/best.pt",
+   "WV3": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s<seed>/best.pt"
+  },
+  "k2d_88": {
+   "QB": "C:/CtrS-p88/run/runs/QB_K2D_s<seed>/checkpoints/best.pt",
+   "GF2": "C:/CtrS-p88/run/runs/GF2_K2D_s<seed>/checkpoints/best.pt",
+   "WV3": "C:/CtrS-p88/run/runs/WV3_K2D_s<seed>/checkpoints/best.pt"
+  },
+  "k2d_88_complete": {
+   "QB": "C:/CtrS-p88/run/runs/QB_K2D_s<seed>/training_complete.json",
+   "GF2": "C:/CtrS-p88/run/runs/GF2_K2D_s<seed>/training_complete.json",
+   "WV3": "C:/CtrS-p88/run/runs/WV3_K2D_s<seed>/training_complete.json"
+  },
+  "note": "88 K2D weights are read from the 88 server runtime until 88 is archived; their SHA-256 is recorded in runtime/controls"
+ },
+ "sanity_margin_db": 1.0,
+ "stop_rule": "user decision 2026-11-19 04h: on any failure (process error, incomplete run, validation sanity failure: best epoch 0, nonfinite, or validation PSNR more than sanity_margin_db below the same-seed C2MS-SP; W2 check below -0.06 dB) no new job is launched, running jobs finish normally, stopped.json, exit 3",
+ "evaluation": "each run: best.pt (minimum validation MSE) on the 20 RR test scenes, without and with the 86 K10 projection, vs the same-seed C2MS-SP + P and 88 K2D + P; report only. FR and WV2 are not measured in the screening",
+ "chain": "chain89.ps1: wait for the 88 chain to finish -> copy the 88 source tree and overlay the 89 folder -> gate88 -> prepare -> optimize -> run; stops at the first nonzero exit",
+ "lr_start": 0.0001,
+ "lr_end": 1e-06
 }
