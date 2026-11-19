@@ -225,10 +225,22 @@
           42
         ]
       },
-      "status": "학습 완료·일부 평가",
-      "status_scope": "네 센서 RR MATLAB·FR Python 평가 및 QB 고정 6장면 이미지 완료, 나머지 C2MS 대조 조건 확인 대기",
+      "status": "평가 완료",
+      "status_scope": "네 센서 RR MATLAB·FR Python·고정 6장면 이미지 완료; 저자 가중치 학습 분할 미확인",
       "vs_c2ms_sp": {
-        "note": "C2MS-SP는 이번 사용자 지정 기준이 아닙니다. C2MS와의 비교는 보고서를 참고합니다."
+        "note": "GF2는 seed 42 대조, 저자 가중치는 시드 미공개로 C2MS-SP 3시드 평균과 비교",
+        "author_QB": {
+          "PSNR": -6.887680690808953
+        },
+        "retrain_GF2_s42": {
+          "PSNR": -3.1855978326151586
+        },
+        "author_WV3": {
+          "PSNR": -6.154113523844856
+        },
+        "author_WV2": {
+          "PSNR": -4.477607162885867
+        }
       },
       "report": "SSA-MRN/benchmarks/fusionnet/README.md",
       "config": "SSA-MRN/benchmarks/fusionnet/config.json",

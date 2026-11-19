@@ -2,10 +2,41 @@
   "model": "fusionnet",
   "display_name": "FusionNet",
   "evaluator": "김윤지",
-  "code": {"url": "https://github.com/liangjiandeng/DLPan-Toolbox", "commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5", "license": "GPL-3.0"},
-  "author_weights": {"source": "upstream/01-DL-toolbox(Pytorch)/UDL/pretrained-model/{QB,WV3}/fusionnet.pth", "training_split": "미확인", "redistribution": "공식 저장소 포함; 추가 검토"},
-  "normalization": {"QB": 2047, "GF2": 1023, "WV3": 2047, "WV2": 2047},
-  "settings": {"retrain": {"sensor": "GF2", "epochs": 400, "epochs_source": "DLPan option_fusionnet.py", "batch": 32, "optimizer": "Adam", "lr": 0.0003, "loss": "MSE", "selection": "validation MSE", "seed": 42}},
-  "transfer": {"WV2": "WV3 저자 가중치 적용"},
+  "code": {
+    "url": "https://github.com/liangjiandeng/DLPan-Toolbox",
+    "commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+    "license": "GPL-3.0"
+  },
+  "author_weights": {
+    "source": "upstream/01-DL-toolbox(Pytorch)/UDL/pretrained-model/{QB,WV3}/fusionnet.pth",
+    "training_split": "미확인",
+    "redistribution": "공식 저장소 포함; 추가 검토",
+    "sha256": {
+      "QB": "8154ac2bcdbf7c443b2e2395c6b01c5823297986e7d788d84d637750299ec4b9",
+      "WV3": "203113636325d9ba49ea0a65457df96182c85587db3aeb436f53866c188438bc"
+    }
+  },
+  "normalization": {
+    "QB": 2047,
+    "GF2": 1023,
+    "WV3": 2047,
+    "WV2": 2047
+  },
+  "settings": {
+    "retrain": {
+      "sensor": "GF2",
+      "epochs": 400,
+      "epochs_source": "DLPan option_fusionnet.py",
+      "batch": 32,
+      "optimizer": "Adam",
+      "lr": 0.0003,
+      "loss": "MSE",
+      "selection": "validation MSE",
+      "seed": 42
+    }
+  },
+  "transfer": {
+    "WV2": "WV3 저자 가중치 적용"
+  },
   "output": "lms + official residual; no clipping"
 }

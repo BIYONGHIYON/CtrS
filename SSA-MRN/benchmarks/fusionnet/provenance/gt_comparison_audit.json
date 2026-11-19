@@ -21,5 +21,51 @@
     "psnr_mean_lms": 28.368909545643447,
     "sam_mean_fusionnet": 7.371900667998832,
     "sam_mean_lms": 8.557396621101043
+  },
+  "pan_ms_max_abs_difference_DN": {
+    "QB": {
+      "pan": 0.0625,
+      "ms": 0.0625
+    },
+    "GF2": {
+      "pan": 0.0625,
+      "ms": 0.0625
+    },
+    "WV3": {
+      "pan": 0.0625,
+      "ms": 0.0625
+    },
+    "WV2": {
+      "pan": 0.0625,
+      "ms": 0.0625
+    }
+  },
+  "pan_ms_note": "20 images, 1/8 DN viewer values vs test H5, bounded by 0.0625 DN; LMS not stored in viewer",
+  "author_reinference": {
+    "source_commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+    "device": "CPU",
+    "scene_indices": [
+      0,
+      1,
+      2
+    ],
+    "mean_absolute_error_DN": {
+      "QB": [
+        2.178732183444332e-05,
+        2.219726567398439e-05,
+        3.8935777399773386e-05
+      ],
+      "WV3": [
+        3.087382411570694e-05,
+        5.2630862987790294e-05,
+        4.285647380930513e-05
+      ],
+      "WV2": [
+        0.00022801820110596172,
+        0.00027293404839134894,
+        0.0002747563226055405
+      ]
+    },
+    "limitation": "Three scenes only; does not establish author training split."
   }
 }

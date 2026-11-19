@@ -198,6 +198,7 @@ C2MS-SP의 개선이 가장 큰 64×64 영역을 4배 확대했습니다. C2MS-S
 | 원본 SSA-MRN (우리 재현, 3시드 평균) | 37.429 | 4.941 | 4.124 | 0.923 | [MATLAB 재평가](SSA-MRN/docs/c2ms_matlab_evaluation_tables.md) |
 | PNN | 36.942 | 5.181 | 4.468 | 0.918 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 | MTF-GLP-FS (고전 방법) | 32.709 | 7.792 | 7.373 | 0.835 | [ADWM](https://arxiv.org/html/2503.13214v1) |
+| FusionNet (Ours 환경 재현, 저자 QB 가중치) | 31.485 | 7.372 | 8.291 | 0.805 | [MATLAB 평가](SSA-MRN/benchmarks/fusionnet/README.md) |
 
 - 다른 모델의 값은 출처 열의 논문이 보고한 값입니다. 비교군으로 다시 학습·보고된 값(예: LFormer·PanDiff·HFIN·HOIF는 SRINO 보충자료, LAGNet·FusionNet·PNN은 ADWM)도 포함하므로, 같은 모델이 논문마다 다른 값으로 보고될 수 있습니다.
 - 논문마다 데이터 분할·정규화·PSNR 구현·학습 예산이 다를 수 있어 같은 조건의 공인 순위가 아닙니다. 순위는 참고로만 봅니다.
