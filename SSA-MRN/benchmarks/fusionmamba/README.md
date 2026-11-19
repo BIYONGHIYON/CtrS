@@ -6,7 +6,7 @@
 
 **출처:** Peng 외, FusionMamba, TGRS 2024 · [공식 코드](https://github.com/PSRben/FusionMamba). 저자 코드와 가중치의 재배포 조건은 확인하지 않아 포함하지 않았습니다.
 
-**결과:** WV3 test RR·FR 각 20장의 추론과 Python 지표 계산을 마쳤습니다. 다른 센서 학습 및 평가, MATLAB 채점과 예측 Release 보관은 미완료입니다. 논문값 재현이나 전체 모델 비교 완료로 해석하지 않습니다.
+**결과:** WV3 test RR·FR 각 20장의 추론과 Python 지표 계산을 마쳤습니다. WV3 RR 예측은 Release에 보관했고 실제 MATLAB 채점은 진행 중입니다. 다른 센서 학습 및 평가는 미완료입니다. 논문값 재현이나 전체 모델 비교 완료로 해석하지 않습니다.
 
 [평가 표](../README.md#models) · [결과](#results) · [해석](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
 
@@ -51,4 +51,4 @@ WV3에서만 사전 측정한 수치이며 다른 센서의 성능이나 공식 
 
 ## 재현 자료
 
-[설정과 해시](config.json). 예측 원본은 로컬 압축 파일에 보관되었고 GitHub Release에는 아직 게시하지 않았습니다. QB·GF2 직접 학습, WV2 전이, 전체 MATLAB 평가 및 Release 검증은 미완료입니다.
+[설정과 해시](config.json). WV3 RR 예측 20장은 [GitHub Release](https://github.com/BIYONGHIYON/CtrS/releases/tag/predictions-benchmarks-fusionmamba-author)에 보관했으며 파일 SHA-256은 `13a7d284b52fd5c577b57288c7d95745d8d9795c826cac8bf133fc724874055b`입니다. [실제 MATLAB 채점](https://github.com/BIYONGHIYON/CtrS/actions/runs/44560761200)은 진행 중입니다. FR 예측은 로컬 압축 파일에 보관했습니다. QB·GF2 직접 학습, WV2 전이, 전체 MATLAB 평가 및 Release 검증은 미완료입니다.
