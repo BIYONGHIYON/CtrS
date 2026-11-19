@@ -5,7 +5,7 @@
   "issue": "https://github.com/BIYONGHIYON/CtrS/issues/184",
   "paper": {
     "title": "Linearly-evolved Transformer for Pan-sharpening",
-    "authors": "Junming Hou, Zihan Cao, Naishan Zheng, Xuan Li, Xiaoyu Chen, Xinyang Liu, Xiaofeng Cong, Man Zhou, Danfeng Hong",
+    "authors": "Junming Hou, Zihan Cao, Naishan Zheng, Xuan Li, Xiaoyu Chen, Xinyang Liu, Xiaofeng Cong, Danfeng Hong, Man Zhou",
     "venue": "ACM MM 2024",
     "arxiv": "https://arxiv.org/abs/2404.12804",
     "version_used": "ACM MM 2024 최종본(DOI) + 보충자료 PDF(OpenReview 투고 페이지, 2024-08-03 작성; ACM DL에는 발표 영상만). 학습 설정은 보충자료 1절",
@@ -106,9 +106,9 @@
       "seed_note": "공식 main.py 3407 대신 팀 규칙의 42",
       "selection": "매 에폭 validation 손실(공식 손실, 자르지 않은 출력, valid_<센서>.h5) 최소. 공식 코드는 학습 파일로 검증하고 25에폭마다 저장",
       "deterministic": "cudnn.deterministic = True (공식 setup_seed)",
-      "memory": "층 재계산 사용 안 함",
+      "memory": "층 재계산 사용 안 함 (Kaggle T4 15GB에서 QB·GF2 모두 들어감, 2026-11-20 1에폭 실측: QB 402초, GF2 571초)",
       "data": "train_<센서>.h5 / valid_<센서>.h5 (팀 고정 PanCollection)",
-      "recipe_reason": "AGENTS.md 8절: 논문(보충자료 1절)에 학습 설정이 있으므로 그대로 사용. 비교 대상인 논문 표 1 수치도 이 설정으로 보고됨(\"In all experiments\"). 공식 config(code)는 참고만: 저자 WV3 가중치(epoch500)가 어느 설정으로 학습됐는지는 알 수 없음(공식 코드는 25에폭마다 저장)",
+      "recipe_reason": "AGENTS.md 8절: 논문(보충자료 1절)에 학습 설정이 있으므로 그대로 사용. 보충자료 1절은 이 설정을 센서 구분 없이 학습 설정으로 적음(같은 절의 \"In all experiments\"는 λ=0.1·모듈 5개에 대한 문장). 공식 config(code)는 참고만: 저자 WV3 가중치(epoch500)가 어느 설정으로 학습됐는지는 알 수 없음(공식 코드는 25에폭마다 저장)",
       "monitor": "weight decay 0.1이 학습을 막는지 QB 첫 세션 validation 손실 추이로 확인, 이상하면 이슈에서 재논의 (설정 변경 시 처음부터 다시)"
     }
   },
@@ -153,7 +153,7 @@
       "source": "논문 표 2"
     }
   },
-  "environment": "학습 장소 결정 후 기록 (공용 서버 또는 Kaggle), 실제 GPU·버전은 history.json meta",
+  "environment": "Kaggle T4 x2 (센서별 1장, QB·GF2 동시 학습), Python 3.13, Kaggle 기본 torch; 세션별 실제 GPU·버전은 history.json meta.session_log",
   "predictions_release": {
     "author": "predictions-benchmarks-lformer-author",
     "retrain": "predictions-benchmarks-lformer-retrain"

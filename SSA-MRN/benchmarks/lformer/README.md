@@ -2,11 +2,11 @@
 
 | 평가자 | 설정 | 상태 |
 |:---:|:---:|:---:|
-| 김경찬 | `author` WV3 (저자 가중치) · `retrain` QB · GF2 (논문 보충자료 설정), seed 42 | 계획 |
+| 김경찬 | `author` WV3 (저자 가중치) · `retrain` QB · GF2 (논문 보충자료 설정), seed 42 | 학습 중 |
 
 **출처:** Hou 외, Linearly-evolved Transformer for Pan-sharpening, ACM MM, 2024, [DOI 10.1145/3664647.3680979](https://doi.org/10.1145/3664647.3680979) ([arXiv](https://arxiv.org/abs/2404.12804), [OpenReview·보충자료](https://openreview.net/forum?id=pCxZTmGr4O)) · 공식 코드 [coder-JMHou/LFormer](https://github.com/coder-JMHou/LFormer) `cb10d43` · 라이선스 없음(코드·WV3 가중치 재배포 불가, 하위 모듈 참조만) · 이슈 [#184](https://github.com/BIYONGHIYON/CtrS/issues/184)
 
-**결과:** 아직 평가하지 않았습니다.
+**결과:** `author` WV3 RR PSNR 39.231 dB(논문 39.075), WV2 전이 28.615 dB(참고). Python 공통 지표, 실제 MATLAB 채점 전. QB·GF2는 학습 중입니다.
 
 [평가 표](../README.md#models) · [결과](#results) · [해석](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
 
@@ -14,7 +14,14 @@
 
 ## 결과
 
-아직 평가하지 않았습니다. 비교할 보고값은 다음과 같습니다.
+`author` WV3·WV2는 Python 공통 지표로 평가했습니다(실제 MATLAB 채점 전). QB·GF2는 학습 중입니다.
+
+| 센서 | PSNR ↑ | SAM ↓ | ERGAS ↓ | Q ↑ | QNR ↑ | 설정 |
+|---|---:|---:|---:|---:|---:|---|
+| WV3 | 39.231 | 2.821 | 2.103 | 0.918 (Q8) | 0.945 | `author` |
+| WV2 | 28.615 | 6.195 | 5.016 | 0.806 (Q8) | 0.850 | `author` WV3 가중치 전이(참고) |
+
+비교할 보고값은 다음과 같습니다.
 
 | 센서 | PSNR ↑ | SAM ↓ | ERGAS ↓ | Q ↑ | 출처 | 우리 평가 설정 |
 |---|---:|---:|---:|---:|---|---|
@@ -42,8 +49,8 @@ QB RR PSNR 38.674 dB(SRINO 보충자료의 재학습값)가 C2MS-SP보다 높게
 
 | 설정 | 센서 | 상태 |
 |---|---|---|
-| `author` | WV3, WV2 전이 | 계획 |
-| `retrain` seed 42 | QB, GF2 | 계획 (논문 보충자료 설정) |
+| `author` | WV3, WV2 전이 | 평가 완료 (Python 지표, MATLAB 채점 전) |
+| `retrain` seed 42 | QB, GF2 | 학습 중 (논문 보충자료 설정, Kaggle T4) |
 
 ### 모델
 
@@ -80,7 +87,7 @@ QB RR PSNR 38.674 dB(SRINO 보충자료의 재학습값)가 C2MS-SP보다 높게
 | 학습률 | 3e-4, 300·500에폭에 0.1배 | 1e-3, 250에폭마다 0.1배 |
 | 출처 | 논문 보충자료 (RTX 4090 1장) | `configs/config_qb.yaml`·`config_gf2.yaml`, `models/pipeline.py` |
 
-논문 설정을 쓰는 이유는 세 가지입니다. AGENTS.md 8절이 논문 설정을 우선하고, 비교 대상인 논문 표 1 수치도 이 설정으로 보고됐습니다("In all experiments"). 또 저자 WV3 가중치(`epoch500`)가 어느 설정으로 학습됐는지는 알 수 없습니다. 공식 코드가 25에폭마다 저장하므로 800에폭 학습에서도 500에폭 파일이 생기기 때문입니다.
+논문 설정을 쓰는 이유는 세 가지입니다. AGENTS.md 8절이 논문 설정을 우선하고, 보충자료 1절은 이 설정을 센서 구분 없이 학습 설정으로 적고 있고, 비교 대상인 논문 표 1도 이 학습으로 나온 수치입니다(같은 절의 "In all experiments"는 λ=0.1과 모듈 5개에 대한 문장입니다). 또 저자 WV3 가중치(`epoch500`)가 어느 설정으로 학습됐는지는 알 수 없습니다. 공식 코드가 25에폭마다 저장하므로 800에폭 학습에서도 500에폭 파일이 생기기 때문입니다.
 
 공개 코드 모델이 논문 모델과 다르다는 점(위 표)은 어느 설정을 쓰든 같으므로 차이로만 적습니다. weight decay 0.1이 학습을 막는지는 QB 첫 세션의 validation 손실 추이로 확인합니다. 이상하면 이슈에서 다시 논의합니다(설정을 바꾸면 처음부터 다시 학습).
 
@@ -88,7 +95,7 @@ QB RR PSNR 38.674 dB(SRINO 보충자료의 재학습값)가 C2MS-SP보다 높게
 - 손실은 L1 + 0.1·(1 − SSIM)입니다. 공식 `get_loss('l1ssim')`이고 논문 식 15-17과도 같습니다.
 - 섞어서 배치를 만들고 마지막 미완성 배치는 버립니다. `cudnn.deterministic`을 켭니다.
 
-**메모리:** 배치 32(64×64)의 학습 활성값은 CPU 측정으로 QB 약 7GB, GF2 약 10GB입니다. GPU 실측이 필요합니다. 들어가지 않으면 배치를 줄이지 않고 `--checkpointing`을 씁니다. 각 단계를 역전파 때 다시 계산하는 방식이고, 기울기가 같음을 확인했습니다(GF2 기준 표본당 약 300MB → 110MB). 썼는지는 `history.json`의 `meta.checkpointing`과 보고서에 적습니다.
+**메모리:** 배치 32(64×64)의 학습 활성값은 CPU 측정으로 QB 약 7GB, GF2 약 10GB입니다. Kaggle T4(15GB)에서 1에폭 실측 결과 QB·GF2 모두 층 재계산 없이 들어갑니다(1에폭 QB 402초, GF2 571초). 들어가지 않으면 배치를 줄이지 않고 `--checkpointing`을 씁니다. 각 단계를 역전파 때 다시 계산하는 방식이고, 기울기가 같음을 확인했습니다(GF2 기준 표본당 약 300MB → 110MB). 썼는지는 `history.json`의 `meta.checkpointing`과 보고서에 적습니다.
 
 **우리 규칙 때문에 바꾸는 점** (학습 조건 변경은 아님):
 - seed는 42입니다. 공식 값은 3407입니다.
