@@ -25,7 +25,7 @@ WV3 RR test 20장 평균입니다. FusionMamba는 실제 MATLAB으로 채점했�
 | CANNet | WV3 저자 가중치 1개 | 38.978 | 2.925 | 2.160 | 기존 MATLAB |
 | FusionNet | WV3 저자 가중치 1개 | 32.519 | 4.930 | 4.689 | 기존 MATLAB |
 
-기존 수치는 [기준 모델](../../docs/images/c2ms_sp/baseline_metrics.json), [U2Net](../u2net/README.md), [ARConv](../arconv/README.md), [CANNet](../cannet/README.md), [FusionNet](../fusionnet/README.md)의 보고값입니다. FusionMamba 입력 RR 파일의 해시는 과거 성능 54번 보존 manifest의 RR 파일과 일치합니다. 현재 C2MS-SP 실행 당시의 전체 입력 파일 해시와는 아직 대조하지 않았습니다. FusionMamba는 원본 test.py의 출력 clipping을 사용하고 C2MS-SP는 관측 일치 사영을 사용합니다. 저자 가중치의 학습 시드·학습 데이터 분할은 확인되지 않았습니다.
+기존 수치는 [C2MS-SP 보고값](../../docs/images/c2ms_sp/baseline_metrics.json), [U2Net](../u2net/README.md), [ARConv](../arconv/README.md), [CANNet](../cannet/README.md), [FusionNet](../fusionnet/README.md)의 보고값입니다. FusionMamba 입력 RR 파일의 해시는 과거 성능 54번 보존 manifest의 RR 파일과 일치합니다. C2MS-SP 실행 당시의 전체 입력 파일 해시와는 아직 대조하지 않았습니다. 현재 사용자 지정 기준 모델 C2MS와의 동일 조건 비교는 미완료입니다. FusionMamba는 원본 test.py의 출력 clipping을 사용하고 C2MS-SP는 관측 일치 사영을 사용합니다. 저자 가중치의 학습 시드·학습 데이터 분할은 확인되지 않았습니다.
 
 FR Python 참고값은 QNR 0.9656, Dλ 0.0166, Ds 0.0182입니다. PAN 축소는 MATLAB 근사 구현이며 FR에는 정답 영상이 없습니다. [RR 장면별 수치](results/rr_metrics.json) · [FR 장면별 수치](results/fr_metrics_approx.json).
 
