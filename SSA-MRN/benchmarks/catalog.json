@@ -21,6 +21,46 @@
     "last_checked": "마지막 확인 시각 (KST, ISO 8601)"
   },
   "models": {
+    "lformer": {
+      "display_name": "LFormer",
+      "paper": "Hou et al. Linearly-evolved Transformer for Pan-sharpening. ACM MM 2024. https://doi.org/10.1145/3664647.3680979 (보충자료: https://openreview.net/forum?id=pCxZTmGr4O)",
+      "code": "https://github.com/coder-JMHou/LFormer",
+      "commit": "cb10d435baae1f7cfb58f43cf79bfadc8335f2e0",
+      "license": "없음 (LICENSE 파일 없음); 코드·WV3 저자 가중치 재배포 불가, 하위 모듈 참조와 URL·커밋·SHA-256만 기록",
+      "evaluator": "김경찬",
+      "settings": [
+        "author",
+        "retrain"
+      ],
+      "epochs": "QB·GF2 800 (논문 보충자료 1절), seed 42",
+      "sensors": {
+        "author": [
+          "WV3",
+          "WV2"
+        ],
+        "retrain": [
+          "QB",
+          "GF2"
+        ]
+      },
+      "seeds": {
+        "author": null,
+        "retrain": [
+          42
+        ]
+      },
+      "status": "계획",
+      "status_scope": "WV3 저자 가중치 평가·WV2 전이, QB·GF2 직접 학습 예정 (이슈 #184)",
+      "paper_reported": {
+        "source": "논문에 QB 없음; QB RR PSNR 38.674는 SRINO 보충자료의 재학습 비교값",
+        "QB": {
+          "PSNR": 38.674
+        }
+      },
+      "report": "SSA-MRN/benchmarks/lformer/README.md",
+      "config": "SSA-MRN/benchmarks/lformer/config.json",
+      "last_checked": "2026-11-20T02:13:52+09:00"
+    },
     "u2net": {
       "display_name": "U2Net",
       "paper": "Peng et al. U2Net: A General Framework with Spatial-Spectral-Integrated Double U-Net for Image Fusion. ACM MM 2023. https://doi.org/10.1145/3581783.3612084",

@@ -1,0 +1,162 @@
+{
+  "model": "lformer",
+  "display_name": "LFormer",
+  "evaluator": "김경찬",
+  "issue": "https://github.com/BIYONGHIYON/CtrS/issues/184",
+  "paper": {
+    "title": "Linearly-evolved Transformer for Pan-sharpening",
+    "authors": "Junming Hou, Zihan Cao, Naishan Zheng, Xuan Li, Xiaoyu Chen, Xinyang Liu, Xiaofeng Cong, Man Zhou, Danfeng Hong",
+    "venue": "ACM MM 2024",
+    "arxiv": "https://arxiv.org/abs/2404.12804",
+    "version_used": "ACM MM 2024 최종본(DOI) + 보충자료 PDF(OpenReview 투고 페이지, 2024-08-03 작성; ACM DL에는 발표 영상만). 학습 설정은 보충자료 1절",
+    "doi": "https://doi.org/10.1145/3664647.3680979",
+    "pages": "MM '24 논문집 1486-1494",
+    "code_link_in_paper": "초록: The code is publicly available at https://github.com/coder-JMHou/LFormer",
+    "supplementary": "1절 Datasets and Experimental Settings: Adam (0.9, 0.999), weight decay 0.1, batch 32, lr 3e-4, 300·500에폭에 0.1배, 800에폭, λ=0.1, LFormer 모듈 5개, RTX 4090 1장 (arXiv v1 4.1절과 같음)",
+    "openreview": "https://openreview.net/forum?id=pCxZTmGr4O (ACM MM 2024 투고·심사 페이지: 본문 PDF와 보충자료 PDF)"
+  },
+  "code": {
+    "url": "https://github.com/coder-JMHou/LFormer",
+    "commit": "cb10d435baae1f7cfb58f43cf79bfadc8335f2e0",
+    "license": "없음 (LICENSE 파일 없음)",
+    "redistribution": false,
+    "link": "고정 커밋 하위 모듈 참조만, 코드·가중치 복사 없음",
+    "modified": false
+  },
+  "main_model": {
+    "file": "upstream/models/LFormer.py (AttnFuseMain)",
+    "structure": "PAN을 Q, LMS를 K·V로 한 첫 교차 주의(8x8 창, 8헤드) → 주의 지도를 1x3 합성곱으로 갱신하며 재사용하는 단계 5개(MSReversibleRefine) + 고주파 가지(HpBranch) → Resblock 2개와 1x1 합성곱으로 잔차 → LMS에 더함",
+    "adapter": "공식 입력 (lms, pan), ms 미사용. 추론은 patch_merge=False로 영상 전체를 한 번에, 출력 [0, 1] 자름(공식 val_step과 같음). 학습 중에는 자르지 않음(공식 train_step)",
+    "dims": {
+      "WV3": "lms 8 / attn 64 / hp 64",
+      "QB": "lms 4 / attn 32 / hp 48",
+      "GF2": "lms 4 / attn 64 / hp 64",
+      "source": "공식 configs/config_<센서>.yaml (논문에는 채널 수 없음)"
+    },
+    "parameters": {
+      "WV3": 2274635,
+      "QB": 1068539,
+      "GF2": 2273307
+    },
+    "paper_vs_code": [
+      "논문 본 모델: 첫 단계 주의를 창으로 나누지 않음(표 6에 창 주의 확장 변형을 따로 실험: GF2 RR 43.0769 dB, 0.573M) / 코드: 8x8 창 주의(FirstAttn window_size=8)",
+      "논문: 1차원 합성곱 1x5 선택(표 5) / 코드·저자 가중치: 1x3 (reflash_attn.body.0.weight 8x8x1x3)",
+      "논문 표 4·5: 0.589M 파라미터(GF2) / 코드 config: GF2 2.27M, WV3 2.27M, QB 1.07M",
+      "README 제목 아래에 다른 프로젝트(BiMPan) 설명이 섞여 있고 'Complete code will be released soon'"
+    ]
+  },
+  "author_weights": {
+    "WV3": {
+      "path": "upstream/weights/WV3/LFormer_epoch500.pth",
+      "sha256": "8b521a5f8e8bbe8104ebb11f1c97e91d9a0a19d3f994d342cd3952551827170a",
+      "format": "{'model': state_dict (텐서 174개), 'exp_timestamp': '20240903-152543'}; config_wv3.yaml의 test_weight_path 타임스탬프와 같음",
+      "redistribution": false
+    },
+    "QB": null,
+    "GF2": null
+  },
+  "inference": {
+    "mode": "영상 전체 한 번에 (patch_merge=False), 네 센서·두 설정 모두 같음",
+    "official": "공식 test는 PatchMergeModule(.so, Linux)로 타일링: crop_batch_size 64, patch_size_list [16, 64, 64]",
+    "check": "results/patch_merge_check.json (compare_patch_merge.py, WV3 저자 가중치, 출력 차이만 기록). 결과와 관계없이 추론 방식은 바꾸지 않고 차이를 보고서에 적음 (실행 전 고정)"
+  },
+  "normalization": {
+    "QB": 2047,
+    "GF2": 1023,
+    "WV3": 2047,
+    "WV2": 2047
+  },
+  "settings": {
+    "author": {
+      "sensors": [
+        "WV3"
+      ],
+      "transfer": {
+        "WV2": "WV3 저자 가중치 적용, 참고"
+      },
+      "checkpoint_argument": "--checkpoint SSA-MRN/benchmarks/lformer/upstream/weights/WV3/LFormer_epoch500.pth"
+    },
+    "retrain": {
+      "sensors": [
+        "QB",
+        "GF2"
+      ],
+      "script": "train.py",
+      "recipe": "paper",
+      "recipes": {
+        "code": {
+          "epochs": 500,
+          "batch": 32,
+          "optimizer": "Adam (0.9, 0.999), weight decay 1e-6",
+          "lr": "1e-3, StepLR 250에폭마다 0.1배",
+          "source": "공식 configs/config_qb.yaml·config_gf2.yaml, models/pipeline.py",
+          "note": "참고만, 사용 안 함"
+        },
+        "paper": {
+          "epochs": 800,
+          "batch": 32,
+          "optimizer": "Adam (0.9, 0.999), weight decay 0.1",
+          "lr": "3e-4, 300·500에폭에 0.1배",
+          "source": "논문 보충자료 1절 Experimental Settings (arXiv v1 4.1절과 같음; WV3·GF2 공통, QB는 논문에 없음)",
+          "epochs_note": "800"
+        }
+      },
+      "loss": "L1 + 0.1 (1 - SSIM) (공식 get_loss('l1ssim'), 논문 식 15-17)",
+      "seed": 42,
+      "seed_note": "공식 main.py 3407 대신 팀 규칙의 42",
+      "selection": "매 에폭 validation 손실(공식 손실, 자르지 않은 출력, valid_<센서>.h5) 최소. 공식 코드는 학습 파일로 검증하고 25에폭마다 저장",
+      "deterministic": "cudnn.deterministic = True (공식 setup_seed)",
+      "memory": "층 재계산 사용 안 함",
+      "data": "train_<센서>.h5 / valid_<센서>.h5 (팀 고정 PanCollection)",
+      "recipe_reason": "AGENTS.md 8절: 논문(보충자료 1절)에 학습 설정이 있으므로 그대로 사용. 비교 대상인 논문 표 1 수치도 이 설정으로 보고됨(\"In all experiments\"). 공식 config(code)는 참고만: 저자 WV3 가중치(epoch500)가 어느 설정으로 학습됐는지는 알 수 없음(공식 코드는 25에폭마다 저장)",
+      "monitor": "weight decay 0.1이 학습을 막는지 QB 첫 세션 validation 손실 추이로 확인, 이상하면 이슈에서 재논의 (설정 변경 시 처음부터 다시)"
+    }
+  },
+  "sensors": [
+    "QB",
+    "GF2",
+    "WV3"
+  ],
+  "transfer": {
+    "WV2": "WV3 저자 가중치 적용, 참고"
+  },
+  "seeds": {
+    "author": null,
+    "retrain": [
+      42
+    ]
+  },
+  "paper_reported": {
+    "source": "LFormer 논문 표 1 (ACM 최종본, RR, arXiv v1과 같음), 표 2 (GF2 FR)",
+    "WV3": {
+      "PSNR": 39.0748,
+      "SAM": 2.8985,
+      "ERGAS": 2.1645,
+      "Q8": 0.9193,
+      "PSNR_std": 2.844
+    },
+    "GF2": {
+      "PSNR": 44.1958,
+      "SAM": 0.6481,
+      "ERGAS": 0.5778,
+      "Q4": 0.9851,
+      "note": "GF2 PSNR은 논문마다 43-45 dB와 49-50 dB 계열이 섞여 있어 우리 평가기 값과 직접 비교하지 않음"
+    },
+    "QB": {
+      "PSNR": 38.674,
+      "source": "SRINO 보충자료의 재학습 비교값 (LFormer 논문에는 QB 없음)"
+    },
+    "GF2_FR": {
+      "D_lambda": 0.0206,
+      "D_s": 0.0501,
+      "QNR": 0.9303,
+      "source": "논문 표 2"
+    }
+  },
+  "environment": "학습 장소 결정 후 기록 (공용 서버 또는 Kaggle), 실제 GPU·버전은 history.json meta",
+  "predictions_release": {
+    "author": "predictions-benchmarks-lformer-author",
+    "retrain": "predictions-benchmarks-lformer-retrain"
+  },
+  "post_processing": "없음"
+}
