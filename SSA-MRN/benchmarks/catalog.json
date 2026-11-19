@@ -252,6 +252,39 @@
           "note": "FusionNet 저자 가중치와 C2MS seed 42, MATLAB band mean, peak 2047; 동일 시드 쌍 아님"
         }
       }
+    },
+    "fusionmamba": {
+      "display_name": "FusionMamba",
+      "paper": "Peng et al. FusionMamba, TGRS 2024. https://doi.org/10.1109/TGRS.2024.3496073",
+      "code": "https://github.com/PSRben/FusionMamba",
+      "commit": "6bd5cbd2c65b56c0d5820f91f25b5ea3d44d0945",
+      "license": "공식 코드와 저자 가중치 재배포 조건 미확인",
+      "evaluator": "김윤지",
+      "settings": [
+        "author"
+      ],
+      "epochs": "WV3 저자 공개 가중치; README 400에폭, 파일명 420 차이 미확인",
+      "sensors": {
+        "author": [
+          "WV3"
+        ]
+      },
+      "pending_sensors": [
+        "QB",
+        "GF2",
+        "WV2"
+      ],
+      "seeds": {
+        "author": null
+      },
+      "status": "학습 완료·일부 평가",
+      "status_scope": "WV3 RR·FR Python만; MATLAB·나머지 센서 미완료",
+      "vs_c2ms_sp": {
+        "note": "동일 시드 짝 없음; 비교 조건 확인 중"
+      },
+      "report": "SSA-MRN/benchmarks/fusionmamba/README.md",
+      "config": "SSA-MRN/benchmarks/fusionmamba/config.json",
+      "last_checked": "2026-11-19"
     }
   }
 }
