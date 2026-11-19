@@ -23,7 +23,7 @@
 | WV3 | 저자 | 32.519 | 4.9298 | 4.6888 | 0.9177 | 0.8058 |
 | WV2 | WV3 가중치 전이 | 27.058 | 7.4858 | 6.0711 | 0.8494 | 0.7099 |
 
-각 센서 RR test 20장입니다. PSNR은 band mean과 peak 2047을 사용했습니다. GF2의 원래 범위 peak 1023을 쓰면 PSNR은 39.522 dB입니다. 같은 배열의 Python과 MATLAB 결과에서 PSNR·SAM·ERGAS는 표시 정밀도에서 일치했습니다. Q2n은 구현에 따른 작은 차이가 있습니다. [저자 설정 장면별 채점](results/matlab_author.json) · [GF2 장면별 채점](results/matlab_retrain.json).
+각 센서 RR test 20장입니다. 이 표는 비교를 위해 PSNR band mean을 모두 peak 2047 기준으로 표시합니다. **GF2의 MATLAB 원본 출력은 peak 1023 기준 39.522 dB이며, 표의 45.547 dB는 같은 예측의 오차에 peak 2047을 적용해 변환한 값입니다.** 같은 배열의 Python과 MATLAB 결과에서 PSNR·SAM·ERGAS는 표시 정밀도에서 일치했습니다. Q2n은 구현에 따른 작은 차이가 있습니다. [저자 설정 채점 요약](results/matlab_author.json) · [GF2 채점 요약](results/matlab_retrain.json). GF2의 개별 장면 값은 [MATLAB 실행의 artifact](https://github.com/BIYONGHIYON/CtrS/actions/runs/44337153698)에 있습니다.
 
 ### 기준 모델과 비교
 
@@ -36,7 +36,7 @@
 | WV3 | 38.663 | 32.519 | -6.144 |
 | WV2 전이 | 31.335 | 27.058 | -4.277 |
 
-C2MS-SP 수치는 [기존 Python 평가 기록](../../docs/images/c2ms_sp/baseline_metrics.json), FusionNet 수치는 위의 실제 MATLAB 채점입니다. 두 평가 코드는 같은 test 파일 이름과 20장, band mean PSNR 및 peak 2047을 사용하도록 작성됐지만, 기준 모델 예측을 이번에 MATLAB으로 다시 채점하거나 데이터 파일 해시의 일치 여부를 검증한 것은 아닙니다. 따라서 수치 차이는 참고로 해석합니다. 특히 GF2는 두 모델 모두 peak 2047 기준이며, peak 1023 수치와 혼합하지 않습니다.
+C2MS-SP 수치는 [기존 Python 평가 기록](../../docs/images/c2ms_sp/baseline_metrics.json), FusionNet 수치는 실제 MATLAB 채점과 동일 예측에 대해 산출한 peak 2047 기준 값입니다(GF2의 원본 출력은 peak 1023). 두 평가 코드는 같은 test 파일 이름과 20장, band mean PSNR 및 peak 2047을 사용하도록 작성됐지만, 기준 모델 예측을 이번에 MATLAB으로 다시 채점하거나 데이터 파일 해시의 일치 여부를 검증한 것은 아닙니다. 따라서 수치 차이는 참고로 해석합니다. 특히 GF2는 두 모델 모두 peak 2047 기준이며, peak 1023 수치와 혼합하지 않습니다.
 
 GF2의 FusionNet은 seed 42로 직접 학습했고, QB·WV3 저자 가중치의 학습 시드와 분할은 확인되지 않아 같은 시드 쌍 비교가 아닙니다. WV2는 두 모델 모두 WV3 가중치로 전이했으나 C2MS-SP에만 밴드별 센서 보정과 관측 일치 사영이 적용됩니다. 학습 데이터 중복 여부와 조건 차이는 결과의 원인을 단정할 수 없게 합니다.
 
