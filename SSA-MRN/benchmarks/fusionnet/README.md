@@ -6,7 +6,7 @@
 
 **출처:** Deng 외, Detail Injection-based Deep Convolutional Neural Networks for Pansharpening · [DLPan-Toolbox 공식 코드](https://github.com/liangjiandeng/DLPan-Toolbox). 공식 코드의 라이선스와 저자 가중치의 별도 재배포 조건은 구분합니다.
 
-**확인된 결과:** 네 센서 RR 각 20장의 실제 MATLAB 채점과 FR 각 20장의 Python 평가를 마쳤습니다. GF2는 400에폭 학습하고 validation MSE 최저인 382에폭을 선택했습니다. 저자 가중치의 학습 데이터 분할은 확인되지 않았으며 논문 조건을 완전히 재현했다고 판단할 수 없습니다. QB 고정 6장면의 현재 C2MS-SP 비교 이미지를 보관했습니다. 네 센서의 C2MS-SP 기존 기록과 비교했으며 평가 방법과 학습 조건의 차이를 아래에 적었습니다.
+**확인된 결과:** 네 센서 RR 각 20장의 실제 MATLAB 채점과 FR 각 20장의 Python 평가를 마쳤습니다. GF2는 400에폭 학습하고 validation MSE 최저인 382에폭을 선택했습니다. [학습·validation 곡선](results/learning_GF2_seed42.png)과 [에폭별 기록](results/history_GF2_seed42.json)은 400에폭 latest 체크포인트에서 복구했습니다. 저자 가중치의 학습 데이터 분할은 확인되지 않았으며 논문 조건을 완전히 재현했다고 판단할 수 없습니다. QB 고정 6장면의 현재 C2MS-SP 비교 이미지를 보관했습니다. 네 센서의 C2MS-SP 기존 기록과 비교했으며 평가 방법과 학습 조건의 차이를 아래에 적었습니다.
 
 [평가 표](../README.md#models) · [결과](#results) · [해석](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
 
