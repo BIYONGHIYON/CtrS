@@ -6,7 +6,7 @@
 
 **출처:** Deng 외, Detail Injection-based Deep Convolutional Neural Networks for Pansharpening · [DLPan-Toolbox 공식 코드](https://github.com/liangjiandeng/DLPan-Toolbox). 공식 코드의 라이선스와 저자 가중치의 별도 재배포 조건은 구분합니다.
 
-**확인된 결과:** 네 센서 RR 각 20장의 실제 MATLAB 채점과 FR 각 20장의 Python 평가를 마쳤습니다. GF2는 400에폭 학습하고 validation MSE 최저인 382에폭을 선택했습니다. 저자 가중치의 학습 데이터 분할은 확인되지 않았으며 논문 조건을 완전히 재현했다고 판단할 수 없습니다. QB 고정 6장면의 C2MS 비교 이미지를 보관했습니다. 네 센서의 C2MS-SP 기존 기록과 비교했으며 평가 방법과 학습 조건의 차이를 아래에 적었습니다.
+**확인된 결과:** 네 센서 RR 각 20장의 실제 MATLAB 채점과 FR 각 20장의 Python 평가를 마쳤습니다. GF2는 400에폭 학습하고 validation MSE 최저인 382에폭을 선택했습니다. 저자 가중치의 학습 데이터 분할은 확인되지 않았으며 논문 조건을 완전히 재현했다고 판단할 수 없습니다. QB 고정 6장면의 현재 C2MS-SP 비교 이미지를 보관했습니다. 네 센서의 C2MS-SP 기존 기록과 비교했으며 평가 방법과 학습 조건의 차이를 아래에 적었습니다.
 
 [평가 표](../README.md#models) · [결과](#results) · [해석](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
 
@@ -23,7 +23,7 @@
 | WV3 | 저자 | 32.519 | 4.9298 | 4.6888 | 0.9177 | 0.8058 |
 | WV2 | WV3 가중치 전이 | 27.058 | 7.4858 | 6.0711 | 0.8494 | 0.7099 |
 
-각 센서 RR test 20장입니다. 이 표는 비교를 위해 PSNR band mean을 모두 peak 2047 기준으로 표시합니다. **GF2의 MATLAB 원본 출력은 peak 1023 기준 39.522 dB이며, 표의 45.547 dB는 같은 예측의 오차에 peak 2047을 적용해 변환한 값입니다.** 같은 배열의 Python과 MATLAB 결과에서 PSNR·SAM·ERGAS는 표시 정밀도에서 일치했습니다. Q2n은 구현에 따른 작은 차이가 있습니다. [저자 설정 채점 요약](results/matlab_author.json) · [GF2 채점 요약](results/matlab_retrain.json). GF2의 개별 장면 값은 [MATLAB 실행의 artifact](https://github.com/BIYONGHIYON/CtrS/actions/runs/44337153698)에 있습니다.
+각 센서 RR test 20장입니다. 이 표는 비교를 위해 PSNR band mean을 모두 peak 2047 기준으로 표시합니다. **GF2의 MATLAB 원본 출력은 peak 1023 기준 39.522 dB이며, 표의 45.547 dB는 같은 예측의 오차에 peak 2047을 적용해 변환한 값입니다.** 같은 배열의 Python과 MATLAB 결과에서 PSNR·SAM·ERGAS는 표시 정밀도에서 일치했습니다. Q2n은 구현에 따른 작은 차이가 있습니다. [저자 설정 채점 요약](results/matlab_author.json) · [GF2 채점 요약](results/matlab_retrain.json). MATLAB 개별 장면 값은 [QB](results/matlab_scenes_QB.json) · [GF2](results/matlab_scenes_GF2.json) · [WV3](results/matlab_scenes_WV3.json) · [WV2](results/matlab_scenes_WV2.json)에 보관했습니다. GF2 원본 장면 PSNR은 peak 1023입니다.
 
 ### 기준 모델과 비교
 
@@ -40,7 +40,7 @@ C2MS-SP 수치는 [기존 Python 평가 기록](../../docs/images/c2ms_sp/baseli
 
 GF2의 FusionNet은 seed 42로 직접 학습했고, QB·WV3 저자 가중치의 학습 시드와 분할은 확인되지 않아 같은 시드 쌍 비교가 아닙니다. WV2는 두 모델 모두 WV3 가중치로 전이했으나 C2MS-SP에만 밴드별 센서 보정과 관측 일치 사영이 적용됩니다. 학습 데이터 중복 여부와 조건 차이는 결과의 원인을 단정할 수 없게 합니다.
 
-아래 QB 그림은 현재 기준 C2MS-SP가 아닌 이전 **C2MS** seed 42와 비교했습니다. 이전 C2MS의 실제 MATLAB RR PSNR은 [38.274 dB](../../experiments/performance/53_scale_mixed_training/results/matlab_reevaluation/40202998202/e53_QB_C2MS_s42/summary.json)입니다. 현재 기준과의 비교 그림은 확인되지 않았습니다.
+아래 QB 그림은 현재 기준 C2MS-SP가 아닌 이전 **C2MS** seed 42와 비교했습니다. 이전 C2MS의 실제 MATLAB RR PSNR은 [38.274 dB](../../experiments/performance/53_scale_mixed_training/results/matlab_reevaluation/40202998202/e53_QB_C2MS_s42/summary.json)입니다. 현재 기준 비교 그림은 아래에 있습니다.
 
 ### FR 참고 결과
 
@@ -68,43 +68,43 @@ WV2는 WV3 가중치로 평가한 전이 결과입니다. 서로 다른 정규�
 
 ## 그림
 
-QB RR 고정 6장면(0·1·3·7·14·17)을 이전 C2MS seed 42와 비교했습니다. 현재 기준 C2MS-SP와 비교한 이미지는 아직 확인하지 않았습니다. 원본 비교는 LR MS · PAN · C2MS · FusionNet · 정답 순서이며 오차 지도는 같은 색 척도를 사용합니다. 확대 창은 FusionNet의 오차 감소가 가장 큰 64×64 영역이므로 FusionNet에 유리하게 선택된 창입니다. 전체 장면 PSNR과 창 위치는 [장면별 기록](results/images/author_QB_c2ms_s42/result_images.json)에 보관했습니다. FusionNet 저자 가중치의 학습 시드는 확인되지 않았습니다.
+QB RR 고정 6장면(0·1·3·7·14·17)을 현재 기준 C2MS-SP seed 42와 비교했습니다. C2MS-SP는 배포된 뷰어의 1/8 DN 단위로 저장된 예측을 사용했고, FusionNet은 MATLAB 채점에 사용한 예측 Release를 사용했습니다. 뷰어 묶음과 FusionNet 예측 zip의 SHA-256을 검증했으며, 뷰어에 저장된 정답이 해시 확인한 QB test 정답 20장과 일치함을 확인했습니다. 원본 비교는 LR MS · PAN · C2MS-SP · FusionNet · 정답 순서이며 오차 지도는 같은 색 척도를 사용합니다. 확대 창은 FusionNet에 유리하게 선택한 64×64 영역입니다. 전체 장면 PSNR과 창 위치는 [장면별 기록](results/images/author_QB_c2ms_sp_s42/result_images.json)에 보관했습니다. 그림의 PSNR은 peak 2047이며 C2MS-SP는 반올림된 뷰어 예측 기반입니다. FusionNet 저자 가중치의 학습 시드는 확인되지 않았습니다.
 
 ### 장면 0
 
-![장면 0 원본 크기 비교](results/images/author_QB_c2ms_s42/full_scene_00.png)
+![장면 0 원본 크기 비교](results/images/author_QB_c2ms_sp_s42/full_scene_00.png)
 
-![장면 0 확대 비교](results/images/author_QB_c2ms_s42/compare_scene_00.png)
+![장면 0 확대 비교](results/images/author_QB_c2ms_sp_s42/compare_scene_00.png)
 
 ### 장면 1
 
-![장면 1 원본 크기 비교](results/images/author_QB_c2ms_s42/full_scene_01.png)
+![장면 1 원본 크기 비교](results/images/author_QB_c2ms_sp_s42/full_scene_01.png)
 
-![장면 1 확대 비교](results/images/author_QB_c2ms_s42/compare_scene_01.png)
+![장면 1 확대 비교](results/images/author_QB_c2ms_sp_s42/compare_scene_01.png)
 
 ### 장면 3
 
-![장면 3 원본 크기 비교](results/images/author_QB_c2ms_s42/full_scene_03.png)
+![장면 3 원본 크기 비교](results/images/author_QB_c2ms_sp_s42/full_scene_03.png)
 
-![장면 3 확대 비교](results/images/author_QB_c2ms_s42/compare_scene_03.png)
+![장면 3 확대 비교](results/images/author_QB_c2ms_sp_s42/compare_scene_03.png)
 
 ### 장면 7
 
-![장면 7 원본 크기 비교](results/images/author_QB_c2ms_s42/full_scene_07.png)
+![장면 7 원본 크기 비교](results/images/author_QB_c2ms_sp_s42/full_scene_07.png)
 
-![장면 7 확대 비교](results/images/author_QB_c2ms_s42/compare_scene_07.png)
+![장면 7 확대 비교](results/images/author_QB_c2ms_sp_s42/compare_scene_07.png)
 
 ### 장면 14
 
-![장면 14 원본 크기 비교](results/images/author_QB_c2ms_s42/full_scene_14.png)
+![장면 14 원본 크기 비교](results/images/author_QB_c2ms_sp_s42/full_scene_14.png)
 
-![장면 14 확대 비교](results/images/author_QB_c2ms_s42/compare_scene_14.png)
+![장면 14 확대 비교](results/images/author_QB_c2ms_sp_s42/compare_scene_14.png)
 
 ### 장면 17
 
-![장면 17 원본 크기 비교](results/images/author_QB_c2ms_s42/full_scene_17.png)
+![장면 17 원본 크기 비교](results/images/author_QB_c2ms_sp_s42/full_scene_17.png)
 
-![장면 17 확대 비교](results/images/author_QB_c2ms_s42/compare_scene_17.png)
+![장면 17 확대 비교](results/images/author_QB_c2ms_sp_s42/compare_scene_17.png)
 
 <a id="evidence"></a>
 
