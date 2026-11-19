@@ -2,11 +2,11 @@
 
 | 평가자 | 설정 | 상태 |
 |:---:|:---:|:---:|
-| 김윤지 | 저자 WV3 가중치 | WV3 일부 평가 · MATLAB 대기 |
+| 김윤지 | 저자 WV3 가중치 | WV3 RR MATLAB 평가 완료 · 다른 센서 대기 |
 
 **출처:** Peng 외, FusionMamba, TGRS 2024 · [공식 코드](https://github.com/PSRben/FusionMamba). 저자 코드와 가중치의 재배포 조건은 확인하지 않아 포함하지 않았습니다.
 
-**결과:** WV3 test RR·FR 각 20장의 추론과 Python 지표 계산을 마쳤습니다. WV3 RR 예측은 Release에 보관했고 실제 MATLAB 채점은 진행 중입니다. 다른 센서 학습 및 평가는 미완료입니다. 논문값 재현이나 전체 모델 비교 완료로 해석하지 않습니다.
+**결과:** WV3 test RR·FR 각 20장의 추론과 Python 지표 계산을 마쳤습니다. WV3 RR 예측을 Release에 보관했고 실제 MATLAB 채점을 완료했습니다. 다른 센서 학습 및 평가는 미완료입니다. 논문값 재현이나 전체 모델 비교 완료로 해석하지 않습니다.
 
 [평가 표](../README.md#models) · [결과](#results) · [해석](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
 
@@ -14,11 +14,11 @@
 
 ## 결과
 
-WV3 RR test 20장 평균입니다. FusionMamba의 PSNR·SAM·ERGAS는 Python으로 계산했으며 MATLAB 채점값이 아닙니다. 기존 모델의 숫자는 해당 보고서의 기존 결과입니다. 각 결과의 데이터·전처리·시드·평가 방법이 다를 수 있으므로 표의 차이를 공식 순위나 같은 시드 비교로 해석하지 않습니다.
+WV3 RR test 20장 평균입니다. FusionMamba는 실제 MATLAB으로 채점했으며 Python 계산과 표시 자릿수에서 일치했습니다. 기존 모델의 숫자는 해당 보고서의 기존 결과입니다. 각 결과의 데이터·전처리·시드·평가 방법이 다를 수 있으므로 표의 차이를 공식 순위나 같은 시드 비교로 해석하지 않습니다.
 
 | 모델 | 설정 | PSNR (dB) | SAM (도) | ERGAS | 채점 |
 |---|---|---:|---:|---:|---|
-| FusionMamba | WV3 저자 가중치 1개 | 39.344 | 2.816 | 2.079 | Python, MATLAB 대기 |
+| FusionMamba | WV3 저자 가중치 1개 | 39.344 | 2.816 | 2.079 | 실제 MATLAB |
 | C2MS-SP | 3시드 평균 | 38.673 | 2.984 | 2.241 | 기존 Python |
 | U2Net | WV3 저자 가중치 1개 | 38.844 | 2.897 | 2.200 | 기존 Python |
 | ARConv | WV3 저자 가중치 1개 | 39.167 | 2.858 | 2.118 | 기존 MATLAB |
@@ -33,7 +33,7 @@ FR Python 참고값은 QNR 0.9656, Dλ 0.0166, Ds 0.0182입니다. PAN 축소는
 
 ## 해석과 정리
 
-WV3에서만 사전 측정한 수치이며 다른 센서의 성능이나 공식 우열을 확정하지 않습니다. 동일 예측의 실제 MATLAB 채점, 데이터·후처리 확인 및 비교군별 조건 대조가 필요합니다.
+WV3에서만 사전 측정한 수치이며 다른 센서의 성능이나 공식 우열을 확정하지 않습니다. 데이터·후처리 확인 및 비교군별 조건 대조가 필요합니다.
 
 <a id="method"></a>
 
@@ -51,4 +51,4 @@ WV3에서만 사전 측정한 수치이며 다른 센서의 성능이나 공식 
 
 ## 재현 자료
 
-[설정과 해시](config.json). WV3 RR 예측 20장은 [GitHub Release](https://github.com/BIYONGHIYON/CtrS/releases/tag/predictions-benchmarks-fusionmamba-author)에 보관했으며 파일 SHA-256은 `13a7d284b52fd5c577b57288c7d95745d8d9795c826cac8bf133fc724874055b`입니다. [실제 MATLAB 채점](https://github.com/BIYONGHIYON/CtrS/actions/runs/44560761200)은 진행 중입니다. FR 예측은 로컬 압축 파일에 보관했습니다. QB·GF2 직접 학습, WV2 전이, 전체 MATLAB 평가 및 Release 검증은 미완료입니다.
+[설정과 해시](config.json). WV3 RR 예측 20장은 [GitHub Release](https://github.com/BIYONGHIYON/CtrS/releases/tag/predictions-benchmarks-fusionmamba-author)에 보관했으며 파일 SHA-256은 `13a7d284b52fd5c577b57288c7d95745d8d9795c826cac8bf133fc724874055b`입니다. [실제 MATLAB 채점](https://github.com/BIYONGHIYON/CtrS/actions/runs/44560761200)을 완료했습니다. 평균은 PSNR 39.34355 dB(밴드 평균, peak 2047), SAM 2.81623도, ERGAS 2.07943, SCC 0.98730, Q2n 0.91889, Q 0.92063입니다. 전체 밴드 통합 PSNR은 37.78668 dB로 밴드 평균과 정의가 다릅니다. Python과의 차이는 표시 자릿수에서 0입니다. FR 예측은 로컬 압축 파일에 보관했습니다. QB·GF2 직접 학습, WV2 전이, 나머지 센서 MATLAB 평가와 전체 Release 검증은 미완료입니다.
