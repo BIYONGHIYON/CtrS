@@ -50,7 +50,8 @@ async function loadScene(dsId, i, ids) {             // inputs and GT once per s
 const dataset = id => S.index.datasets.find(d => d.id === id);
 const model = id => S.index.models.find(m => m.id === id);
 const modelsIn = ds => S.index.models.filter(m => ds.results && ds.results[m.id]);
-const COMPARE_GROUPS = [['original', '원본'], ['ours', '우리 모델'], ['benchmark', '다른 연구 모델 · 저자 가중치']];
+const COMPARE_GROUPS = [['original', '원본'], ['ours', '우리 모델'], ['benchmark', '다른 연구 모델']];
+const roleOf = m => (m.role_by_dataset && m.role_by_dataset[S.ds]) || m.role;
 const comparable = ds => modelsIn(ds).filter(m => COMPARE_GROUPS.some(([g]) => g === m.group));
 function pickModels(ds) {                           // the baseline C2MS-SP and one chosen model (default: original SSA-MRN)
   const avail = modelsIn(ds), cmps = comparable(ds), base = avail.find(m => m.group === 'baseline');
@@ -269,7 +270,7 @@ function build() {
 
   // about
   const about = el('details', { class: 'about' }, el('summary', {}, '모델과 수치 설명'),
-    el('dl', {}, vis.map(m => { const r = ds.results[m.id]; return [el('dt', {}, m.label, ' ', el('span', { class: 'tag' }, m.role)), el('dd', {}, m.description || '', el('br'), el('code', {}, r.checkpoint || r.predictions || (r.asset ? `${r.release}/${r.asset}` : '')))]; })),
+    el('dl', {}, vis.map(m => { const r = ds.results[m.id]; return [el('dt', {}, m.label, ' ', el('span', { class: 'tag' }, roleOf(m))), el('dd', {}, m.description || '', el('br'), el('code', {}, r.checkpoint || r.predictions || (r.asset ? `${r.release}/${r.asset}` : '')))]; })),
     el('ul', {},
       el('li', {}, '장면과 데이터셋 수치는 export.py가 원래 예측으로 계산했습니다(common/metrics.rr_metrics, PSNR은 peak 2047의 밴드별 평균).'),
       el('li', {}, `확대 영역 수치는 브라우저가 1/${factor} DN 단위로 저장한 값으로 계산합니다. 장면 전체에서 두 계산의 차이는 PSNR 0.0004 dB 이내였습니다.`),

@@ -13,6 +13,7 @@ A model is either
 - given as precomputed predictions: "predictions": {"<dataset>": "<h5 path>"} with dataset "pred" of shape (N, C, H, W) in DN.
 - read from another model's predictions Release: "benchmark": {"model", "setting", "datasets"} takes
   predictions-benchmarks-<model>-<setting>/<model>_<setting>_<dataset>_rr.zip through common/benchmark_predictions.py (no weights).
+  "settings_by_dataset": {"GF2": "retrain"} overrides the setting for single datasets.
 Datasets without an entry for a model are skipped for that model. Existing results of models that are not exported
 again are kept in index.json.
 
@@ -77,8 +78,9 @@ def build(model, dataset, device):
 def predictor(model, dataset, device):
     if 'benchmark' in model:
         from common import benchmark_predictions
-        b = model['benchmark']; pred, info = benchmark_predictions.load(b['model'], b['setting'], dataset['id'])
-        return (lambda i, a: pred[i]), info
+        b = model['benchmark']; setting = b.get('settings_by_dataset', {}).get(dataset['id'], b['setting'])
+        pred, info = benchmark_predictions.load(b['model'], setting, dataset['id'])
+        return (lambda i, a: pred[i]), dict(setting=setting, **info)
     if 'predictions' in model:
         path = ROOT / model['predictions'][dataset['id']]
         with h5py.File(path, 'r') as f:
