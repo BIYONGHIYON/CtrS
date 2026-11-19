@@ -6,7 +6,7 @@
 
 **출처:** Deng 외, Detail Injection-based Deep Convolutional Neural Networks for Pansharpening · [DLPan-Toolbox 공식 코드](https://github.com/liangjiandeng/DLPan-Toolbox). 공식 코드의 라이선스와 저자 가중치의 별도 재배포 조건은 구분합니다.
 
-**확인된 결과:** 네 센서 RR 각 20장의 실제 MATLAB 채점과 FR 각 20장의 Python 평가를 마쳤습니다. GF2는 400에폭 학습하고 validation MSE 최저인 382에폭을 선택했습니다. 저자 가중치의 학습 데이터 분할은 확인되지 않았으며 논문 조건을 완전히 재현했다고 판단할 수 없습니다. QB 고정 6장면의 C2MS 비교 이미지를 보관했습니다. 나머지 센서의 C2MS 대조 조건은 확인이 필요합니다.
+**확인된 결과:** 네 센서 RR 각 20장의 실제 MATLAB 채점과 FR 각 20장의 Python 평가를 마쳤습니다. GF2는 400에폭 학습하고 validation MSE 최저인 382에폭을 선택했습니다. 저자 가중치의 학습 데이터 분할은 확인되지 않았으며 논문 조건을 완전히 재현했다고 판단할 수 없습니다. QB 고정 6장면의 C2MS 비교 이미지를 보관했습니다. 네 센서의 C2MS-SP 기존 기록과 비교했으며 평가 방법과 학습 조건의 차이를 아래에 적었습니다.
 
 [평가 표](../README.md#models) · [결과](#results) · [해석](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
 
@@ -27,7 +27,20 @@
 
 ### 기준 모델과 비교
 
-현재 지정된 기준 모델은 **C2MS-SP**입니다. 아래 QB 그림에 사용한 모델은 이전 **C2MS** seed 42로, C2MS-SP의 관측 일치 사영이 적용된 기준과 다릅니다. 이전 C2MS의 실제 MATLAB RR PSNR은 [38.274 dB](../../experiments/performance/53_scale_mixed_training/results/matlab_reevaluation/40202998202/e53_QB_C2MS_s42/summary.json), FusionNet 저자 가중치는 31.485 dB이며 차이는 -6.788 dB입니다. 이 수치는 C2MS-SP 대비 차이가 아닙니다. FusionNet 저자 가중치의 학습 시드도 확인되지 않아 같은 시드 쌍 비교가 아닙니다. 네 센서의 C2MS-SP 비교는 동일 평가 조건 및 장면별 자료를 확인한 뒤 작성합니다.
+현재 지정된 기준 모델은 **C2MS-SP**입니다. RR test 각 20장의 기존 기록을 비교하면 다음과 같습니다. 차이는 FusionNet에서 C2MS-SP를 뺀 값입니다.
+
+| 센서 | C2MS-SP seed 42 | FusionNet | 차이 (dB) |
+|---|---:|---:|---:|
+| QB | 38.396 | 31.485 | -6.910 |
+| GF2 | 48.732 | 45.547 | -3.186 |
+| WV3 | 38.663 | 32.519 | -6.144 |
+| WV2 전이 | 31.335 | 27.058 | -4.277 |
+
+C2MS-SP 수치는 [기존 Python 평가 기록](../../docs/images/c2ms_sp/baseline_metrics.json), FusionNet 수치는 위의 실제 MATLAB 채점입니다. 두 평가 코드는 같은 test 파일 이름과 20장, band mean PSNR 및 peak 2047을 사용하도록 작성됐지만, 기준 모델 예측을 이번에 MATLAB으로 다시 채점하거나 데이터 파일 해시의 일치 여부를 검증한 것은 아닙니다. 따라서 수치 차이는 참고로 해석합니다. 특히 GF2는 두 모델 모두 peak 2047 기준이며, peak 1023 수치와 혼합하지 않습니다.
+
+GF2의 FusionNet은 seed 42로 직접 학습했고, QB·WV3 저자 가중치의 학습 시드와 분할은 확인되지 않아 같은 시드 쌍 비교가 아닙니다. WV2는 두 모델 모두 WV3 가중치로 전이했으나 C2MS-SP에만 밴드별 센서 보정과 관측 일치 사영이 적용됩니다. 학습 데이터 중복 여부와 조건 차이는 결과의 원인을 단정할 수 없게 합니다.
+
+아래 QB 그림은 현재 기준 C2MS-SP가 아닌 이전 **C2MS** seed 42와 비교했습니다. 이전 C2MS의 실제 MATLAB RR PSNR은 [38.274 dB](../../experiments/performance/53_scale_mixed_training/results/matlab_reevaluation/40202998202/e53_QB_C2MS_s42/summary.json)입니다. 현재 기준과의 비교 그림은 확인되지 않았습니다.
 
 ### FR 참고 결과
 
