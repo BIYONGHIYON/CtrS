@@ -275,6 +275,31 @@
           "WV2"
         ]
       }
+    },
+    {
+      "id": "fusionnet",
+      "label": "FusionNet",
+      "short": "FusionNet",
+      "role": "다른 모델 · 저자 가중치",
+      "group": "benchmark",
+      "seed": null,
+      "role_by_dataset": {
+        "GF2": "다른 모델 · 직접 학습 seed 42"
+      },
+      "description": "FusionNet(Deng 외, IEEE TGRS)의 예측입니다. QB·WV3는 저자 공개 가중치(재학습 없음, 시드 미공개), GF2는 저자 가중치가 없어 공식 코드와 기본 설정으로 우리 학습 데이터에서 400에폭 직접 학습했습니다(seed 42, validation으로 382에폭 선택). WV2에는 WV3 저자 가중치를 그대로 적용했고, 사영·밴드별 보정 같은 우리 방법은 붙이지 않았습니다. 평가 보고서: benchmarks/fusionnet (평가자 김윤지).",
+      "benchmark": {
+        "model": "fusionnet",
+        "setting": "author",
+        "settings_by_dataset": {
+          "GF2": "retrain"
+        },
+        "datasets": [
+          "QB",
+          "GF2",
+          "WV3",
+          "WV2"
+        ]
+      }
     }
   ]
 }

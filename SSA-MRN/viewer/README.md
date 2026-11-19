@@ -1,6 +1,6 @@
 # 팬샤프닝 결과 비교 사이트
 
-같은 RR test 장면에서 **기준 모델 C2MS-SP(성능 81번)와 고른 비교 모델 하나**의 예측 영상·오차 지도·수치를 비교하는 정적 웹페이지입니다. 비교 모델은 화면에서 고르며 기본값은 원본 SSA-MRN입니다. 그 밖에 우리 모델(경량판 C2MS-SP-Lite, 성능 83번)과 우리 환경에서 평가한 다른 연구 모델(현재 CANNet·ARConv, 저자 공개 가중치)을 고를 수 있습니다. 데이터셋은 QB·GF2·WV3·WV2 전이입니다. 우리 모델은 seed 42 가중치이고, C2MS-SP·SP-Lite는 관측 일치 사영(공액 기울기법 10회)과 WV2의 성능 82번 밴드별 센서 보정을 포함합니다. 원본과 다른 연구 모델은 발표된 방식 그대로이며 우리 방법을 붙이지 않았습니다. 모델 정의는 `common/baseline_models.py`, 다른 연구 모델의 평가는 `benchmarks/<모델>/`에 있습니다.
+같은 RR test 장면에서 **기준 모델 C2MS-SP(성능 81번)와 고른 비교 모델 하나**의 예측 영상·오차 지도·수치를 비교하는 정적 웹페이지입니다. 비교 모델은 화면에서 고르며 기본값은 원본 SSA-MRN입니다. 그 밖에 우리 모델(경량판 C2MS-SP-Lite, 성능 83번)과 우리 환경에서 평가한 다른 연구 모델(현재 CANNet·ARConv·FusionNet)을 고를 수 있습니다. CANNet·ARConv와 FusionNet의 QB·WV3·WV2는 저자 공개 가중치이고, 저자 가중치가 없는 FusionNet GF2는 우리 학습 데이터에서 직접 학습한 seed 42 가중치입니다. 데이터셋은 QB·GF2·WV3·WV2 전이입니다. 우리 모델은 seed 42 가중치이고, C2MS-SP·SP-Lite는 관측 일치 사영(공액 기울기법 10회)과 WV2의 성능 82번 밴드별 센서 보정을 포함합니다. 원본과 다른 연구 모델은 발표된 방식 그대로이며 우리 방법을 붙이지 않았습니다. 모델 정의는 `common/baseline_models.py`, 다른 연구 모델의 평가는 `benchmarks/<모델>/`에 있습니다.
 
 배포 주소: **[CtrS Viewer 열기](https://biyonghiyon.github.io/CtrS/)** (이 저장소의 GitHub Pages 루트, 배포 워크플로 [`.github/workflows/pages.yml`](../../.github/workflows/pages.yml)). 같은 사이트의 `/portfolio/<GitHub ID>/`에는 팀원별 소개 페이지([`portfolio/`](../../portfolio/README.md))가 있고, 이 사이트에서 그쪽으로 가는 링크는 두지 않습니다.
 
@@ -17,7 +17,7 @@ python -m http.server 8765 -d SSA-MRN/viewer
 
 - **데이터셋:** 맨 위 탭에서 고릅니다.
 - **장면:** 탭 아래 썸네일 줄에서 고릅니다. 썸네일 아래 숫자는 **C2MS-SP − 비교 모델**의 장면 PSNR 차이(dB, 파랑이면 C2MS-SP가 높음)이고, 밑줄이 있는 번호는 표준 결과 이미지 장면(0·1·3·7·14·17)입니다. `[` `]` 키로 이전·다음 장면으로 넘어갑니다.
-- **모델:** C2MS-SP는 항상 표시하고, 다른 한 열은 "비교 모델" 목록에서 고릅니다(원본 / 우리 모델 / 다른 연구 모델 · 저자 가중치, 기본값 원본 SSA-MRN). 고른 모델의 예측만 내려받습니다.
+- **모델:** C2MS-SP는 항상 표시하고, 다른 한 열은 "비교 모델" 목록에서 고릅니다(원본 / 우리 모델 / 다른 연구 모델, 기본값 원본 SSA-MRN). 고른 모델의 예측만 내려받습니다.
 - **영상 열:** 두 모델의 예측 · 정답 · 모델별 오차 |예측 − 정답| · C2MS-SP 개선(비교 모델 오차 − C2MS-SP 오차, 파랑 개선·주황 악화)을 한 열씩 놓았습니다. 각 열의 위가 장면 전체, 바로 아래 노란 테두리가 확대 영역입니다.
 - **확대 영역:** 아무 영상이나 누르거나 끌면 노란 상자가 옮겨집니다. 크기는 16·32·64·128 픽셀, 방향키로 1픽셀(Shift는 8픽셀)씩 움직입니다. "개선 최대"·"악화 최대"는 개선 지도의 창 평균이 가장 크거나 작은 곳으로 옮깁니다.
 - **수치:** 영상 아래에 장면·영역 PSNR과 평균 오차를 적고, 아래 표에 확대 영역(PSNR·SAM·ERGAS·평균 오차), 장면 전체(PSNR·SAM·ERGAS·SCC·Q2n), 데이터셋 평균을 두 모델별로 놓았습니다. C2MS-SP 옆의 차이는 비교 모델 대비이며 파랑이 C2MS-SP 쪽이 좋은 것입니다.
@@ -30,7 +30,7 @@ python -m http.server 8765 -d SSA-MRN/viewer
 - 원본의 예측 PSNR은 성능 53·54번이 보관한 결과 이미지 기록(`result_images.json`, CUDA)과 네 데이터셋의 표준 6장면 모두에서 0.0007 dB 이내로 일치했습니다(로컬 MPS 추론). C2MS-SP·SP-Lite의 데이터셋 평균은 `common/baseline_images.py`의 seed 42 값과 대조했습니다.
 - 예측은 1/8 DN 단위 int16으로 저장합니다. 브라우저가 저장값으로 계산한 장면 전체 수치는 원래 예측으로 계산한 값과 PSNR 0.0004 dB, SAM 0.0001° 이내였습니다.
 - PSNR은 `rr_metrics`와 같이 peak 2047의 밴드별 PSNR 평균입니다(GF2는 10bit라 약 6 dB 높게 나옵니다).
-- 우리 모델의 수치는 seed 42 가중치 한 개의 결과이고 실험 판정은 `docs/judgement_criteria.md`의 시드 평균을 따릅니다. 다른 연구 모델은 저자 가중치(시드 미공개)의 예측이며 판정을 붙이지 않습니다. 그 데이터셋 평균은 Python `rr_metrics` 값이라 보고서의 MATLAB 채점값과 소수 셋째 자리에서 다를 수 있습니다.
+- 우리 모델의 수치는 seed 42 가중치 한 개의 결과이고 실험 판정은 `docs/judgement_criteria.md`의 시드 평균을 따릅니다. 다른 연구 모델은 저자 가중치(시드 미공개) 또는 직접 학습 가중치(seed 42)의 예측이며 판정을 붙이지 않습니다. 그 데이터셋 평균은 Python `rr_metrics` 값이라 보고서의 MATLAB 채점값과 소수 셋째 자리에서 다를 수 있습니다.
 
 ## 모델 추가
 
@@ -43,7 +43,7 @@ python SSA-MRN/viewer/export.py --models <모델 id>
 ```
 
 - **저장소 코드로 만드는 모델:** `module`(SSA-MRN 기준 경로), `factory`, `args`(`"{bands}"`는 밴드 수, `"{dataset}"`은 데이터셋 id로 바뀜), 데이터셋별 인자 `kwargs_by_dataset`과 데이터셋별 `checkpoints`를 적습니다. 입력은 (pan, lms, ms)를 데이터셋 `scale`로 나눈 값이고 출력에 다시 곱합니다. 체크포인트의 state dict 키가 `model`이 아니면 `state_key`를 적습니다.
-- **다른 연구 모델(평가 완료):** `"benchmark": {"model": "<폴더 이름>", "setting": "author|retrain", "datasets": ["QB", "GF2", "WV3", "WV2"]}`을 적습니다. `export.py`가 MATLAB 채점에 쓴 예측 Release `predictions-benchmarks-<모델>-<설정>`의 zip을 받아 GitHub SHA-256을 확인하고 읽습니다(`common/benchmark_predictions.py`). 가중치가 필요 없으므로 재배포할 수 없는 저자 가중치 모델도 올릴 수 있습니다. `group`은 `benchmark`로 둡니다.
+- **다른 연구 모델(평가 완료):** `"benchmark": {"model": "<폴더 이름>", "setting": "author|retrain", "datasets": ["QB", "GF2", "WV3", "WV2"]}`을 적습니다. `export.py`가 MATLAB 채점에 쓴 예측 Release `predictions-benchmarks-<모델>-<설정>`의 zip을 받아 GitHub SHA-256을 확인하고 읽습니다(`common/benchmark_predictions.py`). 가중치가 필요 없으므로 재배포할 수 없는 저자 가중치 모델도 올릴 수 있습니다. 데이터셋마다 설정이 다르면 `"settings_by_dataset": {"GF2": "retrain"}`처럼 바꿀 데이터셋만 적고, 화면의 모델 설명 표시도 `role_by_dataset`으로 데이터셋별로 바꿉니다(FusionNet). `group`은 `benchmark`로 둡니다.
 - **H5로 준비한 예측:** `"predictions": {"QB": "<h5 경로>"}`를 적습니다. H5에는 `pred` 데이터셋을 RR test와 같은 순서·크기 `(20, C, 256, 256)`의 DN 값으로 넣습니다.
 - 체크포인트나 예측이 없는 데이터셋은 그 모델에서 건너뜁니다. `label`·`short`·`role`·`description`은 화면에 그대로 표시됩니다.
 
