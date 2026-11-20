@@ -3,13 +3,17 @@
   "sensor": "WV2",
   "source": "user supplied original archive",
   "single_execution": "required by issue; attempt history not supplied",
-  "actual_settings": null,
-  "actual_prompt": null,
+  "actual_settings": {
+    "model": "gemini-nano-banana-2.1",
+    "number_of_images": 1,
+    "aspect_ratio": "1:1",
+    "image_size": "1K"
+  },
+  "actual_prompt": "Do not change the composition. I am giving you two images of the same satellite scene, exactly aligned pixel to pixel.\nThe first image is a low-resolution multispectral color image of the area: it is blurry, but its colors are correct.\nThe second image is a high-resolution panchromatic grayscale image of the same area: it is sharp, but it has no color.\n\nCreate one image that combines them (pansharpening): use the second image as the guide for all spatial detail and the first image as the guide for all color.\n\nRules:\n- Keep the exact framing, scale and geometry. Do not crop, rotate, shift, zoom, mirror or reframe. Every object must stay at the same pixel position as in both inputs.\n- Take edges, textures and fine structures only from the second image. Do not add, remove or invent any building, road, vehicle, tree, boat, field pattern or texture that is not visible in the second image.\n- Take colors only from the first image. Keep its overall brightness and color balance. Do not increase saturation or contrast, and do not apply any artistic style, haze removal, color grading or sharpening halos.\n- Output a single square (1:1) top-down satellite photograph, 1024×1024, with no text, labels, borders or watermarks.",
   "missing_metadata": [
     "generation timestamps",
     "credits",
-    "retry history",
-    "service settings and prompt verification"
+    "retry history"
   ],
   "archive": {
     "name": "WV2_생성결과.zip",
@@ -278,5 +282,13 @@
       "credits_charged": null,
       "retries": null
     }
-  ]
+  ],
+  "condition_confirmation": {
+    "source": "User confirmation in the Codex conversation after results submission",
+    "statement": "Both models used the fixed prompt and settings of issue #212 unchanged.",
+    "scope": "All 20 supplied WV2 scenes for each model",
+    "evidence_type": "user attestation",
+    "independently_verified_against_service_logs": false,
+    "fixed_prompt_source": "SSA-MRN/common/genimage_io.py at 6315811e86fabef006c6d5fd688e3c81ecc22dde"
+  }
 }
