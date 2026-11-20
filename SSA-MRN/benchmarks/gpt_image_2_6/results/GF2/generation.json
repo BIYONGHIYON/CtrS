@@ -1,0 +1,316 @@
+{
+ "model": "gpt_image_2_6",
+ "model_id": "gpt-image-2.6-sunburst",
+ "sensor": "GF2",
+ "inputs_zip_sha256": "79a8c1cb82390f848939fb232c19c02ad0a91502f26c29664af1c6b522716fca",
+ "settings": {
+  "model": "gpt-image-2.6-sunburst",
+  "number_of_images": 1,
+  "size": "1024x1024",
+  "quality": "high",
+  "background": "opaque"
+ },
+ "prompt": "Edit the first image. Both images show the same satellite scene and are exactly aligned pixel to pixel.\nThe first image is a low-resolution multispectral color image: blurry, but its colors are correct.\nThe second image is a high-resolution panchromatic (grayscale) image of the same area: sharp, but without color.\n\nTask: pansharpening. Make the first image as sharp as the second image while keeping the colors of the first image.\n\nRules:\n- Keep the exact framing, scale and geometry. Do not crop, rotate, shift, zoom, mirror or reframe. Every object must stay at the same pixel position as in both inputs.\n- Take edges, textures and fine structures only from the second image. Do not add, remove or invent any building, road, vehicle, tree, boat, field pattern or texture that is not visible in the second image.\n- Take colors only from the first image. Keep its overall brightness and color balance. Do not increase saturation or contrast, and do not apply any artistic style, haze removal, color grading or sharpening halos.\n- Output a single square (1:1) top-down satellite photograph, 1024\u00d71024, with no text, labels, borders or watermarks.",
+ "attempts": [
+  {
+   "scene": 0,
+   "attempt": 0,
+   "started": "2026-11-20T21:47:22+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-504f108d38424bf1",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_00.png",
+   "picture_sha256": "589766ef2140bd9e6b888d61a68779838dc2543a531d265b718e1abb34043dd0"
+  },
+  {
+   "scene": 1,
+   "attempt": 0,
+   "started": "2026-11-20T21:48:24+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-d7a8c95ecb1547cb",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_01.png",
+   "picture_sha256": "6a16225e73a10d51bf078d0b8ccef1b301e9fd7593b751f116eb89c6d7b312ea"
+  },
+  {
+   "scene": 2,
+   "attempt": 0,
+   "started": "2026-11-20T21:49:00+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-ee1df725c5b04665",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_02.png",
+   "picture_sha256": "bfd1d7f0c3bb6125d9d0b1ac34056455c286850280bf4f265c1614560185a52d"
+  },
+  {
+   "scene": 3,
+   "attempt": 0,
+   "started": "2026-11-20T21:49:35+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-c50d1038d2c04540",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_03.png",
+   "picture_sha256": "b2ac738c0038c64a30e701cffe475a13dc044622a88862a08ed5a535434a3dc9"
+  },
+  {
+   "scene": 4,
+   "attempt": 0,
+   "started": "2026-11-20T21:50:14+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-11b07d7c95614ddf",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_04.png",
+   "picture_sha256": "df296aac6c94f03dfa34ae19562fbc896698a5b1e68a0f3766b2e50a93d3a527"
+  },
+  {
+   "scene": 5,
+   "attempt": 0,
+   "started": "2026-11-20T21:50:53+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-f67af058d4564780",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_05.png",
+   "picture_sha256": "841f78ba6f8c488ae78c5ee2cebf004f649a2db81e3a0127a3deaf8b6692a0ef"
+  },
+  {
+   "scene": 6,
+   "attempt": 0,
+   "started": "2026-11-20T21:51:33+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-dbb26d71c3704a20",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_06.png",
+   "picture_sha256": "9917397873098517ea372ccb63418f9506d01d0141cb2ef06ebc6e59bc5a8b8f"
+  },
+  {
+   "scene": 7,
+   "attempt": 0,
+   "started": "2026-11-20T21:52:11+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-771695df4de4455c",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_07.png",
+   "picture_sha256": "15ad33340124b0b4b5af4f9bda22671b9dbf7873d5ec6d158840f04d4dcf6f7b"
+  },
+  {
+   "scene": 8,
+   "attempt": 0,
+   "started": "2026-11-20T21:52:47+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-aa2984de30cf4cc6",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_08.png",
+   "picture_sha256": "b16b6d00a45a99884050d42c190aff9c5b12260e9f0d841dfd3fdf990bc16025"
+  },
+  {
+   "scene": 9,
+   "attempt": 0,
+   "started": "2026-11-20T21:53:27+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-99f43c33fbc74d14",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_09.png",
+   "picture_sha256": "5e0f2d5fdb26c7d5f882f52d869f4ed0239d9c70366c8e3d3e1838bf135ab26f"
+  },
+  {
+   "scene": 10,
+   "attempt": 0,
+   "started": "2026-11-20T21:54:07+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-88418d252f304071",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_10.png",
+   "picture_sha256": "4a2ea13f0287a3c489397d4b64635d29237126cca7539b62d560e438a60c54b8"
+  },
+  {
+   "scene": 11,
+   "attempt": 0,
+   "started": "2026-11-20T21:54:48+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-ab836d3421e6421a",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_11.png",
+   "picture_sha256": "4b8b891bdee5824a99f158c823f9362b0447790fc3d4afc4d33ee06e9ce993da"
+  },
+  {
+   "scene": 12,
+   "attempt": 0,
+   "started": "2026-11-20T21:55:27+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-ca3b35c7e1a74f63",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_12.png",
+   "picture_sha256": "e59b055facc564827eb97ee5009b8f04d0d932099bfe1ef8c4dc3c47f42cf39a"
+  },
+  {
+   "scene": 13,
+   "attempt": 0,
+   "started": "2026-11-20T21:56:05+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-387a526dce43493e",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_13.png",
+   "picture_sha256": "367738d3e7789eb9bd44f7a944d61a449f35c016b398e22cea7d337ea808c01c"
+  },
+  {
+   "scene": 14,
+   "attempt": 0,
+   "started": "2026-11-20T21:56:41+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-a110454be39a4d5a",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_14.png",
+   "picture_sha256": "d498e96e28c67332e685b6769df1ab05e673144d5d3c9a5ee191cc6789035187"
+  },
+  {
+   "scene": 15,
+   "attempt": 0,
+   "started": "2026-11-20T21:57:19+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-5b0d8b76089a40b4",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_15.png",
+   "picture_sha256": "ead2946702f392312a2b21760e95e4bb9924a5f0c9408ddab7d5a9f32de16977"
+  },
+  {
+   "scene": 16,
+   "attempt": 0,
+   "started": "2026-11-20T21:57:59+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-b215cd3d77c9493c",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_16.png",
+   "picture_sha256": "fbda8c1c5971faddf569952b0586fd01604deca1f2c09ae69d4bce572f3ed4a8"
+  },
+  {
+   "scene": 17,
+   "attempt": 0,
+   "started": "2026-11-20T21:58:39+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-0dd9aafb5d844a5c",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_17.png",
+   "picture_sha256": "e66c3b48b2f663eb7361456aab30be753b920e1d3bd17c442c1230e3323331cf"
+  },
+  {
+   "scene": 18,
+   "attempt": 0,
+   "started": "2026-11-20T21:59:16+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-0e696f1938f64589",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_18.png",
+   "picture_sha256": "879c1ad648176cb8a5e5ec250bda139cd7832bf7be26ac8c99a29c55f5e43558"
+  },
+  {
+   "scene": 19,
+   "attempt": 0,
+   "started": "2026-11-20T21:59:58+0900",
+   "credits_charged": 70.45,
+   "response_id": "img-3104fff3e9344ba4",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "picture": "gpt_image_2_6_GF2_19.png",
+   "picture_sha256": "03757f43bd60830431e0558dfa936a692783199d465c24de05749afb10d727f8"
+  }
+ ]
+}
