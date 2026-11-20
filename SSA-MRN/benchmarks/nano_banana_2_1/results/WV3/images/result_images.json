@@ -1,0 +1,137 @@
+{
+  "names": [
+    "C2MS-SP",
+    "Nano Banana 2.1"
+  ],
+  "bands": "WV3 RGB [4,2,1], model output in R,G,B order",
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "baseline": "C2MS-SP seed 42 from the result viewer data (1/8 DN precision)",
+  "baseline_source": {
+    "asset": "viewer-data-d110d1115868.tar.gz",
+    "sha256": "d110d111586831c70684f0e61805ad6dff1fa95e12df12ce3d094a8cea4761d9",
+    "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/viewer-data/viewer-data-d110d1115868.tar.gz",
+    "storage": "int16 little endian CHW, DN * 8",
+    "use": "RGB visual comparison only, not actual MATLAB baseline metrics"
+  },
+  "window_note": "64x64 window with greatest candidate error reduction versus C2MS-SP; selection favours candidate, including when all windows are worse",
+  "display": "shared GT 1-99 percentile stretch; GT is used for visualization only, never generation or DN restoration",
+  "psnr_peak": 2047,
+  "renderer": "SSA-MRN/common/result_images.py _full_multi/_zoom_multi (main 2026-11-20), PSNR common/metrics.rr_metrics",
+  "stats": {
+    "0": {
+      "scene_psnr": {
+        "C2MS-SP": 38.55448584122418,
+        "Nano Banana 2.1": 30.57278857079291
+      },
+      "window": [
+        0,
+        176
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 58.8098524067074,
+        "Nano Banana 2.1": 45.23173474318119
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 1.8631693522135415,
+        "Nano Banana 2.1": 13.464122269792515
+      }
+    },
+    "1": {
+      "scene_psnr": {
+        "C2MS-SP": 36.83482480816636,
+        "Nano Banana 2.1": 29.419578550166452
+      },
+      "window": [
+        128,
+        144
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 45.71390633215625,
+        "Nano Banana 2.1": 38.65997660398981
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 7.56683349609375,
+        "Nano Banana 2.1": 17.902879935468867
+      }
+    },
+    "3": {
+      "scene_psnr": {
+        "C2MS-SP": 43.10017742161613,
+        "Nano Banana 2.1": 33.05345181333835
+      },
+      "window": [
+        176,
+        0
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 54.33764146875564,
+        "Nano Banana 2.1": 46.386157039823324
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 2.734110514322917,
+        "Nano Banana 2.1": 7.210184896172125
+      }
+    },
+    "7": {
+      "scene_psnr": {
+        "C2MS-SP": 38.57222741343075,
+        "Nano Banana 2.1": 31.956291108379258
+      },
+      "window": [
+        32,
+        144
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 43.59270830805746,
+        "Nano Banana 2.1": 37.550543865576344
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 5.004679361979167,
+        "Nano Banana 2.1": 17.138843694566503
+      }
+    },
+    "14": {
+      "scene_psnr": {
+        "C2MS-SP": 32.9414793855746,
+        "Nano Banana 2.1": 24.9063477745358
+      },
+      "window": [
+        16,
+        192
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 31.102215390813104,
+        "Nano Banana 2.1": 25.937956482414634
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 31.288279215494793,
+        "Nano Banana 2.1": 67.2207124440261
+      }
+    },
+    "17": {
+      "scene_psnr": {
+        "C2MS-SP": 36.2012355084939,
+        "Nano Banana 2.1": 26.553013096392203
+      },
+      "window": [
+        112,
+        192
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 36.02333523797342,
+        "Nano Banana 2.1": 27.673660451219366
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 20.026397705078125,
+        "Nano Banana 2.1": 58.52222210668221
+      }
+    }
+  }
+}
