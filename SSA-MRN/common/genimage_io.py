@@ -1,6 +1,6 @@
 """Inputs, restoring and checks for pansharpening with generative image models (issues #209-212, zero-shot, RGB only).
 
-Generative image models (GPT Image, Nano Banana, FLUX in the Dongguk AI CHAT image menu) take 8-bit pictures and return one
+Generative image models (GPT Image 2.6 Sunburst and Nano Banana 2.1 of the Dongguk AI CHAT API Gateway) take 8-bit pictures and return one
 8-bit RGB picture, so they are tested on the RGB bands only (QB/GF2 bands [2,1,0], WV3/WV2 [4,2,1]) and scored with the RGB
 mode of the MATLAB workflow (benchmark_prepare.py --bands rgb). The ground truth is never used to build inputs or to stretch.
 
@@ -22,13 +22,13 @@ generate  make the pictures through the Dongguk AI CHAT (BAZE) API Gateway with 
           log of every attempt (time, size, credits charged, error), and skips scenes that are already saved (resume)
 
 python SSA-MRN/common/genimage_io.py inputs --out runtime/genimage
-python SSA-MRN/common/genimage_io.py restore --sensor QB --model flux_2_pro --images <folder> --out runtime/genimage
-python SSA-MRN/common/genimage_io.py checks --sensor QB --predictions runtime/genimage/flux_2_pro_zeroshot_QB_rr.zip
+python SSA-MRN/common/genimage_io.py restore --sensor QB --model nano_banana_2_1 --images <folder> --out runtime/genimage
+python SSA-MRN/common/genimage_io.py checks --sensor QB --predictions runtime/genimage/nano_banana_2_1_zeroshot_QB_rr.zip
 python SSA-MRN/common/genimage_io.py upload --release genimage-inputs runtime/genimage/genimage_inputs_*.zip
 python SSA-MRN/common/genimage_io.py generate --sensor QB --model nano_banana_2_1 --inputs genimage_inputs_QB.zip --out pictures --estimate-only
 python SSA-MRN/common/genimage_io.py generate --sensor QB --model nano_banana_2_1 --inputs genimage_inputs_QB.zip --out pictures --max-credits 800
 
-Returned pictures are named <anything>_<SENSOR>_<scene two digits>.<png|jpg|jpeg|webp>, e.g. flux_2_pro_QB_07.png.
+Returned pictures are named <anything>_<SENSOR>_<scene two digits>.<png|jpg|jpeg|webp>, e.g. nano_banana_2_1_QB_07.png.
 """
 import argparse
 import base64
@@ -286,19 +286,10 @@ Create one image that combines them (pansharpening): use the second image as the
 
 Rules:
 """ + RULES.format(pan='the second image', ms='the first image'),
-    'flux_2_pro': """image 1 and image 2 show the same satellite scene and are exactly aligned pixel to pixel.
-image 1: low-resolution multispectral color image (blurry, colors are correct).
-image 2: high-resolution panchromatic grayscale image (sharp, no color).
-
-Task: pansharpening. Generate one image with the spatial detail of image 2 and the colors of image 1.
-
-Rules:
-""" + RULES.format(pan='image 2', ms='image 1'),
 }
 GEN_MODELS = {   # folder name -> API model id and fixed parameters (same as the image menu settings of #209)
     'gpt_image_2_6': ('gpt-image-2.6-sunburst', lambda q: dict(size='1024x1024', quality=q, background='opaque')),
     'nano_banana_2_1': ('gemini-nano-banana-2.1', lambda q: dict(aspect_ratio='1:1', image_size='1K')),
-    'flux_2_pro': ('fal-ai/flux-2-pro', lambda q: dict(image_size='square_hd')),
 }
 RETRIES = 2      # extra attempts after a failure (refusal, no picture, not square); never for a picture we merely dislike
 
@@ -337,7 +328,7 @@ def generate_one(key, model_id, request):
 
 def cmd_generate(a):
     model_id, params = GEN_MODELS[a.model]
-    if a.model == 'gpt_image_2_6' and not a.quality: raise SystemExit('--quality low|medium|high is required for gpt_image_2_6 (decided in #209)')
+    if a.model == 'gpt_image_2_6' and not a.quality: a.quality = 'high'   # fixed for all four sensors in #209
     key = os.environ.get('BAZE_API_KEY')
     if not key and not a.dry_run: raise SystemExit('set the BAZE_API_KEY environment variable to your own API Gateway key first')
     meta, inputs_sha = read_meta(a.inputs, a.sensor)
@@ -395,7 +386,7 @@ def main():
     c.add_argument('--predictions', type=Path, help='<model>_zeroshot_<SENSOR>_rr.zip (omit for the ground-truth reference only)'); c.add_argument('--out', type=Path)
     g = sub.add_parser('generate'); g.add_argument('--sensor', choices=list(SENSORS), required=True); g.add_argument('--model', choices=list(GEN_MODELS), required=True)
     g.add_argument('--inputs', type=Path, required=True, help='genimage_inputs_<SENSOR>.zip or its folder'); g.add_argument('--out', type=Path, required=True)
-    g.add_argument('--quality', choices=('low', 'medium', 'high'), help='GPT Image only, the value decided in #209')
+    g.add_argument('--quality', choices=('low', 'medium', 'high'), help='GPT Image only; default high, the value fixed for all sensors in #209')
     g.add_argument('--scenes', type=int, nargs='+', help='only these scenes (e.g. 0 for the first check); default all 20')
     g.add_argument('--max-credits', type=float, help='stop before this run would spend more'); g.add_argument('--estimate-only', action='store_true')
     g.add_argument('--dry-run', action='store_true', help='check the inputs and the request without the key or any call')
