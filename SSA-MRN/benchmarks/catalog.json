@@ -258,7 +258,7 @@
       "display_name": "GPT Image 2.6 Sunburst",
       "paper": "OpenAI 이미지 생성 모델 (논문 없음, 서비스 표시 출시일 2026-11-05)",
       "license": "비공개 상용 모델, 가중치 없음; 출력 이미지 사용은 서비스 약관을 따름",
-      "code": "없음 (상용 서비스 모델, 동국 AI CHAT 이미지 생성 메뉴)",
+      "code": "없음 (상용 서비스 모델, 동국 AI CHAT API Gateway)",
       "commit": null,
       "evaluator": "센서별 담당 (#209 QB · #210 GF2 · #211 WV3 · #212 WV2), 미정",
       "settings": [
@@ -278,7 +278,7 @@
       },
       "bands": "rgb",
       "status": "계획",
-      "status_scope": "입력 묶음(genimage-inputs)·되돌리기·MATLAB RGB 채점 모드 준비 완료, 생성 전",
+      "status_scope": "API 생성 진행 중(QB 장면 0 완료), MATLAB RGB 채점 전",
       "issues": [
         209,
         210,
@@ -286,15 +286,16 @@
         212
       ],
       "inputs_release": "genimage-inputs",
-      "last_checked": "2026-11-20T17:00:00+09:00",
+      "last_checked": "2026-11-20T21:30:00+09:00",
       "predictions_release": "predictions-benchmarks-gpt_image_2_6-zeroshot",
-      "report": "SSA-MRN/benchmarks/gpt_image_2_6/README.md"
+      "report": "SSA-MRN/benchmarks/gpt_image_2_6/README.md",
+      "settings_detail": "1024x1024, quality high, background opaque (장당 약 70 크레딧, QB 장면 0 실제 70.45)"
     },
     "nano_banana_2_1": {
       "display_name": "Nano Banana 2.1",
       "paper": "Google Gemini 이미지 생성 모델 (논문 없음, 서비스 표시 출시일 2026-10-06)",
       "license": "비공개 상용 모델, 가중치 없음; 출력 이미지 사용은 서비스 약관을 따름",
-      "code": "없음 (상용 서비스 모델, 동국 AI CHAT 이미지 생성 메뉴)",
+      "code": "없음 (상용 서비스 모델, 동국 AI CHAT API Gateway)",
       "commit": null,
       "evaluator": "센서별 담당 (#209 QB · #210 GF2 · #211 WV3 · #212 WV2), 미정",
       "settings": [
@@ -314,7 +315,7 @@
       },
       "bands": "rgb",
       "status": "계획",
-      "status_scope": "입력 묶음(genimage-inputs)·되돌리기·MATLAB RGB 채점 모드 준비 완료, 생성 전",
+      "status_scope": "API 생성 진행 중(QB 장면 0 완료), MATLAB RGB 채점 전",
       "issues": [
         209,
         210,
@@ -322,45 +323,10 @@
         212
       ],
       "inputs_release": "genimage-inputs",
-      "last_checked": "2026-11-20T17:00:00+09:00",
+      "last_checked": "2026-11-20T21:30:00+09:00",
       "predictions_release": "predictions-benchmarks-nano_banana_2_1-zeroshot",
-      "report": "SSA-MRN/benchmarks/nano_banana_2_1/README.md"
-    },
-    "flux_2_pro": {
-      "display_name": "FLUX 2 [pro]",
-      "paper": "Black Forest Labs 이미지 생성 모델 (서비스 표시 출시일 2025-11-25)",
-      "license": "상용 pro판, 가중치 없음 (FLUX 2 계열에는 공개 가중치판이 따로 있음); 출력 이미지 사용은 서비스 약관을 따름",
-      "code": "없음 (상용 서비스 모델, 동국 AI CHAT 이미지 생성 메뉴)",
-      "commit": null,
-      "evaluator": "센서별 담당 (#209 QB · #210 GF2 · #211 WV3 · #212 WV2), 미정",
-      "settings": [
-        "zeroshot"
-      ],
-      "epochs": "학습 없음 (zero-shot 생성, 단일 실행)",
-      "sensors": {
-        "zeroshot": [
-          "QB",
-          "GF2",
-          "WV3",
-          "WV2"
-        ]
-      },
-      "seeds": {
-        "zeroshot": null
-      },
-      "bands": "rgb",
-      "status": "계획",
-      "status_scope": "입력 묶음(genimage-inputs)·되돌리기·MATLAB RGB 채점 모드 준비 완료, 생성 전",
-      "issues": [
-        209,
-        210,
-        211,
-        212
-      ],
-      "inputs_release": "genimage-inputs",
-      "last_checked": "2026-11-20T17:00:00+09:00",
-      "predictions_release": "predictions-benchmarks-flux_2_pro-zeroshot",
-      "report": "SSA-MRN/benchmarks/flux_2_pro/README.md"
+      "report": "SSA-MRN/benchmarks/nano_banana_2_1/README.md",
+      "settings_detail": "image_size 1K, aspect_ratio 1:1 (장당 37 크레딧)"
     },
     "genimage_identity": {
       "display_name": "변환 한계 대조군 (생성형 이미지 모델 시험)",
