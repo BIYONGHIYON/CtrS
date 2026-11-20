@@ -373,10 +373,86 @@ def screen():
     note(chosen=chosen)
 
 
+def chosen():
+    """After the screening (user decision 2026-11-21 03h): if it chose A, B or C, train that variant with the K2D 150-epoch recipe on
+    GF2, QB, WV3 seed 42 (<v>T 120 epochs -> factorize -> <v>K 30 epochs -> evaluation) and compare it with the 89 confirmation NK
+    (validation and RR test with projection, WV2 transfer reference). If N was chosen nothing is trained. Runs from a separate copy of
+    the source tree on the same runtime once the screening runner finished (it holds controller.lock while it runs)."""
+    conf=load_conf();root=Path(conf['runtime']);cp=root/'runtime_config.json';cfg=json.loads(cp.read_text(encoding='utf8'));set_impl(cfg)
+    note=lambda **k:print(json.dumps(dict(time_kst=now(),**k),ensure_ascii=False),flush=True)
+    while not (root/'screen_complete.json').exists():
+        if (root/'screen_stopped.json').exists():note(stopped='screening stopped; nothing started');sys.exit(2)
+        time.sleep(60)
+    v=json.loads((root/'screen_complete.json').read_text(encoding='utf8'))['chosen']
+    if v=='N':write(root/'chosen_complete.json',dict(time_kst=now(),chosen='N',note='screening kept N; nothing trained'));note(chosen='N');return
+    if v not in ('A','B','C'):raise ValueError(v)
+    while True:  # wait until the screening runner released controller.lock (the handle is closed after each failed try)
+        f=(root/'controller.lock').open('a+b')
+        try:
+            if os.name=='nt':
+                import msvcrt;f.seek(0);msvcrt.locking(f.fileno(),msvcrt.LK_NBLCK,1)
+            else:
+                import fcntl;fcntl.flock(f,fcntl.LOCK_EX|fcntl.LOCK_NB)
+            guard=f;break
+        except OSError:
+            f.close();time.sleep(30)
+    write(root/'chosen_started.json',dict(time_kst=now(),chosen=v,decision='user 2026-11-21 03h: train the chosen variant with K2D 150 epochs (seed 42) and compare with the 89 confirmation',
+          script=str(Path(__file__).resolve()),script_sha256=sha(Path(__file__).resolve())))
+    out=lambda k:root/'runs'/run_name(*k)
+    trained=lambda k:(out(k)/'training_complete.json').exists();evaluated=lambda k:(out(k)/'evaluation_complete.json').exists()
+    keys=[(s,v+a,SEED) for s in ('GF2','QB','WV3') for a in ('T','K')]
+    ready=lambda k:k[1].endswith('T') or trained((k[0],v+'T',k[2]))
+    jobs=[('train',k) for k in keys if not trained(k)]+[('evaluate',k) for k in keys if k[1].endswith('K') and trained(k) and not evaluated(k)]
+    running={};problem=None
+    def launch(kind,k):
+        o=out(k);o.mkdir(parents=True,exist_ok=True);f=(o/(kind+'.log')).open('a',encoding='utf8')
+        args=[sys.executable,'-u',str(HERE/'train.py'),'--config',str(cp),'--mode',kind,'--sensor',k[0],'--arm',k[1],'--seed',str(k[2])]
+        if kind=='train' and (o/'checkpoints/initial.pt').exists():args+=['--resume']
+        p=subprocess.Popen(args,stdout=f,stderr=subprocess.STDOUT);note(launched=kind,run=run_name(*k),pid=p.pid);return p,f
+    while True:
+        if problem is None:
+            for j in sorted(jobs,key=lambda j:(j[0]!='evaluate',not j[1][1].endswith('K'),keys.index(j[1]))):
+                if len(running)>=cfg['max_parallel']:break
+                kind,k=j
+                if kind=='train' and not ready(k):continue
+                if kind=='train' and k[1].endswith('K'):
+                    (root/'init').mkdir(exist_ok=True)
+                    code=subprocess.run([sys.executable,'-u',str(HERE/'run.py'),'--mode','factorize','--sensor',k[0],'--arm',k[1],'--seed',str(k[2])],
+                                        stdout=(root/'init'/f'factorize_{run_name(*k)}.log').open('a',encoding='utf8'),stderr=subprocess.STDOUT).returncode
+                    if code:problem='factorize failed '+run_name(*k);break
+                jobs.remove(j);running[j]=launch(kind,k)
+        time.sleep(10)
+        for j,(p,f) in list(running.items()):
+            if p.poll() is None:continue
+            f.close();del running[j];kind,k=j
+            ok=p.returncode==0 and (trained(k) if kind=='train' else evaluated(k))
+            if ok and kind=='train' and sanity(cfg,root,k):ok=False
+            if ok and kind=='train' and k[1].endswith('K'):jobs.append(('evaluate',k))
+            note(finished=kind,run=run_name(*k),ok=ok,exit=p.returncode)
+            if not ok and problem is None:problem=f'{kind} failed {run_name(*k)} (exit {p.returncode})'
+        if not running and (problem or not jobs):break
+        if not running and jobs and all(j[0]=='train' and not ready(j[1]) for j in jobs):problem='no runnable job: '+str(jobs);break
+    if problem:
+        write(root/'chosen_stopped.json',dict(time_kst=now(),chosen=v,reason=problem,note='no new job after the problem; running jobs finished'));write(root/'summary.json',summary(cfg,root));note(stopped=problem);sys.exit(3)
+    cmp={'chosen':v,'validation':{},'test':{}}
+    for s in cfg['sensors']:
+        a,n=validation_of(root,(s,v+'K',SEED)),validation_of(root,(s,'NK',SEED))
+        cmp['validation'][s]=dict(variant=a,N=n,delta_psnr=a['psnr']-n['psnr'],delta_sam=a['sam']-n['sam'])
+        ea=json.loads((out((s,v+'K',SEED))/'evaluation_complete.json').read_text(encoding='utf8'))['targets'];en=json.loads((out((s,'NK',SEED))/'evaluation_complete.json').read_text(encoding='utf8'))['targets']
+        for t in ea:
+            ra,rn=ea[t]['means'][v+'K + P']['RR'],en[t]['means']['NK + P']['RR']
+            cmp['test'][f'{s}->{t}']=dict(variant_P=ra,N_P=rn,delta={k:ra[k]-rn[k] for k in ('PSNR','SAM','ERGAS')},role='judgement target (report)' if t==s else 'transfer, reference only',
+                                          variant_P_vs_88_K2D_P=ea[t]['delta_RR']['P_vs_88_K2D_P'],variant_P_vs_C2MS_SP=ea[t]['delta_RR']['P_vs_C2MS_SP'])
+    cmp['note']='single seed 42; v2.4 single-seed threshold 0.06 dB; test reported only'
+    write(root/'chosen_comparison.json',dict(time_kst=now(),**cmp));write(root/'summary.json',summary(cfg,root))
+    write(root/'chosen_complete.json',dict(time_kst=now(),chosen=v,next='final model seeds 43, 44 after the user decision'))
+    note(chosen=v,test_delta_PSNR={k:round(x['delta']['PSNR'],4) for k,x in cmp['test'].items()})
+
+
 if __name__=='__main__':
     import argparse
     p=argparse.ArgumentParser(description='90 controller: prepare -> optimize -> run (resume: --mode run --resume)')
-    p.add_argument('--mode',choices=['prepare','optimize','run','factorize','screen'],required=True);p.add_argument('--resume',action='store_true')
+    p.add_argument('--mode',choices=['prepare','optimize','run','factorize','screen','chosen'],required=True);p.add_argument('--resume',action='store_true')
     p.add_argument('--sensor');p.add_argument('--arm');p.add_argument('--seed',type=int,default=42);a=p.parse_args()
     if a.mode=='factorize':factorize(a.sensor,a.arm,a.seed)
-    else:{'prepare':prepare,'optimize':optimize,'screen':screen}.get(a.mode,lambda:run(a.resume))()
+    else:{'prepare':prepare,'optimize':optimize,'screen':screen,'chosen':chosen}.get(a.mode,lambda:run(a.resume))()
