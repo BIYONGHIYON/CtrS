@@ -61,7 +61,7 @@
       "seed_note": "공식 기본 SEED 1 대신 팀 규칙의 42",
       "selection": "매 에폭 validation L1(전체 픽셀 평균, 자르지 않은 출력) 최소. 공식 코드는 10에폭마다 검증·저장",
       "deterministic": "cudnn.deterministic = True, benchmark = False (공식 main_train.py와 같음)",
-      "memory": "T4(15 GB)에서 배치 64가 들어가지 않으면 LAConv 층을 역전파 때 다시 계산(torch.utils.checkpoint). 배치·손실·기울기·BatchNorm 통계는 배치 64 그대로이고 시간만 더 듦. 켰는지는 history.json meta.checkpointing에 기록",
+      "memory": "T4(15 GB)에서 배치 64가 들어가지 않으면 LAConv 층을 역전파 때 다시 계산(torch.utils.checkpoint). 배치·손실·기울기·BatchNorm 통계는 배치 64 그대로이고 시간만 더 듦. 세션마다 켰는지는 history.json meta.session_log[].checkpointing에 기록",
       "data": "train_<센서>.h5 / valid_<센서>.h5 (팀 고정 PanCollection, SHA-256은 성능 53·54번 config.json)"
     }
   },
@@ -74,7 +74,7 @@
     "QB": {"PSNR": 38.466, "SAM": 4.45, "ERGAS": 3.705, "Q4": 0.937},
     "GF2": {"PSNR": 43.884, "SAM": 0.672, "ERGAS": 0.597, "Q4": 0.985, "note": "GF2 PSNR은 논문마다 약 43-45 dB와 49-50 dB 계열이 함께 있어 우리 평가기 값과 직접 비교하지 않음"}
   },
-  "environment": "Kaggle GPU T4 x2 (provenance/kaggle_adwm.py), 실제 GPU·버전은 결과의 progress.json·history.json에 기록",
+  "environment": "Kaggle GPU T4 x2, 6시간 세션을 이어서 학습 (provenance/session.py). 세션별 GPU·버전·층 재계산·코드·데이터는 progress.json, 학습 구간별 기록은 history.json meta.session_log",
   "predictions_release": {"author": "predictions-benchmarks-adwm-author", "retrain": "predictions-benchmarks-adwm-retrain"},
   "post_processing": "없음"
 }

@@ -78,6 +78,8 @@ GF2 PSNR은 논문마다 약 43-45 dB와 49-50 dB 계열이 함께 있어([성�
 
 **메모리:** 배치 64의 학습에는 역전파용 활성값이 약 20 GB 필요해 Kaggle T4(15 GB)에 들어가지 않습니다. 배치를 줄이지 않고, LAConv 층의 중간값을 저장하는 대신 역전파 때 다시 계산합니다(`torch.utils.checkpoint`). LAConv 층에는 BatchNorm·dropout이 없어 손실·기울기·BatchNorm 통계가 배치 64와 같습니다(같은 입력에서 기울기 차이 0으로 확인). 저장 활성값은 약 2.7 GB로 줄고 시간이 더 듭니다.
 
+**학습 장소와 세션:** Kaggle GPU T4 x2에서 QB·GF2를 GPU 하나씩 동시에 학습합니다. 한 세션은 6시간이고, 끝나기 약 35분 전에 에폭 단위로 멈춘 뒤 남은 시간에 평가·저장합니다. 다음 세션은 직전 출력을 입력으로 붙여 `latest.pt`(모델·옵티마이저·스케줄러·난수·셔플 상태)에서 이어서 학습합니다. 끊었다 이은 학습과 한 번에 한 학습의 가중치가 같음을 CPU에서 확인했습니다(GPU에서는 LAConv 역전파 특성상 끊지 않아도 미세한 차이가 날 수 있음). 학습이 끝날 때까지 `model.py`·`train.py`는 바꾸지 않으며, 바뀌면 세션이 학습을 시작하지 않습니다.
+
 </details>
 
 <a id="figures"></a>
@@ -95,7 +97,8 @@ GF2 PSNR은 논문마다 약 43-45 dB와 49-50 dB 계열이 함께 있어([성�
 <summary><b>재현 자료</b> · 코드, 가중치, 설정, 환경</summary>
 
 - 공식 코드: `upstream/` 하위 모듈 (고정 커밋과 저자 가중치 SHA-256은 [config.json](config.json))
-- 어댑터: [model.py](model.py) · 학습: [train.py](train.py) · Kaggle 실행 원본: [provenance/kaggle_adwm.py](provenance/kaggle_adwm.py)
-- 데이터: 팀 고정 PanCollection 파일(성능 53·54번 config.json의 SHA-256)과 같은지 Kaggle 노트북이 확인합니다.
+- 어댑터: [model.py](model.py) · 학습: [train.py](train.py) · Kaggle 세션 실행: [provenance/session.py](provenance/session.py) (노트북 셀 코드는 파일 첫머리 설명)
+- 데이터: 팀 고정 PanCollection 파일(성능 53·54번 config.json의 SHA-256)과 같은지 세션마다 확인하고, 다르면 쓰지 않습니다(`provenance/data_check.json`).
+- 세션 기록: 세션별 GPU·층 재계산·코드 SHA-256·데이터·에폭은 `progress.json`, 학습 구간별 기록은 `history.json`의 `meta.session_log`에 남습니다.
 
 </details>

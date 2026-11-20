@@ -1,6 +1,6 @@
 {
  "model": "adwm",
- "description": "ADWM 평가 등록 단계 보관 파일(코드·설정). 저자 WV3 가중치는 upstream 하위 모듈 안에 있고 SHA-256은 config.json에 있습니다. 결과·가중치·예측은 평가 후 추가합니다.",
+ "description": "ADWM 평가 등록 단계 보관 파일(코드·설정·Kaggle 세션 스크립트). 저자 WV3 가중치는 upstream 하위 모듈 안에 있고 SHA-256은 config.json에 있습니다. 결과·가중치·예측은 평가 후 추가합니다.",
  "upstream": {
   "path": "upstream",
   "url": "https://github.com/Jie-1203/ADWM",
@@ -8,24 +8,24 @@
  },
  "files": {
   "README.md": {
-   "bytes": 6188,
-   "sha256": "e62e3c6c72483af338904cfafbcc0af8107a9260e3e8bcb79ddba4c0a4ca5314"
+   "bytes": 7184,
+   "sha256": "1ee7fff95324c261adcaeaf7ab3cf1f3848946cbd277482703d24fed847e55b8"
   },
   "config.json": {
-   "bytes": 5724,
-   "sha256": "0a309cf825f80cd0421d510ca8961276fd0aceebe0c6db5037386d377b81dc39"
+   "bytes": 5844,
+   "sha256": "d57bdfdcda4f84dded9e68b1aa9fd0ebc9ceb4c6afe07203d12a3db85dbb3e78"
   },
   "model.py": {
    "bytes": 8700,
    "sha256": "13573a63147b2b25fcf6f498750f6f2f7a3b5bc525da71ff6303058fc9cb87cb"
   },
   "train.py": {
-   "bytes": 12130,
-   "sha256": "b3a949fab677c340d0393f088456625854c4583fe33649e6b6d6c6437b58b383"
+   "bytes": 13952,
+   "sha256": "9fe52a8df35cba57cf1f850f10bde7c7e1bcd943e47448398264e4a189137a90"
   },
-  "provenance/kaggle_adwm.py": {
-   "bytes": 14234,
-   "sha256": "e457b4c8b6a8c3616f92fb15c6f7b5eeaec251d8a4ac13279d6d145bf7efd998"
+  "provenance/session.py": {
+   "bytes": 31454,
+   "sha256": "e0eb1d396f022403c12546950480201e93d865fa16cce86a6f3e8b2dda6de1c0"
   }
  },
  "release_assets": {}

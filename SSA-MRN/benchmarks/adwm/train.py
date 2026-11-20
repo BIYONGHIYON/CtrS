@@ -9,22 +9,29 @@ Official main_train.py and the paper (Sec. 3.1, App. D), with the CtrS rules for
 Inputs are DN / scale (QB 2047, GF2 1023, as the official data.py and common/data.py). The H5 arrays are read into memory.
 Memory: --checkpointing auto first tries one real batch of 64 without recomputation and turns on LAConv recomputation
 (model.ADWM.set_checkpointing) only if it does not fit; the batch, the loss and the BatchNorm statistics stay those of 64.
+Sessions: training may be split over several sessions (--deadline, --resume). Every start appends one entry to
+meta.session_log (session, platform, GPU, LAConv recomputation, torch/CUDA, start and end epoch, times), so the report can
+state where each part of the training ran. --deadline stops before an epoch that would not end in time, estimated from the
+slowest of the last three epochs (the first epoch of a new run starts unless the deadline has already passed).
 
 Outputs in --out (default checkpoints/retrain_<sensor>_s<seed>/):
     best.pt      {'model', 'epoch', 'val_l1', 'meta'}            Git (benchmarks checkpoints are tracked)
     latest.pt    model, optimizer, scheduler, RNG, epoch, best   Release (common/release_weights.py), for --resume
     initial.pt   weights before the first step                  Release
-    history.json per-epoch train L1, validation L1, lr, seconds  -> results/retrain_<sensor>_s<seed>/history.json
+    history.json per-epoch train L1, validation L1, lr, seconds, and meta (with session_log); written before latest.pt.
+                 provenance/session.py copies it to results/retrain_<sensor>_s<seed>/history.json when the run is evaluated.
 
 python SSA-MRN/benchmarks/adwm/train.py --sensor QB --train data/train_qb.h5 --val data/valid_qb.h5 --device cuda
 python SSA-MRN/benchmarks/adwm/train.py ... --resume                                # continue from <out>/latest.pt
 python SSA-MRN/benchmarks/adwm/train.py ... --deadline <unix time>                  # stop before a Kaggle session ends
+python SSA-MRN/benchmarks/adwm/train.py ... --session 3                             # session number for meta.session_log
 python SSA-MRN/benchmarks/adwm/train.py ... --epochs 2 --limit 128 --out /tmp/adwm_smoke   # smoke test
 """
 import argparse
 import hashlib
 import importlib.util
 import json
+import os
 import random
 import time
 from datetime import datetime, timedelta, timezone
@@ -106,6 +113,18 @@ def validate(net, data, device, size=64):
     return total / count
 
 
+def platform():
+    if os.environ.get('KAGGLE_KERNEL_RUN_TYPE') or Path('/kaggle').is_dir(): return 'kaggle'
+    if os.environ.get('COLAB_RELEASE_TAG'): return 'colab'
+    return 'local'
+
+
+def epoch_estimate(history):
+    """Seconds the next epoch may take: the slowest of the last three epochs (None before the first epoch)."""
+    recent = [h['seconds'] for h in history[-3:]]
+    return max(recent) if recent else None
+
+
 def atomic_save(obj, path):
     tmp = path.with_suffix('.tmp'); torch.save(obj, tmp); tmp.replace(path)
 
@@ -123,6 +142,7 @@ def main():
     p.add_argument('--resume', action='store_true', help='continue from <out>/latest.pt')
     p.add_argument('--deadline', type=float, help='unix time; stop after the last epoch that ends before it')
     p.add_argument('--limit', type=int, help='smoke test: first N training and validation samples')
+    p.add_argument('--session', type=int, help='session number (provenance/session.py), recorded in meta.session_log')
     a = p.parse_args()
     if a.train.resolve() == a.val.resolve(): p.error('training and validation must be different files')
     if a.device.startswith('cuda') and not torch.cuda.is_available(): p.error('CUDA is not available')
@@ -146,27 +166,35 @@ def main():
                 step_size=a.step_size, gamma=a.gamma, scheduler='StepLR(last_epoch=0) as official main_train.py', loss='L1',
                 cacw_ratio=net.cacw_ratio, selection='lowest validation L1, every epoch', parameters=sum(q.numel() for q in net.parameters()),
                 train=a.train.name, train_sha256=sha256(a.train), train_samples=n, val=a.val.name, val_sha256=sha256(a.val),
-                val_samples=val['gt'].shape[0], limit=a.limit, device=a.device, torch=str(torch.__version__),   # str: loadable with weights_only
-                gpu=torch.cuda.get_device_name(0) if a.device.startswith('cuda') else None)
+                val_samples=val['gt'].shape[0], limit=a.limit)
     g = torch.Generator().manual_seed(a.seed)
-    start, best, history = 0, float('inf'), []
+    start, best, history, log = 0, float('inf'), [], []
     if a.resume:
         ck = torch.load(out / 'latest.pt', map_location='cpu', weights_only=False)
         if {k: ck['meta'][k] for k in SETTINGS} != {k: meta[k] for k in SETTINGS}: p.error('latest.pt was made with other settings or data')
         net.net.load_state_dict(ck['model']); optimizer.load_state_dict(ck['optimizer']); scheduler.load_state_dict(ck['scheduler'])
         set_rng_state(ck['rng']); g.set_state(ck['shuffle_rng']); start, best = ck['epoch'], ck['best_val_l1']
         history = [h for h in json.loads(hist_path.read_text(encoding='utf-8'))['epochs'] if h['epoch'] <= start]
-        meta['sessions'] = ck['meta'].get('sessions', 1) + 1
+        log = list(ck['meta'].get('session_log', []))
     else:
-        atomic_save(dict(model=cpu(net.net.state_dict()), epoch=0, meta=meta), out / 'initial.pt'); meta['sessions'] = 1
+        atomic_save(dict(model=cpu(net.net.state_dict()), epoch=0, meta=meta), out / 'initial.pt')
     if start >= epochs: print(f'already finished ({start}/{epochs} epochs)'); return
 
     ck_on = a.checkpointing == 'on' or (a.checkpointing == 'auto' and needs_checkpointing(net, train, a.batch_size, a.device))
-    net.set_checkpointing(ck_on); meta['checkpointing'] = ck_on
+    net.set_checkpointing(ck_on)
+    entry = dict(session=a.session, run=len(log) + 1, platform=platform(), device=a.device,
+                 gpu=torch.cuda.get_device_name(0) if a.device.startswith('cuda') else None,
+                 checkpointing=ck_on, checkpointing_mode=a.checkpointing, torch=str(torch.__version__), cuda=str(torch.version.cuda),
+                 start_epoch=start, end_epoch=start, started=datetime.now(KST).isoformat(timespec='seconds'), updated=None)
+    meta['session_log'] = log + [entry]
     print(f'{a.sensor}: {n} train / {val["gt"].shape[0]} val samples loaded in {time.time() - t_load:.0f}s; epochs {start}->{epochs}; '
           f'LAConv recomputation {"on" if ck_on else "off"}; {meta["parameters"]} parameters', flush=True)
 
     for epoch in range(start, epochs):
+        est = epoch_estimate(history)
+        if a.deadline and (time.time() > a.deadline or (est and time.time() + 1.3 * est + 60 > a.deadline)):
+            print(f'{a.sensor}: deadline, stopped before epoch {epoch + 1} (about {est:.0f}s per epoch); continue with --resume', flush=True)
+            break
         t0 = time.time(); net.train(); losses = []
         order = torch.randperm(n, generator=g)
         for i in range(0, n - a.batch_size + 1, a.batch_size):          # shuffle, drop_last (as the official DataLoader)
@@ -178,19 +206,20 @@ def main():
         val_l1 = validate(net, val, a.device)
         row = dict(epoch=epoch + 1, train_l1=float(np.mean(losses)), val_l1=val_l1, lr=lr, seconds=round(time.time() - t0, 1))
         history.append(row)
+        entry.update(end_epoch=epoch + 1, updated=datetime.now(KST).isoformat(timespec='seconds'))
         if val_l1 < best:
             best = val_l1
             atomic_save(dict(model=cpu(net.net.state_dict()), epoch=epoch + 1, val_l1=val_l1, meta=meta), out / 'best.pt')
+        # history first: if the session dies between the two writes, --resume drops the extra row (epoch > latest)
+        best_row = min(history, key=lambda h: h['val_l1'])
+        tmp = hist_path.with_suffix('.tmp')
+        tmp.write_text(json.dumps(dict(meta=meta, best_epoch=best_row['epoch'], best_val_l1=best_row['val_l1'],
+                                       updated=entry['updated'], epochs=history), ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
+        tmp.replace(hist_path)
         atomic_save(dict(model=cpu(net.net.state_dict()), optimizer=optimizer.state_dict(), scheduler=scheduler.state_dict(),
                          rng=rng_state(), shuffle_rng=g.get_state(), epoch=epoch + 1, best_val_l1=best, meta=meta), out / 'latest.pt')
-        best_row = min(history, key=lambda h: h['val_l1'])
-        hist_path.write_text(json.dumps(dict(meta=meta, best_epoch=best_row['epoch'], best_val_l1=best_row['val_l1'],
-                                             updated=datetime.now(KST).isoformat(timespec='seconds'), epochs=history),
-                                        ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
         print(f"{a.sensor} epoch {epoch + 1}/{epochs} train {row['train_l1']:.6f} val {val_l1:.6f} lr {lr:.2e} {row['seconds']}s"
               + (' *best' if val_l1 == best else ''), flush=True)
-        if a.deadline and epoch + 1 < epochs and time.time() + 1.3 * row['seconds'] + 60 > a.deadline:
-            print(f'{a.sensor}: deadline, stopped after epoch {epoch + 1}; continue with --resume', flush=True); break
 
 
 if __name__ == '__main__':
