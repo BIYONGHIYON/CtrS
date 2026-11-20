@@ -35,7 +35,8 @@ def case(out):
     result = dict(case=meta['case'], scenes=len(rows), matlab_mean=m, python_mean=p, matlab_minus_python=diff, peak=meta['peak'],
                   matlab_release=matlab.get('matlab_release'), dlpan_commit=matlab.get('dlpan_commit'), profile=matlab.get('profile'),
                   data=meta['data'], prediction_files=meta['files'],
-                  note='MATLAB Q is the DLPan band-averaged Q; Q2n is Q4 (4 bands) or Q8 (8 bands), the Q index papers report')
+                  note='MATLAB Q is the DLPan band-averaged Q; Q2n is Q4 (4 bands) or Q8 (8 bands), the Q index papers report; '
+                       'with bands=rgb the 3 RGB bands are padded with one zero band to Q4 (DLPan q2n)')
     write(out / 'summary.json', result)
     print(json.dumps(dict(case=meta['case']['id'], matlab=m, python=p, matlab_minus_python=diff), indent=1), flush=True)
 
