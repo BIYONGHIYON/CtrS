@@ -44,6 +44,8 @@
 
 **중단 규칙(사용자 결정):** 프로세스 오류, 끝나지 않은 실행, validation 이상(best 에폭 0, 유한하지 않은 값, 같은 시드 C2MS-SP보다 validation PSNR이 1.0 dB 넘게 낮음), 2×2 확인 −0.06 dB 미만 중 하나라도 생기면 새 학습을 띄우지 않습니다. 돌고 있는 학습은 강제로 끝내지 않고 마치게 둔 뒤 `stopped.json`을 남기고 멈춥니다. 2026-11-19 14시 사용자 결정으로 validation PSNR 1.0 dB 문턱은 뺐습니다. 실행 중인 컨트롤러는 그대로 두고, 이 문턱만으로 멈추면 [continue_without_margin.py](provenance/continue_without_margin.py)가 문턱 없이 이어서 실행합니다(학습 코드·설정은 같음, 감시: [watch_margin_stop.ps1](provenance/watch_margin_stop.ps1)). 나머지 중단 조건은 그대로입니다.
 
+**B단계 범위 축소(2026-11-20 사용자 결정):** A단계 선택은 λ\* = 1.2입니다. B단계에서 c = 0·0.5·1.0의 validation이 c가 클수록 낮아져, 시간을 줄이려고 c ≥ 1.25(1.25·1.5·1.75·2.0)는 학습하지 않고 작은 c 구간을 촘촘히 봅니다. 실행 중인 컨트롤러는 그대로 두고, [block_high_c.py](provenance/block_high_c.py)가 c ≥ 1.25 실행의 작업 잠금을 미리 잡아 첫 c ≥ 1.25 학습이 체크포인트 없이 끝나면 컨트롤러가 멈춥니다. 그 뒤 [run_fine_c.py](provenance/run_fine_c.py)가 같은 학습 코드·설정으로 GF2·WV3·QB c = 0.25와 QB c = 0.75를 학습·평가하고, 선택 규칙을 줄인 격자(QB 0-1.0, 0.25 간격, 중심 0.25-0.75, 세 센서 공통 점 0·0.25·0.5·1.0, 기준점 c = 1.0)로 적용합니다(`selection_B_reduced.json`).
+
 ### W2 2×2 합성곱 확인
 
 | | 지금 (C2MS-SP) | 바꾼 구현 |
