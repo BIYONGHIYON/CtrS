@@ -39,10 +39,10 @@ def predict(net,pan,lms,ms,scale):
     return out
 
 
-def load(path,arm,bands,seed):
+def load(path,arm,sensor,seed):
     ck=torch.load(path,map_location='cpu',weights_only=False)
     if ck['seed']!=seed:raise ValueError('seed mismatch '+str(path))
-    m=M.Model(arm,bands,seed);m.load_state_dict(ck['model'],strict=True)
+    m=M.Model(arm,SENSORS[sensor]['bands'],seed,sensor=sensor);m.load_state_dict(ck['model'],strict=True)
     return m.cuda().eval(),dict(path=str(path),sha256=sha(path),best_epoch=ck.get('best_epoch'),metrics=ck.get('metrics'))
 
 
@@ -84,7 +84,7 @@ def control_rows(cfg,sensor,target,seed):
     if p.exists():return json.loads(p.read_text(encoding='utf8'))
     setup(seed);models={};weights={}
     for name,(arm,path) in control_paths(cfg,sensor,seed).items():
-        net,weights[name]=load(path,arm,SENSORS[sensor]['bands'],seed);models.update(systems(net,sensor,target,name))
+        net,weights[name]=load(path,arm,sensor,seed);models.update(systems(net,sensor,target,name))
     rows,means=rows_for(cfg,target,models,[n for n in models if n.endswith(' + P')])
     rec=dict(time_kst=now(),sensor=sensor,target=target,seed=seed,weights=weights,means=means,rows=rows,projection='86 FastProjectedV2 K10',
              calibration='82 scene' if target!=sensor else None)
@@ -99,7 +99,7 @@ def evaluate(cfg,sensor,arm,seed):
     if done.exists():return
     if arm not in M.FACTORIZED:raise ValueError('only the factorized final models are evaluated: '+arm)
     if not (dest/'training_complete.json').exists():raise RuntimeError('training incomplete')
-    net,w=load(dest/'checkpoints/best.pt',arm,SENSORS[sensor]['bands'],seed);out={}
+    net,w=load(dest/'checkpoints/best.pt',arm,sensor,seed);out={}
     for target in [sensor]+TRANSFER.get(sensor,[]):
         ctrl=control_rows(cfg,sensor,target,seed);models=systems(net,sensor,target,arm)
         rows,means=rows_for(cfg,target,models,[arm+' + P'])

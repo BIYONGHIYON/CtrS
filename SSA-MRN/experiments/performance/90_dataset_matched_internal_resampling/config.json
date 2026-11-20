@@ -20,9 +20,9 @@
  "variants": {
   "N": "unchanged (bilinear, align_corners=True); the 89 confirmation model and the control of A, B, C",
   "A": "upsample1 (x4) and upsample100 (x2) -> 23-tap interpolation (common/interpolation, toolbox phases); performance 6 condition",
-  "B": "A + downsample1 -> PAN MTF blur (genMTF 41x41, PAN GNyq by band count: 4 bands 0.15 = QB/GF2, 8 bands 0.14 = WV3) + x4 decimation phase 2 (= 54 Wald.pan)",
-  "C": "B + downsample100 / downsample200 (x2) and downsample2 (x4) -> 23-tap half-band low-pass (DC gain 1, separable, periodic boundary) + decimation on the data grid (full->1/2 phase 0, 1/2->1/4 phase 1); fixed before training, sensor independent",
-  "unchanged": "upsample101 / upsample102 (output), W2 branch 2x2 layers, data / coarse pairs / projection operators"
+  "B": "A + downsample1 -> PAN MTF blur (genMTF 41x41 ratio 4, the training sensor PAN GNyq, replicated boundary) + x4 decimation phase 2 (= 54 Wald.pan)",
+  "C": "every fixed resampling matched to the dataset (user decision 2026-11-20 23h): B + downsample100 (x2; features with the per-band MS MTF, PAN with the PAN MTF, genMTF ratio 2 = the coarse-pair kernels) at phase 0, downsample200 (features x2, MS MTF ratio 2) at phase 1, downsample2 (PAN x4, PAN MTF ratio 4) at phase 2 (data grid: 1/2 pixel k = full 2k, 1/4 pixel j = 4j + 2) + output upsampling upsample101 / upsample102 with the two stages of the dataset 23-tap interpolation (insertion phase 1, then 0)",
+  "unchanged": "W2 branch 2x2 layers (learned), data / coarse pairs / projection operators"
  },
  "arms": "<v>T = full-size 2x2 trunk 120 epochs (snapshot e120), <v>K = K2 from <v>T e120, 30-epoch cosine; v in N, A, B, C; QB, GF2, WV3 seed 42 (24 trainings)",
  "order": "N of GF2, QB, WV3 first (the 89 confirmation), then A, B, C; factorized runs and evaluations first when ready; two jobs at once",
@@ -68,14 +68,15 @@
  "expected_gpu_hours": {
   "definition": "sum of run wall times / 2 (two concurrent runs); 88/89 concurrent epoch times QB 134 s, GF2 156 s, WV3 98 s; K2 epochs about 0.75 x; variants B/C about +5 %",
   "N": 8.5,
-  "A_B_C": 25,
-  "total": 33.5
+  "A_B_C": 25.5,
+  "total": 34
  },
  "limits": [
   "single seed 42; the 3-seed judgement is done once on the final model",
   "the variant is chosen on validation only; test differences of 0.06 dB or less are within the single-seed threshold",
-  "B uses the PAN MTF of the training sensor (by band count); on the WV2 transfer the WV3 kernel is kept",
-  "C uses a sensor-independent half-band filter for the internal downsampling"
+  "B and C use the MTF of the training sensor; on the WV2 transfer the WV3 kernels stay",
+  "C changes the internal downsampling and the output upsampling together (a fully matched model); if C is chosen the two parts are not separated",
+  "the 1/4-size features are made by two x2 MTF steps (an SSAI update in between), close to but not equal to the dataset x4 MTF"
  ],
  "sensors": [
   "QB",

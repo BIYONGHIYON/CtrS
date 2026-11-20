@@ -118,6 +118,11 @@ def _load():
     mod.schedule=schedule;mod.snapshot_hook=snapshot_hook;mod.load_initial=load_initial;mod.check_initial=check_initial
     exec(compile(src,str(SOURCE),'exec'),mod.__dict__)
     mod.epochs=epochs;mod.spectral_weight=spectral_weight;mod.weight=coarse_weight  # 89 confirmed loss weights, per-arm lengths
+    base_make=mod.make_model
+    def make_model(arm,sensor,seed,layout):
+        import model as M
+        M.SENSOR['value']=sensor;return base_make(arm,sensor,seed,layout)  # B and C use the training sensor's MTF
+    mod.make_model=make_model
     return mod
 
 
@@ -130,6 +135,8 @@ if __name__=='__main__':
     p.add_argument('--sensor');p.add_argument('--arm');p.add_argument('--seed',type=int,default=42)
     p.add_argument('--layout',default='channels_last');p.add_argument('--tag',default='single');p.add_argument('--resume',action='store_true')
     a=p.parse_args();cfg=json.loads(Path(a.config).read_text(encoding='utf-8'));_STATE.update(cfg=cfg,mode=a.mode);set_impl(cfg)
+    if a.sensor:
+        import model as _M;_M.SENSOR['value']=a.sensor
     try:
         if a.mode=='bench':T.benchmark(cfg,a.sensor,a.arm,a.layout,a.tag)
         elif a.mode=='preflight':T.preflight(cfg)

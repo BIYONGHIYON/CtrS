@@ -4,7 +4,7 @@
 |:---:|:---:|:---:|:---:|
 | 성능 개선 | 이병현 | 계획 | **판단 보류** |
 
-**변경:** 원본 코드가 모델 안에서 쓰는 bilinear 축소·확대(`nn.Upsample`, `align_corners=True`)를 데이터셋을 만든 연산으로 바꿉니다. A는 입력 확대(LRPAN 4배, MS 2배)를 23탭 보간으로, B는 A에 더해 LRPAN을 PAN MTF 블러 + 4배 솎음으로, C는 B에 더해 내부 축소를 23탭 반대역 저역 필터 + 솎음으로 바꿉니다. 학습할 파라미터는 바뀌지 않습니다. 대조군은 같은 조건에서 연산을 바꾸지 않은 N이며, N은 [89번](../89_spectral_coarse_loss_weights/README.md)에서 고른 λ = 1.2, c = 0.25의 확정 모델입니다.
+**변경:** 원본 코드가 모델 안에서 쓰는 bilinear 축소·확대(`nn.Upsample`, `align_corners=True`)를 데이터셋을 만든 연산으로 바꿉니다. A는 입력 확대(LRPAN 4배, MS 2배)를 23탭 보간으로, B는 A에 더해 LRPAN을 PAN MTF 블러 + 4배 솎음으로 바꿉니다. C는 모델 안의 고정 축소·확대를 모두 데이터셋 연산으로 맞춘 모델로, B에 더해 내부 축소를 센서 MTF 블러 + 솎음으로, 출력 확대를 23탭 보간으로 바꿉니다. 학습할 파라미터는 바뀌지 않습니다. 대조군은 같은 조건에서 연산을 바꾸지 않은 N이며, N은 [89번](../89_spectral_coarse_loss_weights/README.md)에서 고른 λ = 1.2, c = 0.25의 확정 모델입니다.
 
 **결과:** 아직 학습하지 않았습니다.
 
@@ -28,8 +28,9 @@
 
 - seed 42 하나로 고릅니다(2026-11-19 결정).
 - 갈래는 validation(사영 없는 네트워크 출력)으로만 고릅니다. test는 측정·보고만 합니다.
-- B는 학습 센서의 PAN MTF를 밴드 수로 정합니다(4밴드 0.15 = QB·GF2, 8밴드 0.14 = WV3). WV2 전이에서도 WV3 커널을 그대로 씁니다.
-- C의 내부 축소 필터는 센서와 무관한 23탭 반대역 필터이고, 학습 전에 정했습니다.
+- B·C는 학습 센서의 MTF를 씁니다. WV2 전이에서도 WV3 커널을 그대로 씁니다.
+- C는 내부 축소와 출력 확대를 함께 바꿉니다(완전히 맞춘 모델). C가 뽑혀도 두 부분의 효과는 나누지 않습니다.
+- C의 1/4 크기 특징은 2배 MTF 두 번(사이에 SSAI 융합)으로 만들어, 데이터의 4배 MTF와 비슷하지만 같지는 않습니다.
 
 <a id="method"></a>
 
@@ -48,16 +49,17 @@
 
 | 위치 | 원본 (N) | A | B | C |
 |---|---|---|---|---|
-| `downsample1` (PAN 1/4, LRPAN용) | bilinear | bilinear | PAN MTF 블러(41×41) + 4배 솎음(위상 2) | B와 같음 |
+| `downsample1` (PAN 1/4, LRPAN용) | bilinear | bilinear | PAN MTF(4배) 블러 + 솎음(위상 2) | B와 같음 |
 | `upsample1` (LRPAN 4배) | bilinear | 23탭 보간 | 23탭 보간 | 23탭 보간 |
 | `upsample100` (MS 2배) | bilinear | 23탭 보간(4배 사슬의 첫 단) | 23탭 보간 | 23탭 보간 |
-| `downsample100` (특징·PAN 1/2) | bilinear | bilinear | bilinear | 23탭 반대역 저역 + 솎음(위상 0) |
-| `downsample200` (특징 1/2 → 1/4) | bilinear | bilinear | bilinear | 23탭 반대역 저역 + 솎음(위상 1) |
-| `downsample2` (PAN 1/4) | bilinear | bilinear | bilinear | 반대역 두 번(전체 위상 2) |
-| 출력 확대(`upsample101`·`upsample102`), W2 2×2 층 | 그대로 | 그대로 | 그대로 | 그대로 |
+| `downsample100` (특징·PAN 1/2) | bilinear | bilinear | bilinear | 특징은 밴드별 MS MTF(2배), PAN은 PAN MTF(2배) 블러 + 솎음(위상 0) |
+| `downsample200` (특징 1/2 → 1/4) | bilinear | bilinear | bilinear | MS MTF(2배) 블러 + 솎음(위상 1) |
+| `downsample2` (PAN 1/4) | bilinear | bilinear | bilinear | PAN MTF(4배) 블러 + 솎음(위상 2) |
+| `upsample101`·`upsample102` (출력 2배씩) | bilinear | bilinear | bilinear | 23탭 보간 두 단(삽입 위상 1, 0) |
+| W2 2×2 층 | 학습 | 학습 | 학습 | 학습 |
 
 - 솎음 위상은 데이터의 격자에 맞췄습니다. MS 화소 j는 원래 크기 4j + 2 위치에 놓이고, 1/2 크기 화소 k는 원래 크기 2k 위치입니다.
-- B의 PAN 축소는 데이터 열화 연산(54번 `Wald.pan`)과 1e-6 이내로 같습니다.
+- PAN 4배 축소는 데이터 열화 연산(54번 `Wald.pan`)과 1e-6 이내로, 2배 MS MTF 커널은 2배 거친 학습 쌍의 커널과 같습니다. 출력 확대 두 단을 이으면 데이터셋 23탭 4배 보간과 정확히 같습니다.
 - 필터는 저장되지 않는 고정 버퍼라서 상태와 시드 초기값은 N과 같습니다. K2 분해 대상(3×3 합성곱 24개)도 같습니다.
 
 | 항목 | 내용 |
@@ -69,7 +71,7 @@
 | 평가 | RR test 20장(사영 유무), FR QNR(참고), WV3는 WV2 전이(82번 보정, 참고). 대조군 N, 88번 K2D, C2MS-SP(같은 시드) |
 | 89번 확정 | N 갈래가 89번 확정 모델입니다. 88번 K2D + 사영과 RR test로 비교해 89번 보고서에 적습니다 |
 | 실행 | 공용 서버 `C:\CtrS-p90`, 두 개씩 동시 |
-| 예상 GPU 시간 | N 약 8.5, A·B·C 약 25, 합계 약 33.5시간 |
+| 예상 GPU 시간 | N 약 8.5, A·B·C 약 25.5, 합계 약 34시간 |
 
 </details>
 
@@ -88,7 +90,7 @@
 <summary><b>재현 자료</b> · 코드, 가중치, 설정, 실행 기록</summary>
 
 - [config.json](config.json): 가설, 갈래 정의, 손실 계수, 선택 규칙, 평가, 중단 규칙
-- [model.py](model.py): 갈래별 내부 축소·확대 연산(`Interp23`, `PanMTFDown`, `HalfDown`, `QuarterDown`)과 갈래 이름(`<v>T`·`<v>K`)
+- [model.py](model.py): 갈래별 내부 축소·확대 연산(`Interp23`, `Up23`, `MTFDown`)과 갈래 이름(`<v>T`·`<v>K`)
 - [train.py](train.py): 89번 학습기에 K2D 일정과 89번 손실 계수를 적용
 - [evaluate.py](evaluate.py): RR·FR test와 WV2 전이 평가(보고용)
 - [run.py](run.py): `prepare` → `optimize` → `run`(학습 → 분해 → 학습 → 평가, 갈래 선택), 중단 규칙

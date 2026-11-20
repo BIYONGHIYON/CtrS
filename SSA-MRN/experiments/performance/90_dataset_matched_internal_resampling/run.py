@@ -102,29 +102,34 @@ def structure_checks():
     """Variants add no state and keep the K2 targets; N equals the 89 2x2 model; the operators match the data operators."""
     import torch
     from common.interpolation import interp23tap
+    from prepare import CoarsePairs
     out={};sh=lambda m:hashlib.sha256(b''.join(k.encode()+v.detach().cpu().numpy().tobytes() for k,v in sorted(m.state_dict().items()))).hexdigest()
-    for bands in (4,8):
-        t={a:sh(M.Model(a,bands,42)) for a in M.ARMS}
-        if len({t[a] for a in M.FULL_SIZE})!=1 or len({t[a] for a in M.FACTORIZED})!=1:raise AssertionError('variants change the state '+str(bands))
+    for sensor in ('QB','WV3'):
+        bands=SENSORS[sensor]['bands'];t={a:sh(M.Model(a,bands,42,sensor=sensor)) for a in M.ARMS}
+        if len({t[a] for a in M.FULL_SIZE})!=1 or len({t[a] for a in M.FACTORIZED})!=1:raise AssertionError('variants change the state '+sensor)
         if t['NT']!=sh(M.M89.Model('W2T',bands,42)) or t['NK']!=sh(M.M89.Model('W2K',bands,42)):raise AssertionError('N differs from the 89 2x2 model')
     n_t=[x[0] for x in M.M83.targets(M.Model('NT',4,42))]
     for a in M.FULL_SIZE:
-        if [x[0] for x in M.M83.targets(M.Model(a,4,42))]!=n_t:raise AssertionError('factorization targets differ '+a)
+        if [x[0] for x in M.M83.targets(M.Model(a,4,42,sensor='QB'))]!=n_t:raise AssertionError('factorization targets differ '+a)
     out['k2_targets']=len(n_t)
-    P=M.P54;g=torch.Generator().manual_seed(3);pan=torch.rand(1,1,128,128,generator=g,dtype=torch.float64)
-    out['pan_mtf_vs_wald']={s:float((M.PanMTFDown(M.PAN_GNYQ[SENSORS[s]['bands']])(pan.float()).double()-P.Wald(s,'cpu').pan(pan)).abs().max()) for s in ('QB','GF2','WV3')}
-    if max(out['pan_mtf_vs_wald'].values())>1e-4:raise AssertionError('PAN MTF operator differs from Wald.pan')
-    ms=torch.rand(1,4,16,16,generator=g);up=interp23tap(ms,4)
-    out['quarter_down_of_interp23_x4']=float((M.QuarterDown()(up)-ms).abs().max())  # grid check: the x4 chain lands MS pixel j on 4j + 2
-    out['quarter_down_of_interp23_x4_shifted']=float((M.HalfDown(1)(M.HalfDown(1)(up))-ms).abs().max())
-    if out['quarter_down_of_interp23_x4']>=out['quarter_down_of_interp23_x4_shifted']:raise AssertionError('internal decimation grid does not match the data grid')
+    P=M.P54;g=torch.Generator().manual_seed(3);pan=torch.rand(1,1,128,128,generator=g,dtype=torch.float64);ms=torch.rand(1,4,16,16,generator=g)
+    out['pan_mtf_x4_vs_wald']={s:float((M.MTFDown(s,4,2)(pan.float()).double()-P.Wald(s,'cpu').pan(pan)).abs().max()) for s in ('QB','GF2','WV3')}
+    out['ms_mtf_x2_kernel_vs_coarse_pairs']={s:float((M.MTFDown(s,2,0).km.double()-CoarsePairs(s,'cpu').ms_kernel.double()).abs().max()) for s in ('QB','GF2','WV3')}
+    out['up23_two_stages_vs_interp23_x4']=float((M.Up23(0)(M.Up23(1)(ms))-interp23tap(ms,4)).abs().max())
+    out['up23_first_stage_vs_interp23_x2']=float((M.Up23(1)(ms)-interp23tap(ms,2)).abs().max())
+    if max(out['pan_mtf_x4_vs_wald'].values())>1e-4 or max(out['ms_mtf_x2_kernel_vs_coarse_pairs'].values())>1e-6 or out['up23_two_stages_vs_interp23_x4']>1e-5 or out['up23_first_stage_vs_interp23_x2']>1e-5:
+        raise AssertionError('resampling operators differ from the data operators: '+json.dumps(out))
+    up=interp23tap(ms,4)  # grid check: decimating the x4 interpolation at the data phases returns the MS samples best
+    d=lambda a,b:float((M.MTFDown('QB',2,b)(M.MTFDown('QB',2,a)(up))-ms).abs().mean())
+    out['grid_phase_0_then_1']=d(0,1);out['grid_phase_1_then_1']=d(1,1)
+    if out['grid_phase_0_then_1']>=out['grid_phase_1_then_1']:raise AssertionError('internal decimation grid does not match the data grid')
     return out
 
 
 def factorize(sensor,arm,seed):
     import torch
     import train as TR
-    root,cp,cfg=runtime_cfg();set_impl(cfg);dest=root/'init';dest.mkdir(exist_ok=True);p=TR.init_path(cfg,sensor,arm,seed);rec=p.with_suffix('.json')
+    root,cp,cfg=runtime_cfg();set_impl(cfg);M.SENSOR['value']=sensor;dest=root/'init';dest.mkdir(exist_ok=True);p=TR.init_path(cfg,sensor,arm,seed);rec=p.with_suffix('.json')
     if rec.exists():print('FACTORIZED ALREADY',p.stem,flush=True);return
     trunk=M.SOURCE[arm];k,snap,meta=TR.snapshot_files(cfg,sensor,trunk,seed);src=snap/'latest.pt';ck=torch.load(src,map_location='cpu',weights_only=False)
     if ck['epoch']!=k or ck['fingerprint']!=cfg['fingerprint'] or ck['seed']!=seed:raise RuntimeError('snapshot is not the epoch-%d state'%k)
@@ -159,7 +164,7 @@ def optimize():
         b=json.loads((out/f'benchmark_n1_{sensor}_{arm}.json').read_text(encoding='utf8'));rows[f'{sensor}_{arm}']=dict(median_step_seconds=b['median_step_seconds'],steps_per_epoch=b['steps_per_epoch'],peak_reserved_gib=b['peak_reserved_bytes']/2**30)
     cfg['benchmark']=rows
     shapes=lambda nb:[(1,1,256,256),(1,nb,256,256),(1,nb,64,64)]
-    cfg['gmac_256']={s:{a:E.macs(M.Model(a,SENSORS[s]['bands'],42),shapes(SENSORS[s]['bands']))/1e9 for a in ('NT','NK','CK')} for s in cfg['sensors']}
+    cfg['gmac_256']={s:{a:E.macs(M.Model(a,SENSORS[s]['bands'],42,sensor=s),shapes(SENSORS[s]['bands']))/1e9 for a in ('NT','NK','CK')} for s in cfg['sensors']}
     cfg['source_hashes']=source_hashes();cfg['fingerprint']=fingerprint(cfg);write(cp,cfg)
     subprocess.run([sys.executable,'-u',str(HERE/'train.py'),'--config',str(cp),'--mode','preflight'],check=True)
     write(out/'optimization.json',dict(time_kst=now(),structure_checks=cfg['structure_checks'],benchmark=rows,gmac_256=cfg['gmac_256'],fingerprint=cfg['fingerprint']))
