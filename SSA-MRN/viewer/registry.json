@@ -343,12 +343,12 @@
     },
     {
       "id": "genimage_identity",
-      "label": "입력 그대로 (생성형 대조군)",
-      "short": "입력 그대로",
-      "role": "생성형 모델의 대조군 · RGB만",
+      "label": "변환 한계 대조군 (EXP)",
+      "short": "EXP",
+      "role": "생성형 모델의 대조군 · PAN 미사용 · RGB만",
       "group": "generative",
       "seed": null,
-      "description": "생성형 모델에 넣은 1번 이미지(LMS의 RGB)를 모델 없이 같은 방법으로 되돌린 결과입니다. 8bit 변환·확대·축소만으로 생기는 손실을 보여 주며, 생성형 모델은 이 값을 넘어야 PAN의 세부를 넣었다고 볼 수 있습니다. 평가 보고서: benchmarks/genimage_identity.",
+      "description": "생성형 모델에 넣은 1번 이미지(LMS의 RGB)를 PAN 없이 모델과 같은 방법으로 되돌린 EXP(보간한 MS) 결과입니다. 팬샤프닝 벤치마크의 EXP에 8bit 변환·1024 확대·4×4 축소에서 생기는 손실이 더해진 것으로, 생성형 모델은 이 값을 넘어야 PAN의 세부를 넣었다고 볼 수 있습니다. 평가 보고서: benchmarks/genimage_identity.",
       "benchmark": {
         "model": "genimage_identity",
         "setting": "zeroshot",
