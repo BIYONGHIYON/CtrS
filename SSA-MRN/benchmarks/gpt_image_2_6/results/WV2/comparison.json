@@ -1,0 +1,58 @@
+{
+  "scope": "WV2 RR test, 20 scenes, RGB [4,2,1] only; peak 2047; actual MATLAB R2025b; no crop or output clipping",
+  "model": "gpt_image_2_6",
+  "matlab_mean": {
+    "Q": 0.8232006917240791,
+    "SAM": 3.1371365370436117,
+    "ERGAS": 4.734851639451877,
+    "SCC": 0.9193036264930294,
+    "Q2n": 0.8168214795293842,
+    "PSNR_global": 30.57155994522727,
+    "PSNR_bandmean": 31.030122982062096,
+    "PSNR_bandmean_peak2047": 31.030122982062096
+  },
+  "control": "genimage_identity (image 1 restored without a generative model)",
+  "control_source": "SSA-MRN/benchmarks/genimage_identity/results/matlab_summary.json",
+  "control_matlab_mean": {
+    "Q": 0.6427639002233334,
+    "SAM": 3.3521341290870112,
+    "ERGAS": 6.946967329843227,
+    "SCC": 0.7231793393227364,
+    "Q2n": 0.6393489247093673,
+    "PSNR_global": 27.144412630367906,
+    "PSNR_bandmean": 27.69544275528842,
+    "PSNR_bandmean_peak2047": 27.69544275528842
+  },
+  "model_minus_control": {
+    "Q": 0.18043679150074565,
+    "SAM": -0.21499759204339952,
+    "ERGAS": -2.21211569039135,
+    "SCC": 0.19612428717029307,
+    "Q2n": 0.1774725548200169,
+    "PSNR_global": 3.427147314859365,
+    "PSNR_bandmean": 3.3346802267736777,
+    "PSNR_bandmean_peak2047": 3.3346802267736777
+  },
+  "diagnostics": {
+    "observation_rmse_dn": 25.189452882497655,
+    "pan_detail_corr": 0.8445919554024595,
+    "shift_rows": -0.13999999999999999,
+    "shift_cols": -0.17500000000000004
+  },
+  "ground_truth_diagnostics": {
+    "observation_rmse_dn": 4.2438799173374476e-13,
+    "pan_detail_corr": 0.860690536019783,
+    "shift_rows": -0.095,
+    "shift_cols": -0.12000000000000002
+  },
+  "interpretation": [
+    "Observation error, PAN-detail correlation and phase shift are diagnostic proxies, not a validated hallucination detector.",
+    "A higher PAN correlation than ground truth does not prove better reconstruction.",
+    "RGB scores cannot be compared directly with full 8-band scores.",
+    "C2MS-SP figures use published viewer predictions quantized to 1/8 DN; figure PSNR is illustrative, not a new MATLAB baseline."
+  ],
+  "limitations": [
+    "One supplied output per scene; no repeated generation statistics.",
+    "Generation timestamp, cost, retry history and service-side settings/prompt logs were not supplied."
+  ]
+}
