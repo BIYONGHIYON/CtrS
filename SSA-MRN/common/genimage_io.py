@@ -16,21 +16,33 @@ checks    per-scene checks that need no ground truth, for the returned pictures 
             PAN detail corr.   correlation of the high-pass of the output intensity (RGB mean) and of the PAN
             shift              phase-correlation shift (rows, cols) of the output intensity against the PAN, in pixels
 upload    put files on a GitHub Release (created at weights-anchor if missing); an existing asset is never replaced
+generate  make the pictures through the Dongguk AI CHAT (BAZE) API Gateway with the fixed prompts and settings of #209, so
+          nobody has to click 60 times: reads the key from the BAZE_API_KEY environment variable (never stored or printed),
+          estimates the cost first, stops before --max-credits would be passed, saves <model>_<SENSOR>_<scene>.<ext> and a
+          log of every attempt (time, size, credits charged, error), and skips scenes that are already saved (resume)
 
 python SSA-MRN/common/genimage_io.py inputs --out runtime/genimage
 python SSA-MRN/common/genimage_io.py restore --sensor QB --model flux_2_pro --images <folder> --out runtime/genimage
 python SSA-MRN/common/genimage_io.py checks --sensor QB --predictions runtime/genimage/flux_2_pro_zeroshot_QB_rr.zip
 python SSA-MRN/common/genimage_io.py upload --release genimage-inputs runtime/genimage/genimage_inputs_*.zip
+python SSA-MRN/common/genimage_io.py generate --sensor QB --model nano_banana_2_1 --inputs genimage_inputs_QB.zip --out pictures --estimate-only
+python SSA-MRN/common/genimage_io.py generate --sensor QB --model nano_banana_2_1 --inputs genimage_inputs_QB.zip --out pictures --max-credits 800
 
 Returned pictures are named <anything>_<SENSOR>_<scene two digits>.<png|jpg|jpeg|webp>, e.g. flux_2_pro_QB_07.png.
 """
 import argparse
+import base64
 import hashlib
 import io
 import json
+import os
 import re
 import subprocess
 import sys
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
 import zipfile
 from pathlib import Path
 
@@ -251,6 +263,125 @@ def cmd_upload(a):
         print(f'verified {a.release}/{f.name} {assets[f.name]["digest"]}')
 
 
+# ---------- generation through the API Gateway (issues #209-212) ----------
+API = 'https://factchat-cloud.mindlogic.ai/v1/gateway'
+RULES = """- Keep the exact framing, scale and geometry. Do not crop, rotate, shift, zoom, mirror or reframe. Every object must stay at the same pixel position as in both inputs.
+- Take edges, textures and fine structures only from {pan}. Do not add, remove or invent any building, road, vehicle, tree, boat, field pattern or texture that is not visible in {pan}.
+- Take colors only from {ms}. Keep its overall brightness and color balance. Do not increase saturation or contrast, and do not apply any artistic style, haze removal, color grading or sharpening halos.
+- Output a single square (1:1) top-down satellite photograph, 1024×1024, with no text, labels, borders or watermarks."""
+PROMPTS = {
+    'gpt_image_2_6': """Edit the first image. Both images show the same satellite scene and are exactly aligned pixel to pixel.
+The first image is a low-resolution multispectral color image: blurry, but its colors are correct.
+The second image is a high-resolution panchromatic (grayscale) image of the same area: sharp, but without color.
+
+Task: pansharpening. Make the first image as sharp as the second image while keeping the colors of the first image.
+
+Rules:
+""" + RULES.format(pan='the second image', ms='the first image'),
+    'nano_banana_2_1': """Do not change the composition. I am giving you two images of the same satellite scene, exactly aligned pixel to pixel.
+The first image is a low-resolution multispectral color image of the area: it is blurry, but its colors are correct.
+The second image is a high-resolution panchromatic grayscale image of the same area: it is sharp, but it has no color.
+
+Create one image that combines them (pansharpening): use the second image as the guide for all spatial detail and the first image as the guide for all color.
+
+Rules:
+""" + RULES.format(pan='the second image', ms='the first image'),
+    'flux_2_pro': """image 1 and image 2 show the same satellite scene and are exactly aligned pixel to pixel.
+image 1: low-resolution multispectral color image (blurry, colors are correct).
+image 2: high-resolution panchromatic grayscale image (sharp, no color).
+
+Task: pansharpening. Generate one image with the spatial detail of image 2 and the colors of image 1.
+
+Rules:
+""" + RULES.format(pan='image 2', ms='image 1'),
+}
+GEN_MODELS = {   # folder name -> API model id and fixed parameters (same as the image menu settings of #209)
+    'gpt_image_2_6': ('gpt-image-2.6-sunburst', lambda q: dict(size='1024x1024', quality=q, background='opaque')),
+    'nano_banana_2_1': ('gemini-nano-banana-2.1', lambda q: dict(aspect_ratio='1:1', image_size='1K')),
+    'flux_2_pro': ('fal-ai/flux-2-pro', lambda q: dict(image_size='square_hd')),
+}
+RETRIES = 2      # extra attempts after a failure (refusal, no picture, not square); never for a picture we merely dislike
+
+
+def api(path, key, body=None, timeout=600):
+    req = urllib.request.Request(API + path, data=None if body is None else json.dumps(body).encode(), method='GET' if body is None else 'POST',
+                                 headers={'Authorization': f'Bearer {key}', 'Content-Type': 'application/json', 'User-Agent': 'CtrS-genimage/1'})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r: return json.loads(r.read())
+    except urllib.error.HTTPError as e:
+        raise RuntimeError(f'HTTP {e.code}: {e.read().decode(errors="replace")[:500]}') from None
+
+
+def data_url(png_bytes):
+    return 'data:image/png;base64,' + base64.b64encode(png_bytes).decode()
+
+
+def fetch_picture(url):
+    if url.startswith('data:'): return base64.b64decode(url.split(',', 1)[1])
+    with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'CtrS-genimage/1'}), timeout=300) as r: return r.read()
+
+
+def generate_one(key, model_id, request):
+    """One API call (polls Fal operations); returns (picture bytes, credits charged, response id)."""
+    resp = api('/images/generate/', key, request)
+    credits = float(resp.get('credits_charged') or 0)
+    waited = 0
+    while not resp.get('data'):
+        if 'operation_id' not in resp: raise RuntimeError(f'no picture in response: {json.dumps(resp)[:300]}')
+        if waited > 900: raise RuntimeError('operation still processing after 15 minutes')
+        time.sleep(5); waited += 5
+        resp = {**api(f'/images/generate/{resp["operation_id"]}/?model={urllib.parse.quote(model_id, safe="")}', key), 'operation_id': resp['operation_id']}
+        if resp.get('status') == 'failed': raise RuntimeError(f'operation failed: {json.dumps(resp)[:300]}')
+    return fetch_picture(resp['data'][0]['url']), credits, resp.get('id') or resp.get('operation_id')
+
+
+def cmd_generate(a):
+    model_id, params = GEN_MODELS[a.model]
+    if a.model == 'gpt_image_2_6' and not a.quality: raise SystemExit('--quality low|medium|high is required for gpt_image_2_6 (decided in #209)')
+    key = os.environ.get('BAZE_API_KEY')
+    if not key and not a.dry_run: raise SystemExit('set the BAZE_API_KEY environment variable to your own API Gateway key first')
+    meta, inputs_sha = read_meta(a.inputs, a.sensor)
+    p = Path(a.inputs); p = p / f'genimage_inputs_{a.sensor}.zip' if p.is_dir() else p
+    with zipfile.ZipFile(p) as z:
+        pair = {i: (z.read(f'{a.sensor}_{i:02}_1_ms.png'), z.read(f'{a.sensor}_{i:02}_2_pan.png')) for i in range(SCENES)}
+    fixed = dict(model=model_id, prompt=PROMPTS[a.model], number_of_images=1, **params(a.quality))
+    out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
+    log_path = out / f'{a.model}_{a.sensor}_generation.json'
+    log = json.loads(log_path.read_text()) if log_path.exists() else dict(model=a.model, model_id=model_id, sensor=a.sensor, inputs_zip_sha256=inputs_sha,
+                                                                          settings={k: v for k, v in fixed.items() if k != 'prompt'}, prompt=PROMPTS[a.model], attempts=[])
+    if log['settings'] != {k: v for k, v in fixed.items() if k != 'prompt'} or log['prompt'] != PROMPTS[a.model]:
+        raise SystemExit(f'{log_path} was made with other settings or another prompt; use a new --out folder')
+    done = {int(m.group(2)) for f in out.iterdir() if (m := PICTURE.search(f.name)) and f.name.startswith(a.model + '_') and m.group(1).upper() == a.sensor}
+    todo = [i for i in (a.scenes if a.scenes is not None else range(SCENES)) if i not in done]
+    print(f'{a.model} ({model_id}) {a.sensor}: {len(done)} saved, {len(todo)} to make; settings {log["settings"]}', flush=True)
+    if a.dry_run:
+        body = dict(fixed, input_images=[data_url(x) for x in pair[todo[0] if todo else 0]])
+        print(f'request body {len(json.dumps(body)) / 1e6:.2f} MB, keys {sorted(body)}'); return
+    est = api('/estimate/', key, dict(kind='image', **{k: v for k, v in fixed.items() if k != 'prompt'}, input_images=[data_url(x) for x in pair[0]]))
+    print(f'estimate per picture: {est.get("credits")} credits ({est.get("bound")}); for {len(todo)} scenes about {float(est.get("credits") or 0) * len(todo):.0f}', flush=True)
+    if a.estimate_only: return
+    if a.max_credits is None: raise SystemExit('give --max-credits (the most this run may spend)')
+    spent = 0.0
+    for i in todo:
+        for attempt in range(RETRIES + 1):
+            if spent + float(est.get('credits') or 0) > a.max_credits:
+                print(f'stopping before scene {i}: {spent:.1f} spent, next would pass --max-credits {a.max_credits}'); log_path.write_text(json.dumps(log, indent=1) + '\n'); return
+            row = dict(scene=i, attempt=attempt, started=time.strftime('%Y-%m-%dT%H:%M:%S%z'))
+            try:
+                picture, credits, rid = generate_one(key, model_id, dict(fixed, input_images=[data_url(x) for x in pair[i]]))
+                spent += credits; row.update(credits_charged=credits, response_id=rid)
+                img = Image.open(io.BytesIO(picture)); row.update(size=[img.width, img.height], format=img.format)
+                if img.width != img.height: raise RuntimeError(f'not square: {img.width}x{img.height}')
+                name = f'{a.model}_{a.sensor}_{i:02}.{dict(JPEG="jpg", WEBP="webp").get(img.format, "png")}'
+                (out / name).write_bytes(picture); row.update(status='ok', picture=name, picture_sha256=sha(picture))
+            except Exception as e:  # noqa: BLE001  record every failure, then retry under the fixed rule
+                row.update(status='failed', error=str(e)[:500])
+            log['attempts'].append(row); log_path.write_text(json.dumps(log, indent=1) + '\n')
+            print(f'scene {i:02} attempt {attempt}: {row["status"]} {row.get("size", "")} credits {row.get("credits_charged", 0)} (total {spent:.1f}) {row.get("error", "")}', flush=True)
+            if row['status'] == 'ok': break
+    print(f'done: {spent:.1f} credits this run; log {log_path}')
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest='command', required=True)
@@ -262,9 +393,15 @@ def main():
     d.add_argument('--model', default='genimage_identity'); d.add_argument('--out', type=Path, required=True)
     c = sub.add_parser('checks'); c.add_argument('--data', **data); c.add_argument('--sensor', choices=list(SENSORS), required=True)
     c.add_argument('--predictions', type=Path, help='<model>_zeroshot_<SENSOR>_rr.zip (omit for the ground-truth reference only)'); c.add_argument('--out', type=Path)
+    g = sub.add_parser('generate'); g.add_argument('--sensor', choices=list(SENSORS), required=True); g.add_argument('--model', choices=list(GEN_MODELS), required=True)
+    g.add_argument('--inputs', type=Path, required=True, help='genimage_inputs_<SENSOR>.zip or its folder'); g.add_argument('--out', type=Path, required=True)
+    g.add_argument('--quality', choices=('low', 'medium', 'high'), help='GPT Image only, the value decided in #209')
+    g.add_argument('--scenes', type=int, nargs='+', help='only these scenes (e.g. 0 for the first check); default all 20')
+    g.add_argument('--max-credits', type=float, help='stop before this run would spend more'); g.add_argument('--estimate-only', action='store_true')
+    g.add_argument('--dry-run', action='store_true', help='check the inputs and the request without the key or any call')
     u = sub.add_parser('upload'); u.add_argument('--release', required=True); u.add_argument('--title'); u.add_argument('--notes'); u.add_argument('files', nargs='+')
     a = p.parse_args()
-    dict(inputs=cmd_inputs, restore=cmd_restore, identity=cmd_identity, checks=cmd_checks, upload=cmd_upload)[a.command](a)
+    dict(inputs=cmd_inputs, restore=cmd_restore, identity=cmd_identity, checks=cmd_checks, upload=cmd_upload, generate=cmd_generate)[a.command](a)
 
 
 if __name__ == '__main__':
