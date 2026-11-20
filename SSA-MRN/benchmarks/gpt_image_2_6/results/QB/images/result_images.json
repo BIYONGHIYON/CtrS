@@ -1,0 +1,125 @@
+{
+  "names": [
+    "C2MS-SP",
+    "GPT Image 2.6"
+  ],
+  "bands": "RGB [2,1,0] of the 4 QB bands",
+  "baseline": "C2MS-SP seed 42 from the result viewer data (1/8 DN)",
+  "window_note": "compare: 64x64 window where the candidate gains most over C2MS-SP (favours the candidate)",
+  "stats": {
+    "0": {
+      "land_cover": "바다·항구 방파제",
+      "scene_psnr": {
+        "C2MS-SP": 43.685073167921,
+        "GPT Image 2.6": 37.77911086522827
+      },
+      "window": [
+        144,
+        160
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 51.15186567290993,
+        "GPT Image 2.6": 49.71617463137346
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 4.2039794921875,
+        "GPT Image 2.6": 4.842146222805165
+      }
+    },
+    "1": {
+      "land_cover": "부두·곡선 방파제·수목",
+      "scene_psnr": {
+        "C2MS-SP": 44.16423723161926,
+        "GPT Image 2.6": 39.161052814584814
+      },
+      "window": [
+        80,
+        192
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 52.60669602090187,
+        "GPT Image 2.6": 47.42594408689871
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 2.9980367024739585,
+        "GPT Image 2.6": 5.117626609465964
+      }
+    },
+    "3": {
+      "land_cover": "요트 마리나·운동장",
+      "scene_psnr": {
+        "C2MS-SP": 38.86521820781352,
+        "GPT Image 2.6": 30.850203547691862
+      },
+      "window": [
+        176,
+        128
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 44.64082532966063,
+        "GPT Image 2.6": 37.44204109281217
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 8.377960205078125,
+        "GPT Image 2.6": 22.04509966625333
+      }
+    },
+    "7": {
+      "land_cover": "숲 공원",
+      "scene_psnr": {
+        "C2MS-SP": 40.7684533175358,
+        "GPT Image 2.6": 32.91567481868392
+      },
+      "window": [
+        48,
+        112
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 50.8421122495682,
+        "GPT Image 2.6": 41.82946209414953
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 4.321360270182292,
+        "GPT Image 2.6": 13.16129213152135
+      }
+    },
+    "14": {
+      "land_cover": "언덕 공원·곡선 주택가",
+      "scene_psnr": {
+        "C2MS-SP": 39.56341971570925,
+        "GPT Image 2.6": 31.47257489188969
+      },
+      "window": [
+        0,
+        96
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 41.32163724956459,
+        "GPT Image 2.6": 35.178934277471974
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 11.61865234375,
+        "GPT Image 2.6": 26.66999830855635
+      }
+    },
+    "17": {
+      "land_cover": "산지 녹지·산책로",
+      "scene_psnr": {
+        "C2MS-SP": 40.80765389616172,
+        "GPT Image 2.6": 32.92543420888543
+      },
+      "window": [
+        32,
+        32
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 47.08471648358013,
+        "GPT Image 2.6": 41.15615403051542
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 6.44329833984375,
+        "GPT Image 2.6": 13.475033755455083
+      }
+    }
+  }
+}
