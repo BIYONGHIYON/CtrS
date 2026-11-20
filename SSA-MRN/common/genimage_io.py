@@ -174,7 +174,7 @@ def cmd_restore(a):
     pictures = {}
     for p in sorted(Path(a.images).iterdir()):
         m = PICTURE.search(p.name)
-        if not m or m.group(1).upper() != a.sensor: continue
+        if not m or m.group(1).upper() != a.sensor or not p.name.startswith(a.model + '_'): continue   # one model per call; folders may hold several
         i = int(m.group(2))
         if i in pictures: raise ValueError(f'two pictures for scene {i}: {pictures[i][0]} and {p.name}')
         pictures[i] = (p.name, p.read_bytes())
