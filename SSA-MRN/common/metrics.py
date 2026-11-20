@@ -33,13 +33,19 @@ def _onion(a, b):
 
 
 def q2n(reference, fused, block=32):
-    """Q4/Q8 with nonoverlapping 32-pixel blocks, matching q2n.m here."""
+    """Q4/Q8 with nonoverlapping 32-pixel blocks, matching q2n.m here.
+
+    Like DLPan q2n.m, a band count that is not a power of 2 (3 RGB bands) is padded with zero bands (3 -> Q4)."""
     reference, fused = _chw(reference), _chw(fused)
     if reference.shape != fused.shape:
         raise ValueError("Q2n shapes differ")
     channels, height, width = reference.shape
-    if height % block or width % block or channels & (channels - 1):
-        raise ValueError("Q2n requires block-aligned images and power-of-2 bands")
+    if height % block or width % block:
+        raise ValueError("Q2n requires block-aligned images")
+    if channels & (channels - 1):
+        pad = np.zeros((2 ** int(np.ceil(np.log2(channels))) - channels, height, width))
+        reference, fused = np.concatenate((reference, pad)), np.concatenate((fused, pad))
+        channels = reference.shape[0]
     def blocks(image):
         # MATLAB uint16 saturates/rounds values before the hypercomplex index.
         image = np.rint(np.clip(image, 0, 65535)).transpose(1, 2, 0)
