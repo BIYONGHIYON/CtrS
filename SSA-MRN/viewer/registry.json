@@ -1,5 +1,5 @@
 {
-  "description": "결과 비교 사이트에 올릴 데이터셋과 모델 목록입니다. group은 original(원본 SSA-MRN)·baseline(기준 모델)·ours(우리 다른 모델)·benchmark(다른 연구 모델)이며, 화면은 원본·기준 모델과 ours·benchmark 중 고른 비교군 하나를 함께 보여 줍니다. 모델을 추가한 뒤 python SSA-MRN/viewer/export.py --models <id>로 예측을 만듭니다.",
+  "description": "결과 비교 사이트에 올릴 데이터셋과 모델 목록입니다. group은 original(원본 SSA-MRN)·baseline(기준 모델)·ours(우리 다른 모델)·benchmark(다른 연구 모델)·generative(생성형 이미지 모델, RGB 3밴드만)이며, 화면은 기준 모델과 나머지 중 고른 비교군 하나를 함께 보여 줍니다. 모델을 추가한 뒤 python SSA-MRN/viewer/export.py --models <id>로 예측을 만듭니다.",
   "datasets": [
     {
       "id": "QB",
@@ -293,6 +293,66 @@
         "settings_by_dataset": {
           "GF2": "retrain"
         },
+        "datasets": [
+          "QB",
+          "GF2",
+          "WV3",
+          "WV2"
+        ]
+      }
+    },
+    {
+      "id": "gpt_image_2_6",
+      "label": "GPT Image 2.6",
+      "short": "GPT Image",
+      "role": "생성형 모델 · 학습 없음 · RGB만",
+      "group": "generative",
+      "seed": null,
+      "description": "OpenAI GPT Image 2.6 Sunburst(1024×1024, 품질 high)의 생성 결과입니다. 학습 없이 RR test 입력(LMS의 RGB 밴드와 PAN을 각각 0.1-99.9%로 늘려 8bit 1024×1024 PNG로 만든 것)과 고정 프롬프트를 동국 AI CHAT API Gateway로 넣어 얻은 결과를 4×4 평균으로 256×256으로 줄이고 DN으로 되돌렸습니다. RGB 3밴드만 출력하므로 C2MS-SP와도 RGB 3밴드로만 비교합니다. 평가 보고서: benchmarks/gpt_image_2_6.",
+      "benchmark": {
+        "model": "gpt_image_2_6",
+        "setting": "zeroshot",
+        "bands": "rgb",
+        "datasets": [
+          "QB",
+          "GF2",
+          "WV3",
+          "WV2"
+        ]
+      }
+    },
+    {
+      "id": "nano_banana_2_1",
+      "label": "Nano Banana 2.1",
+      "short": "Nano Banana",
+      "role": "생성형 모델 · 학습 없음 · RGB만",
+      "group": "generative",
+      "seed": null,
+      "description": "Google Nano Banana 2.1(Gemini 이미지 모델, 1K·1:1)의 생성 결과입니다. 학습 없이 RR test 입력(LMS의 RGB 밴드와 PAN을 각각 0.1-99.9%로 늘려 8bit 1024×1024 PNG로 만든 것)과 고정 프롬프트를 동국 AI CHAT API Gateway로 넣어 얻은 결과를 4×4 평균으로 256×256으로 줄이고 DN으로 되돌렸습니다. RGB 3밴드만 출력하므로 C2MS-SP와도 RGB 3밴드로만 비교합니다. 평가 보고서: benchmarks/nano_banana_2_1.",
+      "benchmark": {
+        "model": "nano_banana_2_1",
+        "setting": "zeroshot",
+        "bands": "rgb",
+        "datasets": [
+          "QB",
+          "GF2",
+          "WV3",
+          "WV2"
+        ]
+      }
+    },
+    {
+      "id": "genimage_identity",
+      "label": "입력 그대로 (생성형 대조군)",
+      "short": "입력 그대로",
+      "role": "생성형 모델의 대조군 · RGB만",
+      "group": "generative",
+      "seed": null,
+      "description": "생성형 모델에 넣은 1번 이미지(LMS의 RGB)를 모델 없이 같은 방법으로 되돌린 결과입니다. 8bit 변환·확대·축소만으로 생기는 손실을 보여 주며, 생성형 모델은 이 값을 넘어야 PAN의 세부를 넣었다고 볼 수 있습니다. 평가 보고서: benchmarks/genimage_identity.",
+      "benchmark": {
+        "model": "genimage_identity",
+        "setting": "zeroshot",
+        "bands": "rgb",
         "datasets": [
           "QB",
           "GF2",

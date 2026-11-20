@@ -13,6 +13,10 @@ A model is either
 - given as precomputed predictions: "predictions": {"<dataset>": "<h5 path>"} with dataset "pred" of shape (N, C, H, W) in DN.
 - read from another model's predictions Release: "benchmark": {"model", "setting", "datasets"} takes
   predictions-benchmarks-<model>-<setting>/<model>_<setting>_<dataset>_rr.zip through common/benchmark_predictions.py (no weights).
+  "bands": "rgb" in that entry marks predictions holding only the dataset's RGB composite bands (generative image models);
+  they are stored and scored on those 3 bands and the result records them under "bands".
+Every exported model also gets "rgb": metrics on the RGB composite bands only, so the viewer can compare a full-band model
+with an RGB-only one on the same bands.
   "settings_by_dataset": {"GF2": "retrain"} overrides the setting for single datasets.
 Datasets without an entry for a model are skipped for that model. Existing results of models that are not exported
 again are kept in index.json.
@@ -134,16 +138,22 @@ def main():
         for i, s in enumerate(scenes):
             for k in ('gt', 'pan', 'ms'): save(out / f's{i:02}/{k}.i16', s[k])
         thumbnails(out / 'thumbs.jpg', scenes, next(iter(ds['composites'].values()))); entry['thumbnails'] = 'thumbs.jpg'
+        rgb = list(ds['composites']['RGB'])
         for model in reg['models']:
             if model['id'] not in chosen or not available(model, ds): continue
-            t = time.time(); run, info = predictor(model, ds, a.device); rows, clipped = [], 0
+            only_rgb = model.get('benchmark', {}).get('bands') == 'rgb'
+            t = time.time(); run, info = predictor(model, ds, a.device); rows, rows_rgb, clipped = [], [], 0
             for i, s in enumerate(scenes):
-                pred = run(i, s)
-                if pred.shape != s['gt'].shape: raise ValueError(f'{model["id"]} {ds["id"]} scene {i}: shape {pred.shape} != {s["gt"].shape}')
+                pred, gt = run(i, s), s['gt']
+                if only_rgb: gt = gt[rgb]
+                if pred.shape != gt.shape: raise ValueError(f'{model["id"]} {ds["id"]} scene {i}: shape {pred.shape} != {gt.shape}')
                 clipped += save(out / f's{i:02}/{model["id"]}.i16', pred)
-                m = rr_metrics(s['gt'], pred); rows.append({k: float(m[k]) for k in METRICS})
+                m = rr_metrics(gt, pred); rows.append({k: float(m[k]) for k in METRICS})
+                m = m if only_rgb else rr_metrics(gt[rgb], pred[rgb]); rows_rgb.append({k: float(m[k]) for k in METRICS})
             mean = {k: float(np.mean([r[k] for r in rows])) for k in METRICS}
-            entry['results'][model['id']] = dict(scene_metrics=rows, mean=mean, clipped_values=clipped, device=a.device, **info)
+            mean_rgb = {k: float(np.mean([r[k] for r in rows_rgb])) for k in METRICS}
+            entry['results'][model['id']] = dict(scene_metrics=rows, mean=mean, rgb=dict(bands=rgb, scene_metrics=rows_rgb, mean=mean_rgb),
+                                                 **(dict(bands=rgb) if only_rgb else {}), clipped_values=clipped, device=a.device, **info)
             print(f'{ds["id"]} {model["id"]}: PSNR {mean["PSNR"]:.4f} SAM {mean["SAM"]:.4f} ERGAS {mean["ERGAS"]:.4f} ({time.time() - t:.0f}s, clipped {clipped})', flush=True)
     models = [{k: v for k, v in m.items() if k not in ('module', 'factory', 'args', 'kwargs', 'kwargs_by_dataset', 'state_key')} for m in reg['models']]
     index = dict(generated=time.strftime('%Y-%m-%d %H:%M'), storage=dict(dtype='int16 little endian', layout='CHW', factor=FACTOR),

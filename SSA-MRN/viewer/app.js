@@ -43,14 +43,20 @@ async function loadScene(dsId, i, ids) {             // inputs and GT once per s
     if (cache.size > 12) cache.delete(cache.keys().next().value);
   }
   const need = ids.filter(id => !sc.pred[id]);
-  (await Promise.all(need.map(id => loadArray(dir + id + '.i16')))).forEach((a, k) => { sc.pred[need[k]] = a; });
+  (await Promise.all(need.map(id => loadArray(dir + id + '.i16')))).forEach((a, k) => { sc.pred[need[k]] = expand(a, bandsOf(ds, need[k]), sc); });
   return sc;
+}
+function expand(a, bands, sc) {                     // RGB-only prediction -> full band layout (missing bands NaN, never read)
+  if (!bands) return a;
+  const N = sc.H * sc.W, f = new Float32Array(sc.C * N).fill(NaN);
+  bands.forEach((b, k) => f.set(a.subarray(k * N, (k + 1) * N), b * N));
+  return f;
 }
 
 const dataset = id => S.index.datasets.find(d => d.id === id);
 const model = id => S.index.models.find(m => m.id === id);
 const modelsIn = ds => S.index.models.filter(m => ds.results && ds.results[m.id]);
-const COMPARE_GROUPS = [['original', '원본'], ['ours', '우리 모델'], ['benchmark', '다른 연구 모델']];
+const COMPARE_GROUPS = [['original', '원본'], ['ours', '우리 모델'], ['benchmark', '다른 연구 모델'], ['generative', '생성형 이미지 모델 · RGB만']];
 const roleOf = m => (m.role_by_dataset && m.role_by_dataset[S.ds]) || m.role;
 const comparable = ds => modelsIn(ds).filter(m => COMPARE_GROUPS.some(([g]) => g === m.group));
 function pickModels(ds) {                           // the baseline C2MS-SP and one chosen model (default: original SSA-MRN)
@@ -60,7 +66,19 @@ function pickModels(ds) {                           // the baseline C2MS-SP and 
   if (!S.visible.length) S.visible = avail.slice(0, 1).map(m => m.id);
   S.ref = S.cmp && S.visible.includes(S.cmp) ? S.cmp : S.visible[0];      // differences are baseline - chosen model
   S.cand = base && S.visible.includes(base.id) && base.id !== S.ref ? base.id : null;
+  const ok = comps(ds); if (!ok.includes(S.comp)) S.comp = ok[0];
+  if (S.errBand !== 'mean' && !activeBands(ds).includes(+S.errBand)) S.errBand = 'mean';
 }
+// A generative model gives only the RGB composite bands; while one is shown, every image, error map and number uses those bands.
+const bandsOf = (ds, id) => ds.results[id] && ds.results[id].bands;
+const rgbOnly = (ds = dataset(S.ds)) => S.visible.some(id => bandsOf(ds, id));
+function activeBands(ds = dataset(S.ds)) {
+  const only = S.visible.map(id => bandsOf(ds, id)).find(Boolean);
+  return only ? only.slice().sort((a, b) => a - b) : Array.from({ length: ds.bands }, (_, b) => b);
+}
+const comps = ds => Object.keys(ds.composites).filter(k => ds.composites[k].every(b => activeBands(ds).includes(b)));
+const metricsOf = (ds, id) => (rgbOnly(ds) ? ds.results[id].rgb : ds.results[id]);   // scene_metrics and mean on the compared bands
+const bkey = () => `${S.errBand}|${activeBands().join(',')}`;
 
 // ---------- numeric helpers ----------
 function percentile(arr, p) {
@@ -92,12 +110,12 @@ function panStretch(sc, region) {
   return sc.stretch[key];
 }
 function errMap(sc, id) {                         // |pred - gt|, band mean or one band (DN)
-  const key = `${id}:${S.errBand}`;
+  const key = `${id}:${bkey()}`;
   if (!sc.err[key]) {
-    const { C, H, W, gt } = sc, p = sc.pred[id], N = H * W, out = new Float32Array(N);
+    const { H, W, gt } = sc, p = sc.pred[id], N = H * W, out = new Float32Array(N), bs = activeBands();
     if (S.errBand === 'mean') {
-      for (let b = 0; b < C; b++) for (let i = 0, o = b * N; i < N; i++, o++) out[i] += Math.abs(p[o] - gt[o]);
-      for (let i = 0; i < N; i++) out[i] /= C;
+      for (const b of bs) for (let i = 0, o = b * N; i < N; i++, o++) out[i] += Math.abs(p[o] - gt[o]);
+      for (let i = 0; i < N; i++) out[i] /= bs.length;
     } else {
       const o = +S.errBand * N;
       for (let i = 0; i < N; i++) out[i] = Math.abs(p[o + i] - gt[o + i]);
@@ -107,7 +125,7 @@ function errMap(sc, id) {                         // |pred - gt|, band mean or o
   return sc.err[key];
 }
 function gainMap(sc, id) {                        // reference error - model error (>0: model better)
-  const key = `gain:${S.ref}:${id}:${S.errBand}`;
+  const key = `gain:${S.ref}:${id}:${bkey()}`;
   if (!sc.err[key]) {
     const a = errMap(sc, S.ref), b = errMap(sc, id), out = new Float32Array(a.length);
     for (let i = 0; i < a.length; i++) out[i] = a[i] - b[i];
@@ -116,13 +134,13 @@ function gainMap(sc, id) {                        // reference error - model err
   return sc.err[key];
 }
 function regionMetrics(sc, id, r0, c0, w) {
-  const { C, H, W, gt } = sc, p = sc.pred[id], N = H * W;
+  const { H, W, gt } = sc, p = sc.pred[id], N = H * W, bs = activeBands(), C = bs.length;
   const mse = new Float64Array(C), mu = new Float64Array(C);
   let sam = 0, n = 0, mae = 0;
   for (let y = r0; y < r0 + w; y++) for (let x = c0; x < c0 + w; x++) {
     let dot = 0, na = 0, nb = 0;
-    for (let b = 0, o = y * W + x; b < C; b++, o += N) {
-      const g = gt[o], f = p[o], d = f - g;
+    for (let b = 0; b < C; b++) {
+      const o = bs[b] * N + y * W + x, g = gt[o], f = p[o], d = f - g;
       mse[b] += d * d; mu[b] += g; mae += Math.abs(d); dot += g * f; na += g * g; nb += f * f;
     }
     const norm = Math.sqrt(na * nb);
@@ -228,18 +246,18 @@ function build() {
   // scene strip
   const thumbs = ds.thumbnails ? `background-image:url(data/${ds.id}/${ds.thumbnails});` : '';
   const strip = el('div', { class: 'strip', id: 'strip', style: `--n:${ds.scenes}` }, Array.from({ length: ds.scenes }, (_, i) => {
-    const r = ds.results, lab = sceneLabel(ds, i), std = (ds.standard_scenes || []).includes(i);
-    const tip = [`장면 ${i}${lab ? ' · ' + lab : ''}`, ...vis.map(m => `${m.short} ${num(r[m.id].scene_metrics[i].PSNR, 2)} dB`)].join('\n');
+    const r = id => metricsOf(ds, id), lab = sceneLabel(ds, i), std = (ds.standard_scenes || []).includes(i);
+    const tip = [`장면 ${i}${lab ? ' · ' + lab : ''}`, ...vis.map(m => `${m.short} ${num(r(m.id).scene_metrics[i].PSNR, 2)} dB`)].join('\n');
     return el('button', { class: 'shot', type: 'button', title: tip, 'data-i': i, onclick: () => setScene(i) },
       el('span', { class: 'th', style: `--i:${i};${thumbs}` }, el('span', { class: 'no' + (std ? ' std' : '') }, i)),
-      cand ? delta(r[cand.id].scene_metrics[i].PSNR, r[ref.id].scene_metrics[i].PSNR, true, 2, 'dv') : el('span', { class: 'dv' }, num(r[ref.id].scene_metrics[i].PSNR, 2)));
+      cand ? delta(r(cand.id).scene_metrics[i].PSNR, r(ref.id).scene_metrics[i].PSNR, true, 2, 'dv') : el('span', { class: 'dv' }, num(r(ref.id).scene_metrics[i].PSNR, 2)));
   }));
   const stripNote = (cand ? `숫자는 PSNR 차이 (${cand.short} − ${ref.short}, dB)` : `숫자는 ${ref.short} PSNR (dB)`) + ((ds.standard_scenes || []).length ? ' · 밑줄 번호는 표준 결과 이미지 장면' : '');
 
   // toolbar
   const settings = el('details', { class: 'pop', id: 'pop', open: S.popOpen, ontoggle: e => { S.popOpen = e.target.open; } }, el('summary', {}, '표시 설정'),
     el('div', { class: 'pop-body' },
-      el('span', { class: 'lab' }, '오차 밴드'), el('select', { onchange: e => { S.errBand = e.target.value; renderAll(); } }, opt('mean', '전체 밴드 평균', S.errBand), ds.band_names.map((n, b) => opt(b, `${b} · ${n}`, S.errBand))),
+      el('span', { class: 'lab' }, '오차 밴드'), el('select', { onchange: e => { S.errBand = e.target.value; renderAll(); } }, opt('mean', rgbOnly(ds) ? 'RGB 3밴드 평균' : '전체 밴드 평균', S.errBand), activeBands(ds).map(b => opt(b, `${b} · ${ds.band_names[b]}`, S.errBand))),
       el('span', { class: 'lab' }, '오차 색 범위'), el('div', { class: 'pair' },
         el('select', { onchange: e => { S.errScale = e.target.value; build(); } }, opt('ref', `${ref.short} 99%`, S.errScale), opt('max', '두 모델 중 최대 99%', S.errScale), opt('manual', '직접 입력', S.errScale)),
         S.errScale === 'manual' ? el('input', { type: 'number', min: 1, step: 1, value: S.errManual, title: 'DN', style: 'width:84px', onchange: e => { S.errManual = Math.max(0.1, +e.target.value || 1); renderAll(); } }) : null),
@@ -252,7 +270,7 @@ function build() {
       comparable(ds).length ? [el('span', { class: 'lab' }, '비교 모델'), el('select', { class: 'cmp', 'aria-label': '비교 모델', onchange: e => setCompare(e.target.value) },
         COMPARE_GROUPS.map(([g, label]) => { const ms = comparable(ds).filter(m => m.group === g); return ms.length ? el('optgroup', { label }, ms.map(m => opt(m.id, m.label, S.cmp))) : null; }))] : null),
     el('span', { class: 'spacer' }),
-    Object.keys(ds.composites).length > 1 ? el('span', { class: 'group' }, el('span', { class: 'lab' }, '밴드'), seg(Object.keys(ds.composites).map(k => [k, k]), S.comp, v => { S.comp = v; build(); })) : null,
+    comps(ds).length > 1 ? el('span', { class: 'group' }, el('span', { class: 'lab' }, '밴드'), seg(comps(ds).map(k => [k, k]), S.comp, v => { S.comp = v; build(); })) : null,
     el('span', { class: 'group' }, el('span', { class: 'lab' }, '확대 영역'), seg(WINDOWS.map(w => [w, w]), S.win, setWindow)),
     cand ? el('span', { class: 'group' }, el('span', { class: 'lab' }, '영역 찾기'),
       el('button', { class: 'btn', type: 'button', title: `${cand.short}의 오차가 ${ref.short}보다 가장 많이 줄어든 곳`, onclick: () => autoWindow(1) }, '개선 최대'),
@@ -275,10 +293,12 @@ function build() {
       el('li', {}, '장면과 데이터셋 수치는 export.py가 원래 예측으로 계산했습니다(common/metrics.rr_metrics, PSNR은 peak 2047의 밴드별 평균).'),
       el('li', {}, `확대 영역 수치는 브라우저가 1/${factor} DN 단위로 저장한 값으로 계산합니다. 장면 전체에서 두 계산의 차이는 PSNR 0.0004 dB 이내였습니다.`),
       el('li', {}, '우리 모델은 seed 42 가중치 하나의 결과이고, 다른 연구 모델은 저자 공개 가중치(시드 미공개)의 예측입니다. 실험 판정은 연구 문서의 시드 평균을 따르며, 다른 연구 모델에는 판정을 붙이지 않습니다.'),
+      el('li', {}, '생성형 이미지 모델은 RGB 3밴드만 내므로, 이 모델을 고르면 C2MS-SP를 포함한 모든 영상·오차 지도·수치를 같은 RGB 3밴드로 계산합니다. 이때 NIR 위색은 고를 수 없고, 수치는 전체 밴드 수치와 직접 비교하지 않습니다.'),
       el('li', {}, `데이터 생성 ${S.index.generated}`)));
 
   app.replaceChildren(
     el('p', { class: 'ds-note' }, el('b', {}, ds.title), ds.note),
+    rgbOnly(ds) ? el('p', { class: 'ds-note rgb-note' }, el('b', {}, 'RGB 3밴드 비교'), `생성형 이미지 모델은 RGB 영상만 내므로 두 모델의 영상·오차·수치를 모두 밴드 ${ds.composites.RGB.join(' ')}만으로 계산했습니다. 전체 밴드 수치와 직접 비교하지 않습니다.`) : null,
     el('div', { class: 'strip-head' }, el('span', {}, `장면 ${ds.scenes}개`), el('span', {}, stripNote)), strip,
     bar, layers,
     el('p', { class: 'hint' }, '영상을 누르거나 끌어서 확대 영역을 옮깁니다 · 방향키 1픽셀, Shift+방향키 8픽셀 · [ ] 이전·다음 장면'),
@@ -300,33 +320,33 @@ addEventListener('resize', layoutCols);
 // ---------- rendering ----------
 function errVmax(sc) {
   if (S.errScale === 'manual') return S.errManual;
-  if (S.errScale === 'max') return Math.max(...S.visible.map(id => memo(sc, `p99:${id}:${S.errBand}`, () => percentile(errMap(sc, id), 99))));
-  return memo(sc, `p99:${S.ref}:${S.errBand}`, () => percentile(errMap(sc, S.ref), 99));
+  if (S.errScale === 'max') return Math.max(...S.visible.map(id => memo(sc, `p99:${id}:${bkey()}`, () => percentile(errMap(sc, id), 99))));
+  return memo(sc, `p99:${S.ref}:${bkey()}`, () => percentile(errMap(sc, S.ref), 99));
 }
 function gainVmax(sc, region) {
   const ids = S.visible.filter(v => v !== S.ref);
   const one = id => { const g = gainMap(sc, id); return percentile(Float32Array.from(region ? sub(g, sc.H, sc.W, 0, ...region) : g, Math.abs), 99); };
-  return Math.max(1e-6, ...ids.map(id => (region ? one(id) : memo(sc, `g99:${S.ref}:${id}:${S.errBand}`, () => one(id)))));
+  return Math.max(1e-6, ...ids.map(id => (region ? one(id) : memo(sc, `g99:${S.ref}:${id}:${bkey()}`, () => one(id)))));
 }
 
 function renderAll() {
   const sc = current; if (!sc) return;
-  const ds = dataset(S.ds), bands = ds.composites[S.comp], st = stretchOf(sc, bands), { H, W } = sc, res = ds.results;
-  const vmax = errVmax(sc), gmax = gainVmax(sc), refPsnr = res[S.ref].scene_metrics[S.scene].PSNR;
+  const ds = dataset(S.ds), bands = ds.composites[S.comp], st = stretchOf(sc, bands), { H, W } = sc, res = id => metricsOf(ds, id);
+  const vmax = errVmax(sc), gmax = gainVmax(sc), refPsnr = res(S.ref).scene_metrics[S.scene].PSNR;
   for (const t of tiles) {
     if (t.kind === 'lr') { paintLR(t.full, sc, bands, st, 0, 0, H, W); setCap(t.cap1, `${sc.h}×${sc.h}`); }
     else if (t.kind === 'pan') { paintGray(t.full, sc.pan, W, panStretch(sc), 0, 0, H, W); setCap(t.cap1, `${W}×${H}`); }
     else if (t.kind === 'gt') { paintRGB(t.full, sc.gt, sc, bands, st, 0, 0, H, W); setCap(t.cap1, `${W}×${H} · ${S.comp} ${bands.join(' ')}`); }
     else if (t.kind === 'pred') {
       paintRGB(t.full, sc.pred[t.id], sc, bands, st, 0, 0, H, W);
-      const p = res[t.id].scene_metrics[S.scene].PSNR;
+      const p = res(t.id).scene_metrics[S.scene].PSNR;
       setCap(t.cap1, ['장면 ', el('b', {}, num(p, 2)), ' dB'], t.id === S.ref ? null : delta(p, refPsnr, true, 2, ''));
     } else if (t.kind === 'err') {
       const m = errMap(sc, t.id); paintMap(t.full, m, W, vmax, 'heat', 0, 0, H, W);
-      setCap(t.cap1, ['평균 ', el('b', {}, num(memo(sc, `mean:${t.id}:${S.errBand}`, () => mean(m)), 1)), ' DN'], scaleEl('heat', `0-${dn(vmax)}`));
+      setCap(t.cap1, ['평균 ', el('b', {}, num(memo(sc, `mean:${t.id}:${bkey()}`, () => mean(m)), 1)), ' DN'], scaleEl('heat', `0-${dn(vmax)}`));
     } else {
       const g = gainMap(sc, t.id); paintMap(t.full, g, W, gmax, 'div', 0, 0, H, W);
-      setCap(t.cap1, ['평균 ', signed(memo(sc, `gmean:${S.ref}:${t.id}:${S.errBand}`, () => mean(g)), 1), ' DN'], scaleEl('div', `±${dn(gmax)}`));
+      setCap(t.cap1, ['평균 ', signed(memo(sc, `gmean:${S.ref}:${t.id}:${bkey()}`, () => mean(g)), 1), ' DN'], scaleEl('div', `±${dn(gmax)}`));
     }
   }
   const lab = sceneLabel(ds, S.scene);
@@ -375,14 +395,15 @@ const REGION_COLS = [['PSNR', 'PSNR dB', true, 2], ['SAM', 'SAM °', false, 3], 
 const SCENE_COLS = [['PSNR', 'PSNR dB', true, 2], ['SAM', 'SAM °', false, 3], ['ERGAS', 'ERGAS', false, 3], ['SCC', 'SCC', true, 4], ['Q2n', 'Q2n', true, 4]];
 const MEAN_COLS = SCENE_COLS.slice(0, 3);
 function renderNumbers(rm) {
-  const ds = dataset(S.ds), res = ds.results, ref = S.ref, multi = S.visible.length > 1;
+  const ds = dataset(S.ds), ref = S.ref, multi = S.visible.length > 1, band = rgbOnly(ds) ? ' · RGB 3밴드' : '';
+  const res = Object.fromEntries(S.visible.map(id => [id, metricsOf(ds, id)]));
   const cells = (cols, get, id) => cols.map(([k, , hb, dg], i) => el('td', { class: i === 0 ? 'g' : '' }, num(get(id)[k], dg), multi && id !== ref ? delta(get(id)[k], get(ref)[k], hb, dg) : null));
   const heads = cols => cols.map(([, t], i) => el('th', { class: i === 0 ? 'g' : '' }, t));
   const wins = id => res[id].scene_metrics.filter((r, i) => r.PSNR > res[ref].scene_metrics[i].PSNR).length;
   const table = el('table', { class: 'numbers' },
     el('thead', {},
-      el('tr', { class: 'groups' }, el('th', {}), el('th', { class: 'g', colspan: REGION_COLS.length }, `확대 영역 ${S.win}×${S.win}`), el('th', { class: 'g', colspan: SCENE_COLS.length }, `장면 ${S.scene} 전체`),
-        el('th', { class: 'g', colspan: MEAN_COLS.length + (multi ? 1 : 0) }, `데이터셋 평균 · ${ds.scenes}장면`)),
+      el('tr', { class: 'groups' }, el('th', {}), el('th', { class: 'g', colspan: REGION_COLS.length }, `확대 영역 ${S.win}×${S.win}${band}`), el('th', { class: 'g', colspan: SCENE_COLS.length }, `장면 ${S.scene} 전체${band}`),
+        el('th', { class: 'g', colspan: MEAN_COLS.length + (multi ? 1 : 0) }, `데이터셋 평균 · ${ds.scenes}장면${band}`)),
       el('tr', {}, el('th', {}, '모델'), heads(REGION_COLS), heads(SCENE_COLS), heads(MEAN_COLS), multi ? el('th', { title: `${model(ref).short}보다 PSNR이 높은 장면 수` }, 'PSNR 우세 장면') : null)),
     el('tbody', {}, S.visible.map(id => el('tr', {}, el('td', {}, model(id).label, model(id).group === 'baseline' ? [' ', el('span', { class: 'tag' }, '기준 모델')] : null),
       cells(REGION_COLS, i => rm[i], id), cells(SCENE_COLS, i => res[i].scene_metrics[S.scene], id), cells(MEAN_COLS, i => res[i].mean, id),
