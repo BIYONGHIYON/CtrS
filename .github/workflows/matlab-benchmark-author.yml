@@ -21,6 +21,9 @@ on:
       key:
         description: Variable name of the prediction in each .mat
         default: sr
+      bands:
+        description: all (every band) or rgb (R,G,B only, for 3-band generative image model predictions)
+        default: all
   push:
     branches: [cannet-author-reproduction]
     paths:
@@ -36,7 +39,7 @@ concurrency:
 
 jobs:
   score:
-    name: ${{ matrix.sensor }} / ${{ inputs.setting || 'author' }} / actual MATLAB
+    name: ${{ matrix.sensor }} / ${{ inputs.setting || 'author' }} / ${{ inputs.bands || 'all' }} bands / actual MATLAB
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     strategy:
@@ -47,6 +50,7 @@ jobs:
       MODEL: ${{ inputs.model || 'cannet' }}
       SETTING: ${{ inputs.setting || 'author' }}
       KEY: ${{ inputs.key || 'sr' }}
+      BANDS: ${{ inputs.bands || 'all' }}
       RELEASE: ${{ inputs.release || 'predictions-benchmarks-cannet-author' }}
       SENSOR: ${{ matrix.sensor }}
       GH_TOKEN: ${{ github.token }}
@@ -69,7 +73,7 @@ jobs:
           sha256sum pred/*.zip
           unzip -q "pred/${MODEL}_${SETTING}_${SENSOR}_rr.zip" -d "pred/${SENSOR}"
       - name: Check the exact test data and write MATLAB inputs
-        run: python SSA-MRN/common/matlab_reevaluation/benchmark_prepare.py --model "$MODEL" --setting "$SETTING" --sensor "$SENSOR" --key "$KEY" --predictions "pred/$SENSOR" --data "$RUNNER_TEMP/pancollection" --out evaluation
+        run: python SSA-MRN/common/matlab_reevaluation/benchmark_prepare.py --model "$MODEL" --setting "$SETTING" --sensor "$SENSOR" --key "$KEY" --bands "$BANDS" --predictions "pred/$SENSOR" --data "$RUNNER_TEMP/pancollection" --out evaluation
       - name: Checkout original DLPan MATLAB sources
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:

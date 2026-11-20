@@ -1,0 +1,16 @@
+{
+  "time_kst": "2026-11-18T17:42:00+09:00",
+  "reason": "experiments 86 and 87 archived and verified before cleanup (PR #198 pushed; verify.py --experiment 86 PASS: 12 files; verify.py --experiment 87 --releases PASS: 159 files, 12 Release assets); 88 runs in C:/CtrS-p88 and does not reference C:/CtrS-p86 or C:/CtrS-p87",
+  "deleted": {
+    "C:/CtrS-p87/run": {"gib": 11.27, "what": "87 runtime: caches rebuilt from the H5, runs (checkpoints, records), reduced initial weights, controls", "recovery": "best/best_ema, records and results in Git (experiments/performance/87_reduced_width_short_finetuning); latest/initial in Release weights-experiments-performance-87; caches can be rebuilt from C:/CtrS/PAN-MS"},
+    "C:/CtrS-p86 (run, logs)": {"gib": 0.0, "what": "86 measurement records", "recovery": "results in Git (experiments/performance/86_fft_adjoint_fast_inference/results)"},
+    "C:/CtrS-p86/SSA-MRN, C:/CtrS-p87/SSA-MRN, src87.tgz (both), source_manifest.json": {"gib": 0.46, "what": "86/87 server source copies", "recovery": "same files in Git; hashes in 86/87 provenance/source_manifest.json"},
+    "C:/CtrS-p87/fetch8687.tgz": {"gib": 0.39, "what": "transfer bundle of the 86/87 results", "recovery": "contents archived in Git and the Release"},
+    "C:/CtrS-p87 scripts and top-level logs": {"gib": 0.0, "what": "chain, launch, fetch and 85-cleanup scripts; prepare/stage0/optimize/run logs (kept in the log bundle)"}
+  },
+  "kept": ["C:/CtrS-p87/archive8687_logs.tgz (0.2 MB: train/evaluate logs and events of every 87 run, benchmark logs, top-level logs and scripts of 86 and 87)", "C:/CtrS/PAN-MS", "C:/CtrS-p73/.venv", "C:/CtrS-p88 (running)"],
+  "free_before_gib": 60.60,
+  "free_after_gib": 72.74,
+  "reclaimed_gib": 12.14,
+  "note": "GiB values are the PowerShell GB (2^30 bytes) printed by the cleanup script"
+}

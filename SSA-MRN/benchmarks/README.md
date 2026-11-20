@@ -12,10 +12,25 @@
 
 | 모델 | 출처·학습 조건 | 확인된 결과 | 상태 |
 |---|---|---|:---:|
+| GPT Image 2.6 Sunburst<br>[센서별 담당 미정] | 생성형 이미지 모델 · `zeroshot` 학습 없이 생성(단일 실행) · 동국 AI CHAT · RGB 3밴드 실제 MATLAB 채점 예정 | API 생성 진행 중. 공통 입력·채점 준비 완료([생성형 모델 시험](#generative)) | 계획 |
+| Nano Banana 2.1<br>[센서별 담당 미정] | 생성형 이미지 모델 · `zeroshot` 학습 없이 생성(단일 실행) · 동국 AI CHAT · RGB 3밴드 실제 MATLAB 채점 예정 | API 생성 진행 중. 공통 입력·채점 준비 완료([생성형 모델 시험](#generative)) | 계획 |
 | [ADWM](adwm/README.md)<br>[김경찬] | CVPR 2025 · `author` WV3 저자 가중치 · `retrain` QB 200·GF2 500에폭(논문), seed 42 · Kaggle T4 | 아직 평가하지 않았습니다 | 계획 |
+| [FusionNet](fusionnet/README.md)<br>[김윤지] | 저자 QB·WV3, WV2 전이 · GF2 직접 학습 seed 42 · 실제 MATLAB 채점 | QB 31.485, GF2 45.547, WV3 32.519 dB; WV2 전이 27.058 dB. 네 센서 고정 6장면 이미지. GF2 peak 1023 기준 39.522 dB | 평가 완료 |
 | [ARConv](arconv/README.md)<br>[김윤지] | CVPR 2025 · `author` 저자 가중치 · 실제 MATLAB 채점 | QB 38.425, GF2 49.385, WV3 39.167 dB. C2MS-SP 3시드 평균 대비 각각 +0.052, +0.600, +0.493 dB; WV2 전이(참고) 29.853 dB(−1.682). 네 데이터셋 고정 6장면 이미지 | 평가 완료 |
 | [U2Net](u2net/README.md)<br>[송준현] | ACM MM 2023 · `author` WV3 공개 가중치 · Kaggle T4 · Python 공통 지표 | WV3 RR PSNR 38.844(C2MS-SP 3seed 평균 대비 +0.171dB), WV2 전이 30.497(−1.039dB). 고정6장면 RR 이미지 센서별12개. 실제 MATLAB 미실행 | 평가 완료<br>WV3·WV2만<br>QB·GF2 미평가 |
 | [CANNet](cannet/README.md)<br>[이병현] | CVPR 2024 · `author` 저자 가중치 재현(재학습 없음) · Kaggle T4 · 실제 MATLAB 채점 | QB RR PSNR 38.261(C2MS-SP 평균 대비 −0.112dB), GF2 49.274(+0.489), WV3 38.977(+0.304). WV3는 논문값 재현, QB·GF2는 논문보다 조금 낮음 | 평가 완료 |
+
+<a id="generative"></a>
+
+## 생성형 이미지 모델 시험
+
+기업 멘토링의 "LLM·멀티모달 모델과 비교하고, 할루시네이션도 실제로 측정하라"는 피드백에 따라, 이미지를 출력하는 생성형 모델 두 개(GPT Image 2.6 Sunburst 품질 high, Nano Banana 2.1 1K)로 학습 없이 팬샤프닝을 시험합니다. FLUX 2 [pro]는 크레딧 한도 때문에 하지 않습니다. 센서 하나를 한 사람이 맡아 두 모델로 RR test 20장씩 만듭니다([#209](https://github.com/BIYONGHIYON/CtrS/issues/209) QB · [#210](https://github.com/BIYONGHIYON/CtrS/issues/210) GF2 · [#211](https://github.com/BIYONGHIYON/CtrS/issues/211) WV3 · [#212](https://github.com/BIYONGHIYON/CtrS/issues/212) WV2).
+
+- **입력:** 모두 Release [`genimage-inputs`](https://github.com/BIYONGHIYON/CtrS/releases/tag/genimage-inputs)의 같은 입력을 씁니다. 1번 이미지는 데이터셋 LMS의 RGB 밴드, 2번 이미지는 PAN이며 둘 다 1024×1024 PNG입니다. 정답은 입력을 만들 때도 밝기 범위를 정할 때도 쓰지 않습니다.
+- **생성:** 이미지 생성 메뉴를 손으로 누르지 않고 `common/genimage_io.py generate`로 동국 AI CHAT API Gateway에서 만듭니다. 프롬프트와 설정은 도구에 고정돼 있고(#209와 같음), 각자 만든 API 키를 `BAZE_API_KEY` 환경변수로 넘깁니다. 먼저 `--estimate-only`로 비용을 보고, `--max-credits`를 넘기 전에 멈추며, 모든 시도(시각·크기·차감 크레딧·오류)를 기록합니다.
+- **되돌리기와 채점:** 받은 이미지는 `common/genimage_io.py restore`로 256×256 DN `.mat`과 zip으로 바꿉니다. 이 모델들은 RGB 3장만 출력하므로 `matlab-benchmark-author.yml`의 `bands: rgb`로 정답의 RGB 밴드에서만 채점합니다. 4·8밴드 전체 수치와 섞지 않으며 루트 README 비교 표에는 넣지 않습니다. [결과 비교 사이트](https://biyonghiyon.github.io/CtrS/)에서는 C2MS-SP와 같은 RGB 3밴드로 계산해 비교합니다.
+- **[변환 한계 대조군](genimage_identity/README.md):** 1번 이미지를 모델 없이 그대로 되돌린 결과입니다. RGB 3밴드 실제 MATLAB PSNR은 QB 29.216, GF2 37.953, WV3 29.225, WV2 27.695 dB이고, 생성형 모델은 이 값을 넘어야 PAN의 세부를 넣었다고 볼 수 있습니다.
+- **정답 없는 지표:** `common/genimage_io.py checks`가 관측 일치 오차, PAN 구조 일치도, 위치 어긋남을 장면별로 계산하고 정답의 같은 값을 함께 적습니다.
 
 ## 폴더 구조
 
@@ -48,9 +63,9 @@ benchmarks/
 | 설정 | 내용 | 시드 |
 |---|---|---|
 | `author` | 저자가 배포한 가중치를 학습 없이 평가합니다. 저자 가중치가 있는 센서는 재학습하지 않습니다. 저자 학습 데이터가 우리 분할과 다를 수 있으므로 보고서에 적습니다. | 없음 |
-| `retrain` | 학습 센서 QB·GF2·WV3 중 저자 가중치·평가가 없는 데이터셋을 공식 코드와 논문 설정(손실·배치·학습률 등)으로 우리 학습 데이터에서 직접 학습하고, 가중치·예측·결과를 함께 올립니다. 에폭은 논문이나 공식 코드에 공개된 값을 씁니다. 공개되지 않았으면 C2MS-SP와 같은 150에폭으로 학습합니다. 축척 혼합·사영·밴드 보정은 붙이지 않습니다. | 42 |
+| `retrain` | 학습 센서 QB·GF2·WV3 중 저자 가중치·평가가 없는 데이터셋을 공식 코드와 논문 설정(손실·배치·학습률 등)으로 우리 학습 데이터에서 직접 학습하고, 가중치·예측·결과를 함께 올립니다. 논문에 보고된 설정을 그대로 쓰고, 논문에 없는 값은 공식 코드 기본값을 씁니다. 에폭·배치·학습률 등을 줄이거나 바꾸지 않습니다. 둘 다에 없는 값만 C2MS-SP와 같게 정합니다(에폭 150). 축척 혼합·사영·밴드 보정은 붙이지 않습니다. | 42 |
 
-모든 설정은 PanCollection의 같은 학습·validation·test 분할을 씁니다. 정규화는 QB·WV3·WV2 2047, GF2 1023입니다. test는 RR·FR 각 20장 전체를 평가합니다. 가중치는 validation으로만 고르고 test를 보고 에폭·설정을 바꾸지 않습니다. WV2는 학습하지 않고 WV3 가중치(저자 또는 직접 학습)를 적용한 전이 결과로 참고만 합니다. 저자 WV3 가중치가 없으면 WV3를 직접 학습한 뒤 WV2에 적용합니다.
+모든 설정은 PanCollection의 같은 학습·validation·test 분할을 씁니다. 정규화는 QB·WV3·WV2 2047, GF2 1023입니다. test는 RR·FR 각 20장 전체를 평가합니다. 가중치는 validation으로만 고르고 test를 보고 에폭·설정을 바꾸지 않습니다. GPU 메모리나 시간이 부족해 논문 설정대로 학습할 수 없으면 에폭·배치를 줄이거나 모델을 가볍게 고치지 않고, 더 가벼운 다른 모델을 평가합니다(사유는 이슈에 남깁니다). Kaggle 세션 한도는 중간 저장과 이어서 학습하기로 넘깁니다. 배치·손실·기울기를 바꾸지 않고 시간만 더 드는 메모리 절약(층 재계산, `torch.utils.checkpoint`)은 쓸 수 있으며, 썼는지 `history.json`과 보고서에 적습니다. WV2는 학습하지 않고 WV3 가중치(저자 또는 직접 학습)를 적용한 전이 결과로 참고만 합니다. 저자 WV3 가중치가 없으면 WV3를 직접 학습한 뒤 WV2에 적용합니다.
 
 ## 평가 실행
 

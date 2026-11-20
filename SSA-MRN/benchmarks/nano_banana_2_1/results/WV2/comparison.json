@@ -1,0 +1,60 @@
+{
+  "scope": "WV2 RR test, 20 scenes, RGB [4,2,1] only; peak 2047; actual MATLAB R2025b; no crop or output clipping",
+  "model": "nano_banana_2_1",
+  "matlab_mean": {
+    "Q": 0.8194919571710153,
+    "SAM": 3.871910488267487,
+    "ERGAS": 5.307026173392978,
+    "SCC": 0.9319967995361168,
+    "Q2n": 0.8030845522569641,
+    "PSNR_global": 29.710149631579107,
+    "PSNR_bandmean": 30.19437897978717,
+    "PSNR_bandmean_peak2047": 30.19437897978717
+  },
+  "control": "genimage_identity (image 1 restored without a generative model)",
+  "control_source": "SSA-MRN/benchmarks/genimage_identity/results/matlab_summary.json",
+  "control_matlab_mean": {
+    "Q": 0.6427639002233334,
+    "SAM": 3.3521341290870112,
+    "ERGAS": 6.946967329843227,
+    "SCC": 0.7231793393227364,
+    "Q2n": 0.6393489247093673,
+    "PSNR_global": 27.144412630367906,
+    "PSNR_bandmean": 27.69544275528842,
+    "PSNR_bandmean_peak2047": 27.69544275528842
+  },
+  "model_minus_control": {
+    "Q": 0.1767280569476819,
+    "SAM": 0.5197763591804758,
+    "ERGAS": -1.6399411564502495,
+    "SCC": 0.20881746021338043,
+    "Q2n": 0.16373562754759674,
+    "PSNR_global": 2.5657370012112004,
+    "PSNR_bandmean": 2.4989362244987525,
+    "PSNR_bandmean_peak2047": 2.4989362244987525
+  },
+  "diagnostics": {
+    "observation_rmse_dn": 41.36239048833394,
+    "pan_detail_corr": 0.872905778145664,
+    "shift_rows": -0.07000000000000002,
+    "shift_cols": -0.005
+  },
+  "ground_truth_diagnostics": {
+    "observation_rmse_dn": 4.2438799173374476e-13,
+    "pan_detail_corr": 0.860690536019783,
+    "shift_rows": -0.095,
+    "shift_cols": -0.12000000000000002
+  },
+  "interpretation": [
+    "Observation error, PAN-detail correlation and phase shift are diagnostic proxies, not a validated hallucination detector.",
+    "A higher PAN correlation than ground truth does not prove better reconstruction.",
+    "RGB scores cannot be compared directly with full 8-band scores.",
+    "C2MS-SP figures use published viewer predictions quantized to 1/8 DN; figure PSNR is illustrative, not a new MATLAB baseline."
+  ],
+  "limitations": [
+    "One supplied output per scene; no repeated generation statistics.",
+    "Prompt and settings were confirmed by the user; service-side generation logs were not supplied.",
+    "Generation timestamps, cost and retry history were not supplied.",
+    "Nano Banana originals are JPEG; original bytes are preserved, including compression."
+  ]
+}

@@ -1,0 +1,186 @@
+{
+  "case": {
+    "id": "nano_banana_2_1_zeroshot_WV3",
+    "model": "nano_banana_2_1",
+    "setting": "zeroshot",
+    "sensor": "WV3",
+    "experiment": "benchmark",
+    "bands": "rgb",
+    "band_indices": [
+      4,
+      2,
+      1
+    ]
+  },
+  "scenes": 20,
+  "matlab_mean": {
+    "Q": 0.7318199211527731,
+    "SAM": 3.9582159575243034,
+    "ERGAS": 6.762701859560646,
+    "SCC": 0.8934684117522218,
+    "Q2n": 0.6775481838354279,
+    "PSNR_global": 28.635328307763253,
+    "PSNR_bandmean": 29.222839555708852,
+    "PSNR_bandmean_peak2047": 29.222839555708852
+  },
+  "python_mean": {
+    "SAM": 3.958215957524301,
+    "ERGAS": 6.762701859560643,
+    "PSNR": 29.222839555708852,
+    "SCC": 0.8934684117522218,
+    "Q2n": 0.6775481838354283
+  },
+  "matlab_minus_python": {
+    "SAM": 2.220446049250313e-15,
+    "ERGAS": 2.6645352591003757e-15,
+    "SCC": 0.0,
+    "Q2n": -3.3306690738754696e-16,
+    "PSNR": 0.0
+  },
+  "peak": 2047,
+  "matlab_release": "2025b",
+  "dlpan_commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+  "profile": {
+    "cut_bounds": false,
+    "dim_cut": 21,
+    "clip_output": false,
+    "clipping_upper_if_enabled": 2048,
+    "peak": 2047,
+    "bits": 11,
+    "block": 32,
+    "ratio": 4,
+    "QNR_variant": "DLPan Toolbox 1.0 flag_orig_paper=0 p=q=alpha=beta=1"
+  },
+  "data": {
+    "RR": {
+      "name": "test_wv3_multiExm1.h5",
+      "sha256": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "revision": "b39e5daf0a322105977a7d4ce53ca0c4806defed",
+      "url": "https://huggingface.co/datasets/elsting/PanCollection/resolve/b39e5daf0a322105977a7d4ce53ca0c4806defed/test_data/test_wv3_multiExm1.h5?download=true",
+      "sha256_checked": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a"
+    }
+  },
+  "prediction_files": [
+    {
+      "protocol": "RR",
+      "scene": 0,
+      "file": "predictions/RR_00.mat",
+      "sha256": "de77d3969ef81d6785e60102874c4afb324708f3703e3fa0521249a5f03b0488"
+    },
+    {
+      "protocol": "RR",
+      "scene": 1,
+      "file": "predictions/RR_01.mat",
+      "sha256": "d6cb45f222f3c9ac29a8cbb7990e52f679cb2a1f8d2dc1694e6e8044e5d5684c"
+    },
+    {
+      "protocol": "RR",
+      "scene": 2,
+      "file": "predictions/RR_02.mat",
+      "sha256": "3b4e4accdef66b7b47bab024330531c8db9f7cd51558dd75bc8e72554678e6a1"
+    },
+    {
+      "protocol": "RR",
+      "scene": 3,
+      "file": "predictions/RR_03.mat",
+      "sha256": "51b6f3a24c03027488d4ab80e46c2496f9f96f4d951649d7ab9a86dac81b0252"
+    },
+    {
+      "protocol": "RR",
+      "scene": 4,
+      "file": "predictions/RR_04.mat",
+      "sha256": "fea2769568e85e70eb43f4b0b935b5078693312c3db99df576ee9e7fde7e574a"
+    },
+    {
+      "protocol": "RR",
+      "scene": 5,
+      "file": "predictions/RR_05.mat",
+      "sha256": "889b92461f560ee3201539957e70f2ac954cfc369f880dfe62e92ee6f7f67458"
+    },
+    {
+      "protocol": "RR",
+      "scene": 6,
+      "file": "predictions/RR_06.mat",
+      "sha256": "826ef1e5e8bb25eb2bb0dd3efcc048ab8a5b6216cb748ea7f5c9f85489632f16"
+    },
+    {
+      "protocol": "RR",
+      "scene": 7,
+      "file": "predictions/RR_07.mat",
+      "sha256": "09995989ad6c493ce50632ae774bcd89e8f2c43a28f33eee7842de6a887031c3"
+    },
+    {
+      "protocol": "RR",
+      "scene": 8,
+      "file": "predictions/RR_08.mat",
+      "sha256": "ad3d3d73609f65324107902ef6b4dd80551eea08dee4d7252695f13aa5a31b9f"
+    },
+    {
+      "protocol": "RR",
+      "scene": 9,
+      "file": "predictions/RR_09.mat",
+      "sha256": "4365336737ea5768bc2dfe05f5a7ae4998034c3d1517bee3e37cd7707a418cb1"
+    },
+    {
+      "protocol": "RR",
+      "scene": 10,
+      "file": "predictions/RR_10.mat",
+      "sha256": "739775a3b04487e66ac57a8fde36509381d033175352fe911d6d1abf6a794a73"
+    },
+    {
+      "protocol": "RR",
+      "scene": 11,
+      "file": "predictions/RR_11.mat",
+      "sha256": "c6dd341452505a595f7b57a8088bef7640c8fc8bbff5785dc203c7cf9a32912e"
+    },
+    {
+      "protocol": "RR",
+      "scene": 12,
+      "file": "predictions/RR_12.mat",
+      "sha256": "d63b1d4e94aa5389ded9584e1beca116aa7ba208d1153ab9722305c1ed573d02"
+    },
+    {
+      "protocol": "RR",
+      "scene": 13,
+      "file": "predictions/RR_13.mat",
+      "sha256": "df8975a2a8f5acdce02e52ca5ed52f52ff405701e3d3370b495a61a8731f0592"
+    },
+    {
+      "protocol": "RR",
+      "scene": 14,
+      "file": "predictions/RR_14.mat",
+      "sha256": "748373f93f3a1219daa009011a86ff90b0cb1cda2277b47d3d8246a7e7929882"
+    },
+    {
+      "protocol": "RR",
+      "scene": 15,
+      "file": "predictions/RR_15.mat",
+      "sha256": "2ffa805040baad1d351ffd3763eb666194b01359bb7f130c5d8b649346e9a189"
+    },
+    {
+      "protocol": "RR",
+      "scene": 16,
+      "file": "predictions/RR_16.mat",
+      "sha256": "1e6cb690d9c38124b9359880da07976466913a1549f9ca77c386408eb399ce50"
+    },
+    {
+      "protocol": "RR",
+      "scene": 17,
+      "file": "predictions/RR_17.mat",
+      "sha256": "e36e96ade29dab689b2ef47b1faaa553e6a07ef731ec714025daeac3e1cc1b8d"
+    },
+    {
+      "protocol": "RR",
+      "scene": 18,
+      "file": "predictions/RR_18.mat",
+      "sha256": "ba7cad30f909d54e5d6b8ddf40604da84589f9ffea9e51b8791aeb5f32138f8c"
+    },
+    {
+      "protocol": "RR",
+      "scene": 19,
+      "file": "predictions/RR_19.mat",
+      "sha256": "3069b14ce67d52661b96355bb3a945db743bbb880f7a43cd0e8a66e1355d63d0"
+    }
+  ],
+  "note": "MATLAB Q is the DLPan band-averaged Q; Q2n is Q4 (4 bands) or Q8 (8 bands), the Q index papers report; with bands=rgb the 3 RGB bands are padded with one zero band to Q4 (DLPan q2n)"
+}

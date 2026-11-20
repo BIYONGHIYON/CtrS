@@ -50,4 +50,4 @@ python SSA-MRN/common/matlab_reevaluation/test_suite.py
 
 ## 다른 모델 저자 가중치 예측 채점
 
-CUDA 전용이라 CPU에서 다시 추론할 수 없는 다른 모델(CANNet)은 Kaggle GPU에서 만든 RR 예측을 GitHub Release에 두고, `.github/workflows/matlab-benchmark-author.yml`이 채점합니다. `benchmark_prepare.py`가 원본 test 파일을 SHA-256으로 확인해 받은 뒤 같은 `score_suite.m` 입력을 만들고 같은 배열의 Python 지표를 기록합니다. `benchmark_report.py`가 MATLAB과 Python 평균을 비교합니다. 결과는 각 모델 보고서(`SSA-MRN/benchmarks/<모델>/results/matlab.json`)에 옮깁니다.
+CUDA 전용이라 CPU에서 다시 추론할 수 없는 다른 모델(CANNet)은 Kaggle GPU에서 만든 RR 예측을 GitHub Release에 두고, `.github/workflows/matlab-benchmark-author.yml`이 채점합니다. `benchmark_prepare.py`가 원본 test 파일을 SHA-256으로 확인해 받은 뒤 같은 `score_suite.m` 입력을 만들고 같은 배열의 Python 지표를 기록합니다. `benchmark_report.py`가 MATLAB과 Python 평균을 비교합니다. 결과는 각 모델 보고서(`SSA-MRN/benchmarks/<모델>/results/matlab.json`)에 옮깁니다. RGB 3장만 출력하는 생성형 이미지 모델은 `bands: rgb`(`benchmark_prepare.py --bands rgb`)로 정답·LMS·MS의 RGB 밴드(QB·GF2 `[2,1,0]`, WV3·WV2 `[4,2,1]`)만 남겨 같은 `score_suite.m`으로 채점합니다. 3밴드의 Q2n은 DLPan `q2n.m`처럼 0 밴드 하나를 덧붙인 Q4입니다.

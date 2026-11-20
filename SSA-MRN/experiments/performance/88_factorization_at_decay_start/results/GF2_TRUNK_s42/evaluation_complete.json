@@ -1,0 +1,133 @@
+{
+  "time_kst": "2026-11-19T03:59:38.450732+09:00",
+  "weights": {
+    "path": "C:\\CtrS-p88\\run\\runs\\GF2_TRUNK_s42\\checkpoints\\best.pt",
+    "sha256": "ec87a06a906bb0cbe2530d38265e40806d2e83670703f355b447eb4dad87969a",
+    "best_epoch": 118
+  },
+  "cost": {
+    "parameters": 2853918,
+    "used_parameters": 2735610,
+    "conv_gmac_256": 59.632058368
+  },
+  "validation": {
+    "arm": {
+      "val_mse": 4.5843246746980034e-05,
+      "val_psnr": 44.46974041049234,
+      "val_sam": 0.6872952686312491
+    },
+    "control_65": {
+      "val_mse": 4.6006266796310406e-05,
+      "val_psnr": 44.544863982072805,
+      "val_sam": 0.6793133738594345
+    },
+    "delta_psnr_vs_65": -0.07512357158046257,
+    "delta_sam_vs_65": 0.007981894771814657,
+    "epoch0": {
+      "epoch": 0,
+      "train_mse": null,
+      "val_mse": 0.04638576994249489,
+      "val_psnr": 15.960339745517645,
+      "val_sam": 36.42610623906829,
+      "coarse_val_mse": 0.04869562778087251,
+      "coarse_val_psnr": 15.323910838417008,
+      "coarse_val_sam": 37.84313670803661
+    }
+  },
+  "targets": {
+    "GF2": {
+      "judgement": {
+        "arm_P_vs_C2MS_SP": {
+          "delta_RR": {
+            "SAM": -0.0037156718421831325,
+            "ERGAS": -0.009371556337929077,
+            "PSNR": 0.12140292676948405,
+            "SCC": 0.0003676914382874097,
+            "Q2n": 8.270911129437675e-05
+          },
+          "delta_FR_reference": {
+            "D_lambda": 0.0005120228211949393,
+            "D_s": -0.0005408960360194521,
+            "QNR": 2.349792793798766e-05
+          },
+          "rr_components_improved": {
+            "PSNR": true,
+            "SAM": true,
+            "ERGAS": true
+          },
+          "noise_threshold": 0.06,
+          "above_noise": true,
+          "label": "개선"
+        },
+        "arm_P_vs_Lite_P": {
+          "delta_RR": {
+            "SAM": -0.008686537751434575,
+            "ERGAS": -0.014282689641329727,
+            "PSNR": 0.17967894692559838,
+            "SCC": 0.0005265330118237044,
+            "Q2n": 0.00033687074387300786
+          },
+          "delta_FR_reference": {
+            "D_lambda": 0.0003457745636014434,
+            "D_s": -0.0005313663450605532,
+            "QNR": 0.00017808756142323467
+          },
+          "rr_components_improved": {
+            "PSNR": true,
+            "SAM": true,
+            "ERGAS": true
+          },
+          "noise_threshold": 0.06,
+          "above_noise": true,
+          "label": "개선"
+        },
+        "arm_P_vs_84_B150_P": {
+          "delta_RR": {
+            "SAM": 0.013219747435564755,
+            "ERGAS": 0.005919419476916099,
+            "PSNR": -0.0627483759259988,
+            "SCC": -0.00010208274412515372,
+            "Q2n": -0.0005478582811194732
+          },
+          "delta_FR_reference": {
+            "D_lambda": 0.001245685338665193,
+            "D_s": -0.0003331683563514553,
+            "QNR": -0.0008983991181592543
+          },
+          "rr_components_improved": {
+            "PSNR": false,
+            "SAM": false,
+            "ERGAS": false
+          },
+          "noise_threshold": 0.06,
+          "above_noise": false,
+          "label": "개선 없음"
+        },
+        "arm_vs_65_raw": {
+          "delta_RR": {
+            "SAM": 0.004647711670488608,
+            "ERGAS": -0.007064170947002402,
+            "PSNR": 0.08967647601691908,
+            "SCC": 0.00036515135806636234,
+            "Q2n": 5.9334767303353964e-05
+          },
+          "delta_FR_reference": {
+            "D_lambda": -0.00015707785520197373,
+            "D_s": -0.003405549218394567,
+            "QNR": 0.003463678001958903
+          },
+          "rr_components_improved": {
+            "PSNR": true,
+            "SAM": false,
+            "ERGAS": true
+          },
+          "noise_threshold": 0.06,
+          "above_noise": true,
+          "label": "부분 개선"
+        }
+      },
+      "transfer": false
+    }
+  },
+  "scope": "full 20-scene RR (judgement on the training sensor) and FR QNR (reference); WV2 transfer reference only; v2.4; per seed; no automatic baseline promotion"
+}

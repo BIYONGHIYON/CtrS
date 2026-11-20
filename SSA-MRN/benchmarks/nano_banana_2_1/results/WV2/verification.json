@@ -1,0 +1,70 @@
+{
+  "images": 20,
+  "scene_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "original_images": {
+    "size": [
+      1024,
+      1024
+    ],
+    "mode": "RGB",
+    "preserved_bytes": true
+  },
+  "prediction_shape_hwc": [
+    256,
+    256,
+    3
+  ],
+  "prediction_key": "sr",
+  "prediction_units": "DN",
+  "all_finite": true,
+  "release_hashes": "verified against GitHub asset digests; full remote downloads verified separately with common/verify.py",
+  "matlab_source_mats_sha256": "all 20 match the uploaded prediction ZIP",
+  "matlab_python_mean_difference": {
+    "SAM": 0.0,
+    "ERGAS": 1.7763568394002505e-15,
+    "SCC": 0.0,
+    "Q2n": 2.220446049250313e-16,
+    "PSNR": 0.0
+  },
+  "fixed_visual_scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "restore_code_commit": "6315811e86fabef006c6d5fd688e3c81ecc22dde",
+  "environment": {
+    "python": "3.12.14",
+    "numpy": "2.5.3",
+    "pillow": "12.3.0",
+    "scipy": "1.18.1",
+    "h5py": "3.16.0"
+  },
+  "commands": {
+    "restore": "python SSA-MRN/common/genimage_io.py restore --sensor WV2 --model nano_banana_2_1 --images <original-images> --inputs genimage_inputs_WV2.zip --out <out>",
+    "checks": "python SSA-MRN/common/genimage_io.py checks --sensor WV2 --data <data> --predictions <out>/nano_banana_2_1_zeroshot_WV2_rr.zip --out checks.json"
+  }
+}
