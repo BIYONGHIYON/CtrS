@@ -66,10 +66,9 @@
  "stop_rule": "as 89 without the PSNR margin (user decision 2026-11-19 14h): process error, incomplete run, nonfinite validation or best epoch 0 -> no new job, running jobs finish, stopped.json, exit 3",
  "chain": "chain90.ps1: wait for the 89 reduced stage B (fine_c_complete.json) and continue only if c* = 0.25 -> server tidy-up (empty folders) -> copy the 89 source tree and overlay the 90 folder -> prepare -> optimize -> run",
  "expected_gpu_hours": {
-  "definition": "sum of run wall times / 2 (two concurrent runs); 88/89 concurrent epoch times QB 134 s, GF2 156 s, WV3 98 s; K2 epochs about 0.75 x; variants B/C about +5 %",
+  "definition": "sum of run wall times / 2 (two concurrent runs); 88/89 concurrent epoch times QB 134 s, GF2 156 s, WV3 98 s",
   "N": 8.5,
-  "A_B_C": 25.5,
-  "total": 34
+  "screening": 8.5
  },
  "limits": [
   "single seed 42; the 3-seed judgement is done once on the final model",
@@ -168,5 +167,14 @@
   "reference": "cuDNN autotune + TF32 and FP16 autocast timings and the FP16 RR change (never a judgement)"
  },
  "lr_start": 0.0001,
- "lr_end": 1e-06
+ "lr_end": 1e-06,
+ "screening": {
+  "decision": "user 2026-11-21 02h: choose the variant on 50-epoch screening runs as in the 89 lambda search, not on 150-epoch K2D runs",
+  "arms": "AS, BS, CS = full-size 2x2 C2MS of the variant, 50 epochs (40 at 1e-4 + 10 cosine to 1e-6), lambda 1.2, c 0.25; GF2, QB, WV3 seed 42; validation only",
+  "n_control": "89 stage-B run BL1.20C0.25 of the same sensor (identical recipe and seed; separate run, rerun spread up to 0.03 dB)",
+  "n_control_runtime": "C:/CtrS-p89/run",
+  "selection": "selection_rule above applied to the screening validation (variant minus the N control)",
+  "mechanism": "the sealed controller keeps training N (the 89 confirmation); provenance/block_abc.py holds the worker locks of AT/BT/CT so the controller stops at its first A/B/C trunk; run.py --mode screen (separate copy of the tree, same runtime) uses the free slot, then finishes the N jobs the controller left (factorize + NK + evaluation) and the screening runs",
+  "next": "final model: the chosen variant with the K2D 150-epoch recipe, seeds 42, 43, 44 (if N: seeds 43, 44; seed 42 is the 89 confirmation)"
+ }
 }

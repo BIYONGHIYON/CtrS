@@ -5,6 +5,7 @@ epoch 0, EMA recorded only) for the 88 K2D recipe with the 89 loss weights (lamb
          snapshots/e120 with hashes (88 TRUNK)
   <v>K : factorized <v>T epoch-120 weights (hash-checked file written by `run.py --mode factorize`), new Adam, 30-epoch cosine
          1e-4 -> 1e-6 (88 K2D)
+  <v>S : full-size 2x2 C2MS of variant v, 50 epochs (epochs 0-39 at 1e-4, 40-49 cosine 1e-4 -> 1e-6, the 89 screening schedule)
 The W2 output implementation is the sealed cfg['w2_out_impl'] (convT, as 89)."""
 import os
 os.environ.setdefault('CUBLAS_WORKSPACE_CONFIG',':4096:8')
@@ -34,13 +35,14 @@ SENSOR_REPLACEMENTS=(  # 90: the 58 preflight builds the model directly; B and C
     ("sd=Model(arm,SENSORS[sensor]['bands'],seed).state_dict()","sd=Model(arm,SENSORS[sensor]['bands'],seed,sensor=sensor).state_dict()"),
 )
 _STATE={'mode':None}
-TRUNK_EPOCHS,K2D_EPOCHS=120,30
+TRUNK_EPOCHS,K2D_EPOCHS,SCREEN_EPOCHS,SCREEN_CONSTANT=120,30,50,40
 
 
 def epochs(cfg,arm):
     import model as M
     if arm in M.FULL_SIZE:return TRUNK_EPOCHS
     if arm in M.FACTORIZED:return K2D_EPOCHS
+    if arm in M.SCREEN:return SCREEN_EPOCHS
     raise ValueError(arm)
 
 
@@ -60,6 +62,7 @@ def schedule(cfg,arm,epoch):
     import model as M
     if arm in M.FULL_SIZE:return cfg['lr_start']
     if arm in M.FACTORIZED:return cosine(cfg,epoch,K2D_EPOCHS,cfg['lr_start'])
+    if arm in M.SCREEN:return cfg['lr_start'] if epoch<SCREEN_CONSTANT else cosine(cfg,epoch-SCREEN_CONSTANT,SCREEN_EPOCHS-SCREEN_CONSTANT,cfg['lr_start'])
     raise ValueError(arm)
 
 

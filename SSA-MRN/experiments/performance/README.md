@@ -20,7 +20,7 @@ SSA-MRN의 구조·학습·손실을 바꿔 수치를 개선하는 연구입니�
 <!-- experiments:start -->
 | 실험 | 핵심 결과 | 상태 | 판정 |
 |---|---|:---:|:---:|
-| [90. 모델 내부 축소·확대를 데이터셋 방식(23탭 보간, MTF 블러 + 솎음)으로 교체](90_dataset_matched_internal_resampling/README.md)<br>이병현 | 계획. 갈래 A·B·C를 seed 42로 학습해 validation으로 고르고 89번 확정 모델(N)과 비교 | 계획 | 판단&nbsp;보류 |
+| [90. 모델 내부 축소·확대를 데이터셋 방식(23탭 보간, MTF 블러 + 솎음)으로 교체](90_dataset_matched_internal_resampling/README.md)<br>이병현 | 학습 중. N(89번 확정)을 K2D 150에폭으로, 갈래 A·B·C를 50에폭 선별로 학습해 validation으로 고름 | 학습&nbsp;중 | 판단&nbsp;보류 |
 | [89. 분광 손실 계수(λ)와 2배 거친 쌍 계수(c) 탐색: K2D 학습법, W2 2×2 합성곱 구현](89_spectral_coarse_loss_weights/README.md)<br>이병현 | λ* = 1.2 선택, c는 0-1.0 축소 범위에서 선택 중. 확정 학습은 90번 N 갈래로 함께 학습 | 학습&nbsp;중 | 판단&nbsp;보류 |
 | [88. 일정 학습률 학습 뒤 감쇠 시작 시점의 저랭크 분해(K2)와 감쇠 구간 학습: 150에폭 경량 C2MS-SP 단일 시드 확인](88_factorization_at_decay_start/README.md)<br>이병현 | seed 42 학습 중. 같은 150에폭에서 감쇠 직전 K2 분해, C2MS-SP와 비교 | 학습&nbsp;중 | 판단&nbsp;보류 |
 | [87. C2MS-SP 잔차 블록 가운데 채널 축소 구조의 20에폭 미세조정 단일 시드 확인](87_reduced_width_short_finetuning/README.md)<br>이병현 | 아직 학습하지 않았습니다. B32W96·B32W64를 20에폭 미세조정해 C2MS-SP와 비교(seed 42) | 계획 | 판단&nbsp;보류 |

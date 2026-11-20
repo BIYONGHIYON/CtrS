@@ -2990,14 +2990,14 @@
   "performance/90_dataset_matched_internal_resampling": {
     "display_name": "90. 모델 내부 축소·확대를 데이터셋 방식(23탭 보간, MTF 블러 + 솎음)으로 교체",
     "experimenter": "이병현",
-    "status": "계획",
+    "status": "학습 중",
     "improvement": "판단 보류",
-    "result": "계획. 갈래 A·B·C를 seed 42로 학습해 validation으로 고르고 89번 확정 모델(N)과 비교",
+    "result": "학습 중. N(89번 확정)을 K2D 150에폭으로, 갈래 A·B·C를 50에폭 선별로 학습해 validation으로 고름",
     "report": "experiments/performance/90_dataset_matched_internal_resampling/README.md",
     "sensor": "QB, GF2, WV3",
     "evaluated_seeds": [],
     "retraining": true,
-    "limits": "89번 확정 학습법(λ 1.2, c 0.25, K2D 150에폭)으로 갈래 N·A·B·C를 seed 42에서 학습합니다. 갈래는 validation으로만 고르고 test는 보고만 합니다. WV2 전이와 FR은 참고입니다.",
+    "limits": "89번 확정 학습법(λ 1.2, c 0.25)으로 N을 K2D 150에폭, 갈래 A·B·C를 50에폭 선별로 seed 42에서 학습합니다. 갈래는 validation으로만 고르고 test는 보고만 합니다. WV2 전이와 FR은 참고입니다.",
     "config": "experiments/performance/90_dataset_matched_internal_resampling/config.json"
   }
 }

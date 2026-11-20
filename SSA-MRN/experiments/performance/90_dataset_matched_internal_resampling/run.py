@@ -281,10 +281,102 @@ def run(resume=False):
     print('ALL COMPLETE chosen',sel['chosen'],flush=True)
 
 
+def screen():
+    """Variant choice on 50-epoch screening runs (user decision 2026-11-21 02h, as the 89 lambda screening) instead of the 150-epoch
+    A/B/C runs. Runs from a separate copy of the source tree on the same runtime after the sealed controller stopped at its first A/B/C
+    trunk (blocked by provenance/block_abc.py; the stop must be exactly that lock failure). While the controller is still finishing its
+    running N job, this uses only the free slot (queue_status.json); after the controller exits it takes controller.lock and both slots.
+    Jobs: AS, BS, CS on GF2, QB, WV3 (validation only) and the N jobs the controller left (factorize + NK + evaluation).
+    The N screening control is the 89 stage-B run BL1.20C0.25 (same recipe: full-size 2x2, 50 epochs, lambda 1.2, c 0.25, seed 42)."""
+    conf=load_conf();root=Path(conf['runtime']);cp=root/'runtime_config.json';cfg=json.loads(cp.read_text(encoding='utf8'));set_impl(cfg)
+    note=lambda **k:print(json.dumps(dict(time_kst=now(),**k),ensure_ascii=False),flush=True)
+    def stop_reason():  # the controller writes its stop reason to queue_status.json at once (stopped.json only when it exits)
+        for f in ('stopped.json','queue_status.json'):
+            try:
+                r=json.loads((root/f).read_text(encoding='utf8')).get('reason' if f=='stopped.json' else 'stop_reason')
+                if r:return r
+            except Exception:pass
+        return None
+    while stop_reason() is None:
+        if (root/'all_complete.json').exists():raise RuntimeError('controller completed; nothing to screen')
+        time.sleep(30)
+    reason=stop_reason()
+    if not any(reason==f'train failed {s}_{v}T_s{SEED} (exit 1)' for s in cfg['sensors'] for v in 'ABC'):
+        write(root/'screen_stopped.json',dict(time_kst=now(),reason='controller stop is not the intended A/B/C lock failure: '+repr(reason)));note(refused=reason);sys.exit(4)
+    write(root/'screen_started.json',dict(time_kst=now(),controller_stop=reason,decision='user 2026-11-21 02h: choose the variant on 50-epoch screening runs',
+          script=str(Path(__file__).resolve()),script_sha256=sha(Path(__file__).resolve())))
+    out=lambda k:root/'runs'/run_name(*k)
+    trained=lambda k:(out(k)/'training_complete.json').exists();evaluated=lambda k:(out(k)/'evaluation_complete.json').exists()
+    guard=[None]
+    def controller_alive():
+        if guard[0] is not None:return False
+        f=(root/'controller.lock').open('a+b')
+        try:
+            import msvcrt;f.seek(0);msvcrt.locking(f.fileno(),msvcrt.LK_NBLCK,1)
+        except OSError:
+            f.close();return True
+        guard[0]=f;note(controller='exited, lock taken');return False
+    def controller_running():
+        try:return len(json.loads((root/'queue_status.json').read_text(encoding='utf8'))['running'])
+        except Exception:return cfg['max_parallel']
+    screens=[(s,v+'S',SEED) for v in 'ABC' for s in ('GF2','QB','WV3')]
+    n_jobs=lambda:[('train',(s,'NK',SEED)) for s in ('GF2','QB','WV3') if trained((s,'NT',SEED)) and not trained((s,'NK',SEED))]+\
+                  [('evaluate',(s,'NK',SEED)) for s in ('GF2','QB','WV3') if trained((s,'NK',SEED)) and not evaluated((s,'NK',SEED))]
+    jobs=[('train',k) for k in screens if not trained(k)];running={};problem=None;queued_n=set()
+    def launch(kind,k):
+        o=out(k);o.mkdir(parents=True,exist_ok=True);f=(o/(kind+'.log')).open('a',encoding='utf8')
+        args=[sys.executable,'-u',str(HERE/'train.py'),'--config',str(cp),'--mode',kind,'--sensor',k[0],'--arm',k[1],'--seed',str(k[2])]
+        if kind=='train' and (o/'checkpoints/initial.pt').exists():args+=['--resume']
+        p=subprocess.Popen(args,stdout=f,stderr=subprocess.STDOUT);note(launched=kind,run=run_name(*k),pid=p.pid);return p,f
+    while True:
+        alive=controller_alive()
+        if not alive:  # N jobs only after the controller exited (it may still be training WV3 NT)
+            for j in n_jobs():
+                if j not in queued_n:queued_n.add(j);jobs.append(j)
+        if problem is None:
+            free=cfg['max_parallel']-len(running)-(controller_running() if alive else 0)
+            for j in sorted(jobs,key=lambda j:(j[0]!='evaluate',j[1][1]!='NK',screens.index(j[1]) if j[1] in screens else 0)):
+                if free<=0:break
+                kind,k=j
+                if kind=='train' and k[1]=='NK':
+                    code=subprocess.run([sys.executable,'-u',str(HERE/'run.py'),'--mode','factorize','--sensor',k[0],'--arm',k[1],'--seed',str(k[2])],
+                                        stdout=(root/'init'/f'factorize_{run_name(*k)}.log').open('a',encoding='utf8'),stderr=subprocess.STDOUT).returncode
+                    if code:problem='factorize failed '+run_name(*k);break
+                jobs.remove(j);running[j]=launch(kind,k);free-=1
+        time.sleep(10)
+        for j,(p,f) in list(running.items()):
+            if p.poll() is None:continue
+            f.close();del running[j];kind,k=j
+            ok=p.returncode==0 and (trained(k) if kind=='train' else evaluated(k))
+            if ok and kind=='train' and sanity(cfg,root,k):ok=False
+            note(finished=kind,run=run_name(*k),ok=ok,exit=p.returncode)
+            if not ok and problem is None:problem=f'{kind} failed {run_name(*k)} (exit {p.returncode})'
+        pending_n=bool(n_jobs()) and not alive
+        if not running and not alive and (problem or (not jobs and not pending_n)):break
+    if problem:
+        write(root/'screen_stopped.json',dict(time_kst=now(),reason=problem,note='no new job after the problem; running jobs finished'));write(root/'summary.json',summary(cfg,root));note(stopped=problem);sys.exit(3)
+    rule=cfg['selection_rule'];tau=rule['tau_sam_deg'];sensors=cfg['sensors']
+    ref89=lambda s:json.loads((Path(conf['screening']['n_control_runtime'])/'runs'/f'{s}_BL1.20C0.25_s{SEED}'/'training_complete.json').read_text(encoding='utf8'))
+    val={'N':{s:dict(psnr=ref89(s)['best_val']['val_psnr'],sam=ref89(s)['best_val']['val_sam'],epoch=ref89(s)['best_epoch']) for s in sensors}}
+    val.update({v:{s:validation_of(root,(s,v+'S',SEED)) for s in sensors} for v in 'ABC'})
+    d={v:{s:dict(psnr=val[v][s]['psnr']-val['N'][s]['psnr'],sam=val[v][s]['sam']-val['N'][s]['sam']) for s in sensors} for v in 'ABC'}
+    mean={v:sum(d[v][s]['psnr'] for s in sensors)/len(sensors) for v in d}
+    checks=[];chosen='N'
+    for v in sorted(d,key=lambda v:(-mean[v],'ABC'.index(v))):
+        bad={s:d[v][s]['sam'] for s in sensors if d[v][s]['sam']>tau[s]}
+        checks.append(dict(variant=v,mean_delta_psnr=mean[v],rejected_by_sam=bad,positive=mean[v]>0))
+        if mean[v]>0 and not bad:chosen=v;break
+    sel=dict(time_kst=now(),rule=rule,screening=conf['screening'],validation=val,delta_vs_N=d,mean_delta_psnr=mean,checks=checks,chosen=chosen,
+             note='50-epoch screening, validation only; the N control is the 89 run BL1.20C0.25 (same recipe, separate run: rerun spread up to 0.03 dB)')
+    write(root/'screen_selection.json',sel);write(root/'summary.json',summary(cfg,root))
+    write(root/'screen_complete.json',dict(time_kst=now(),chosen=chosen,next='final model: the chosen variant with the K2D 150-epoch recipe, seeds 42-44 (N: seed 42 exists), after the user decision'))
+    note(chosen=chosen)
+
+
 if __name__=='__main__':
     import argparse
     p=argparse.ArgumentParser(description='90 controller: prepare -> optimize -> run (resume: --mode run --resume)')
-    p.add_argument('--mode',choices=['prepare','optimize','run','factorize'],required=True);p.add_argument('--resume',action='store_true')
+    p.add_argument('--mode',choices=['prepare','optimize','run','factorize','screen'],required=True);p.add_argument('--resume',action='store_true')
     p.add_argument('--sensor');p.add_argument('--arm');p.add_argument('--seed',type=int,default=42);a=p.parse_args()
     if a.mode=='factorize':factorize(a.sensor,a.arm,a.seed)
-    else:{'prepare':prepare,'optimize':optimize}.get(a.mode,lambda:run(a.resume))()
+    else:{'prepare':prepare,'optimize':optimize,'screen':screen}.get(a.mode,lambda:run(a.resume))()
