@@ -361,15 +361,15 @@ def cmd_generate(a):
     print(f'estimate per picture: {est.get("credits")} credits ({est.get("bound")}); for {len(todo)} scenes about {float(est.get("credits") or 0) * len(todo):.0f}', flush=True)
     if a.estimate_only: return
     if a.max_credits is None: raise SystemExit('give --max-credits (the most this run may spend)')
-    spent = 0.0
+    spent, per = 0.0, float(est.get('credits') or 0)   # per: reserve for the next picture (estimate, raised to the most actually charged)
     for i in todo:
         for attempt in range(RETRIES + 1):
-            if spent + float(est.get('credits') or 0) > a.max_credits:
+            if spent + per > a.max_credits:
                 print(f'stopping before scene {i}: {spent:.1f} spent, next would pass --max-credits {a.max_credits}'); log_path.write_text(json.dumps(log, indent=1) + '\n'); return
             row = dict(scene=i, attempt=attempt, started=time.strftime('%Y-%m-%dT%H:%M:%S%z'))
             try:
                 picture, credits, rid = generate_one(key, model_id, dict(fixed, input_images=[data_url(x) for x in pair[i]]))
-                spent += credits; row.update(credits_charged=credits, response_id=rid)
+                spent += credits; per = max(per, credits); row.update(credits_charged=credits, response_id=rid)
                 img = Image.open(io.BytesIO(picture)); row.update(size=[img.width, img.height], format=img.format)
                 if img.width != img.height: raise RuntimeError(f'not square: {img.width}x{img.height}')
                 name = f'{a.model}_{a.sensor}_{i:02}.{dict(JPEG="jpg", WEBP="webp").get(img.format, "png")}'
