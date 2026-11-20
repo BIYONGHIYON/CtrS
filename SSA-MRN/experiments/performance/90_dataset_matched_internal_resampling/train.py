@@ -30,6 +30,9 @@ INIT_REPLACEMENTS=(  # as 88
     ("if SENSORS[sensor]['bands']==4 and h!=state_hash(M54.M43.Model(M54.CORE43[arm],seed).state_dict()):raise AssertionError('4-band initial state differs from 43 '+arm)",
      "check_initial(sd,h,sensor,arm,seed)"),
 )
+SENSOR_REPLACEMENTS=(  # 90: the 58 preflight builds the model directly; B and C need the training sensor
+    ("sd=Model(arm,SENSORS[sensor]['bands'],seed).state_dict()","sd=Model(arm,SENSORS[sensor]['bands'],seed,sensor=sensor).state_dict()"),
+)
 _STATE={'mode':None}
 TRUNK_EPOCHS,K2D_EPOCHS=120,30
 
@@ -111,7 +114,7 @@ def set_impl(cfg):
 
 def _load():
     src=SOURCE.read_text(encoding='utf-8')
-    for old,new in L1_REPLACEMENTS+SCHEDULE_REPLACEMENTS+INIT_REPLACEMENTS:
+    for old,new in L1_REPLACEMENTS+SCHEDULE_REPLACEMENTS+INIT_REPLACEMENTS+SENSOR_REPLACEMENTS:
         if src.count(old)!=1:raise RuntimeError('58 trainer changed; replacement not unique: '+old)
         src=src.replace(old,new)
     mod=types.ModuleType('c2ms58_train_l1s_90');mod.__file__=str(SOURCE)
