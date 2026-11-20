@@ -27,6 +27,7 @@
 기업 멘토링의 "LLM·멀티모달 모델과 비교하고, 할루시네이션도 실제로 측정하라"는 피드백에 따라, 이미지를 출력하는 생성형 모델 세 개(GPT Image 2.6 Sunburst, Nano Banana 2.1, FLUX 2 [pro])로 학습 없이 팬샤프닝을 시험합니다. 센서 하나를 한 사람이 맡아 세 모델로 RR test 20장씩 만듭니다([#209](https://github.com/BIYONGHIYON/CtrS/issues/209) QB · [#210](https://github.com/BIYONGHIYON/CtrS/issues/210) GF2 · [#211](https://github.com/BIYONGHIYON/CtrS/issues/211) WV3 · [#212](https://github.com/BIYONGHIYON/CtrS/issues/212) WV2).
 
 - **입력:** 모두 Release [`genimage-inputs`](https://github.com/BIYONGHIYON/CtrS/releases/tag/genimage-inputs)의 같은 입력을 씁니다. 1번 이미지는 데이터셋 LMS의 RGB 밴드, 2번 이미지는 PAN이며 둘 다 1024×1024 PNG입니다. 정답은 입력을 만들 때도 밝기 범위를 정할 때도 쓰지 않습니다.
+- **생성:** 이미지 생성 메뉴를 손으로 누르지 않고 `common/genimage_io.py generate`로 동국 AI CHAT API Gateway에서 만듭니다. 프롬프트와 설정은 도구에 고정돼 있고(#209와 같음), 각자 만든 API 키를 `BAZE_API_KEY` 환경변수로 넘깁니다. 먼저 `--estimate-only`로 비용을 보고, `--max-credits`를 넘기 전에 멈추며, 모든 시도(시각·크기·차감 크레딧·오류)를 기록합니다.
 - **되돌리기와 채점:** 받은 이미지는 `common/genimage_io.py restore`로 256×256 DN `.mat`과 zip으로 바꿉니다. 이 모델들은 RGB 3장만 출력하므로 `matlab-benchmark-author.yml`의 `bands: rgb`로 정답의 RGB 밴드에서만 채점합니다. 4·8밴드 전체 수치와 섞지 않으며 루트 README 비교 표에는 넣지 않습니다.
 - **[변환 한계 대조군](genimage_identity/README.md):** 1번 이미지를 모델 없이 그대로 되돌린 결과입니다. RGB 3밴드 실제 MATLAB PSNR은 QB 29.216, GF2 37.953, WV3 29.225, WV2 27.695 dB이고, 생성형 모델은 이 값을 넘어야 PAN의 세부를 넣었다고 볼 수 있습니다.
 - **정답 없는 지표:** `common/genimage_io.py checks`가 관측 일치 오차, PAN 구조 일치도, 위치 어긋남을 장면별로 계산하고 정답의 같은 값을 함께 적습니다.
