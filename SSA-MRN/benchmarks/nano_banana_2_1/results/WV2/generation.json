@@ -1,0 +1,294 @@
+{
+  "model": "nano_banana_2_1",
+  "sensor": "WV2",
+  "source": "user supplied original archive",
+  "single_execution": "required by issue; attempt history not supplied",
+  "actual_settings": {
+    "model": "gemini-nano-banana-2.1",
+    "number_of_images": 1,
+    "aspect_ratio": "1:1",
+    "image_size": "1K"
+  },
+  "actual_prompt": "Do not change the composition. I am giving you two images of the same satellite scene, exactly aligned pixel to pixel.\nThe first image is a low-resolution multispectral color image of the area: it is blurry, but its colors are correct.\nThe second image is a high-resolution panchromatic grayscale image of the same area: it is sharp, but it has no color.\n\nCreate one image that combines them (pansharpening): use the second image as the guide for all spatial detail and the first image as the guide for all color.\n\nRules:\n- Keep the exact framing, scale and geometry. Do not crop, rotate, shift, zoom, mirror or reframe. Every object must stay at the same pixel position as in both inputs.\n- Take edges, textures and fine structures only from the second image. Do not add, remove or invent any building, road, vehicle, tree, boat, field pattern or texture that is not visible in the second image.\n- Take colors only from the first image. Keep its overall brightness and color balance. Do not increase saturation or contrast, and do not apply any artistic style, haze removal, color grading or sharpening halos.\n- Output a single square (1:1) top-down satellite photograph, 1024×1024, with no text, labels, borders or watermarks.",
+  "missing_metadata": [
+    "generation timestamps",
+    "credits",
+    "retry history"
+  ],
+  "archive": {
+    "name": "WV2_생성결과.zip",
+    "sha256": "cf05be3577d61e48c80c5d7cbb49ca1d00a8ddc88ec642a04beddd7d70120b36"
+  },
+  "inputs_zip_sha256": "40193cc846e9ecc419f27a5dd3fb6fb073b5ab0cbe1a52177ded193db9f0cdb6",
+  "issue": "https://github.com/BIYONGHIYON/CtrS/issues/212",
+  "scenes": [
+    {
+      "scene": 0,
+      "picture": "nano_banana_2_1_WV2_00.jpg",
+      "picture_sha256": "24272c38ae111ac487cae351fa659588c8c6f60d859778c0b1fbada8e8731361",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 1,
+      "picture": "nano_banana_2_1_WV2_01.jpg",
+      "picture_sha256": "8fc6c80ece5fa99f6db7f3423e229c2b52fbf82ed677eead3eb3b4661185aa07",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 2,
+      "picture": "nano_banana_2_1_WV2_02.jpg",
+      "picture_sha256": "43eab0cfca28a7b15da2e67e6a8cd1cf1173d9f683aaf654c090ef9147d42549",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 3,
+      "picture": "nano_banana_2_1_WV2_03.jpg",
+      "picture_sha256": "a4e11e9b1663ad9cdf0c0117357b9727f85b1aba0a2b9f15d1c9c426211ca0ff",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 4,
+      "picture": "nano_banana_2_1_WV2_04.jpg",
+      "picture_sha256": "3c8f72e632f6839c21627bcb31003770a8f37e3848803073cb51dff2e0102720",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 5,
+      "picture": "nano_banana_2_1_WV2_05.jpg",
+      "picture_sha256": "9a30af6fb835a60345fc1b58af0a72fc0424b20266ed6776c0cbb6038a88db05",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 6,
+      "picture": "nano_banana_2_1_WV2_06.jpg",
+      "picture_sha256": "6d4891d6795e6af7d7670c40c2de71d76efb723010af4a475ffb2d5e4226bd40",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 7,
+      "picture": "nano_banana_2_1_WV2_07.jpg",
+      "picture_sha256": "295c1e1dd619d4cab6b368d9c970ba40750834803ef0d054403cb367aea95020",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 8,
+      "picture": "nano_banana_2_1_WV2_08.jpg",
+      "picture_sha256": "a6753462abedab5bd24b52959ddd04f16131b5ddf5a35c0ae46c3a4ef09cd335",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 9,
+      "picture": "nano_banana_2_1_WV2_09.jpg",
+      "picture_sha256": "b9138419f3d2a6eac6d2d156389ae9015fbece0171a20d4a29ad6c5e67888727",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 10,
+      "picture": "nano_banana_2_1_WV2_10.jpg",
+      "picture_sha256": "ac8d8a78ca974c9165661f530259a3bdbd3aa44cf949045d517889758ac7f340",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 11,
+      "picture": "nano_banana_2_1_WV2_11.jpg",
+      "picture_sha256": "f7486308a32bcf9569ead706dba4f15e5db564919c1d986eaef85365324425e2",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 12,
+      "picture": "nano_banana_2_1_WV2_12.jpg",
+      "picture_sha256": "9853b038f417dbcf2194212644dc7f7ebbc0fd19f79652cfc54e5666e480348f",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 13,
+      "picture": "nano_banana_2_1_WV2_13.jpg",
+      "picture_sha256": "be57c1c78fab03609574d30b2a5b90284b64c7b0919da5d990d4556d2417d827",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 14,
+      "picture": "nano_banana_2_1_WV2_14.jpg",
+      "picture_sha256": "5c8562d41ca552f006ca6a523f107795eea73b36090fa02babb1a31011864534",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 15,
+      "picture": "nano_banana_2_1_WV2_15.jpg",
+      "picture_sha256": "6acc4fffacc800004f84b48a9f0b82fb89e2778958d4bae024c0c7ff68750624",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 16,
+      "picture": "nano_banana_2_1_WV2_16.jpg",
+      "picture_sha256": "30974eb4d008da602fea3d20f1e797747fc06ebef2b68f1afe24030ef48a262d",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 17,
+      "picture": "nano_banana_2_1_WV2_17.jpg",
+      "picture_sha256": "86203e685b89f15c37871c2414d3d864f28d79383fc4598d4bf08f1ed6856fed",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 18,
+      "picture": "nano_banana_2_1_WV2_18.jpg",
+      "picture_sha256": "5c1e74272c9393a39d9c3226073bbf23aa8976a4a6543a2eed30c6e6916ca540",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    },
+    {
+      "scene": 19,
+      "picture": "nano_banana_2_1_WV2_19.jpg",
+      "picture_sha256": "cd0b6d4bbeede2071cbf587cc1e3eb9967fa0517c85ba2c35d8fc7b1f1e4252d",
+      "size": [
+        1024,
+        1024
+      ],
+      "format": "JPEG",
+      "generated_at": null,
+      "credits_charged": null,
+      "retries": null
+    }
+  ],
+  "condition_confirmation": {
+    "source": "User confirmation in the Codex conversation after results submission",
+    "statement": "Both models used the fixed prompt and settings of issue #212 unchanged.",
+    "scope": "All 20 supplied WV2 scenes for each model",
+    "evidence_type": "user attestation",
+    "independently_verified_against_service_logs": false,
+    "fixed_prompt_source": "SSA-MRN/common/genimage_io.py at 6315811e86fabef006c6d5fd688e3c81ecc22dde"
+  }
+}

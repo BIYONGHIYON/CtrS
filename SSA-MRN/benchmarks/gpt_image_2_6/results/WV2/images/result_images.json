@@ -1,0 +1,136 @@
+{
+  "names": [
+    "C2MS-SP",
+    "GPT Image 2.6"
+  ],
+  "bands": "WV2 RGB [4,2,1], model output in R,G,B order",
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "baseline": "C2MS-SP seed 42 with WV2 band calibration, result viewer data at 1/8 DN precision",
+  "baseline_source": {
+    "asset": "viewer-data-d110d1115868.tar.gz",
+    "sha256": "d110d111586831c70684f0e61805ad6dff1fa95e12df12ce3d094a8cea4761d9",
+    "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/viewer-data/viewer-data-d110d1115868.tar.gz",
+    "storage": "int16 little endian CHW, DN * 8",
+    "use": "RGB visual comparison only, not actual MATLAB baseline metrics"
+  },
+  "window_note": "64x64 window with greatest candidate error reduction versus C2MS-SP; selection favours candidate, including when all windows are worse",
+  "display": "shared GT 1-99 percentile stretch; GT is used for visualization only, never generation or DN restoration",
+  "psnr_peak": 2047,
+  "stats": {
+    "0": {
+      "scene_psnr": {
+        "C2MS-SP": 33.40065784153166,
+        "GPT Image 2.6": 30.81602738344765
+      },
+      "window": [
+        192,
+        32
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 37.908619545283834,
+        "GPT Image 2.6": 36.96480659129289
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 17.31548055013021,
+        "GPT Image 2.6": 20.659585104845426
+      }
+    },
+    "1": {
+      "scene_psnr": {
+        "C2MS-SP": 30.91822771324333,
+        "GPT Image 2.6": 28.71841888036202
+      },
+      "window": [
+        192,
+        0
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 30.248630361443634,
+        "GPT Image 2.6": 29.069812414619303
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 45.70216878255208,
+        "GPT Image 2.6": 54.56080607437593
+      }
+    },
+    "3": {
+      "scene_psnr": {
+        "C2MS-SP": 39.846095235904464,
+        "GPT Image 2.6": 37.674130303058526
+      },
+      "window": [
+        64,
+        128
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 43.83213236091379,
+        "GPT Image 2.6": 43.15114993682676
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 8.991841634114584,
+        "GPT Image 2.6": 9.275931064536794
+      }
+    },
+    "7": {
+      "scene_psnr": {
+        "C2MS-SP": 32.5836246299385,
+        "GPT Image 2.6": 30.245485371610922
+      },
+      "window": [
+        64,
+        16
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 47.413518733409795,
+        "GPT Image 2.6": 45.86733005786373
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 7.290232340494792,
+        "GPT Image 2.6": 8.66741042557548
+      }
+    },
+    "14": {
+      "scene_psnr": {
+        "C2MS-SP": 32.45522035992292,
+        "GPT Image 2.6": 30.511936795914426
+      },
+      "window": [
+        16,
+        80
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 30.532991483761425,
+        "GPT Image 2.6": 29.987770358358546
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 36.90533447265625,
+        "GPT Image 2.6": 41.41780387858325
+      }
+    },
+    "17": {
+      "scene_psnr": {
+        "C2MS-SP": 32.97761685320213,
+        "GPT Image 2.6": 31.071180900744793
+      },
+      "window": [
+        192,
+        32
+      ],
+      "crop_psnr": {
+        "C2MS-SP": 30.286664329448474,
+        "GPT Image 2.6": 29.890237481125087
+      },
+      "crop_mean_abs_err": {
+        "C2MS-SP": 44.55930582682292,
+        "GPT Image 2.6": 47.5982308243184
+      }
+    }
+  }
+}
