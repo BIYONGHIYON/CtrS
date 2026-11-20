@@ -1,0 +1,315 @@
+{
+ "model": "nano_banana_2_1",
+ "model_id": "gemini-nano-banana-2.1",
+ "sensor": "QB",
+ "inputs_zip_sha256": "1c46a07b3d81b371e9ce0c132fb61871e5d049f0b49b6320209eeace0eae7cba",
+ "settings": {
+  "model": "gemini-nano-banana-2.1",
+  "number_of_images": 1,
+  "aspect_ratio": "1:1",
+  "image_size": "1K"
+ },
+ "prompt": "Do not change the composition. I am giving you two images of the same satellite scene, exactly aligned pixel to pixel.\nThe first image is a low-resolution multispectral color image of the area: it is blurry, but its colors are correct.\nThe second image is a high-resolution panchromatic grayscale image of the same area: it is sharp, but it has no color.\n\nCreate one image that combines them (pansharpening): use the second image as the guide for all spatial detail and the first image as the guide for all color.\n\nRules:\n- Keep the exact framing, scale and geometry. Do not crop, rotate, shift, zoom, mirror or reframe. Every object must stay at the same pixel position as in both inputs.\n- Take edges, textures and fine structures only from the second image. Do not add, remove or invent any building, road, vehicle, tree, boat, field pattern or texture that is not visible in the second image.\n- Take colors only from the first image. Keep its overall brightness and color balance. Do not increase saturation or contrast, and do not apply any artistic style, haze removal, color grading or sharpening halos.\n- Output a single square (1:1) top-down satellite photograph, 1024\u00d71024, with no text, labels, borders or watermarks.",
+ "attempts": [
+  {
+   "scene": 0,
+   "attempt": 0,
+   "started": "2026-11-20T21:34:44+0900",
+   "credits_charged": 40.68,
+   "response_id": "img-5222e1558077446d",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_00.jpg",
+   "picture_sha256": "80f5e06203dca657a1a48ed2557286f742048e8715f34f7d9da24ce33dbeffb1"
+  },
+  {
+   "scene": 1,
+   "attempt": 0,
+   "started": "2026-11-20T21:34:58+0900",
+   "credits_charged": 41.7,
+   "response_id": "img-defa2b9b72304b72",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_01.jpg",
+   "picture_sha256": "bf44ae95f7dcf1db897a1e92ea986c2388b9a94e53453537701fd9974331d6e3"
+  },
+  {
+   "scene": 2,
+   "attempt": 0,
+   "started": "2026-11-20T21:35:23+0900",
+   "credits_charged": 40.12,
+   "response_id": "img-e9d12f749e334a78",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_02.jpg",
+   "picture_sha256": "fde04536b727e83e894808a1b0606214c23caf7eb1adbba3763226a2f620f8b0"
+  },
+  {
+   "scene": 3,
+   "attempt": 0,
+   "started": "2026-11-20T21:35:39+0900",
+   "credits_charged": 40.9,
+   "response_id": "img-e6fbfc0a621a486d",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_03.jpg",
+   "picture_sha256": "d18d6e1adb1d57b88b4b62e40ea706c85f1319d5ba6776fa5765403ee4ab7cc9"
+  },
+  {
+   "scene": 4,
+   "attempt": 0,
+   "started": "2026-11-20T21:35:54+0900",
+   "credits_charged": 40.11,
+   "response_id": "img-ee0a5fbeb1874ab2",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_04.jpg",
+   "picture_sha256": "362847095b5eaf4db6afb8cd0f331634c0b027cb887a0951aac3c84781e1d847"
+  },
+  {
+   "scene": 5,
+   "attempt": 0,
+   "started": "2026-11-20T21:36:11+0900",
+   "credits_charged": 42.16,
+   "response_id": "img-d3ac2c12d4a24dbf",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_05.jpg",
+   "picture_sha256": "f0cb8135e354f2f3267edf6306f5e1b1f3c43cd33d9261e39de7ae5f654212c6"
+  },
+  {
+   "scene": 6,
+   "attempt": 0,
+   "started": "2026-11-20T21:36:37+0900",
+   "credits_charged": 39.92,
+   "response_id": "img-89f755dbd744487a",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_06.jpg",
+   "picture_sha256": "6b9b7935504705ce6a51a697c27041bae9258d2d94598657959f57734fdf4049"
+  },
+  {
+   "scene": 7,
+   "attempt": 0,
+   "started": "2026-11-20T21:36:52+0900",
+   "credits_charged": 40.22,
+   "response_id": "img-b4872f521de942f7",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_07.jpg",
+   "picture_sha256": "ca6b5cee8c766e506af625e7e48ec3db49e395a4d12c0872d5efe4e2f5af91c3"
+  },
+  {
+   "scene": 8,
+   "attempt": 0,
+   "started": "2026-11-20T21:37:09+0900",
+   "credits_charged": 40.58,
+   "response_id": "img-ea37fae6d90d4f57",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_08.jpg",
+   "picture_sha256": "66e43e83dc2f0715e8c1dc04c41cc0f16553e0537f92d92742ffd6588541d083"
+  },
+  {
+   "scene": 9,
+   "attempt": 0,
+   "started": "2026-11-20T21:37:27+0900",
+   "credits_charged": 39.82,
+   "response_id": "img-06fd8f2ded8b4ba5",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_09.jpg",
+   "picture_sha256": "13c0d17ea5ff875a669c8af443e9c92522dd24f4ab2fb16a32c2ce2342cda52a"
+  },
+  {
+   "scene": 10,
+   "attempt": 0,
+   "started": "2026-11-20T21:37:49+0900",
+   "credits_charged": 41.21,
+   "response_id": "img-5dc65a1159134a4a",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_10.jpg",
+   "picture_sha256": "ccff88c4d4ac92b682634c2f0eb6631c204332ad45fd136162b2950f7b2ce6d5"
+  },
+  {
+   "scene": 11,
+   "attempt": 0,
+   "started": "2026-11-20T21:38:06+0900",
+   "credits_charged": 40.32,
+   "response_id": "img-e6d9db6fbd4e4e75",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_11.jpg",
+   "picture_sha256": "1166699c8a313efb8ad1dcba6f6766573a4be6c3cdf5787add7a2b673953f16b"
+  },
+  {
+   "scene": 12,
+   "attempt": 0,
+   "started": "2026-11-20T21:38:22+0900",
+   "credits_charged": 43.16,
+   "response_id": "img-aeaa628354ad444d",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_12.jpg",
+   "picture_sha256": "58641da7272ffd8c854a5ec083d5727b2746f59a4c7f41ae013cefda889e67c3"
+  },
+  {
+   "scene": 13,
+   "attempt": 0,
+   "started": "2026-11-20T21:38:51+0900",
+   "credits_charged": 43.3,
+   "response_id": "img-8da604fa11e34104",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_13.jpg",
+   "picture_sha256": "90112aafaf0f92465b01db920264c309c00d7c9b9066bcaf1f833d9199f25383"
+  },
+  {
+   "scene": 14,
+   "attempt": 0,
+   "started": "2026-11-20T21:39:15+0900",
+   "credits_charged": 41.0,
+   "response_id": "img-62c03d518f3d4913",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_14.jpg",
+   "picture_sha256": "aac51681a97aa58f3d2874788e6eeb06b8d94ca7fb91ca0ff4b1c3e489c7ec7e"
+  },
+  {
+   "scene": 15,
+   "attempt": 0,
+   "started": "2026-11-20T21:39:34+0900",
+   "credits_charged": 43.08,
+   "response_id": "img-288b3507d2f4422a",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_15.jpg",
+   "picture_sha256": "738d551945d9299bfe68dc3ccec9d9c76ca6a3d253549672907b3275bbcb1ebe"
+  },
+  {
+   "scene": 16,
+   "attempt": 0,
+   "started": "2026-11-20T21:40:01+0900",
+   "credits_charged": 41.79,
+   "response_id": "img-648be6852f1b49fa",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_16.jpg",
+   "picture_sha256": "d2a2fb54ca7cfbb5f7f169f0a7ecbacce88adf3d183f098d45255a2df75ff601"
+  },
+  {
+   "scene": 17,
+   "attempt": 0,
+   "started": "2026-11-20T21:40:29+0900",
+   "credits_charged": 40.31,
+   "response_id": "img-9161be68d7ab462a",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_17.jpg",
+   "picture_sha256": "910bf08cbcca8e31c6557f63a6570925323605a090832c505427ff1c1471ec80"
+  },
+  {
+   "scene": 18,
+   "attempt": 0,
+   "started": "2026-11-20T21:42:21+0900",
+   "credits_charged": 40.28,
+   "response_id": "img-ba68130ab8a440d9",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_18.jpg",
+   "picture_sha256": "4e0826d9ab6f03855598ae0422bc42b42a65dc8ca878ec823880acb50a10e193"
+  },
+  {
+   "scene": 19,
+   "attempt": 0,
+   "started": "2026-11-20T21:42:40+0900",
+   "credits_charged": 40.91,
+   "response_id": "img-b16754b320bc488c",
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "JPEG",
+   "status": "ok",
+   "picture": "nano_banana_2_1_QB_19.jpg",
+   "picture_sha256": "8615e0541d6a8cc12b13fd6f0b03f5e4626fc5138c5b9b1ebe56696b49cd3759"
+  }
+ ]
+}
