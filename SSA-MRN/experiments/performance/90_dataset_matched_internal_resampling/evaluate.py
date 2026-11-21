@@ -110,11 +110,11 @@ def final_control_rows(cfg,sensor,target,seed):
 
 
 def evaluate(cfg,sensor,arm,seed):
-    """RR/FR test of <v>K. Seed 42: against the cached C2MS-SP and 88 K2D controls (as before). Other seeds (final model): against
+    """RR/FR test of <v>K or <v>F. Seed 42: against the cached C2MS-SP and 88 K2D controls (as before). Other seeds (final model): against
     C2MS-SP and C2MS-SP-Lite of the same seed (there is no 88 K2D for seeds 43 and 44)."""
     setup(seed);set_impl(cfg);dest=Path(cfg['runtime'])/'runs'/run_name(sensor,arm,seed);done=dest/'evaluation_complete.json'
     if done.exists():return
-    if arm not in M.FACTORIZED:raise ValueError('only the factorized final models are evaluated: '+arm)
+    if arm not in M.FACTORIZED and arm not in M.DECAY:raise ValueError('only the final models (<v>K, <v>F) are evaluated: '+arm)
     if not (dest/'training_complete.json').exists():raise RuntimeError('training incomplete')
     net,w=load(dest/'checkpoints/best.pt',arm,sensor,seed);out={}
     for target in [sensor]+TRANSFER.get(sensor,[]):

@@ -70,7 +70,7 @@
   "N": 8.5,
   "screening": 8.5,
   "chosen_150": 9,
-  "final_seeds_43_44": 15.5
+  "final_full_3_seeds": 19
  },
  "limits": [
   "single seed 42; the 3-seed judgement is done once on the final model",
@@ -193,10 +193,10 @@
   }
  },
  "final": {
-  "decision": "user 2026-11-21 23h: after the chosen variant (seed 42), train it with the K2D 150-epoch recipe on seeds 43 and 44 and judge the 3-seed final model",
-  "runs": "<v>T -> factorize -> <v>K -> evaluation, GF2, QB, WV3, seeds 43 and 44 (seed 42 = run.py --mode chosen)",
-  "comparison": "paired by seed against C2MS-SP (65 C2MS_L1S) and C2MS-SP-Lite (83 K2), both with the projection; RR test, v2.4 3-seed threshold 0.04 dB (report); WV2 transfer (82 calibration) and FR QNR reference",
-  "scheduling": "run.py --mode final from a fourth copy of the tree, same runtime; fills the slot left free once the chosen runner runs its last trunk; the server-wide job count stays at most max_parallel",
+  "decision": "user 2026-11-21 23h: after the chosen variant (seed 42), judge the 3-seed final model; user 2026-11-22 00h: the final model is not factorized (full-size 150 epochs)",
+  "runs": "<v>F = <v>T (120 epochs at 1e-4) + full-size 30-epoch cosine 1e-4 -> 1e-6 from the hash-checked <v>T epoch-120 snapshot (88 FULL) -> evaluation; GF2, QB, WV3, seeds 42, 43, 44 (seed 42 reuses the chosen runner's <v>T; seeds 43 and 44 train <v>T here)",
+  "comparison": "paired by seed against C2MS-SP (65 C2MS_L1S, the same full-size structure and cost), with the projection; RR test, v2.4 3-seed threshold 0.04 dB (report); C2MS-SP-Lite (83 K2), the seed-42 <v>K (factorization cost), WV2 transfer (82 calibration) and FR QNR reference",
+  "scheduling": "run.py --mode final from a fourth copy of the tree, same runtime; one slot while the chosen runner is active (it still finishes WV3 <v>T and <v>K), then two; the server-wide job count stays at most max_parallel",
   "replacement": "the baseline replacement is a user decision after the 3-seed result"
  }
 }

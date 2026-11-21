@@ -18,7 +18,8 @@ are those of the 89 2x2 model):
 The W2 branch 2x2 layers are learned and not changed. The MTF of the training sensor is used (on the WV2 transfer the WV3 kernels stay).
 
 Arm names: <variant>T = full-size 2x2 C2MS trunk (120 epochs, lr 1e-4 constant), <variant>K = 83 K2 structure (2x2) from the <variant>T
-epoch-120 weights (30-epoch cosine), <variant>S = full-size screening run (50 epochs: 40 at 1e-4 + 10 cosine, as the 89 screening). Other names go to the 89 model (controls: 'L1S' = 65 C2MS-SP weights, 'K2D' = 88 K2D).
+epoch-120 weights (30-epoch cosine), <variant>F = full-size decay without factorization (the <variant>T epoch-120 state + 30-epoch cosine,
+88 FULL; the final model after the user decision 2026-11-22 00h), <variant>S = full-size screening run (50 epochs: 40 at 1e-4 + 10 cosine, as the 89 screening). Other names go to the 89 model (controls: 'L1S' = 65 C2MS-SP weights, 'K2D' = 88 K2D).
 B and C need the training sensor: Model(..., sensor=) or SENSOR['value'] (set by train.py / evaluate.py / run.py)."""
 import importlib.util
 import sys
@@ -46,6 +47,8 @@ FULL_SIZE = tuple(v + 'T' for v in VARIANTS)
 FACTORIZED = tuple(v + 'K' for v in VARIANTS)
 SOURCE = {v + 'K': v + 'T' for v in VARIANTS}
 ARMS = FULL_SIZE + FACTORIZED
+DECAY = tuple(v + 'F' for v in VARIANTS)  # full-size decay from the <v>T epoch-120 state (user decision 2026-11-22 00h: final model without factorization)
+DECAY_SOURCE = {v + 'F': v + 'T' for v in VARIANTS}
 SCREEN = tuple(v + 'S' for v in VARIANTS)  # 50-epoch full-size screening runs (user decision 2026-11-21 02h, as the 89 lambda screening)
 SENSOR = {'value': None}  # training sensor for the MTF kernels of B and C
 HALF = [.5, .305334091185, 0, -.072698593239, 0, .021809577942, 0, -.005192756653, 0, .000807762146, 0, -.000060081482]  # interp23tap
@@ -112,6 +115,6 @@ def apply_variant(m, variant, sensor):
 def Model(arm, bands=4, seed=42, sensor=None):
     sensor = sensor or SENSOR['value']
     if sensor is not None and P54.SENSORS[sensor]['bands'] != bands: raise ValueError(f'sensor {sensor} has not {bands} bands')
-    if arm in FULL_SIZE or arm in SCREEN: return apply_variant(to_2x2(M54.Model('C2MS', bands, seed)), arm[0], sensor)
+    if arm in FULL_SIZE or arm in SCREEN or arm in DECAY: return apply_variant(to_2x2(M54.Model('C2MS', bands, seed)), arm[0], sensor)
     if arm in FACTORIZED: return apply_variant(to_2x2(M83.Model('K2', bands, seed)), arm[0], sensor)
     return M89.Model(arm, bands, seed)
