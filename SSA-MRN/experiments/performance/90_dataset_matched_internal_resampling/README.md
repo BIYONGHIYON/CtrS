@@ -43,7 +43,9 @@
 
 **상태:** 계획입니다. 2026-11-20 사용자 결정으로 89번 B단계가 c\* = 0.25를 고른 뒤 서버에서 자동으로 시작했습니다(2026-11-21 02:11, [chain90.ps1](provenance/chain90.ps1)). 첫 사전 점검이 58번 점검 단계의 모델 생성에 학습 센서가 빠져 멈췄고, 고친 뒤 사전 점검부터 다시 실행했습니다([chain90_resume.ps1](provenance/chain90_resume.ps1)). 지금은 N 갈래(89번 확정)를 세 센서에서 학습하고 있습니다.
 
-**갈래 선별 방식 변경(2026-11-21 사용자 결정):** A·B·C는 150에폭 K2D 대신 89번 λ 탐색과 같은 50에폭 선별 학습(원래 크기 2×2 모델, 40에폭 1e-4 고정 + 10에폭 cosine, λ 1.2, c 0.25, `AS`·`BS`·`CS`)으로 고릅니다. N의 선별 대조군은 같은 조건으로 이미 학습한 89번 B단계 `BL1.20C0.25`입니다(같은 학습법·시드, 별도 실행이라 재현 차이 최대 0.03 dB). 실행 중인 컨트롤러는 그대로 두고 [block_abc.py](provenance/block_abc.py)가 150에폭 A·B·C 실행의 작업 잠금을 잡아, 컨트롤러는 N을 마치는 대로 멈춥니다. `run.py --mode screen`(같은 runtime, 별도 소스 사본)이 빈 칸부터 선별 학습을 돌리고, 컨트롤러가 남긴 N 작업(WV3 분해·감쇠·평가)을 마친 뒤 같은 선택 규칙으로 갈래를 고릅니다(`screen_selection.json`). A·B·C 중 하나가 뽑히면 `run.py --mode chosen`이 이어서 그 갈래를 K2D 150에폭으로 QB·GF2·WV3 seed 42에서 학습하고, 89번 확정(NK)과 validation·RR test(사영 포함)·WV2 전이(참고)로 비교합니다(`chosen_comparison.json`). N이 남으면 아무것도 학습하지 않습니다.
+**갈래 선별 방식 변경(2026-11-21 사용자 결정):** A·B·C는 150에폭 K2D 대신 89번 λ 탐색과 같은 50에폭 선별 학습(원래 크기 2×2 모델, 40에폭 1e-4 고정 + 10에폭 cosine, λ 1.2, c 0.25, `AS`·`BS`·`CS`)으로 고릅니다. N의 선별 대조군은 같은 조건으로 이미 학습한 89번 B단계 `BL1.20C0.25`입니다(같은 학습법·시드, 별도 실행이라 재현 차이 최대 0.03 dB). 실행 중인 컨트롤러는 그대로 두고 [block_abc.py](provenance/block_abc.py)가 150에폭 A·B·C 실행의 작업 잠금을 잡아, 컨트롤러는 N을 마치는 대로 멈춥니다. `run.py --mode screen`(같은 runtime, 별도 소스 사본)이 빈 칸부터 선별 학습을 돌리고, 컨트롤러가 남긴 N 작업(WV3 분해·감쇠·평가)을 마친 뒤 같은 선택 규칙으로 갈래를 고릅니다(`screen_selection.json`). A·B·C 중 하나가 뽑히면 `run.py --mode chosen`이 이어서 그 갈래를 K2D 150에폭으로 QB·GF2·WV3 seed 42에서 학습하고, 89번 확정(NK)과 validation·RR test(사영 포함)·WV2 전이(참고)로 비교합니다(`chosen_comparison.json`). N이 남으면 아무것도 학습하지 않습니다. 선별 결과 갈래 C가 뽑혀(세 센서 평균 +0.016 dB) 2026-11-21 18:34부터 C를 150에폭으로 학습하고 있습니다.
+
+**최종 모델 3시드(2026-11-21 사용자 결정):** `run.py --mode final`(네 번째 소스 사본, 같은 runtime)이 고른 갈래를 K2D 150에폭으로 seed 43·44 × QB·GF2·WV3에서 학습합니다(seed 42는 `chosen`). `chosen`이 마지막 1단계(WV3)를 돌리기 시작하면 남는 한 칸부터 쓰고, 서버 전체 작업 수는 두 개를 넘지 않습니다. 끝나면 같은 시드 C2MS-SP·C2MS-SP-Lite(둘 다 사영 포함)와 시드별로 짝지어 RR test 3시드 평균을 비교합니다(v2.4 3시드 문턱 0.04 dB, 보고용, WV2 전이·FR 참고, `final_summary.json`). 기준 모델 교체는 이 결과를 보고 사용자가 정합니다.
 
 **중단 규칙(89번과 같음, PSNR 문턱 없음):** 프로세스 오류, 끝나지 않은 실행, validation 이상(best 에폭 0, 유한하지 않은 값) 중 하나라도 생기면 새 학습을 띄우지 않고, 돌고 있는 학습은 마치게 둔 뒤 `stopped.json`을 남기고 멈춥니다.
 
@@ -95,7 +97,7 @@
 - [model.py](model.py): 갈래별 내부 축소·확대 연산(`Interp23`, `Up23`, `MTFDown`)과 갈래 이름(`<v>T`·`<v>K`)
 - [train.py](train.py): 89번 학습기에 K2D 일정과 89번 손실 계수를 적용
 - [evaluate.py](evaluate.py): RR·FR test와 WV2 전이 평가(보고용)
-- [run.py](run.py): `prepare` → `optimize` → `run`(학습 → 분해 → 학습 → 평가), `screen`(50에폭 선별과 갈래 선택), `chosen`(고른 갈래 150에폭과 89번 확정 비교), 중단 규칙
+- [run.py](run.py): `prepare` → `optimize` → `run`(학습 → 분해 → 학습 → 평가), `screen`(50에폭 선별과 갈래 선택), `chosen`(고른 갈래 150에폭과 89번 확정 비교), `final`·`finalctrl`(최종 모델 seed 43·44와 3시드 비교), 중단 규칙
 - [chain90.ps1](provenance/chain90.ps1)·[chain90_resume.ps1](provenance/chain90_resume.ps1): 89번 B단계 뒤 자동 시작과 사전 점검 수정 뒤 재시작
 - [block_abc.py](provenance/block_abc.py): 150에폭 A·B·C 실행 차단
 

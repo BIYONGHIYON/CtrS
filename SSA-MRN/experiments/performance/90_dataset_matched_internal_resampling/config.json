@@ -69,7 +69,8 @@
   "definition": "sum of run wall times / 2 (two concurrent runs); 88/89 concurrent epoch times QB 134 s, GF2 156 s, WV3 98 s",
   "N": 8.5,
   "screening": 8.5,
-  "chosen_150": 9
+  "chosen_150": 9,
+  "final_seeds_43_44": 15.5
  },
  "limits": [
   "single seed 42; the 3-seed judgement is done once on the final model",
@@ -178,5 +179,24 @@
   "mechanism": "the sealed controller keeps training N (the 89 confirmation); provenance/block_abc.py holds the worker locks of AT/BT/CT so the controller stops at its first A/B/C trunk; run.py --mode screen (separate copy of the tree, same runtime) uses the free slot, then finishes the N jobs the controller left (factorize + NK + evaluation) and the screening runs",
   "next": "final model: the chosen variant with the K2D 150-epoch recipe, seeds 42, 43, 44 (if N: seeds 43, 44; seed 42 is the 89 confirmation)",
   "after": "user decision 2026-11-21 03h: if A, B or C is chosen, run.py --mode chosen (third copy of the tree, same runtime) trains it with the K2D 150-epoch recipe on GF2, QB, WV3 seed 42 and compares <v>K with the 89 confirmation NK (validation, RR test with projection, WV2 transfer reference) -> chosen_comparison.json; if N is chosen nothing is trained"
+ },
+ "controls_final": {
+  "c2ms_sp": {
+   "QB": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt",
+   "GF2": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s<seed>/best.pt",
+   "WV3": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s<seed>/best.pt"
+  },
+  "lite": {
+   "QB": "experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_QB_s<seed>/best.pt",
+   "GF2": "experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_GF2_s<seed>/best.pt",
+   "WV3": "experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_WV3_s<seed>/best.pt"
+  }
+ },
+ "final": {
+  "decision": "user 2026-11-21 23h: after the chosen variant (seed 42), train it with the K2D 150-epoch recipe on seeds 43 and 44 and judge the 3-seed final model",
+  "runs": "<v>T -> factorize -> <v>K -> evaluation, GF2, QB, WV3, seeds 43 and 44 (seed 42 = run.py --mode chosen)",
+  "comparison": "paired by seed against C2MS-SP (65 C2MS_L1S) and C2MS-SP-Lite (83 K2), both with the projection; RR test, v2.4 3-seed threshold 0.04 dB (report); WV2 transfer (82 calibration) and FR QNR reference",
+  "scheduling": "run.py --mode final from a fourth copy of the tree, same runtime; fills the slot left free once the chosen runner runs its last trunk; the server-wide job count stays at most max_parallel",
+  "replacement": "the baseline replacement is a user decision after the 3-seed result"
  }
 }

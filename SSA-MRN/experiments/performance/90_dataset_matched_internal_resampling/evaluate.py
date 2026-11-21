@@ -94,17 +94,39 @@ def control_rows(cfg,sensor,target,seed):
 def deltas(a,b):return {k:a[k]-b[k] for k in ('PSNR','SAM','ERGAS')}
 
 
+def final_control_rows(cfg,sensor,target,seed):
+    """Final-model controls of (sensor, target, seed): C2MS-SP (65 C2MS_L1S) and C2MS-SP-Lite (83 K2), with and without projection,
+    cached in runtime/controls/final_*.json. The paths come from config.json controls_final (the sealed runtime config predates them)."""
+    p=Path(cfg['runtime'])/'controls'/f'final_{sensor}_{target}_s{seed}.json'
+    if p.exists():return json.loads(p.read_text(encoding='utf8'))
+    conf=json.loads((HERE/'config.json').read_text(encoding='utf8'))['controls_final']
+    setup(seed);models={};weights={}
+    for name,arm,key in (('C2MS-SP','L1S','c2ms_sp'),('C2MS-SP-Lite','K2','lite')):
+        net,weights[name]=load(HERE.parents[2]/conf[key][sensor].replace('<seed>',str(seed)),arm,sensor,seed);models.update(systems(net,sensor,target,name))
+    rows,means=rows_for(cfg,target,models,[n for n in models if n.endswith(' + P')])
+    rec=dict(time_kst=now(),sensor=sensor,target=target,seed=seed,weights=weights,means=means,rows=rows,projection='86 FastProjectedV2 K10',
+             calibration='82 scene' if target!=sensor else None)
+    write(p,rec);return rec
+
+
 def evaluate(cfg,sensor,arm,seed):
+    """RR/FR test of <v>K. Seed 42: against the cached C2MS-SP and 88 K2D controls (as before). Other seeds (final model): against
+    C2MS-SP and C2MS-SP-Lite of the same seed (there is no 88 K2D for seeds 43 and 44)."""
     setup(seed);set_impl(cfg);dest=Path(cfg['runtime'])/'runs'/run_name(sensor,arm,seed);done=dest/'evaluation_complete.json'
     if done.exists():return
     if arm not in M.FACTORIZED:raise ValueError('only the factorized final models are evaluated: '+arm)
     if not (dest/'training_complete.json').exists():raise RuntimeError('training incomplete')
     net,w=load(dest/'checkpoints/best.pt',arm,sensor,seed);out={}
     for target in [sensor]+TRANSFER.get(sensor,[]):
-        ctrl=control_rows(cfg,sensor,target,seed);models=systems(net,sensor,target,arm)
-        rows,means=rows_for(cfg,target,models,[arm+' + P'])
-        cmp={'P_vs_88_K2D_P':deltas(means[arm+' + P']['RR'],ctrl['means']['88 K2D + P']['RR']),'P_vs_C2MS_SP':deltas(means[arm+' + P']['RR'],ctrl['means']['C2MS-SP + P']['RR']),
-             'raw_vs_88_K2D_raw':deltas(means[arm]['RR'],ctrl['means']['88 K2D']['RR'])}
+        models=systems(net,sensor,target,arm);rows,means=rows_for(cfg,target,models,[arm+' + P'])
+        if seed==42:
+            ctrl=control_rows(cfg,sensor,target,seed)
+            cmp={'P_vs_88_K2D_P':deltas(means[arm+' + P']['RR'],ctrl['means']['88 K2D + P']['RR']),'P_vs_C2MS_SP':deltas(means[arm+' + P']['RR'],ctrl['means']['C2MS-SP + P']['RR']),
+                 'raw_vs_88_K2D_raw':deltas(means[arm]['RR'],ctrl['means']['88 K2D']['RR'])}
+        else:
+            ctrl=final_control_rows(cfg,sensor,target,seed)
+            cmp={'P_vs_C2MS_SP':deltas(means[arm+' + P']['RR'],ctrl['means']['C2MS-SP + P']['RR']),'P_vs_Lite_P':deltas(means[arm+' + P']['RR'],ctrl['means']['C2MS-SP-Lite + P']['RR']),
+                 'raw_vs_65_raw':deltas(means[arm]['RR'],ctrl['means']['C2MS-SP']['RR'])}
         write(dest/'evaluation'/f'{target}_test.json',dict(time_kst=now(),sensor=sensor,target=target,arm=arm,seed=seed,weights=w,means=means,rows=rows,
               controls=ctrl['means'],delta_RR=cmp,role='judgement target (report)' if target==sensor else 'transfer, reference only',note='test measured and reported only; never used for selection'))
         out[target]=dict(means=means,delta_RR=cmp)
