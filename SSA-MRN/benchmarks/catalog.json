@@ -7,7 +7,7 @@
     "commit": "평가에 쓴 공식 코드 커밋 (upstream 하위 모듈과 같아야 함)",
     "license": "공식 코드·저자 가중치 라이선스, 재배포 가능 여부",
     "evaluator": "실제 평가자 (확인되지 않으면 확인 필요)",
-    "settings": "평가한 설정: author / retrain",
+    "settings": "평가한 설정: author / retrain / zeroshot (학습 없이 생성, 생성형 이미지 모델)",
     "epochs": "retrain 학습 에폭과 출처 (논문 / 공식 코드 / 미공개라 C2MS-SP와 같은 150)",
     "sensors": "평가한 센서 (WV2는 WV3 가중치 전이, 참고)",
     "seeds": "설정별 평가 시드",
@@ -18,7 +18,8 @@
     "config": "config.json 경로",
     "summary": "results/summary.json 경로",
     "manifest": "manifest.json 경로",
-    "last_checked": "마지막 확인 시각 (KST, ISO 8601)"
+    "last_checked": "마지막 확인 시각 (KST, ISO 8601)",
+    "bands": "채점 밴드: 없으면 전체, rgb면 R·G·B 3밴드만 (생성형 이미지 모델)"
   },
   "models": {
     "u2net": {
@@ -196,6 +197,195 @@
           "Q8": 0.921
         }
       }
+    },
+    "fusionnet": {
+      "display_name": "FusionNet",
+      "paper": "Deng et al. Detail Injection-based Deep Convolutional Neural Networks for Pansharpening. IEEE TGRS.",
+      "code": "https://github.com/liangjiandeng/DLPan-Toolbox",
+      "commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+      "license": "공식 코드 GPL-3.0; 저자 가중치의 재배포 조건과 학습 분할 확인 필요",
+      "evaluator": "김윤지",
+      "settings": [
+        "author",
+        "retrain"
+      ],
+      "epochs": "GF2 400 (DLPan 공식 기본값), seed 42",
+      "sensors": {
+        "author": [
+          "QB",
+          "WV3",
+          "WV2"
+        ],
+        "retrain": [
+          "GF2"
+        ]
+      },
+      "seeds": {
+        "author": null,
+        "retrain": [
+          42
+        ]
+      },
+      "status": "평가 완료",
+      "status_scope": "네 센서 RR MATLAB·FR Python·고정 6장면 이미지 완료; 저자 가중치 학습 분할 미확인",
+      "vs_c2ms_sp": {
+        "note": "GF2는 seed 42 대조, 저자 가중치는 시드 미공개로 C2MS-SP 3시드 평균과 비교",
+        "author_QB": {
+          "PSNR": -6.887680690808953
+        },
+        "retrain_GF2_s42": {
+          "PSNR": -3.1855978326151586
+        },
+        "author_WV3": {
+          "PSNR": -6.154113523844856
+        },
+        "author_WV2": {
+          "PSNR": -4.477607162885867
+        }
+      },
+      "report": "SSA-MRN/benchmarks/fusionnet/README.md",
+      "config": "SSA-MRN/benchmarks/fusionnet/config.json",
+      "manifest": "SSA-MRN/benchmarks/fusionnet/manifest.json",
+      "last_checked": "2026-11-19",
+      "vs_c2ms": {
+        "author_QB": {
+          "PSNR": -6.788263734771784,
+          "note": "FusionNet 저자 가중치와 C2MS seed 42, MATLAB band mean, peak 2047; 동일 시드 쌍 아님"
+        }
+      }
+    },
+    "gpt_image_2_6": {
+      "display_name": "GPT Image 2.6 Sunburst",
+      "paper": "OpenAI 이미지 생성 모델 (논문 없음, 서비스 표시 출시일 2026-11-05)",
+      "license": "비공개 상용 모델, 가중치 없음; 출력 이미지 사용은 서비스 약관을 따름",
+      "code": "없음 (상용 서비스 모델, 동국 AI CHAT API Gateway)",
+      "commit": null,
+      "evaluator": "센서별 담당 (#209 QB · #210 GF2 · #211 WV3 · #212 WV2), 미정",
+      "settings": [
+        "zeroshot"
+      ],
+      "epochs": "학습 없음 (zero-shot 생성, 단일 실행)",
+      "sensors": {
+        "zeroshot": [
+          "QB",
+          "GF2",
+          "WV3",
+          "WV2"
+        ]
+      },
+      "seeds": {
+        "zeroshot": null
+      },
+      "bands": "rgb",
+      "status": "계획",
+      "status_scope": "API 생성 진행 중(QB 장면 0 완료), MATLAB RGB 채점 전",
+      "issues": [
+        209,
+        210,
+        211,
+        212
+      ],
+      "inputs_release": "genimage-inputs",
+      "last_checked": "2026-11-20T21:30:00+09:00",
+      "predictions_release": "predictions-benchmarks-gpt_image_2_6-zeroshot",
+      "report": "SSA-MRN/benchmarks/gpt_image_2_6/README.md",
+      "settings_detail": "1024x1024, quality high, background opaque (장당 약 70 크레딧, QB 장면 0 실제 70.45)"
+    },
+    "nano_banana_2_1": {
+      "display_name": "Nano Banana 2.1",
+      "paper": "Google Gemini 이미지 생성 모델 (논문 없음, 서비스 표시 출시일 2026-10-06)",
+      "license": "비공개 상용 모델, 가중치 없음; 출력 이미지 사용은 서비스 약관을 따름",
+      "code": "없음 (상용 서비스 모델, 동국 AI CHAT API Gateway)",
+      "commit": null,
+      "evaluator": "센서별 담당 (#209 QB · #210 GF2 · #211 WV3 · #212 WV2), 미정",
+      "settings": [
+        "zeroshot"
+      ],
+      "epochs": "학습 없음 (zero-shot 생성, 단일 실행)",
+      "sensors": {
+        "zeroshot": [
+          "QB",
+          "GF2",
+          "WV3",
+          "WV2"
+        ]
+      },
+      "seeds": {
+        "zeroshot": null
+      },
+      "bands": "rgb",
+      "status": "계획",
+      "status_scope": "API 생성 진행 중(QB 장면 0 완료), MATLAB RGB 채점 전",
+      "issues": [
+        209,
+        210,
+        211,
+        212
+      ],
+      "inputs_release": "genimage-inputs",
+      "last_checked": "2026-11-20T21:30:00+09:00",
+      "predictions_release": "predictions-benchmarks-nano_banana_2_1-zeroshot",
+      "report": "SSA-MRN/benchmarks/nano_banana_2_1/README.md",
+      "settings_detail": "image_size 1K, aspect_ratio 1:1 (장당 37 크레딧)"
+    },
+    "genimage_identity": {
+      "display_name": "변환 한계 대조군 (생성형 이미지 모델 시험)",
+      "paper": "모델 없음: 1번 입력 이미지(LMS RGB)를 그대로 되돌린 결과",
+      "code": "SSA-MRN/common/genimage_io.py identity",
+      "commit": null,
+      "license": "해당 없음",
+      "evaluator": "이병현",
+      "settings": [
+        "zeroshot"
+      ],
+      "epochs": "학습 없음",
+      "sensors": {
+        "zeroshot": [
+          "QB",
+          "GF2",
+          "WV3",
+          "WV2"
+        ]
+      },
+      "seeds": {
+        "zeroshot": null
+      },
+      "bands": "rgb",
+      "status": "평가 완료",
+      "status_scope": "RR test 네 센서 RGB 3밴드 실제 MATLAB 채점, 정답 없는 지표",
+      "matlab_rgb": {
+        "QB": {
+          "PSNR": 29.216,
+          "SAM": 4.0318,
+          "ERGAS": 10.8878
+        },
+        "GF2": {
+          "PSNR": 37.953,
+          "SAM": 1.0331,
+          "ERGAS": 2.2394
+        },
+        "WV3": {
+          "PSNR": 29.225,
+          "SAM": 2.4074,
+          "ERGAS": 6.6941
+        },
+        "WV2": {
+          "PSNR": 27.695,
+          "SAM": 3.3521,
+          "ERGAS": 6.947
+        }
+      },
+      "predictions_release": "predictions-benchmarks-genimage_identity-zeroshot",
+      "inputs_release": "genimage-inputs",
+      "issues": [
+        209,
+        210,
+        211,
+        212
+      ],
+      "report": "SSA-MRN/benchmarks/genimage_identity/README.md",
+      "summary": "SSA-MRN/benchmarks/genimage_identity/results/matlab_summary.json",
+      "last_checked": "2026-11-20T17:30:00+09:00"
     }
   }
 }

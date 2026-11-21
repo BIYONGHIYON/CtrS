@@ -1,0 +1,349 @@
+{
+ "model": "gpt_image_2_6",
+ "model_id": "gpt-image-2.6-sunburst",
+ "sensor": "WV3",
+ "inputs_zip_sha256": "7276e4c5c380c08878bcec080255f2846e246c272ab455a90dafcefc64b72618",
+ "source": "Dongguk AI CHAT image page (aichat.dongguk.edu, web UI), not the API; same settings as the #209 decision",
+ "settings": {
+  "model": "gpt-image-2.6-sunburst",
+  "number_of_images": 1,
+  "size": "1024x1024",
+  "quality": "high",
+  "background": "opaque"
+ },
+ "ui_settings": {
+  "이미지_개수": "1장",
+  "이미지_크기": "1024x1024",
+  "품질": "높음",
+  "배경": "불투명"
+ },
+ "prompt": "Edit the first image. Both images show the same satellite scene and are exactly aligned pixel to pixel.\nThe first image is a low-resolution multispectral color image: blurry, but its colors are correct.\nThe second image is a high-resolution panchromatic (grayscale) image of the same area: sharp, but without color.\n\nTask: pansharpening. Make the first image as sharp as the second image while keeping the colors of the first image.\n\nRules:\n- Keep the exact framing, scale and geometry. Do not crop, rotate, shift, zoom, mirror or reframe. Every object must stay at the same pixel position as in both inputs.\n- Take edges, textures and fine structures only from the second image. Do not add, remove or invent any building, road, vehicle, tree, boat, field pattern or texture that is not visible in the second image.\n- Take colors only from the first image. Keep its overall brightness and color balance. Do not increase saturation or contrast, and do not apply any artistic style, haze removal, color grading or sharpening halos.\n- Output a single square (1:1) top-down satellite photograph, 1024×1024, with no text, labels, borders or watermarks.",
+ "notes": [
+  "started: server creation time taken from the service file name (UTC) converted to KST",
+  "credits_shown: cost displayed on the generate button with both reference images attached; the charged amount was not read back",
+  "reference images: image 1 (MS) then image 2 (PAN) from genimage_inputs_WV3.zip; prompt optimisation off",
+  "single execution: every scene was generated once, no regeneration (no refusal, unrelated picture or non-square output)"
+ ],
+ "attempts": [
+  {
+   "scene": 0,
+   "attempt": 0,
+   "started": "2026-11-20T20:48:20+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_114820_543fede9155d7796a565eed85fbb97d6.png",
+   "picture": "gpt_image_2_6_WV3_00.png",
+   "picture_sha256": "67db2c78a12f8127ef105463d2c1ef4f20218b070f003b59adb6539aa0ccb80b"
+  },
+  {
+   "scene": 1,
+   "attempt": 0,
+   "started": "2026-11-20T20:57:59+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_115759_410a1d6a4a6f54f2d029bf3b9115b74e.png",
+   "picture": "gpt_image_2_6_WV3_01.png",
+   "picture_sha256": "df2ef0616a0bd8bced331a335c6185d359b8450fb9c8fbd2829369b1bbfec36e"
+  },
+  {
+   "scene": 2,
+   "attempt": 0,
+   "started": "2026-11-20T21:09:46+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_120946_95078bff3dfa62683883dd73bcc414aa.png",
+   "picture": "gpt_image_2_6_WV3_02.png",
+   "picture_sha256": "da38b1801bc4815b0f305981fc7aada76e7b78852f7eac1af0fe0ad2db22f99a"
+  },
+  {
+   "scene": 3,
+   "attempt": 0,
+   "started": "2026-11-20T21:12:32+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_121232_556e95fa060aa847ec45fa81e99672e7.png",
+   "picture": "gpt_image_2_6_WV3_03.png",
+   "picture_sha256": "1c4172b52c8ed0dafe44ee13ebc59a26f969520b1096c5222099d49b0f549ff2"
+  },
+  {
+   "scene": 4,
+   "attempt": 0,
+   "started": "2026-11-20T21:15:46+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_121546_15cd547873b69e78880b8744a1e5aacb.png",
+   "picture": "gpt_image_2_6_WV3_04.png",
+   "picture_sha256": "cef12719e3f4954c2d1a8e7d61a94f0d18963a0b889d1dc0060cfd3fcfbeef9e"
+  },
+  {
+   "scene": 5,
+   "attempt": 0,
+   "started": "2026-11-20T21:16:45+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_121645_a26105b057778416010db9bff449d65a.png",
+   "picture": "gpt_image_2_6_WV3_05.png",
+   "picture_sha256": "e4b36eb9a0a5043098d99d4c1cc375faa5668b0ffd4f16ba2f1bda1a682d18e4"
+  },
+  {
+   "scene": 6,
+   "attempt": 0,
+   "started": "2026-11-20T21:17:37+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_121737_0a7df784474492eccb306050dc8fe5b0.png",
+   "picture": "gpt_image_2_6_WV3_06.png",
+   "picture_sha256": "bad21f4f91e9c67e65a8de54618749945fa337a480c6adc81bdfcb24dd042cd6"
+  },
+  {
+   "scene": 7,
+   "attempt": 0,
+   "started": "2026-11-20T21:18:32+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_121832_69a545879b949614823987ced2154e0b.png",
+   "picture": "gpt_image_2_6_WV3_07.png",
+   "picture_sha256": "c88eefab985b37889eca6ea4b0bbc781b50ac6d93d40e40476a7bdc8a212fb1d"
+  },
+  {
+   "scene": 8,
+   "attempt": 0,
+   "started": "2026-11-20T21:19:24+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_121924_ce896b53cc11819cb965e1b56f9b5f39.png",
+   "picture": "gpt_image_2_6_WV3_08.png",
+   "picture_sha256": "e63372d780beecca11653d2159016c1c68e886ee8fd47febd810b543ba748316"
+  },
+  {
+   "scene": 9,
+   "attempt": 0,
+   "started": "2026-11-20T21:20:24+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_122024_c7d372c2f3e027abebf161535e5c33c3.png",
+   "picture": "gpt_image_2_6_WV3_09.png",
+   "picture_sha256": "e28472e72201070c28a6294b7545343cce6371cf760e93e94b42f57422636a9f"
+  },
+  {
+   "scene": 10,
+   "attempt": 0,
+   "started": "2026-11-20T21:21:30+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_122130_6d2610b3afaca7a93930ba69dbaca5f3.png",
+   "picture": "gpt_image_2_6_WV3_10.png",
+   "picture_sha256": "cee08a8e26ded43af5abab9694dea6059b14d523141b4663ec59380fa27b04a9"
+  },
+  {
+   "scene": 11,
+   "attempt": 0,
+   "started": "2026-11-20T21:22:29+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_122229_a6c02ab2a0371032a27be5bca61fc1a2.png",
+   "picture": "gpt_image_2_6_WV3_11.png",
+   "picture_sha256": "6842c7be792c03daebbef3ab683702c19f4724f457d89a7050088b96aafc9385"
+  },
+  {
+   "scene": 12,
+   "attempt": 0,
+   "started": "2026-11-20T21:23:29+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_122329_53eeeec645aceae8f06592351cb9ed92.png",
+   "picture": "gpt_image_2_6_WV3_12.png",
+   "picture_sha256": "f9834ee99a5bfb5c5bf05ef00e8b9a3ff4adf835171fadcc10ab119fd290bf61"
+  },
+  {
+   "scene": 13,
+   "attempt": 0,
+   "started": "2026-11-20T21:24:28+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_122428_eeacdcba9d217cbab49ee3d21e5bbbaf.png",
+   "picture": "gpt_image_2_6_WV3_13.png",
+   "picture_sha256": "8c666252e350078321731e0f8aa183d39ef4a8b1bda196970dab562376da4b2a"
+  },
+  {
+   "scene": 14,
+   "attempt": 0,
+   "started": "2026-11-20T21:25:36+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_122536_d16c5227d957c4c9810087fb2998f68b.png",
+   "picture": "gpt_image_2_6_WV3_14.png",
+   "picture_sha256": "8947921f934d4f8d1c6a10d914552029f7190801c629555d971c21768f648727"
+  },
+  {
+   "scene": 15,
+   "attempt": 0,
+   "started": "2026-11-20T21:26:39+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_122639_7651d3a511b2d6142ced32e379bc6fd5.png",
+   "picture": "gpt_image_2_6_WV3_15.png",
+   "picture_sha256": "2d7be0793a100615b93345570b7a7a82982289ac8bf09be933e8185ec96e4c7e"
+  },
+  {
+   "scene": 16,
+   "attempt": 0,
+   "started": "2026-11-20T21:27:41+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_122741_1d99a99f84d706fcf0e2013e00747064.png",
+   "picture": "gpt_image_2_6_WV3_16.png",
+   "picture_sha256": "c4b834694e9de07a684b6b98bc21803e1ba253ccef41cba4b229aa5531567524"
+  },
+  {
+   "scene": 17,
+   "attempt": 0,
+   "started": "2026-11-20T21:28:44+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_122844_3f1a39a10ff21707d8583e5c8c61f959.png",
+   "picture": "gpt_image_2_6_WV3_17.png",
+   "picture_sha256": "ffb44064f4451f2d76f079be76faad8c2d5c4d1585ca5a4ceebf1db99f8daa43"
+  },
+  {
+   "scene": 18,
+   "attempt": 0,
+   "started": "2026-11-20T21:29:45+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_122945_e0429f77ec1dc68ff756963491fffed1.png",
+   "picture": "gpt_image_2_6_WV3_18.png",
+   "picture_sha256": "434fd7769bdda2368f768f445437c3b79366bfa6f9664e24fb0a8298b6a1367a"
+  },
+  {
+   "scene": 19,
+   "attempt": 0,
+   "started": "2026-11-20T21:30:48+0900",
+   "credits_shown": 69,
+   "response_id": null,
+   "size": [
+    1024,
+    1024
+   ],
+   "format": "PNG",
+   "status": "ok",
+   "service_file": "20261120_123048_22e5cacb10606f149d2d1d4b4f70cd99.png",
+   "picture": "gpt_image_2_6_WV3_19.png",
+   "picture_sha256": "6d3e72d0e9aa86324a36995726bb2468fa56108934559e142d87be9482202315"
+  }
+ ]
+}

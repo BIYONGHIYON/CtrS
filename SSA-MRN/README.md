@@ -55,7 +55,7 @@ python -m pip install -r SSA-MRN/requirements.txt
 
 ## 새 실험
 
-1. 최신 main과 열린 PR에서 번호를 확인하고 `experiments/performance/<번호>_<변경명>/`을 만듭니다.
+1. 최신 main, 열린 PR, 진행 중인 원격 브랜치에서 번호를 확인하고 작업 브랜치에 `experiments/performance/<번호>_<변경명>/`을 만듭니다.
 2. [양식](docs/experiment_template.md)으로 `README.md`를 쓰고 `experiments/catalog.json`에 **계획** 상태로 등록합니다.
 3. 실험 표를 다시 만듭니다.
 
@@ -65,6 +65,7 @@ python SSA-MRN/common/index.py
 
 4. 학습·평가는 실험 폴더의 `run.py --help`, `prepare.py --help`를 따릅니다. 실행 중인 checkout에 새 코드를 덮어쓰지 않습니다.
 5. 결과가 나오면 catalog의 `status`·`improvement`·`result`를 고치고 3번을 다시 실행합니다.
+6. 결과 보관·검증까지 끝나 병합만 남았을 때 PR을 만듭니다. 그 전에는 브랜치에 커밋·푸시만 합니다.
 
 catalog 항목의 필수 값은 `display_name`, `experimenter`, `status`, `improvement`, `result`(한 줄, 100자 이내)입니다.
 

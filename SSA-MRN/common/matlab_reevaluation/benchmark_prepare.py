@@ -6,6 +6,10 @@ output_mulExm_<i>.mat with key 'sr'). The exact original RR test file is downloa
 (data_files), each scene is written as fused/lms/ms/pan/reference (H x W x C, DN) for score_suite.m, and the same arrays are scored
 with the CtrS Python metrics (common/metrics) so that MATLAB and Python can be compared on identical inputs.
 
+--bands rgb scores 3-band predictions (generative image models, issues #209-212; common/genimage_io.py): the reference, LMS
+and MS are cut to the RGB bands in R,G,B order (QB/GF2 [2,1,0], WV3/WV2 [4,2,1]) and the same score_suite.m is used. DLPan
+q2n pads 3 bands with one zero band to Q4; common/metrics.q2n does the same.
+
 python SSA-MRN/common/matlab_reevaluation/benchmark_prepare.py --model cannet --setting author --sensor QB \
     --predictions pred/QB --data /tmp/pancollection --out evaluation
 """
@@ -26,6 +30,7 @@ sys.path.insert(0, str(HERE.parents[1]))
 from common.metrics import rr_metrics  # noqa: E402
 
 BANDS = {'QB': 4, 'GF2': 4, 'WV3': 8, 'WV2': 8}
+RGB = {'QB': [2, 1, 0], 'GF2': [2, 1, 0], 'WV3': [4, 2, 1], 'WV2': [4, 2, 1]}
 
 
 def scene_files(folder):
@@ -53,6 +58,7 @@ def main():
     p.add_argument('--key', default='sr', help='variable name of the prediction in each .mat (CANConv: sr)')
     p.add_argument('--data', type=Path, required=True, help='download cache for the original test files')
     p.add_argument('--out', type=Path, required=True)
+    p.add_argument('--bands', choices=('all', 'rgb'), default='all', help='rgb: score R,G,B only (3-band predictions)')
     a = p.parse_args()
     spec = data_files(a.sensor)['RR']
     rr_file = download(spec, a.data / spec['name'])
@@ -63,16 +69,19 @@ def main():
         if len(h['gt']) != 20: raise ValueError('full RR20 required')
         for i, src in enumerate(scene_files(a.predictions)):
             s = {k: np.asarray(h[k][i], dtype=np.float64) for k in ('gt', 'pan', 'lms', 'ms')}
+            if s['gt'].shape[0] != BANDS[a.sensor]: raise ValueError(f'scene {i}: {s["gt"].shape[0]} reference bands')
+            if a.bands == 'rgb': s.update({k: s[k][RGB[a.sensor]] for k in ('gt', 'lms', 'ms')})
             fused = load_fused(src, a.key)
             c, hh, ww = s['gt'].shape
-            if c != BANDS[a.sensor] or fused.shape != (hh, ww, c): raise ValueError(f'scene {i}: prediction {fused.shape} vs reference {(hh, ww, c)}')
+            if fused.shape != (hh, ww, c): raise ValueError(f'scene {i}: prediction {fused.shape} vs reference {(hh, ww, c)}')
             if not np.isfinite(fused).all(): raise FloatingPointError(f'scene {i}: nonfinite prediction')
             records.append(dict(protocol='RR', scene=i, python=rr_metrics(s['gt'], fused.transpose(2, 0, 1)), source=src.name, source_sha256=sha(src)))
             path = out / 'predictions' / f'RR_{i:02}.mat'
             savemat(path, dict(fused=fused, lms=s['lms'].transpose(1, 2, 0), ms=s['ms'].transpose(1, 2, 0),
                                pan=s['pan'].transpose(1, 2, 0), reference=s['gt'].transpose(1, 2, 0)), do_compression=False)
             files.append(dict(protocol='RR', scene=i, file='predictions/' + path.name, sha256=sha(path)))
-    case = dict(id=f'{a.model}_{a.setting}_{a.sensor}', model=a.model, setting=a.setting, sensor=a.sensor, experiment='benchmark')
+    case = dict(id=f'{a.model}_{a.setting}_{a.sensor}', model=a.model, setting=a.setting, sensor=a.sensor, experiment='benchmark',
+                bands=a.bands, band_indices=RGB[a.sensor] if a.bands == 'rgb' else list(range(BANDS[a.sensor])))
     write(out / 'prediction_manifest.json', dict(case=case, files=files, scenes=20, peak=peak, bits=bits, ratio=4, block=32,
           dlpan_commit=DLPAN_REV, data=dict(RR=dict(spec, sha256_checked=sha(rr_file))),
           inference='made elsewhere (see the model report); this step only reads the saved predictions',

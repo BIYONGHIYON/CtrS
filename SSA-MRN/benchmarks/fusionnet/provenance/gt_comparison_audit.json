@@ -1,0 +1,71 @@
+{
+  "viewer_archive_sha256": "c3656d3c69b472000ddeb9527a3ed3f796f3bf29c0b6f064540921b8f74c4714",
+  "comparison": "C2MS-SP viewer gt.i16 (CHW, divided by 8) versus MATLAB test H5 gt for each scene",
+  "max_abs_difference_DN": {
+    "QB": 0.0,
+    "GF2": 0.0,
+    "WV3": 0.0,
+    "WV2": 0.0
+  },
+  "scenes_per_sensor": 20,
+  "test_h5_sha256": {
+    "QB": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+    "WV3": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+    "WV2": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b",
+    "GF2": "709a9a53b2e0f29d3dcd5c6ca4410c2913b62cc03c104fed6c049911dbe1c8ea"
+  },
+  "limitation": "GT equality is confirmed; matching original H5 hash for the viewer-generation run and PAN, MS, LMS equality are not confirmed.",
+  "qb_python_input_check": {
+    "peak": 2047,
+    "psnr_mean_fusionnet": 31.485494520212416,
+    "psnr_mean_lms": 28.368909545643447,
+    "sam_mean_fusionnet": 7.371900667998832,
+    "sam_mean_lms": 8.557396621101043
+  },
+  "pan_ms_max_abs_difference_DN": {
+    "QB": {
+      "pan": 0.0625,
+      "ms": 0.0625
+    },
+    "GF2": {
+      "pan": 0.0625,
+      "ms": 0.0625
+    },
+    "WV3": {
+      "pan": 0.0625,
+      "ms": 0.0625
+    },
+    "WV2": {
+      "pan": 0.0625,
+      "ms": 0.0625
+    }
+  },
+  "pan_ms_note": "20 images, 1/8 DN viewer values vs test H5, bounded by 0.0625 DN; LMS not stored in viewer",
+  "author_reinference": {
+    "source_commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+    "device": "CPU",
+    "scene_indices": [
+      0,
+      1,
+      2
+    ],
+    "mean_absolute_error_DN": {
+      "QB": [
+        2.178732183444332e-05,
+        2.219726567398439e-05,
+        3.8935777399773386e-05
+      ],
+      "WV3": [
+        3.087382411570694e-05,
+        5.2630862987790294e-05,
+        4.285647380930513e-05
+      ],
+      "WV2": [
+        0.00022801820110596172,
+        0.00027293404839134894,
+        0.0002747563226055405
+      ]
+    },
+    "limitation": "Three scenes only; does not establish author training split."
+  }
+}
