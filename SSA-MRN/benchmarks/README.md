@@ -12,6 +12,7 @@
 
 | 모델 | 출처·학습 조건 | 확인된 결과 | 상태 |
 |---|---|---|:---:|
+| [ADWM](adwm/README.md)<br>[김경찬] | CVPR 2025 · `author` WV3 저자 가중치(WV2 전이) · `retrain` QB 200·GF2 500에폭(논문) seed 42 · Kaggle T4 · 실제 MATLAB 채점 예정 | 아직 평가하지 않음. 논문 QB RR PSNR 38.466 | 계획 |
 | GPT Image 2.6 Sunburst<br>[센서별 담당 미정] | 생성형 이미지 모델 · `zeroshot` 학습 없이 생성(단일 실행) · 동국 AI CHAT · RGB 3밴드 실제 MATLAB 채점 예정 | API 생성 진행 중. 공통 입력·채점 준비 완료([생성형 모델 시험](#generative)) | 계획 |
 | Nano Banana 2.1<br>[센서별 담당 미정] | 생성형 이미지 모델 · `zeroshot` 학습 없이 생성(단일 실행) · 동국 AI CHAT · RGB 3밴드 실제 MATLAB 채점 예정 | API 생성 진행 중. 공통 입력·채점 준비 완료([생성형 모델 시험](#generative)) | 계획 |
 | [FusionNet](fusionnet/README.md)<br>[김윤지] | 저자 QB·WV3, WV2 전이 · GF2 직접 학습 seed 42 · 실제 MATLAB 채점 | QB 31.485, GF2 45.547, WV3 32.519 dB; WV2 전이 27.058 dB. 네 센서 고정 6장면 이미지. GF2 peak 1023 기준 39.522 dB | 평가 완료 |

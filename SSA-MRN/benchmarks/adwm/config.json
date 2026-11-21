@@ -1,0 +1,76 @@
+{
+  "model": "adwm",
+  "display_name": "ADWM",
+  "evaluator": "김경찬",
+  "paper": {
+    "title": "A General Adaptive Dual-level Weighting Mechanism for Remote Sensing Pansharpening",
+    "authors": "Jie Huang, Haorui Chen, Jiaxuan Ren, Siran Peng, Liangjian Deng",
+    "venue": "CVPR 2025",
+    "url": "https://arxiv.org/abs/2503.13214"
+  },
+  "code": {
+    "url": "https://github.com/Jie-1203/ADWM",
+    "commit": "aa185a64cac00a8c31581290de276568da2eb106",
+    "license": "MIT",
+    "modified": false
+  },
+  "main_model": "LAGNet + ADWM (upstream/model/bwnet_lagconv_sota.py BWNet; paper section 3.2 and supplement B)",
+  "author_weights": {
+    "WV3": {
+      "path": "upstream/weights/BWNET_LAGConv_WV3/model.pth",
+      "sha256": "793e5eccfe6a03995a98a15ee8e4c8911eb129f3c4bb03aa24ae143b41928e2c",
+      "chosen_by": "file name, fixed before any evaluation"
+    },
+    "not_used": {
+      "upstream/weights/BWNET_FusionNet_WV3/model.pth": {
+        "sha256": "601e34e04e0f142e8daa7aac136d79989f3ceb3878ce3cb4b496a44bf1055d9e",
+        "note": "replaced in upstream commit aa185a6; has the LAGNet + ADWM keys and different values, not FusionNet; recorded only"
+      }
+    },
+    "redistribution": "not copied; used through the pinned upstream submodule",
+    "training_split": "not stated by the authors (paper: PanCollection)"
+  },
+  "normalization": {"QB": 2047, "GF2": 1023, "WV3": 2047, "WV2": 2047},
+  "inputs": "ms (LR, DN / scale) and pan; the network upsamples ms by bicubic inside; lms not used",
+  "output": "clipped to 0-1 at inference as official main_test.py; unclipped in training and validation as main_train.py",
+  "settings": {
+    "author": {
+      "sensors": ["WV3"],
+      "layernorm": null,
+      "layernorm_note": "the WV3 weights lack the 14 LayerNorm tensors of the official class; 'identity' (no LayerNorm) or 'default' (weight 1, bias 0) is chosen by WV3 validation L1 (train.py author-select), never by test",
+      "layernorm_selection": "results/author_WV3/layernorm_selection.json"
+    },
+    "retrain": {
+      "sensors": ["QB", "GF2"],
+      "seed": 42,
+      "epochs": {"QB": 200, "GF2": 500},
+      "epochs_source": "paper supplement D (QB 200; GF2 same as WV3, 500). Issue #183 listed the official default 500 for both",
+      "batch": 64,
+      "loss": "L1",
+      "optimizer": "Adam lr 2e-3, weight_decay 0 (paper, official main_train.py)",
+      "scheduler": "StepLR step_size 150, gamma 0.5, built as official with initial_lr and last_epoch=0: halved rate from epoch index 149, 299, 449",
+      "ifw_hidden": {"QB": "0.6n = 29 (paper; official code fixes 0.8n, rebuilt in model.py)", "GF2": "0.8n = 38"},
+      "layernorm": "kept (official class)",
+      "dropout": "0.05 in IFW (official)",
+      "cudnn": "deterministic, benchmark off (official)",
+      "selection": "minimum validation L1 after every epoch on the whole validation set (team rule; official: every 10 epochs, no selection)",
+      "recompute": "only if batch 64 does not fit in GPU memory; BatchNorm statistics are saved and restored so the result is unchanged"
+    }
+  },
+  "transfer": {"WV2": "WV3 author weights applied, reference"},
+  "post_processing": "none",
+  "training_place": "Kaggle GPU T4 x2 (QB on GPU 0, GF2 on GPU 1), sessions of about 6 hours resumed from latest.pt",
+  "paper_reported": {
+    "RR": {
+      "WV3": {"PSNR": 39.170, "SAM": 2.913, "ERGAS": 2.145, "Q8": 0.921},
+      "QB": {"PSNR": 38.466, "SAM": 4.450, "ERGAS": 3.705, "Q4": 0.937},
+      "GF2": {"PSNR": 43.884, "SAM": 0.672, "ERGAS": 0.597, "Q4": 0.985}
+    },
+    "FR": {
+      "WV3": {"D_lambda": 0.024, "D_s": 0.029, "HQNR": 0.948},
+      "QB": {"D_lambda": 0.064, "D_s": 0.024, "HQNR": 0.914},
+      "GF2": {"D_lambda": 0.022, "D_s": 0.052, "HQNR": 0.928}
+    },
+    "source": "paper Table 1 and supplement Table 5; GPU GTX 3090"
+  }
+}

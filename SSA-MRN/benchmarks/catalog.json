@@ -386,6 +386,50 @@
       "report": "SSA-MRN/benchmarks/genimage_identity/README.md",
       "summary": "SSA-MRN/benchmarks/genimage_identity/results/matlab_summary.json",
       "last_checked": "2026-11-20T17:30:00+09:00"
+    },
+    "adwm": {
+      "display_name": "ADWM",
+      "paper": "Huang, Chen, Ren, Peng, Deng. A General Adaptive Dual-level Weighting Mechanism for Remote Sensing Pansharpening. CVPR 2025. https://arxiv.org/abs/2503.13214",
+      "code": "https://github.com/Jie-1203/ADWM",
+      "commit": "aa185a64cac00a8c31581290de276568da2eb106",
+      "license": "MIT (공식 코드). 저자 WV3 가중치는 복사하지 않고 고정 커밋 하위 모듈에서 읽음",
+      "evaluator": "김경찬",
+      "settings": [
+        "author",
+        "retrain"
+      ],
+      "epochs": "retrain QB 200, GF2 500 (논문 부록 D), seed 42",
+      "sensors": {
+        "author": [
+          "WV3",
+          "WV2"
+        ],
+        "retrain": [
+          "QB",
+          "GF2"
+        ]
+      },
+      "seeds": {
+        "author": null,
+        "retrain": [
+          42
+        ]
+      },
+      "status": "계획",
+      "vs_c2ms_sp": {},
+      "paper_reported": {
+        "QB": {
+          "PSNR": 38.466,
+          "SAM": 4.45,
+          "ERGAS": 3.705,
+          "Q4": 0.937
+        },
+        "source": "논문 Table 1 (LAGNet + ADWM)"
+      },
+      "report": "SSA-MRN/benchmarks/adwm/README.md",
+      "config": "SSA-MRN/benchmarks/adwm/config.json",
+      "manifest": "SSA-MRN/benchmarks/adwm/manifest.json",
+      "last_checked": "2026-11-22"
     }
   }
 }
