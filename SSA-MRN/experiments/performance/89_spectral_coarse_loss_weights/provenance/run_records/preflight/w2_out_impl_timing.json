@@ -1,0 +1,28 @@
+{
+  "time_kst": "2026-11-19T04:25:04.691958+09:00",
+  "rule": "ConvTranspose2d(128,64,2,2) vs Conv2d(128,256,1,bias=False) -> PixelShuffle(2) -> per-channel bias (64); timed with the 85 rule (official setting, autotune off) and the 86 graph_fp16 setting at 256^2 and 512^2 on an idle GPU after the 88 evaluation and before any 89 training; use the one that is at least 3% faster in both settings, otherwise ConvTranspose2d; record the float64 max difference between the two",
+  "settings": {
+    "official": {
+      "256": {
+        "convT": 0.019950200017774478,
+        "pixelshuffle": 0.018940200039651245
+      },
+      "512": {
+        "convT": 0.05967185000190511,
+        "pixelshuffle": 0.05524824999156408
+      }
+    },
+    "graph_fp16": {
+      "256": {
+        "convT": 0.00904949998948723,
+        "pixelshuffle": 0.009148350014584139
+      },
+      "512": {
+        "convT": 0.031667100032791495,
+        "pixelshuffle": 0.03208569996058941
+      }
+    }
+  },
+  "max_abs_output_difference": 0.0,
+  "choice": "convT"
+}

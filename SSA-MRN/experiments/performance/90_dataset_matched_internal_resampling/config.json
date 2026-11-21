@@ -1,0 +1,182 @@
+{
+ "experiment": 90,
+ "title": "모델 내부 축소·확대를 데이터셋 방식(23탭 보간, MTF 블러 + 솎음)으로 교체",
+ "status": "계획",
+ "improvement": "판단 보류",
+ "registered": "2026-11-20",
+ "issue": 203,
+ "research_track": "performance",
+ "experimenter": "이병현",
+ "hypothesis": "Matching the model-internal resampling to the dataset operators (23-tap interpolation for the MS / LRPAN upsampling, the MTF degradation for the LRPAN, an anti-aliased internal downsampling) improves RR over the same-seed 89 confirmed model (variant N).",
+ "plan_context": "final-model plan (2026-11-19): 88 K2D -> 89 (W2 2x2, lambda, c) -> 90 (this) -> final model with seeds 43 and 44; single seed 42 per stage, validation selection, test reported only",
+ "base_recipe": "89 confirmed: W2 2x2 (convT), 88 K2D (full-size 2x2 C2MS at constant lr 1e-4 for 120 epochs -> 83 K2 factorization -> 30-epoch cosine 1e-4 -> 1e-6 with a new Adam), selection by minimum original-scale validation MSE",
+ "loss": {
+  "form": "per-pixel L1 + c x per-pixel L1 on 2x coarser pairs + lambda x spectral loss (1 - cos)",
+  "spectral_weight": 1.2,
+  "coarse_weight": 0.25,
+  "source": "89 selection: lambda* 1.2 (selection_A.json), c* 0.25 (selection_B_reduced.json, reduced c range by user decision 2026-11-20)"
+ },
+ "w2_out_impl": "convT",
+ "variants": {
+  "N": "unchanged (bilinear, align_corners=True); the 89 confirmation model and the control of A, B, C",
+  "A": "upsample1 (x4) and upsample100 (x2) -> 23-tap interpolation (common/interpolation, toolbox phases); performance 6 condition",
+  "B": "A + downsample1 -> PAN MTF blur (genMTF 41x41 ratio 4, the training sensor PAN GNyq, replicated boundary) + x4 decimation phase 2 (= 54 Wald.pan)",
+  "C": "every fixed resampling matched to the dataset (user decision 2026-11-20 23h): B + downsample100 (x2; features with the per-band MS MTF, PAN with the PAN MTF, genMTF ratio 2 = the coarse-pair kernels) at phase 0, downsample200 (features x2, MS MTF ratio 2) at phase 1, downsample2 (PAN x4, PAN MTF ratio 4) at phase 2 (data grid: 1/2 pixel k = full 2k, 1/4 pixel j = 4j + 2) + output upsampling upsample101 / upsample102 with the two stages of the dataset 23-tap interpolation (insertion phase 1, then 0)",
+  "unchanged": "W2 branch 2x2 layers (learned), data / coarse pairs / projection operators"
+ },
+ "arms": "<v>T = full-size 2x2 trunk 120 epochs (snapshot e120), <v>K = K2 from <v>T e120, 30-epoch cosine; v in N, A, B, C; QB, GF2, WV3 seed 42 (24 trainings)",
+ "order": "N of GF2, QB, WV3 first (the 89 confirmation), then A, B, C; factorized runs and evaluations first when ready; two jobs at once",
+ "selection_rule": {
+  "metric": "validation PSNR of <v>K (minimum original-scale validation MSE, network output without projection) minus that of NK, same sensor and seed",
+  "choice": "variant (A, B, C) with the largest mean of the three sensor differences; it is chosen only if that mean is > 0 and on no sensor the validation SAM is worse than NK by more than tau_s; otherwise the next variant by the mean; if none qualifies the model stays N",
+  "tau_sam_deg": {
+   "QB": 0.004,
+   "GF2": 0.004,
+   "WV3": 0.024
+  },
+  "tau_basis": "as 89: 2 x sample std of the 65 seeds 42-44 best-epoch validation SAM",
+  "test": "RR test (with projection) against NK, 88 K2D and C2MS-SP is measured and reported only; never used for the choice"
+ },
+ "confirmation_89": {
+  "model": "NK (N variant) = the 89 confirmation (lambda* 1.2, c* 0.25, W2 2x2, K2D 150 epochs), trained here because it is also the 90 control",
+  "control": "88 K2D + P, same seed",
+  "reference": "C2MS-SP (65 + P), same seed",
+  "judgement": "v2.4 RR test PSNR/SAM/ERGAS, single-seed threshold 0.06 dB (report); WV2 transfer and FR QNR reference"
+ },
+ "evaluation": "each <v>K: best.pt on the 20 RR test scenes without and with the 86 K10 projection, FR QNR (+P, reference); WV3 also on WV2 (82 calibration, reference); controls C2MS-SP and 88 K2D cached in optimize",
+ "transfer_data_sha256": {
+  "WV2": {
+   "RR": "ccba7ddf6674eea7f3699e50fe8278ec7ba4f109a2d331a6be8f4c8f2a22a09b",
+   "FR": "6dc8a2354d98e0b9fbce82c1887642c06aad5c9e8468dd8f95e01bc38782173d"
+  }
+ },
+ "controls": {
+  "c2ms_sp": {
+   "QB": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt",
+   "GF2": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s<seed>/best.pt",
+   "WV3": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s<seed>/best.pt"
+  },
+  "k2d_88": {
+   "QB": "C:/CtrS-p88/run/runs/QB_K2D_s<seed>/checkpoints/best.pt",
+   "GF2": "C:/CtrS-p88/run/runs/GF2_K2D_s<seed>/checkpoints/best.pt",
+   "WV3": "C:/CtrS-p88/run/runs/WV3_K2D_s<seed>/checkpoints/best.pt"
+  }
+ },
+ "runtime": "C:/CtrS-p90/run",
+ "stop_rule": "as 89 without the PSNR margin (user decision 2026-11-19 14h): process error, incomplete run, nonfinite validation or best epoch 0 -> no new job, running jobs finish, stopped.json, exit 3",
+ "chain": "chain90.ps1: wait for the 89 reduced stage B (fine_c_complete.json) and continue only if c* = 0.25 -> server tidy-up (empty folders) -> copy the 89 source tree and overlay the 90 folder -> prepare -> optimize -> run",
+ "expected_gpu_hours": {
+  "definition": "sum of run wall times / 2 (two concurrent runs); 88/89 concurrent epoch times QB 134 s, GF2 156 s, WV3 98 s",
+  "N": 8.5,
+  "screening": 8.5,
+  "chosen_150": 9
+ },
+ "limits": [
+  "single seed 42; the 3-seed judgement is done once on the final model",
+  "the variant is chosen on validation only; test differences of 0.06 dB or less are within the single-seed threshold",
+  "B and C use the MTF of the training sensor; on the WV2 transfer the WV3 kernels stay",
+  "C changes the internal downsampling and the output upsampling together (a fully matched model); if C is chosen the two parts are not separated",
+  "the 1/4-size features are made by two x2 MTF steps (an SSAI update in between), close to but not equal to the dataset x4 MTF"
+ ],
+ "sensors": [
+  "QB",
+  "GF2",
+  "WV3"
+ ],
+ "seeds": [
+  42
+ ],
+ "max_parallel": 2,
+ "precision": "FP16 AMP training with GradScaler; FP32 loss, validation and evaluation; factorization in float32 with float64 accumulation",
+ "batch": 32,
+ "micro": 32,
+ "optimizer": "Adam (beta 0.9, 0.999), no weight decay",
+ "K": 4,
+ "spatial_ratio": 4,
+ "tf32": false,
+ "cudnn_deterministic": true,
+ "layout": "channels_last",
+ "cudnn_benchmark": true,
+ "torch_deterministic_algorithms": "warn_only",
+ "cublas_workspace_config": ":4096:8",
+ "cpu_threads": 1,
+ "normalization": {
+  "QB": 2047,
+  "GF2": 1023,
+  "WV3": 2047,
+  "WV2": 2047
+ },
+ "data_root": "C:/CtrS/PAN-MS",
+ "data_sha256": {
+  "QB": {
+   "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+   "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+   "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+   "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+  },
+  "GF2": {
+   "train": "243a0bc8a4cc0a2740ed24409f9e87afe531d87e9d57524c6bcbec2b5f937621",
+   "val": "ae15b19ccc6ece799ebfeb3fb374b1a333238226397441e3d523b0195dff4f43",
+   "RR": "709a9a53b2e0f29d3dcd5c6ca4410c2913b62cc03c104fed6c049911dbe1c8ea",
+   "FR": "840698f9b3de181de9f665ca88e562fb7783dcd93045a136ace2110d414989ad"
+  },
+  "WV3": {
+   "train": "f9e7ec381390ff36ddffd0714df7af07a3c5f456078b219a25f3e18372228f82",
+   "val": "ba883e57408d1f3c2263cc2818a9fbbf2dbe8e62554c531288f9e8bf9f59dc87",
+   "RR": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+   "FR": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+  }
+ },
+ "data_counts": {
+  "QB": {
+   "train": 17139,
+   "val": 1905,
+   "RR": 20,
+   "FR": 20
+  },
+  "GF2": {
+   "train": 19809,
+   "val": 2201,
+   "RR": 20,
+   "FR": 20
+  },
+  "WV3": {
+   "train": 9714,
+   "val": 1080,
+   "RR": 20,
+   "FR": 20
+  }
+ },
+ "ema_beta": 0.99,
+ "ema_note": "EMA recorded only (as 65); selection uses the online weights",
+ "scenes": [
+  0,
+  1,
+  3,
+  7,
+  14,
+  17
+ ],
+ "scene_index_base": 0,
+ "cache_reference_manifest": {
+  "QB": "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json",
+  "GF2": "experiments/performance/65_l1_spectral_loss/provenance/stage3/run_records/data_manifest.json",
+  "WV3": "experiments/performance/65_l1_spectral_loss/provenance/stage3/run_records/data_manifest.json"
+ },
+ "latency": {
+  "setting": "one process, no training on the GPU, batch 1, test scene 0 (RR 256^2, FR 512^2), float32, TF32 off, cuDNN deterministic, autotune off, NCHW; 5 warm-up, 50 timed runs per system interleaved, 3 rounds, median of the round medians",
+  "reference": "cuDNN autotune + TF32 and FP16 autocast timings and the FP16 RR change (never a judgement)"
+ },
+ "lr_start": 0.0001,
+ "lr_end": 1e-06,
+ "screening": {
+  "decision": "user 2026-11-21 02h: choose the variant on 50-epoch screening runs as in the 89 lambda search, not on 150-epoch K2D runs",
+  "arms": "AS, BS, CS = full-size 2x2 C2MS of the variant, 50 epochs (40 at 1e-4 + 10 cosine to 1e-6), lambda 1.2, c 0.25; GF2, QB, WV3 seed 42; validation only",
+  "n_control": "89 stage-B run BL1.20C0.25 of the same sensor (identical recipe and seed; separate run, rerun spread up to 0.03 dB)",
+  "n_control_runtime": "C:/CtrS-p89/run",
+  "selection": "selection_rule above applied to the screening validation (variant minus the N control)",
+  "mechanism": "the sealed controller keeps training N (the 89 confirmation); provenance/block_abc.py holds the worker locks of AT/BT/CT so the controller stops at its first A/B/C trunk; run.py --mode screen (separate copy of the tree, same runtime) uses the free slot, then finishes the N jobs the controller left (factorize + NK + evaluation) and the screening runs",
+  "next": "final model: the chosen variant with the K2D 150-epoch recipe, seeds 42, 43, 44 (if N: seeds 43, 44; seed 42 is the 89 confirmation)",
+  "after": "user decision 2026-11-21 03h: if A, B or C is chosen, run.py --mode chosen (third copy of the tree, same runtime) trains it with the K2D 150-epoch recipe on GF2, QB, WV3 seed 42 and compares <v>K with the 89 confirmation NK (validation, RR test with projection, WV2 transfer reference) -> chosen_comparison.json; if N is chosen nothing is trained"
+ }
+}

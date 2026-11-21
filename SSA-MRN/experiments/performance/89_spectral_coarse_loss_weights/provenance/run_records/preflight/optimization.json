@@ -1,0 +1,57 @@
+{
+  "time_kst": "2026-11-19T04:27:34.742888+09:00",
+  "w2_out_impl": "convT",
+  "structure_checks": {
+    "conversion_max_abs_convT": 4.172325134277344e-07,
+    "conversion_max_abs_pixelshuffle": 4.172325134277344e-07,
+    "parameters": {
+      "C2MS": 2853918,
+      "W2T": 2853726,
+      "K2": 1991710,
+      "W2K": 1991518
+    }
+  },
+  "benchmark": {
+    "QB_W2T": {
+      "median_step_seconds": 0.18694160002632998,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.50390625
+    },
+    "QB_W2K": {
+      "median_step_seconds": 0.15601035000872798,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 1.53125
+    },
+    "GF2_W2T": {
+      "median_step_seconds": 0.18958509995718487,
+      "steps_per_epoch": 620,
+      "peak_reserved_gib": 0.50390625
+    },
+    "WV3_W2T": {
+      "median_step_seconds": 0.2079206499911379,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 0.595703125
+    }
+  },
+  "gmac_256": {
+    "QB": {
+      "C2MS": 59.632058368,
+      "W2T": 59.632058368,
+      "K2": 39.063191552,
+      "W2K": 39.063191552
+    },
+    "GF2": {
+      "C2MS": 59.632058368,
+      "W2T": 59.632058368,
+      "K2": 39.063191552,
+      "W2K": 39.063191552
+    },
+    "WV3": {
+      "C2MS": 60.3799552,
+      "W2T": 60.3799552,
+      "K2": 39.811088384,
+      "W2K": 39.811088384
+    }
+  },
+  "fingerprint": "e0ee01ff9b3827aae0e5238a80d1702a4cbc94bf48198bdd9f4b1e5f1d30647d"
+}

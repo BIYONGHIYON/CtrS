@@ -20,6 +20,8 @@ SSA-MRN의 구조·학습·손실을 바꿔 수치를 개선하는 연구입니�
 <!-- experiments:start -->
 | 실험 | 핵심 결과 | 상태 | 판정 |
 |---|---|:---:|:---:|
+| [90. 모델 내부 축소·확대를 데이터셋 방식(23탭 보간, MTF 블러 + 솎음)으로 교체](90_dataset_matched_internal_resampling/README.md)<br>이병현 | 학습 중. N(89번 확정)을 K2D 150에폭으로, 갈래 A·B·C를 50에폭 선별로 학습해 validation으로 고름 | 학습&nbsp;중 | 판단&nbsp;보류 |
+| [89. 분광 손실 계수(λ)와 2배 거친 쌍 계수(c) 탐색: K2D 학습법, W2 2×2 합성곱 구현](89_spectral_coarse_loss_weights/README.md)<br>이병현 | λ*=1.2·c*=0.25, 88번 K2D 대비 QB −0.103·GF2 +0.438·WV3 +0.095 dB (1시드) | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [88. 일정 학습률 학습 뒤 감쇠 시작 시점의 저랭크 분해(K2)와 감쇠 구간 학습: 150에폭 경량 C2MS-SP 단일 시드 확인](88_factorization_at_decay_start/README.md)<br>이병현 | K2D(연산 66%) +0.036/+0.154/+0.310 dB (QB/GF2/WV3, 1시드), Lite보다 세 센서 모두 개선 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [87. C2MS-SP 잔차 블록 가운데 채널 축소 구조의 20에폭 미세조정 단일 시드 확인](87_reduced_width_short_finetuning/README.md)<br>이병현 | B32W96 −0.076/−0.253/−0.146, B32W64 −0.236/−0.510/−0.443 dB (QB/GF2/WV3, 1시드) | 평가&nbsp;완료 | 개선&nbsp;없음 |
 | [86. K10 사영 전치 연산의 FFT 계산과 C2MS-SP 추론 설정 측정](86_fft_adjoint_fast_inference/README.md)<br>이병현 | FFT 사영이 79번과 동일(1.3e-14), C2MS-SP 공식 설정 QB 256² 58.6→26.1 ms, graph_fp16 13.3 ms | 평가&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |

@@ -1,0 +1,37 @@
+{
+  "time_kst": "2026-11-19T10:02:49.779991+09:00",
+  "rule": "apply the 2x2 implementation if the original-scale validation PSNR difference (selected epoch, network output) is >= -0.06 dB; test RR with projection is measured and reported only",
+  "w2k_validation": {
+    "psnr": 40.320260043407046,
+    "sam": 4.12291067792562,
+    "mse": 0.00013411325577302778,
+    "epoch": 30
+  },
+  "k2d_88_validation": {
+    "val_mse": 0.00013415463999698533,
+    "val_psnr": 40.318225345962006,
+    "val_sam": 4.12447387300197
+  },
+  "k2d_88_best_epoch": 30,
+  "delta_val_psnr": 0.0020346974450404787,
+  "delta_val_sam": -0.0015631950763506097,
+  "apply": true,
+  "test_report_only": {
+    "P_vs_C2MS_SP": {
+      "PSNR": 0.008924154492241598,
+      "SAM": 0.0021328319412479146,
+      "ERGAS": -0.003685230228349212
+    },
+    "P_vs_88_K2D": {
+      "PSNR": -0.02731809053313583,
+      "SAM": 0.0018445762447969472,
+      "ERGAS": 0.008598644236806674
+    },
+    "raw_vs_65_raw": {
+      "PSNR": 0.014448113698065868,
+      "SAM": 0.0024458217505376467,
+      "ERGAS": -0.006065778823097556
+    }
+  },
+  "w2_out_impl": "convT"
+}

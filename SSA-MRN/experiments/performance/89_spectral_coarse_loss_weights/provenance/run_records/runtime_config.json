@@ -1,0 +1,518 @@
+{
+  "experiment": 89,
+  "research_track": "performance",
+  "experimenter": "이병현",
+  "title": "분광 손실 계수(λ)와 2배 거친 쌍 계수(c) 탐색: K2D 학습법, W2 2×2 합성곱 구현",
+  "status": "계획",
+  "improvement": "판단 보류",
+  "registered": "2026-11-19",
+  "issue": 202,
+  "hypothesis": "Changing the spectral-loss weight lambda (now 0.46) and the 2x-coarse-pair weight c (now 1.0) shifts the balance between SAM and PSNR and between the original and coarse scales; a common (lambda, c) for QB, GF2 and WV3 can raise RR over the same-seed 88 K2D. Neither current value was chosen by comparison.",
+  "plan_context": "2026-11-19 user decision: single seed 42 + validation selection per stage, stacked on the previous stage; only the final model gets 3 seeds (issue 203). Test is measured and reported, never used to select or to decide whether to apply a change.",
+  "base_recipe": "88 K2D: full C2MS at constant lr 1e-4 for 120 epochs -> 83 K2 factorization -> 30-epoch cosine decay 1e-4 -> 1e-6 with a new Adam; same loss form, data, projection (86 FastProjectedV2 K10) and selection (minimum original-scale validation MSE over K2 epochs 0..30) as 88",
+  "loss": "original per-pixel L1 + c x per-pixel L1 on 2x coarser pairs + lambda x spectral loss (1 - cos) on the original pair",
+  "w2_check": {
+    "change": "W2 branch input PixelUnshuffle(2)+Conv2d(256,128,1) -> Conv2d(64,128,2,stride 2) (identical operation); output Conv2d(128,256,1)+PixelShuffle(2) -> 2x2 stride-2 transposed convolution 128->64, weight and bias zero-initialized (per-position bias 256 -> per-channel 64, 192 fewer parameters)",
+    "output_implementation": "ConvTranspose2d(128,64,2,2) vs Conv2d(128,256,1,bias=False) -> PixelShuffle(2) -> per-channel bias (64); timed with the 85 rule (official setting, autotune off) and the 86 graph_fp16 setting at 256^2 and 512^2 on an idle GPU after the 88 evaluation and before any 89 training; use the one that is at least 3% faster in both settings, otherwise ConvTranspose2d; record the float64 max difference between the two",
+    "factorization_check": "83 targets() must not select the 2x2 input/output layers; the K2 model with the 2x2 implementation has exactly 192 fewer parameters than the original-implementation K2",
+    "run": "QB seed 42, lambda 0.46, c 1.0, 88 K2D recipe (TRUNK 120 + K2D 30)",
+    "control": "88 K2D QB seed 42",
+    "apply_rule": "apply the 2x2 implementation if the original-scale validation PSNR difference (selected epoch, network output) is >= -0.06 dB; test RR with projection is measured and reported only",
+    "with_screening": "stages A and B use the 2x2 implementation from the start without waiting for the check; if it is not applied, only the confirmation runs use the original implementation and the limitation is reported",
+    "limits": [
+      "initialization RNG consumption changes (seed noise mixed in)",
+      "parameter names differ from the 65/81/83/88 checkpoints",
+      "checked on QB only"
+    ]
+  },
+  "screening": {
+    "model": "full-size C2MS (no factorization), W2 2x2 implementation",
+    "epochs": 50,
+    "constant_epochs": 40,
+    "lr_start": 0.0001,
+    "lr_end": 1e-06,
+    "schedule": "epochs 1-40 lr 1e-4; epochs 41-50 cosine to 1e-6 (88 schedule shortened)",
+    "selection": "minimum original-scale validation MSE over epochs (earliest exact tie), as 88",
+    "seed": 42
+  },
+  "stage_A": {
+    "vary": "lambda",
+    "fixed": {
+      "c": 1.0
+    },
+    "reference": {
+      "lambda": 0.46,
+      "c": 1.0
+    },
+    "candidates": {
+      "QB": [
+        0.0,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9,
+        1.0,
+        1.1,
+        1.2,
+        1.3,
+        1.4,
+        1.5,
+        1.6,
+        1.7,
+        1.8,
+        1.9,
+        2.0,
+        0.46
+      ],
+      "GF2": [
+        0.0,
+        0.2,
+        0.46,
+        0.8,
+        1.2,
+        2.0
+      ],
+      "WV3": [
+        0.0,
+        0.2,
+        0.46,
+        0.8,
+        1.2,
+        2.0
+      ]
+    },
+    "grid": {
+      "QB": [
+        0.0,
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9,
+        1.0,
+        1.1,
+        1.2,
+        1.3,
+        1.4,
+        1.5,
+        1.6,
+        1.7,
+        1.8,
+        1.9,
+        2.0
+      ]
+    },
+    "shared_points": [
+      0.0,
+      0.2,
+      0.46,
+      0.8,
+      1.2,
+      2.0
+    ],
+    "center_candidates": [
+      0.1,
+      0.2,
+      0.3,
+      0.4,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1.0,
+      1.1,
+      1.2,
+      1.3,
+      1.4,
+      1.5,
+      1.6,
+      1.7,
+      1.8,
+      1.9
+    ],
+    "order": "shared points first (GF2 6, WV3 6, QB 0/0.2/0.46/0.8/1.2/2.0), then the other 16 QB points"
+  },
+  "stage_B": {
+    "vary": "c",
+    "fixed": {
+      "lambda": "lambda* from stage A"
+    },
+    "reference": {
+      "lambda": "lambda*",
+      "c": 1.0
+    },
+    "candidates": {
+      "QB": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0,
+        1.25,
+        1.5,
+        1.75,
+        2.0
+      ],
+      "GF2": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0
+      ],
+      "WV3": [
+        0.0,
+        0.5,
+        1.0,
+        1.5,
+        2.0
+      ]
+    },
+    "grid": {
+      "QB": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        1.0,
+        1.25,
+        1.5,
+        1.75,
+        2.0
+      ]
+    },
+    "shared_points": [
+      0.0,
+      0.5,
+      1.0,
+      1.5,
+      2.0
+    ],
+    "center_candidates": [
+      0.25,
+      0.5,
+      0.75,
+      1.0,
+      1.25,
+      1.5,
+      1.75
+    ],
+    "reference_note": "the (lambda*, 1.0) point is trained again in stage B and used as the stage-B reference; the difference to the stage-A run of the same setting is reported as rerun spread",
+    "reduced_fallback": "if the schedule is tight: c = 0, 0.5, 1.0, 1.5, 2.0 on all three sensors (15 runs); the QB moving average then uses the 0.5 grid with centers 0.5-1.5",
+    "start": "automatic after stage A with the rule-chosen lambda* (user decision 2026-11-19 04h: schedule through the lambda/c search, results checked the next day); stage-B arms are named BL<lam>C<c>"
+  },
+  "selection_rule": {
+    "metric": "Delta_s(x) = original-scale validation PSNR of candidate x on sensor s minus that of the same-sensor reference point (network output, screening-selected epoch)",
+    "1_qb_moving_average": "on the evenly spaced QB grid, m(x_i) = mean(Delta(x_{i-1}), Delta(x_i), Delta(x_{i+1})); x_QB = center with the largest m among center_candidates (ends excluded); lambda = 0.46 is off-grid and is only the stage-A reference",
+    "2_shared_check": "p* = shared point with the largest three-sensor mean of Delta; if x_QB lies between the shared points adjacent to p* (inclusive; if p* is an end, between p* and its neighbor) choose x_QB, otherwise choose p*",
+    "3_sam_check": "reject the choice if on any sensor where it was trained the validation SAM is worse than the reference by more than tau_s",
+    "tau_sam_deg": {
+      "QB": 0.004,
+      "GF2": 0.004,
+      "WV3": 0.024
+    },
+    "tau_basis": "2 x sample std of the best-epoch validation SAM over the 65 seeds 42-44 (QB 0.0021, GF2 0.0020, WV3 0.0122 deg; n = 3, rough)",
+    "fallback_order": "choice from 2 -> remaining QB centers inside the p* interval by m -> remaining shared points by three-sensor mean; first that passes 3; if none passes keep the reference (lambda 0.46 / c 1.0)",
+    "boundary": "if the choice is at the edge of the range (centers 0.1/1.9 or 0.25/1.75, shared points 0/2.0) report that the optimum may lie outside; the range is not extended",
+    "c_zero": "c = 0 is accepted if chosen; the report states that scale mixing is removed",
+    "test": "test RR (with projection) measured for every candidate and tabulated, never used for selection",
+    "user_confirmation": "lambda* and c* are chosen automatically by this rule (user decision 2026-11-19 04h); the confirmation stage starts only after the user checks the curves and choices"
+  },
+  "screening_check": {
+    "note": "reference only, not used for selection",
+    "compare": "QB lambda=0 screening Delta vs 150-epoch cosine 63 (lambda 0) - 65 (lambda 0.46), seed 42: validation PSNR -0.029 dB, SAM +0.048 deg; only QB seed 42 exists at 150 epochs"
+  },
+  "confirmation": {
+    "recipe": "88 K2D (150 epochs) with lambda*, c* and the W2 implementation from w2_check",
+    "sensors": [
+      "QB",
+      "GF2",
+      "WV3"
+    ],
+    "seed": 42,
+    "control": "88 K2D + P, same seed",
+    "reference": "C2MS-SP (65 + P), same seed",
+    "judgement": "v2.4 RR test PSNR/SAM/ERGAS, single-seed threshold 0.06 dB (report); the confirmed model is the 203 base regardless of the judgement"
+  },
+  "transfer": "WV2 transfer is not measured in this experiment",
+  "validation_noise_reference": {
+    "source": "65 seeds 42-44 best-epoch validation",
+    "psnr_std_db": {
+      "QB": 0.0104,
+      "GF2": 0.0187,
+      "WV3": 0.033
+    },
+    "sam_std_deg": {
+      "QB": 0.0021,
+      "GF2": 0.002,
+      "WV3": 0.0122
+    }
+  },
+  "sensors": [
+    "QB",
+    "GF2",
+    "WV3"
+  ],
+  "seeds": [
+    42
+  ],
+  "runtime": "C:/CtrS-p89/run",
+  "max_parallel": 2,
+  "expected_gpu_hours": {
+    "definition": "sum of run wall times / 2 (two concurrent runs); 88 concurrent epoch times QB 134 s, GF2 156 s, WV3 about 98 s",
+    "w2_check": 2.8,
+    "stage_A": 31,
+    "stage_B": 17,
+    "confirmation": 8
+  },
+  "next": "issue 203: internal up/downsampling replacement on the confirmed model, then the final model with seeds 43 and 44",
+  "limits": [
+    "single seed 42 per stage; the 3-seed judgement is done once on the final model",
+    "screening is a 50-epoch full-size run while the confirmation is K2D 150 epochs; the ranking may change",
+    "GF2 and WV3 points are sparse and only check the QB optimum interval",
+    "validation is network output without the projection; the confirmation and judgement use the projection"
+  ],
+  "precision": "FP16 AMP training with GradScaler; FP32 loss, validation and evaluation; factorization in float32 with float64 accumulation",
+  "batch": 32,
+  "micro": 32,
+  "optimizer": "Adam (beta 0.9, 0.999), no weight decay",
+  "K": 4,
+  "spatial_ratio": 4,
+  "tf32": false,
+  "cudnn_deterministic": true,
+  "layout": "channels_last",
+  "cudnn_benchmark": true,
+  "torch_deterministic_algorithms": "warn_only",
+  "cublas_workspace_config": ":4096:8",
+  "cpu_threads": 1,
+  "normalization": {
+    "QB": 2047,
+    "GF2": 1023,
+    "WV3": 2047,
+    "WV2": 2047
+  },
+  "data_root": "C:/CtrS/PAN-MS",
+  "data_sha256": {
+    "QB": {
+      "train": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+      "val": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+      "RR": "9842a1232ad2d5b9a61c9fd7fb353e8fc6214eeac6e947d888f221ad6ecdda35",
+      "FR": "4583c2890009e047ddc1e0daf88db3f5db43041fc301fa9ff8eb52a37f84b88f"
+    },
+    "GF2": {
+      "train": "243a0bc8a4cc0a2740ed24409f9e87afe531d87e9d57524c6bcbec2b5f937621",
+      "val": "ae15b19ccc6ece799ebfeb3fb374b1a333238226397441e3d523b0195dff4f43",
+      "RR": "709a9a53b2e0f29d3dcd5c6ca4410c2913b62cc03c104fed6c049911dbe1c8ea",
+      "FR": "840698f9b3de181de9f665ca88e562fb7783dcd93045a136ace2110d414989ad"
+    },
+    "WV3": {
+      "train": "f9e7ec381390ff36ddffd0714df7af07a3c5f456078b219a25f3e18372228f82",
+      "val": "ba883e57408d1f3c2263cc2818a9fbbf2dbe8e62554c531288f9e8bf9f59dc87",
+      "RR": "00db0d62f63693410935208e287aea21a736d11840d92eedd2d093c99be5314a",
+      "FR": "89e97320288f8fca638e5d91c007a4919463a7752c70bff24949c8a7d7a37bc5"
+    }
+  },
+  "data_counts": {
+    "QB": {
+      "train": 17139,
+      "val": 1905,
+      "RR": 20,
+      "FR": 20
+    },
+    "GF2": {
+      "train": 19809,
+      "val": 2201,
+      "RR": 20,
+      "FR": 20
+    },
+    "WV3": {
+      "train": 9714,
+      "val": 1080,
+      "RR": 20,
+      "FR": 20
+    }
+  },
+  "ema_beta": 0.99,
+  "ema_note": "EMA recorded only (as 65); selection uses the online weights",
+  "scenes": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "scene_index_base": 0,
+  "cache_reference_manifest": {
+    "QB": "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json",
+    "GF2": "experiments/performance/65_l1_spectral_loss/provenance/stage3/run_records/data_manifest.json",
+    "WV3": "experiments/performance/65_l1_spectral_loss/provenance/stage3/run_records/data_manifest.json"
+  },
+  "latency": {
+    "setting": "one process, no training on the GPU, batch 1, test scene 0 (RR 256^2, FR 512^2), float32, TF32 off, cuDNN deterministic, autotune off, NCHW; 5 warm-up, 50 timed runs per system interleaved, 3 rounds, median of the round medians",
+    "reference": "cuDNN autotune + TF32 and FP16 autocast timings and the FP16 RR change (never a judgement)"
+  },
+  "stage0": {
+    "runtime": "C:/CtrS-p88/run",
+    "gate": "88 seed-42 run complete (all_complete.json, no controller_failure.json), summary.json present, K2D evaluation finite on QB, GF2 and WV3. K2D is taken as adopted (user decision 2026-11-19 04h, before the 88 result); no performance gate"
+  },
+  "controls": {
+    "c2ms_sp": {
+      "QB": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s<seed>/best.pt",
+      "GF2": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s<seed>/best.pt",
+      "WV3": "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s<seed>/best.pt"
+    },
+    "k2d_88": {
+      "QB": "C:/CtrS-p88/run/runs/QB_K2D_s<seed>/checkpoints/best.pt",
+      "GF2": "C:/CtrS-p88/run/runs/GF2_K2D_s<seed>/checkpoints/best.pt",
+      "WV3": "C:/CtrS-p88/run/runs/WV3_K2D_s<seed>/checkpoints/best.pt"
+    },
+    "k2d_88_complete": {
+      "QB": "C:/CtrS-p88/run/runs/QB_K2D_s<seed>/training_complete.json",
+      "GF2": "C:/CtrS-p88/run/runs/GF2_K2D_s<seed>/training_complete.json",
+      "WV3": "C:/CtrS-p88/run/runs/WV3_K2D_s<seed>/training_complete.json"
+    },
+    "note": "88 K2D weights are read from the 88 server runtime until 88 is archived; their SHA-256 is recorded in runtime/controls"
+  },
+  "sanity_margin_db": 1.0,
+  "stop_rule": "user decision 2026-11-19 04h: on any failure (process error, incomplete run, validation sanity failure: best epoch 0, nonfinite, or validation PSNR more than sanity_margin_db below the same-seed C2MS-SP; W2 check below -0.06 dB) no new job is launched, running jobs finish normally, stopped.json, exit 3",
+  "evaluation": "each run: best.pt (minimum validation MSE) on the 20 RR test scenes, without and with the 86 K10 projection, vs the same-seed C2MS-SP + P and 88 K2D + P; report only. FR and WV2 are not measured in the screening",
+  "chain": "chain89.ps1: wait for the 88 chain to finish -> copy the 88 source tree and overlay the 89 folder -> gate88 -> prepare -> optimize -> run; stops at the first nonzero exit",
+  "lr_start": 0.0001,
+  "lr_end": 1e-06,
+  "source_hashes": {
+    "experiments/performance/89_spectral_coarse_loss_weights/model.py": "ff27ec771d432f337f944412f72c94195384f6b805e96441141529d29642669d",
+    "experiments/performance/89_spectral_coarse_loss_weights/prepare.py": "8f480f97f124d40e7f6d857400827bde4385d7145cedb4757ebf3887423c8a8b",
+    "experiments/performance/89_spectral_coarse_loss_weights/train.py": "0f0adc60ae89cae7d71852c95c933e0f75986e606b88755f9f0cd2f5c9033135",
+    "experiments/performance/89_spectral_coarse_loss_weights/run.py": "adb680a5fbcf21f9bae0245510b8f8b58813060b8ceccfc3e94d9a89bc14e359",
+    "experiments/performance/89_spectral_coarse_loss_weights/config.json": "870f4ca2c05fe0c4a5a8858ede55056e26190649bbb08ea27a7b04734f76b630",
+    "experiments/performance/89_spectral_coarse_loss_weights/evaluate.py": "7f7410b8f492daa68fc94c62418bc8ddcbee9f669593ee8cc891b9a37d31a2e5",
+    "experiments/performance/89_spectral_coarse_loss_weights/selection.py": "c924caa628996778dc0ecc2dbe4d0a36e92b3292f51898a144255c6ec08e2685",
+    "experiments/performance/88_factorization_at_decay_start/model.py": "a3eea6c52e53a39a3b682a9f1cb39a7a2e703ab39dce849ae54b264692ef5927",
+    "experiments/performance/88_factorization_at_decay_start/prepare.py": "c8fbfeffc91d6df2a55b4802e5ea9421eb6fc8cd75f6e50c1b61eabee620136e",
+    "experiments/performance/86_fft_adjoint_fast_inference/prepare.py": "6bee20cc7505c1a637d50e0343570e3bf74265e717ab6353d15442a262e206e1",
+    "experiments/performance/85_hidden_width_reduction_fast_projection/prepare.py": "0fdb04c5efbc6205beb03c79c5aba53d385fa7d8c59e36735da8cb9706412549",
+    "experiments/performance/83_factorized_c2ms_finetuning/model.py": "dfe46a05afdcf624b910b4101cb08ee0bea111a665bc451f8236f3e42ab886d2",
+    "experiments/performance/83_factorized_c2ms_finetuning/prepare.py": "ddd9b71d3d7dc19cf1d9d40ae895f4311efc76cf6dd8466fb1f5aac91958fb5f",
+    "experiments/performance/79_deep_narrow_branch_projection/model.py": "8ac88fdead767e84bfae5cb22a230c3c53fd7afd1acecac5e7d732ff09091148",
+    "experiments/performance/79_deep_narrow_branch_projection/prepare.py": "f658efc0506affb7cc8dc76e3ae2a34b202a75f0d7cfa83766838ec0d49e6b28",
+    "experiments/performance/75_parallel_branch_width_depth/model.py": "107398906d671fccde503637eea1f9c8309b742700d542f0e458ea4ac56821f0",
+    "experiments/performance/58_spectral_loss_multi_sensor/train.py": "b5a8c3f5e2dbff854a1bbf09c8f1e1ccdd601cb6a53557f31e4e5b76b6f1b575",
+    "experiments/performance/82_cross_sensor_band_calibration/prepare.py": "ff7e7eb65b8d4c3e99e2347db0a4a61be65e5f8349026da2928bfb918dfa06f8",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/model.py": "a91129ada3043ca03b6bad9580dff32f3d8cc29d4f65fc318b755b1ffacf99ed",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/train.py": "55c150b067788191664e5f72885e065b1a222fcaeb0fe97a6b13050dc08a7dc5",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/evaluate.py": "e7e60ab17aea8d55f9d1d92fc57c1bd166e50f44d936b1d29c190c25ed818a7a",
+    "experiments/performance/54_multi_sensor_scale_mixed_training/config.json": "821c9038a3c6fa296d96176074b3d91c86a9df3d5a9ffd115eb727de310546e4",
+    "experiments/performance/43_normalized_parallel_capacity/model.py": "146db412aabc7df13dc97411a8cc48114383f420c73779fd9a47eff3727a37fa",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/metrics.py": "ec2353523bbe55f4d0a0000452d6bbd388854c112264a43e6c95cc3b7fe8f012",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41",
+    "experiments/performance/43_normalized_parallel_capacity/provenance/source/references/upstream/network.py": "2d72e42a0465a1993d584a62f8c9c967d93f0f7b957cbcaab479b7a4dc4aa69a",
+    "common/interpolation.py": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41",
+    "common/metrics.py": "26837190e6e0d69856bbfe277f1792efd009c46157bbc1d7216cc5b872d6f2ef",
+    "common/observation.py": "88c38ec7f2c87487101ce71b8fdfbbb973e95d334bf07f24fa205f93c2765d2d",
+    "common/evaluation_protocol.py": "0762f3c7a3ed0bdd51f1df23bcbaf4894315421dca2fff65067b45e04977ef16",
+    "experiments/performance/63_l1_reconstruction_loss/provenance/run_records/data_manifest.json": "5eff51d1aab2a971d850296817ec91de3fcc0560086d75969a11035e04f3d5ad",
+    "experiments/performance/65_l1_spectral_loss/provenance/stage3/run_records/data_manifest.json": "9d62325a7dac32f67f766af12869643e2974250e562ce7afc1909556eb723751",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_QB_s42/best.pt": "0175151f6306b275966858cbef6b66b5c9b7345ecdc581e6383a03ad09cbabbb",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_GF2_s42/best.pt": "e33c04fb8b06cd1284b2d58b5d57933586a3e470ea51d0fee7e97a66da60ae31",
+    "experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_WV3_s42/best.pt": "d9d9d8c67bca9f48f8e6027825041f76a8c5a7e987a26a68287e34fcbd351541"
+  },
+  "created_kst": "2026-11-19T04:25:00.750119+09:00",
+  "coarse_cache_equal_to_reference": {
+    "QB_train_coarse_pan": true,
+    "QB_train_coarse_lms": true,
+    "QB_train_coarse_ms": true,
+    "QB_train_coarse_gt": true,
+    "QB_val_coarse_pan": true,
+    "QB_val_coarse_lms": true,
+    "QB_val_coarse_ms": true,
+    "QB_val_coarse_gt": true,
+    "GF2_train_coarse_pan": true,
+    "GF2_train_coarse_lms": true,
+    "GF2_train_coarse_ms": true,
+    "GF2_train_coarse_gt": true,
+    "GF2_val_coarse_pan": true,
+    "GF2_val_coarse_lms": true,
+    "GF2_val_coarse_ms": true,
+    "GF2_val_coarse_gt": true,
+    "WV3_train_coarse_pan": true,
+    "WV3_train_coarse_lms": true,
+    "WV3_train_coarse_ms": true,
+    "WV3_train_coarse_gt": true,
+    "WV3_val_coarse_pan": true,
+    "WV3_val_coarse_lms": true,
+    "WV3_val_coarse_ms": true,
+    "WV3_val_coarse_gt": true
+  },
+  "cache_manifest_sha256": "884a433635285ccd76052c9400b1aec41a987ca10013436e0a4d4bd1d2c6bb59",
+  "w2_out_impl": "convT",
+  "structure_checks": {
+    "conversion_max_abs_convT": 4.172325134277344e-07,
+    "conversion_max_abs_pixelshuffle": 4.172325134277344e-07,
+    "parameters": {
+      "C2MS": 2853918,
+      "W2T": 2853726,
+      "K2": 1991710,
+      "W2K": 1991518
+    }
+  },
+  "controls_sha256": {
+    "QB": "bcb1b5d67afa1cbc9b07f89e2e3242a03d5f5d05c0c6cb508aed62a7f2669dc5",
+    "GF2": "fc4946f46988a6a7239c41eb903cacd8a66df8e25385b674e5d977d72434ba60",
+    "WV3": "674932c732a20a2c006cbf5c660d623da4176a00f43bbba994c52ab4b7bd536c"
+  },
+  "benchmark": {
+    "QB_W2T": {
+      "median_step_seconds": 0.18694160002632998,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 0.50390625
+    },
+    "QB_W2K": {
+      "median_step_seconds": 0.15601035000872798,
+      "steps_per_epoch": 536,
+      "peak_reserved_gib": 1.53125
+    },
+    "GF2_W2T": {
+      "median_step_seconds": 0.18958509995718487,
+      "steps_per_epoch": 620,
+      "peak_reserved_gib": 0.50390625
+    },
+    "WV3_W2T": {
+      "median_step_seconds": 0.2079206499911379,
+      "steps_per_epoch": 304,
+      "peak_reserved_gib": 0.595703125
+    }
+  },
+  "gmac_256": {
+    "QB": {
+      "C2MS": 59.632058368,
+      "W2T": 59.632058368,
+      "K2": 39.063191552,
+      "W2K": 39.063191552
+    },
+    "GF2": {
+      "C2MS": 59.632058368,
+      "W2T": 59.632058368,
+      "K2": 39.063191552,
+      "W2K": 39.063191552
+    },
+    "WV3": {
+      "C2MS": 60.3799552,
+      "W2T": 60.3799552,
+      "K2": 39.811088384,
+      "W2K": 39.811088384
+    }
+  },
+  "fingerprint": "e0ee01ff9b3827aae0e5238a80d1702a4cbc94bf48198bdd9f4b1e5f1d30647d"
+}

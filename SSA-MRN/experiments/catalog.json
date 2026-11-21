@@ -2986,5 +2986,37 @@
     "manifest": "experiments/performance/88_factorization_at_decay_start/manifest.json",
     "results": "experiments/performance/88_factorization_at_decay_start/results",
     "last_checked": "2026-11-19T05:20:00+09:00"
+  },
+  "performance/89_spectral_coarse_loss_weights": {
+    "display_name": "89. 분광 손실 계수(λ)와 2배 거친 쌍 계수(c) 탐색: K2D 학습법, W2 2×2 합성곱 구현",
+    "experimenter": "이병현",
+    "status": "평가 완료",
+    "improvement": "부분 개선",
+    "result": "λ*=1.2·c*=0.25, 88번 K2D 대비 QB −0.103·GF2 +0.438·WV3 +0.095 dB (1시드)",
+    "report": "experiments/performance/89_spectral_coarse_loss_weights/README.md",
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "evaluated_seeds": [
+      42
+    ],
+    "retraining": true,
+    "limits": "50에폭 선별 곡선으로 λ(A단계)와 c(B단계, c ≥ 1.25 생략)를 validation으로 고르고, 88번 K2D 학습법 150에폭 seed 42로 확정했습니다(90번 컨트롤러 N 갈래). W2 입·출력 층은 2×2 합성곱 구현입니다. QB는 개선 없음입니다.",
+    "config": "experiments/performance/89_spectral_coarse_loss_weights/config.json",
+    "entrypoint": "experiments/performance/89_spectral_coarse_loss_weights/run.py",
+    "manifest": "experiments/performance/89_spectral_coarse_loss_weights/manifest.json",
+    "results": "experiments/performance/89_spectral_coarse_loss_weights/results",
+    "last_checked": "2026-11-21T22:30:00+09:00"
+  },
+  "performance/90_dataset_matched_internal_resampling": {
+    "display_name": "90. 모델 내부 축소·확대를 데이터셋 방식(23탭 보간, MTF 블러 + 솎음)으로 교체",
+    "experimenter": "이병현",
+    "status": "학습 중",
+    "improvement": "판단 보류",
+    "result": "학습 중. N(89번 확정)을 K2D 150에폭으로, 갈래 A·B·C를 50에폭 선별로 학습해 validation으로 고름",
+    "report": "experiments/performance/90_dataset_matched_internal_resampling/README.md",
+    "sensor": "QB, GF2, WV3",
+    "evaluated_seeds": [],
+    "retraining": true,
+    "limits": "89번 확정 학습법(λ 1.2, c 0.25)으로 N을 K2D 150에폭, 갈래 A·B·C를 50에폭 선별로 seed 42에서 학습합니다. 갈래는 validation으로만 고르고 test는 보고만 합니다. WV2 전이와 FR은 참고입니다.",
+    "config": "experiments/performance/90_dataset_matched_internal_resampling/config.json"
   }
 }

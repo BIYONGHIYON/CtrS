@@ -1,0 +1,1939 @@
+{
+  "experiment": "performance/89_spectral_coarse_loss_weights",
+  "research_track": "performance",
+  "experiment_number": 89,
+  "state": "evaluation complete (seed 42): lambda* 1.2 (stage A) and c* 0.25 (stage B, c >= 1.25 not run) chosen on 50-epoch screening validation; W2 2x2 implementation applied; confirmation (88 K2D recipe, 90 controller variant N) + projection vs 88 K2D + projection RR test: QB no improvement (-0.103 dB), GF2 (+0.438) and WV3 (+0.095) improvement -> partial improvement; WV2 transfer +0.098 (reference). Screening best.pt (47 runs) kept as release assets only (user decision 2026-11-21).",
+  "files": {
+    "README.md": {
+      "bytes": 17604,
+      "sha256": "74d654e80b5394cfbd3203cd3e1462ab060444b217ff4cf738d328f843f22932"
+    },
+    "checkpoints/GF2_NK_s42/best.pt": {
+      "bytes": 8717827,
+      "sha256": "996a8af100cb087f7187e7a32837dd043699d51588503377414622e728856c6c"
+    },
+    "checkpoints/GF2_NK_s42/best_ema.pt": {
+      "bytes": 8729891,
+      "sha256": "2a03b1bdb1df1d9bb05680e6cecef84b23adc1dcbf914da3a119b745b7bf81b4"
+    },
+    "checkpoints/GF2_NT_s42/best.pt": {
+      "bytes": 12678515,
+      "sha256": "b0138198b7f191bab3989685cee2f91a0a2db6de69239ab4f50dd5fa238b0da2"
+    },
+    "checkpoints/GF2_NT_s42/best_ema.pt": {
+      "bytes": 12687315,
+      "sha256": "cab513a662d4a18c5b83f4551db873514a50ac97a7db104b1eba0543f313290e"
+    },
+    "checkpoints/QB_NK_s42/best.pt": {
+      "bytes": 8717827,
+      "sha256": "56781bd153ae70d54bd05d554ed5535bf364561ee923827996f83c718138ee13"
+    },
+    "checkpoints/QB_NK_s42/best_ema.pt": {
+      "bytes": 8729891,
+      "sha256": "4144e74d951271ce4b6263028938c5c521546873087eee2de0a8807f030c940f"
+    },
+    "checkpoints/QB_NT_s42/best.pt": {
+      "bytes": 12678515,
+      "sha256": "c4a03dd37a9121bacf90657ee7bdf17ea001b2f6f519b9148b6508ecbd97d91a"
+    },
+    "checkpoints/QB_NT_s42/best_ema.pt": {
+      "bytes": 12687315,
+      "sha256": "e8f59acc07f8397a3396f2b49f667e9b70adf02bca2aa96c01715a9b35a63035"
+    },
+    "checkpoints/QB_W2K_s42/best.pt": {
+      "bytes": 8722371,
+      "sha256": "0ec8fe134af0fe4dc9cb2465df88a8d5845ee8239d1c4177706d194e0f50e5c0"
+    },
+    "checkpoints/QB_W2K_s42/best_ema.pt": {
+      "bytes": 8734435,
+      "sha256": "450af5950b44b36a889b8af4ddaf3d759627cd537056cf194133d401b28bbba4"
+    },
+    "checkpoints/QB_W2T_s42/best.pt": {
+      "bytes": 12683059,
+      "sha256": "c21118aa1bb65903cbfb8675dcb8402bdc9258c46807c11f06bb263edb7c8442"
+    },
+    "checkpoints/QB_W2T_s42/best_ema.pt": {
+      "bytes": 12691859,
+      "sha256": "13defb38a6539c09d23010ca2065dfbb3192dffacf8657efa76d661f860e539c"
+    },
+    "checkpoints/WV3_NK_s42/best.pt": {
+      "bytes": 9113123,
+      "sha256": "b4c971c7c8245c73d76f146fa590bfc7edcb3ab1f8a0c9113f2f41b1eb9795bf"
+    },
+    "checkpoints/WV3_NK_s42/best_ema.pt": {
+      "bytes": 9126531,
+      "sha256": "c10ed33f3df9ca929307f35571944e2ee46046c880aac0c193525606d0bc2795"
+    },
+    "checkpoints/WV3_NT_s42/best.pt": {
+      "bytes": 13073811,
+      "sha256": "e2260097db5156b66e1fc6270ec6d872cd70bcbdbb043b0d81ab7658fa384c25"
+    },
+    "checkpoints/WV3_NT_s42/best_ema.pt": {
+      "bytes": 13083955,
+      "sha256": "f7993b9d4096c62edc3a857b27a49daf3c6e0cf1b8c289c1b6f78522bf15b514"
+    },
+    "config.json": {
+      "bytes": 14059,
+      "sha256": "870f4ca2c05fe0c4a5a8858ede55056e26190649bbb08ea27a7b04734f76b630"
+    },
+    "evaluate.py": {
+      "bytes": 9061,
+      "sha256": "7f7410b8f492daa68fc94c62418bc8ddcbee9f669593ee8cc891b9a37d31a2e5"
+    },
+    "model.py": {
+      "bytes": 4752,
+      "sha256": "ff27ec771d432f337f944412f72c94195384f6b805e96441141529d29642669d"
+    },
+    "prepare.py": {
+      "bytes": 961,
+      "sha256": "8f480f97f124d40e7f6d857400827bde4385d7145cedb4757ebf3887423c8a8b"
+    },
+    "provenance/block_high_c.py": {
+      "bytes": 2248,
+      "sha256": "d4eb1026399a28ad92bf56db9d52baf06154d928c1376a68e482a767a43bb58e"
+    },
+    "provenance/chain89.ps1": {
+      "bytes": 2019,
+      "sha256": "cf3c4eabd48504c1bc566e03577ff7c6b151195599ddebbb14cfec828f3342b7"
+    },
+    "provenance/confirmation_run_records/abc_blocked.json": {
+      "bytes": 550,
+      "sha256": "6d90b5a8bb6916665f80547555ec62541cf346062a1c2ebd09adc52fa31188c8"
+    },
+    "provenance/confirmation_run_records/controller_started.json": {
+      "bytes": 177,
+      "sha256": "b442623c653fa0d23dd19a68137e6f2ff4fe0a775991bc6aa9078e439aa98286"
+    },
+    "provenance/confirmation_run_records/data_manifest.json": {
+      "bytes": 18526,
+      "sha256": "884a433635285ccd76052c9400b1aec41a987ca10013436e0a4d4bd1d2c6bb59"
+    },
+    "provenance/confirmation_run_records/environment.json": {
+      "bytes": 315,
+      "sha256": "155654b49205daeda989f3153710f254cf87d832b343c47e28f4ebc8390d824b"
+    },
+    "provenance/confirmation_run_records/init/GF2_NK_s42.json": {
+      "bytes": 559,
+      "sha256": "65a12fd03644772d7ce452cb61ad2e2b7536770c9b9aa7aadc2bc3825c19faff"
+    },
+    "provenance/confirmation_run_records/init/QB_NK_s42.json": {
+      "bytes": 557,
+      "sha256": "6e57e782cec4c38baab117d158c2c7ddb3b22aa701062459cb06e4e1ab03a7b1"
+    },
+    "provenance/confirmation_run_records/init/WV3_NK_s42.json": {
+      "bytes": 558,
+      "sha256": "b83ccf418730ca9d2b1bbc67595aa4e169590b44add598d08aa7d25517add36e"
+    },
+    "provenance/confirmation_run_records/preflight/bench_config.json": {
+      "bytes": 18068,
+      "sha256": "1c3f78e3cffe0803eb41dda4c783d88ee46528844bb0f4cd6ad08345f73a77aa"
+    },
+    "provenance/confirmation_run_records/preflight/benchmark_n1_GF2_CT.json": {
+      "bytes": 439,
+      "sha256": "fc57da93d9b0bc821d89e50342684471a5dac68421b91572535b1dbe6a3bf24d"
+    },
+    "provenance/confirmation_run_records/preflight/benchmark_n1_QB_CK.json": {
+      "bytes": 441,
+      "sha256": "c57849ad466ad548c02b4bc9d864853b61843ba84a3bdb9d2061ecf7e1784cca"
+    },
+    "provenance/confirmation_run_records/preflight/benchmark_n1_QB_CT.json": {
+      "bytes": 438,
+      "sha256": "1bced7c60dc2800b0b4955d123b19cc3d93305205137b02fb4d6da45485fe6bc"
+    },
+    "provenance/confirmation_run_records/preflight/benchmark_n1_QB_NK.json": {
+      "bytes": 439,
+      "sha256": "42944fe86623ae512d1b34fa6fe6abca86cec18cbc0069154837aefd5e66109f"
+    },
+    "provenance/confirmation_run_records/preflight/benchmark_n1_QB_NT.json": {
+      "bytes": 439,
+      "sha256": "3ce825db9c9696bac446e5ef28771fd042fb91d114a95c16b3c9a37d13ea252f"
+    },
+    "provenance/confirmation_run_records/preflight/benchmark_n1_WV3_CT.json": {
+      "bytes": 437,
+      "sha256": "f50373073dcabf5e5f37309c27249061ce2a07e3413c38a0a4212b3365298829"
+    },
+    "provenance/confirmation_run_records/preflight/checks.json": {
+      "bytes": 8150,
+      "sha256": "b51cb9f9780f3abb7e84e9c1e83d5ff04cf794d4030d5b928988a04cfd35aab7"
+    },
+    "provenance/confirmation_run_records/preflight/failure_preflight_1.json": {
+      "bytes": 1399,
+      "sha256": "4d8973f895eb7b1b85714df40103bedc8e1a1f992461b6a6bc6b09a115436034"
+    },
+    "provenance/confirmation_run_records/preflight/optimization.json": {
+      "bytes": 1903,
+      "sha256": "4d021a900cbfafd3bd50e3dcd869bfdf1cfdd3501576a598d7b37d98745ed830"
+    },
+    "provenance/confirmation_run_records/runtime_config.json": {
+      "bytes": 18121,
+      "sha256": "cdbe38c95df8fb25044eda776a6f401c2aa63804c22730e5920478f22a92f7e0"
+    },
+    "provenance/confirmation_run_records/stopped.json": {
+      "bytes": 191,
+      "sha256": "999e1b15dc1a1acd9e2313c818cb50ec7d4ff2dbdc22be6bbc6899e6a3ac1e5b"
+    },
+    "provenance/confirmation_source/config.json": {
+      "bytes": 8869,
+      "sha256": "7b18719bc934b4ba4bcff98d521c4f96635d4b5ae9d1d31d9e4a1021172e1db7"
+    },
+    "provenance/confirmation_source/evaluate.py": {
+      "bytes": 7542,
+      "sha256": "bc64bfde6762f4d711238f9cd1dae2659fc03e70d53c998ccf66876c073ec1e6"
+    },
+    "provenance/confirmation_source/model.py": {
+      "bytes": 7482,
+      "sha256": "a0e290703625dff3f5bd0a4b7b83c9929b56929361de0a6bd3d6c71e1646d1c7"
+    },
+    "provenance/confirmation_source/prepare.py": {
+      "bytes": 922,
+      "sha256": "3e18d871cc621b040cd35d16780374b5c167363df5394e2c9a686eb4db0666e9"
+    },
+    "provenance/confirmation_source/run.py": {
+      "bytes": 22202,
+      "sha256": "e83aea6a3bfdfbed348b388961830e7ef0cfd8ddf39fd4220bc83e384a669c01"
+    },
+    "provenance/confirmation_source/train.py": {
+      "bytes": 8123,
+      "sha256": "5a31a7f07c8a5d29486096730cea99a32105586576abf371bae1f5e6cfe596d7"
+    },
+    "provenance/continue_without_margin.py": {
+      "bytes": 2280,
+      "sha256": "300af5ca5fd889916f98f54de26bae8c5bb1899a96a75c42910e74afd20f983a"
+    },
+    "provenance/run_fine_c.py": {
+      "bytes": 6155,
+      "sha256": "0efb8b36f2ac0beb04d49a184dda740d988ff5698c210f5f8ec23852dc038b56"
+    },
+    "provenance/run_records/controller_started.json": {
+      "bytes": 177,
+      "sha256": "5cbb577a940b8922aa7e98847d8a8b55dcbf81c52e3e76e7570b0a598effb16c"
+    },
+    "provenance/run_records/data_manifest.json": {
+      "bytes": 18526,
+      "sha256": "884a433635285ccd76052c9400b1aec41a987ca10013436e0a4d4bd1d2c6bb59"
+    },
+    "provenance/run_records/environment.json": {
+      "bytes": 315,
+      "sha256": "063b451ead313e630657c4dd80ae40235960f694a517fe22ab0167c52cf9ecd1"
+    },
+    "provenance/run_records/failed_run_GF2_BL1.20C1.50_s42/failure_train.json": {
+      "bytes": 1110,
+      "sha256": "bcd0960a7d631430eafbc3d95f56e746f7ec155f0db7a3416594237427b40a7e"
+    },
+    "provenance/run_records/fine_c_complete.json": {
+      "bytes": 171,
+      "sha256": "a0cb71c7a9ac2340206d3131986ac1517ae72cf0c2a4da94d12ec8ce7584ac83"
+    },
+    "provenance/run_records/fine_c_started.json": {
+      "bytes": 607,
+      "sha256": "bb5bf13d30c73bb19f540377863e3cce8993dde4381ccca6bd1b481cd6763a41"
+    },
+    "provenance/run_records/init/QB_W2K_s42.json": {
+      "bytes": 558,
+      "sha256": "000fd97f91282ebc97dca82ee4a20a47de798b24ee98e6cfbe9fc93cb854e755"
+    },
+    "provenance/run_records/preflight/bench_config.json": {
+      "bytes": 22203,
+      "sha256": "01322eb5b67ad9107b4ef800a982922467fb2f976a1a9cd867ce6cbf336d368d"
+    },
+    "provenance/run_records/preflight/benchmark_n1_GF2_W2T.json": {
+      "bytes": 440,
+      "sha256": "357f8125061c77a221a170461e1cbcd32085d73af794c5240051e7631f81f28f"
+    },
+    "provenance/run_records/preflight/benchmark_n1_QB_W2K.json": {
+      "bytes": 441,
+      "sha256": "3a9c426b672e8b4567944682630ca990c558a4e71f7ead561717c1f42db434fa"
+    },
+    "provenance/run_records/preflight/benchmark_n1_QB_W2T.json": {
+      "bytes": 440,
+      "sha256": "20719b847786530c9f13f01c9168a6d0d0733fcd8baacb20b6995fbccfb870ae"
+    },
+    "provenance/run_records/preflight/benchmark_n1_WV3_W2T.json": {
+      "bytes": 439,
+      "sha256": "982fd012ca9348a071a47eabf8099f8d71d6c7dc03958c33cb4d86f5910a122a"
+    },
+    "provenance/run_records/preflight/checks.json": {
+      "bytes": 4888,
+      "sha256": "e3ea84f0cf6191b4d19fcf4ffd310111d801f9bb2a13c2ade8d3c36dfe89ac1f"
+    },
+    "provenance/run_records/preflight/optimization.json": {
+      "bytes": 1458,
+      "sha256": "83aa64d8bf8676b1f3727f00892f3f452bccd172c35380588edef452683cf7d5"
+    },
+    "provenance/run_records/preflight/w2_out_impl_timing.json": {
+      "bytes": 1058,
+      "sha256": "24d8540f346033b969816fdbb219a39531992ca597fac4f63f8e0c1a5c72c2a8"
+    },
+    "provenance/run_records/queue_status.json": {
+      "bytes": 4653,
+      "sha256": "f3f07df2d211ea6db6aa1ab383a71f9232b04b8ed606363d3b42cbb1d035d66f"
+    },
+    "provenance/run_records/runtime_config.json": {
+      "bytes": 23280,
+      "sha256": "8936120a0a9b4d9174d631bfec27902e82fa715b9194e8e423a51dc0b334d811"
+    },
+    "provenance/run_records/stage_B_blocked.json": {
+      "bytes": 874,
+      "sha256": "a65c3a753d5eb6356dd5f8338bd05fe983330e16dd8711cdb02e25429940dfc1"
+    },
+    "provenance/run_records/stage_B_blocked_1.json": {
+      "bytes": 847,
+      "sha256": "bd6c543cac6002c419d9730f1945d0cd1465a2acca9df20658eb6a641bff3222"
+    },
+    "provenance/run_records/stage_B_high_c_blocked.json": {
+      "bytes": 694,
+      "sha256": "4ff2b9aa229e5ae9e370829d971f82cf0175e09b4c1bf93e85d59dc8afd4a11d"
+    },
+    "provenance/run_records/stopped.json": {
+      "bytes": 200,
+      "sha256": "eee28365ce2303a448ef66243814cae377eb5eb0b4d7d21e35de7a8c2d29f17d"
+    },
+    "provenance/watch_margin_stop.ps1": {
+      "bytes": 1497,
+      "sha256": "3715afaa7d637531c0f2124ea81f8d8056ab2c96550a534d42931c0ed53be584"
+    },
+    "results/GF2_BL1.20C0.00_s42/evaluation/RR_test.json": {
+      "bytes": 12820,
+      "sha256": "ad4774ca6356d88306070d2f6c18d6942894ea8db979483ddffd0678be953d4f"
+    },
+    "results/GF2_BL1.20C0.00_s42/evaluation_complete.json": {
+      "bytes": 1277,
+      "sha256": "867f54cb79a56d0d7373041349ba2b91bc967304b65a66169fad0b8aba6fed5e"
+    },
+    "results/GF2_BL1.20C0.00_s42/history.json": {
+      "bytes": 34434,
+      "sha256": "81837a0d5fca47ae32721e5fd61a36be798ce7ea38bdd09a564b42235c8ed3c6"
+    },
+    "results/GF2_BL1.20C0.00_s42/initialization.json": {
+      "bytes": 176,
+      "sha256": "e0b52c34aac014926a9341c495a1af25eec9cb341c5849c19bd76d1219c903a3"
+    },
+    "results/GF2_BL1.20C0.00_s42/training_complete.json": {
+      "bytes": 778,
+      "sha256": "ee3e375b0b028c0b905f2c92d6893f216d1ef690c8c4b4492e2e0db8baff7ffb"
+    },
+    "results/GF2_BL1.20C0.25_s42/evaluation/RR_test.json": {
+      "bytes": 12829,
+      "sha256": "8d2916c289f0220277c402f99fd2c7af567b2824f1cf4f44a813fef5d4e39ce2"
+    },
+    "results/GF2_BL1.20C0.25_s42/evaluation_complete.json": {
+      "bytes": 1276,
+      "sha256": "8efddfe64e7cfd668bd731a3304a597f1233cf57126199e7eca3deacb7a1c5e2"
+    },
+    "results/GF2_BL1.20C0.25_s42/history.json": {
+      "bytes": 35173,
+      "sha256": "cda4baa5fb4d1e3c11f5663b53749494d720e4e882b7a5392e9cec0b8bc1bd79"
+    },
+    "results/GF2_BL1.20C0.25_s42/initialization.json": {
+      "bytes": 176,
+      "sha256": "8dd32112d8cbb22ac31d8795efcb0aa0bcc510303e989f976c6eff5aade79515"
+    },
+    "results/GF2_BL1.20C0.25_s42/training_complete.json": {
+      "bytes": 782,
+      "sha256": "909d64e2a477ceed377fd02b79bd3da5e47219d468e03dd1ce85fedaaaa606a8"
+    },
+    "results/GF2_BL1.20C0.50_s42/evaluation/RR_test.json": {
+      "bytes": 12841,
+      "sha256": "e01822d1bd66a74b62bcb5f7d6fcdb31f4ab52d2582859073926c8c7384f8461"
+    },
+    "results/GF2_BL1.20C0.50_s42/evaluation_complete.json": {
+      "bytes": 1281,
+      "sha256": "51e2cafc9bfee1248969ef7082ecc7ed205f9b67fe7c452fa896586801823389"
+    },
+    "results/GF2_BL1.20C0.50_s42/history.json": {
+      "bytes": 35197,
+      "sha256": "85ab4e735a99754b15f3d8cfc29d9f91aa3625ac7ccb0e4fa73c76425a657e94"
+    },
+    "results/GF2_BL1.20C0.50_s42/initialization.json": {
+      "bytes": 176,
+      "sha256": "c34966ef5dfe9ba9e25a75bcb4476226fe41db47c9dd422557d094c4d1be5296"
+    },
+    "results/GF2_BL1.20C0.50_s42/training_complete.json": {
+      "bytes": 782,
+      "sha256": "50cf29e6c69c347d088cf49d8492a727cde2015df61415f08b422499ab293637"
+    },
+    "results/GF2_BL1.20C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12832,
+      "sha256": "e4cb02be0521eaf52e7051f76a1c045c7b1181de2dda9f16d8993c2c86094534"
+    },
+    "results/GF2_BL1.20C1.00_s42/evaluation_complete.json": {
+      "bytes": 1273,
+      "sha256": "698c4012bb4902ce0b03e138d8433181012d29d0808208f206a8d4361afa4e90"
+    },
+    "results/GF2_BL1.20C1.00_s42/history.json": {
+      "bytes": 35249,
+      "sha256": "e5cef428476643462e965a01df737a9f581c283550721443d0cae1206f239da0"
+    },
+    "results/GF2_BL1.20C1.00_s42/initialization.json": {
+      "bytes": 176,
+      "sha256": "052a218ec09442bbc815c89fc703a9b55545965947c6c10d7cf34dace549d6c1"
+    },
+    "results/GF2_BL1.20C1.00_s42/training_complete.json": {
+      "bytes": 780,
+      "sha256": "39a9cd00545752786b19112a0a48a5b945143d87eca2195a162884945dda0391"
+    },
+    "results/GF2_L0.00C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12819,
+      "sha256": "fbbdff1a3940aa12ba5817a2730d909b2d757ccf4fdc106292d278da37ce36f5"
+    },
+    "results/GF2_L0.00C1.00_s42/evaluation_complete.json": {
+      "bytes": 1268,
+      "sha256": "0bdfbc9008a9af20119dc95ebf707a4266a9b622b45d1188f03ebb9e1142e2d1"
+    },
+    "results/GF2_L0.00C1.00_s42/history.json": {
+      "bytes": 35178,
+      "sha256": "70537b33607c2aaf9559f49940e854a905dc6bcbeff3309383af7df532653af4"
+    },
+    "results/GF2_L0.00C1.00_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "25049b3c3ce4d2ee78c81757ca5499e248f930bcee9049dd4c64490e87bbe86a"
+    },
+    "results/GF2_L0.00C1.00_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "33f172fd99789e73e5f9d6a3669b5debbb0299db5bcffb0a48520b3ab6a3fc47"
+    },
+    "results/GF2_L0.20C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12825,
+      "sha256": "41d62504a6f5d5df460c70586cc98b14506e814784f05882a3544ea933ce2e78"
+    },
+    "results/GF2_L0.20C1.00_s42/evaluation_complete.json": {
+      "bytes": 1272,
+      "sha256": "033779a38310063e9236ddd6ce5a7656df9381d47f97c77250c722b6e764b7ef"
+    },
+    "results/GF2_L0.20C1.00_s42/history.json": {
+      "bytes": 35260,
+      "sha256": "8954f1c1ebf5eccf2b933c26e661e192cb5afbfc767111bdd52551431243826b"
+    },
+    "results/GF2_L0.20C1.00_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "b5fd1407503ebbbbe7f2f5b4d4fc9f1223d3577cbd2a163a18ee717c7b49ba9e"
+    },
+    "results/GF2_L0.20C1.00_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "b957153073eba3bad05ec267e2b3558540009641378d8ed7cec12871914b5a36"
+    },
+    "results/GF2_L0.46C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12823,
+      "sha256": "c712fdc7eb6588f7ffdf0e6b1243814721705b8b3645f6564af547c197279d19"
+    },
+    "results/GF2_L0.46C1.00_s42/evaluation_complete.json": {
+      "bytes": 1273,
+      "sha256": "0366333c4c429a3a1090f75db528db79ed1356328256188cfc00f4408399be05"
+    },
+    "results/GF2_L0.46C1.00_s42/history.json": {
+      "bytes": 35213,
+      "sha256": "6dc5f59662bea255b715e4a8c8bdabc1ec5537dcb0f2fdc80f0f42fbfe3b0f2e"
+    },
+    "results/GF2_L0.46C1.00_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "4a2588a44cc9f373e8e1f1e1794b627d9efedf332ba7c4048b1313912cef4158"
+    },
+    "results/GF2_L0.46C1.00_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "b06a206415378db3c69545ad284798facedab0d482490e439f08872536a65d65"
+    },
+    "results/GF2_L0.80C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12825,
+      "sha256": "95316c0600a1571df5158e6ef5b32ee96cd97581aba50433150495e5ec59ce4e"
+    },
+    "results/GF2_L0.80C1.00_s42/evaluation_complete.json": {
+      "bytes": 1274,
+      "sha256": "932294014d0e14350fd11266e4dfa0ecd7f3ee7d16a5587b0db70327ad0e0260"
+    },
+    "results/GF2_L0.80C1.00_s42/history.json": {
+      "bytes": 35225,
+      "sha256": "df2537e5555c8a0841c68249eb8f64cbc66bc9d65dbe8763e7fcedd4744cab1b"
+    },
+    "results/GF2_L0.80C1.00_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "74fe119dfbfaad9d6e5a05427f80f0c3446b36e95e7ab854817379972116fa2d"
+    },
+    "results/GF2_L0.80C1.00_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "01d6f97a3fac8190b450c029672fd977d80a4e9898ecbbccdc79f95c66cff63e"
+    },
+    "results/GF2_L1.20C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12825,
+      "sha256": "3b970bd511914834f2da07b0663ec27a8d778df8efce9bae045fa50e88a2b17e"
+    },
+    "results/GF2_L1.20C1.00_s42/evaluation_complete.json": {
+      "bytes": 1268,
+      "sha256": "5d77da32332a6fc60edfd597dd37918405ee42a4f1263d9e7a2922c6e7045b60"
+    },
+    "results/GF2_L1.20C1.00_s42/history.json": {
+      "bytes": 35203,
+      "sha256": "2f0424ec03285ad50bad034c50b157709cf808f832b9290881791bce9ca69fe0"
+    },
+    "results/GF2_L1.20C1.00_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "5fcdc73e484e4c3b6634df73c9d4a04402330fdd5edb00de59d1331b5748f865"
+    },
+    "results/GF2_L1.20C1.00_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "941ffc67b115a1e5443cfbc926652d37d50543ca86c37a6668225e2126cea05e"
+    },
+    "results/GF2_L2.00C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12815,
+      "sha256": "38db1b0916b281c344991c57b456224681b446fea1bb8fc31db06caf26a200b6"
+    },
+    "results/GF2_L2.00C1.00_s42/evaluation_complete.json": {
+      "bytes": 1270,
+      "sha256": "5ca675e68d0f95c1b7eb9d794ddb5121803cb46fd21162734c333c5a63cb4573"
+    },
+    "results/GF2_L2.00C1.00_s42/history.json": {
+      "bytes": 35212,
+      "sha256": "10a5a53f34e3ea4bf020e8fc892197674f0cdc944ca7d01cb4d194cd83902186"
+    },
+    "results/GF2_L2.00C1.00_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "547ebfefb78c2ea72f0e3703107ec72f3c18eeddbeb49697953dda85264de83c"
+    },
+    "results/GF2_L2.00C1.00_s42/training_complete.json": {
+      "bytes": 780,
+      "sha256": "54f73c30a48c71efa7d7a21850e5e9b95c2979af7d9c3c3c8e3c7019f1b4be2e"
+    },
+    "results/GF2_NK_s42/evaluation/GF2_test.json": {
+      "bytes": 16316,
+      "sha256": "7a6cccee703f04a26a4b2a17cc5ac4736ff1bc9ed1e1e6082e6ee16964426cd6"
+    },
+    "results/GF2_NK_s42/evaluation_complete.json": {
+      "bytes": 1822,
+      "sha256": "7d84845e40dcba1106a36e55ebdff7d6dcf41c83372498e19d42a59374dcbc36"
+    },
+    "results/GF2_NK_s42/history.json": {
+      "bytes": 21586,
+      "sha256": "3e0d9548c7b64685e6e8b80d2d93d4eebf783a27070aa926ac8f519becc169a6"
+    },
+    "results/GF2_NK_s42/initialization.json": {
+      "bytes": 167,
+      "sha256": "9f2d462a7a61dc5f4defb5463141b6d84b57ece5616475f44d92e05465eb5263"
+    },
+    "results/GF2_NK_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "de3b3dd95e89bebcbec241a04f7ad11a287e291b5f14f2d7e539cb98a5283d0c"
+    },
+    "results/GF2_NT_s42/history.json": {
+      "bytes": 83989,
+      "sha256": "a050ec461ef468998910f311a378555a6d17db03909d646e0131790b315342e9"
+    },
+    "results/GF2_NT_s42/initialization.json": {
+      "bytes": 167,
+      "sha256": "cbc419043b2f2e1af37e66a2ad2219bd529fe9aaae2cd5dfdc01908e22ebba7b"
+    },
+    "results/GF2_NT_s42/training_complete.json": {
+      "bytes": 784,
+      "sha256": "fca9f7946c7a5b93b3ffbc2253240f1975155e9a5f2815ad5ecc991f12915ea4"
+    },
+    "results/QB_BL1.20C0.00_s42/evaluation/RR_test.json": {
+      "bytes": 12764,
+      "sha256": "30a19bcb7f9ccf29e8548d3520d050048badcf2ccb9a60e675f7b705e21cc374"
+    },
+    "results/QB_BL1.20C0.00_s42/evaluation_complete.json": {
+      "bytes": 1267,
+      "sha256": "9fd19f2529e33670c1273f603d5bb7e7cf2c73a230bc7315cf91d941d7822016"
+    },
+    "results/QB_BL1.20C0.00_s42/history.json": {
+      "bytes": 34297,
+      "sha256": "f45ec1624e60419e72f5dcb4ad495ac4e067099fbf2b5556b61259235943eab3"
+    },
+    "results/QB_BL1.20C0.00_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "bb3936481cb9fda97943aaf895c5d99ec612e14d46adca1ce537f83ea7b17dfc"
+    },
+    "results/QB_BL1.20C0.00_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "f9acefc612048c3ad019af29e5b27ed4f1a8271574d344c21c0f0351e4faa621"
+    },
+    "results/QB_BL1.20C0.25_s42/evaluation/RR_test.json": {
+      "bytes": 12768,
+      "sha256": "6d7715982c8055d4f8261c5589fb133b6c020b252b749939020450bcc30acd03"
+    },
+    "results/QB_BL1.20C0.25_s42/evaluation_complete.json": {
+      "bytes": 1270,
+      "sha256": "9fe1e186445ff50ae8f8f3ebc7503f85eddf2103fd6df13615febea62b600dad"
+    },
+    "results/QB_BL1.20C0.25_s42/history.json": {
+      "bytes": 35104,
+      "sha256": "602ce41cf4adc9903a033e1400a0f0d8e6128d0aec775fc886afaec50dae2380"
+    },
+    "results/QB_BL1.20C0.25_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "f09f57b5164628223547966234b87cce0d0d2e12fb106d6f24ac8a0ae1452204"
+    },
+    "results/QB_BL1.20C0.25_s42/training_complete.json": {
+      "bytes": 777,
+      "sha256": "4e24a1b9ebab3a1b307f0bb60d61fd0adef7699f03ad7af73a81ca0af771e650"
+    },
+    "results/QB_BL1.20C0.50_s42/evaluation/RR_test.json": {
+      "bytes": 12766,
+      "sha256": "b44d85ec2faecf6b1ec2f9170b0ab94c313a10babadb90db54c83a754a854fb4"
+    },
+    "results/QB_BL1.20C0.50_s42/evaluation_complete.json": {
+      "bytes": 1270,
+      "sha256": "72e7b2939c710c738f040d9910c537d6028c616bb5dd9e45ae9b5ded3c898af8"
+    },
+    "results/QB_BL1.20C0.50_s42/history.json": {
+      "bytes": 35130,
+      "sha256": "7b3e6468c214900aaf728ab141e43074ba909d8d55b1e1f32d63b268055d560b"
+    },
+    "results/QB_BL1.20C0.50_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "ae5e0a922ad6c5dec8fddcbb72fe628ae2c90be78f8272e300553ecffe2386a2"
+    },
+    "results/QB_BL1.20C0.50_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "052eccfbb00fd8078cd919e14446456357cbb231d83bb1d8b7cce049a04bba88"
+    },
+    "results/QB_BL1.20C0.75_s42/evaluation/RR_test.json": {
+      "bytes": 12751,
+      "sha256": "3ae5e94bc9ed765f9a7619f0cb17b1d7325d992fef94b3d4b43063743902153d"
+    },
+    "results/QB_BL1.20C0.75_s42/evaluation_complete.json": {
+      "bytes": 1266,
+      "sha256": "e5a6c35f1196a13f4ad0855b9fe07e62818e6923b5cce8a15da0f297e3714174"
+    },
+    "results/QB_BL1.20C0.75_s42/history.json": {
+      "bytes": 35138,
+      "sha256": "6a878a199d2f9b1e690bccfd73ba203a78d6435240360665e5b4613afca06841"
+    },
+    "results/QB_BL1.20C0.75_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "98e0623a831ca146948e846ecd617f886897a313101e179e6682db3e43142d04"
+    },
+    "results/QB_BL1.20C0.75_s42/training_complete.json": {
+      "bytes": 777,
+      "sha256": "7674d67be87599e4975dc132b9688497ba3b0b3f8628d9d52d926237b74d123e"
+    },
+    "results/QB_BL1.20C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12766,
+      "sha256": "5283706b718c2fa1c761c5be3a037154ff37bb03b7512eb782e53eed5b799b97"
+    },
+    "results/QB_BL1.20C1.00_s42/evaluation_complete.json": {
+      "bytes": 1270,
+      "sha256": "6abd1d8d3d96e4737a18b8e0c6a2d35ec99a33f50bd8a8853d6bc82278c5e331"
+    },
+    "results/QB_BL1.20C1.00_s42/history.json": {
+      "bytes": 35151,
+      "sha256": "df0b08c82f0a5706c081862d4bb57c013f44af3071c6a06a0a00b75dcc274054"
+    },
+    "results/QB_BL1.20C1.00_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "bffdafa162eafe365eb7d644ad6fdc359255db3e2180624bc45895c755269ce8"
+    },
+    "results/QB_BL1.20C1.00_s42/training_complete.json": {
+      "bytes": 782,
+      "sha256": "c3e8093de7926de45eaba4cc706a4536e98fceb6cbfdae31026cc415a98f5161"
+    },
+    "results/QB_L0.00C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12753,
+      "sha256": "c0af0fdc42158c31bef26655ce6546fd6ac1cf9a6950c397fbb7a16dbcc53e74"
+    },
+    "results/QB_L0.00C1.00_s42/evaluation_complete.json": {
+      "bytes": 1264,
+      "sha256": "fc80e8ab9a6aaea869540948927aa7942dd4a9e92ba800804ce69e0e3e20b6b7"
+    },
+    "results/QB_L0.00C1.00_s42/history.json": {
+      "bytes": 35154,
+      "sha256": "1892d95ab5a7c3555e658873816a904955c95623f2a7d0b6330751e857092452"
+    },
+    "results/QB_L0.00C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "824806909db33d14c00e569218fffe643d6635a8242ba5ac4e404233912c83a4"
+    },
+    "results/QB_L0.00C1.00_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "4e3350fd638a92af663d01b28f048ea4a7c2a25e5585ce57ceacdf291abcd10a"
+    },
+    "results/QB_L0.10C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12756,
+      "sha256": "2998418795593bfd1a10a3b1bcffe785ead716e7260ba7ceaa7ccfa07e1af036"
+    },
+    "results/QB_L0.10C1.00_s42/evaluation_complete.json": {
+      "bytes": 1262,
+      "sha256": "93f2c983b120957b5cdac290aba0696ad2faa1b9c74c718c36039971d3b4a7ff"
+    },
+    "results/QB_L0.10C1.00_s42/history.json": {
+      "bytes": 35217,
+      "sha256": "44d9b0c5c58723ed22a10e37c8b6a1293ebd7787713656c8d5e6743df299773f"
+    },
+    "results/QB_L0.10C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "3044894a28049ae79704314dbf75b4268c5ccb84f74f6b7e3f729e162734a7f6"
+    },
+    "results/QB_L0.10C1.00_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "8a56e0978363d3d006e0c7d91ff4465c58688c2c3ba563eb6e4d1070337164f8"
+    },
+    "results/QB_L0.20C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12757,
+      "sha256": "f056718396cac3ee55565cca0f3da01e7243a6c39a2965d8dfc3c014a05b7b07"
+    },
+    "results/QB_L0.20C1.00_s42/evaluation_complete.json": {
+      "bytes": 1260,
+      "sha256": "b5f9b0a4c0535598ed0c6b0571afa47a54fa5b433f5bcd0798e50432bda05249"
+    },
+    "results/QB_L0.20C1.00_s42/history.json": {
+      "bytes": 35208,
+      "sha256": "35a5f9ae286ab2d17ee961accad273f7dd0ec5a468216baf035c44c6d186d9dd"
+    },
+    "results/QB_L0.20C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "f4bb81f5a073404666e81a661271a41fde412db71a843eb8b5c923865fd681c2"
+    },
+    "results/QB_L0.20C1.00_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "d3e8da61920e0909632bc1320d279665ba57479e27ec0f9a00beccb3959e9e93"
+    },
+    "results/QB_L0.30C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12750,
+      "sha256": "b28e2e5e2d74b75dd9599b1cbfca02b1048435ed4db781e8ecd079f0df11c1bf"
+    },
+    "results/QB_L0.30C1.00_s42/evaluation_complete.json": {
+      "bytes": 1263,
+      "sha256": "30b97456a874e59ba1f06a60b0b9f9b2bc3483e0497d743eecfe8813a0b13257"
+    },
+    "results/QB_L0.30C1.00_s42/history.json": {
+      "bytes": 35164,
+      "sha256": "b912c81e70b5b966bef31a561a9910795662c138a75be218804f6c1ac9e32d49"
+    },
+    "results/QB_L0.30C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "12e8f3c046c47a23b7a8b288a1ffebe84d55aa064da59470840f3644c74b7eff"
+    },
+    "results/QB_L0.30C1.00_s42/training_complete.json": {
+      "bytes": 779,
+      "sha256": "829ce09a44d8caa289ea57e35f0cdfaeca9b3e034392d1b9ab596e8bbf1e0eb5"
+    },
+    "results/QB_L0.40C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12757,
+      "sha256": "d2120cc36f2c3dbddbab67bde4f1a63ce309d0287d5456982def5ca98ec8d3cf"
+    },
+    "results/QB_L0.40C1.00_s42/evaluation_complete.json": {
+      "bytes": 1263,
+      "sha256": "ce1db1dad2fd684be1685ce68331453a7debf0e64a88ce551e74c034671151b0"
+    },
+    "results/QB_L0.40C1.00_s42/history.json": {
+      "bytes": 35200,
+      "sha256": "883e39cd1c2c2118358061b3ae2f925784699d26c8509c9642d38b9c3faac034"
+    },
+    "results/QB_L0.40C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "9e5b1284d2e7650589972c82cea0d433ac40d91fb2384e19b5ed0aad3a9ab021"
+    },
+    "results/QB_L0.40C1.00_s42/training_complete.json": {
+      "bytes": 780,
+      "sha256": "5f7e7054779ce4fa82240ffd805dde10f650dcccb33b82b9b71777b89aacd475"
+    },
+    "results/QB_L0.46C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12757,
+      "sha256": "86df952711a3f279bf0c676b488c928bc60dae852a4a5fe7bcc02d0596de3510"
+    },
+    "results/QB_L0.46C1.00_s42/evaluation_complete.json": {
+      "bytes": 1261,
+      "sha256": "e7f39d38ccc26a8568dbd5d8fb05c48bcf4727522ff08501bf1c2861523291cb"
+    },
+    "results/QB_L0.46C1.00_s42/history.json": {
+      "bytes": 35147,
+      "sha256": "54901aaca079d80d95487d54b029bd84042279aa960166fdc3313b6b50dc7a9d"
+    },
+    "results/QB_L0.46C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "3d4b4bf696c430b67d98ead2dcd752627fbf5fbe09411ef3778ba1bbccfbc99e"
+    },
+    "results/QB_L0.46C1.00_s42/training_complete.json": {
+      "bytes": 779,
+      "sha256": "d4c10aa5745be95c0a13ff66fcaa93d016d4ae48bcaf947b0d3a55685d71d5c4"
+    },
+    "results/QB_L0.50C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12758,
+      "sha256": "bee54211771bef03a550b5b99e0a898e251ba4ffee0942cd9c745b9398ae2368"
+    },
+    "results/QB_L0.50C1.00_s42/evaluation_complete.json": {
+      "bytes": 1262,
+      "sha256": "7006fda7809127f16af2e55c2f71b663da7a818336cad4d6149f04323ca7d92e"
+    },
+    "results/QB_L0.50C1.00_s42/history.json": {
+      "bytes": 35135,
+      "sha256": "196aef609cbac3d2f2a6f56c7564ea71002b978cc74decdfba04c2cc754925f2"
+    },
+    "results/QB_L0.50C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "85a967144fcbac4447e4ac6354f29f6dba69db906b316dc47d4298e590d2d44d"
+    },
+    "results/QB_L0.50C1.00_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "dda621b6454dc76799693503c2095506d0f3b81bfa188738f686dfff075db7fd"
+    },
+    "results/QB_L0.60C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12754,
+      "sha256": "dda3b692d86d6caaffb2d1fe97321287033e9a4a519873f5519d561dcc214dc4"
+    },
+    "results/QB_L0.60C1.00_s42/evaluation_complete.json": {
+      "bytes": 1262,
+      "sha256": "48930324b0e0c7160b95179d38241800b8cf7ed0773dd15ff00b029afa3e30c5"
+    },
+    "results/QB_L0.60C1.00_s42/history.json": {
+      "bytes": 35129,
+      "sha256": "c2cb4f578f2009170ac4dc2aa975e8aee137563933bc7ca43894b8e96024eaaf"
+    },
+    "results/QB_L0.60C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "6bd392639dba2db61d6813d571e3e26146830b87ea3c90410d6ef7567e668d32"
+    },
+    "results/QB_L0.60C1.00_s42/training_complete.json": {
+      "bytes": 780,
+      "sha256": "a4521fd7fdcedbf87fef8576ae91285b716e7828d0e903c83fed7a6b5ca1fbf9"
+    },
+    "results/QB_L0.70C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12751,
+      "sha256": "727132eb8e0b04581cebef265ecff6db4cf479036b95dc46d37028acc70b3cce"
+    },
+    "results/QB_L0.70C1.00_s42/evaluation_complete.json": {
+      "bytes": 1265,
+      "sha256": "eb7ca132c364ad9df904f5d1cd83f264151cb48da78f368aad14136de5f12a34"
+    },
+    "results/QB_L0.70C1.00_s42/history.json": {
+      "bytes": 35158,
+      "sha256": "4028427c62b03db5d79e395c4991a910d5b283b3ad558ec1b286d39a911b9ed9"
+    },
+    "results/QB_L0.70C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "f3562013b671e37edc2e699b68644afa66b1675b332c88247497cbc42bbd3c77"
+    },
+    "results/QB_L0.70C1.00_s42/training_complete.json": {
+      "bytes": 780,
+      "sha256": "ae90f2472652186efe1e62021ed15cbbff6b0aa42cd94c10826f555d299be5ac"
+    },
+    "results/QB_L0.80C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12749,
+      "sha256": "192fbb9226936cb03e6657bda6c5bda9da663bffa3fbb35363a152fbfcce65fb"
+    },
+    "results/QB_L0.80C1.00_s42/evaluation_complete.json": {
+      "bytes": 1264,
+      "sha256": "16978d07ae56baeb77aa7e2feb240119ad4ae16301366897c44b8c1fc646975d"
+    },
+    "results/QB_L0.80C1.00_s42/history.json": {
+      "bytes": 35203,
+      "sha256": "6d1108da47b7b0135f4bfaca85736d8c558913c645cc3588ce649cca683ee940"
+    },
+    "results/QB_L0.80C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "adebd26626a465797ecb4c4b107800131145bf9cfc55403b630b0bb3974a16d6"
+    },
+    "results/QB_L0.80C1.00_s42/training_complete.json": {
+      "bytes": 779,
+      "sha256": "fc5cee1f6f1490829f786804b15c6665e9d0abc56a8cd65053e2b750d4378f25"
+    },
+    "results/QB_L0.90C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12753,
+      "sha256": "17da1dd29f90ec72b745e82c3d13597031fea4006f9db25d93989b18352726b6"
+    },
+    "results/QB_L0.90C1.00_s42/evaluation_complete.json": {
+      "bytes": 1263,
+      "sha256": "6109a1f42aaa2ee6acb1f793c88c7eb9b391e340051a2eef99112377f54fd4ed"
+    },
+    "results/QB_L0.90C1.00_s42/history.json": {
+      "bytes": 35160,
+      "sha256": "b535e831ae7fba486404bdfb2ba092904bdbf55e51f3e73f576b89878b487c67"
+    },
+    "results/QB_L0.90C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "f0367c48c6604413f0c176cc81b98801dc883516fd03ce08a02cb69d705d18d9"
+    },
+    "results/QB_L0.90C1.00_s42/training_complete.json": {
+      "bytes": 779,
+      "sha256": "99d2aad13f087c3a7923d8f4271059aec7066b472fcecc983a1f04501f1d340f"
+    },
+    "results/QB_L1.00C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12758,
+      "sha256": "8be89decdfdfcb5adf610ebdc69ede76a9748edd4e1a20818c7e84e2391b4d7c"
+    },
+    "results/QB_L1.00C1.00_s42/evaluation_complete.json": {
+      "bytes": 1261,
+      "sha256": "adabeea719501ed320d98258fda9c762567c747b1d0156caa38be06fe9a02efc"
+    },
+    "results/QB_L1.00C1.00_s42/history.json": {
+      "bytes": 35133,
+      "sha256": "fe751af2578e36025b7b5ca1fc2ff744e63e54ec8638923fc1467e226a51fa16"
+    },
+    "results/QB_L1.00C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "ed7e219bb9c1ecf28e9e893bec21b4a9ce8930c2ae88772f9f4cb5c9aa371891"
+    },
+    "results/QB_L1.00C1.00_s42/training_complete.json": {
+      "bytes": 780,
+      "sha256": "f349715343bab4a8628a89519d66dc4b1dfa0bc170784619585e656610a59f6f"
+    },
+    "results/QB_L1.10C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12752,
+      "sha256": "18373bd6564d2eeb82e2a87a2da0715bbc72440fdd945d8e760de665cf23f2a6"
+    },
+    "results/QB_L1.10C1.00_s42/evaluation_complete.json": {
+      "bytes": 1262,
+      "sha256": "3c2468c020f4e77bfdb1fed0ae57d2ccc63e45a08e6c17937707109b2b1aa58f"
+    },
+    "results/QB_L1.10C1.00_s42/history.json": {
+      "bytes": 35153,
+      "sha256": "89d28964f36d73126025ecd1157dc12bf50c4e78f24daa3b30c929fce022754c"
+    },
+    "results/QB_L1.10C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "b6f04c686734af9fcdaaf6db1fe48e186b809c981748dcd28111093fcaa3ea01"
+    },
+    "results/QB_L1.10C1.00_s42/training_complete.json": {
+      "bytes": 778,
+      "sha256": "6e91bc2f39fbd924c6530cee4f8b22c061c65eb61cbd389e6f45ab921d0c1c43"
+    },
+    "results/QB_L1.20C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12757,
+      "sha256": "6bca264a50ba36d1cef026c7389c6e06f957c652a05208c0f8e4306a7759fdf3"
+    },
+    "results/QB_L1.20C1.00_s42/evaluation_complete.json": {
+      "bytes": 1266,
+      "sha256": "dfffd3facb605c9ae477d9d8c6a4d62c7ce319b768ad1227eb8a2bac360a5221"
+    },
+    "results/QB_L1.20C1.00_s42/history.json": {
+      "bytes": 35171,
+      "sha256": "3ffdbadbe498d4fd98c688b75aa6d76cdf17b56f511737f5267d1ebe59492d00"
+    },
+    "results/QB_L1.20C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "5ba0ed55c819f948fc349dac95a0c905d69e5f16e1e6ed6e3a736a7a295bd9d4"
+    },
+    "results/QB_L1.20C1.00_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "db30fd6ce984108a203be4be002292222a17d876037b2cdfb40b2a3ae334f6c4"
+    },
+    "results/QB_L1.30C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12769,
+      "sha256": "8d0bcfa82adea76ce556eb21ebfa53f9f653d95e40b9c658bae1aa214b9e0c13"
+    },
+    "results/QB_L1.30C1.00_s42/evaluation_complete.json": {
+      "bytes": 1262,
+      "sha256": "3de30f73086f52da3f1cb77c458765de47a953f9daf5e1fdfcbb3f311c0eb046"
+    },
+    "results/QB_L1.30C1.00_s42/history.json": {
+      "bytes": 35173,
+      "sha256": "b4a7b97d3c97102ac6339582fc5753a5c72f8f85d315af12a710335325b237ca"
+    },
+    "results/QB_L1.30C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "a73f31bbb52972ad91c510ffb2f6202e3ee9fff5170d5d9429796a6b4cde99be"
+    },
+    "results/QB_L1.30C1.00_s42/training_complete.json": {
+      "bytes": 780,
+      "sha256": "c4cecd78157d205e9e6ee57a2594334dc2399a216bc68483690776ae4336e524"
+    },
+    "results/QB_L1.40C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12757,
+      "sha256": "e9afca586c3535389b9b9070cf8486c846a2a2e630fea82d24d2bbb97d1541f6"
+    },
+    "results/QB_L1.40C1.00_s42/evaluation_complete.json": {
+      "bytes": 1262,
+      "sha256": "82728eb433d17ee3e2ef391378795e4fb87af8d97186327db68831d0bf21e145"
+    },
+    "results/QB_L1.40C1.00_s42/history.json": {
+      "bytes": 35173,
+      "sha256": "0d58cb3b833d53b87ef7f46e93c3f1193829439bfa1215f48d8f5085d9b1f033"
+    },
+    "results/QB_L1.40C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "2cabff47fb0d024481022fcdb2b7e5f618168fc0e40317f9904877beadd75bfd"
+    },
+    "results/QB_L1.40C1.00_s42/training_complete.json": {
+      "bytes": 778,
+      "sha256": "f03b6cf34a7894ffc876803b54543a957dd608d590f06f542d5e1ec391fc24d8"
+    },
+    "results/QB_L1.50C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12759,
+      "sha256": "dd13dc7a88cb8bdf73776aff90e7661b0b5402bd7145b7a977b87fe1898defb4"
+    },
+    "results/QB_L1.50C1.00_s42/evaluation_complete.json": {
+      "bytes": 1260,
+      "sha256": "722361d779537ad488323b15762646f87f90509c9fc1fd2be12c11a6bd87d557"
+    },
+    "results/QB_L1.50C1.00_s42/history.json": {
+      "bytes": 35154,
+      "sha256": "c67cfba4e45f9ac02d18e650735e6dd904ee9cce96c88b052c22f4bc448815a4"
+    },
+    "results/QB_L1.50C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "3ac53ce4b8b8678a9a653508050689446abc3f8e328212bd386a9bd101295a4d"
+    },
+    "results/QB_L1.50C1.00_s42/training_complete.json": {
+      "bytes": 782,
+      "sha256": "65442857f8be8adb331aab9ac80d92bdcd4c92e7f0e5f5c5db5ede391cb54e43"
+    },
+    "results/QB_L1.60C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12744,
+      "sha256": "d9043d633d843d498bffc1e3f3929a904e477aa6bc7b4dc44c1b1506030c0e02"
+    },
+    "results/QB_L1.60C1.00_s42/evaluation_complete.json": {
+      "bytes": 1261,
+      "sha256": "08af49fa943416276a0e9d4729b33849573e9dc781c68610d3c61f2f27aee0bc"
+    },
+    "results/QB_L1.60C1.00_s42/history.json": {
+      "bytes": 35197,
+      "sha256": "a25823f941e9556d7d804cecf976535a3ab1ca5959ddd92e320d10efbe0c3773"
+    },
+    "results/QB_L1.60C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "e0176aaea5b34e0b54e5a08eda7300a79c9d7d086a729a931383c86daddc5060"
+    },
+    "results/QB_L1.60C1.00_s42/training_complete.json": {
+      "bytes": 780,
+      "sha256": "da83531cbc7ba11cd4eb266858655e1d38024089f1892dde38c7cac21d6ad8b5"
+    },
+    "results/QB_L1.70C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12762,
+      "sha256": "cbdc0780c93ebda6f2f56665303c7afda7f43ccd722327b2540eb5256afd3e11"
+    },
+    "results/QB_L1.70C1.00_s42/evaluation_complete.json": {
+      "bytes": 1268,
+      "sha256": "a60de44f0475223b56fce5eaa6f190ece5e152158714cdb330dd3c7435b9219e"
+    },
+    "results/QB_L1.70C1.00_s42/history.json": {
+      "bytes": 35180,
+      "sha256": "f4503ed97cf7952953c35d9ecc98d24bb72c4c41879b5666ff7f2172844555e1"
+    },
+    "results/QB_L1.70C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "cc873a8331ec0d3e3f60107230f800d5468e29f2b9bc646e45e78d95e034934e"
+    },
+    "results/QB_L1.70C1.00_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "4dba7de284bcd4b635a7ae22f9c05802706a55642586d55ff1415d7f71f0c9f4"
+    },
+    "results/QB_L1.80C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12760,
+      "sha256": "f80af8e4e7087febae681c930e74210447e6597d440d2768ad48c46273feac9f"
+    },
+    "results/QB_L1.80C1.00_s42/evaluation_complete.json": {
+      "bytes": 1266,
+      "sha256": "c47798c86c602168d2a64d6f1dc6439cb3cafedc734d296599a1044322af186e"
+    },
+    "results/QB_L1.80C1.00_s42/history.json": {
+      "bytes": 35147,
+      "sha256": "c4a6167dff702c595ff503f04eccb65745ea7c536bca45a436ffd6baeaebdf9c"
+    },
+    "results/QB_L1.80C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "6eadf78e734ba65bfac4ee161d6f7260c4480fddd231b33be700d5397d43203c"
+    },
+    "results/QB_L1.80C1.00_s42/training_complete.json": {
+      "bytes": 782,
+      "sha256": "d1f9ccc103922c44db87d5350eddbddc1a39765ccdcefbe4d52b9937d68d725c"
+    },
+    "results/QB_L1.90C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12758,
+      "sha256": "8655cbdfc4fd590507145cc08ef5c2e38ff5ddbbf9e696b86646f2e56fd276c6"
+    },
+    "results/QB_L1.90C1.00_s42/evaluation_complete.json": {
+      "bytes": 1263,
+      "sha256": "394b591c003a3e49db7d821061afe11082abb96729f182a31f6c62cc4dc60552"
+    },
+    "results/QB_L1.90C1.00_s42/history.json": {
+      "bytes": 35148,
+      "sha256": "f98cebf24ee2a8a4657ad22a4dbe02549ded3b5d0cddd505b28f61d525e85dee"
+    },
+    "results/QB_L1.90C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "33bb86bca4d676cea85110b776621a7d2a5f35582eebb77b4e14adf4d288dce1"
+    },
+    "results/QB_L1.90C1.00_s42/training_complete.json": {
+      "bytes": 777,
+      "sha256": "3b8d48acaaec030f60d7d624e3bfe77bbd4d07335cf0c17eef381530ac5f72a9"
+    },
+    "results/QB_L2.00C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12752,
+      "sha256": "2c51fd900a8b21f968440761410c825897a5e185ce4bbd90878c762eacb1dd38"
+    },
+    "results/QB_L2.00C1.00_s42/evaluation_complete.json": {
+      "bytes": 1263,
+      "sha256": "99de93f36a9eae13c125371674f728a11a3bc7d1aa8de18506731d573babc4da"
+    },
+    "results/QB_L2.00C1.00_s42/history.json": {
+      "bytes": 35171,
+      "sha256": "421111de583daa77d67517d16bbb932e4ece0ac34ef80155edf317a80cf4f520"
+    },
+    "results/QB_L2.00C1.00_s42/initialization.json": {
+      "bytes": 174,
+      "sha256": "f0c8e70db15109ebceb0daba96925963fcbd8ebf05ab663bfa62873a5708ef43"
+    },
+    "results/QB_L2.00C1.00_s42/training_complete.json": {
+      "bytes": 782,
+      "sha256": "3772e76d6e5a4ba99b434b05a7e71c1543ef90b3ec43cb29eb542c487699c4c5"
+    },
+    "results/QB_NK_s42/evaluation/QB/compare_scene_00.png": {
+      "bytes": 228692,
+      "sha256": "0350d66ca18019b1ffa7a4398d1ce57c51417d6126dfa7d630e850d8611d763d"
+    },
+    "results/QB_NK_s42/evaluation/QB/compare_scene_01.png": {
+      "bytes": 234739,
+      "sha256": "02da0875472483718193fb25c6ee4cf8c12dd379a27d79f440ab7f697db3cd52"
+    },
+    "results/QB_NK_s42/evaluation/QB/compare_scene_03.png": {
+      "bytes": 242792,
+      "sha256": "8f8e08d6677660a1d48a741862ab9fc6efc70a15003aae9542a447138663ce45"
+    },
+    "results/QB_NK_s42/evaluation/QB/compare_scene_07.png": {
+      "bytes": 227611,
+      "sha256": "8d01735b0fb456c9b89753af1d243d5bfdb247e607ed36c3b86398587c5bc3f1"
+    },
+    "results/QB_NK_s42/evaluation/QB/compare_scene_14.png": {
+      "bytes": 224735,
+      "sha256": "43065e5c1b44c145d35aba49e14dbc1b4980249769d5a7c8099d3602687c490b"
+    },
+    "results/QB_NK_s42/evaluation/QB/compare_scene_17.png": {
+      "bytes": 234868,
+      "sha256": "934417838a70bfc982edf6cbd3ba80c46bac90048b7c04e3852add758a706964"
+    },
+    "results/QB_NK_s42/evaluation/QB/full_scene_00.png": {
+      "bytes": 746295,
+      "sha256": "529ebf26348322314d7ddb4ad63a5608d1e33e47dc136c494626b10b6ed881dd"
+    },
+    "results/QB_NK_s42/evaluation/QB/full_scene_01.png": {
+      "bytes": 776900,
+      "sha256": "5955301719d6de31a77c249235cda0335d8c0d5212dd6deefa867cab3ff99252"
+    },
+    "results/QB_NK_s42/evaluation/QB/full_scene_03.png": {
+      "bytes": 808920,
+      "sha256": "51d0fb92fd15b118660dce137563f10b8148d6da9f10da666dd1b559d896131d"
+    },
+    "results/QB_NK_s42/evaluation/QB/full_scene_07.png": {
+      "bytes": 734144,
+      "sha256": "4d6e5e9b4e3ec9ff526f42214f7da9a19d15d816231aa07a9bb2d13ab7e9c43a"
+    },
+    "results/QB_NK_s42/evaluation/QB/full_scene_14.png": {
+      "bytes": 755969,
+      "sha256": "68ff455cf8ffb691a673e8a5cf31dbce75d5813dbbaad181bbcffcc805f63aa1"
+    },
+    "results/QB_NK_s42/evaluation/QB/full_scene_17.png": {
+      "bytes": 748776,
+      "sha256": "1e67cab15913ddb89e4eb7899f44c350a844e498551c7558536bc1cb67ae2beb"
+    },
+    "results/QB_NK_s42/evaluation/QB/result_images.json": {
+      "bytes": 2815,
+      "sha256": "94b2b35d6beb7da005539ef52aa141a5afb79e5e13bf3a7aa9844913c272c866"
+    },
+    "results/QB_NK_s42/evaluation/QB_test.json": {
+      "bytes": 16207,
+      "sha256": "3e04ae3e0a0fe1566f2b16d9e2ee05e9ca0041f5fe028dc0f907c69075a53c38"
+    },
+    "results/QB_NK_s42/evaluation_complete.json": {
+      "bytes": 1812,
+      "sha256": "11351670cd86e8cffffa3b12c38bac3c855c116572722933797d777fed763898"
+    },
+    "results/QB_NK_s42/history.json": {
+      "bytes": 21601,
+      "sha256": "f024906f1aa2344157a1419a79336a684631655c05790d9eedf13ae42503c875"
+    },
+    "results/QB_NK_s42/initialization.json": {
+      "bytes": 166,
+      "sha256": "f12b564c48bb2b836f341f6a92fd181e7871987b8fcfcc1e62281ab62c56acb5"
+    },
+    "results/QB_NK_s42/training_complete.json": {
+      "bytes": 777,
+      "sha256": "ae14f883c3b97e45261a5059d53267c1c859075deade0b611c952d0782f20c8a"
+    },
+    "results/QB_NT_s42/history.json": {
+      "bytes": 83868,
+      "sha256": "875c4ab7ef59c1bce7ad989e74e1a8d7a1129b407613e14626055aa9c7e8a157"
+    },
+    "results/QB_NT_s42/initialization.json": {
+      "bytes": 166,
+      "sha256": "18a23ac6c976ad2ca6be9a7c44dc6d4dba151843ef9b0bba79a8004e6233c46c"
+    },
+    "results/QB_NT_s42/training_complete.json": {
+      "bytes": 782,
+      "sha256": "35c6c9d4c439d6ecb185edadfb0077ceb950ba348b601730d500b4c294c67640"
+    },
+    "results/QB_W2K_s42/evaluation/RR_test.json": {
+      "bytes": 12738,
+      "sha256": "36732b0df9bbf875f436c14aedb976e3d42d86129a6f701a636cbe447e8d68a9"
+    },
+    "results/QB_W2K_s42/evaluation_complete.json": {
+      "bytes": 1254,
+      "sha256": "fc6d844c22edb6eb845f1d4d70037f8ceec13a9111ff286d952caf2d83371bcf"
+    },
+    "results/QB_W2K_s42/history.json": {
+      "bytes": 21587,
+      "sha256": "567546db7ab51673d1bee383f2065a6840167f1209c537d25e694858b6931205"
+    },
+    "results/QB_W2K_s42/initialization.json": {
+      "bytes": 167,
+      "sha256": "0d6d85b922730693ebaa9e195fe21e727cf0f332cc2cc9df48343370a61bc794"
+    },
+    "results/QB_W2K_s42/training_complete.json": {
+      "bytes": 782,
+      "sha256": "f7cf18f5c73e9650fc8ed53acff532927872ca40e8061783da49fb21139fd55c"
+    },
+    "results/QB_W2T_s42/evaluation/RR_test.json": {
+      "bytes": 12727,
+      "sha256": "35f60ae9aee076a0ef70117f58bd5b7d828d5c385bbd1658a6a3094014cef563"
+    },
+    "results/QB_W2T_s42/evaluation_complete.json": {
+      "bytes": 1253,
+      "sha256": "06cb42f64144ec6c1495cc63b4dc66f741b34762aad504927b8ce697678cc96b"
+    },
+    "results/QB_W2T_s42/history.json": {
+      "bytes": 83944,
+      "sha256": "d7cf8c057c10c29f96edfb1dd98528c99951c0389bde78ad585056b7115d648e"
+    },
+    "results/QB_W2T_s42/initialization.json": {
+      "bytes": 167,
+      "sha256": "1c5900f29cd7e4fffe32702b15268eb26f9ce157bd0af24eda7dc5476703f656"
+    },
+    "results/QB_W2T_s42/training_complete.json": {
+      "bytes": 783,
+      "sha256": "c9ab2725afa1c91c97875a8728e9d0370e202fdf83b4bb69c186f1c594e58e3b"
+    },
+    "results/WV3_BL1.20C0.00_s42/evaluation/RR_test.json": {
+      "bytes": 12784,
+      "sha256": "1c802ffcd00eedf5c0ac8b3e98f76b0788cb468fde3bc86e76caa23db41e0cdd"
+    },
+    "results/WV3_BL1.20C0.00_s42/evaluation_complete.json": {
+      "bytes": 1268,
+      "sha256": "2e94b3704771a2088c7a3588badb73e0bf2c310c983d83331ca28b9de6b0d885"
+    },
+    "results/WV3_BL1.20C0.00_s42/history.json": {
+      "bytes": 34170,
+      "sha256": "6ea6715eb7862b790edf52f3e00fdefec26ebb327537ed37ba54c1b90b29d512"
+    },
+    "results/WV3_BL1.20C0.00_s42/initialization.json": {
+      "bytes": 176,
+      "sha256": "23b435c144e04255356250d28583aa78a03d23e77a6533e238269de96830878e"
+    },
+    "results/WV3_BL1.20C0.00_s42/training_complete.json": {
+      "bytes": 782,
+      "sha256": "59df98e28f91d421efe15e49978f3dc5b8c747f5bc1f71a06f3a9ef405c1bd67"
+    },
+    "results/WV3_BL1.20C0.25_s42/evaluation/RR_test.json": {
+      "bytes": 12770,
+      "sha256": "a8668c3ce4fedaa50e9518259aefc77601bfa212b11d37cdf273909554964ba6"
+    },
+    "results/WV3_BL1.20C0.25_s42/evaluation_complete.json": {
+      "bytes": 1259,
+      "sha256": "c6a913793b2085fc6add5cc10b5a2ebfa9bd50081c2b86036c9066244d61fd1e"
+    },
+    "results/WV3_BL1.20C0.25_s42/history.json": {
+      "bytes": 35069,
+      "sha256": "e9392b35efa8d2aa150aea4d15e7f80ccd96a3402c3344860aaa1365249e0cea"
+    },
+    "results/WV3_BL1.20C0.25_s42/initialization.json": {
+      "bytes": 176,
+      "sha256": "37b26387614118902455d4da3b9378891a828ce308c36c937c12218a4ab25564"
+    },
+    "results/WV3_BL1.20C0.25_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "db35a01cab0ad16c5d2d9a4164c47445e38a0ceeeb34684bb7a85ac4369197b3"
+    },
+    "results/WV3_BL1.20C0.50_s42/evaluation/RR_test.json": {
+      "bytes": 12781,
+      "sha256": "e4cb842149192b3fb0fc00bc1627851429ad42c18b5ddb11e5d78c024cbcbafb"
+    },
+    "results/WV3_BL1.20C0.50_s42/evaluation_complete.json": {
+      "bytes": 1265,
+      "sha256": "89e79dbfc1df1555b6a01a59109e1e4bbb25923d17f384d2da0735df097f6218"
+    },
+    "results/WV3_BL1.20C0.50_s42/history.json": {
+      "bytes": 35070,
+      "sha256": "754bf0e00fa380923c6ea481ddd3916ca7853f18ab977243ce8399755cf05f89"
+    },
+    "results/WV3_BL1.20C0.50_s42/initialization.json": {
+      "bytes": 176,
+      "sha256": "b5e2af2bd69c081cb15af526dba8182e1eb533154b92a5ee20f59d16c409371b"
+    },
+    "results/WV3_BL1.20C0.50_s42/training_complete.json": {
+      "bytes": 782,
+      "sha256": "01e97eb010f24caca3bc32099b4c4aa5c1806efbe913c6b6004d0fc8144cb366"
+    },
+    "results/WV3_BL1.20C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12783,
+      "sha256": "e656af0e3cd4b422d789575369b64c3df397cadf66776ff2d3b4cbc7cee0d235"
+    },
+    "results/WV3_BL1.20C1.00_s42/evaluation_complete.json": {
+      "bytes": 1257,
+      "sha256": "4379376e6b6bdd5ca737864e6a21e83ad5f1a91a097a156385ce638839ffce7c"
+    },
+    "results/WV3_BL1.20C1.00_s42/history.json": {
+      "bytes": 35067,
+      "sha256": "079ae710cb84a92abd143969755f3073bd2539545fb1dd5699a6c0fba3565193"
+    },
+    "results/WV3_BL1.20C1.00_s42/initialization.json": {
+      "bytes": 176,
+      "sha256": "08ed05eafb6e069762be6d467afca181fc2cfa07a356cef105fa29ab3651829f"
+    },
+    "results/WV3_BL1.20C1.00_s42/training_complete.json": {
+      "bytes": 779,
+      "sha256": "ca1d57ca45159127de051ee09af4ec5d11929184ae2ba292ddad6ca5ca2e9a41"
+    },
+    "results/WV3_L0.00C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12781,
+      "sha256": "470362a9031f3987559e7737aa61dce6ca2af10a78182ee2f0eb76d73ef1cfc7"
+    },
+    "results/WV3_L0.00C1.00_s42/evaluation_complete.json": {
+      "bytes": 1256,
+      "sha256": "095f7d30d0a4f250d718004cb3f838a2d6dbee1b537e1a8338ff482d8a1779ac"
+    },
+    "results/WV3_L0.00C1.00_s42/history.json": {
+      "bytes": 35096,
+      "sha256": "19e4982aae342c235d75a56622fd0a5d5eb52aaf935786e38ea5c7fafc9f0b59"
+    },
+    "results/WV3_L0.00C1.00_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "07300bb5aecf0c101c435e5d897724b72ae6274a92f600f33f69dbc8b4850225"
+    },
+    "results/WV3_L0.00C1.00_s42/training_complete.json": {
+      "bytes": 780,
+      "sha256": "777229ebab6212effe7e019395794222d01b66a6e56a3a9415f2008068ff900f"
+    },
+    "results/WV3_L0.20C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12772,
+      "sha256": "f2e05b2ca1c05e98a18686cdbe0eccbfabb39f9e28cbf74c069583906cbc1744"
+    },
+    "results/WV3_L0.20C1.00_s42/evaluation_complete.json": {
+      "bytes": 1256,
+      "sha256": "827c1b572cf0184112b65a40a2dc432b8cf4a984dff4eb725397205aa470b013"
+    },
+    "results/WV3_L0.20C1.00_s42/history.json": {
+      "bytes": 35065,
+      "sha256": "40d5aadf8838b5ae109f32519d181c06f5e6bd72b41c1bbeac209c9d458006db"
+    },
+    "results/WV3_L0.20C1.00_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "6d877132885135fa4ca19ba52a1f758372f99c0e5a6c9aec7e3b5a4826de5479"
+    },
+    "results/WV3_L0.20C1.00_s42/training_complete.json": {
+      "bytes": 779,
+      "sha256": "541e963386ff75aa017c154bb5e02eb853be9ee82ac307a996cf9f5e6a60f3bc"
+    },
+    "results/WV3_L0.46C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12777,
+      "sha256": "4caad59c3c90babe5a16403a5afc413d6fc46f8a349e53031bec7eeeca52d1bb"
+    },
+    "results/WV3_L0.46C1.00_s42/evaluation_complete.json": {
+      "bytes": 1256,
+      "sha256": "82e744fee2228a7c4867decc6adc000c3420d597d4c1e1893c802478b2b50e96"
+    },
+    "results/WV3_L0.46C1.00_s42/history.json": {
+      "bytes": 35071,
+      "sha256": "191145b681abaae2c784c9a9dd1f38ffe861df0b8dfdda34a36d06ad2fcbc7b4"
+    },
+    "results/WV3_L0.46C1.00_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "80a7e14126ddf69626efeed3f0c5f12e5e0492eeb8d48450f12bc5583e46a86b"
+    },
+    "results/WV3_L0.46C1.00_s42/training_complete.json": {
+      "bytes": 781,
+      "sha256": "b8d265aa90ab22979a086193c6a7475e31ee323ac17f6a4be1c02fdab89483cc"
+    },
+    "results/WV3_L0.80C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12775,
+      "sha256": "5eb7c8ae375073c1288db72e303b3d7ce7295d6a92eff5a66c29b16b3690f0d0"
+    },
+    "results/WV3_L0.80C1.00_s42/evaluation_complete.json": {
+      "bytes": 1263,
+      "sha256": "580efee51786e3375655140dd49f522b3f465d8a45413fdc7e1aacf2bc3e014a"
+    },
+    "results/WV3_L0.80C1.00_s42/history.json": {
+      "bytes": 35062,
+      "sha256": "4ec41cec2a66594a2ce7c77d12a8c81b36a85babcf13850f56c173e338289103"
+    },
+    "results/WV3_L0.80C1.00_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "b5bdef4640fdaf50e279f62dbb86371b0f6d91473976f6ede7f5e2abf45f5794"
+    },
+    "results/WV3_L0.80C1.00_s42/training_complete.json": {
+      "bytes": 782,
+      "sha256": "f299e5fc1f3f1c0f3500cccd687b8e8c9bb161d03eede76373beabfa5f50e61b"
+    },
+    "results/WV3_L1.20C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12775,
+      "sha256": "5e164b4630ad1fdd61e5bb08d0a90cbd62a96c94e89802b27422c700ad30fe6b"
+    },
+    "results/WV3_L1.20C1.00_s42/evaluation_complete.json": {
+      "bytes": 1256,
+      "sha256": "3cbad5adc95ae6d12dae984eaedc145e3c890f3d78ba43ffed036126742ebd71"
+    },
+    "results/WV3_L1.20C1.00_s42/history.json": {
+      "bytes": 35050,
+      "sha256": "e287de6c0d9ad1a1d328ba5e3a6aab468a57418e9b8e4cb380b02104e79c4c10"
+    },
+    "results/WV3_L1.20C1.00_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "6d70391cee5d25a264b74cdd11706a359fc289267d345e6164cfb9b5a19d7e72"
+    },
+    "results/WV3_L1.20C1.00_s42/training_complete.json": {
+      "bytes": 780,
+      "sha256": "979a7b361835a28832bd69515aab041079ce114be8a73c1405aaac36f1bf3dd4"
+    },
+    "results/WV3_L2.00C1.00_s42/evaluation/RR_test.json": {
+      "bytes": 12766,
+      "sha256": "a6814444d566217f590ec302a79d2f1723f896aa0b7a992876cf381f9e2b098b"
+    },
+    "results/WV3_L2.00C1.00_s42/evaluation_complete.json": {
+      "bytes": 1254,
+      "sha256": "e48404ee713e4c66a7055ab52c59b6640d09d962339ee36ea568680cbdd16ea9"
+    },
+    "results/WV3_L2.00C1.00_s42/history.json": {
+      "bytes": 35070,
+      "sha256": "200f00cbd1fc571e96214628ce09a477f7fe1d8189de08205f4990c24021fd29"
+    },
+    "results/WV3_L2.00C1.00_s42/initialization.json": {
+      "bytes": 175,
+      "sha256": "f3e603b8b3301fbc4ced3a6ed94489dcf8946f126842fd0198e209d8e149e428"
+    },
+    "results/WV3_L2.00C1.00_s42/training_complete.json": {
+      "bytes": 780,
+      "sha256": "1ec430b113c6c6144f1fe3809e0f7b5a04db9fdc0e1f876896bedd518b88ea03"
+    },
+    "results/WV3_NK_s42/evaluation/WV2_test.json": {
+      "bytes": 16252,
+      "sha256": "8897d6924dd2a0390746733001b211b474466860a0f0e89ea1353cd5fb462e65"
+    },
+    "results/WV3_NK_s42/evaluation/WV3_test.json": {
+      "bytes": 16272,
+      "sha256": "56062e32cb488a9023ec20e6e28d5c3cb92f0a99915727bf3b20de89f0c47c8a"
+    },
+    "results/WV3_NK_s42/evaluation_complete.json": {
+      "bytes": 3069,
+      "sha256": "1f821ef8839137ece5f5a32d87e5bddd3ec4ed392651db4e419f21c2c20c52e2"
+    },
+    "results/WV3_NK_s42/history.json": {
+      "bytes": 21568,
+      "sha256": "4d0d28271ce986d3d9929f8047be685857ec369f8228f646e5be6ce92b503df4"
+    },
+    "results/WV3_NK_s42/initialization.json": {
+      "bytes": 167,
+      "sha256": "156824d9967058073a4691aefa20eba447a0492c16cd6c1fbd8982cc77ac1737"
+    },
+    "results/WV3_NK_s42/training_complete.json": {
+      "bytes": 779,
+      "sha256": "264ebebc75f538f6fc068b8806985c04c3981626871369c8fc1b2088e81e65de"
+    },
+    "results/WV3_NT_s42/history.json": {
+      "bytes": 83707,
+      "sha256": "26d864e2d2a5678438bf03d50ae8b1f33ea8f32b8fd5dee2ce56608e083fce9a"
+    },
+    "results/WV3_NT_s42/initialization.json": {
+      "bytes": 167,
+      "sha256": "50ce585ae7063f6f0b4c8b834a13b251a2f4488bad49cd98895acc994f380982"
+    },
+    "results/WV3_NT_s42/training_complete.json": {
+      "bytes": 784,
+      "sha256": "3d86b602bf5c35e2fa6a4670b6b908970d943347da1803b397699b97fd58bed2"
+    },
+    "results/c_curve.png": {
+      "bytes": 124776,
+      "sha256": "23a40767c6e508096583dd370ad34123c66417225c891cc96b3166547851f887"
+    },
+    "results/confirmation_learning.png": {
+      "bytes": 181531,
+      "sha256": "78cab8f358a836ddddb5be6e5e1b4e009228100a0fe507af665b1ece5bec40be"
+    },
+    "results/confirmation_vs_controls.png": {
+      "bytes": 70224,
+      "sha256": "fdfb3f866439fa18ae218e77199525b6ecff31727285a6ed3741e63b609c3e9a"
+    },
+    "results/controls/confirmation_GF2_GF2_s42.json": {
+      "bytes": 29075,
+      "sha256": "a67435d6a9e7e01a5f51e6420572c61c1e5ae9b226f0861a3dbc86acc3a16d5d"
+    },
+    "results/controls/confirmation_QB_QB_s42.json": {
+      "bytes": 28949,
+      "sha256": "dc6d2c3b4cfd382079e4118daef0e6c499f5368038417bcf8d25d2f2e6c85a37"
+    },
+    "results/controls/confirmation_WV3_WV2_s42.json": {
+      "bytes": 28951,
+      "sha256": "9eb0fef4fbc998285fe6012a530aa8f74120178720c26fba1d8ce4d0a589e04f"
+    },
+    "results/controls/confirmation_WV3_WV3_s42.json": {
+      "bytes": 29023,
+      "sha256": "2be4ac14a5d673075480fac8798496e53839f5ad1d200be02598a195b456d217"
+    },
+    "results/controls/screening_GF2_s42.json": {
+      "bytes": 22618,
+      "sha256": "fc4946f46988a6a7239c41eb903cacd8a66df8e25385b674e5d977d72434ba60"
+    },
+    "results/controls/screening_QB_s42.json": {
+      "bytes": 22512,
+      "sha256": "bcb1b5d67afa1cbc9b07f89e2e3242a03d5f5d05c0c6cb508aed62a7f2669dc5"
+    },
+    "results/controls/screening_WV3_s42.json": {
+      "bytes": 22542,
+      "sha256": "674932c732a20a2c006cbf5c660d623da4176a00f43bbba994c52ab4b7bd536c"
+    },
+    "results/lambda_curve.png": {
+      "bytes": 148553,
+      "sha256": "243779d7d888c7b82d867c4f7edfafeee91d3b8962b4fe8de204fc2a41a4aa61"
+    },
+    "results/selection_A.json": {
+      "bytes": 4515,
+      "sha256": "49a8396f510ac13c9ae629d15ad0e7f86fa8057d4116752c0b27c2494874bfd9"
+    },
+    "results/selection_B_reduced.json": {
+      "bytes": 3040,
+      "sha256": "35d711ec0224ca983b22a12265e0ffc618169f95971af949a029cb736be1f3ff"
+    },
+    "results/w2_check.json": {
+      "bytes": 1155,
+      "sha256": "bea40e1b3a9118fb4c241f4cf9ea4e64745d2c5b9693419d96caaf960fa9341c"
+    },
+    "run.py": {
+      "bytes": 26019,
+      "sha256": "adb680a5fbcf21f9bae0245510b8f8b58813060b8ceccfc3e94d9a89bc14e359"
+    },
+    "selection.py": {
+      "bytes": 2879,
+      "sha256": "c924caa628996778dc0ecc2dbe4d0a36e92b3292f51898a144255c6ec08e2685"
+    },
+    "train.py": {
+      "bytes": 7906,
+      "sha256": "0f0adc60ae89cae7d71852c95c933e0f75986e606b88755f9f0cd2f5c9033135"
+    }
+  },
+  "release_assets": {
+    "checkpoints/GF2_BL1.20C0.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__GF2_BL1.20C0.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__GF2_BL1.20C0.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "ee9318af6d19bb063d68f7781bc1d57977fa2170834dea495078fdadabfe3cde"
+    },
+    "checkpoints/GF2_BL1.20C0.25_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__GF2_BL1.20C0.25_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__GF2_BL1.20C0.25_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "57212ca1d2e8971b1f8f8a218673722249c1611af079899fd3f788f246bbb130"
+    },
+    "checkpoints/GF2_BL1.20C0.50_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__GF2_BL1.20C0.50_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__GF2_BL1.20C0.50_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "9174d44dcf83c8556c805d47ba47742aee423d3529f3bcc6c73cf90b7b2c34d6"
+    },
+    "checkpoints/GF2_BL1.20C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__GF2_BL1.20C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__GF2_BL1.20C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "6c75cf5fb2aa984a37aa18282d6ebda2520f45e4c0f24825baa06d5ea5426eea"
+    },
+    "checkpoints/GF2_L0.00C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__GF2_L0.00C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__GF2_L0.00C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "b3eae946976b4f529146c096d77602aa7348492f0682ad74ad03ef7b8a4d33e0"
+    },
+    "checkpoints/GF2_L0.20C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__GF2_L0.20C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__GF2_L0.20C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "8d4f71903d0b7a7c0faec67d123010b954032119217493e1c79dbdce170ed2d3"
+    },
+    "checkpoints/GF2_L0.46C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__GF2_L0.46C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__GF2_L0.46C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "02b47d2ef10cdd349d6c3c8456c2e3cd16de9c4334e74bc3573bacd0d24a70b1"
+    },
+    "checkpoints/GF2_L0.80C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__GF2_L0.80C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__GF2_L0.80C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "e81755dba1824f119469e17d178fd2362ded11b8fe30b4c9295083a7d6336f34"
+    },
+    "checkpoints/GF2_L1.20C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__GF2_L1.20C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__GF2_L1.20C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "d871760493f2ce98407adf0215d5c92733889227b1049bab90f762e7ff9192ee"
+    },
+    "checkpoints/GF2_L2.00C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__GF2_L2.00C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__GF2_L2.00C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "83aae27396fa55a66c81ff6178079271b87665f1da1a27c21423ac932ead5747"
+    },
+    "checkpoints/GF2_NK_s42/initial.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__GF2_NK_s42__initial.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__GF2_NK_s42__initial.pt",
+      "bytes": 8729211,
+      "sha256": "38974e120587301adc562206b5f89bf5d8d963386bad31da1bb1e1db1bbb90c0"
+    },
+    "checkpoints/GF2_NK_s42/latest.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__GF2_NK_s42__latest.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__GF2_NK_s42__latest.pt",
+      "bytes": 41317795,
+      "sha256": "2f1b0f7bc3f25188b67adf3cb51f75adcb0710806bfa19f1a9ba11d6edac379f"
+    },
+    "checkpoints/GF2_NT_s42/initial.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__GF2_NT_s42__initial.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__GF2_NT_s42__initial.pt",
+      "bytes": 12686683,
+      "sha256": "0fc93af383a4608eba36b94dfa671d8f0b1c90bb30bc6834945d76491127692c"
+    },
+    "checkpoints/GF2_NT_s42/latest.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__GF2_NT_s42__latest.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__GF2_NT_s42__latest.pt",
+      "bytes": 60091827,
+      "sha256": "886de66b15c24d28e5ca3576da4e750225a53af0d7e8e5e721a72565a194249f"
+    },
+    "checkpoints/QB_BL1.20C0.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_BL1.20C0.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_BL1.20C0.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "d56b86d2284109f3e24bef3eb4a87a49c7919fb3fb68c0a074ee4f57b62ff794"
+    },
+    "checkpoints/QB_BL1.20C0.25_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_BL1.20C0.25_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_BL1.20C0.25_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "0fb0abcb16e4fd52e551c8210ce9e472ed25020082ddbd0d2d9fcc13e29845be"
+    },
+    "checkpoints/QB_BL1.20C0.50_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_BL1.20C0.50_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_BL1.20C0.50_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "c5dcdceac491d88e66310dc8839be42d1726fab1ae63ce0190aca6050540a840"
+    },
+    "checkpoints/QB_BL1.20C0.75_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_BL1.20C0.75_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_BL1.20C0.75_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "378e966f427d55b0579014302c25c81c109f83e665119f79c045387aaf7309b5"
+    },
+    "checkpoints/QB_BL1.20C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_BL1.20C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_BL1.20C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "974aba96ee4ad8129d9d1b0b43399496947bf95f47b384c4d3facb703b5299f3"
+    },
+    "checkpoints/QB_L0.00C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L0.00C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L0.00C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "ff9246a6ec95055a1191fc4a36685ecb77077c84e5c91d25f7c5fa68aac95511"
+    },
+    "checkpoints/QB_L0.10C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L0.10C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L0.10C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "c749dc4d88772dc183949ad77bf0c9cab958cbdb77b4ac0f74d3acc3ec3cb1f9"
+    },
+    "checkpoints/QB_L0.20C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L0.20C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L0.20C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "4239aa816f78f35383989dfa40f6a6e7fe2d6f629719fe15ee0a3e20f2e39e4c"
+    },
+    "checkpoints/QB_L0.30C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L0.30C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L0.30C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "3690bbef624726fef3b7ccf0eb2fb1f7717383041ae9f3f33369f20999c038bd"
+    },
+    "checkpoints/QB_L0.40C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L0.40C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L0.40C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "e4123d27a571e291dfb8c1d0f1e1873cac06b5b78fdc209683930c0c9aa288d3"
+    },
+    "checkpoints/QB_L0.46C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L0.46C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L0.46C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "dcdc95360274aac4c2c9bc7e6081dbde0eb99c4e74ea360b9e535f1d5ef1f4de"
+    },
+    "checkpoints/QB_L0.50C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L0.50C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L0.50C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "91ce2f5989b3e565349a637e3e4fe809b84e9485a48a1d32f032c19e49947f35"
+    },
+    "checkpoints/QB_L0.60C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L0.60C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L0.60C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "7304592287f0caa96a1537601a2412b333cfa1f873a3b1f8f06f6aaae84641c4"
+    },
+    "checkpoints/QB_L0.70C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L0.70C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L0.70C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "80f155fb4541ae26f571cd6da86f2bb4905dedd08b9e88e7ee539a446f8eb4bd"
+    },
+    "checkpoints/QB_L0.80C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L0.80C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L0.80C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "1ca63195eab2173b6778902aabe2a52e3cd651e173405947146188000fdba7f6"
+    },
+    "checkpoints/QB_L0.90C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L0.90C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L0.90C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "84d7c07f9dc38ee13d4e58794449c8d93bf85670a31d4481e75c548f8644bb90"
+    },
+    "checkpoints/QB_L1.00C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L1.00C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L1.00C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "f08e031436bc84be85e6799f13d411ffe2633b69c57859db49b28debb8f2c1da"
+    },
+    "checkpoints/QB_L1.10C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L1.10C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L1.10C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "6288f67d9952687561f044d697fad33def28dbd8621042ccead209950efd11ca"
+    },
+    "checkpoints/QB_L1.20C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L1.20C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L1.20C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "b65f6adaa9da9bf506dfbd6dbc75cf01f8c857762a042e2b51a3bd144a6b2de5"
+    },
+    "checkpoints/QB_L1.30C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L1.30C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L1.30C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "6e8dfe5865a4993b9b1910ea4076d3b2a7e37bfa64a81c62e914b2512e37e240"
+    },
+    "checkpoints/QB_L1.40C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L1.40C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L1.40C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "b78ebaa4418aeb07143dd3df6588b0869d2e58ed587cc82de7137e8aeb47650b"
+    },
+    "checkpoints/QB_L1.50C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L1.50C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L1.50C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "7aef6fde934d854b2cb0df1fc6c60ed0f7d9824321456ed2a31ba9bef9bfc5ab"
+    },
+    "checkpoints/QB_L1.60C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L1.60C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L1.60C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "d9bdad3d2ff710aab81ab1899349a335408e962687f19b876a18b5a187e22012"
+    },
+    "checkpoints/QB_L1.70C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L1.70C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L1.70C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "6c4bb417b1b78abce8c0dcd6e7a020edc21f93d17633400121bbec4a5ccf299a"
+    },
+    "checkpoints/QB_L1.80C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L1.80C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L1.80C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "4ac5edf209650a437a310d4d0f0cd7397cf34b477a3302ec4e9ae022205757d2"
+    },
+    "checkpoints/QB_L1.90C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L1.90C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L1.90C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "8b4e02abfff624973f6d9fc6dfc79d68be075106b1a43644bd6e78ab333e6c1e"
+    },
+    "checkpoints/QB_L2.00C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_L2.00C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_L2.00C1.00_s42__best.pt",
+      "bytes": 12683059,
+      "sha256": "41951dd6f422166c939719be0bfd891793181db1eb1f31c3eef95f223d8c6fa2"
+    },
+    "checkpoints/QB_NK_s42/initial.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_NK_s42__initial.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_NK_s42__initial.pt",
+      "bytes": 8729211,
+      "sha256": "b0eae2f3b7097793e34feb38a4be125b6da88ba41f29fde2d839f56a3a792bfa"
+    },
+    "checkpoints/QB_NK_s42/latest.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_NK_s42__latest.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_NK_s42__latest.pt",
+      "bytes": 41317795,
+      "sha256": "54b04204e4ee5cfd875cb4c87cb26784557e6a0852a20c73709f0859d52951fb"
+    },
+    "checkpoints/QB_NT_s42/initial.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_NT_s42__initial.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_NT_s42__initial.pt",
+      "bytes": 12686683,
+      "sha256": "951baf5fe3c68192ba0be646f61663c4a57c7ca9e9cfde80fd01230146573ed4"
+    },
+    "checkpoints/QB_NT_s42/latest.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_NT_s42__latest.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_NT_s42__latest.pt",
+      "bytes": 60091763,
+      "sha256": "7bd2ebc853cea208e57d2808acb2fe58a2bb65fe368b657488211ef7a0e9af26"
+    },
+    "checkpoints/QB_W2K_s42/initial.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_W2K_s42__initial.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_W2K_s42__initial.pt",
+      "bytes": 8733691,
+      "sha256": "8f2fffe98e88126bb3d877f0f800888063c8b6561f635f0919188da80882284a"
+    },
+    "checkpoints/QB_W2K_s42/latest.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_W2K_s42__latest.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_W2K_s42__latest.pt",
+      "bytes": 41322339,
+      "sha256": "907f9ff21672b9da7548358e0e403474d957f2f75090a52ccde9462988129004"
+    },
+    "checkpoints/QB_W2T_s42/initial.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_W2T_s42__initial.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_W2T_s42__initial.pt",
+      "bytes": 12691227,
+      "sha256": "70960d5e4b305de02cf997fc1272cfb884959d02a5aa8136c807039c095bc29c"
+    },
+    "checkpoints/QB_W2T_s42/latest.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__QB_W2T_s42__latest.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__QB_W2T_s42__latest.pt",
+      "bytes": 60096307,
+      "sha256": "597e1c63a8da8fa316d6ca49baa8ed7b98538c4c1d2136f827c9af9fe4037135"
+    },
+    "checkpoints/WV3_BL1.20C0.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__WV3_BL1.20C0.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__WV3_BL1.20C0.00_s42__best.pt",
+      "bytes": 13078355,
+      "sha256": "72ce27cf820ae78480f0b8252b0cf61396e6028d7d7705f0afffd6f5db154747"
+    },
+    "checkpoints/WV3_BL1.20C0.25_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__WV3_BL1.20C0.25_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__WV3_BL1.20C0.25_s42__best.pt",
+      "bytes": 13078355,
+      "sha256": "74963916b663ddc2d85fa89925430c2daf970b2c9074516c46eac7c2c1aee83e"
+    },
+    "checkpoints/WV3_BL1.20C0.50_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__WV3_BL1.20C0.50_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__WV3_BL1.20C0.50_s42__best.pt",
+      "bytes": 13078355,
+      "sha256": "65b20c3f3b1b820502bf5414ef6cc5cea81adf9ff997112d83da605cd0d75765"
+    },
+    "checkpoints/WV3_BL1.20C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__WV3_BL1.20C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__WV3_BL1.20C1.00_s42__best.pt",
+      "bytes": 13078355,
+      "sha256": "1fed4dace6197cb564c1daa86ce7b44e0681d13507385e812302b3de9511b6f2"
+    },
+    "checkpoints/WV3_L0.00C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__WV3_L0.00C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__WV3_L0.00C1.00_s42__best.pt",
+      "bytes": 13078355,
+      "sha256": "ed8e9315b36a054c317cd05c78545515803083783333f363c4b2819f19382488"
+    },
+    "checkpoints/WV3_L0.20C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__WV3_L0.20C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__WV3_L0.20C1.00_s42__best.pt",
+      "bytes": 13078355,
+      "sha256": "27a1f4a7a6118e8da15f98f590db3650a71f0afd48c21a32afc7fa5cb6dedfe4"
+    },
+    "checkpoints/WV3_L0.46C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__WV3_L0.46C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__WV3_L0.46C1.00_s42__best.pt",
+      "bytes": 13078355,
+      "sha256": "40582a219af05267ca3f220eabfef304093ada8edffcf5c89c1ecf7faac33161"
+    },
+    "checkpoints/WV3_L0.80C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__WV3_L0.80C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__WV3_L0.80C1.00_s42__best.pt",
+      "bytes": 13078355,
+      "sha256": "1a83b64aea59c05722bd40edb3770ca497e7ec817cca042c1e4fb561f3fdc282"
+    },
+    "checkpoints/WV3_L1.20C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__WV3_L1.20C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__WV3_L1.20C1.00_s42__best.pt",
+      "bytes": 13078355,
+      "sha256": "b9bad8e4745b9d42465b339669852c8624b511903258377047237836a7c4973f"
+    },
+    "checkpoints/WV3_L2.00C1.00_s42/best.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__WV3_L2.00C1.00_s42__best.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__WV3_L2.00C1.00_s42__best.pt",
+      "bytes": 13078355,
+      "sha256": "2bd09a21db2274109d12763e1ae8aa67f42e8e89a609baea5440a49718c33f21"
+    },
+    "checkpoints/WV3_NK_s42/initial.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__WV3_NK_s42__initial.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__WV3_NK_s42__initial.pt",
+      "bytes": 9125691,
+      "sha256": "8607300fe0086b78e7a0fc811f1472199ccc819ec802f5b83d671489491c6446"
+    },
+    "checkpoints/WV3_NK_s42/latest.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__WV3_NK_s42__latest.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__WV3_NK_s42__latest.pt",
+      "bytes": 42727283,
+      "sha256": "349a9db61a40862c8ce2d0d777103d6ca315b3044a84c472d1d00c92eb50ea4f"
+    },
+    "checkpoints/WV3_NT_s42/initial.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__WV3_NT_s42__initial.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__WV3_NT_s42__initial.pt",
+      "bytes": 13083227,
+      "sha256": "da58b8eadba7b7649bf557942e9c631cd207540703fe7e7e9e9cd92485fba404"
+    },
+    "checkpoints/WV3_NT_s42/latest.pt": {
+      "release": "weights-experiments-performance-89",
+      "asset": "checkpoints__WV3_NT_s42__latest.pt",
+      "url": "https://github.com/BIYONGHIYON/CtrS/releases/download/weights-experiments-performance-89/checkpoints__WV3_NT_s42__latest.pt",
+      "bytes": 61501123,
+      "sha256": "b92f9772a2b1a0c4607df5ed04b1617f63266fdc49f033137c84e946274efaaa"
+    }
+  }
+}
