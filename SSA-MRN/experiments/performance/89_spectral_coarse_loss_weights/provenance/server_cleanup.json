@@ -1,0 +1,38 @@
+{
+ "time_kst": "2026-11-21T22:30:08+09:00",
+ "reason": "experiments 88 and 89 archived and verified before cleanup: 88 merged (PR #204), verify.py --experiment 88 PASS and all 45 server weights equal the 88 manifest hashes (Git and Release); 89 pushed (PR #222), verify.py --experiment 89 --releases PASS (372 files, 63 Release assets); the running 90 controller uses C:/CtrS-p90 and C:/CtrS-p90c and its 88 K2D controls are cached in C:/CtrS-p90/run/controls",
+ "deleted": {
+  "C:/CtrS-p89/run": {
+   "gib": 15.433,
+   "what": "89 screening runtime: caches, 49 runs (checkpoints, records), factorized initial weights, controls",
+   "recovery": "results, records and the W2 check / confirmation weights in Git and Release weights-experiments-performance-89; screening best.pt in the same Release; screening latest.pt / initial.pt not kept (user decision 2026-11-21: finished runs, initial weights are seeded); caches can be rebuilt from C:/CtrS/PAN-MS"
+  },
+  "C:/CtrS-p88/run": {
+   "gib": 12.105,
+   "what": "88 runtime (12 runs, caches, controls)",
+   "recovery": "experiments/performance/88_factorization_at_decay_start (Git) and Release weights-experiments-performance-88"
+  },
+  "C:/CtrS-p88/fetch88.tgz, src88.tgz, SSA-MRN; C:/CtrS-p89/SSA-MRN, archive89": {
+   "gib": 1.18,
+   "what": "server source copies and transfer bundles",
+   "recovery": "same files in Git"
+  },
+  "top-level scripts and logs of C:/CtrS-p88 and C:/CtrS-p89": {
+   "gib": 0.0,
+   "what": "chain/launch/status scripts and controller logs",
+   "recovery": "kept in the log bundles below"
+  }
+ },
+ "kept": [
+  "C:/CtrS-p88/archive88_logs.tgz (0.7 MB: train/evaluate logs, events, status and scripts)",
+  "C:/CtrS-p89/archive89_logs.tgz (2.9 MB: train/evaluate logs, events, status and scripts)",
+  "C:/CtrS-p88s (0.3 GB, 88 stage-2 setup of another session, not checked)",
+  "C:/CtrS-p90, C:/CtrS-p90s, C:/CtrS-p90c (90 running)",
+  "C:/CtrS/PAN-MS",
+  "C:/CtrS-p73/.venv"
+ ],
+ "free_before_gib": 38.49,
+ "free_after_gib": 67.21,
+ "reclaimed_gib": 28.72,
+ "note": "GiB = 2^30 bytes"
+}
