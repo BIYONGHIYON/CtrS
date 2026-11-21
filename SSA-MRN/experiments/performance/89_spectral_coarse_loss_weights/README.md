@@ -152,7 +152,14 @@
 
 ![확정 모델 RR test 차이](results/confirmation_vs_controls.png)
 
-**결과 이미지 (QB RR test 고정 6장면, 88번 K2D + 사영 대 확정 모델 + 사영):** [results/QB_NK_s42/evaluation/QB](results/QB_NK_s42/evaluation/QB)에 장면마다 원본 크기 비교(`full_scene_XX.png`)와 확대 비교(`compare_scene_XX.png`)가 있습니다. 확대 창은 확정 모델의 개선이 가장 큰 64×64라 확정 모델에 유리하게 고른 것이고, 장면 PSNR은 각 이미지 제목과 `result_images.json`에 있습니다.
+**결과 이미지 (RR test 고정 6장면, 88번 K2D + 사영 대 확정 모델 + 사영):** 장면마다 원본 크기 비교(`full_scene_XX.png`)와 확대 비교(`compare_scene_XX.png`)가 있습니다. QB는 [results/QB_NK_s42/evaluation/QB](results/QB_NK_s42/evaluation/QB), GF2는 [results/GF2_NK_s42/evaluation/GF2](results/GF2_NK_s42/evaluation/GF2), WV3는 [results/WV3_NK_s42/evaluation/WV3](results/WV3_NK_s42/evaluation/WV3), WV2 전이(참고, 82번 보정 포함)는 [results/WV3_NK_s42/evaluation/WV2](results/WV3_NK_s42/evaluation/WV2)에 있습니다. 장면 번호는 QB 정답만 보고 정한 표준 번호를 모든 데이터셋에 같이 썼습니다. 확대 창은 확정 모델의 개선이 가장 큰 64×64라 확정 모델에 유리하게 고른 것이고, 장면 PSNR은 각 이미지 제목과 `result_images.json`에 있습니다(서버 평가값과 같음).
+
+| 장면 PSNR (88번 K2D → 확정) | 0 | 1 | 3 | 7 | 14 | 17 |
+|---|---|---|---|---|---|---|
+| QB | 42.96 → 43.11 | 43.29 → 43.29 | 38.27 → 38.08 | 39.70 → 39.67 | 38.54 → 38.37 | 39.60 → 39.47 |
+| GF2 | 47.96 → 48.68 | 49.66 → 50.08 | 50.08 → 50.54 | 51.00 → 51.46 | 48.12 → 48.58 | 49.82 → 50.17 |
+| WV3 | 40.32 → 40.41 | 38.06 → 38.21 | 42.17 → 42.39 | 38.66 → 38.71 | 33.83 → 33.87 | 36.32 → 36.34 |
+| WV2 전이 (참고) | 31.39 → 31.33 | 29.42 → 29.96 | 37.10 → 36.84 | 31.37 → 31.49 | 31.22 → 31.09 | 31.51 → 31.51 |
 
 ![장면 7 원본 크기 비교](results/QB_NK_s42/evaluation/QB/full_scene_07.png)
 
