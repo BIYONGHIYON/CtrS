@@ -1,0 +1,21 @@
+{
+ "time_kst": "2026-11-20T20:46:01.132930+09:00",
+ "decision": "user 2026-11-20 20h: stage B c >= 1.25 is not run (the curve already falls with c; time); small c refined instead",
+ "locks": 12,
+ "runs": [
+  "GF2_BL1.20C1.25_s42",
+  "WV3_BL1.20C1.25_s42",
+  "QB_BL1.20C1.25_s42",
+  "GF2_BL1.20C1.50_s42",
+  "WV3_BL1.20C1.50_s42",
+  "QB_BL1.20C1.50_s42",
+  "GF2_BL1.20C1.75_s42",
+  "WV3_BL1.20C1.75_s42",
+  "QB_BL1.20C1.75_s42",
+  "GF2_BL1.20C2.00_s42",
+  "WV3_BL1.20C2.00_s42",
+  "QB_BL1.20C2.00_s42"
+ ],
+ "mechanism": "worker locks held; the first c >= 1.25 launch fails before any checkpoint and the controller stops",
+ "released_kst": "2026-11-20T21:33:01.204796+09:00"
+}

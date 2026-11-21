@@ -1,0 +1,43 @@
+{
+ "time_kst": "2026-11-19T14:27:25.772157+09:00",
+ "decision": "user 2026-11-19 14h: run stage A (lambda) only; stage B (c) is not run",
+ "locks": 594,
+ "lambdas": [
+  0.0,
+  0.1,
+  0.2,
+  0.3,
+  0.4,
+  0.46,
+  0.5,
+  0.6,
+  0.7,
+  0.8,
+  0.9,
+  1.0,
+  1.1,
+  1.2,
+  1.3,
+  1.4,
+  1.5,
+  1.6,
+  1.7,
+  1.8,
+  1.9,
+  2.0
+ ],
+ "cs": [
+  0.0,
+  0.25,
+  0.5,
+  0.75,
+  1.0,
+  1.25,
+  1.5,
+  1.75,
+  2.0
+ ],
+ "mechanism": "worker locks of every possible stage-B run are held, so the first stage-B launches fail before any checkpoint and the controller stops",
+ "cancelled_kst": "2026-11-20T00:05:05.149670+09:00",
+ "cancel_decision": "user 2026-11-20: run stage B after stage A as originally planned; blocker stopped before selection_A, locks released, the empty stage-B folders it had created were removed"
+}
