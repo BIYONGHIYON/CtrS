@@ -59,7 +59,7 @@ const modelsIn = ds => S.index.models.filter(m => ds.results && ds.results[m.id]
 const COMPARE_GROUPS = [['original', '원본'], ['ours', '우리 모델'], ['benchmark', '다른 연구 모델'], ['generative', '생성형 이미지 모델 · RGB만']];
 const roleOf = m => (m.role_by_dataset && m.role_by_dataset[S.ds]) || m.role;
 const comparable = ds => modelsIn(ds).filter(m => COMPARE_GROUPS.some(([g]) => g === m.group));
-function pickModels(ds) {                           // the baseline C2MS-SP and one chosen model (default: original SSA-MRN)
+function pickModels(ds) {                           // the baseline (SMOC) and one chosen model (default: original SSA-MRN)
   const avail = modelsIn(ds), cmps = comparable(ds), base = avail.find(m => m.group === 'baseline');
   if (!cmps.some(m => m.id === S.cmp)) S.cmp = (cmps.find(m => m.group === 'original') || cmps[0] || {}).id || null;
   S.visible = [base, cmps.find(m => m.id === S.cmp)].filter(Boolean).map(m => m.id);
@@ -293,10 +293,10 @@ function build() {
       el('li', {}, '장면과 데이터셋 수치는 export.py가 원래 예측으로 계산했습니다(common/metrics.rr_metrics, PSNR은 peak 2047의 밴드별 평균).'),
       el('li', {}, `확대 영역 수치는 브라우저가 1/${factor} DN 단위로 저장한 값으로 계산합니다. 장면 전체에서 두 계산의 차이는 PSNR 0.0004 dB 이내였습니다.`),
       el('li', {}, '우리 모델은 seed 42 가중치 하나의 결과이고, 다른 연구 모델은 저자 공개 가중치(시드 미공개)의 예측입니다. 실험 판정은 연구 문서의 시드 평균을 따르며, 다른 연구 모델에는 판정을 붙이지 않습니다.'),
-      el('li', {}, '생성형 이미지 모델은 RGB 3밴드만 내므로, 이 모델을 고르면 C2MS-SP를 포함한 모든 영상·오차 지도·수치를 같은 RGB 3밴드로 계산합니다. 이때 NIR 위색은 고를 수 없고, 수치는 전체 밴드 수치와 직접 비교하지 않습니다.'),
+      el('li', {}, '생성형 이미지 모델은 RGB 3밴드만 내므로, 이 모델을 고르면 기준 모델을 포함한 모든 영상·오차 지도·수치를 같은 RGB 3밴드로 계산합니다. 이때 NIR 위색은 고를 수 없고, 수치는 전체 밴드 수치와 직접 비교하지 않습니다.'),
       el('li', {}, `데이터 생성 ${S.index.generated}`)));
 
-  app.replaceChildren(
+  app.replaceChildren(...[
     el('p', { class: 'ds-note' }, el('b', {}, ds.title), ds.note),
     rgbOnly(ds) ? el('p', { class: 'ds-note rgb-note' }, el('b', {}, 'RGB 3밴드 비교'), `생성형 이미지 모델은 RGB 영상만 내므로 두 모델의 영상·오차·수치를 모두 밴드 ${ds.composites.RGB.join(' ')}만으로 계산했습니다. 전체 밴드 수치와 직접 비교하지 않습니다.`) : null,
     el('div', { class: 'strip-head' }, el('span', {}, `장면 ${ds.scenes}개`), el('span', {}, stripNote)), strip,
@@ -304,7 +304,7 @@ function build() {
     el('p', { class: 'hint' }, '영상을 누르거나 끌어서 확대 영역을 옮깁니다 · 방향키 1픽셀, Shift+방향키 8픽셀 · [ ] 이전·다음 장면'),
     el('div', { id: 'readout' }),
     el('div', { class: 'scroll', id: 'numbers' }),
-    about);
+    about].filter(Boolean));   // the RGB note is null unless a generative model is chosen
   wire(); layoutCols(); renderAll();
 }
 
