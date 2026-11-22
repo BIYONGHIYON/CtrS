@@ -2,11 +2,11 @@
 
 | 분야 | 실험자 | 상태 | 판정 |
 |:---:|:---:|:---:|:---:|
-| 성능 개선 | 이병현 | 학습 중 · seed 42 평가 완료 | **판단 보류** |
+| 성능 개선 | 이병현 | 3시드 평가 완료 · 300에폭 학습 중 | **부분 개선** |
 
 **변경:** 원본 코드가 모델 안에서 쓰는 bilinear 축소·확대(`nn.Upsample`, `align_corners=True`)를 데이터셋을 만든 연산으로 바꿉니다. A는 입력 확대(LRPAN 4배, MS 2배)를 23탭 보간으로, B는 A에 더해 LRPAN을 PAN MTF 블러 + 4배 솎음으로 바꿉니다. C는 모델 안의 고정 축소·확대를 모두 데이터셋 연산으로 맞춘 모델로, B에 더해 내부 축소를 센서 MTF 블러 + 솎음으로, 출력 확대를 23탭 보간으로 바꿉니다. 학습할 파라미터는 바뀌지 않습니다. 대조군은 같은 조건에서 연산을 바꾸지 않은 N이며, N은 [89번](../89_spectral_coarse_loss_weights/README.md)에서 고른 λ = 1.2, c = 0.25의 확정 모델입니다. 50에폭 선별에서 고른 C를 K2 분해 없이 원래 크기 150에폭으로 학습한 모델(`CF`)이 최종 모델 **SMOC**입니다.
 
-**결과:** 50에폭 선별 validation에서 C만 세 센서 모두 N보다 좋아(평균 +0.016 dB) C를 골랐습니다. 같은 K2D 학습법으로 비교한 RR test(사영 포함, seed 42)에서 C는 N보다 QB +0.065, GF2 +0.112, WV3 +0.041 dB였고 세 센서 모두 SAM·ERGAS도 좋아졌습니다. 최종 모델 SMOC(C, 분해 없음)는 같은 시드 C2MS-SP보다 GF2 +0.687 dB, WV3 +0.477 dB로 PSNR·SAM·ERGAS가 모두 좋았고, QB는 −0.028 dB, SAM +0.053°로 조금 낮았습니다. seed 42 한 개의 결과이며, 3시드(seed 43·44)와 300에폭 학습이 진행 중이라 판정은 보류합니다.
+**결과:** 50에폭 선별 validation에서 C만 세 센서 모두 N보다 좋아(평균 +0.016 dB) C를 골랐습니다. 같은 K2D 학습법으로 비교한 RR test(사영 포함, seed 42)에서 C는 N보다 QB +0.065, GF2 +0.112, WV3 +0.041 dB였고 세 센서 모두 SAM·ERGAS도 좋아졌습니다. 최종 모델 SMOC(C, 분해 없음)는 같은 시드 C2MS-SP와 짝지은 3시드 평균에서 GF2 +0.667 dB, WV3 +0.463 dB로 PSNR·SAM·ERGAS가 모두 좋아 개선이었고, QB는 −0.029 dB, SAM +0.046°로 개선 없음이었습니다. 판정은 부분 개선입니다. 300에폭 학습(seed 42)은 진행 중입니다.
 
 [실험 표](../README.md#experiments) · [결과](#results) · [해석과 판정](#verdict) · [방법](#method) · [그림](#figures) · [재현 자료](#evidence)
 
@@ -37,7 +37,27 @@ PSNR은 dB, SAM은 °입니다. 평균이 0보다 크고 어느 센서도 SAM이
 | WV3 | 38.489 → 38.507 (+0.018) | +0.041 | −0.0059 | −0.0091 | 부분 개선 (문턱 0.06 dB 안) |
 | WV2 전이 (참고) | - | +0.237 | −0.0440 | −0.0899 | 참고 |
 
-### 최종 모델 SMOC 대 C2MS-SP (RR test, 사영 포함, seed 42)
+### 최종 모델 SMOC 3시드 대 C2MS-SP (RR test, 사영 포함)
+
+같은 시드 C2MS-SP(65번 가중치 + K10 사영)와 짝지은 차이의 3시드 평균입니다(v2.4, 문턱 0.04 dB). WV2는 WV3 가중치에 82번 밴드별 보정을 붙인 전이입니다([final_summary.json](results/final_summary.json)).
+
+| 센서 | PSNR | SAM | ERGAS | 시드별 PSNR (42 / 43 / 44) | 판정 |
+|---|---:|---:|---:|---|---|
+| QB | −0.029 | +0.0464 | +0.0173 | −0.028 / −0.011 / −0.048 | 개선 없음 |
+| GF2 | +0.667 | −0.0534 | −0.0509 | +0.687 / +0.633 / +0.680 | 개선 |
+| WV3 | +0.463 | −0.1253 | −0.1198 | +0.477 / +0.423 / +0.489 | 개선 |
+| WV2 전이 (참고) | +0.476 | −0.1125 | −0.2077 | +0.782 / +0.203 / +0.443 | 참고 |
+
+| SMOC 시드별 | QB PSNR / SAM | GF2 PSNR / SAM | WV3 PSNR / SAM | WV2 전이 PSNR / SAM |
+|---|---|---|---|---|
+| seed 42 | 38.368 / 4.5181 | 49.419 / 0.7123 | 39.140 / 2.8620 | 32.117 / 4.9091 |
+| seed 43 | 38.334 / 4.5242 | 49.504 / 0.7039 | 39.143 / 2.8538 | 31.870 / 5.0064 |
+| seed 44 | 38.331 / 4.5187 | 49.432 / 0.7127 | 39.125 / 2.8614 | 32.047 / 4.9368 |
+| validation PSNR (42 / 43 / 44) | 40.394 / 40.397 / 40.373 | 45.229 / 45.226 / 45.244 | 38.560 / 38.556 / 38.563 | - |
+
+FR QNR(참고, 3시드 평균)은 C2MS-SP 대비 QB 0.907 → 0.882, GF2 0.963 → 0.967, WV3 0.949 → 0.936, WV2 0.930 → 0.916입니다. 구조와 비용이 같은 C2MS-SP-Lite(83번 K2) 대비로는 QB −0.009, GF2 +0.701, WV3 +0.474 dB였습니다(참고).
+
+### 최종 모델 SMOC 대 C2MS-SP 상세 (seed 42)
 
 SMOC는 갈래 C를 분해 없이 원래 크기로 학습한 모델입니다(1단계 120에폭 상태에서 원래 크기로 30에폭 cosine, `CF`). 구조와 연산량은 C2MS-SP와 같습니다. 대조군은 같은 시드 C2MS-SP(65번 가중치 + K10 사영)입니다. WV2는 WV3 가중치에 82번 밴드별 보정을 붙인 전이입니다.
 
@@ -64,17 +84,16 @@ validation(원래 축척, 사영 없음) best는 `CT` 120에폭 → `CK` → `CF
 - **데이터셋 연산으로 맞추면 좋아졌습니다.** 선별에서는 입력 확대만 바꾼 A와 LRPAN까지 바꾼 B가 N보다 나빴고, 내부 축소와 출력 확대까지 모두 바꾼 C만 세 센서에서 좋아졌습니다. 150에폭 K2D에서도 C는 세 센서 모두 N보다 PSNR·SAM·ERGAS가 좋았습니다. 모델 안의 축소·확대가 데이터를 만든 연산과 일치할 때만 이득이 났고, 일부만 바꾸면 오히려 손해였습니다.
 - **QB의 89번 손실을 거의 되찾았습니다.** 89번 확정(N)은 QB에서 C2MS-SP보다 0.067 dB 낮았는데, C는 같은 학습법에서 −0.002 dB였습니다.
 - **분해 여부의 차이는 잡음 수준입니다.** 같은 1단계에서 갈라진 `CF`와 `CK`의 차이는 −0.026에서 +0.031 dB로 방향이 센서마다 달랐습니다. validation은 세 센서 모두 `CF`가 높았습니다. 88번의 분해 비용(+0.007에서 −0.040 dB)과 같은 범위입니다.
-- **QB는 아직 C2MS-SP를 넘지 못했습니다.** SMOC는 QB에서 PSNR −0.028 dB(장면 9/20), SAM +0.053°(장면 1/20)였습니다. FR QNR도 QB·WV3에서 C2MS-SP보다 낮습니다(88번 이후 같은 학습 일정에서 본 경향).
+- **3시드에서도 결과가 안정적이었습니다.** GF2(+0.633에서 +0.687 dB)와 WV3(+0.423에서 +0.489 dB)는 세 시드 모두 PSNR·SAM·ERGAS가 좋았습니다. WV2 전이는 시드에 따라 +0.203에서 +0.782 dB로 흔들렸습니다.
+- **QB는 C2MS-SP를 넘지 못했습니다.** 세 시드 모두 PSNR이 0.011-0.048 dB 낮고 SAM이 0.043-0.053° 나빴습니다. FR QNR도 QB·WV3에서 C2MS-SP보다 낮습니다(88번 이후 같은 학습 일정에서 본 경향).
 
 ### 판정과 다음 단계
 
-판단 보류입니다. 갈래 효과(C 대 N)는 단일 시드 참고 판정으로 QB·GF2 개선, WV3 부분 개선입니다([v2.4](../../../docs/judgement_criteria.md), 단일 시드 문턱 0.06 dB). 최종 모델의 판정은 seed 42·43·44를 같은 시드 C2MS-SP와 짝지은 3시드 평균(문턱 0.04 dB)으로 한 번만 하고, 기준 모델 교체는 그 결과를 보고 사용자가 정합니다. seed 42만 보면 GF2·WV3는 개선, QB는 개선 없음 쪽이라 전체로는 부분 개선이 될 가능성이 큽니다.
+**부분 개선**입니다([v2.4](../../../docs/judgement_criteria.md)). 최종 모델 SMOC는 같은 시드 C2MS-SP와 짝지은 3시드 평균에서 GF2·WV3가 PSNR·SAM·ERGAS 모두 좋고 PSNR이 문턱(0.04 dB)을 넘어 개선, QB는 세 지표 모두 나빠 개선 없음입니다. 개선 판정에는 세 센서가 모두 개선이어야 합니다. 갈래 효과(C 대 N, seed 42)는 단일 시드 참고 판정으로 QB·GF2 개선, WV3 부분 개선입니다(문턱 0.06 dB). 이 결과로 기준 모델이 자동으로 바뀌지 않으며, 교체는 사용자가 정합니다.
 
 진행 중인 일:
 
-- seed 43·44 학습과 평가(`run.py --mode final`), 3시드 비교(`final_summary.json`)
-- 300에폭 학습(`CL`, seed 42, 세 센서)과 150에폭 `CF` 비교(`long_comparison.json`)
-- 보관: latest·initial과 선별 best.pt의 Release, `manifest.json`, 해시 확인
+- 300에폭 학습(`CL`, seed 42, 세 센서)과 150에폭 `CF` 비교(`long_comparison.json`). 결과는 끝나는 대로 이 보고서에 더합니다.
 
 한계:
 
@@ -84,6 +103,7 @@ validation(원래 축척, 사영 없음) best는 `CT` 120에폭 → `CK` → `CF
 - C는 내부 축소와 출력 확대를 함께 바꿉니다. 두 부분의 효과는 나누지 않았습니다.
 - C의 1/4 크기 특징은 2배 MTF 두 번(사이에 SSAI 융합)으로 만들어, 데이터의 4배 MTF와 비슷하지만 같지는 않습니다.
 - 2026-11-22 10:37-14:43에 학습이 세 개씩 동시에 돌았습니다(아래 방법). 동시 실행은 계산 결과를 바꾸지 않습니다.
+- 결과 이미지는 seed 42만 만들었습니다.
 
 <a id="method"></a>
 
@@ -94,7 +114,7 @@ validation(원래 축척, 사영 없음) best는 `CT` 120에폭 → `CK` → `CF
 
 최종 모델(C2MS-SP보다 정확도가 같거나 높은 모델)을 만드는 세 번째 단계입니다([#203](https://github.com/BIYONGHIYON/CtrS/issues/203)). 같은 교체는 원본 SSA-MRN(K=6) 시절에 입력 확대만 바꿨을 때 개선이었지만(성능 6번), 지금 모델(K=4, W2 가지, L1·분광 손실, K2 분해, 사영)에서는 확인한 적이 없습니다.
 
-**상태:** 학습 중입니다(2026-11-22 15시 확인). 2026-11-20 사용자 결정으로 89번 B단계가 c\* = 0.25를 고른 뒤 서버에서 자동으로 시작했습니다(2026-11-21 02:11, [chain90.ps1](provenance/chain90.ps1)). 첫 사전 점검이 58번 점검 단계의 모델 생성에 학습 센서가 빠져 멈췄고, 고친 뒤 사전 점검부터 다시 실행했습니다([chain90_resume.ps1](provenance/chain90_resume.ps1)). N 갈래(89번 확정) 세 센서, 50에폭 선별, 갈래 C의 K2D 150에폭(seed 42), 최종 모델 SMOC seed 42를 마쳤고, seed 43·44와 300에폭을 학습하고 있습니다.
+**상태:** 3시드 평가 완료, 300에폭 학습 중입니다(2026-11-23 01시 확인). 2026-11-20 사용자 결정으로 89번 B단계가 c\* = 0.25를 고른 뒤 서버에서 자동으로 시작했습니다(2026-11-21 02:11, [chain90.ps1](provenance/chain90.ps1)). 첫 사전 점검이 58번 점검 단계의 모델 생성에 학습 센서가 빠져 멈췄고, 고친 뒤 사전 점검부터 다시 실행했습니다([chain90_resume.ps1](provenance/chain90_resume.ps1)). N 갈래(89번 확정) 세 센서, 50에폭 선별, 갈래 C의 K2D 150에폭(seed 42), 최종 모델 SMOC 3시드(seed 42·43·44)를 마쳤고(2026-11-23 01:10), 300에폭(seed 42)을 학습하고 있습니다.
 
 **갈래 선별 방식 변경(2026-11-21 사용자 결정):** A·B·C는 150에폭 K2D 대신 89번 λ 탐색과 같은 50에폭 선별 학습(원래 크기 2×2 모델, 40에폭 1e-4 고정 + 10에폭 cosine, λ 1.2, c 0.25, `AS`·`BS`·`CS`)으로 고릅니다. N의 선별 대조군은 같은 조건으로 이미 학습한 89번 B단계 `BL1.20C0.25`입니다(같은 학습법·시드, 별도 실행이라 재현 차이 최대 0.03 dB). 실행 중인 컨트롤러는 그대로 두고 [block_abc.py](provenance/block_abc.py)가 150에폭 A·B·C 실행의 작업 잠금을 잡아, 컨트롤러는 N을 마치는 대로 멈춥니다. `run.py --mode screen`(같은 runtime, 별도 소스 사본)이 빈 칸부터 선별 학습을 돌리고, 컨트롤러가 남긴 N 작업(WV3 분해·감쇠·평가)을 마친 뒤 같은 선택 규칙으로 갈래를 고릅니다(`screen_selection.json`). A·B·C 중 하나가 뽑히면 `run.py --mode chosen`이 이어서 그 갈래를 K2D 150에폭으로 QB·GF2·WV3 seed 42에서 학습하고, 89번 확정(NK)과 validation·RR test(사영 포함)·WV2 전이(참고)로 비교합니다(`chosen_comparison.json`). N이 남으면 아무것도 학습하지 않습니다. 선별 결과 갈래 C가 뽑혀(세 센서 평균 +0.016 dB) 2026-11-21 18:34부터 C를 150에폭으로 학습하고 있습니다.
 
@@ -153,6 +173,10 @@ validation(원래 축척, 사영 없음) best는 `CT` 120에폭 → `CK` → `CF
 
 ![validation PSNR](results/learning_curves.png)
 
+**SMOC 3시드 대 C2MS-SP (막대 = 3시드 평균, 점 = 시드별):**
+
+![SMOC 3시드](results/three_seed_vs_c2ms_sp.png)
+
 **C2MS-SP 대비 RR test PSNR (사영 포함, seed 42):**
 
 ![C2MS-SP 대비 RR test](results/test_vs_c2ms_sp.png)
@@ -184,7 +208,8 @@ validation(원래 축척, 사영 없음) best는 `CT` 120에폭 → `CK` → `CF
 - [run.py](run.py): `prepare` → `optimize` → `run`(학습 → 분해 → 학습 → 평가), `screen`(50에폭 선별과 갈래 선택), `chosen`(고른 갈래 K2D 150에폭과 89번 확정 비교), `final`·`finalctrl`(분해 없는 최종 모델 seed 42·43·44와 C2MS-SP 3시드 비교), `long`(300에폭 seed 42와 150에폭 비교), 중단 규칙
 - [chain90.ps1](provenance/chain90.ps1)·[chain90_resume.ps1](provenance/chain90_resume.ps1): 89번 B단계 뒤 자동 시작과 사전 점검 수정 뒤 재시작
 - [block_abc.py](provenance/block_abc.py): 150에폭 A·B·C 실행 차단
-- 가중치(Git): `checkpoints/<센서>_CF_s42/`(SMOC)와 `checkpoints/<센서>_CK_s42/`(C의 K2D)의 `best.pt`·`best_ema.pt`. N(89번 확정)은 [89번 checkpoints](../89_spectral_coarse_loss_weights/checkpoints/)에 있습니다. latest·initial과 선별 best.pt의 Release는 3시드가 끝난 뒤 함께 올립니다.
+- 가중치(Git): `checkpoints/<센서>_CF_s<42·43·44>/`(SMOC)와 `checkpoints/<센서>_CK_s42/`(C의 K2D)의 `best.pt`·`best_ema.pt`. N(89번 확정)은 [89번 checkpoints](../89_spectral_coarse_loss_weights/checkpoints/)에 있습니다.
+- 가중치(Release `weights-experiments-performance-90`): 1단계 `<센서>_CT_s<시드>`의 `initial.pt`·`latest.pt`(120에폭 상태, `CF`·`CK`·`CL`의 공통 시작점), `CF`·`CK`의 `latest.pt`, `CK`의 `initial.pt`(분해 초기값), 50에폭 선별 `AS`·`BS`·`CS`의 `best.pt`. 경로·크기·SHA-256은 [manifest.json](manifest.json)의 `release_assets`에 있습니다.
 - 결과: `results/<센서>_<갈래>_s42/`(학습 기록 `history.json`, `training_complete.json`, 평가 `evaluation_complete.json`·`evaluation/`), [results/controls](results/controls/)(같은 시드 C2MS-SP·88번 K2D·Lite), [results/factorization](results/factorization/)(K2 분해 기록), [screen_selection.json](results/screen_selection.json), [chosen_comparison.json](results/chosen_comparison.json)
 - 실행 기록: [provenance/run_records](provenance/run_records/)(봉인한 `runtime_config.json`, 단계별 시작·완료·중단 기록)
 
