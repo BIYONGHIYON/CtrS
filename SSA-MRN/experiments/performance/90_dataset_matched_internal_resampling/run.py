@@ -573,11 +573,75 @@ def final():
     write(root/'final_summary.json',dict(time_kst=now(),**res));write(root/'final_complete.json',dict(time_kst=now(),variant=v,arm=a,labels={k:x['vs_C2MS_SP']['label'] for k,x in res['targets'].items()}))
     note(final={k:(round(x['vs_C2MS_SP']['mean_delta']['PSNR'],4),x['vs_C2MS_SP']['label']) for k,x in res['targets'].items()})
 
+
+def long_run():
+    """300 epochs, seed 42 (user decision 2026-11-22 15h, after the final 3 seeds): <v>L = the <v>T epoch-120 state continued at 1e-4 to
+    epoch 240 + 60-epoch cosine (84 B300 split) on GF2, QB, WV3, then evaluation (RR test with projection against the cached seed-42
+    controls, WV2 transfer and FR reference) and the comparison with the 150-epoch <v>F of the same seed (validation and test; test
+    reported only, the length is not chosen with it). Starts when the final runner has only its last chain (WV3 <v>T/<v>F seed 44) left
+    and uses one slot until final_complete.json exists, then two; the server-wide job count (live_jobs) stays at most max_parallel."""
+    conf=load_conf();root=Path(conf['runtime']);cp=root/'runtime_config.json';cfg=json.loads(cp.read_text(encoding='utf8'));set_impl(cfg)
+    note=lambda **k:print(json.dumps(dict(time_kst=now(),**k),ensure_ascii=False),flush=True)
+    while not (root/'screen_complete.json').exists():time.sleep(60)
+    v=json.loads((root/'screen_complete.json').read_text(encoding='utf8'))['chosen']
+    out=lambda k:root/'runs'/run_name(*k)
+    trained=lambda k:(out(k)/'training_complete.json').exists();evaluated=lambda k:(out(k)/'evaluation_complete.json').exists()
+    final_done=lambda:(root/'final_complete.json').exists()
+    others=[(s,v+'F',sd) for sd in (42,43,44) for s in ('GF2','QB','WV3') if (s,sd)!=('WV3',44)]
+    while not (final_done() or (all(evaluated(k) for k in others) and (out(('WV3',v+'T',44))/'status.json').exists())):
+        if (root/'final_stopped.json').exists():note(stopped='final runner stopped; nothing started');sys.exit(2)
+        time.sleep(60)
+    write(root/'long_started.json',dict(time_kst=now(),variant=v,arm=v+'L',seed=SEED,decision='user 2026-11-22 15h: after the final 3 seeds, 300 epochs on all three sensors',
+          schedule='<v>T epoch-120 state -> 1e-4 to epoch 240 -> 60-epoch cosine 1e-4 -> 1e-6 (84 B300)',script=str(Path(__file__).resolve()),script_sha256=sha(Path(__file__).resolve())))
+    keys=[(s,v+'L',SEED) for s in ('GF2','QB','WV3')]
+    jobs=[('train',k) for k in keys if not trained(k)]+[('evaluate',k) for k in keys if trained(k) and not evaluated(k)]
+    running={};problem=None
+    def launch(kind,k):
+        o=out(k);o.mkdir(parents=True,exist_ok=True);f=(o/(kind+'.log')).open('a',encoding='utf8')
+        args=[sys.executable,'-u',str(HERE/'train.py'),'--config',str(cp),'--mode',kind,'--sensor',k[0],'--arm',k[1],'--seed',str(k[2])]
+        p=subprocess.Popen(args,stdout=f,stderr=subprocess.STDOUT);note(launched=kind,run=run_name(*k),pid=p.pid);return p,f
+    while True:
+        if problem is None:
+            try:live=live_jobs()
+            except Exception as e:live=None;note(warning='process query failed; no launch this round',error=str(e)[-200:])
+            if live is not None:
+                free=cfg['max_parallel']-len(live)
+                if not final_done():
+                    if (root/'final_stopped.json').exists():problem='final runner stopped'
+                    free=min(free,1-len(running))  # the final runner keeps one slot for its last chain
+                for j in sorted(jobs,key=lambda j:(j[0]!='evaluate',keys.index(j[1]))):
+                    if free<=0 or problem:break
+                    jobs.remove(j);running[j]=launch(*j);free-=1
+        time.sleep(30)
+        for j,(p,f) in list(running.items()):
+            if p.poll() is None:continue
+            f.close();del running[j];kind,k=j
+            ok=p.returncode==0 and (trained(k) if kind=='train' else evaluated(k))
+            if ok and kind=='train' and sanity(cfg,root,k):ok=False
+            if ok and kind=='train':jobs.append(('evaluate',k))
+            note(finished=kind,run=run_name(*k),ok=ok,exit=p.returncode)
+            if not ok and problem is None:problem=f'{kind} failed {k} (exit {p.returncode})'
+        if not running and (problem or not jobs):break
+    if problem:
+        write(root/'long_stopped.json',dict(time_kst=now(),reason=problem,note='no new job after the problem; running jobs finished'));note(stopped=problem);sys.exit(3)
+    res={'variant':v,'seed':SEED,'arms':{'300':v+'L','150':v+'F'},'targets':{}}
+    for s in cfg['sensors']:
+        lv,fv=validation_of(root,(s,v+'L',SEED)),validation_of(root,(s,v+'F',SEED))
+        el=json.loads((out((s,v+'L',SEED))/'evaluation_complete.json').read_text(encoding='utf8'))['targets'];ef=json.loads((out((s,v+'F',SEED))/'evaluation_complete.json').read_text(encoding='utf8'))['targets']
+        for t in el:
+            rl,rf=el[t]['means'][v+'L + P']['RR'],ef[t]['means'][v+'F + P']['RR']
+            res['targets'][f'{s}->{t}']=dict(role='report' if t==s else 'transfer, reference only',RR_300_P=rl,RR_150_P=rf,delta_300_minus_150={m:rl[m]-rf[m] for m in ('PSNR','SAM','ERGAS')},
+                RR_300_vs_C2MS_SP=el[t]['delta_RR']['P_vs_C2MS_SP'],RR_150_vs_C2MS_SP=ef[t]['delta_RR']['P_vs_C2MS_SP'],
+                validation=dict(L300=lv,F150=fv,delta_psnr=lv['psnr']-fv['psnr'],delta_sam=lv['sam']-fv['sam']) if t==s else None)
+    res['note']='single seed 42; validation-side comparison of the length; test reported only (v2.4 single-seed threshold 0.06 dB)'
+    write(root/'long_comparison.json',dict(time_kst=now(),**res));write(root/'long_complete.json',dict(time_kst=now()))
+    note(long={k:round(x['delta_300_minus_150']['PSNR'],4) for k,x in res['targets'].items()})
+
 if __name__=='__main__':
     import argparse
     p=argparse.ArgumentParser(description='90 controller: prepare -> optimize -> run (resume: --mode run --resume)')
-    p.add_argument('--mode',choices=['prepare','optimize','run','factorize','screen','chosen','final','finalctrl'],required=True);p.add_argument('--resume',action='store_true')
+    p.add_argument('--mode',choices=['prepare','optimize','run','factorize','screen','chosen','final','finalctrl','long'],required=True);p.add_argument('--resume',action='store_true')
     p.add_argument('--sensor');p.add_argument('--arm');p.add_argument('--seed',type=int,default=42);a=p.parse_args()
     if a.mode=='factorize':factorize(a.sensor,a.arm,a.seed)
     elif a.mode=='finalctrl':finalctrl(a.sensor,a.seed)
-    else:{'prepare':prepare,'optimize':optimize,'screen':screen,'chosen':chosen,'final':final}.get(a.mode,lambda:run(a.resume))()
+    else:{'prepare':prepare,'optimize':optimize,'screen':screen,'chosen':chosen,'final':final,'long':long_run}.get(a.mode,lambda:run(a.resume))()

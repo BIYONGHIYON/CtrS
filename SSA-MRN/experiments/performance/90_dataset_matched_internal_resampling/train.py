@@ -8,6 +8,8 @@ epoch 0, EMA recorded only) for the 88 K2D recipe with the 89 loss weights (lamb
   <v>F : full-size decay without factorization (user decision 2026-11-22 00h, the final model): the hash-checked <v>T epoch-120 snapshot
          (model, Adam, GradScaler, RNG, data order, history, best so far) continues for 30 epochs of cosine 1e-4 -> 1e-6 (epochs 120-149 of
          the trunk counter, the same cosine as <v>K; 88 FULL / start_branch)
+  <v>L : full-size 300 epochs (user decision 2026-11-22 15h): the same <v>T epoch-120 snapshot continues at 1e-4 to epoch 240, then
+         60-epoch cosine 1e-4 -> 1e-6 (epochs 240-299; the 84 B300 split, decay = last 20%)
   <v>S : full-size 2x2 C2MS of variant v, 50 epochs (epochs 0-39 at 1e-4, 40-49 cosine 1e-4 -> 1e-6, the 89 screening schedule)
 The W2 output implementation is the sealed cfg['w2_out_impl'] (convT, as 89)."""
 import os
@@ -39,6 +41,7 @@ SENSOR_REPLACEMENTS=(  # 90: the 58 preflight builds the model directly; B and C
 )
 _STATE={'mode':None}
 TRUNK_EPOCHS,K2D_EPOCHS,SCREEN_EPOCHS,SCREEN_CONSTANT=120,30,50,40
+LONG_CONSTANT,LONG_DECAY=240,60
 
 
 def epochs(cfg,arm):
@@ -47,6 +50,7 @@ def epochs(cfg,arm):
     if arm in M.FACTORIZED:return K2D_EPOCHS
     if arm in M.SCREEN:return SCREEN_EPOCHS
     if arm in M.DECAY:return TRUNK_EPOCHS+K2D_EPOCHS
+    if arm in M.LONG:return LONG_CONSTANT+LONG_DECAY
     raise ValueError(arm)
 
 
@@ -67,6 +71,7 @@ def schedule(cfg,arm,epoch):
     if arm in M.FULL_SIZE:return cfg['lr_start']
     if arm in M.FACTORIZED:return cosine(cfg,epoch,K2D_EPOCHS,cfg['lr_start'])
     if arm in M.DECAY:return cfg['lr_start'] if epoch<TRUNK_EPOCHS else cosine(cfg,epoch-TRUNK_EPOCHS,K2D_EPOCHS,cfg['lr_start'])
+    if arm in M.LONG:return cfg['lr_start'] if epoch<LONG_CONSTANT else cosine(cfg,epoch-LONG_CONSTANT,LONG_DECAY,cfg['lr_start'])
     if arm in M.SCREEN:return cfg['lr_start'] if epoch<SCREEN_CONSTANT else cosine(cfg,epoch-SCREEN_CONSTANT,SCREEN_EPOCHS-SCREEN_CONSTANT,cfg['lr_start'])
     raise ValueError(arm)
 
@@ -94,19 +99,19 @@ def snapshot_files(cfg,sensor,trunk,seed):
 
 
 def start_branch(cfg,sensor,arm,seed):
-    """<v>F: copy the <v>T epoch-120 snapshot into the run once (hashes checked); later restarts resume the run's own latest.pt (88)."""
+    """<v>F / <v>L: copy the <v>T epoch-120 snapshot into the run once (hashes checked); later restarts resume the run's own latest.pt (88)."""
     import torch
     import model as M
     out=Path(cfg['runtime'])/'runs'/T.run_name(sensor,arm,seed);cp=out/'checkpoints';marker=out/'branch_init.json'
     if marker.exists():return
-    trunk=M.DECAY_SOURCE[arm];k,src,meta=snapshot_files(cfg,sensor,trunk,seed)
+    trunk={**M.DECAY_SOURCE,**M.LONG_SOURCE}[arm];k,src,meta=snapshot_files(cfg,sensor,trunk,seed)
     ck=torch.load(src/'latest.pt',map_location='cpu',weights_only=False)
     if ck['epoch']!=k or ck['next_batch']!=0 or ck['order'] is not None or ck['fingerprint']!=cfg['fingerprint'] or ck['seed']!=seed:raise RuntimeError('snapshot state differs from a clean epoch boundary '+str(src))
     if cp.exists():shutil.rmtree(cp)  # only snapshot copies can be here: training never starts before branch_init.json is written
     cp.mkdir(parents=True)
     for n in ('latest.pt','best.pt','best_ema.pt'):shutil.copy2(src/n,cp/n)
     T.write(out/'history.json',ck['history'])
-    T.write(marker,dict(time_kst=T.now(),trunk=T.run_name(sensor,trunk,seed),trunk_epoch=k,decay_epochs=K2D_EPOCHS,total_epochs=k+K2D_EPOCHS,snapshot=str(src),snapshot_files=meta['files'],trunk_best_epoch=ck['best_epoch']))
+    T.write(marker,dict(time_kst=T.now(),trunk=T.run_name(sensor,trunk,seed),trunk_epoch=k,decay_epochs=epochs(cfg,arm)-(LONG_CONSTANT if arm in M.LONG else k),total_epochs=epochs(cfg,arm),snapshot=str(src),snapshot_files=meta['files'],trunk_best_epoch=ck['best_epoch']))
 
 
 def init_path(cfg,sensor,arm,seed):return Path(cfg['runtime'])/'init'/f'{sensor}_{arm}_s{seed}.pt'
@@ -170,7 +175,7 @@ if __name__=='__main__':
         elif a.mode=='evaluate':
             from evaluate import evaluate
             evaluate(cfg,a.sensor,a.arm,a.seed)
-        elif a.arm in __import__('model').DECAY:start_branch(cfg,a.sensor,a.arm,a.seed);T.train(cfg,a.sensor,a.arm,a.seed,True)
+        elif a.arm in __import__('model').DECAY+__import__('model').LONG:start_branch(cfg,a.sensor,a.arm,a.seed);T.train(cfg,a.sensor,a.arm,a.seed,True)
         else:T.train(cfg,a.sensor,a.arm,a.seed,a.resume)
     except BaseException:
         dest=Path(cfg['runtime'])/('preflight' if a.mode in ('bench','preflight') else 'runs/'+run_name(a.sensor,a.arm,a.seed))
