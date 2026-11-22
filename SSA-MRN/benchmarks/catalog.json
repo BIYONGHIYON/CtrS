@@ -376,7 +376,7 @@
       "license": "비공개 상용 모델, 가중치 없음; 출력 이미지 사용은 서비스 약관을 따름",
       "code": "없음 (상용 서비스 모델, 동국 AI CHAT API Gateway)",
       "commit": null,
-      "evaluator": "센서별 담당 (#209 QB · #210 GF2 · #211 WV3 · #212 WV2), 미정",
+      "evaluator": "QB 이병현 · GF2 김윤지 · WV3 김경찬 · WV2 송준현",
       "settings": [
         "zeroshot"
       ],
@@ -393,8 +393,8 @@
         "zeroshot": null
       },
       "bands": "rgb",
-      "status": "계획",
-      "status_scope": "API 생성 진행 중(QB 장면 0 완료), MATLAB RGB 채점 전",
+      "status": "평가 완료",
+      "status_scope": "네 센서 RR test 각 20장 RGB 3밴드 실제 MATLAB 채점·정답 없는 지표·고정 6장면 이미지 완료",
       "issues": [
         209,
         210,
@@ -402,10 +402,48 @@
         212
       ],
       "inputs_release": "genimage-inputs",
-      "last_checked": "2026-11-20T21:30:00+09:00",
+      "last_checked": "2026-11-23",
       "predictions_release": "predictions-benchmarks-gpt_image_2_6-zeroshot",
       "report": "SSA-MRN/benchmarks/gpt_image_2_6/README.md",
-      "settings_detail": "1024x1024, quality high, background opaque (장당 약 70 크레딧, QB 장면 0 실제 70.45)"
+      "settings_detail": "1024x1024, quality high, background opaque",
+      "full_four_sensor_complete": true,
+      "matlab_rgb": {
+        "QB": {
+          "PSNR": 31.169574794556564,
+          "SAM": 3.8760242247322365,
+          "ERGAS": 8.585493173886821,
+          "SCC": 0.8815149773064954,
+          "Q2n": 0.7426128382983365
+        },
+        "GF2": {
+          "PSNR": 36.89334433840846,
+          "SAM": 1.5069864438387657,
+          "ERGAS": 2.527441875714884,
+          "SCC": 0.9362512262692556,
+          "Q2n": 0.7692717953142972
+        },
+        "WV3": {
+          "PSNR": 31.554902260221063,
+          "SAM": 2.3352055526674573,
+          "ERGAS": 5.003272022108282,
+          "SCC": 0.9085556979665108,
+          "Q2n": 0.7622666088447306
+        },
+        "WV2": {
+          "PSNR": 31.030122982062096,
+          "SAM": 3.1371365370436117,
+          "ERGAS": 4.734851639451877,
+          "SCC": 0.9193036264930294,
+          "Q2n": 0.8168214795293842
+        }
+      },
+      "psnr_convention": "밴드별 평균, peak 2047 (GF2 센서 peak 1023 값은 각 matlab_summary.json에 함께 보관)",
+      "generation_sources": {
+        "QB": "API",
+        "GF2": "API",
+        "WV3": "동국 AI CHAT 웹 화면, 고정 설정·프롬프트",
+        "WV2": "제공된 원본 묶음; 고정 설정·프롬프트 사용은 사용자 확인, 서비스 로그 미확인"
+      }
     },
     "nano_banana_2_1": {
       "display_name": "Nano Banana 2.1",
@@ -413,7 +451,7 @@
       "license": "비공개 상용 모델, 가중치 없음; 출력 이미지 사용은 서비스 약관을 따름",
       "code": "없음 (상용 서비스 모델, 동국 AI CHAT API Gateway)",
       "commit": null,
-      "evaluator": "센서별 담당 (#209 QB · #210 GF2 · #211 WV3 · #212 WV2), 미정",
+      "evaluator": "QB 이병현 · GF2 김윤지 · WV3 김경찬 · WV2 송준현",
       "settings": [
         "zeroshot"
       ],
@@ -430,8 +468,8 @@
         "zeroshot": null
       },
       "bands": "rgb",
-      "status": "계획",
-      "status_scope": "API 생성 진행 중(QB 장면 0 완료), MATLAB RGB 채점 전",
+      "status": "평가 완료",
+      "status_scope": "네 센서 RR test 각 20장 RGB 3밴드 실제 MATLAB 채점·정답 없는 지표·고정 6장면 이미지 완료",
       "issues": [
         209,
         210,
@@ -439,10 +477,48 @@
         212
       ],
       "inputs_release": "genimage-inputs",
-      "last_checked": "2026-11-20T21:30:00+09:00",
+      "last_checked": "2026-11-23",
       "predictions_release": "predictions-benchmarks-nano_banana_2_1-zeroshot",
       "report": "SSA-MRN/benchmarks/nano_banana_2_1/README.md",
-      "settings_detail": "image_size 1K, aspect_ratio 1:1 (장당 37 크레딧)"
+      "settings_detail": "image_size 1K, aspect_ratio 1:1",
+      "full_four_sensor_complete": true,
+      "matlab_rgb": {
+        "QB": {
+          "PSNR": 29.625878354266586,
+          "SAM": 4.682045566029311,
+          "ERGAS": 10.225513650857497,
+          "SCC": 0.8804501075728133,
+          "Q2n": 0.6764642700281184
+        },
+        "GF2": {
+          "PSNR": 33.11363862393299,
+          "SAM": 2.435818121699995,
+          "ERGAS": 4.061370547442456,
+          "SCC": 0.8991429265196915,
+          "Q2n": 0.6301934827202971
+        },
+        "WV3": {
+          "PSNR": 29.222839555708852,
+          "SAM": 3.9582159575243034,
+          "ERGAS": 6.762701859560646,
+          "SCC": 0.8934684117522218,
+          "Q2n": 0.6775481838354279
+        },
+        "WV2": {
+          "PSNR": 30.19437897978717,
+          "SAM": 3.871910488267487,
+          "ERGAS": 5.307026173392978,
+          "SCC": 0.9319967995361168,
+          "Q2n": 0.8030845522569641
+        }
+      },
+      "psnr_convention": "밴드별 평균, peak 2047 (GF2 센서 peak 1023 값은 각 matlab_summary.json에 함께 보관)",
+      "generation_sources": {
+        "QB": "API",
+        "GF2": "API",
+        "WV3": "동국 AI CHAT 웹 화면, 고정 설정·프롬프트",
+        "WV2": "제공된 원본 묶음; 고정 설정·프롬프트 사용은 사용자 확인, 서비스 로그 미확인"
+      }
     },
     "genimage_identity": {
       "display_name": "변환 한계 대조군 (생성형 이미지 모델 시험)",

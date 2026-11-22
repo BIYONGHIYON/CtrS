@@ -158,12 +158,15 @@ SMOC의 개선(원본 대비)이 가장 큰 64×64 영역을 4배 확대했습�
 | SRINO | 38.864 | 4.351 | 3.542 | 0.940 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
 | ADWM | 38.466 | 4.450 | 3.705 | 0.937 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 | **SMOC (현재 기준, 3시드 평균)** | **38.344** | **4.520** | **3.702** | **0.935** | [Ours](SSA-MRN/docs/images/smoc/baseline_metrics.json) |
+| HFIN | 38.247 | 4.542 | 3.813 | 0.934 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
+| LAGNet | 38.209 | 4.534 | 3.812 | 0.934 | [ADWM](https://arxiv.org/html/2503.13214v1) |
+| U2Net | 38.065 | 4.642 | 3.987 | 0.931 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
+| FusionMamba | 37.986 | 4.610 | 4.054 | 0.930 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
 | SSA-MRN 원 논문 | 37.665 | 4.848 | 4.073 | 0.924 | [SSA-MRN](https://ieeexplore.ieee.org/abstract/document/10902025) |
-| 원본 SSA-MRN (우리 재현, 3시드 평균) | 37.429 | 4.941 | 4.124 | 0.923 | [MATLAB 재평가](SSA-MRN/docs/c2ms_matlab_evaluation_tables.md) |
 | MTF-GLP-FS (고전 방법) | 32.709 | 7.792 | 7.373 | 0.835 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 
 <details>
-<summary>전체 비교 표 (PSNR 순, 28행)와 주의점</summary>
+<summary>전체 비교 표 (PSNR 순, 30행)와 주의점</summary>
 
 | 모델 | PSNR ↑ | SAM ↓ | ERGAS ↓ | Q4 ↑ | 출처 |
 |---|---:|---:|---:|---:|---|
@@ -189,22 +192,24 @@ SMOC의 개선(원본 대비)이 가장 큰 64×64 영역을 4배 확대했습�
 | U2Net | 38.065 | 4.642 | 3.987 | 0.931 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
 | PanDiM | 38.012 | 4.344 | 3.594 | 0.939 | [PanDiM](https://www.mdpi.com/2072-4292/18/14/2299) |
 | FusionMamba | 37.986 | 4.610 | 4.054 | 0.930 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
+| ADKNet | 37.918 | 4.881 | 3.912 | — | [MSFFusion](https://www.mdpi.com/2072-4292/18/18/3236) |
 | SSA-MRN 원 논문 | 37.665 | 4.848 | 4.073 | 0.924 | [SSA-MRN](https://ieeexplore.ieee.org/abstract/document/10902025) |
 | FusionNet | 37.540 | 4.904 | 4.156 | 0.925 | [ADWM](https://arxiv.org/html/2503.13214v1) |
-| 원본 SSA-MRN (우리 재현, 3시드 평균) | 37.429 | 4.941 | 4.124 | 0.923 | [MATLAB 재평가](SSA-MRN/docs/c2ms_matlab_evaluation_tables.md) |
+| PanMamba | 37.356 | 4.625 | 4.277 | 0.929 | [ADWM](https://arxiv.org/html/2503.13214v1) |
+| TDNet | 37.170 | 4.580 | 4.150 | — | [ABFNet](https://proceedings.mlr.press/v306/wang26hx.html) |
 | PNN | 36.942 | 5.181 | 4.468 | 0.918 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 | MTF-GLP-FS (고전 방법) | 32.709 | 7.792 | 7.373 | 0.835 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 | FusionNet (Ours 환경 재현, 저자 QB 가중치) | 31.485 | 7.372 | 8.291 | 0.805 | [MATLAB 평가](SSA-MRN/benchmarks/fusionnet/README.md) |
 
 - 다른 모델의 값은 출처 열의 논문이 보고한 값입니다. 비교군으로 다시 학습·보고된 값(예: LFormer·PanDiff·HFIN·HOIF는 SRINO 보충자료, LAGNet·FusionNet·PNN은 ADWM)도 포함하므로, 같은 모델이 논문마다 다른 값으로 보고될 수 있습니다.
 - 논문마다 데이터 분할·정규화·PSNR 구현·학습 예산이 다를 수 있어 같은 조건의 공인 순위가 아닙니다. 순위는 참고로만 봅니다.
-- PSNR을 보고하지 않은 방법(CC-Pan SAM 4.198, HMPNet SAM 4.617 등)은 표에서 제외했습니다. PSNR 37.99 dB 미만에서는 SSA-MRN 원 논문과 대표 비교군(FusionNet·PNN·MTF-GLP-FS)만 남겼습니다. —는 해당 논문이 Q4를 보고하지 않았다는 뜻입니다.
+- PSNR을 보고하지 않은 방법(CC-Pan SAM 4.198, HMPNet SAM 4.617 등)은 표에서 제외했습니다. 조사표에서 대표 모델을 추려 실었으며 전체 모델 목록은 아래 논문 보고값 조사에 있습니다. —는 해당 논문이 Q4를 보고하지 않았다는 뜻입니다.
 - 우리 값은 3시드 평균이고, 다른 논문은 대부분 1회 학습 값입니다. 같은 20장 test를 여러 실험에서 반복해 썼습니다.
 
 </details>
 
 - [논문 보고값 조사](SSA-MRN/docs/pansharpening_survey/QB_GF_WV2_WV3_팬샤프닝_성능조사_2026-10-27.md): 센서·학습 경로별 정리 ([QB 원표](SSA-MRN/docs/pansharpening_survey/QB_팬샤프닝_성능조사_2026-10-27.md))
-- [다른 팬샤프닝 모델 평가](SSA-MRN/benchmarks/README.md): 다른 모델을 우리 환경에서 직접 학습·평가한 결과. 3시드 평가가 끝나면 위 표에 `모델 (Ours 환경 재현)` 행으로 넣습니다.
+- [다른 팬샤프닝 모델 평가](SSA-MRN/benchmarks/README.md): 다른 모델을 우리 환경에서 직접 학습·평가한 결과. 실제 MATLAB 평가와 결과 보관이 끝나면 위 표에 `모델 (Ours 환경 재현)` 행으로 넣습니다(RGB 3밴드 생성형 모델은 별도 보고).
 
 <a id="experiments"></a>
 
