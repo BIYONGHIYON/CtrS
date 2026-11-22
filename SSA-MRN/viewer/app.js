@@ -280,7 +280,7 @@ function build() {
   // layers: one column per image, whole scene on top and the selected region below
   tiles = [];
   if (S.inputs) tiles.push({ kind: 'lr', title: 'LR MS', sub: '입력 · 최근접 확대' }, { kind: 'pan', title: 'PAN', sub: '입력' });
-  vis.forEach(m => tiles.push({ kind: 'pred', id: m.id, title: m.label, tag: m.group === 'baseline' ? '기준 모델' : null }));
+  vis.forEach(m => tiles.push({ kind: 'pred', id: m.id, title: m.label, tag: m.group === 'baseline' ? '개선 모델' : null }));
   tiles.push({ kind: 'gt', title: '정답', sub: 'GT' });
   vis.forEach(m => tiles.push({ kind: 'err', id: m.id, title: `${m.short} 오차`, sub: '|예측 − 정답|' }));
   others.forEach(m => tiles.push({ kind: 'gain', id: m.id, title: `${m.short} 개선`, sub: `${ref.short} 오차 − ${m.short} 오차` }));
@@ -293,7 +293,7 @@ function build() {
       el('li', {}, '장면과 데이터셋 수치는 export.py가 원래 예측으로 계산했습니다(common/metrics.rr_metrics, PSNR은 peak 2047의 밴드별 평균).'),
       el('li', {}, `확대 영역 수치는 브라우저가 1/${factor} DN 단위로 저장한 값으로 계산합니다. 장면 전체에서 두 계산의 차이는 PSNR 0.0004 dB 이내였습니다.`),
       el('li', {}, '우리 모델은 seed 42 가중치 하나의 결과이고, 다른 연구 모델은 저자 공개 가중치(시드 미공개)의 예측입니다. 실험 판정은 연구 문서의 시드 평균을 따르며, 다른 연구 모델에는 판정을 붙이지 않습니다.'),
-      el('li', {}, '생성형 이미지 모델은 RGB 3밴드만 내므로, 이 모델을 고르면 기준 모델을 포함한 모든 영상·오차 지도·수치를 같은 RGB 3밴드로 계산합니다. 이때 NIR 위색은 고를 수 없고, 수치는 전체 밴드 수치와 직접 비교하지 않습니다.'),
+      el('li', {}, '생성형 이미지 모델은 RGB 3밴드만 내므로, 이 모델을 고르면 개선 모델을 포함한 모든 영상·오차 지도·수치를 같은 RGB 3밴드로 계산합니다. 이때 NIR 위색은 고를 수 없고, 수치는 전체 밴드 수치와 직접 비교하지 않습니다.'),
       el('li', {}, `데이터 생성 ${S.index.generated}`)));
 
   app.replaceChildren(...[
@@ -405,7 +405,7 @@ function renderNumbers(rm) {
       el('tr', { class: 'groups' }, el('th', {}), el('th', { class: 'g', colspan: REGION_COLS.length }, `확대 영역 ${S.win}×${S.win}${band}`), el('th', { class: 'g', colspan: SCENE_COLS.length }, `장면 ${S.scene} 전체${band}`),
         el('th', { class: 'g', colspan: MEAN_COLS.length + (multi ? 1 : 0) }, `데이터셋 평균 · ${ds.scenes}장면${band}`)),
       el('tr', {}, el('th', {}, '모델'), heads(REGION_COLS), heads(SCENE_COLS), heads(MEAN_COLS), multi ? el('th', { title: `${model(ref).short}보다 PSNR이 높은 장면 수` }, 'PSNR 우세 장면') : null)),
-    el('tbody', {}, S.visible.map(id => el('tr', {}, el('td', {}, model(id).label, model(id).group === 'baseline' ? [' ', el('span', { class: 'tag' }, '기준 모델')] : null),
+    el('tbody', {}, S.visible.map(id => el('tr', {}, el('td', {}, model(id).label, model(id).group === 'baseline' ? [' ', el('span', { class: 'tag' }, '개선 모델')] : null),
       cells(REGION_COLS, i => rm[i], id), cells(SCENE_COLS, i => res[i].scene_metrics[S.scene], id), cells(MEAN_COLS, i => res[i].mean, id),
       multi ? el('td', {}, id === ref ? '' : `${wins(id)}/${ds.scenes}`) : null))));
   $('#numbers').replaceChildren(table);
@@ -546,9 +546,22 @@ async function boot() {
     const r = await fetch('data/index.json', { cache: 'no-cache' });
     if (!r.ok) throw new Error(r.status);
     index = await r.json();
+    // Display text follows the tracked registry; prediction arrays and metrics stay in the Release.
+    const metadata = await fetch('registry.json', { cache: 'no-cache' });
+    if (!metadata.ok) throw new Error(`registry.json: ${metadata.status}`);
+    const registry = await metadata.json();
+    index.models = index.models.map(m => {
+      const entry = registry.models.find(item => item.id === m.id);
+      if (!entry) return m;
+      const display = {};
+      for (const key of ['label', 'short', 'role', 'role_by_dataset', 'description']) {
+        if (entry[key] !== undefined) display[key] = entry[key];
+      }
+      return { ...m, ...display };
+    });
   } catch (err) {
     $('#app').replaceChildren(el('div', { class: 'empty' },
-      el('p', {}, '예측 데이터(data/index.json)가 없습니다. 아래 두 명령으로 데이터를 만들고 이 폴더를 엽니다.'),
+      el('p', {}, '예측 데이터(data/index.json) 또는 모델 목록(registry.json)을 불러오지 못했습니다. 아래 두 명령으로 데이터를 만들고 이 폴더를 엽니다.'),
       el('p', {}, el('code', {}, 'python SSA-MRN/viewer/export.py')), el('p', {}, el('code', {}, 'python -m http.server 8765 -d SSA-MRN/viewer'))));
     return;
   }

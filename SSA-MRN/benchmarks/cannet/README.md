@@ -1,5 +1,7 @@
 # CANNet
 
+> 현재 비교 기준은 SMOC입니다([최신 평가 표](../README.md#models)). 이 보고서의 C2MS-SP 수치·이미지는 당시 비교 기록이며 그대로 보존합니다.
+
 **출처:** Yule Duan, Xiao Wu, Haoyu Deng, Liang-Jian Deng, Content-Adaptive Non-Local Convolution for Remote Sensing Pansharpening, CVPR, 2024, [arXiv 2404.07543](https://arxiv.org/abs/2404.07543)
 
 **공식 코드:** [Duanyll/CANConv](https://github.com/Duanyll/CANConv) · `0b7cc6f`(kmcuda 하위 모듈 `6906cc3`) · GPL-3.0(코드·저자 가중치 재배포 가능)

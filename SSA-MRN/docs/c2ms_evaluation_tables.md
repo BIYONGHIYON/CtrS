@@ -1,8 +1,8 @@
 # C2MS와 원본 SSA-MRN의 데이터셋·시드별 평가 수치
 
-성능 53번(QB)과 54번(GF2·WV3·WV2 전이)의 보존된 평가 수치를 한곳에 정리했습니다. 원본은 SSA-MRN K4(C0), C2MS는 원본에 W2 병렬 가지와 축척 혼합 학습을 적용한 현재 기준 모델입니다. 두 실험의 실제 실험자는 이병현입니다.
+성능 53번(QB)과 54번(GF2·WV3·WV2 전이)의 보존된 평가 수치를 한곳에 정리했습니다. 원본은 SSA-MRN K4(C0), C2MS는 원본에 W2 병렬 가지와 축척 혼합 학습을 적용한 당시 기준 모델입니다. 현재 기준 모델 SMOC의 수치는 [SMOC 결과](smoc_result_images.md)에서 확인합니다. 두 실험의 실제 실험자는 이병현입니다.
 
-[루트 README의 원본 대비 개선](../../README.md#원본-대비-개선) · [53번 보고서](../experiments/performance/53_scale_mixed_training/README.md) · [54번 보고서](../experiments/performance/54_multi_sensor_scale_mixed_training/README.md)
+[루트 README의 원본 대비 개선](../../README.md#결과) · [53번 보고서](../experiments/performance/53_scale_mixed_training/README.md) · [54번 보고서](../experiments/performance/54_multi_sensor_scale_mixed_training/README.md)
 
 ## 읽는 방법
 
@@ -257,6 +257,6 @@
 
 ## 근거와 해석의 범위
 
-- QB: [53번 평가 JSON](../experiments/performance/53_scale_mixed_training/results/evaluation_v2_3.json)의 `models.*.mean`과 원본 대비 `judgements`를 사용했습니다. 53번의 F1·C2·F1MS 및 TTA 실험은 현재 기준 모델의 원본 대비 비교 범위에서 제외했으며, 해당 보고서에 보존되어 있습니다.
+- QB: [53번 평가 JSON](../experiments/performance/53_scale_mixed_training/results/evaluation_v2_3.json)의 `models.*.mean`과 원본 대비 `judgements`를 사용했습니다. 53번의 F1·C2·F1MS 및 TTA 실험은 이 문서의 원본 대비 비교 범위에서 제외했으며, 해당 보고서에 보존되어 있습니다.
 - GF2·WV3·WV2: [54번 평가 JSON](../experiments/performance/54_multi_sensor_scale_mixed_training/results/evaluation_v2_3.json)의 `models.*.targets.*.mean`과 원본 대비 `judgements`를 사용했습니다.
 - RR2는 학습에 넣은 거친 축척과 관련된 시험이므로, 그 이득을 실제 FR 방향의 일반화가 확인된 것으로 해석하지 않습니다. FR 관측 일치와 참고 지표는 실제 정답 영상의 품질을 직접 보장하지 않습니다.

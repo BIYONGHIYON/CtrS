@@ -1,5 +1,5 @@
 {
-  "description": "결과 비교 사이트에 올릴 데이터셋과 모델 목록입니다. group은 original(원본 SSA-MRN)·baseline(기준 모델)·ours(우리 다른 모델)·benchmark(다른 연구 모델)·generative(생성형 이미지 모델, RGB 3밴드만)이며, 화면은 기준 모델과 나머지 중 고른 비교군 하나를 함께 보여 줍니다. 모델을 추가한 뒤 python SSA-MRN/viewer/export.py --models <id>로 예측을 만듭니다.",
+  "description": "결과 비교 사이트에 올릴 데이터셋과 모델 목록입니다. group은 original(원본 SSA-MRN)·baseline(개선 모델)·ours(우리 다른 모델)·benchmark(다른 연구 모델)·generative(생성형 이미지 모델, RGB 3밴드만)이며, 화면은 개선 모델과 나머지 중 고른 비교군 하나를 함께 보여 줍니다. 모델을 추가한 뒤 python SSA-MRN/viewer/export.py --models <id>로 예측을 만듭니다.",
   "datasets": [
     {
       "id": "QB",
@@ -188,10 +188,10 @@
       "id": "smoc",
       "label": "SMOC",
       "short": "SMOC",
-      "role": "현재 기준 모델",
+      "role": "개선 모델",
       "group": "baseline",
       "seed": 42,
-      "description": "원본 SSA-MRN에 W2 병렬 가지(2×2 합성곱 입·출력), 데이터셋 방식 축소·확대(센서 MTF 블러 + 솎음, 23탭 보간), 축척 혼합 학습(L1 + 1.2 × 분광 손실, 거친 쌍 0.25, 원래 크기 150에폭)을 더한 성능 90번 가중치에 관측 일치 사영(공액 기울기법 10회)을 붙인 모델입니다(2026-11-23 기준 모델). WV2에는 WV3 가중치(WV3 MTF)에 성능 82번 밴드별 센서 보정을 더해 적용합니다.",
+      "description": "원본 SSA-MRN에 W2 병렬 가지(2×2 합성곱 입·출력), 데이터셋 방식 축소·확대(센서 MTF 블러 + 솎음, 23탭 보간), 축척 혼합 학습(L1 + 1.2 × 분광 손실, 거친 쌍 0.25, 원래 크기 150에폭)을 더한 성능 90번 가중치에 관측 일치 사영(공액 기울기법 10회)을 붙인 모델입니다. WV2에는 WV3 가중치(WV3 MTF)에 성능 82번 밴드별 센서 보정을 더해 적용합니다.",
       "module": "common/baseline_models.py",
       "factory": "smoc",
       "args": [
@@ -282,7 +282,7 @@
       "role": "생성형 모델 · 학습 없음 · RGB만",
       "group": "generative",
       "seed": null,
-      "description": "OpenAI GPT Image 2.6 Sunburst(1024×1024, 품질 high)의 생성 결과입니다. 학습 없이 RR test 입력(LMS의 RGB 밴드와 PAN을 각각 0.1-99.9%로 늘려 8bit 1024×1024 PNG로 만든 것)과 고정 프롬프트를 동국 AI CHAT API Gateway로 넣어 얻은 결과를 4×4 평균으로 256×256으로 줄이고 DN으로 되돌렸습니다. RGB 3밴드만 출력하므로 기준 모델과도 RGB 3밴드로만 비교합니다. 평가 보고서: benchmarks/gpt_image_2_6.",
+      "description": "OpenAI GPT Image 2.6 Sunburst(1024×1024, 품질 high)의 생성 결과입니다. 학습 없이 RR test 입력(LMS의 RGB 밴드와 PAN을 각각 0.1-99.9%로 늘려 8bit 1024×1024 PNG로 만든 것)과 고정 프롬프트를 동국 AI CHAT API Gateway로 넣어 얻은 결과를 4×4 평균으로 256×256으로 줄이고 DN으로 되돌렸습니다. RGB 3밴드만 출력하므로 개선 모델과도 RGB 3밴드로만 비교합니다. 평가 보고서: benchmarks/gpt_image_2_6.",
       "benchmark": {
         "model": "gpt_image_2_6",
         "setting": "zeroshot",
@@ -302,7 +302,7 @@
       "role": "생성형 모델 · 학습 없음 · RGB만",
       "group": "generative",
       "seed": null,
-      "description": "Google Nano Banana 2.1(Gemini 이미지 모델, 1K·1:1)의 생성 결과입니다. 학습 없이 RR test 입력(LMS의 RGB 밴드와 PAN을 각각 0.1-99.9%로 늘려 8bit 1024×1024 PNG로 만든 것)과 고정 프롬프트를 동국 AI CHAT API Gateway로 넣어 얻은 결과를 4×4 평균으로 256×256으로 줄이고 DN으로 되돌렸습니다. RGB 3밴드만 출력하므로 기준 모델과도 RGB 3밴드로만 비교합니다. 평가 보고서: benchmarks/nano_banana_2_1.",
+      "description": "Google Nano Banana 2.1(Gemini 이미지 모델, 1K·1:1)의 생성 결과입니다. 학습 없이 RR test 입력(LMS의 RGB 밴드와 PAN을 각각 0.1-99.9%로 늘려 8bit 1024×1024 PNG로 만든 것)과 고정 프롬프트를 동국 AI CHAT API Gateway로 넣어 얻은 결과를 4×4 평균으로 256×256으로 줄이고 DN으로 되돌렸습니다. RGB 3밴드만 출력하므로 개선 모델과도 RGB 3밴드로만 비교합니다. 평가 보고서: benchmarks/nano_banana_2_1.",
       "benchmark": {
         "model": "nano_banana_2_1",
         "setting": "zeroshot",

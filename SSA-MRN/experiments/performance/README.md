@@ -6,9 +6,9 @@ SSA-MRN의 구조·학습·손실을 바꿔 수치를 개선하는 연구입니�
 
 | 항목 | 내용 |
 |---|---|
-| 대조군 | 기준 모델 **C2MS-SP** ([81번](81_l1_spectral_loss_projection/README.md), 2026-11-14 채택). 경량판 C2MS-SP-Lite는 [83번](83_factorized_c2ms_finetuning/README.md) |
+| 대조군 | 기준 모델 **SMOC** ([90번](90_dataset_matched_internal_resampling/README.md), 2026-11-23 채택). 새 실험에 적용하며 이전 실험의 대조군·판정은 보존합니다. |
 | 판정 | 같은 조건 대조군과 짝지은 RR test 20장의 PSNR·SAM·ERGAS ([v2.4](../../docs/judgement_criteria.md)) |
-| 이전 기준 모델 | C2MS ([53번](53_scale_mixed_training/README.md), 2026-10-21), F1 ([49번](49_observation_refinement_seed_repeat/README.md), 2026-10-20) |
+| 이전 기준 모델 | C2MS-SP ([81번](81_l1_spectral_loss_projection/README.md), 2026-11-14)와 경량판 C2MS-SP-Lite ([83번](83_factorized_c2ms_finetuning/README.md)), C2MS ([53번](53_scale_mixed_training/README.md), 2026-10-21), F1 ([49번](49_observation_refinement_seed_repeat/README.md), 2026-10-20) |
 | 47번 이전 실험의 판정 | [47번 재평가](47_ground_truth_criteria_reevaluation/README.md)의 측정값을 v2.4로 다시 집계한 값 |
 
 <a id="experiments"></a>

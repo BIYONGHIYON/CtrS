@@ -3,11 +3,11 @@
 
 Writes docs/images/smoc/:
   baseline_metrics.json  RR test metrics (PSNR, SAM, ERGAS, SCC, Q2n) of the three models on QB, GF2, WV3 (each trained on its own sensor) and
-                         the WV2 transfer (WV3 weights), seeds 42-44, per seed and 3-seed mean; on WV2 also C2MS-SP / C2MS-SP-Lite without the
+                         the WV2 transfer (WV3 weights), seeds 42-44, per seed and 3-seed mean; on WV2 also C2MS-SP / SMOC without the
                          band calibration, and the transfer detail measures of experiment 54 (sharpness = mean |4-neighbour Laplacian| of the
                          output / of the GT, detail correlation of (output - LMS) with (GT - LMS), per-band mean bias / GT mean)
   <dataset>/full_scene_XX.png, compare_scene_XX.png, result_images.json  fixed six scenes, seed 42 (common/result_images.render_multi)
-Models come from common/baseline_models (C2MS-SP and -Lite include the K10 projection; on WV2 also the band calibration of experiment 82;
+Models come from common/baseline_models (C2MS-SP and SMOC include the K10 projection; on WV2 also the band calibration of experiment 82;
 the original SSA-MRN runs as published). Usage: python SSA-MRN/common/baseline_images.py [--device cpu] [--skip-metrics] [--skip-images]
 """
 import argparse, json, sys, time

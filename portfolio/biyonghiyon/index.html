@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CtrS — 위성영상 팬샤프닝 연구</title>
-<meta name="description" content="SSA-MRN을 개선한 팬샤프닝 기준 모델 C2MS-SP. 병렬 가지·축척 혼합 학습·L1·분광 손실·관측 일치 사영으로 QB·GF2·WV3에서 원본보다 높은 성능을 확인하고, 학습하지 않은 센서 WV2에서도 선명도와 색을 유지합니다.">
+<meta name="description" content="SSA-MRN을 개선한 팬샤프닝 기준 모델 SMOC. 병렬 가지·축척 혼합 학습·L1·분광 손실·관측 일치 사영으로 QB·GF2·WV3에서 원본보다 높은 성능을 확인하고, 학습하지 않은 센서 WV2에서도 선명도와 색을 유지합니다.">
 <link rel="icon" href="assets/icon.png" type="image/png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <link rel="stylesheet" href="style.css?v=3">
@@ -36,7 +36,7 @@
   <section class="hero">
     <p class="hero-meta">딥러닝 연구 · 위성영상 팬샤프닝 · 동국대학교 종합설계1</p>
     <h1>학습하지 않은 위성 센서에서도 선명도와 색을 유지하는 팬샤프닝 모델</h1>
-    <p class="lead">흑백 고해상도 영상(PAN)과 저해상도 다중분광 영상(MS)을 합쳐 고해상도 컬러 영상을 복원합니다. 오픈소스 모델 SSA-MRN을 재현한 뒤, 구조·학습·추론을 바꾼 기준 모델 <strong>C2MS-SP</strong>와 경량판 <strong>C2MS-SP-Lite</strong>로 성능을 개선했습니다.</p>
+    <p class="lead">흑백 고해상도 영상(PAN)과 저해상도 다중분광 영상(MS)을 합쳐 고해상도 컬러 영상을 복원합니다. 오픈소스 모델 SSA-MRN을 재현한 뒤, 구조·학습·추론을 바꾼 기준 모델 <strong>SMOC</strong>로 성능을 개선했습니다. 이전 기준 C2MS-SP와 경량판 C2MS-SP-Lite의 결과도 기록으로 남깁니다.</p>
     <div class="actions">
       <a class="btn primary" href="https://github.com/BIYONGHIYON/CtrS">GitHub 저장소</a>
       <a class="btn" href="#results">결과 보기</a>
@@ -44,15 +44,15 @@
     <dl class="facts">
       <div><dt>역할</dt><dd>팀장 · 4인</dd></div>
       <div><dt>기간</dt><dd>2026.09 — 현재</dd></div>
-      <div><dt>기준 모델</dt><dd>C2MS-SP (2026.11 채택)</dd></div>
+      <div><dt>기준 모델</dt><dd>SMOC (2026.11.23 채택)</dd></div>
     </dl>
   </section>
 
   <div class="stats" aria-label="원본 SSA-MRN 대비 주요 결과">
-    <div class="stat"><b>+0.94 dB</b><span>QB RR PSNR · 3시드 평균</span></div>
-    <div class="stat"><b>+2.24 dB</b><span>GF2 RR PSNR · 3시드 평균</span></div>
-    <div class="stat"><b>+1.14 dB</b><span>WV3 RR PSNR · 3시드 평균</span></div>
-    <div class="stat"><b>7.2% → 0.1%</b><span>학습하지 않은 WV2의 색 치우침</span></div>
+    <div class="stat"><b>+0.92 dB</b><span>QB RR PSNR · 3시드 평균</span></div>
+    <div class="stat"><b>+2.90 dB</b><span>GF2 RR PSNR · 3시드 평균</span></div>
+    <div class="stat"><b>+1.60 dB</b><span>WV3 RR PSNR · 3시드 평균</span></div>
+    <div class="stat"><b>+3.43 dB</b><span>WV2 전이 RR PSNR · 3시드 평균 · 참고</span></div>
   </div>
 
   <section class="section" id="about">
@@ -63,14 +63,16 @@
         <div class="item"><h4>SSA-MRN 재현</h4><p>PAN·LRPAN·LMS에서 특징을 뽑아 전체·절반·1/4 크기에서 밴드별로 융합(SSAI)하고, 작은 크기부터 복원하는 원본 모델을 재현해 비교 기준으로 삼았습니다.</p></div>
         <div class="item"><h4>가설 → 실험 → 판정</h4><p>validation으로 후보를 고르고 실제 test의 RR 지표(PSNR·SAM·ERGAS)로 개선 여부를 판정합니다. 같은 시드의 대조군과 짝지어 비교합니다.</p></div>
         <div class="item"><h4>네 개의 위성 센서</h4><p>QuickBird(QB)·GaoFen-2(GF2)·WorldView-3(WV3)로 학습하고, 학습하지 않은 WorldView-2(WV2)에 적용해 일반화도 확인했습니다.</p></div>
-        <div class="item"><h4>기준 모델 교체 규칙</h4><p>새 후보가 기준 모델이 되려면 3시드 이상에서 개선이 확인되어야 합니다. C2MS(2026.10)와 C2MS-SP(2026.11)도 이 기준을 통과해 차례로 채택했습니다.</p></div>
+        <div class="item"><h4>기준 모델 교체 규칙</h4><p>새 후보가 기준 모델이 되려면 3시드 이상에서 개선이 확인되어야 합니다. C2MS(2026.10)와 C2MS-SP(2026.11)를 거쳐, SMOC를 2026.11.23 채택했습니다. SMOC는 C2MS-SP 대비 GF2·WV3가 개선되고 QB는 개선이 없어 판정은 부분 개선입니다.</p></div>
       </div>
     </div>
   </section>
 
   <section class="section" id="model">
-    <div class="section-head"><h2>기준 모델 C2MS-SP</h2><p>병렬 가지 + 축척 혼합 학습 + L1·분광 손실 + 관측 일치 사영</p></div>
+    <div class="section-head"><h2>기준 모델 SMOC</h2><p>데이터셋 방식 축소·확대 + 병렬 가지 + 축척 혼합 학습 + 관측 일치 사영</p></div>
     <div class="section-body">
+      <p><strong>SMOC.</strong> 모델 내부 축소·확대를 센서 MTF 블러와 23탭 보간으로 맞추고, W2 가지 입·출력을 2×2 합성곱으로 구현했습니다. L1 + 1.2 × 분광 손실과 거친 쌍 가중치 0.25로 분해 없이 150에폭 학습하고, 추론 뒤 관측 일치 사영 10회를 적용합니다. 같은 시드 C2MS-SP 대비 RR PSNR은 3시드 평균 QB −0.029, GF2 +0.667, WV3 +0.463 dB입니다. <a href="https://github.com/BIYONGHIYON/CtrS#기준-모델">SMOC 구조와 전체 결과</a>를 확인할 수 있습니다.</p>
+      <h3>이전 기준 C2MS-SP와 경량판의 구조 기록</h3>
       <p><strong>입력.</strong> 원본과 같이 고해상도 PAN, 4배 확대한 MS(LMS), 저해상도 MS 세 가지를 받습니다. PAN·LMS·축소 후 재확대한 PAN(LRPAN)에서 초기 특징을 만들고, 전체·1/2·1/4 크기에서 밴드별 SSAI로 PAN의 공간 정보를 주입한 뒤 1/4 크기부터 단계적으로 복원합니다.</p>
       <p><strong>W2 병렬 가지.</strong> 원본 구조는 그대로 두고, 초기 특징(64채널)에서 갈라져 원본 backbone(ResBlock 4개)과 나란히 흐르는 가지를 더했습니다. 해상도를 절반으로 접고(PixelUnshuffle) 128채널 잔차 블록 8개를 거친 뒤 다시 펼쳐(PixelShuffle) backbone 출력에 더합니다. 파라미터는 원본 426,654개에서 2,853,918개로 늘었습니다.</p>
       <p><strong>축척 혼합 학습.</strong> 병렬 가지만 붙였을 때는 한 단계 더 거친 시험(RR2)에서 성능이 무너졌습니다. 원인은 축척에 따라 세부를 넣는 세기가 맞지 않는 것이었고, 같은 패치로 만든 <strong>2배 거친 학습 쌍</strong>을 함께 학습해 이 약점을 없앴습니다. 여기까지가 이전 기준 모델 C2MS입니다.</p>
@@ -99,7 +101,7 @@
   </section>
 
   <section class="section" id="results">
-    <div class="section-head"><h2>결과</h2><p>test 20장 · 3시드 평균</p></div>
+    <div class="section-head"><h2>이전 기준 모델의 결과 기록</h2><p>C2MS-SP·C2MS-SP-Lite · test 20장 · 3시드 평균</p></div>
     <div class="section-body">
       <p class="intro">같은 시드(42·43·44)의 원본 SSA-MRN과 짝지은 평균 차이입니다. 학습한 세 데이터셋 모두 두 모델이 세 지표에서 원본보다 좋았고, 시드별로도 모두 원본보다 높았습니다.</p>
       <div class="table-wrap">
@@ -145,8 +147,9 @@
           <thead><tr><th>모델</th><th class="num">PSNR ↑</th><th class="num">SAM ↓</th><th class="num">ERGAS ↓</th><th class="num">Q4 ↑</th></tr></thead>
           <tbody>
             <tr><td>DCINN</td><td class="num">38.430</td><td class="num">4.220</td><td class="num">3.570</td><td class="num">—</td></tr>
-            <tr class="hl"><td>C2MS-SP (Ours, 현재 기준, 3시드 평균)</td><td class="num">38.373</td><td class="num">4.474</td><td class="num">3.685</td><td class="num">0.935</td></tr>
-            <tr class="hl"><td>C2MS-SP-Lite (Ours, 경량판, 3시드 평균)</td><td class="num">38.353</td><td class="num">4.476</td><td class="num">3.693</td><td class="num">0.935</td></tr>
+            <tr class="hl"><td>SMOC (Ours, 현재 기준, 3시드 평균)</td><td class="num">38.344</td><td class="num">4.520</td><td class="num">3.702</td><td class="num">0.935</td></tr>
+            <tr class="hl"><td>C2MS-SP (Ours, 이전 기준, 3시드 평균)</td><td class="num">38.373</td><td class="num">4.474</td><td class="num">3.685</td><td class="num">0.935</td></tr>
+            <tr class="hl"><td>C2MS-SP-Lite (Ours, 이전 기준의 경량판, 3시드 평균)</td><td class="num">38.353</td><td class="num">4.476</td><td class="num">3.693</td><td class="num">0.935</td></tr>
             <tr><td>HFIN</td><td class="num">38.247</td><td class="num">4.542</td><td class="num">3.813</td><td class="num">0.934</td></tr>
             <tr><td>U2Net</td><td class="num">38.065</td><td class="num">4.642</td><td class="num">3.987</td><td class="num">0.931</td></tr>
             <tr><td>SSA-MRN 원 논문</td><td class="num">37.665</td><td class="num">4.848</td><td class="num">4.073</td><td class="num">0.924</td></tr>

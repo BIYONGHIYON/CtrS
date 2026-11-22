@@ -8,6 +8,7 @@ on:
     paths:
       - SSA-MRN/viewer/index.html
       - SSA-MRN/viewer/app.js
+      - SSA-MRN/viewer/registry.json
       - SSA-MRN/viewer/data.sha256
       - portfolio/**
       - .github/workflows/pages.yml
@@ -46,7 +47,7 @@ jobs:
       - name: 사이트 조립
         run: |
           mkdir -p _site/data _site/portfolio
-          cp SSA-MRN/viewer/index.html SSA-MRN/viewer/app.js _site/
+          cp SSA-MRN/viewer/index.html SSA-MRN/viewer/app.js SSA-MRN/viewer/registry.json _site/
           tar -xzf "$RUNNER_TEMP/$(awk '{print $2}' SSA-MRN/viewer/data.sha256)" -C _site/data
           cp -R portfolio/. _site/portfolio/
           rm -f _site/portfolio/README.md

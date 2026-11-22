@@ -1,4 +1,4 @@
-"""Evaluate another pansharpening model (SSA-MRN/benchmarks/<model>/) under the same conditions as the baseline C2MS-SP.
+"""Evaluate another pansharpening model (SSA-MRN/benchmarks/<model>/) under the same conditions as the baseline SMOC.
 
 Adapter (benchmarks/<model>/model.py) must define
     build(bands, sensor, setting, seed) -> torch.nn.Module
@@ -9,15 +9,16 @@ and may define
 
 Checkpoints: benchmarks/<model>/checkpoints/<setting>_<train sensor>_s<seed>/best.pt (author weights without a seed:
 <setting>_<train sensor>/best.pt) or --checkpoint. Settings: author (published weights, no training), retrain (official code and
-paper settings trained on our split; the published number of epochs, or the 150 epochs of C2MS-SP when none is published);
+paper settings trained on our split; the published number of epochs, or the 150 epochs of SMOC when none is published);
 see benchmarks/README.md.
 
 Writes benchmarks/<model>/results/<setting>_<sensor>_s<seed>/metrics.json: per-scene RR metrics (PSNR, SAM, ERGAS, SCC, Q2n;
 common/metrics, the code the baseline numbers come from) on all RR test scenes, per-scene FR QNR / D_lambda / D_s (reference),
 checkpoint and data SHA-256, parameter count. WV2 is evaluated with the WV3 weights (transfer, reference only).
---summary pools the runs into results/summary.json: per setting and sensor the seed mean and the paired difference to C2MS-SP
-(same seeds, docs/images/c2ms_sp/baseline_metrics.json). No judgement is attached; the numbers are reported as they are.
---figures renders the fixed six scenes in both formats (common/result_images.render_multi): C2MS-SP, then the model.
+--summary pools the runs into results/summary_smoc.json: per setting and sensor the seed mean and the paired difference to SMOC
+(same seeds, docs/images/smoc/baseline_metrics.json). No judgement is attached; the numbers are reported as they are.
+--baseline c2ms_sp reproduces archived comparisons (summary.json and images/); the default SMOC writes summary_smoc.json and images_smoc/.
+--figures renders the fixed six scenes in both formats (common/result_images.render_multi): SMOC, then the model.
 --figures --release takes the model's saved predictions from Release predictions-benchmarks-<model>-<setting> instead of running
 its weights (common/benchmark_predictions.py), so images can be made for author weights that are not redistributed.
 
@@ -47,7 +48,11 @@ SENSORS = {'QB': ('qb', 2047., 4, [2, 1, 0]), 'GF2': ('gf2', 1023., 4, [2, 1, 0]
            'WV3': ('wv3', 2047., 8, [4, 2, 1]), 'WV2': ('wv2', 2047., 8, [4, 2, 1])}
 TRAINING_SENSOR = {'QB': 'QB', 'GF2': 'GF2', 'WV3': 'WV3', 'WV2': 'WV3'}  # WV2 has no training data: WV3 weights (transfer)
 RR_KEYS = ('PSNR', 'SAM', 'ERGAS', 'SCC', 'Q2n'); FR_KEYS = ('QNR', 'D_lambda', 'D_s')
-BASELINE = ROOT / 'docs/images/c2ms_sp/baseline_metrics.json'
+BASELINES = {
+    'smoc': ROOT / 'docs/images/smoc/baseline_metrics.json',
+    'c2ms_sp': ROOT / 'docs/images/c2ms_sp/baseline_metrics.json',
+}
+BASELINE_LABELS = {'smoc': 'SMOC', 'c2ms_sp': 'C2MS-SP'}
 KST = timezone(timedelta(hours=9))
 
 
@@ -125,8 +130,9 @@ def evaluate(a, folder):
     print('wrote', path)
 
 
-def summary(folder):
-    base = json.loads(BASELINE.read_text(encoding='utf-8'))['results']; groups = {}
+def summary(folder, baseline='smoc'):
+    baseline_path = BASELINES[baseline]; label = BASELINE_LABELS[baseline]; comparison = f'vs_{baseline}'
+    base = json.loads(baseline_path.read_text(encoding='utf-8'))['results']; groups = {}
     for p in sorted((folder / 'results').glob('*/metrics.json')):
         r = json.loads(p.read_text(encoding='utf-8'))
         if r['complete']: groups.setdefault((r['setting'], r['sensor']), []).append(r)
@@ -136,25 +142,26 @@ def summary(folder):
         per = {str(r['seed']): dict(rr=r['rr']['mean'], fr=r['fr']['mean']) for r in runs}
         entry = dict(seeds=[r['seed'] for r in runs], transfer=runs[0]['transfer'], parameters=runs[0]['parameters'], per_seed=per,
                      mean=dict(rr=mean([r['rr']['mean'] for r in runs], RR_KEYS), fr=mean([r['fr']['mean'] for r in runs], FR_KEYS)))
-        ref = base.get(sensor, {}).get('c2ms_sp', {}).get('per_seed', {})
+        ref = base[sensor][baseline]['per_seed']
         paired = [r for r in runs if r['seed'] is not None and str(r['seed']) in ref]
         if paired:
             d = [{k: r['rr']['mean'][k] - ref[str(r['seed'])][k] for k in RR_KEYS} for r in paired]
             diff = mean(d, RR_KEYS)
-            entry['vs_c2ms_sp'] = dict(paired_seeds=[r['seed'] for r in paired], difference=diff, per_seed=dict(zip([str(r['seed']) for r in paired], d)),
+            entry[comparison] = dict(paired_seeds=[r['seed'] for r in paired], difference=diff, per_seed=dict(zip([str(r['seed']) for r in paired], d)),
                                        note='WV2 전이, 참고' if runs[0]['transfer'] else None)
         elif runs:
-            m = entry['mean']['rr']; c = base.get(sensor, {}).get('c2ms_sp', {}).get('mean')
-            if c: entry['vs_c2ms_sp'] = dict(paired_seeds=[], difference={k: m[k] - c[k] for k in RR_KEYS},
-                                             note='같은 시드 짝 없음: C2MS-SP 3시드 평균과의 차이')
+            m = entry['mean']['rr']; c = base[sensor][baseline]['mean']
+            entry[comparison] = dict(paired_seeds=[], difference={k: m[k] - c[k] for k in RR_KEYS},
+                                     note=f'같은 시드 짝 없음: {label} 3시드 평균과의 차이')
         res[f'{setting}_{sensor}'] = entry
-        v = entry.get('vs_c2ms_sp', {})
+        v = entry.get(comparison, {})
         print(f"{setting} {sensor} seeds {entry['seeds']}: PSNR {entry['mean']['rr']['PSNR']:.3f} SAM {entry['mean']['rr']['SAM']:.3f} "
-              f"ERGAS {entry['mean']['rr']['ERGAS']:.3f} | - C2MS-SP: PSNR {v.get('difference', {}).get('PSNR', float('nan')):+.3f} dB "
+              f"ERGAS {entry['mean']['rr']['ERGAS']:.3f} | - {label}: PSNR {v.get('difference', {}).get('PSNR', float('nan')):+.3f} dB "
               f"SAM {v.get('difference', {}).get('SAM', float('nan')):+.3f} ERGAS {v.get('difference', {}).get('ERGAS', float('nan')):+.3f}")
-    out = dict(model=folder.name, description='seed means and the paired difference to C2MS-SP (same seeds); common/benchmark_evaluate.py --summary',
-               baseline=BASELINE.relative_to(ROOT).as_posix(), created=datetime.now(KST).isoformat(timespec='seconds'), results=res)
-    (folder / 'results/summary.json').write_text(json.dumps(out, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
+    out = dict(model=folder.name, description=f'seed means and the paired difference to {label} (same seeds); common/benchmark_evaluate.py --summary',
+               baseline=baseline_path.relative_to(ROOT).as_posix(), created=datetime.now(KST).isoformat(timespec='seconds'), results=res)
+    filename = 'summary_smoc.json' if baseline == 'smoc' else 'summary.json'
+    (folder / 'results' / filename).write_text(json.dumps(out, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
 
 
 def figures(a, folder):
@@ -168,8 +175,9 @@ def figures(a, folder):
     else:
         net, _ = load_model(folder, a.setting, a.sensor, a.seed, a.checkpoint, a.device)
     name = json.loads((folder / 'config.json').read_text(encoding='utf-8')).get('display_name', folder.name) if (folder / 'config.json').exists() else folder.name
-    nets = {'c2ms_sp': B.build('c2ms_sp', a.sensor, seed, device=a.device), folder.name: net}
-    result_images.render_multi(nets, Path(a.data), folder / 'results/images' / run_name(a.setting, a.sensor, a.seed), ['C2MS-SP', name], seed=seed,
+    nets = {a.baseline: B.build(a.baseline, a.sensor, seed, device=a.device), folder.name: net}
+    image_dir = 'images_smoc' if a.baseline == 'smoc' else 'images'
+    result_images.render_multi(nets, Path(a.data), folder / 'results' / image_dir / run_name(a.setting, a.sensor, a.seed), [BASELINE_LABELS[a.baseline], name], seed=seed,
                                device=a.device, rr_file=f'test_{stem}_multiExm1.h5', scale=scale, bands=bands,
                                land_cover=result_images.LAND_COVER if a.sensor == 'QB' else {i: f'{a.sensor} 장면 {i}' for i in result_images.SCENES}, chooser=1)
 
@@ -184,6 +192,7 @@ def main():
     p.add_argument('--checkpoint', help='checkpoint path instead of checkpoints/<setting>_<sensor>_s<seed>/best.pt')
     p.add_argument('--data', default=str(ROOT / 'data/test'), help='folder with test_<sensor>[_OrigScale]_multiExm1.h5')
     p.add_argument('--device', default='cpu')
+    p.add_argument('--baseline', choices=tuple(BASELINES), default='smoc', help='comparison model (default SMOC); c2ms_sp reproduces archived comparisons')
     p.add_argument('--limit', type=int, help='smoke test on the first N scenes (writes metrics_smoke.json, excluded from --summary)')
     p.add_argument('--skip-fr', action='store_true', help='RR only (the run is then marked incomplete)')
     p.add_argument('--summary', action='store_true'); p.add_argument('--figures', action='store_true')
@@ -191,7 +200,7 @@ def main():
     a = p.parse_args()
     folder = (a.folder or (ROOT / 'benchmarks' / (a.model or ''))).resolve()
     if not (folder / 'model.py').is_file() and not a.summary and not (a.figures and a.release): p.error(f'no adapter: {folder}/model.py')
-    if a.summary: summary(folder)
+    if a.summary: summary(folder, a.baseline)
     elif a.figures: figures(a, folder)
     else: evaluate(a, folder)
 

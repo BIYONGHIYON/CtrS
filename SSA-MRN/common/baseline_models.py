@@ -1,7 +1,7 @@
 """Inference models of the baseline comparison (root README, docs/smoc_result_images.md, docs/c2ms_sp_result_images.md, viewer/registry.json).
 
 original      original SSA-MRN K4 (experiment 54 C0 structure; QB weights from experiment 43, GF2/WV3 from 54)
-c2ms_sp       C2MS-SP, the baseline since 2026-11-14 (experiment 81): C2MS trained with the L1 + spectral loss of experiment 65, followed by the
+c2ms_sp       C2MS-SP, the previous baseline (2026-11-14 to 2026-11-22) (experiment 81): C2MS trained with the L1 + spectral loss of experiment 65, followed by the
               observation-consistency projection (conjugate gradient stopped at 10 iterations, experiments 66/81)
 c2ms_sp_lite  C2MS-SP-Lite (experiment 83): the C2MS-SP weights factorized (backbone rank 32, W2 branch 1x1-depthwise-1x1, CP rank 384) and
               fine-tuned for 10 epochs, followed by the same projection
@@ -10,7 +10,7 @@ smoc          SMOC, the baseline since 2026-11-23 (experiment 90): the 89 recipe
               training sensor's MTF), trained full-size for 150 epochs (CF), followed by the same projection
 
 The projection always uses the Wald operator of the sensor the image comes from. For a sensor the model was not trained on (WV2 with the
-WV3 weights), C2MS-SP and C2MS-SP-Lite add the per-band sensor calibration of experiment 82 before the projection. It is never applied
+WV3 weights), SMOC, C2MS-SP and C2MS-SP-Lite add the per-band sensor calibration of experiment 82 before the projection. It is never applied
 to the training sensor, and never to the original SSA-MRN (the calibration and the projection are part of our method, not of the baseline). Each factory returns a module whose load_state_dict loads the plain network weights (strict), so the archived best.pt files
 load unchanged. The projection runs on the CPU in float64 (MPS has no float64), the network on the module's device.
 """
