@@ -1,13 +1,10 @@
-"""Root README / docs/c2ms_sp_result_images.md material for the baseline comparison: original SSA-MRN, C2MS-SP, C2MS-SP-Lite.
+"""Root README / docs/smoc_result_images.md material: original SSA-MRN and SMOC.
 
-Writes docs/images/c2ms_sp/:
-  baseline_metrics.json  RR test metrics (PSNR, SAM, ERGAS, SCC, Q2n) of the three models on QB, GF2, WV3 (each trained on its own sensor) and
-                         the WV2 transfer (WV3 weights), seeds 42-44, per seed and 3-seed mean; on WV2 also C2MS-SP / C2MS-SP-Lite without the
-                         band calibration, and the transfer detail measures of experiment 54 (sharpness = mean |4-neighbour Laplacian| of the
-                         output / of the GT, detail correlation of (output - LMS) with (GT - LMS), per-band mean bias / GT mean)
-  <dataset>/full_scene_XX.png, compare_scene_XX.png, result_images.json  fixed six scenes, seed 42 (common/result_images.render_multi)
-Models come from common/baseline_models (C2MS-SP and -Lite include the K10 projection; on WV2 also the band calibration of experiment 82;
-the original SSA-MRN runs as published). Usage: python SSA-MRN/common/baseline_images.py [--device cpu] [--skip-metrics] [--skip-images]
+Writes docs/images/smoc/baseline_metrics.json (RR test, seeds 42-44; WV2 transfer includes SMOC without calibration)
+and <dataset>/full_scene_XX.png, compare_scene_XX.png, result_images.json for the fixed six scenes, seed 42.
+SMOC includes the K10 observation-consistency projection and, on WV2, the per-band calibration of experiment 82.
+The original SSA-MRN runs as published. Earlier model comparisons remain in docs/images/c2ms_sp/.
+Usage: python SSA-MRN/common/baseline_images.py [--device cpu] [--skip-metrics] [--skip-images]
 """
 import argparse, json, sys, time
 from pathlib import Path
@@ -22,10 +19,11 @@ from common import baseline_models as B  # noqa: E402
 from common import result_images  # noqa: E402
 from common.metrics import rr_metrics  # noqa: E402
 
-OUT = ROOT / 'docs/images/c2ms_sp'
+OUT = ROOT / 'docs/images/smoc'
+PREVIOUS = ROOT / 'docs/images/c2ms_sp/baseline_metrics.json'  # archived original metrics, reused (--reuse-previous)
 DATASETS = {'QB': ('test_qb_multiExm1.h5', 2047., [2, 1, 0]), 'GF2': ('test_gf2_multiExm1.h5', 1023., [2, 1, 0]),
             'WV3': ('test_wv3_multiExm1.h5', 2047., [4, 2, 1]), 'WV2': ('test_wv2_multiExm1.h5', 2047., [4, 2, 1])}
-SEEDS = (42, 43, 44); NAMES = ('original', 'c2ms_sp', 'c2ms_sp_lite'); KEYS = ('PSNR', 'SAM', 'ERGAS', 'SCC', 'Q2n')
+SEEDS = (42, 43, 44); NAMES = ('original', 'smoc'); KEYS = ('PSNR', 'SAM', 'ERGAS', 'SCC', 'Q2n')
 
 
 def lap(x): return np.abs(4 * x[:, 1:-1, 1:-1] - x[:, :-2, 1:-1] - x[:, 2:, 1:-1] - x[:, 1:-1, :-2] - x[:, 1:-1, 2:]).mean()
@@ -44,9 +42,11 @@ def metrics(device):
     res = {}
     for ds, (f, scale, _) in DATASETS.items():
         with h5py.File(ROOT / 'data/test' / f) as h: rr = [{k: np.asarray(h[k][i], dtype=np.float64) for k in ('pan', 'lms', 'ms', 'gt')} for i in range(20)]
-        variants = [(n, True) for n in NAMES] + ([('c2ms_sp', False), ('c2ms_sp_lite', False)] if ds == 'WV2' else [])
+        variants = [(n, True) for n in NAMES] + ([('smoc', False)] if ds == 'WV2' else [])
         for name, cal in variants:
             key = name + ('' if cal or ds != 'WV2' or name == 'original' else '_no_calibration'); per = {}
+            if REUSE and name != 'smoc' and key in REUSE.get(ds, {}):
+                res.setdefault(ds, {})[key] = REUSE[ds][key]; print(ds, key, 'reused from', PREVIOUS.name, flush=True); continue
             for seed in SEEDS:
                 t = time.time(); ys = run(B.build(name, ds, seed, calibrate=cal, device=device), rr, scale)
                 m = [rr_metrics(a['gt'], y) for a, y in zip(rr, ys)]; r = {k: float(np.mean([x[k] for x in m])) for k in KEYS}
@@ -68,15 +68,16 @@ def images(device):
     labels = [B.LABELS[n] for n in NAMES]
     for ds, (f, scale, bands) in DATASETS.items():
         nets = {n: B.build(n, ds, 42, calibrate=True, device=device) for n in NAMES}
-        lab = labels if ds != 'WV2' else [labels[0], labels[1] + ' (보정)', labels[2] + ' (보정)']
+        lab = labels if ds != 'WV2' else [labels[0], labels[1] + ' (보정)']  # zoom window where SMOC gains most
         result_images.render_multi(nets, ROOT / 'data/test', OUT / ds, lab, seed=42, device=device, rr_file=f, scale=scale, bands=bands,
                                    land_cover=result_images.LAND_COVER if ds == 'QB' else {i: f'{ds} 장면 {i}' for i in result_images.SCENES}, chooser=1)
         print('images', ds, flush=True)
 
 
 if __name__ == '__main__':
-    p = argparse.ArgumentParser(); p.add_argument('--device', default='cpu'); p.add_argument('--skip-metrics', action='store_true'); p.add_argument('--skip-images', action='store_true')
+    p = argparse.ArgumentParser(); p.add_argument('--device', default='cpu'); p.add_argument('--skip-metrics', action='store_true'); p.add_argument('--skip-images', action='store_true'); p.add_argument('--reuse-previous', action='store_true')
     a = p.parse_args(); torch.set_num_threads(8); OUT.mkdir(parents=True, exist_ok=True)
+    REUSE = json.loads(PREVIOUS.read_text(encoding='utf-8'))['results'] if a.reuse_previous else {}
     if not a.skip_images: images(a.device)
     if not a.skip_metrics:
         res = metrics(a.device)

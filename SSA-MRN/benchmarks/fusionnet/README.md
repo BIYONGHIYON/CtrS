@@ -1,5 +1,7 @@
 # FusionNet
 
+> 현재 비교 기준은 SMOC입니다([최신 평가 표](../README.md#models)). 이 보고서의 C2MS-SP 수치·이미지는 당시 비교 기록이며 그대로 보존합니다.
+
 | 평가자 | 설정 | 상태 |
 |:---:|:---:|:---:|
 | 김윤지 | 저자 가중치 QB·WV3, WV2 전이 / GF2 직접 학습 seed 42 | 평가 완료 |
@@ -27,7 +29,7 @@
 
 ### 기준 모델과 비교
 
-현재 지정된 기준 모델은 **C2MS-SP**입니다. RR test 각 20장의 기존 기록을 비교하면 다음과 같습니다. GF2는 같은 seed 42, 저자 가중치 QB·WV3·WV2는 시드가 미공개이므로 C2MS-SP 3시드 평균과 비교합니다. 차이는 FusionNet에서 C2MS-SP를 뺀 값입니다.
+이 평가 당시의 기준 모델은 **C2MS-SP**였습니다. RR test 각 20장의 기존 기록을 비교하면 다음과 같습니다. GF2는 같은 seed 42, 저자 가중치 QB·WV3·WV2는 시드가 미공개이므로 C2MS-SP 3시드 평균과 비교합니다. 차이는 FusionNet에서 C2MS-SP를 뺀 값입니다.
 
 | 센서 | C2MS-SP | FusionNet | 차이 (dB) |
 |---|---:|---:|---:|
@@ -40,7 +42,7 @@ C2MS-SP 수치는 [기존 Python 평가 기록](../../docs/images/c2ms_sp/baseli
 
 GF2의 FusionNet은 seed 42로 직접 학습했고, QB·WV3 저자 가중치의 학습 시드와 분할은 확인되지 않아 같은 시드 쌍 비교가 아닙니다. WV2는 두 모델 모두 WV3 가중치로 전이했으나 C2MS-SP에만 밴드별 센서 보정과 관측 일치 사영이 적용됩니다. 학습 데이터 중복 여부와 조건 차이는 결과의 원인을 단정할 수 없게 합니다.
 
-기존 QB 그림은 이전 **C2MS** seed 42와 비교했습니다. 이전 C2MS의 실제 MATLAB RR PSNR은 [38.274 dB](../../experiments/performance/53_scale_mixed_training/results/matlab_reevaluation/40202998202/e53_QB_C2MS_s42/summary.json)입니다. 현재 기준 비교 그림은 아래에 있습니다.
+기존 QB 그림은 이전 **C2MS** seed 42와 비교했습니다. 이전 C2MS의 실제 MATLAB RR PSNR은 [38.274 dB](../../experiments/performance/53_scale_mixed_training/results/matlab_reevaluation/40202998202/e53_QB_C2MS_s42/summary.json)입니다. 당시 기준 비교 그림은 아래에 있습니다.
 
 ### FR 참고 결과
 
@@ -77,7 +79,7 @@ WV2는 WV3 가중치로 평가한 전이 결과입니다. 서로 다른 정규�
 
 ## 그림
 
-네 센서 RR 고정 6장면(0·1·3·7·14·17)을 현재 기준 C2MS-SP seed 42와 비교했습니다. C2MS-SP는 배포된 뷰어의 1/8 DN 단위로 저장된 예측을 사용했고, FusionNet은 MATLAB 채점에 사용한 예측 Release를 사용했습니다. 뷰어 묶음과 FusionNet 예측 zip의 SHA-256을 검증했으며, 뷰어에 저장된 정답이 해시 확인한 네 센서 test 정답 각 20장과 일치함을 확인했습니다. PAN·MS는 뷰어의 1/8 DN 반올림에 따른 최대 0.0625 DN 차이 이내입니다. GF2·WV3·WV2 그림은 표시용 색상 수를 줄였고 점수는 색상 축소 전 배열에서 계산했습니다. 원본 비교는 LR MS · PAN · C2MS-SP · FusionNet · 정답 순서이며 오차 지도는 같은 색 척도를 사용합니다. 확대 창은 FusionNet에 유리하게 선택한 64×64 영역입니다. 전체 장면 PSNR과 창 위치는 [장면별 기록](results/images/author_QB_c2ms_sp_s42/result_images.json)에 보관했습니다. 그림의 PSNR은 peak 2047이며 C2MS-SP는 반올림된 뷰어 예측 기반입니다. FusionNet 저자 가중치의 학습 시드는 확인되지 않았습니다.
+네 센서 RR 고정 6장면(0·1·3·7·14·17)을 당시 기준 C2MS-SP seed 42와 비교했습니다. C2MS-SP는 배포된 뷰어의 1/8 DN 단위로 저장된 예측을 사용했고, FusionNet은 MATLAB 채점에 사용한 예측 Release를 사용했습니다. 뷰어 묶음과 FusionNet 예측 zip의 SHA-256을 검증했으며, 뷰어에 저장된 정답이 해시 확인한 네 센서 test 정답 각 20장과 일치함을 확인했습니다. PAN·MS는 뷰어의 1/8 DN 반올림에 따른 최대 0.0625 DN 차이 이내입니다. GF2·WV3·WV2 그림은 표시용 색상 수를 줄였고 점수는 색상 축소 전 배열에서 계산했습니다. 원본 비교는 LR MS · PAN · C2MS-SP · FusionNet · 정답 순서이며 오차 지도는 같은 색 척도를 사용합니다. 확대 창은 FusionNet에 유리하게 선택한 64×64 영역입니다. 전체 장면 PSNR과 창 위치는 [장면별 기록](results/images/author_QB_c2ms_sp_s42/result_images.json)에 보관했습니다. 그림의 PSNR은 peak 2047이며 C2MS-SP는 반올림된 뷰어 예측 기반입니다. FusionNet 저자 가중치의 학습 시드는 확인되지 않았습니다.
 
 ### 장면 0
 

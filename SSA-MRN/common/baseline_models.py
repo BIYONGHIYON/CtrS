@@ -1,13 +1,16 @@
-"""Inference models of the current baseline comparison (root README, docs/c2ms_sp_result_images.md, viewer/registry.json).
+"""Inference models of the baseline comparison (root README, docs/smoc_result_images.md, docs/c2ms_sp_result_images.md, viewer/registry.json).
 
 original      original SSA-MRN K4 (experiment 54 C0 structure; QB weights from experiment 43, GF2/WV3 from 54)
-c2ms_sp       C2MS-SP, the baseline since 2026-11-14 (experiment 81): C2MS trained with the L1 + spectral loss of experiment 65, followed by the
+c2ms_sp       C2MS-SP, the previous baseline (2026-11-14 to 2026-11-22) (experiment 81): C2MS trained with the L1 + spectral loss of experiment 65, followed by the
               observation-consistency projection (conjugate gradient stopped at 10 iterations, experiments 66/81)
 c2ms_sp_lite  C2MS-SP-Lite (experiment 83): the C2MS-SP weights factorized (backbone rank 32, W2 branch 1x1-depthwise-1x1, CP rank 384) and
               fine-tuned for 10 epochs, followed by the same projection
+smoc          SMOC, the baseline since 2026-11-23 (experiment 90): the 89 recipe (W2 2x2 convolutions, lambda 1.2, c 0.25) with every fixed
+              resampling inside the network matched to the dataset (variant C: sensor MTF blur + decimation, 23-tap interpolation; the
+              training sensor's MTF), trained full-size for 150 epochs (CF), followed by the same projection
 
 The projection always uses the Wald operator of the sensor the image comes from. For a sensor the model was not trained on (WV2 with the
-WV3 weights), C2MS-SP and C2MS-SP-Lite add the per-band sensor calibration of experiment 82 before the projection. It is never applied
+WV3 weights), SMOC, C2MS-SP and C2MS-SP-Lite add the per-band sensor calibration of experiment 82 before the projection. It is never applied
 to the training sensor, and never to the original SSA-MRN (the calibration and the projection are part of our method, not of the baseline). Each factory returns a module whose load_state_dict loads the plain network weights (strict), so the archived best.pt files
 load unchanged. The projection runs on the CPU in float64 (MPS has no float64), the network on the module's device.
 """
@@ -33,7 +36,8 @@ def _m(key):
         _cache[key] = {'m54': lambda: _load('bm_m54', PERF / '54_multi_sensor_scale_mixed_training/model.py'),
                        'm83': lambda: _load('bm_m83', PERF / '83_factorized_c2ms_finetuning/model.py'),
                        'p83': lambda: _load('bm_p83', PERF / '83_factorized_c2ms_finetuning/prepare.py'),
-                       'p82': lambda: _load('bm_p82', PERF / '82_cross_sensor_band_calibration/prepare.py')}[key]()
+                       'p82': lambda: _load('bm_p82', PERF / '82_cross_sensor_band_calibration/prepare.py'),
+                       'm90': lambda: _load('bm_m90', PERF / '90_dataset_matched_internal_resampling/model.py')}[key]()
     return _cache[key]
 
 
@@ -60,36 +64,42 @@ class Wrapped(nn.Module):
         return out.detach().to(device=device, dtype=dtype)
 
 
-def original(bands, seed, sensor, calibrate_from=None):
+def original(bands, seed, sensor, calibrate_from=None, train=None):
     return Wrapped(_m('m54').Model('C0', bands, seed), sensor, project=False, calibrate_from=calibrate_from)
 
 
-def c2ms_sp(bands, seed, sensor, calibrate_from=None):
+def c2ms_sp(bands, seed, sensor, calibrate_from=None, train=None):
     return Wrapped(_m('m54').Model('C2MS', bands, seed), sensor, project=True, calibrate_from=calibrate_from)
 
 
-def c2ms_sp_lite(bands, seed, sensor, calibrate_from=None):
+def c2ms_sp_lite(bands, seed, sensor, calibrate_from=None, train=None):
     return Wrapped(_m('m83').Model('K2', bands, seed), sensor, project=True, calibrate_from=calibrate_from)
 
 
-FACTORIES = {'original': original, 'c2ms_sp': c2ms_sp, 'c2ms_sp_lite': c2ms_sp_lite}
-LABELS = {'original': '원본 SSA-MRN', 'c2ms_sp': 'C2MS-SP', 'c2ms_sp_lite': 'C2MS-SP-Lite'}
+def smoc(bands, seed, sensor, calibrate_from=None, train=None):
+    m90 = _m('m90'); m90.OUT_IMPL['value'] = 'convT'  # the resampling kernels follow the training sensor (WV3 kernels on the WV2 transfer)
+    return Wrapped(m90.Model('CF', bands, seed, sensor=train or sensor), sensor, project=True, calibrate_from=calibrate_from)
+
+
+FACTORIES = {'original': original, 'c2ms_sp': c2ms_sp, 'c2ms_sp_lite': c2ms_sp_lite, 'smoc': smoc}
+LABELS = {'original': '원본 SSA-MRN', 'c2ms_sp': 'C2MS-SP', 'c2ms_sp_lite': 'C2MS-SP-Lite', 'smoc': 'SMOC'}
 CHECKPOINTS = {
     'original': {'QB': 'experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s{seed}/best.pt',
                  'GF2': 'experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_GF2_s{seed}/best.pt',
                  'WV3': 'experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_WV3_s{seed}/best.pt'},
     'c2ms_sp': {s: f'experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_{s}_s{{seed}}/best.pt' for s in ('QB', 'GF2', 'WV3')},
     'c2ms_sp_lite': {s: f'experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_{s}_s{{seed}}/best.pt' for s in ('QB', 'GF2', 'WV3')},
+    'smoc': {s: f'experiments/performance/90_dataset_matched_internal_resampling/checkpoints/{s}_CF_s{{seed}}/best.pt' for s in ('QB', 'GF2', 'WV3')},
 }
 TRAINING_SENSOR = {'QB': 'QB', 'GF2': 'GF2', 'WV3': 'WV3', 'WV2': 'WV3'}  # WV2 has no training data: the WV3 weights are applied (transfer)
 
 
 def build(name, target, seed, calibrate=True, device='cpu'):
-    """Model `name` for test sensor `target` with the archived weights of `seed`. WV2 uses the WV3 weights; C2MS-SP and C2MS-SP-Lite are then
+    """Model `name` for test sensor `target` with the archived weights of `seed`. WV2 uses the WV3 weights; C2MS-SP, C2MS-SP-Lite and SMOC are then
     calibrated (experiment 82) unless calibrate=False. The original SSA-MRN is always run as published (no calibration, no projection)."""
     train = TRAINING_SENSOR[target]; bands = 8 if train in ('WV3',) else 4
     use = calibrate and train != target and name != 'original'  # the calibration is our method: never added to the original SSA-MRN
-    m = FACTORIES[name](bands, seed, target, calibrate_from=train if use else None)
+    m = FACTORIES[name](bands, seed, target, calibrate_from=train if use else None, train=train)
     ck = torch.load(ROOT / CHECKPOINTS[name][train].format(seed=seed), map_location='cpu', weights_only=False)
     if ck['seed'] != seed: raise ValueError('seed mismatch')
     m.load_state_dict(ck['model'], strict=True)

@@ -6,9 +6,9 @@ SSA-MRN의 구조·학습·손실을 바꿔 수치를 개선하는 연구입니�
 
 | 항목 | 내용 |
 |---|---|
-| 대조군 | 기준 모델 **C2MS-SP** ([81번](81_l1_spectral_loss_projection/README.md), 2026-11-14 채택). 경량판 C2MS-SP-Lite는 [83번](83_factorized_c2ms_finetuning/README.md) |
+| 대조군 | 기준 모델 **SMOC** ([90번](90_dataset_matched_internal_resampling/README.md), 2026-11-23 채택). 새 실험에 적용하며 이전 실험의 대조군·판정은 보존합니다. |
 | 판정 | 같은 조건 대조군과 짝지은 RR test 20장의 PSNR·SAM·ERGAS ([v2.4](../../docs/judgement_criteria.md)) |
-| 이전 기준 모델 | C2MS ([53번](53_scale_mixed_training/README.md), 2026-10-21), F1 ([49번](49_observation_refinement_seed_repeat/README.md), 2026-10-20) |
+| 이전 기준 모델 | C2MS-SP ([81번](81_l1_spectral_loss_projection/README.md), 2026-11-14)와 경량판 C2MS-SP-Lite ([83번](83_factorized_c2ms_finetuning/README.md)), C2MS ([53번](53_scale_mixed_training/README.md), 2026-10-21), F1 ([49번](49_observation_refinement_seed_repeat/README.md), 2026-10-20) |
 | 47번 이전 실험의 판정 | [47번 재평가](47_ground_truth_criteria_reevaluation/README.md)의 측정값을 v2.4로 다시 집계한 값 |
 
 <a id="experiments"></a>
@@ -20,7 +20,7 @@ SSA-MRN의 구조·학습·손실을 바꿔 수치를 개선하는 연구입니�
 <!-- experiments:start -->
 | 실험 | 핵심 결과 | 상태 | 판정 |
 |---|---|:---:|:---:|
-| [90. 모델 내부 축소·확대를 데이터셋 방식(23탭 보간, MTF 블러 + 솎음)으로 교체](90_dataset_matched_internal_resampling/README.md)<br>이병현 | seed 42: SMOC(C, 분해 없음) C2MS-SP 대비 QB −0.028·GF2 +0.687·WV3 +0.477 dB, 3시드 진행 중 | 학습&nbsp;중 | 판단&nbsp;보류 |
+| [90. 모델 내부 축소·확대를 데이터셋 방식(23탭 보간, MTF 블러 + 솎음)으로 교체](90_dataset_matched_internal_resampling/README.md)<br>이병현 | SMOC 3시드: C2MS-SP 대비 QB −0.029·GF2 +0.667·WV3 +0.463 dB, QB 개선 없음 | 학습&nbsp;중 | 부분&nbsp;개선 |
 | [89. 분광 손실 계수(λ)와 2배 거친 쌍 계수(c) 탐색: K2D 학습법, W2 2×2 합성곱 구현](89_spectral_coarse_loss_weights/README.md)<br>이병현 | λ*=1.2·c*=0.25, 88번 K2D 대비 QB −0.103·GF2 +0.438·WV3 +0.095 dB (1시드) | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [88. 일정 학습률 학습 뒤 감쇠 시작 시점의 저랭크 분해(K2)와 감쇠 구간 학습: 150에폭 경량 C2MS-SP 단일 시드 확인](88_factorization_at_decay_start/README.md)<br>이병현 | K2D(연산 66%) +0.036/+0.154/+0.310 dB (QB/GF2/WV3, 1시드), Lite보다 세 센서 모두 개선 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [87. C2MS-SP 잔차 블록 가운데 채널 축소 구조의 20에폭 미세조정 단일 시드 확인](87_reduced_width_short_finetuning/README.md)<br>이병현 | B32W96 −0.076/−0.253/−0.146, B32W64 −0.236/−0.510/−0.443 dB (QB/GF2/WV3, 1시드) | 평가&nbsp;완료 | 개선&nbsp;없음 |
