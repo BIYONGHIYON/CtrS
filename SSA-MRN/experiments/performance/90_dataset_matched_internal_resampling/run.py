@@ -449,11 +449,25 @@ def chosen():
     note(chosen=v,test_delta_PSNR={k:round(x['delta']['PSNR'],4) for k,x in cmp['test'].items()})
 
 
+def live_jobs():
+    """GPU jobs running on the server (any runner, also processes whose runner ended): one entry per venv launcher process of
+    train.py --mode train|evaluate or run.py --mode factorize|finalctrl, as (kind, sensor, arm, seed). Windows only. The list is wrapped in
+    @() because a single object has no .Count in Windows PowerShell 5.1 (the first final runner counted one job as zero, 2026-11-22)."""
+    import re
+    q="@(Get-CimInstance Win32_Process -Filter \"Name='python.exe'\" | Where-Object { $_.CommandLine -match 'CtrS-p73' -and $_.CommandLine -match '--mode (train|evaluate|factorize|finalctrl)' } | ForEach-Object { $_.CommandLine })"
+    r=subprocess.run(['powershell','-NoProfile','-Command',q],capture_output=True,text=True,timeout=60)
+    if r.returncode:raise RuntimeError('process query failed: '+r.stderr[-300:])
+    out=[]
+    for line in r.stdout.splitlines():
+        if not line.strip():continue
+        mode=re.search(r'--mode (\w+)',line);sen=re.search(r'--sensor (\w+)',line);arm=re.search(r'--arm (\w+)',line);seed=re.search(r'--seed (\d+)',line)
+        kind={'finalctrl':'ctrl'}.get(mode.group(1),mode.group(1))
+        out.append((kind,sen.group(1) if sen else '',arm.group(1) if arm else '',int(seed.group(1)) if seed else 42))
+    return out
+
+
 def gpu_jobs():
-    """Training/evaluation/factorization jobs running on the server (any runner): venv launcher processes of train.py --mode train|evaluate,
-    run.py --mode factorize|finalctrl. Windows only."""
-    q="(Get-CimInstance Win32_Process -Filter \"Name='python.exe'\" | Where-Object { $_.CommandLine -match 'CtrS-p73' -and $_.CommandLine -match '--mode (train|evaluate|factorize|finalctrl)' }).Count"
-    try:return int(subprocess.run(['powershell','-NoProfile','-Command',q],capture_output=True,text=True,timeout=60).stdout.strip() or 0)
+    try:return len(live_jobs())
     except Exception:return 99
 
 
@@ -485,14 +499,14 @@ def final():
         while not ((out(('WV3',v+'T',SEED))/'status.json').exists() and evaluated(('GF2',v+'K',SEED)) and evaluated(('QB',v+'K',SEED))):
             if (root/'chosen_stopped.json').exists():note(stopped='chosen runner stopped; nothing started');sys.exit(2)
             time.sleep(60)
-    write(root/'final_started.json',dict(time_kst=now(),variant=v,arm=v+'F',seeds=[42,43,44],
+    write(root/('final_started.json' if not (root/'final_started.json').exists() else 'final_restarted.json'),dict(time_kst=now(),variant=v,arm=v+'F',seeds=[42,43,44],
           decision='user 2026-11-21 23h: final model 3 seeds; user 2026-11-22 00h: final model without factorization (full-size 150 epochs, <v>T + 30-epoch full-size cosine)',
           script=str(Path(__file__).resolve()),script_sha256=sha(Path(__file__).resolve())))
     keys=[(s,v+'F',42) for s in ('GF2','QB','WV3')]+[(s,v+a,sd) for sd in (43,44) for s in ('GF2','QB','WV3') for a in ('T','F')]
     ctrl=lambda s,sd:all((root/'controls'/f'final_{s}_{t}_s{sd}.json').exists() for t in [s]+(['WV2'] if s=='WV3' else []))
     ready=lambda k:k[1].endswith('T') or trained((k[0],v+'T',k[2]))
     jobs=[('ctrl',(s,'',42)) for s in ('GF2','QB','WV3') if not ctrl(s,42)]+[('train',k) for k in keys if not trained(k)]+[('evaluate',k) for k in keys if k[1].endswith('F') and trained(k) and not evaluated(k)]
-    running={};problem=None
+    running={};external=set();problem=None
     def launch(kind,k):
         o=out(k) if kind!='ctrl' else root/'controls';o.mkdir(parents=True,exist_ok=True);f=(o/((kind+'.log') if kind!='ctrl' else f'final_ctrl_{k[0]}_s{k[2]}.log')).open('a',encoding='utf8')
         if kind=='ctrl':args=[sys.executable,'-u',str(HERE/'run.py'),'--mode','finalctrl','--sensor',k[0],'--seed',str(k[2])]
@@ -501,9 +515,26 @@ def final():
             if kind=='train' and k[1].endswith('T') and (o/'checkpoints/initial.pt').exists():args+=['--resume']
         p=subprocess.Popen(args,stdout=f,stderr=subprocess.STDOUT);note(launched=kind,run=run_name(*k) if kind!='ctrl' else f'controls {k[0]} s{k[2]}',pid=p.pid);return p,f
     def rank(j):return (j[0]!='evaluate',j[0]!='ctrl',not j[1][1].endswith('F'),keys.index(j[1]) if j[1] in keys else 0)
+    def finish(j,ok_exit,code):
+        kind,k=j
+        ok=ok_exit and (trained(k) if kind=='train' else evaluated(k) if kind=='evaluate' else ctrl(k[0],k[2]))
+        if ok and kind=='train' and sanity(cfg,root,k):ok=False
+        if ok and kind=='train' and k[1].endswith('F'):jobs.append(('evaluate',k))
+        note(finished=kind,run=run_name(*k) if kind!='ctrl' else f'controls {k[0]} s{k[2]}',ok=ok,exit=code)
+        return ok
     while True:
-        if problem is None:
-            free=cfg['max_parallel']-gpu_jobs()
+        try:live=live_jobs()
+        except Exception as e:live=None;note(warning='process query failed; no launch this round',error=str(e)[-200:])
+        if live is not None:
+            lset=set(live)
+            for j in list(jobs):  # jobs running without this runner (a previous runner's children): wait for them, never launch twice
+                if (j[0],)+tuple(j[1])in lset and j not in running:jobs.remove(j);external.add(j);note(adopted=j[0],run=run_name(*j[1]) if j[0]!='ctrl' else str(j[1]))
+            for j in list(external):
+                if (j[0],)+tuple(j[1]) not in lset:
+                    external.discard(j)
+                    if not finish(j,True,None) and problem is None:problem=f'{j[0]} failed {j[1]} (run without this runner)'
+        if problem is None and live is not None:
+            free=cfg['max_parallel']-len(live)
             if chosen_active():free=min(free,1-len(running))  # the chosen runner keeps one slot for its WV3 chain
             for j in sorted(jobs,key=rank):
                 if free<=0:break
@@ -513,14 +544,10 @@ def final():
         time.sleep(30)
         for j,(p,f) in list(running.items()):
             if p.poll() is None:continue
-            f.close();del running[j];kind,k=j
-            ok=p.returncode==0 and (trained(k) if kind=='train' else evaluated(k) if kind=='evaluate' else ctrl(k[0],k[2]))
-            if ok and kind=='train' and sanity(cfg,root,k):ok=False
-            if ok and kind=='train' and k[1].endswith('F'):jobs.append(('evaluate',k))
-            note(finished=kind,run=run_name(*k) if kind!='ctrl' else f'controls {k[0]} s{k[2]}',ok=ok,exit=p.returncode)
-            if not ok and problem is None:problem=f'{kind} failed {k} (exit {p.returncode})'
-        if not running and (problem or not jobs):break
-        if not running and jobs and all(j[0]=='train' and not ready(j[1]) for j in jobs) and not chosen_active():problem='no runnable job: '+str(jobs);break
+            f.close();del running[j]
+            if not finish(j,p.returncode==0,p.returncode) and problem is None:problem=f'{j[0]} failed {j[1]} (exit {p.returncode})'
+        if not running and not external and (problem or not jobs):break
+        if not running and not external and jobs and all(j[0]=='train' and not ready(j[1]) for j in jobs) and not chosen_active():problem='no runnable job: '+str(jobs);break
     if problem:
         write(root/'final_stopped.json',dict(time_kst=now(),variant=v,reason=problem,note='no new job after the problem; running jobs finished'));note(stopped=problem);sys.exit(3)
     a=v+'F';tau=0.04;res={'variant':v,'arm':a,'structure':'full-size 2x2 C2MS (no factorization)','seeds':[42,43,44],'threshold_db':tau,'targets':{}}
