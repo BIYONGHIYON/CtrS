@@ -3011,12 +3011,18 @@
     "experimenter": "이병현",
     "status": "학습 중",
     "improvement": "판단 보류",
-    "result": "학습 중. N(89번 확정)을 K2D 150에폭으로, 갈래 A·B·C를 50에폭 선별로 학습해 validation으로 고름",
+    "result": "seed 42: SMOC(C, 분해 없음) C2MS-SP 대비 QB −0.028·GF2 +0.687·WV3 +0.477 dB, 3시드 진행 중",
     "report": "experiments/performance/90_dataset_matched_internal_resampling/README.md",
-    "sensor": "QB, GF2, WV3",
-    "evaluated_seeds": [],
+    "sensor": "QB, GF2, WV3 (WV2 transfer)",
+    "evaluated_seeds": [
+      42
+    ],
     "retraining": true,
-    "limits": "89번 확정 학습법(λ 1.2, c 0.25)으로 N을 K2D 150에폭, 갈래 A·B·C를 50에폭 선별로 seed 42에서 학습합니다. 갈래는 validation으로만 고르고 test는 보고만 합니다. WV2 전이와 FR은 참고입니다.",
-    "config": "experiments/performance/90_dataset_matched_internal_resampling/config.json"
+    "limits": "50에폭 선별 validation으로 갈래 C를 골랐고, C는 K2D 150에폭(seed 42)에서 89번 확정(N)보다 세 센서 모두 좋았습니다. 최종 모델 SMOC는 C를 분해 없이 원래 크기 150에폭으로 학습한 모델이며 seed 43·44와 300에폭을 학습 중입니다. test는 보고만 합니다.",
+    "config": "experiments/performance/90_dataset_matched_internal_resampling/config.json",
+    "entrypoint": "experiments/performance/90_dataset_matched_internal_resampling/run.py",
+    "manifest": "experiments/performance/90_dataset_matched_internal_resampling/manifest.json",
+    "results": "experiments/performance/90_dataset_matched_internal_resampling/results",
+    "last_checked": "2026-11-22T15:30:00+09:00"
   }
 }

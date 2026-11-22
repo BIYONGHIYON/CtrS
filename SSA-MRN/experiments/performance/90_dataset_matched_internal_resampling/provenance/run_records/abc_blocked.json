@@ -1,0 +1,18 @@
+{
+ "time_kst": "2026-11-21T02:34:36.398509+09:00",
+ "decision": "user 2026-11-21 02h: A/B/C chosen on 50-epoch screening runs; the 150-epoch A/B/C runs are not trained",
+ "locks": 9,
+ "runs": [
+  "GF2_AT_s42",
+  "QB_AT_s42",
+  "WV3_AT_s42",
+  "GF2_BT_s42",
+  "QB_BT_s42",
+  "WV3_BT_s42",
+  "GF2_CT_s42",
+  "QB_CT_s42",
+  "WV3_CT_s42"
+ ],
+ "mechanism": "worker locks held; the first A/B/C trunk launch fails before any checkpoint and the controller stops after its running N job",
+ "released_kst": "2026-11-21T11:05:36.948677+09:00"
+}

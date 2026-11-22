@@ -449,10 +449,199 @@ def chosen():
     note(chosen=v,test_delta_PSNR={k:round(x['delta']['PSNR'],4) for k,x in cmp['test'].items()})
 
 
+def live_jobs():
+    """GPU jobs running on the server (any runner, also processes whose runner ended): one entry per venv launcher process of
+    train.py --mode train|evaluate or run.py --mode factorize|finalctrl, as (kind, sensor, arm, seed). Windows only. The list is wrapped in
+    @() because a single object has no .Count in Windows PowerShell 5.1 (the first final runner counted one job as zero, 2026-11-22)."""
+    import re
+    q="@(Get-CimInstance Win32_Process -Filter \"Name='python.exe'\" | Where-Object { $_.CommandLine -match 'CtrS-p73' -and $_.CommandLine -match '--mode (train|evaluate|factorize|finalctrl)' } | ForEach-Object { $_.CommandLine })"
+    r=subprocess.run(['powershell','-NoProfile','-Command',q],capture_output=True,text=True,timeout=60)
+    if r.returncode:raise RuntimeError('process query failed: '+r.stderr[-300:])
+    out=[]
+    for line in r.stdout.splitlines():
+        if not line.strip():continue
+        mode=re.search(r'--mode (\w+)',line);sen=re.search(r'--sensor (\w+)',line);arm=re.search(r'--arm (\w+)',line);seed=re.search(r'--seed (\d+)',line)
+        kind={'finalctrl':'ctrl'}.get(mode.group(1),mode.group(1))
+        out.append((kind,sen.group(1) if sen else '',arm.group(1) if arm else '',int(seed.group(1)) if seed else 42))
+    return out
+
+
+def gpu_jobs():
+    try:return len(live_jobs())
+    except Exception:return 99
+
+
+def finalctrl(sensor,seed):
+    """C2MS-SP and C2MS-SP-Lite controls of one sensor and seed (and the WV2 transfer for WV3), cached (a GPU job of the final runner)."""
+    import evaluate as E
+    root,cp,cfg=runtime_cfg();set_impl(cfg);M.SENSOR['value']=sensor
+    for t in [sensor]+E.TRANSFER.get(sensor,[]):E.final_control_rows(cfg,sensor,t,seed)
+
+
+def final():
+    """Final model, 3 seeds (user decisions 2026-11-21 23h and 2026-11-22 00h): the screening-chosen variant v trained WITHOUT factorization,
+    <v>F = <v>T (120 epochs at 1e-4) + full-size 30-epoch cosine from the epoch-120 snapshot (88 FULL), on GF2, QB, WV3 and seeds 42, 43, 44.
+    Seed 42 reuses the chosen runner's <v>T (the chosen runner still finishes its <v>K, the variant comparison with the 89 NK); seeds 43 and
+    44 train <v>T here. Then the 3-seed comparison with C2MS-SP (same structure and cost; paired by seed, RR test with projection, v2.4
+    3-seed threshold 0.04 dB, report; WV2 transfer and FR reference) and, for reference, C2MS-SP-Lite and the seed-42 <v>K (factorization
+    cost). While the chosen runner is active this runner uses one slot only; the server-wide job count (gpu_jobs) stays at most
+    max_parallel. Same stop rule."""
+    conf=load_conf();root=Path(conf['runtime']);cp=root/'runtime_config.json';cfg=json.loads(cp.read_text(encoding='utf8'));set_impl(cfg)
+    note=lambda **k:print(json.dumps(dict(time_kst=now(),**k),ensure_ascii=False),flush=True)
+    while not (root/'screen_complete.json').exists():
+        if (root/'screen_stopped.json').exists():note(stopped='screening stopped; nothing started');sys.exit(2)
+        time.sleep(60)
+    v=json.loads((root/'screen_complete.json').read_text(encoding='utf8'))['chosen']
+    out=lambda k:root/'runs'/run_name(*k)
+    trained=lambda k:(out(k)/'training_complete.json').exists();evaluated=lambda k:(out(k)/'evaluation_complete.json').exists()
+    chosen_active=lambda:v!='N' and not (root/'chosen_complete.json').exists() and not (root/'chosen_stopped.json').exists()
+    if v!='N':  # wait until the chosen runner launched its last trunk and finished its other evaluations
+        while not ((out(('WV3',v+'T',SEED))/'status.json').exists() and evaluated(('GF2',v+'K',SEED)) and evaluated(('QB',v+'K',SEED))):
+            if (root/'chosen_stopped.json').exists():note(stopped='chosen runner stopped; nothing started');sys.exit(2)
+            time.sleep(60)
+    write(root/('final_started.json' if not (root/'final_started.json').exists() else 'final_restarted.json'),dict(time_kst=now(),variant=v,arm=v+'F',seeds=[42,43,44],
+          decision='user 2026-11-21 23h: final model 3 seeds; user 2026-11-22 00h: final model without factorization (full-size 150 epochs, <v>T + 30-epoch full-size cosine)',
+          script=str(Path(__file__).resolve()),script_sha256=sha(Path(__file__).resolve())))
+    keys=[(s,v+'F',42) for s in ('GF2','QB','WV3')]+[(s,v+a,sd) for sd in (43,44) for s in ('GF2','QB','WV3') for a in ('T','F')]
+    ctrl=lambda s,sd:all((root/'controls'/f'final_{s}_{t}_s{sd}.json').exists() for t in [s]+(['WV2'] if s=='WV3' else []))
+    ready=lambda k:k[1].endswith('T') or trained((k[0],v+'T',k[2]))
+    jobs=[('ctrl',(s,'',42)) for s in ('GF2','QB','WV3') if not ctrl(s,42)]+[('train',k) for k in keys if not trained(k)]+[('evaluate',k) for k in keys if k[1].endswith('F') and trained(k) and not evaluated(k)]
+    running={};external=set();problem=None
+    def launch(kind,k):
+        o=out(k) if kind!='ctrl' else root/'controls';o.mkdir(parents=True,exist_ok=True);f=(o/((kind+'.log') if kind!='ctrl' else f'final_ctrl_{k[0]}_s{k[2]}.log')).open('a',encoding='utf8')
+        if kind=='ctrl':args=[sys.executable,'-u',str(HERE/'run.py'),'--mode','finalctrl','--sensor',k[0],'--seed',str(k[2])]
+        else:
+            args=[sys.executable,'-u',str(HERE/'train.py'),'--config',str(cp),'--mode',kind,'--sensor',k[0],'--arm',k[1],'--seed',str(k[2])]
+            if kind=='train' and k[1].endswith('T') and (o/'checkpoints/initial.pt').exists():args+=['--resume']
+        p=subprocess.Popen(args,stdout=f,stderr=subprocess.STDOUT);note(launched=kind,run=run_name(*k) if kind!='ctrl' else f'controls {k[0]} s{k[2]}',pid=p.pid);return p,f
+    def rank(j):return (j[0]!='evaluate',j[0]!='ctrl',not j[1][1].endswith('F'),keys.index(j[1]) if j[1] in keys else 0)
+    def finish(j,ok_exit,code):
+        kind,k=j
+        ok=ok_exit and (trained(k) if kind=='train' else evaluated(k) if kind=='evaluate' else ctrl(k[0],k[2]))
+        if ok and kind=='train' and sanity(cfg,root,k):ok=False
+        if ok and kind=='train' and k[1].endswith('F'):jobs.append(('evaluate',k))
+        note(finished=kind,run=run_name(*k) if kind!='ctrl' else f'controls {k[0]} s{k[2]}',ok=ok,exit=code)
+        return ok
+    while True:
+        try:live=live_jobs()
+        except Exception as e:live=None;note(warning='process query failed; no launch this round',error=str(e)[-200:])
+        if live is not None:
+            lset=set(live)
+            for j in list(jobs):  # jobs running without this runner (a previous runner's children): wait for them, never launch twice
+                if (j[0],)+tuple(j[1])in lset and j not in running:jobs.remove(j);external.add(j);note(adopted=j[0],run=run_name(*j[1]) if j[0]!='ctrl' else str(j[1]))
+            for j in list(external):
+                if (j[0],)+tuple(j[1]) not in lset:
+                    external.discard(j)
+                    if not finish(j,True,None) and problem is None:problem=f'{j[0]} failed {j[1]} (run without this runner)'
+        if problem is None and live is not None:
+            free=cfg['max_parallel']-len(live)
+            if chosen_active():free=min(free,1-len(running))  # the chosen runner keeps one slot for its WV3 chain
+            for j in sorted(jobs,key=rank):
+                if free<=0:break
+                kind,k=j
+                if kind=='train' and not ready(k):continue
+                jobs.remove(j);running[j]=launch(kind,k);free-=1
+        time.sleep(30)
+        for j,(p,f) in list(running.items()):
+            if p.poll() is None:continue
+            f.close();del running[j]
+            if not finish(j,p.returncode==0,p.returncode) and problem is None:problem=f'{j[0]} failed {j[1]} (exit {p.returncode})'
+        if not running and not external and (problem or not jobs):break
+        if not running and not external and jobs and all(j[0]=='train' and not ready(j[1]) for j in jobs) and not chosen_active():problem='no runnable job: '+str(jobs);break
+    if problem:
+        write(root/'final_stopped.json',dict(time_kst=now(),variant=v,reason=problem,note='no new job after the problem; running jobs finished'));note(stopped=problem);sys.exit(3)
+    a=v+'F';tau=0.04;res={'variant':v,'arm':a,'structure':'full-size 2x2 C2MS (no factorization)','seeds':[42,43,44],'threshold_db':tau,'targets':{}}
+    for s in cfg['sensors']:
+        for t in [s]+(['WV2'] if s=='WV3' else []):
+            per={}
+            for sd in (42,43,44):
+                cand=json.loads((out((s,a,sd))/'evaluation'/f'{t}_test.json').read_text(encoding='utf8'))['means'][a+' + P']
+                fc=json.loads((root/'controls'/f'final_{s}_{t}_s{sd}.json').read_text(encoding='utf8'))['means']
+                per[sd]=dict(candidate=cand,vs_C2MS_SP={k:cand['RR'][k]-fc['C2MS-SP + P']['RR'][k] for k in ('PSNR','SAM','ERGAS')},
+                             vs_Lite={k:cand['RR'][k]-fc['C2MS-SP-Lite + P']['RR'][k] for k in ('PSNR','SAM','ERGAS')},
+                             FR_QNR=dict(candidate=cand.get('FR',{}).get('QNR'),C2MS_SP=fc['C2MS-SP + P'].get('FR',{}).get('QNR'),Lite=fc['C2MS-SP-Lite + P'].get('FR',{}).get('QNR')))
+            def judge(key):
+                d={k:sum(per[sd][key][k] for sd in per)/3 for k in ('PSNR','SAM','ERGAS')};parts={'PSNR':d['PSNR']>0,'SAM':d['SAM']<0,'ERGAS':d['ERGAS']<0}
+                return dict(mean_delta=d,per_seed={sd:per[sd][key] for sd in per},label='개선' if all(parts.values()) and d['PSNR']>=tau else '부분 개선' if any(parts.values()) else '개선 없음')
+            k42=(s,v+'K',SEED);fk=None
+            if evaluated(k42):
+                ck=json.loads((out(k42)/'evaluation'/f'{t}_test.json').read_text(encoding='utf8'))['means'][v+'K + P']['RR']
+                fk={k:per[42]['candidate']['RR'][k]-ck[k] for k in ('PSNR','SAM','ERGAS')}
+            res['targets'][f'{s}->{t}']=dict(role='judgement target (report)' if t==s else 'transfer, reference only',vs_C2MS_SP=judge('vs_C2MS_SP'),vs_Lite_reference=judge('vs_Lite'),
+                seed42_F_minus_K_reference=fk,per_seed=per,validation={sd:validation_of(root,(s,a,sd)) for sd in (42,43,44)} if t==s else None)
+    res['note']='v2.4: mean of same-seed pairs, 3 seeds, threshold 0.04 dB; improvement over C2MS-SP needs QB, GF2 and WV3; the baseline replacement is a user decision'
+    write(root/'final_summary.json',dict(time_kst=now(),**res));write(root/'final_complete.json',dict(time_kst=now(),variant=v,arm=a,labels={k:x['vs_C2MS_SP']['label'] for k,x in res['targets'].items()}))
+    note(final={k:(round(x['vs_C2MS_SP']['mean_delta']['PSNR'],4),x['vs_C2MS_SP']['label']) for k,x in res['targets'].items()})
+
+
+def long_run():
+    """300 epochs, seed 42 (user decision 2026-11-22 15h, after the final 3 seeds): <v>L = the <v>T epoch-120 state continued at 1e-4 to
+    epoch 240 + 60-epoch cosine (84 B300 split) on GF2, QB, WV3, then evaluation (RR test with projection against the cached seed-42
+    controls, WV2 transfer and FR reference) and the comparison with the 150-epoch <v>F of the same seed (validation and test; test
+    reported only, the length is not chosen with it). Starts when the final runner has only its last chain (WV3 <v>T/<v>F seed 44) left
+    and uses one slot until final_complete.json exists, then two; the server-wide job count (live_jobs) stays at most max_parallel."""
+    conf=load_conf();root=Path(conf['runtime']);cp=root/'runtime_config.json';cfg=json.loads(cp.read_text(encoding='utf8'));set_impl(cfg)
+    note=lambda **k:print(json.dumps(dict(time_kst=now(),**k),ensure_ascii=False),flush=True)
+    while not (root/'screen_complete.json').exists():time.sleep(60)
+    v=json.loads((root/'screen_complete.json').read_text(encoding='utf8'))['chosen']
+    out=lambda k:root/'runs'/run_name(*k)
+    trained=lambda k:(out(k)/'training_complete.json').exists();evaluated=lambda k:(out(k)/'evaluation_complete.json').exists()
+    final_done=lambda:(root/'final_complete.json').exists()
+    others=[(s,v+'F',sd) for sd in (42,43,44) for s in ('GF2','QB','WV3') if (s,sd)!=('WV3',44)]
+    while not (final_done() or (all(evaluated(k) for k in others) and (out(('WV3',v+'T',44))/'status.json').exists())):
+        if (root/'final_stopped.json').exists():note(stopped='final runner stopped; nothing started');sys.exit(2)
+        time.sleep(60)
+    write(root/'long_started.json',dict(time_kst=now(),variant=v,arm=v+'L',seed=SEED,decision='user 2026-11-22 15h: after the final 3 seeds, 300 epochs on all three sensors',
+          schedule='<v>T epoch-120 state -> 1e-4 to epoch 240 -> 60-epoch cosine 1e-4 -> 1e-6 (84 B300)',script=str(Path(__file__).resolve()),script_sha256=sha(Path(__file__).resolve())))
+    keys=[(s,v+'L',SEED) for s in ('GF2','QB','WV3')]
+    jobs=[('train',k) for k in keys if not trained(k)]+[('evaluate',k) for k in keys if trained(k) and not evaluated(k)]
+    running={};problem=None
+    def launch(kind,k):
+        o=out(k);o.mkdir(parents=True,exist_ok=True);f=(o/(kind+'.log')).open('a',encoding='utf8')
+        args=[sys.executable,'-u',str(HERE/'train.py'),'--config',str(cp),'--mode',kind,'--sensor',k[0],'--arm',k[1],'--seed',str(k[2])]
+        p=subprocess.Popen(args,stdout=f,stderr=subprocess.STDOUT);note(launched=kind,run=run_name(*k),pid=p.pid);return p,f
+    while True:
+        if problem is None:
+            try:live=live_jobs()
+            except Exception as e:live=None;note(warning='process query failed; no launch this round',error=str(e)[-200:])
+            if live is not None:
+                free=cfg['max_parallel']-len(live)
+                if not final_done():
+                    if (root/'final_stopped.json').exists():problem='final runner stopped'
+                    free=min(free,1-len(running))  # the final runner keeps one slot for its last chain
+                for j in sorted(jobs,key=lambda j:(j[0]!='evaluate',keys.index(j[1]))):
+                    if free<=0 or problem:break
+                    jobs.remove(j);running[j]=launch(*j);free-=1
+        time.sleep(30)
+        for j,(p,f) in list(running.items()):
+            if p.poll() is None:continue
+            f.close();del running[j];kind,k=j
+            ok=p.returncode==0 and (trained(k) if kind=='train' else evaluated(k))
+            if ok and kind=='train' and sanity(cfg,root,k):ok=False
+            if ok and kind=='train':jobs.append(('evaluate',k))
+            note(finished=kind,run=run_name(*k),ok=ok,exit=p.returncode)
+            if not ok and problem is None:problem=f'{kind} failed {k} (exit {p.returncode})'
+        if not running and (problem or not jobs):break
+    if problem:
+        write(root/'long_stopped.json',dict(time_kst=now(),reason=problem,note='no new job after the problem; running jobs finished'));note(stopped=problem);sys.exit(3)
+    res={'variant':v,'seed':SEED,'arms':{'300':v+'L','150':v+'F'},'targets':{}}
+    for s in cfg['sensors']:
+        lv,fv=validation_of(root,(s,v+'L',SEED)),validation_of(root,(s,v+'F',SEED))
+        el=json.loads((out((s,v+'L',SEED))/'evaluation_complete.json').read_text(encoding='utf8'))['targets'];ef=json.loads((out((s,v+'F',SEED))/'evaluation_complete.json').read_text(encoding='utf8'))['targets']
+        for t in el:
+            rl,rf=el[t]['means'][v+'L + P']['RR'],ef[t]['means'][v+'F + P']['RR']
+            res['targets'][f'{s}->{t}']=dict(role='report' if t==s else 'transfer, reference only',RR_300_P=rl,RR_150_P=rf,delta_300_minus_150={m:rl[m]-rf[m] for m in ('PSNR','SAM','ERGAS')},
+                RR_300_vs_C2MS_SP=el[t]['delta_RR']['P_vs_C2MS_SP'],RR_150_vs_C2MS_SP=ef[t]['delta_RR']['P_vs_C2MS_SP'],
+                validation=dict(L300=lv,F150=fv,delta_psnr=lv['psnr']-fv['psnr'],delta_sam=lv['sam']-fv['sam']) if t==s else None)
+    res['note']='single seed 42; validation-side comparison of the length; test reported only (v2.4 single-seed threshold 0.06 dB)'
+    write(root/'long_comparison.json',dict(time_kst=now(),**res));write(root/'long_complete.json',dict(time_kst=now()))
+    note(long={k:round(x['delta_300_minus_150']['PSNR'],4) for k,x in res['targets'].items()})
+
 if __name__=='__main__':
     import argparse
     p=argparse.ArgumentParser(description='90 controller: prepare -> optimize -> run (resume: --mode run --resume)')
-    p.add_argument('--mode',choices=['prepare','optimize','run','factorize','screen','chosen'],required=True);p.add_argument('--resume',action='store_true')
+    p.add_argument('--mode',choices=['prepare','optimize','run','factorize','screen','chosen','final','finalctrl','long'],required=True);p.add_argument('--resume',action='store_true')
     p.add_argument('--sensor');p.add_argument('--arm');p.add_argument('--seed',type=int,default=42);a=p.parse_args()
     if a.mode=='factorize':factorize(a.sensor,a.arm,a.seed)
-    else:{'prepare':prepare,'optimize':optimize,'screen':screen,'chosen':chosen}.get(a.mode,lambda:run(a.resume))()
+    elif a.mode=='finalctrl':finalctrl(a.sensor,a.seed)
+    else:{'prepare':prepare,'optimize':optimize,'screen':screen,'chosen':chosen,'final':final,'long':long_run}.get(a.mode,lambda:run(a.resume))()

@@ -1,0 +1,161 @@
+{
+  "time_kst": "2026-11-21T18:33:38.675535+09:00",
+  "rule": {
+    "metric": "validation PSNR of <v>K (minimum original-scale validation MSE, network output without projection) minus that of NK, same sensor and seed",
+    "choice": "variant (A, B, C) with the largest mean of the three sensor differences; it is chosen only if that mean is > 0 and on no sensor the validation SAM is worse than NK by more than tau_s; otherwise the next variant by the mean; if none qualifies the model stays N",
+    "tau_sam_deg": {
+      "QB": 0.004,
+      "GF2": 0.004,
+      "WV3": 0.024
+    },
+    "tau_basis": "as 89: 2 x sample std of the 65 seeds 42-44 best-epoch validation SAM",
+    "test": "RR test (with projection) against NK, 88 K2D and C2MS-SP is measured and reported only; never used for the choice"
+  },
+  "screening": {
+    "decision": "user 2026-11-21 02h: choose the variant on 50-epoch screening runs as in the 89 lambda search, not on 150-epoch K2D runs",
+    "arms": "AS, BS, CS = full-size 2x2 C2MS of the variant, 50 epochs (40 at 1e-4 + 10 cosine to 1e-6), lambda 1.2, c 0.25; GF2, QB, WV3 seed 42; validation only",
+    "n_control": "89 stage-B run BL1.20C0.25 of the same sensor (identical recipe and seed; separate run, rerun spread up to 0.03 dB)",
+    "n_control_runtime": "C:/CtrS-p89/run",
+    "selection": "selection_rule above applied to the screening validation (variant minus the N control)",
+    "mechanism": "the sealed controller keeps training N (the 89 confirmation); provenance/block_abc.py holds the worker locks of AT/BT/CT so the controller stops at its first A/B/C trunk; run.py --mode screen (separate copy of the tree, same runtime) uses the free slot, then finishes the N jobs the controller left (factorize + NK + evaluation) and the screening runs",
+    "next": "final model: the chosen variant with the K2D 150-epoch recipe, seeds 42, 43, 44 (if N: seeds 43, 44; seed 42 is the 89 confirmation)"
+  },
+  "validation": {
+    "N": {
+      "QB": {
+        "psnr": 40.10411856343427,
+        "sam": 4.174110137429065,
+        "epoch": 50
+      },
+      "GF2": {
+        "psnr": 44.25586595929573,
+        "sam": 0.7019447134073475,
+        "epoch": 50
+      },
+      "WV3": {
+        "psnr": 37.60711144341363,
+        "sam": 3.5935658152351904,
+        "epoch": 50
+      }
+    },
+    "A": {
+      "QB": {
+        "psnr": 40.097498734041146,
+        "sam": 4.173970845664858,
+        "mse": 0.00014135217175366316,
+        "epoch": 50
+      },
+      "GF2": {
+        "psnr": 44.22310451419177,
+        "sam": 0.7048259454473889,
+        "mse": 4.940166910270974e-05,
+        "epoch": 50
+      },
+      "WV3": {
+        "psnr": 37.59101649920146,
+        "sam": 3.599172639599871,
+        "mse": 0.00034900820737034853,
+        "epoch": 49
+      }
+    },
+    "B": {
+      "QB": {
+        "psnr": 40.10626094547782,
+        "sam": 4.1736857025803715,
+        "mse": 0.00014101204462993976,
+        "epoch": 50
+      },
+      "GF2": {
+        "psnr": 44.24918720604126,
+        "sam": 0.7025801170131994,
+        "mse": 4.900246177271106e-05,
+        "epoch": 50
+      },
+      "WV3": {
+        "psnr": 37.58682905126501,
+        "sam": 3.6019123463009186,
+        "mse": 0.00034957011628597456,
+        "epoch": 50
+      }
+    },
+    "C": {
+      "QB": {
+        "psnr": 40.116841117478415,
+        "sam": 4.1707697406210285,
+        "mse": 0.0001407885660756889,
+        "epoch": 50
+      },
+      "GF2": {
+        "psnr": 44.27823116193301,
+        "sam": 0.6990861850552926,
+        "mse": 4.867431917905489e-05,
+        "epoch": 50
+      },
+      "WV3": {
+        "psnr": 37.61961325009664,
+        "sam": 3.5908793972508577,
+        "mse": 0.0003471296364127204,
+        "epoch": 49
+      }
+    }
+  },
+  "delta_vs_N": {
+    "A": {
+      "QB": {
+        "psnr": -0.006619829393123666,
+        "sam": -0.0001392917642073499
+      },
+      "GF2": {
+        "psnr": -0.03276144510396506,
+        "sam": 0.002881232040041315
+      },
+      "WV3": {
+        "psnr": -0.016094944212170503,
+        "sam": 0.00560682436468074
+      }
+    },
+    "B": {
+      "QB": {
+        "psnr": 0.0021423820435515495,
+        "sam": -0.00042443484869369996
+      },
+      "GF2": {
+        "psnr": -0.006678753254469427,
+        "sam": 0.000635403605851903
+      },
+      "WV3": {
+        "psnr": -0.020282392148615713,
+        "sam": 0.008346531065728247
+      }
+    },
+    "C": {
+      "QB": {
+        "psnr": 0.012722554044145795,
+        "sam": -0.003340396808036772
+      },
+      "GF2": {
+        "psnr": 0.022365202637274706,
+        "sam": -0.002858528352054912
+      },
+      "WV3": {
+        "psnr": 0.012501806683012262,
+        "sam": -0.0026864179843326674
+      }
+    }
+  },
+  "mean_delta_psnr": {
+    "A": -0.01849207290308641,
+    "B": -0.008272921119844531,
+    "C": 0.015863187788144256
+  },
+  "checks": [
+    {
+      "variant": "C",
+      "mean_delta_psnr": 0.015863187788144256,
+      "rejected_by_sam": {},
+      "positive": true
+    }
+  ],
+  "chosen": "C",
+  "note": "50-epoch screening, validation only; the N control is the 89 run BL1.20C0.25 (same recipe, separate run: rerun spread up to 0.03 dB)"
+}
