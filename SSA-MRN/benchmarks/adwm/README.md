@@ -7,11 +7,13 @@
 | WV3 저자 가중치 RR·FR | 예측 생성 근거 확인 대기 | 새 추론 후 확정 |
 | WV3 → WV2 전이 RR | MATLAB 완료 · 20장 | PSNR 29.60093 dB · SAM 5.80065° · ERGAS 4.58945 · SCC 0.91267 · Q2n 0.82165 |
 | WV3 → WV2 전이 FR | Python 참고 · 20장 | QNR 0.871322 · Dλ 0.066332 · Ds 0.073021 |
-| QB·GF2 직접 학습 | 학습 준비 | 시드 42 · 배치 64 · QB 200에폭 · GF2 500에폭 |
+| QB·GF2 직접 학습 | 학습 중 | 시드 42 · 배치 64 · QB 200에폭 · GF2 500에폭 |
 
 WV2 전이는 WV3 저자 가중치와 `identity` 설정으로 예측했다. RR은 [MATLAB 실행 #19](https://github.com/BIYONGHIYON/CtrS/actions/runs/45058335188)에서 채점했고, 예측은 [ADWM author Release](https://github.com/BIYONGHIYON/CtrS/releases/tag/predictions-benchmarks-adwm-author)에 있다. FR은 CtrS Python 지표를 사용했다.
 
 ## 직접 학습
+
+2026년 11월 23일 오전 5시경(KST)에 학교 서버 RTX A6000 한 장에서 QB와 GF2의 본 학습을 병렬로 시작했다. 두 센서 모두 첫 에폭의 학습·전체 검증·체크포인트 저장을 마쳤다.
 
 논문 부록 D에 따라 QB의 CACW 은닉 비율은 0.6, GF2는 0.8이다. Adam과 L1, 초기 학습률 0.002를 사용하고 공식 StepLR 설정을 적용한다. 매 에폭 전체 validation에서 L1이 가장 작은 가중치를 선택한다.
 
