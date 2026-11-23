@@ -1,0 +1,85 @@
+{
+ "time_kst": "2026-11-24T04:40+09:00",
+ "decision": "사용자 결정(2026-11-24): 윈도우 서버(ctrs-server)에서 더 이상 실험을 돌리지 않으므로 C:\\CtrS로 시작하는 폴더를 모두 삭제",
+ "checks": [
+  "실행 중인 python 프로세스 없음",
+  "90번 verify --experiment 90 --releases PASS(Git 462, Release 63), ADWM verify --benchmark adwm --releases PASS",
+  "PR #227·#228·#229 병합 후 삭제"
+ ],
+ "not_kept": "Git이 추적하지 않는 실행 로그(*.log)는 함께 삭제했습니다",
+ "deleted": [
+  {
+   "path": "C:\\CtrS-adwm",
+   "bytes": 2322558426,
+   "note": "ADWM 평가 임시 폴더(test 사본·코드). 결과는 benchmarks/adwm, 예측은 Release predictions-benchmarks-adwm-*"
+  },
+  {
+   "path": "C:\\CtrS-alpha",
+   "bytes": 146858516,
+   "note": "이전 알파 스윕 임시 폴더"
+  },
+  {
+   "path": "C:\\CtrS-p84",
+   "bytes": 4254504,
+   "note": "84번 로그 묶음"
+  },
+  {
+   "path": "C:\\CtrS-p85",
+   "bytes": 91722,
+   "note": "85번 빈 폴더"
+  },
+  {
+   "path": "C:\\CtrS-p87",
+   "bytes": 159656,
+   "note": "87번 빈 폴더"
+  },
+  {
+   "path": "C:\\CtrS-p88",
+   "bytes": 712327,
+   "note": "88번 남은 기록"
+  },
+  {
+   "path": "C:\\CtrS-p88s",
+   "bytes": 354616926,
+   "note": "88번 보조 소스 사본"
+  },
+  {
+   "path": "C:\\CtrS-p89",
+   "bytes": 3038325,
+   "note": "89번 남은 기록"
+  },
+  {
+   "path": "C:\\CtrS-p90L",
+   "bytes": 235102126,
+   "note": "90번 lite 실행기 소스 사본(커밋 d217257과 같음)"
+  },
+  {
+   "path": "C:\\CtrS-p90X",
+   "bytes": 235122425,
+   "note": "90번 처음부터 300에폭 실행기 소스 사본(학교 서버로 옮겨 쓰지 않음)"
+  },
+  {
+   "path": "C:\\CtrS-p90Z",
+   "bytes": 235108166,
+   "note": "90번 scratch 실행기 소스 사본(main의 90번 코드와 같음)"
+  },
+  {
+   "path": "C:\\CtrS-p90",
+   "bytes": 14842313202,
+   "note": "90번 runtime(데이터 캐시·실행 폴더·로그). 결과·best는 Git, latest·initial은 Release weights-experiments-performance-90에 보관(verify --releases PASS)"
+  },
+  {
+   "path": "C:\\CtrS-p73",
+   "bytes": 6371008481,
+   "note": "공용 Python 환경(.venv)"
+  },
+  {
+   "path": "C:\\CtrS",
+   "bytes": 21772190277,
+   "note": "원본 PanCollection H5(PAN-MS)와 84번 로그 묶음. 원본은 PanCollection 배포처와 학교 서버 데이터 폴더에 있음"
+  }
+ ],
+ "total_bytes": 46523135079,
+ "free_gb_before": 59,
+ "free_gb_after": 103
+}
