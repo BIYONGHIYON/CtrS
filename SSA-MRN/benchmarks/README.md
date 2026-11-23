@@ -12,7 +12,7 @@
 
 | 모델 | 출처·학습 조건 | 확인된 결과 | 상태 |
 |---|---|---|:---:|
-| [ADWM](adwm/README.md)<br>[김경찬] | CVPR 2025 · QB 200·GF2 500에폭, seed 42 · RTX A6000 | WV2 전이 RR MATLAB PSNR 29.6009 dB. QB·GF2 직접 학습 완료(validation 선택 199·467에폭) | 학습 완료·평가 대기 |
+| [ADWM](adwm/README.md)<br>[김경찬·BIYONGHIYON] | CVPR 2025 · 저자 WV3, WV2 전이 · QB 200·GF2 500에폭 직접 학습 seed 42 · 실제 MATLAB 채점 | QB 38.523 (SMOC seed 42 +0.156), GF2 49.580 (+0.161), WV3 37.858 dB; WV2 전이 29.601 dB. 네 센서 고정 6장면 이미지 | 평가 완료 |
 | [GPT Image 2.6 Sunburst](gpt_image_2_6/README.md)<br>[센서별 담당](#generative) | 생성형 이미지 모델 · `zeroshot` 학습 없음·단일 실행 · RGB 3밴드 실제 MATLAB 채점 | RGB RR PSNR QB 31.170, GF2 36.893, WV3 31.555, WV2 31.030 dB. 네 센서 각 20장·정답 없는 지표·고정 6장면 이미지 | 평가 완료 |
 | [Nano Banana 2.1](nano_banana_2_1/README.md)<br>[센서별 담당](#generative) | 생성형 이미지 모델 · `zeroshot` 학습 없음·단일 실행 · RGB 3밴드 실제 MATLAB 채점 | RGB RR PSNR QB 29.626, GF2 33.114, WV3 29.223, WV2 30.194 dB. 네 센서 각 20장·정답 없는 지표·고정 6장면 이미지 | 평가 완료 |
 | [FusionNet](fusionnet/README.md)<br>[김윤지] | 저자 QB·WV3, WV2 전이 · GF2 직접 학습 seed 42 · 실제 MATLAB 채점 | QB 31.485, GF2 45.547, WV3 32.519 dB; WV2 전이 27.058 dB. 네 센서 고정 6장면 이미지. GF2 peak 1023 기준 39.522 dB | 평가 완료 |

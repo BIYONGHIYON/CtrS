@@ -1,5 +1,6 @@
 {
   "model": "adwm",
+  "display_name": "ADWM",
   "architecture": "BWNET_LAGConv",
   "upstream": "aa185a64cac00a8c31581290de276568da2eb106",
   "author": {
@@ -12,7 +13,17 @@
       "matlab_run": 45058335188
     },
     "wv3": {
-      "status": "pending clean predictions"
+      "layernorm": "identity",
+      "rr_release": "predictions-benchmarks-adwm-author",
+      "rr_zip": "adwm_author_WV3_rr.zip",
+      "status": "evaluated",
+      "matlab_run": 45052950100,
+      "rr_sha256": "c8469b5b2a762fe297a90eb598f7c1c34e6e7a260a42d2877a2610ad1f2eb563"
+    },
+    "weights": {
+      "path": "upstream/weights/BWNET_LAGConv_WV3/model.pth",
+      "sha256": "793e5eccfe6a03995a98a15ee8e4c8911eb129f3c4bb03aa24ae143b41928e2c",
+      "note": "published in the MIT-licensed official repository; no LayerNorm parameters, loaded with CovBlock LayerNorm as identity"
     }
   },
   "retrain": {
@@ -28,17 +39,20 @@
       "epochs": 200,
       "cacw_ratio": 0.6,
       "scale": 2047,
-      "status": "trained",
+      "status": "evaluated",
       "best_epoch": 199,
       "best_valid_l1": 0.007332318376632422,
       "checkpoint": "checkpoints/retrain_QB_seed42/best.pt",
-      "finished_kst": "2026-11-23T17:05"
+      "finished_kst": "2026-11-23T17:05",
+      "rr_release": "predictions-benchmarks-adwm-retrain",
+      "rr_zip": "adwm_retrain_QB_rr.zip",
+      "matlab_run": 45141153814
     },
     "GF2": {
       "epochs": 500,
       "cacw_ratio": 0.8,
       "scale": 1023,
-      "status": "trained",
+      "status": "evaluated",
       "best_epoch": 467,
       "best_valid_l1": 0.004016530884515286,
       "checkpoint": "checkpoints/retrain_GF2_seed42/best.pt",
@@ -49,7 +63,10 @@
         "resumed_from": "epoch-484 latest.pt",
         "script": "provenance/resume_GF2.py",
         "record": "provenance/resume_GF2.json"
-      }
+      },
+      "rr_release": "predictions-benchmarks-adwm-retrain",
+      "rr_zip": "adwm_retrain_GF2_rr.zip",
+      "matlab_run": 45237462724
     },
     "gpu": "RTX A6000 (school server)"
   }
