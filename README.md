@@ -2,15 +2,15 @@
 
 # CtrS · SSA-MRN 성능 개선 연구
 
-[기준 모델](#기준-모델) · [결과](#결과) · [다른 모델과 비교](#compare) · [실험과 문서](#experiments) · [팀원](#팀원) · **[결과 비교 사이트](https://biyonghiyon.github.io/CtrS/)**
+[최종 개선 모델](#최종-개선-모델) · [결과](#결과) · [다른 모델과 비교](#compare) · [실험과 문서](#experiments) · [팀원](#팀원) · **[결과 비교 사이트](https://biyonghiyon.github.io/CtrS/)**
 
 고해상도 흑백 위성영상 **PAN**과 저해상도 다중분광영상 **MS**를 합쳐 고해상도 MS를 복원하는 팬샤프닝 연구입니다. [SSA-MRN](https://ieeexplore.ieee.org/abstract/document/10902025)을 기반으로 성능을 개선합니다.
 
 <a id="decision"></a>
 
-## 기준 모델
+## 최종 개선 모델
 
-**SMOC**는 원본 SSA-MRN에 네 가지를 더한 모델입니다(구조도의 주황색).
+**SMOC**는 이 연구의 최종 개선 모델로, 원본 SSA-MRN에 네 가지를 더한 모델입니다(구조도의 주황색).
 
 1. **W2 병렬 가지:** 초기 특징에서 갈라지는 절반 해상도 가지. 입·출력은 2×2 합성곱입니다.
 2. **데이터셋 방식 축소·확대:** 모델 안의 고정 축소·확대를 데이터를 만든 연산(센서 MTF 블러 + 솎음, 23탭 보간)으로 맞췄습니다. 학습할 파라미터는 늘지 않습니다.
@@ -24,12 +24,12 @@
 | 구성 | [90번](SSA-MRN/experiments/performance/90_dataset_matched_internal_resampling/README.md) 가중치 + 사영(공액 기울기법 10회) |
 | 파라미터(실사용) | 2,735,418개 (원본 426,654개) |
 | 연산(256²) | 59.7 GMAC (고정 축소·확대 필터 제외) |
-| 근거 | 원본 대비 3시드 RR PSNR QB +0.915, GF2 +2.902, WV3 +1.600 dB, 2026-11-23 채택 |
+| 근거 | 원본 대비 3시드 RR PSNR QB +0.915, GF2 +2.902, WV3 +1.600 dB, 2026-11-23 최종 확정(150에폭) |
 
 학습하지 않은 센서에 쓸 때는 입력 밴드의 밝기 비율을 학습 센서에 맞추는 **밴드별 센서 보정**([82번](SSA-MRN/experiments/performance/82_cross_sensor_band_calibration/README.md))을 함께 붙입니다. 모델 안의 MTF 축소는 학습 센서의 MTF를 그대로 씁니다.
 
 <details>
-<summary>원본 SSA-MRN 구조와 기준 모델 발전 과정</summary>
+<summary>원본 SSA-MRN 구조와 개선 과정</summary>
 
 <p align="center"><img src="SSA-MRN/docs/images/ssa-mrn.png" alt="원본 SSA-MRN 입력·다중 크기 SSAI·단계별 복원 구조" width="360" /></p>
 
@@ -46,9 +46,9 @@
 | 8 | [성능 83번](SSA-MRN/experiments/performance/83_factorized_c2ms_finetuning/README.md) | 학습된 가중치를 **분해 + 짧은 미세조정**(**C2MS-SP-Lite**) | 연산 66%로 세 센서 모두 C2MS 대비 3시드 개선, C2MS-SP와 0.01-0.03 dB 차이 |
 | 9 | [성능 88번](SSA-MRN/experiments/performance/88_factorization_at_decay_start/README.md) | 학습률을 120에폭 고정한 뒤 감쇠 구간을 분해 모델로 학습(K2D) | C2MS-SP 대비 QB +0.036, GF2 +0.154, WV3 +0.310 dB(1시드) |
 | 10 | [성능 89번](SSA-MRN/experiments/performance/89_spectral_coarse_loss_weights/README.md) | 분광 손실 계수 λ와 2배 거친 쌍 계수 c를 다시 찾고, W2 입·출력을 2×2 합성곱으로 | λ = 1.2, c = 0.25. 88번 대비 GF2·WV3 개선, QB 개선 없음(1시드) |
-| 11 | [성능 90번](SSA-MRN/experiments/performance/90_dataset_matched_internal_resampling/README.md) | 모델 안의 bilinear 축소·확대를 데이터셋 방식(MTF 블러 + 솎음, 23탭 보간)으로 바꾸고 분해 없이 150에폭 학습(**SMOC**) | C2MS-SP 대비 3시드 GF2 +0.667, WV3 +0.463 dB, QB −0.029 dB(부분 개선) → **기준 모델 채택(2026-11-23)** |
+| 11 | [성능 90번](SSA-MRN/experiments/performance/90_dataset_matched_internal_resampling/README.md) | 모델 안의 bilinear 축소·확대를 데이터셋 방식(MTF 블러 + 솎음, 23탭 보간)으로 바꾸고 분해 없이 150에폭 학습(**SMOC**) | C2MS-SP 대비 3시드 GF2 +0.667, WV3 +0.463 dB, QB −0.029 dB(부분 개선). 300에폭으로 늘려도 test가 좋아지지 않아 150에폭으로 → **최종 개선 모델 확정(2026-11-23)** |
 
-기준 모델은 원본 → F1([성능 49번](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/README.md), 2026-10-20) → C2MS(2026-10-21) → C2MS-SP(2026-11-14) → SMOC(2026-11-23) 순서로 바뀌었습니다. C2MS-SP 구조도는 [ssa-mrn-c2ms.png](SSA-MRN/docs/images/ssa-mrn-c2ms.png)에 남겼습니다.
+연구 중 비교 기준(기준 모델)은 원본 → F1([성능 49번](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/README.md), 2026-10-20) → C2MS(2026-10-21) → C2MS-SP(2026-11-14) 순서로 바뀌었고, 최종 개선 모델은 SMOC(2026-11-23)입니다. C2MS-SP 구조도는 [ssa-mrn-c2ms.png](SSA-MRN/docs/images/ssa-mrn-c2ms.png)에 남겼습니다.
 
 </details>
 
@@ -157,7 +157,7 @@ SMOC의 개선(원본 대비)이 가장 큰 64×64 영역을 4배 확대했습�
 |---|---:|---:|---:|---:|---|
 | SRINO | 38.864 | 4.351 | 3.542 | 0.940 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
 | ADWM | 38.466 | 4.450 | 3.705 | 0.937 | [ADWM](https://arxiv.org/html/2503.13214v1) |
-| **SMOC (현재 기준, 3시드 평균)** | **38.344** | **4.520** | **3.702** | **0.935** | [Ours](SSA-MRN/docs/images/smoc/baseline_metrics.json) |
+| **SMOC (최종 개선 모델, 3시드 평균)** | **38.344** | **4.520** | **3.702** | **0.935** | [Ours](SSA-MRN/docs/images/smoc/baseline_metrics.json) |
 | HFIN | 38.247 | 4.542 | 3.813 | 0.934 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
 | LAGNet | 38.209 | 4.534 | 3.812 | 0.934 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 | U2Net | 38.065 | 4.642 | 3.987 | 0.931 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
@@ -184,7 +184,7 @@ SMOC의 개선(원본 대비)이 가장 큰 64×64 영역을 4배 확대했습�
 | CANNet | 38.488 | 4.496 | 3.698 | 0.937 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
 | ADWM | 38.466 | 4.450 | 3.705 | 0.937 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 | DCINN | 38.430 | 4.220 | 3.570 | — | [ABFNet](https://proceedings.mlr.press/v306/wang26hx.html) |
-| **SMOC (현재 기준, 3시드 평균)** | **38.344** | **4.520** | **3.702** | **0.935** | [Ours](SSA-MRN/docs/images/smoc/baseline_metrics.json) |
+| **SMOC (최종 개선 모델, 3시드 평균)** | **38.344** | **4.520** | **3.702** | **0.935** | [Ours](SSA-MRN/docs/images/smoc/baseline_metrics.json) |
 | HFIN | 38.247 | 4.542 | 3.813 | 0.934 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
 | HOIF | 38.242 | 4.521 | 3.825 | 0.933 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
 | ProtoFormer | 38.238 | 4.568 | 3.768 | — | [MSFFusion](https://www.mdpi.com/2072-4292/18/18/3236) |
