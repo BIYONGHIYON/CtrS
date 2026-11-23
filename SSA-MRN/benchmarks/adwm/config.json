@@ -27,12 +27,30 @@
     "QB": {
       "epochs": 200,
       "cacw_ratio": 0.6,
-      "scale": 2047
+      "scale": 2047,
+      "status": "trained",
+      "best_epoch": 199,
+      "best_valid_l1": 0.007332318376632422,
+      "checkpoint": "checkpoints/retrain_QB_seed42/best.pt",
+      "finished_kst": "2026-11-23T17:05"
     },
     "GF2": {
       "epochs": 500,
       "cacw_ratio": 0.8,
-      "scale": 1023
-    }
+      "scale": 1023,
+      "status": "trained",
+      "best_epoch": 467,
+      "best_valid_l1": 0.004016530884515286,
+      "checkpoint": "checkpoints/retrain_GF2_seed42/best.pt",
+      "finished_kst": "2026-11-24T02:43",
+      "interruption": {
+        "stopped_epoch": 485,
+        "cause": "disk quota of the shared server account filled by another job (2026-11-24 02:11)",
+        "resumed_from": "epoch-484 latest.pt",
+        "script": "provenance/resume_GF2.py",
+        "record": "provenance/resume_GF2.json"
+      }
+    },
+    "gpu": "RTX A6000 (school server)"
   }
 }
