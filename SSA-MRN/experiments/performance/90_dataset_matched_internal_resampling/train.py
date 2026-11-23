@@ -10,6 +10,8 @@ epoch 0, EMA recorded only) for the 88 K2D recipe with the 89 loss weights (lamb
          the trunk counter, the same cosine as <v>K; 88 FULL / start_branch)
   <v>L : full-size 300 epochs (user decision 2026-11-22 15h): the same <v>T epoch-120 snapshot continues at 1e-4 to epoch 240, then
          60-epoch cosine 1e-4 -> 1e-6 (epochs 240-299; the 84 B300 split, decay = last 20%)
+  <v>Z : the 83 K2 structure (2x2) of variant v trained from its seeded initialization (user decision 2026-11-23 15h): 120 epochs at
+         1e-4 + 30-epoch cosine 1e-4 -> 1e-6 (150 epochs, the <v>K total schedule without the factorized start)
   <v>S : full-size 2x2 C2MS of variant v, 50 epochs (epochs 0-39 at 1e-4, 40-49 cosine 1e-4 -> 1e-6, the 89 screening schedule)
 The W2 output implementation is the sealed cfg['w2_out_impl'] (convT, as 89)."""
 import os
@@ -51,6 +53,7 @@ def epochs(cfg,arm):
     if arm in M.SCREEN:return SCREEN_EPOCHS
     if arm in M.DECAY:return TRUNK_EPOCHS+K2D_EPOCHS
     if arm in M.LONG:return LONG_CONSTANT+LONG_DECAY
+    if arm in M.SCRATCH:return TRUNK_EPOCHS+K2D_EPOCHS
     raise ValueError(arm)
 
 
@@ -71,6 +74,7 @@ def schedule(cfg,arm,epoch):
     if arm in M.FULL_SIZE:return cfg['lr_start']
     if arm in M.FACTORIZED:return cosine(cfg,epoch,K2D_EPOCHS,cfg['lr_start'])
     if arm in M.DECAY:return cfg['lr_start'] if epoch<TRUNK_EPOCHS else cosine(cfg,epoch-TRUNK_EPOCHS,K2D_EPOCHS,cfg['lr_start'])
+    if arm in M.SCRATCH:return cfg['lr_start'] if epoch<TRUNK_EPOCHS else cosine(cfg,epoch-TRUNK_EPOCHS,K2D_EPOCHS,cfg['lr_start'])
     if arm in M.LONG:return cfg['lr_start'] if epoch<LONG_CONSTANT else cosine(cfg,epoch-LONG_CONSTANT,LONG_DECAY,cfg['lr_start'])
     if arm in M.SCREEN:return cfg['lr_start'] if epoch<SCREEN_CONSTANT else cosine(cfg,epoch-SCREEN_CONSTANT,SCREEN_EPOCHS-SCREEN_CONSTANT,cfg['lr_start'])
     raise ValueError(arm)
@@ -129,7 +133,7 @@ def load_initial(m,sensor,arm,seed):
 def check_initial(sd,h,sensor,arm,seed):
     """Full-size arms on 4-band sensors: the initial state equals 43 C2 of the same seed converted by to_2x2 (variants add no state)."""
     import model as M
-    if arm in M.FACTORIZED or T.SENSORS[sensor]['bands']!=4:return
+    if arm in M.FACTORIZED or arm in M.SCRATCH or T.SENSORS[sensor]['bands']!=4:return
     ref=M.to_2x2(M.M54.Model('C2MS',4,seed))
     c2=M.M43.Model('C2',seed).state_dict();base=M.M54.Model('C2MS',4,seed).state_dict()
     if T.state_hash(c2)!=T.state_hash(base):raise AssertionError('54 C2MS initial state differs from 43 C2')

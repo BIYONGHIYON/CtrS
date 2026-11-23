@@ -637,11 +637,116 @@ def long_run():
     write(root/'long_comparison.json',dict(time_kst=now(),**res));write(root/'long_complete.json',dict(time_kst=now()))
     note(long={k:round(x['delta_300_minus_150']['PSNR'],4) for k,x in res['targets'].items()})
 
+
+def lite():
+    """Factorized SMOC, seeds 43 and 44 (user decision 2026-11-23 13h): <v>K = factorization of the <v>T epoch-120 state (83 K2, the
+    `factorize` mode) + 30-epoch cosine (88 K2D), on GF2, QB, WV3, then evaluation (RR test with projection against the cached same-seed
+    C2MS-SP and C2MS-SP-Lite, WV2 transfer and FR reference). Seed 42 is the chosen runner's <v>K. The <v>T run folders of seeds 43 and 44
+    were removed in the server cleanup; their epoch-120 snapshot latest.pt is restored from the weights Release (hash-checked against the
+    archived snapshot record) before this runner starts. Two jobs at once at most (live_jobs). Same stop rule. The 3-seed comparison is
+    written from the archived evaluations (the CF and seed-42 CK run folders are no longer on the server)."""
+    conf=load_conf();root=Path(conf['runtime']);cp=root/'runtime_config.json';cfg=json.loads(cp.read_text(encoding='utf8'));set_impl(cfg)
+    note=lambda **k:print(json.dumps(dict(time_kst=now(),**k),ensure_ascii=False),flush=True)
+    v=json.loads((root/'screen_complete.json').read_text(encoding='utf8'))['chosen']
+    out=lambda k:root/'runs'/run_name(*k)
+    trained=lambda k:(out(k)/'training_complete.json').exists();evaluated=lambda k:(out(k)/'evaluation_complete.json').exists()
+    keys=[(s,v+'K',sd) for sd in (43,44) for s in ('GF2','QB','WV3')]
+    write(root/'lite_started.json',dict(time_kst=now(),variant=v,arm=v+'K',seeds=[43,44],decision='user 2026-11-23 13h: factorized SMOC seeds 43 and 44',
+          script=str(Path(__file__).resolve()),script_sha256=sha(Path(__file__).resolve())))
+    jobs=[('train',k) for k in keys if not trained(k)]+[('evaluate',k) for k in keys if trained(k) and not evaluated(k)]
+    running={};problem=None
+    def launch(kind,k):
+        o=out(k);o.mkdir(parents=True,exist_ok=True);f=(o/(kind+'.log')).open('a',encoding='utf8')
+        args=[sys.executable,'-u',str(HERE/'train.py'),'--config',str(cp),'--mode',kind,'--sensor',k[0],'--arm',k[1],'--seed',str(k[2])]
+        if kind=='train' and (o/'checkpoints/initial.pt').exists():args+=['--resume']
+        p=subprocess.Popen(args,stdout=f,stderr=subprocess.STDOUT);note(launched=kind,run=run_name(*k),pid=p.pid);return p,f
+    while True:
+        if problem is None:
+            try:live=live_jobs()
+            except Exception as e:live=None;note(warning='process query failed; no launch this round',error=str(e)[-200:])
+            if live is not None:
+                free=cfg['max_parallel']-len(live)
+                for j in sorted(jobs,key=lambda j:(j[0]!='evaluate',keys.index(j[1]))):
+                    if free<=0 or problem:break
+                    kind,k=j
+                    if kind=='train':
+                        (root/'init').mkdir(exist_ok=True)
+                        code=subprocess.run([sys.executable,'-u',str(HERE/'run.py'),'--mode','factorize','--sensor',k[0],'--arm',k[1],'--seed',str(k[2])],
+                                            stdout=(root/'init'/f'factorize_{run_name(*k)}.log').open('a',encoding='utf8'),stderr=subprocess.STDOUT).returncode
+                        if code:problem='factorize failed '+run_name(*k);break
+                    jobs.remove(j);running[j]=launch(kind,k);free-=1
+        time.sleep(30)
+        for j,(p,f) in list(running.items()):
+            if p.poll() is None:continue
+            f.close();del running[j];kind,k=j
+            ok=p.returncode==0 and (trained(k) if kind=='train' else evaluated(k))
+            if ok and kind=='train' and sanity(cfg,root,k):ok=False
+            if ok and kind=='train':jobs.append(('evaluate',k))
+            note(finished=kind,run=run_name(*k),ok=ok,exit=p.returncode)
+            if not ok and problem is None:problem=f'{kind} failed {k} (exit {p.returncode})'
+        if not running and (problem or not jobs):break
+    if problem:
+        write(root/'lite_stopped.json',dict(time_kst=now(),reason=problem,note='no new job after the problem; running jobs finished'));note(stopped=problem);sys.exit(3)
+    res={k_[0]+f'_s{k_[2]}':json.loads((out(k_)/'evaluation_complete.json').read_text(encoding='utf8'))['targets'] for k_ in keys}
+    write(root/'lite_complete.json',dict(time_kst=now(),arm=v+'K',seeds=[43,44],delta_RR={r:{t:x['delta_RR'] for t,x in v_.items()} for r,v_ in res.items()}))
+    note(lite={r:{t:round(x['delta_RR']['P_vs_C2MS_SP']['PSNR'],4) for t,x in v_.items()} for r,v_ in res.items()})
+
+
+def scratch():
+    """The factorized structure trained from scratch, seed 42 (user decision 2026-11-23 15h): <v>Z = the 83 K2 structure (2x2, variant v)
+    from its seeded initialization, 120 epochs at 1e-4 + 30-epoch cosine (the <v>K schedule without the factorized start), on GF2, QB,
+    WV3, then evaluation (RR test with projection against the cached seed-42 controls, WV2 transfer and FR reference). Compared later with
+    the archived seed-42 <v>K (same structure and schedule, factorized start) from the archived evaluations. Starts after the lite runner
+    finished (lite_complete.json; lite_stopped.json ends it). Two jobs at once at most (live_jobs). Same stop rule."""
+    conf=load_conf();root=Path(conf['runtime']);cp=root/'runtime_config.json';cfg=json.loads(cp.read_text(encoding='utf8'));set_impl(cfg)
+    note=lambda **k:print(json.dumps(dict(time_kst=now(),**k),ensure_ascii=False),flush=True)
+    while not (root/'lite_complete.json').exists():
+        if (root/'lite_stopped.json').exists():note(stopped='lite runner stopped; nothing started');sys.exit(2)
+        time.sleep(60)
+    v=json.loads((root/'screen_complete.json').read_text(encoding='utf8'))['chosen']
+    out=lambda k:root/'runs'/run_name(*k)
+    trained=lambda k:(out(k)/'training_complete.json').exists();evaluated=lambda k:(out(k)/'evaluation_complete.json').exists()
+    keys=[(s,v+'Z',SEED) for s in ('GF2','QB','WV3')]
+    write(root/'scratch_started.json',dict(time_kst=now(),variant=v,arm=v+'Z',seed=SEED,decision='user 2026-11-23 15h: the factorized structure trained from epoch 0 (no factorized start)',
+          script=str(Path(__file__).resolve()),script_sha256=sha(Path(__file__).resolve())))
+    jobs=[('train',k) for k in keys if not trained(k)]+[('evaluate',k) for k in keys if trained(k) and not evaluated(k)]
+    running={};problem=None
+    def launch(kind,k):
+        o=out(k);o.mkdir(parents=True,exist_ok=True);f=(o/(kind+'.log')).open('a',encoding='utf8')
+        args=[sys.executable,'-u',str(HERE/'train.py'),'--config',str(cp),'--mode',kind,'--sensor',k[0],'--arm',k[1],'--seed',str(k[2])]
+        if kind=='train' and (o/'checkpoints/initial.pt').exists():args+=['--resume']
+        p=subprocess.Popen(args,stdout=f,stderr=subprocess.STDOUT);note(launched=kind,run=run_name(*k),pid=p.pid);return p,f
+    while True:
+        if problem is None:
+            try:live=live_jobs()
+            except Exception as e:live=None;note(warning='process query failed; no launch this round',error=str(e)[-200:])
+            if live is not None:
+                free=cfg['max_parallel']-len(live)
+                for j in sorted(jobs,key=lambda j:(j[0]!='evaluate',keys.index(j[1]))):
+                    if free<=0:break
+                    jobs.remove(j);running[j]=launch(*j);free-=1
+        time.sleep(30)
+        for j,(p,f) in list(running.items()):
+            if p.poll() is None:continue
+            f.close();del running[j];kind,k=j
+            ok=p.returncode==0 and (trained(k) if kind=='train' else evaluated(k))
+            if ok and kind=='train' and sanity(cfg,root,k):ok=False
+            if ok and kind=='train':jobs.append(('evaluate',k))
+            note(finished=kind,run=run_name(*k),ok=ok,exit=p.returncode)
+            if not ok and problem is None:problem=f'{kind} failed {k} (exit {p.returncode})'
+        if not running and (problem or not jobs):break
+    if problem:
+        write(root/'scratch_stopped.json',dict(time_kst=now(),reason=problem,note='no new job after the problem; running jobs finished'));note(stopped=problem);sys.exit(3)
+    res={k_[0]:json.loads((out(k_)/'evaluation_complete.json').read_text(encoding='utf8')) for k_ in keys}
+    write(root/'scratch_complete.json',dict(time_kst=now(),arm=v+'Z',seed=SEED,delta_RR={s_:{t:x['delta_RR'] for t,x in r['targets'].items()} for s_,r in res.items()},
+          validation={s_:r['validation'] for s_,r in res.items()},best_epoch={s_:r['best_epoch'] for s_,r in res.items()}))
+    note(scratch={s_:{t:round(x['delta_RR']['P_vs_C2MS_SP']['PSNR'],4) for t,x in r['targets'].items()} for s_,r in res.items()})
+
 if __name__=='__main__':
     import argparse
     p=argparse.ArgumentParser(description='90 controller: prepare -> optimize -> run (resume: --mode run --resume)')
-    p.add_argument('--mode',choices=['prepare','optimize','run','factorize','screen','chosen','final','finalctrl','long'],required=True);p.add_argument('--resume',action='store_true')
+    p.add_argument('--mode',choices=['prepare','optimize','run','factorize','screen','chosen','final','finalctrl','long','lite','scratch'],required=True);p.add_argument('--resume',action='store_true')
     p.add_argument('--sensor');p.add_argument('--arm');p.add_argument('--seed',type=int,default=42);a=p.parse_args()
     if a.mode=='factorize':factorize(a.sensor,a.arm,a.seed)
     elif a.mode=='finalctrl':finalctrl(a.sensor,a.seed)
-    else:{'prepare':prepare,'optimize':optimize,'screen':screen,'chosen':chosen,'final':final,'long':long_run}.get(a.mode,lambda:run(a.resume))()
+    else:{'prepare':prepare,'optimize':optimize,'screen':screen,'chosen':chosen,'final':final,'long':long_run,'lite':lite,'scratch':scratch}.get(a.mode,lambda:run(a.resume))()

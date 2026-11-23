@@ -114,7 +114,7 @@ def evaluate(cfg,sensor,arm,seed):
     C2MS-SP and C2MS-SP-Lite of the same seed (there is no 88 K2D for seeds 43 and 44)."""
     setup(seed);set_impl(cfg);dest=Path(cfg['runtime'])/'runs'/run_name(sensor,arm,seed);done=dest/'evaluation_complete.json'
     if done.exists():return
-    if arm not in M.FACTORIZED+M.DECAY+M.LONG:raise ValueError('only the final models (<v>K, <v>F, <v>L) are evaluated: '+arm)
+    if arm not in M.FACTORIZED+M.DECAY+M.LONG+M.SCRATCH:raise ValueError('only the final models (<v>K, <v>F, <v>L, <v>Z) are evaluated: '+arm)
     if not (dest/'training_complete.json').exists():raise RuntimeError('training incomplete')
     net,w=load(dest/'checkpoints/best.pt',arm,sensor,seed);out={}
     for target in [sensor]+TRANSFER.get(sensor,[]):
