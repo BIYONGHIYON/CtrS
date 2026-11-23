@@ -2,7 +2,7 @@
 
 | 평가자 | 설정 | 상태 |
 |:---:|:---:|:---:|
-| 김경찬 (설정·QB 학습·저자 가중치 채점), BIYONGHIYON (GF2 채점·어댑터·FR·이미지) | 저자 가중치 WV3, WV2 전이 / QB 200·GF2 500에폭 직접 학습 seed 42 | 평가 완료 |
+| 김경찬 (설정·QB 학습·저자 가중치 채점), 이병현 (GF2 채점·어댑터·FR·이미지) | 저자 가중치 WV3, WV2 전이 / QB 200·GF2 500에폭 직접 학습 seed 42 | 평가 완료 |
 
 **출처:** Huang 외, Adaptive Dual-level Weighting for Pansharpening(ADWM), CVPR 2025, [arXiv 2503.13214](https://arxiv.org/abs/2503.13214) · [공식 코드](https://github.com/Jie-1203/ADWM) 커밋 `aa185a6` · MIT(공식 저장소, 저자 WV3 가중치도 같은 저장소 `weights/`에 포함)
 
