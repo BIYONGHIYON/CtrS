@@ -1,0 +1,73 @@
+{
+  "model": "adwm",
+  "display_name": "ADWM",
+  "architecture": "BWNET_LAGConv",
+  "upstream": "aa185a64cac00a8c31581290de276568da2eb106",
+  "author": {
+    "wv2": {
+      "weights_sensor": "WV3",
+      "layernorm": "identity",
+      "rr_release": "predictions-benchmarks-adwm-author",
+      "rr_zip": "adwm_author_WV2_rr.zip",
+      "rr_sha256": "f09d7b5a6b2b520ad683aca019e5dd2f5f783ffe8c12972e257fe6a44461812c",
+      "matlab_run": 45058335188
+    },
+    "wv3": {
+      "layernorm": "identity",
+      "rr_release": "predictions-benchmarks-adwm-author",
+      "rr_zip": "adwm_author_WV3_rr.zip",
+      "status": "evaluated",
+      "matlab_run": 45052950100,
+      "rr_sha256": "c8469b5b2a762fe297a90eb598f7c1c34e6e7a260a42d2877a2610ad1f2eb563"
+    },
+    "weights": {
+      "path": "upstream/weights/BWNET_LAGConv_WV3/model.pth",
+      "sha256": "793e5eccfe6a03995a98a15ee8e4c8911eb129f3c4bb03aa24ae143b41928e2c",
+      "note": "published in the MIT-licensed official repository; no LayerNorm parameters, loaded with CovBlock LayerNorm as identity"
+    }
+  },
+  "retrain": {
+    "seed": 42,
+    "batch": 64,
+    "optimizer": "Adam",
+    "loss": "L1",
+    "lr": 0.002,
+    "step_size": 150,
+    "gamma": 0.5,
+    "selection": "minimum full validation L1",
+    "QB": {
+      "epochs": 200,
+      "cacw_ratio": 0.6,
+      "scale": 2047,
+      "status": "evaluated",
+      "best_epoch": 199,
+      "best_valid_l1": 0.007332318376632422,
+      "checkpoint": "checkpoints/retrain_QB_seed42/best.pt",
+      "finished_kst": "2026-11-23T17:05",
+      "rr_release": "predictions-benchmarks-adwm-retrain",
+      "rr_zip": "adwm_retrain_QB_rr.zip",
+      "matlab_run": 45141153814
+    },
+    "GF2": {
+      "epochs": 500,
+      "cacw_ratio": 0.8,
+      "scale": 1023,
+      "status": "evaluated",
+      "best_epoch": 467,
+      "best_valid_l1": 0.004016530884515286,
+      "checkpoint": "checkpoints/retrain_GF2_seed42/best.pt",
+      "finished_kst": "2026-11-24T02:43",
+      "interruption": {
+        "stopped_epoch": 485,
+        "cause": "disk quota of the shared server account filled by another job (2026-11-24 02:11)",
+        "resumed_from": "epoch-484 latest.pt",
+        "script": "provenance/resume_GF2.py",
+        "record": "provenance/resume_GF2.json"
+      },
+      "rr_release": "predictions-benchmarks-adwm-retrain",
+      "rr_zip": "adwm_retrain_GF2_rr.zip",
+      "matlab_run": 45237462724
+    },
+    "gpu": "RTX A6000 (school server)"
+  }
+}

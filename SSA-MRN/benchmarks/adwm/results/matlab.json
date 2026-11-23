@@ -1,0 +1,154 @@
+{
+ "model": "adwm",
+ "description": "actual MATLAB (DLPan-Toolbox score_suite.m) RR scores of the saved ADWM predictions, next to the CtrS Python metrics of the same arrays; PSNR band mean shown at peak 2047 for every sensor (GF2 raw MATLAB output is at peak 1023)",
+ "cases": {
+  "retrain_QB": {
+   "sensor": "QB",
+   "setting": "retrain",
+   "scenes": 20,
+   "matlab_run": 45141153814,
+   "matlab_run_url": "https://github.com/BIYONGHIYON/CtrS/actions/runs/45141153814",
+   "release": "predictions-benchmarks-adwm-retrain",
+   "asset": "adwm_retrain_QB_rr.zip",
+   "asset_sha256": "3495739a26bda68b1135fa4c72f274e758ef89180f7dab5b93aae5ea939d3534",
+   "matlab_mean": {
+    "Q": 0.9357651303508654,
+    "SAM": 4.471366780677477,
+    "ERGAS": 3.6284526428291555,
+    "SCC": 0.9830013145953357,
+    "Q2n": 0.9360352507671644,
+    "PSNR_global": 38.05492976441692,
+    "PSNR_bandmean": 38.52327603587993,
+    "PSNR_bandmean_peak2047": 38.52327603587993
+   },
+   "python_mean": {
+    "SAM": 4.47136678067748,
+    "ERGAS": 3.628452642829282,
+    "PSNR": 38.52327603587993,
+    "SCC": 0.983001314595336,
+    "Q2n": 0.9360303638553489
+   },
+   "matlab_minus_python": {
+    "SAM": -2.6645352591003757e-15,
+    "ERGAS": -1.2656542480726785e-13,
+    "SCC": -3.3306690738754696e-16,
+    "Q2n": 4.886911815549233e-06,
+    "PSNR": 0.0
+   },
+   "peak": 2047,
+   "dlpan_commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+   "matlab_release": "2025b"
+  },
+  "retrain_GF2": {
+   "sensor": "GF2",
+   "setting": "retrain",
+   "scenes": 20,
+   "matlab_run": 45237462724,
+   "matlab_run_url": "https://github.com/BIYONGHIYON/CtrS/actions/runs/45237462724",
+   "release": "predictions-benchmarks-adwm-retrain",
+   "asset": "adwm_retrain_GF2_rr.zip",
+   "asset_sha256": "32c5513ce2f9dfd6272d259146716a8eb4e799eaaca02ad157dac6fa1d54088a",
+   "matlab_mean": {
+    "Q": 0.9839845165258081,
+    "SAM": 0.6911810451156433,
+    "ERGAS": 0.6255089488119174,
+    "SCC": 0.9910957901846442,
+    "Q2n": 0.983301832199935,
+    "PSNR_global": 43.481716694291016,
+    "PSNR_bandmean": 43.555350717068094,
+    "PSNR_bandmean_peak2047": 49.58019489607501
+   },
+   "python_mean": {
+    "SAM": 0.6911810451156417,
+    "ERGAS": 0.625508948811917,
+    "PSNR": 49.580194896075014,
+    "SCC": 0.9910957901846441,
+    "Q2n": 0.9832949078334912
+   },
+   "matlab_minus_python": {
+    "SAM": 1.5543122344752192e-15,
+    "ERGAS": 4.440892098500626e-16,
+    "SCC": 1.1102230246251565e-16,
+    "Q2n": 6.924366443894492e-06,
+    "PSNR": -7.105427357601002e-15
+   },
+   "peak": 1023,
+   "dlpan_commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+   "matlab_release": "2025b"
+  },
+  "author_WV3": {
+   "sensor": "WV3",
+   "setting": "author",
+   "scenes": 20,
+   "matlab_run": 45052950100,
+   "matlab_run_url": "https://github.com/BIYONGHIYON/CtrS/actions/runs/45052950100",
+   "release": "predictions-benchmarks-adwm-author",
+   "asset": "adwm_author_WV3_rr.zip",
+   "asset_sha256": "c8469b5b2a762fe297a90eb598f7c1c34e6e7a260a42d2877a2610ad1f2eb563",
+   "matlab_mean": {
+    "Q": 0.902719515940729,
+    "SAM": 3.5287359325353242,
+    "ERGAS": 2.5243611127261882,
+    "SCC": 0.9778136066039333,
+    "Q2n": 0.8987585946151215,
+    "PSNR_global": 35.98346619124357,
+    "PSNR_bandmean": 37.85831423381472,
+    "PSNR_bandmean_peak2047": 37.85831423381472
+   },
+   "python_mean": {
+    "SAM": 3.5287359325353242,
+    "ERGAS": 2.5243611127262926,
+    "PSNR": 37.85831423381472,
+    "SCC": 0.9778136066039341,
+    "Q2n": 0.8985901288338919
+   },
+   "matlab_minus_python": {
+    "SAM": 0.0,
+    "ERGAS": -1.0436096431476471e-13,
+    "SCC": -7.771561172376096e-16,
+    "Q2n": 0.00016846578122964306,
+    "PSNR": 0.0
+   },
+   "peak": 2047,
+   "dlpan_commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+   "matlab_release": "2025b"
+  },
+  "author_WV2": {
+   "sensor": "WV2",
+   "setting": "author",
+   "scenes": 20,
+   "matlab_run": 45058335188,
+   "matlab_run_url": "https://github.com/BIYONGHIYON/CtrS/actions/runs/45058335188",
+   "release": "predictions-benchmarks-adwm-author",
+   "asset": "adwm_author_WV2_rr.zip",
+   "asset_sha256": "f09d7b5a6b2b520ad683aca019e5dd2f5f783ffe8c12972e257fe6a44461812c",
+   "matlab_mean": {
+    "Q": 0.8183680578861781,
+    "SAM": 5.8006485100704825,
+    "ERGAS": 4.589449322932418,
+    "SCC": 0.9126661699381111,
+    "Q2n": 0.8216468735559334,
+    "PSNR_global": 28.403010445363588,
+    "PSNR_bandmean": 29.600927487177096,
+    "PSNR_bandmean_peak2047": 29.600927487177096
+   },
+   "python_mean": {
+    "SAM": 5.8006485100704825,
+    "ERGAS": 4.589449322932567,
+    "PSNR": 29.600927487177096,
+    "SCC": 0.9126661699381113,
+    "Q2n": 0.8214329554939124
+   },
+   "matlab_minus_python": {
+    "SAM": 0.0,
+    "ERGAS": -1.4921397450962104e-13,
+    "SCC": -2.220446049250313e-16,
+    "Q2n": 0.00021391806202097907,
+    "PSNR": 0.0
+   },
+   "peak": 2047,
+   "dlpan_commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+   "matlab_release": "2025b"
+  }
+ }
+}

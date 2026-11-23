@@ -23,6 +23,40 @@
     "vs_smoc": "설정·센서별 SMOC와의 RR 차이 (같은 시드 우선, 저자 시드가 없으면 SMOC 3시드 평균; 판정 없음)"
   },
   "models": {
+    "adwm": {
+      "display_name": "ADWM",
+      "paper": "Huang et al., CVPR 2025, https://arxiv.org/abs/2503.13214",
+      "code": "https://github.com/Jie-1203/ADWM",
+      "commit": "aa185a64cac00a8c31581290de276568da2eb106",
+      "license": "MIT (공식 코드)",
+      "evaluator": "김경찬, BIYONGHIYON",
+      "settings": [
+        "author",
+        "retrain"
+      ],
+      "epochs": "QB 200, GF2 500, seed 42",
+      "sensors": {
+        "author": [
+          "WV3",
+          "WV2"
+        ],
+        "retrain": [
+          "QB",
+          "GF2"
+        ]
+      },
+      "seeds": {
+        "author": null,
+        "retrain": [
+          42
+        ]
+      },
+      "status": "평가 완료",
+      "report": "SSA-MRN/benchmarks/adwm/README.md",
+      "config": "SSA-MRN/benchmarks/adwm/config.json",
+      "manifest": "SSA-MRN/benchmarks/adwm/manifest.json",
+      "last_checked": "2026-11-24"
+    },
     "u2net": {
       "display_name": "U2Net",
       "paper": "Peng et al. U2Net: A General Framework with Spatial-Spectral-Integrated Double U-Net for Image Fusion. ACM MM 2023. https://doi.org/10.1145/3581783.3612084",
