@@ -2,6 +2,46 @@
   "description": "결과 비교 사이트에 올릴 데이터셋과 모델 목록입니다. group은 original(원본 SSA-MRN)·baseline(개선 모델)·ours(우리 다른 모델)·benchmark(다른 연구 모델)·generative(생성형 이미지 모델, RGB 3밴드만)이며, 화면은 개선 모델과 나머지 중 고른 비교군 하나를 함께 보여 줍니다. 모델을 추가한 뒤 python SSA-MRN/viewer/export.py --models <id>로 예측을 만듭니다.",
   "datasets": [
     {
+      "id": "WV2",
+      "label": "WV2 전이",
+      "title": "WorldView-2 (전이)",
+      "rr_file": "test_wv2_multiExm1.h5",
+      "bands": 8,
+      "scale": 2047,
+      "band_names": [
+        "Coastal",
+        "Blue",
+        "Green",
+        "Yellow",
+        "Red",
+        "Red edge",
+        "NIR1",
+        "NIR2"
+      ],
+      "composites": {
+        "RGB": [
+          4,
+          2,
+          1
+        ],
+        "NIR 위색": [
+          6,
+          4,
+          2
+        ]
+      },
+      "note": "WV3 학습 모델을 WV2에 적용한 전이 결과 · SMOC는 성능 82번 밴드별 보정을 함께 적용, 원본은 그대로 · 판정에는 쓰지 않음",
+      "standard_scenes": [
+        0,
+        1,
+        3,
+        7,
+        14,
+        17
+      ],
+      "scene_labels": {}
+    },
+    {
       "id": "QB",
       "label": "QB",
       "title": "QuickBird",
@@ -110,46 +150,6 @@
         ]
       },
       "note": "WV3 학습 · WV3 평가",
-      "standard_scenes": [
-        0,
-        1,
-        3,
-        7,
-        14,
-        17
-      ],
-      "scene_labels": {}
-    },
-    {
-      "id": "WV2",
-      "label": "WV2 전이",
-      "title": "WorldView-2 (전이)",
-      "rr_file": "test_wv2_multiExm1.h5",
-      "bands": 8,
-      "scale": 2047,
-      "band_names": [
-        "Coastal",
-        "Blue",
-        "Green",
-        "Yellow",
-        "Red",
-        "Red edge",
-        "NIR1",
-        "NIR2"
-      ],
-      "composites": {
-        "RGB": [
-          4,
-          2,
-          1
-        ],
-        "NIR 위색": [
-          6,
-          4,
-          2
-        ]
-      },
-      "note": "WV3 학습 모델을 WV2에 적용한 전이 결과 · SMOC는 성능 82번 밴드별 보정을 함께 적용, 원본은 그대로 · 판정에는 쓰지 않음",
       "standard_scenes": [
         0,
         1,
