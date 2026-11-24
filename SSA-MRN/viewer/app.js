@@ -550,6 +550,9 @@ async function boot() {
     const metadata = await fetch('registry.json', { cache: 'no-cache' });
     if (!metadata.ok) throw new Error(`registry.json: ${metadata.status}`);
     const registry = await metadata.json();
+    // Dataset tabs (and the first one shown) follow the registry order, not the order stored in the Release data.
+    const rank = id => { const k = registry.datasets.findIndex(d => d.id === id); return k < 0 ? Infinity : k; };
+    index.datasets.sort((a, b) => rank(a.id) - rank(b.id));
     index.models = index.models.map(m => {
       const entry = registry.models.find(item => item.id === m.id);
       if (!entry) return m;
