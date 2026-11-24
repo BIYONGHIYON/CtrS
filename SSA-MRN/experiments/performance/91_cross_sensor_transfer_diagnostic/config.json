@@ -1,0 +1,151 @@
+{
+  "experiment": 91,
+  "purpose": "CAS500-1 FR source-weight diagnostic; no improvement verdict",
+  "source_experiment": 90,
+  "arm": "CK",
+  "sources": [
+    "QB",
+    "GF2"
+  ],
+  "seed": 42,
+  "target": "CAS500-1",
+  "bands": [
+    "B",
+    "G",
+    "R",
+    "NIR"
+  ],
+  "data": "data/cas500_1_l2g_20260522/fr_patches.h5",
+  "data_sha256": "2e7e99345ee78293bf1faec4a865cd37aff554af51a53223e18d5a36ecc361ee",
+  "selection": {
+    "region": "MS patch is wholly within top third of source raster",
+    "guard_ms_pixels": 128,
+    "count": 20,
+    "method": "deterministic farthest-point in normalized coordinate space; first lexicographic y,x; ties lower patch index",
+    "depends_on": "coordinates only"
+  },
+  "calibration": "experiment 82 scene mode, per input patch; reference training-set ratio of means",
+  "projection": false,
+  "rr_degradation": null,
+  "ground_truth": false,
+  "normalization": "stored float32 DN/4095, do not divide again, no clipping",
+  "metrics": "common.metrics.fr_metrics; Python QNR reference only",
+  "display_indices": [
+    0,
+    1,
+    3,
+    7,
+    14,
+    17
+  ],
+  "checkpoint_paths": {
+    "QB": "experiments/performance/90_dataset_matched_internal_resampling/checkpoints/QB_CK_s42/best.pt",
+    "GF2": "experiments/performance/90_dataset_matched_internal_resampling/checkpoints/GF2_CK_s42/best.pt"
+  },
+  "selected_patch_indices": [
+    0,
+    454,
+    497,
+    89,
+    434,
+    180,
+    235,
+    27,
+    398,
+    87,
+    250,
+    422,
+    132,
+    274,
+    260,
+    53,
+    154,
+    319,
+    483,
+    288
+  ],
+  "selected_ms_yx": [
+    [
+      256,
+      5632
+    ],
+    [
+      2176,
+      256
+    ],
+    [
+      2176,
+      6528
+    ],
+    [
+      1024,
+      2304
+    ],
+    [
+      2048,
+      3328
+    ],
+    [
+      1280,
+      5120
+    ],
+    [
+      1536,
+      896
+    ],
+    [
+      640,
+      3968
+    ],
+    [
+      1920,
+      4992
+    ],
+    [
+      896,
+      6272
+    ],
+    [
+      1536,
+      2816
+    ],
+    [
+      2048,
+      1792
+    ],
+    [
+      1152,
+      3712
+    ],
+    [
+      1536,
+      6272
+    ],
+    [
+      1536,
+      4096
+    ],
+    [
+      768,
+      5120
+    ],
+    [
+      1280,
+      1536
+    ],
+    [
+      1792,
+      256
+    ],
+    [
+      2176,
+      4352
+    ],
+    [
+      1664,
+      1792
+    ]
+  ],
+  "candidate_count": 498,
+  "reserved_region_ms_y_start": 2623
+}
