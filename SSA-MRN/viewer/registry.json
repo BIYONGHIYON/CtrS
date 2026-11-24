@@ -303,6 +303,33 @@
       }
     },
     {
+      "id": "u2net",
+      "label": "U2Net",
+      "short": "U2Net",
+      "role": "다른 모델 · 저자 가중치",
+      "group": "benchmark",
+      "seed": null,
+      "role_by_dataset": {
+        "QB": "다른 모델 · 직접 학습 seed 42",
+        "GF2": "다른 모델 · 직접 학습 seed 42"
+      },
+      "description": "U2Net(Peng 외, ACM MM 2023)의 예측입니다. QB·GF2는 저자 가중치가 없어 공식 코드로 우리 학습 데이터에서 360에폭 직접 학습했습니다(seed 42, validation MSE로 QB 201에폭·GF2 301에폭 선택). 이 학습은 배치 16을 micro 4 × 기울기 누적 4로 나눈 보관 실험이라 논문 학습법을 그대로 재현한 것은 아닙니다. WV3는 저자 공개 가중치(재학습 없음, 시드 미공개)이고, WV2에는 WV3 저자 가중치를 그대로 적용했습니다. 사영·밴드별 보정 같은 우리 방법은 붙이지 않았습니다. 평가 보고서: benchmarks/u2net (평가자 송준현).",
+      "benchmark": {
+        "model": "u2net",
+        "setting": "author",
+        "settings_by_dataset": {
+          "QB": "retrain",
+          "GF2": "retrain"
+        },
+        "datasets": [
+          "QB",
+          "GF2",
+          "WV3",
+          "WV2"
+        ]
+      }
+    },
+    {
       "id": "gpt_image_2_6",
       "label": "GPT Image 2.6",
       "short": "GPT Image",
