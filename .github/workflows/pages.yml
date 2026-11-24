@@ -24,11 +24,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  # 조립·업로드와 배포를 나눕니다. 한 작업 안에서 업로드 직후 배포하면 결과물 목록이 늦게 잡혀
+  # "No artifacts named github-pages"로 실패할 수 있습니다.
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -58,5 +57,12 @@ jobs:
         with:
           path: _site
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
