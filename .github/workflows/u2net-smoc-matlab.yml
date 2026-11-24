@@ -1,0 +1,120 @@
+name: U2Net and SMOC retained predictions - actual MATLAB
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [u2net-matlab-smoc]
+    paths: [.github/workflows/u2net-smoc-matlab.yml]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: u2net-smoc-matlab-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  score:
+    name: ${{ matrix.model }} / ${{ matrix.sensor }} / MATLAB
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        include:
+          - {model: u2net, setting: retrain, sensor: QB, release: predictions-benchmarks-u2net-retrain}
+          - {model: u2net, setting: retrain, sensor: GF2, release: predictions-benchmarks-u2net-retrain}
+          - {model: u2net, setting: author, sensor: WV3, release: predictions-benchmarks-u2net-author}
+          - {model: u2net, setting: author, sensor: WV2, release: predictions-benchmarks-u2net-author}
+          - {model: smoc, setting: reference, sensor: QB, release: predictions-benchmarks-u2net-retrain}
+          - {model: smoc, setting: reference, sensor: GF2, release: predictions-benchmarks-u2net-retrain}
+          - {model: smoc, setting: reference, sensor: WV3, release: predictions-benchmarks-u2net-retrain}
+          - {model: smoc, setting: reference, sensor: WV2, release: predictions-benchmarks-u2net-retrain}
+          - {model: smoc_s43, setting: reference, sensor: WV3, release: predictions-benchmarks-u2net-author}
+          - {model: smoc_s43, setting: reference, sensor: WV2, release: predictions-benchmarks-u2net-author}
+          - {model: smoc_s44, setting: reference, sensor: WV3, release: predictions-benchmarks-u2net-author}
+          - {model: smoc_s44, setting: reference, sensor: WV2, release: predictions-benchmarks-u2net-author}
+    env:
+      MODEL: ${{ matrix.model }}
+      SETTING: ${{ matrix.setting }}
+      SENSOR: ${{ matrix.sensor }}
+      RELEASE: ${{ matrix.release }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /SSA-MRN/common/
+            /SSA-MRN/experiments/performance/53_scale_mixed_training/config.json
+            /SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/config.json
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.11'
+      - name: Install scoring dependencies
+        run: python -m pip install --disable-pip-version-check numpy==2.2.6 scipy==1.15.3 h5py==3.14.0 scikit-image==0.25.2
+      - name: Download immutable predictions
+        run: |
+          gh release download "$RELEASE" --repo "$GITHUB_REPOSITORY" --pattern "${MODEL}_${SETTING}_${SENSOR}_rr.zip" --dir pred
+          sha256sum pred/*.zip
+          unzip -q "pred/${MODEL}_${SETTING}_${SENSOR}_rr.zip" -d "pred/$SENSOR"
+      - name: Verify original data and prepare same-array metrics
+        run: python SSA-MRN/common/matlab_reevaluation/benchmark_prepare.py --model "$MODEL" --setting "$SETTING" --sensor "$SENSOR" --key sr --predictions "pred/$SENSOR" --data "$RUNNER_TEMP/pancollection" --out evaluation
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: liangjiandeng/DLPan-Toolbox
+          ref: a34f884af88967580e3ef4f61a89e12fdfe4cda5
+          path: dlpan
+          sparse-checkout: |
+            02-Test-toolbox-for-traditional-and-DL(Matlab)/Quality_Indices
+            02-Test-toolbox-for-traditional-and-DL(Matlab)/Tools
+      - name: Record MATLAB source hashes
+        run: |
+          test "$(git -C dlpan rev-parse HEAD)" = a34f884af88967580e3ef4f61a89e12fdfe4cda5
+          find dlpan -type f -name '*.m' -print0 | sort -z | xargs -0 sha256sum > evaluation/dlpan_sources.sha256
+      - uses: matlab-actions/setup-matlab@f9e43010f1ae678f7cfa0542fe2a4f60f7d1ad8d
+        with:
+          release: R2025b
+          products: Image_Processing_Toolbox
+      - uses: matlab-actions/run-command@bfa857648f4895aa98a446fe41c85e0788421ed5
+        with:
+          command: addpath(fullfile(pwd,'SSA-MRN','common','matlab_reevaluation')); score_suite(fullfile(pwd,'evaluation'),fullfile(pwd,'dlpan','02-Test-toolbox-for-traditional-and-DL(Matlab)'),false,21,false)
+      - name: Compare MATLAB and Python on the identical arrays
+        run: python SSA-MRN/common/matlab_reevaluation/benchmark_report.py case --out evaluation
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: u2net-matlab-${{ matrix.model }}-${{ matrix.setting }}-${{ matrix.sensor }}
+          retention-days: 30
+          if-no-files-found: warn
+          path: |
+            evaluation/*.json
+            evaluation/*.sha256
+  summary:
+    needs: score
+    if: ${{ !cancelled() }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          sparse-checkout: |
+            SSA-MRN/common/matlab_reevaluation
+            SSA-MRN/benchmarks/u2net
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.11'
+      - run: python -m pip install --disable-pip-version-check numpy==2.2.6
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          pattern: u2net-matlab-*
+          path: case-results
+      - run: python SSA-MRN/common/matlab_reevaluation/benchmark_report.py aggregate --input case-results --out summary
+      - run: python SSA-MRN/benchmarks/u2net/compare_matlab.py --input case-results --out summary
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        if: always()
+        with:
+          name: u2net-smoc-matlab-summary
+          path: summary/
+          retention-days: 30
+          if-no-files-found: error

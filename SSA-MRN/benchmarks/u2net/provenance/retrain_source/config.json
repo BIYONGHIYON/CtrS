@@ -1,0 +1,22 @@
+{
+  "name":"U2Net_QBGF2_retrain_v1",
+  "model":"U2Net", "setting":"retrain", "seed":42,
+  "sensors":["QB","GF2"],"bands":4,"dim":32,
+  "epochs":360,"epoch_source":"U2Net original paper section4.1; official train.py default500 is not used",
+  "effective_batch":16,"micro_batch":4,"drop_last_train":true,
+  "precision":"FP32","amp":false,"tf32":false,
+  "loss":"L1 normalized final raw network output, no training clipping",
+  "optimizer":"Adam","lr":0.001,"betas":[0.9,0.999],"eps":1e-8,"weight_decay":0,
+  "scheduler":"StepLR epoch-end, step_size100, gamma0.5",
+  "validation":"all validation samples every epoch; no shuffle/drop; raw untiled 64px network output",
+  "selection":"minimum validation MSE, epoch0 included, earliest tie",
+  "normalization":{"QB":2047,"GF2":1023},
+  "training_inputs":["ms","pan"],"provided_lms":"not used by U2Net; original input preserved",
+  "inference":"official 64px core tile, halo4, clipping[0,1]",
+  "differences_from_official_code":["sole model-source change: ms_dim8->4", "GF2 normalized by1023 rather than upstream hardcoded2047", "micro4 accumulation to effective16 for T4 memory", "validation every epoch, full split, MSE-best instead of periodic weights", "seed42, sampler RNG separated, full resume metadata"],
+  "extra_methods":"none: no EMA, mixed-scale pairs, spectral loss, projection, or band calibration on U2Net",
+  "session_hours":6,"preserve_margin_minutes":15,"checkpoint_every_updates":20,
+  "smoke":{"epochs":2,"train_samples":32,"validation_samples":16,"interrupt_after_updates":1},
+  "source":{"official":"https://github.com/PSRben/U2Net","commit":"32e214c19b4b1dea72258b4da3157258f67612b9","ctrs_commit":"632a0531485f88030b0e77d04a931f4e216715d9"},
+  "metric_note":"common rr_metrics PSNR uses2047 for every sensor. Preserve PSNR_repo_peak2047 and also report GF2 PSNR_sensor_peak1023 with baseline adjusted by the same constant. Never mix their absolute values."
+}
