@@ -167,7 +167,7 @@ SMOC의 개선(원본 대비)이 가장 큰 64×64 영역을 4배 확대했습�
 | MTF-GLP-FS (고전 방법) | 32.709 | 7.792 | 7.373 | 0.835 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 
 <details>
-<summary>전체 비교 표 (PSNR 순, 31행)와 주의점</summary>
+<summary>전체 비교 표 (PSNR 순, 32행)와 주의점</summary>
 
 | 모델 | PSNR ↑ | SAM ↓ | ERGAS ↓ | Q4 ↑ | 출처 |
 |---|---:|---:|---:|---:|---|
@@ -200,6 +200,7 @@ SMOC의 개선(원본 대비)이 가장 큰 64×64 영역을 4배 확대했습�
 | PanMamba | 37.356 | 4.625 | 4.277 | 0.929 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 | TDNet | 37.170 | 4.580 | 4.150 | — | [ABFNet](https://proceedings.mlr.press/v306/wang26hx.html) |
 | PNN | 36.942 | 5.181 | 4.468 | 0.918 | [ADWM](https://arxiv.org/html/2503.13214v1) |
+| U2Net (Ours 환경 재학습, seed42·micro4×누적4) | 36.500 | 4.808 | 4.662 | 0.920 | [실제 MATLAB·학습법 차이](SSA-MRN/benchmarks/u2net/README.md) |
 | MTF-GLP-FS (고전 방법) | 32.709 | 7.792 | 7.373 | 0.835 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 | FusionNet (Ours 환경 재현, 저자 QB 가중치) | 31.485 | 7.372 | 8.291 | 0.805 | [MATLAB 평가](SSA-MRN/benchmarks/fusionnet/README.md) |
 
