@@ -17,7 +17,7 @@
 | [Nano Banana 2.1](nano_banana_2_1/README.md)<br>[센서별 담당](#generative) | 생성형 이미지 모델 · `zeroshot` 학습 없음·단일 실행 · RGB 3밴드 실제 MATLAB 채점 | RGB RR PSNR QB 29.626, GF2 33.114, WV3 29.223, WV2 30.194 dB. 네 센서 각 20장·정답 없는 지표·고정 6장면 이미지 | 평가 완료 |
 | [FusionNet](fusionnet/README.md)<br>[김윤지] | 저자 QB·WV3, WV2 전이 · GF2 직접 학습 seed 42 · 실제 MATLAB 채점 | QB 31.485, GF2 45.547, WV3 32.519 dB; WV2 전이 27.058 dB. 네 센서 고정 6장면 이미지. GF2 peak 1023 기준 39.522 dB | 평가 완료 |
 | [ARConv](arconv/README.md)<br>[김윤지] | CVPR 2025 · `author` 저자 가중치 · 실제 MATLAB 채점 | QB 38.425, GF2 49.385, WV3 39.167 dB. SMOC 3시드 평균 대비 각각 +0.081, -0.067, +0.031 dB; WV2 전이(참고) 29.853 dB(-2.158). 네 데이터셋 고정 6장면 이미지 | 평가 완료 |
-| [U2Net](u2net/README.md)<br>[송준현] | ACM MM 2023 · `author` WV3 공개 가중치 · Kaggle T4 · Python 공통 지표 | WV3 RR PSNR 38.844(SMOC 3시드 평균 대비 -0.292 dB), WV2 전이 30.497(-1.515 dB). 고정6장면 RR 이미지 센서별12개. 실제 MATLAB 미실행 | 평가 완료<br>WV3·WV2만<br>QB·GF2 미평가 |
+| [U2Net](u2net/README.md)<br>[송준현] | ACM MM 2023 · 저자 WV3·WV2 전이, QB·GF2 360에폭 seed42 · micro4×누적4(논문 학습법 차이) · 실제 MATLAB | QB 36.500 (SMOC seed42 −1.868), GF2 48.906 (−0.513), WV3 38.844 (SMOC 3시드 평균 −0.292), WV2 30.497 dB (−1.515). 네 센서 고정6장면·가중치 | 평가 완료 |
 | [CANNet](cannet/README.md)<br>[이병현] | CVPR 2024 · `author` 저자 가중치 재현(재학습 없음) · Kaggle T4 · 실제 MATLAB 채점 | QB RR PSNR 38.261(SMOC 평균 대비 -0.083 dB), GF2 49.274(-0.178), WV3 38.977(-0.159). WV3는 논문값 재현, QB·GF2는 논문보다 조금 낮음 | 평가 완료 |
 
 <a id="generative"></a>

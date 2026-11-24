@@ -1,8 +1,8 @@
 {
   "display_name": "U2Net",
   "evaluator": "송준현",
-  "status": "평가 완료 (WV3·WV2); QB·GF2 미평가",
-  "setting": "author",
+  "status": "평가 완료 (4개 센서, 실제 MATLAB)",
+  "setting": "author + retrain",
   "code_url": "https://github.com/PSRben/U2Net",
   "upstream_commit": "32e214c19b4b1dea72258b4da3157258f67612b9",
   "ctrs_commit": "632a0531485f88030b0e77d04a931f4e216715d9",
@@ -11,13 +11,12 @@
   "weight_sha256": "e5ef136cdf95cf3cd4ad91bc7d2cea16fba9d8070d82eb1165822d458054bef0",
   "training_sensor": "WV3",
   "evaluation_sensors_ready": [
+    "QB",
+    "GF2",
     "WV3",
     "WV2"
   ],
-  "evaluation_sensors_not_ready": [
-    "QB",
-    "GF2"
-  ],
+  "evaluation_sensors_not_ready": [],
   "seed": null,
   "inference": {
     "core_tile": 64,
@@ -29,7 +28,7 @@
     ],
     "scale": 2047
   },
-  "note": "저자 test.py의 타일·clipping을 유지. Full-scene 무타일 C2MS-SP와 추론 방식 차이를 보고할 것. 학습하지 않음.",
+  "note": "U2Net official tile64/halo4/clipping retained; SMOC whole scene K10 projection and WV2 calibration; original C2MS comparison remains archived.",
   "model": "u2net",
   "code": {
     "url": "https://github.com/PSRben/U2Net",
@@ -43,26 +42,102 @@
       "seed": null,
       "weight_filename": "200000_iter.pth",
       "training_epochs": "가중치 학습 이력 미제공, 파일명 200000iter. 논문360epoch와 코드기본500epoch를 해당 가중치의 확정 학습량으로 간주하지 않음"
+    },
+    "retrain": {
+      "name": "U2Net_QBGF2_retrain_v1",
+      "model": "U2Net",
+      "setting": "retrain",
+      "seed": 42,
+      "sensors": [
+        "QB",
+        "GF2"
+      ],
+      "bands": 4,
+      "dim": 32,
+      "epochs": 360,
+      "epoch_source": "U2Net original paper section4.1; official train.py default500 is not used",
+      "effective_batch": 16,
+      "micro_batch": 4,
+      "drop_last_train": true,
+      "precision": "FP32",
+      "amp": false,
+      "tf32": false,
+      "loss": "L1 normalized final raw network output, no training clipping",
+      "optimizer": "Adam",
+      "lr": 0.001,
+      "betas": [
+        0.9,
+        0.999
+      ],
+      "eps": 1e-08,
+      "weight_decay": 0,
+      "scheduler": "StepLR epoch-end, step_size100, gamma0.5",
+      "validation": "all validation samples every epoch; no shuffle/drop; raw untiled 64px network output",
+      "selection": "minimum validation MSE, epoch0 included, earliest tie",
+      "normalization": {
+        "QB": 2047,
+        "GF2": 1023
+      },
+      "training_inputs": [
+        "ms",
+        "pan"
+      ],
+      "provided_lms": "not used by U2Net; original input preserved",
+      "inference": "official 64px core tile, halo4, clipping[0,1]",
+      "differences_from_official_code": [
+        "sole model-source change: ms_dim8->4",
+        "GF2 normalized by1023 rather than upstream hardcoded2047",
+        "micro4 accumulation to effective16 for T4 memory",
+        "validation every epoch, full split, MSE-best instead of periodic weights",
+        "seed42, sampler RNG separated, full resume metadata"
+      ],
+      "extra_methods": "none: no EMA, mixed-scale pairs, spectral loss, projection, or band calibration on U2Net",
+      "session_hours": 6,
+      "preserve_margin_minutes": 15,
+      "checkpoint_every_updates": 20,
+      "smoke": {
+        "epochs": 2,
+        "train_samples": 32,
+        "validation_samples": 16,
+        "interrupt_after_updates": 1
+      },
+      "source": {
+        "official": "https://github.com/PSRben/U2Net",
+        "commit": "32e214c19b4b1dea72258b4da3157258f67612b9",
+        "ctrs_commit": "632a0531485f88030b0e77d04a931f4e216715d9"
+      },
+      "metric_note": "common rr_metrics PSNR uses2047 for every sensor. Preserve PSNR_repo_peak2047 and also report GF2 PSNR_sensor_peak1023 with baseline adjusted by the same constant. Never mix their absolute values.",
+      "recipe_status": "retained experiment with disclosed micro-batch accumulation and validation-selection deviations; not strict paper reproduction",
+      "selected_epochs": {
+        "QB": 201,
+        "GF2": 301
+      }
     }
   },
   "sensors": {
     "author": [
       "WV3",
       "WV2"
+    ],
+    "retrain": [
+      "QB",
+      "GF2"
     ]
   },
-  "pending_sensors": [
-    "QB",
-    "GF2"
-  ],
+  "pending_sensors": [],
   "normalization": {
+    "QB": 2047,
+    "GF2": 1023,
     "WV3": 2047,
     "WV2": 2047
   },
-  "full_four_sensor_complete": false,
+  "full_four_sensor_complete": true,
   "images": {
     "baseline_seed": 42,
-    "candidate_seed": null,
+    "candidate_seed": {
+      "author": null,
+      "retrain": 42
+    },
     "scenes": [
       0,
       1,
@@ -71,8 +146,19 @@
       14,
       17
     ],
-    "zoom": "candidate-favourable 64px GT-error-reduction window"
+    "zoom": "candidate-favourable 64px GT-error-reduction window",
+    "baseline": "SMOC",
+    "numeric_metrics": "image labels Python; official table MATLAB"
   },
-  "numeric_reference": "C2MS-SP three-seed mean",
-  "matlab_evaluated": false
+  "numeric_reference": "actual MATLAB: retrain paired SMOC seed42; author unknown seed vs SMOC seeds42/43/44 mean",
+  "matlab_evaluated": true,
+  "matlab": {
+    "release": "R2025b",
+    "dlpan_commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+    "cut_bounds": false,
+    "dim_cut": 21,
+    "clip_output": false,
+    "psnr_table": "bandmean peak2047, including GF2; sensor peak1023 also retained",
+    "workflow_run": 45298459042
+  }
 }

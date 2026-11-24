@@ -164,6 +164,7 @@ SMOC의 개선(원본 대비)이 가장 큰 64×64 영역을 4배 확대했습�
 | U2Net | 38.065 | 4.642 | 3.987 | 0.931 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
 | FusionMamba | 37.986 | 4.610 | 4.054 | 0.930 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
 | SSA-MRN 원 논문 | 37.665 | 4.848 | 4.073 | 0.924 | [SSA-MRN](https://ieeexplore.ieee.org/abstract/document/10902025) |
+| U2Net (Ours 환경 재학습, seed42·micro4×누적4) | 36.500 | 4.808 | 4.662 | 0.920 | [실제 MATLAB·학습법 차이](SSA-MRN/benchmarks/u2net/README.md) |
 | MTF-GLP-FS (고전 방법) | 32.709 | 7.792 | 7.373 | 0.835 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 
 <details>

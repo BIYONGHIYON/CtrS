@@ -1,0 +1,337 @@
+{
+  "case": {
+    "id": "u2net_retrain_QB",
+    "model": "u2net",
+    "setting": "retrain",
+    "sensor": "QB",
+    "experiment": "benchmark",
+    "bands": "all",
+    "band_indices": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  "rows": [
+    {
+      "protocol": "RR",
+      "scene": 0,
+      "metrics": {
+        "Q": 0.644234599678221,
+        "SAM": 2.7153988157797926,
+        "ERGAS": 4.6189164548566026,
+        "SCC": 0.94855661887357234,
+        "Q2n": 0.64080105436800194,
+        "PSNR_global": 41.062507081039719,
+        "PSNR_bandmean": 41.556926342572922
+      },
+      "seconds": 0.263123
+    },
+    {
+      "protocol": "RR",
+      "scene": 1,
+      "metrics": {
+        "Q": 0.68451443057986561,
+        "SAM": 3.0959185508752514,
+        "ERGAS": 4.2760443679355342,
+        "SCC": 0.94384003968897978,
+        "Q2n": 0.67603552182751825,
+        "PSNR_global": 41.239911350404242,
+        "PSNR_bandmean": 41.905885370464944
+      },
+      "seconds": 0.333728
+    },
+    {
+      "protocol": "RR",
+      "scene": 2,
+      "metrics": {
+        "Q": 0.97342556915414835,
+        "SAM": 3.9582286148019041,
+        "ERGAS": 3.6157474247562096,
+        "SCC": 0.98644149034795547,
+        "Q2n": 0.96682744372491392,
+        "PSNR_global": 36.412143582011296,
+        "PSNR_bandmean": 36.820360098346562
+      },
+      "seconds": 0.398973
+    },
+    {
+      "protocol": "RR",
+      "scene": 3,
+      "metrics": {
+        "Q": 0.959026869657172,
+        "SAM": 3.7577547376033436,
+        "ERGAS": 3.4366914692740993,
+        "SCC": 0.97869950850578913,
+        "Q2n": 0.95653893582834693,
+        "PSNR_global": 36.855316970983651,
+        "PSNR_bandmean": 37.320568442732764
+      },
+      "seconds": 0.45948
+    },
+    {
+      "protocol": "RR",
+      "scene": 4,
+      "metrics": {
+        "Q": 0.96907634930814357,
+        "SAM": 4.5703904805950808,
+        "ERGAS": 3.9136040651056718,
+        "SCC": 0.98453760804386348,
+        "Q2n": 0.96769148393395243,
+        "PSNR_global": 36.988589854206623,
+        "PSNR_bandmean": 37.37906457505396
+      },
+      "seconds": 0.538814
+    },
+    {
+      "protocol": "RR",
+      "scene": 5,
+      "metrics": {
+        "Q": 0.97032502358852879,
+        "SAM": 4.5236332557227623,
+        "ERGAS": 3.9611763756931144,
+        "SCC": 0.98459216459782173,
+        "Q2n": 0.96700841145030469,
+        "PSNR_global": 36.089720376449435,
+        "PSNR_bandmean": 36.42181726491922
+      },
+      "seconds": 0.596019
+    },
+    {
+      "protocol": "RR",
+      "scene": 6,
+      "metrics": {
+        "Q": 0.97190176324533106,
+        "SAM": 4.640452428598187,
+        "ERGAS": 4.1001801104189068,
+        "SCC": 0.98609822935823443,
+        "Q2n": 0.96845982382938822,
+        "PSNR_global": 36.065308545680381,
+        "PSNR_bandmean": 36.328889928528767
+      },
+      "seconds": 0.669191
+    },
+    {
+      "protocol": "RR",
+      "scene": 7,
+      "metrics": {
+        "Q": 0.90728191680078918,
+        "SAM": 4.9136483038037735,
+        "ERGAS": 4.5463732190232111,
+        "SCC": 0.97944976319893717,
+        "Q2n": 0.92640110149785448,
+        "PSNR_global": 37.525806552042944,
+        "PSNR_bandmean": 38.139919860513729
+      },
+      "seconds": 0.728971
+    },
+    {
+      "protocol": "RR",
+      "scene": 8,
+      "metrics": {
+        "Q": 0.96964054077129314,
+        "SAM": 4.972594804185162,
+        "ERGAS": 4.0913037932364027,
+        "SCC": 0.98458345398957614,
+        "Q2n": 0.96796150519226432,
+        "PSNR_global": 36.294063407510379,
+        "PSNR_bandmean": 36.725531175030667
+      },
+      "seconds": 0.787208
+    },
+    {
+      "protocol": "RR",
+      "scene": 9,
+      "metrics": {
+        "Q": 0.96898425377460418,
+        "SAM": 4.5430328330695087,
+        "ERGAS": 3.6683899313219595,
+        "SCC": 0.98632424720461731,
+        "Q2n": 0.96766595376847786,
+        "PSNR_global": 36.284205712648671,
+        "PSNR_bandmean": 36.626199547849879
+      },
+      "seconds": 0.843258
+    },
+    {
+      "protocol": "RR",
+      "scene": 10,
+      "metrics": {
+        "Q": 0.9232380310852536,
+        "SAM": 6.15103925582957,
+        "ERGAS": 7.2409732209999449,
+        "SCC": 0.94396271274860311,
+        "Q2n": 0.91471298424019165,
+        "PSNR_global": 31.352229383019832,
+        "PSNR_bandmean": 31.7950911290539
+      },
+      "seconds": 0.898455
+    },
+    {
+      "protocol": "RR",
+      "scene": 11,
+      "metrics": {
+        "Q": 0.969989849828584,
+        "SAM": 4.9414418784135181,
+        "ERGAS": 4.213779713879986,
+        "SCC": 0.98410688829207138,
+        "Q2n": 0.96739959313886714,
+        "PSNR_global": 35.351717168012961,
+        "PSNR_bandmean": 35.646994834668924
+      },
+      "seconds": 0.977949
+    },
+    {
+      "protocol": "RR",
+      "scene": 12,
+      "metrics": {
+        "Q": 0.96297442855547,
+        "SAM": 5.1326991110599591,
+        "ERGAS": 4.6757703905119508,
+        "SCC": 0.978155148904698,
+        "Q2n": 0.95608617419005215,
+        "PSNR_global": 36.103923032453189,
+        "PSNR_bandmean": 36.573307740756654
+      },
+      "seconds": 1.038913
+    },
+    {
+      "protocol": "RR",
+      "scene": 13,
+      "metrics": {
+        "Q": 0.96624995866402374,
+        "SAM": 5.2016772496762558,
+        "ERGAS": 4.8807312477864118,
+        "SCC": 0.97629992592551129,
+        "Q2n": 0.95787520104598123,
+        "PSNR_global": 35.033454222760625,
+        "PSNR_bandmean": 35.217550743808566
+      },
+      "seconds": 1.095036
+    },
+    {
+      "protocol": "RR",
+      "scene": 14,
+      "metrics": {
+        "Q": 0.93489183153364286,
+        "SAM": 5.1065109231583419,
+        "ERGAS": 5.49674358011312,
+        "SCC": 0.9560460780993667,
+        "Q2n": 0.93008731855681359,
+        "PSNR_global": 34.211058754410892,
+        "PSNR_bandmean": 34.670770545145643
+      },
+      "seconds": 1.150672
+    },
+    {
+      "protocol": "RR",
+      "scene": 15,
+      "metrics": {
+        "Q": 0.94210942113369167,
+        "SAM": 5.6421535907705662,
+        "ERGAS": 6.17302945861848,
+        "SCC": 0.96054190917285021,
+        "Q2n": 0.9356776883037341,
+        "PSNR_global": 33.525142219505874,
+        "PSNR_bandmean": 33.9936780721732
+      },
+      "seconds": 1.228931
+    },
+    {
+      "protocol": "RR",
+      "scene": 16,
+      "metrics": {
+        "Q": 0.96125009346061951,
+        "SAM": 5.3250945210598042,
+        "ERGAS": 4.1934750680214155,
+        "SCC": 0.97997548121165234,
+        "Q2n": 0.95856156482964794,
+        "PSNR_global": 36.428668982834225,
+        "PSNR_bandmean": 36.907516779637291
+      },
+      "seconds": 1.313131
+    },
+    {
+      "protocol": "RR",
+      "scene": 17,
+      "metrics": {
+        "Q": 0.91648327995218293,
+        "SAM": 4.7896425727248513,
+        "ERGAS": 4.7518603647804447,
+        "SCC": 0.96327093365438388,
+        "Q2n": 0.9121196384715069,
+        "PSNR_global": 36.154545045819546,
+        "PSNR_bandmean": 36.841219271749324
+      },
+      "seconds": 1.381613
+    },
+    {
+      "protocol": "RR",
+      "scene": 18,
+      "metrics": {
+        "Q": 0.92031398986206958,
+        "SAM": 6.2912997998535554,
+        "ERGAS": 5.5792958826370693,
+        "SCC": 0.95977245714617254,
+        "Q2n": 0.92331619467058734,
+        "PSNR_global": 33.721291858423029,
+        "PSNR_bandmean": 34.346266477815227
+      },
+      "seconds": 1.437539
+    },
+    {
+      "protocol": "RR",
+      "scene": 19,
+      "metrics": {
+        "Q": 0.94791676157560223,
+        "SAM": 5.8779235144825535,
+        "ERGAS": 5.8126733561492783,
+        "SCC": 0.96911335655852637,
+        "Q2n": 0.94688733129047642,
+        "PSNR_global": 34.313336267358437,
+        "PSNR_bandmean": 34.782689940051256
+      },
+      "seconds": 1.514791
+    }
+  ],
+  "matlab_version": "25.2.0.3360999 (R2025b) Update 7",
+  "matlab_release": "2025b",
+  "products": [
+    {
+      "Name": "Image Processing Toolbox",
+      "Version": "25.2",
+      "Release": "(R2025b)",
+      "Date": "28-Jul-2025"
+    },
+    {
+      "Name": "MATLAB",
+      "Version": "25.2",
+      "Release": "(R2025b)",
+      "Date": "28-Jul-2025"
+    }
+  ],
+  "resolved_functions": {
+    "indexes_evaluation": "/home/runner/work/CtrS/CtrS/dlpan/02-Test-toolbox-for-traditional-and-DL(Matlab)/Tools/indexes_evaluation.m",
+    "indexes_evaluation_FS": "/home/runner/work/CtrS/CtrS/dlpan/02-Test-toolbox-for-traditional-and-DL(Matlab)/Tools/indexes_evaluation_FS.m",
+    "q2n": "/home/runner/work/CtrS/CtrS/dlpan/02-Test-toolbox-for-traditional-and-DL(Matlab)/Quality_Indices/q2n.m",
+    "SAM": "/home/runner/work/CtrS/CtrS/dlpan/02-Test-toolbox-for-traditional-and-DL(Matlab)/Quality_Indices/SAM.m",
+    "ERGAS": "/home/runner/work/CtrS/CtrS/dlpan/02-Test-toolbox-for-traditional-and-DL(Matlab)/Quality_Indices/ERGAS.m",
+    "SCC": "/home/runner/work/CtrS/CtrS/dlpan/02-Test-toolbox-for-traditional-and-DL(Matlab)/Quality_Indices/SCC.m",
+    "QNR": "/home/runner/work/CtrS/CtrS/dlpan/02-Test-toolbox-for-traditional-and-DL(Matlab)/Quality_Indices/QNR.m"
+  },
+  "dlpan_commit": "a34f884af88967580e3ef4f61a89e12fdfe4cda5",
+  "profile": {
+    "cut_bounds": false,
+    "dim_cut": 21,
+    "clip_output": false,
+    "clipping_upper_if_enabled": 2048,
+    "peak": 2047,
+    "bits": 11,
+    "block": 32,
+    "ratio": 4,
+    "QNR_variant": "DLPan Toolbox 1.0 flag_orig_paper=0 p=q=alpha=beta=1"
+  },
+  "psnr_note": "PSNR is computed in this MATLAB wrapper; DLPan indexes_evaluation returns Q, SAM, ERGAS, SCC, Q2n, not PSNR",
+  "seconds": 1.56263
+}

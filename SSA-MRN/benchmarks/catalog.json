@@ -65,22 +65,27 @@
       "license": "GPL-3.0 (official code; author weight distributed in the same repository)",
       "evaluator": "송준현",
       "settings": [
-        "author"
+        "author",
+        "retrain"
       ],
-      "epochs": "재학습 없음; WV3 공개 200000_iter.pth",
+      "epochs": "QB·GF2 360, seed42, micro4 accumulation4; author training history unknown",
       "sensors": {
         "author": [
           "WV3",
           "WV2"
+        ],
+        "retrain": [
+          "QB",
+          "GF2"
         ]
       },
-      "pending_sensors": [
-        "QB",
-        "GF2"
-      ],
+      "pending_sensors": [],
       "full_four_sensor_complete": false,
       "seeds": {
-        "author": null
+        "author": null,
+        "retrain": [
+          42
+        ]
       },
       "status": "평가 완료",
       "status_scope": "WV3·WV2만, QB·GF2 미평가",
@@ -110,33 +115,65 @@
       },
       "report": "SSA-MRN/benchmarks/u2net/README.md",
       "config": "SSA-MRN/benchmarks/u2net/config.json",
-      "summary": "SSA-MRN/benchmarks/u2net/results/summary.json",
+      "summary": "SSA-MRN/benchmarks/u2net/results/summary_smoc.json",
       "manifest": "SSA-MRN/benchmarks/u2net/manifest.json",
-      "last_checked": "2026-11-17",
+      "last_checked": "2026-11-24",
       "vs_smoc": {
+        "retrain_QB_s42": {
+          "paired_seeds": [
+            42
+          ],
+          "difference": {
+            "PSNR": -1.8676303937108898,
+            "SAM": 0.2894678645821296,
+            "ERGAS": 0.9711177060044167,
+            "SCC": -0.010868325236807919,
+            "Q2n": -0.015061525061915604,
+            "Q": -0.012325806831406494
+          },
+          "note": "실제 MATLAB; 같은 seed42"
+        },
+        "retrain_GF2_s42": {
+          "paired_seeds": [
+            42
+          ],
+          "difference": {
+            "PSNR": -0.5126233545030985,
+            "SAM": 0.016058293803384194,
+            "ERGAS": 0.032232150082563193,
+            "SCC": -0.00020668090431841257,
+            "Q2n": -0.0016748954337693078,
+            "Q": -0.000130343182107584
+          },
+          "note": "실제 MATLAB; 같은 seed42"
+        },
         "author_WV3": {
           "paired_seeds": [],
           "difference": {
-            "PSNR": -0.2918016453987633,
-            "SAM": 0.037836677852979506,
-            "ERGAS": 0.07889974994176052,
-            "SCC": -0.000638610635450676,
-            "Q2n": -5.233791668357579e-05
+            "PSNR": -0.29180160026289315,
+            "SAM": 0.0378366587977661,
+            "ERGAS": 0.07889974219332663,
+            "SCC": -0.0006386100661699423,
+            "Q2n": -5.582766927125782e-05,
+            "Q": -0.00022762071307236287
           },
-          "note": "저자 시드 없음: SMOC 3시드 평균과의 차이"
+          "note": "실제 MATLAB; 저자 시드 미상, SMOC 3시드 평균 비교"
         },
         "author_WV2": {
           "paired_seeds": [],
           "difference": {
-            "PSNR": -1.5145700943511144,
-            "SAM": 0.3078016245109412,
-            "ERGAS": 0.6201371407571048,
-            "SCC": -0.012327460069993967,
-            "Q2n": -0.038064183236486415
+            "PSNR": -1.5145698017526357,
+            "SAM": 0.30780152804832195,
+            "ERGAS": 0.620137019196418,
+            "SCC": -0.012327456393034564,
+            "Q2n": -0.037957582480891316,
+            "Q": -0.029626702337954725
           },
-          "note": "저자 시드 없음: SMOC 3시드 평균과의 차이"
+          "note": "실제 MATLAB; 저자 시드 미상, SMOC 3시드 평균 비교"
         }
-      }
+      },
+      "matlab_evaluated": true,
+      "recipe_qualification": "micro4 accumulation4 effective16; retained completed experiment, not strict paper recipe"
     },
     "cannet": {
       "display_name": "CANNet",

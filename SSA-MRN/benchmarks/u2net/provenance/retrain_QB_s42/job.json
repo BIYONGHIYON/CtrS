@@ -1,0 +1,170 @@
+{
+  "sensor": "QB",
+  "folder": "/kaggle/working/U2Net_QBGF2_retrain_v1/train/QB",
+  "cache": "/kaggle/working/U2Net_QBGF2_retrain_v1/.cache",
+  "input": "/kaggle/input",
+  "physical_gpu": 0,
+  "device": "cuda:0",
+  "config": {
+    "name": "U2Net_QBGF2_retrain_v1",
+    "model": "U2Net",
+    "setting": "retrain",
+    "seed": 42,
+    "sensors": [
+      "QB",
+      "GF2"
+    ],
+    "bands": 4,
+    "dim": 32,
+    "epochs": 360,
+    "epoch_source": "U2Net original paper section4.1; official train.py default500 is not used",
+    "effective_batch": 16,
+    "micro_batch": 4,
+    "drop_last_train": true,
+    "precision": "FP32",
+    "amp": false,
+    "tf32": false,
+    "loss": "L1 normalized final raw network output, no training clipping",
+    "optimizer": "Adam",
+    "lr": 0.001,
+    "betas": [
+      0.9,
+      0.999
+    ],
+    "eps": 1e-08,
+    "weight_decay": 0,
+    "scheduler": "StepLR epoch-end, step_size100, gamma0.5",
+    "validation": "all validation samples every epoch; no shuffle/drop; raw untiled 64px network output",
+    "selection": "minimum validation MSE, epoch0 included, earliest tie",
+    "normalization": {
+      "QB": 2047,
+      "GF2": 1023
+    },
+    "training_inputs": [
+      "ms",
+      "pan"
+    ],
+    "provided_lms": "not used by U2Net; original input preserved",
+    "inference": "official 64px core tile, halo4, clipping[0,1]",
+    "differences_from_official_code": [
+      "sole model-source change: ms_dim8->4",
+      "GF2 normalized by1023 rather than upstream hardcoded2047",
+      "micro4 accumulation to effective16 for T4 memory",
+      "validation every epoch, full split, MSE-best instead of periodic weights",
+      "seed42, sampler RNG separated, full resume metadata"
+    ],
+    "extra_methods": "none: no EMA, mixed-scale pairs, spectral loss, projection, or band calibration on U2Net",
+    "session_hours": 6,
+    "preserve_margin_minutes": 15,
+    "checkpoint_every_updates": 20,
+    "smoke": {
+      "epochs": 2,
+      "train_samples": 32,
+      "validation_samples": 16,
+      "interrupt_after_updates": 1
+    },
+    "source": {
+      "official": "https://github.com/PSRben/U2Net",
+      "commit": "32e214c19b4b1dea72258b4da3157258f67612b9",
+      "ctrs_commit": "632a0531485f88030b0e77d04a931f4e216715d9"
+    },
+    "metric_note": "common rr_metrics PSNR uses2047 for every sensor. Preserve PSNR_repo_peak2047 and also report GF2 PSNR_sensor_peak1023 with baseline adjusted by the same constant. Never mix their absolute values."
+  },
+  "proof": {
+    "data": {
+      "train": {
+        "source_sha256": "7d45e191cd03f3df12eb76b5f27624eaba1b464970788eb61723c3574dd14371",
+        "scale": 2047,
+        "samples": 17139,
+        "shapes": {
+          "gt": [
+            17139,
+            4,
+            64,
+            64
+          ],
+          "pan": [
+            17139,
+            1,
+            64,
+            64
+          ],
+          "ms": [
+            17139,
+            4,
+            16,
+            16
+          ]
+        },
+        "raw_ranges": {
+          "gt": [
+            0.0,
+            2047.0
+          ],
+          "pan": [
+            0.0,
+            1917.2325439453125
+          ],
+          "ms": [
+            -9.118218180503845e-09,
+            1510.2332763671875
+          ]
+        },
+        "normalization": "FP32 DN/scale; no clipping",
+        "npy_sha256": {
+          "gt": "3c792adcfae16f074c81a8fcd82679628081f497e9dc9a586fc866c25b80a1d0",
+          "pan": "2d27eb539ebdd19c6bc58a33c0291d413c51f1d8d5711f7e38b66f44e97b4d39",
+          "ms": "1fde47d03e8a22b605f6a93aa62591ce83ea4b9763da2c241cc783808ac633c3"
+        }
+      },
+      "val": {
+        "source_sha256": "b307bcbb0d69056278a8a0b4970f1cd1b58dfff19bbe949be224e106f1a18470",
+        "scale": 2047,
+        "samples": 1905,
+        "shapes": {
+          "gt": [
+            1905,
+            4,
+            64,
+            64
+          ],
+          "pan": [
+            1905,
+            1,
+            64,
+            64
+          ],
+          "ms": [
+            1905,
+            4,
+            16,
+            16
+          ]
+        },
+        "raw_ranges": {
+          "gt": [
+            0.0,
+            2047.0
+          ],
+          "pan": [
+            0.0,
+            1889.7945556640625
+          ],
+          "ms": [
+            -7.351043773695665e-09,
+            1509.958251953125
+          ]
+        },
+        "normalization": "FP32 DN/scale; no clipping",
+        "npy_sha256": {
+          "gt": "baf3cb6c0ff76d95a8ca49d8bd360296f827af6ed23138275da7fb6c822e1b01",
+          "pan": "95d66b9e94a75bfcbec9c4de62ec0062a70344fe184c1297432df3cee22700a7",
+          "ms": "386b1bb30f9986131cc12bb0122f63a8f099f6fe6b27ec149d5924b850593bfe"
+        }
+      }
+    },
+    "source_sha256": "1c20fb7ad0a2d05b33ff87f10e65d487ad30ea4f893cbb31305e2d3a32faa1f0"
+  },
+  "deadline": 1795498805.343277,
+  "stop_file": "/kaggle/working/U2Net_QBGF2_retrain_v1/train/stop.request"
+}

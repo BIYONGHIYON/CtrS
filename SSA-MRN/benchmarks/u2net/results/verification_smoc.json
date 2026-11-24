@@ -1,0 +1,56 @@
+{
+  "archive_crc": true,
+  "original_artifact_hashes": 116,
+  "original_source_hashes": 31,
+  "training": {
+    "QB": {
+      "epochs": 360,
+      "best_epoch": 201,
+      "updates": 385560,
+      "history_contiguous": true
+    },
+    "GF2": {
+      "epochs": 360,
+      "best_epoch": 301,
+      "updates": 445680,
+      "history_contiguous": true
+    }
+  },
+  "actual_matlab_cases": 12,
+  "actual_matlab_rr_scene_evaluations": 240,
+  "matlab_scene_delta_means_match": true,
+  "fixed_scene_pngs": 48,
+  "original_c2ms_report_verbatim_preserved": true,
+  "adapter_output_equivalence": {
+    "QB": {
+      "equal": true,
+      "max_abs": 0.0,
+      "parameters": 632788
+    },
+    "GF2": {
+      "equal": true,
+      "max_abs": 0.0,
+      "parameters": 632788
+    },
+    "WV3": {
+      "equal": true,
+      "max_abs": 0.0,
+      "parameters": 642008
+    }
+  },
+  "index_check": "PASS: 105 experiments",
+  "training_recipe_status": "retained micro4 accumulation4 effective16; not strict current paper-recipe reproduction",
+  "FR": "original Python only, not rerun in actual MATLAB",
+  "viewer_data_modified": false,
+  "release_download_validation": {
+    "assets": 21,
+    "sha256_and_bytes": "PASS",
+    "command": "python SSA-MRN/common/verify.py --benchmark u2net --releases"
+  },
+  "uploaded_binary_validation": {
+    "verified_git_blobs": 51,
+    "best_weights": 2,
+    "new_pngs": 49,
+    "remote_commit": "9129be5ab957a6731de8dc5dba4b93329366cd87"
+  }
+}
