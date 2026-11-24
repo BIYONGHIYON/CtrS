@@ -5,9 +5,11 @@ c2ms_sp       C2MS-SP, the previous baseline (2026-11-14 to 2026-11-22) (experim
               observation-consistency projection (conjugate gradient stopped at 10 iterations, experiments 66/81)
 c2ms_sp_lite  C2MS-SP-Lite (experiment 83): the C2MS-SP weights factorized (backbone rank 32, W2 branch 1x1-depthwise-1x1, CP rank 384) and
               fine-tuned for 10 epochs, followed by the same projection
-smoc          SMOC, the baseline since 2026-11-23 (experiment 90): the 89 recipe (W2 2x2 convolutions, lambda 1.2, c 0.25) with every fixed
+smoc          SMOC, the final model since 2026-11-24 (experiment 90): the 89 recipe (W2 2x2 convolutions, lambda 1.2, c 0.25) with every fixed
               resampling inside the network matched to the dataset (variant C: sensor MTF blur + decimation, 23-tap interpolation; the
-              training sensor's MTF), trained full-size for 150 epochs (CF), followed by the same projection
+              training sensor's MTF), trained full-size at 1e-4 for 120 epochs, factorized (83 K2) and decayed for 30 epochs (CK), followed by
+              the same projection
+smoc_full     the full-size SMOC (CF, 150 epochs without factorization), the final model on 2026-11-23, kept as a record
 
 The projection always uses the Wald operator of the sensor the image comes from. For a sensor the model was not trained on (WV2 with the
 WV3 weights), SMOC, C2MS-SP and C2MS-SP-Lite add the per-band sensor calibration of experiment 82 before the projection. It is never applied
@@ -76,20 +78,29 @@ def c2ms_sp_lite(bands, seed, sensor, calibrate_from=None, train=None):
     return Wrapped(_m('m83').Model('K2', bands, seed), sensor, project=True, calibrate_from=calibrate_from)
 
 
-def smoc(bands, seed, sensor, calibrate_from=None, train=None):
+def _m90(arm, bands, seed, sensor, calibrate_from, train):
     m90 = _m('m90'); m90.OUT_IMPL['value'] = 'convT'  # the resampling kernels follow the training sensor (WV3 kernels on the WV2 transfer)
-    return Wrapped(m90.Model('CF', bands, seed, sensor=train or sensor), sensor, project=True, calibrate_from=calibrate_from)
+    return Wrapped(m90.Model(arm, bands, seed, sensor=train or sensor), sensor, project=True, calibrate_from=calibrate_from)
 
 
-FACTORIES = {'original': original, 'c2ms_sp': c2ms_sp, 'c2ms_sp_lite': c2ms_sp_lite, 'smoc': smoc}
-LABELS = {'original': '원본 SSA-MRN', 'c2ms_sp': 'C2MS-SP', 'c2ms_sp_lite': 'C2MS-SP-Lite', 'smoc': 'SMOC'}
+def smoc(bands, seed, sensor, calibrate_from=None, train=None):
+    return _m90('CK', bands, seed, sensor, calibrate_from, train)
+
+
+def smoc_full(bands, seed, sensor, calibrate_from=None, train=None):
+    return _m90('CF', bands, seed, sensor, calibrate_from, train)
+
+
+FACTORIES = {'original': original, 'c2ms_sp': c2ms_sp, 'c2ms_sp_lite': c2ms_sp_lite, 'smoc': smoc, 'smoc_full': smoc_full}
+LABELS = {'original': '원본 SSA-MRN', 'c2ms_sp': 'C2MS-SP', 'c2ms_sp_lite': 'C2MS-SP-Lite', 'smoc': 'SMOC', 'smoc_full': 'SMOC (분해 전)'}
 CHECKPOINTS = {
     'original': {'QB': 'experiments/performance/43_normalized_parallel_capacity/checkpoints/C0_QB_s{seed}/best.pt',
                  'GF2': 'experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_GF2_s{seed}/best.pt',
                  'WV3': 'experiments/performance/54_multi_sensor_scale_mixed_training/checkpoints/C0_WV3_s{seed}/best.pt'},
     'c2ms_sp': {s: f'experiments/performance/65_l1_spectral_loss/checkpoints/C2MS_L1S_{s}_s{{seed}}/best.pt' for s in ('QB', 'GF2', 'WV3')},
     'c2ms_sp_lite': {s: f'experiments/performance/83_factorized_c2ms_finetuning/checkpoints/K2_{s}_s{{seed}}/best.pt' for s in ('QB', 'GF2', 'WV3')},
-    'smoc': {s: f'experiments/performance/90_dataset_matched_internal_resampling/checkpoints/{s}_CF_s{{seed}}/best.pt' for s in ('QB', 'GF2', 'WV3')},
+    'smoc': {s: f'experiments/performance/90_dataset_matched_internal_resampling/checkpoints/{s}_CK_s{{seed}}/best.pt' for s in ('QB', 'GF2', 'WV3')},
+    'smoc_full': {s: f'experiments/performance/90_dataset_matched_internal_resampling/checkpoints/{s}_CF_s{{seed}}/best.pt' for s in ('QB', 'GF2', 'WV3')},
 }
 TRAINING_SENSOR = {'QB': 'QB', 'GF2': 'GF2', 'WV3': 'WV3', 'WV2': 'WV3'}  # WV2 has no training data: the WV3 weights are applied (transfer)
 

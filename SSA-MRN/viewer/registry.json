@@ -191,7 +191,7 @@
       "role": "개선 모델",
       "group": "baseline",
       "seed": 42,
-      "description": "원본 SSA-MRN에 W2 병렬 가지(2×2 합성곱 입·출력), 데이터셋 방식 축소·확대(센서 MTF 블러 + 솎음, 23탭 보간), 축척 혼합 학습(L1 + 1.2 × 분광 손실, 거친 쌍 0.25, 원래 크기 150에폭)을 더한 성능 90번 가중치에 관측 일치 사영(공액 기울기법 10회)을 붙인 모델입니다. WV2에는 WV3 가중치(WV3 MTF)에 성능 82번 밴드별 센서 보정을 더해 적용합니다.",
+      "description": "원본 SSA-MRN에 W2 병렬 가지(2×2 합성곱 입·출력), 데이터셋 방식 축소·확대(센서 MTF 블러 + 솎음, 23탭 보간), 축척 혼합 학습(L1 + 1.2 × 분광 손실, 거친 쌍 0.25)을 더해 원래 크기로 120에폭 학습한 뒤 합성곱을 분해(K2)하고 30에폭 감쇠한 성능 90번 가중치(연산 66%)에 관측 일치 사영(공액 기울기법 10회)을 붙인 모델입니다. WV2에는 WV3 가중치(WV3 MTF)에 성능 82번 밴드별 센서 보정을 더해 적용합니다.",
       "module": "common/baseline_models.py",
       "factory": "smoc",
       "args": [
@@ -206,10 +206,10 @@
         }
       },
       "checkpoints": {
-        "QB": "experiments/performance/90_dataset_matched_internal_resampling/checkpoints/QB_CF_s42/best.pt",
-        "GF2": "experiments/performance/90_dataset_matched_internal_resampling/checkpoints/GF2_CF_s42/best.pt",
-        "WV3": "experiments/performance/90_dataset_matched_internal_resampling/checkpoints/WV3_CF_s42/best.pt",
-        "WV2": "experiments/performance/90_dataset_matched_internal_resampling/checkpoints/WV3_CF_s42/best.pt"
+        "QB": "experiments/performance/90_dataset_matched_internal_resampling/checkpoints/QB_CK_s42/best.pt",
+        "GF2": "experiments/performance/90_dataset_matched_internal_resampling/checkpoints/GF2_CK_s42/best.pt",
+        "WV3": "experiments/performance/90_dataset_matched_internal_resampling/checkpoints/WV3_CK_s42/best.pt",
+        "WV2": "experiments/performance/90_dataset_matched_internal_resampling/checkpoints/WV3_CK_s42/best.pt"
       }
     },
     {
