@@ -10,21 +10,22 @@
 
 ## 최종 개선 모델
 
-**SMOC**는 이 연구의 최종 개선 모델로, 원본 SSA-MRN에 네 가지를 더한 모델입니다(구조도의 주황색).
+**SMOC**는 이 연구의 최종 개선 모델로, 원본 SSA-MRN에 다섯 가지를 더한 모델입니다(구조도의 주황색).
 
 1. **W2 병렬 가지:** 초기 특징에서 갈라지는 절반 해상도 가지. 입·출력은 2×2 합성곱입니다.
 2. **데이터셋 방식 축소·확대:** 모델 안의 고정 축소·확대를 데이터를 만든 연산(센서 MTF 블러 + 솎음, 23탭 보간)으로 맞췄습니다. 학습할 파라미터는 늘지 않습니다.
-3. **축척 혼합 학습:** 원래 학습 쌍과 2배 거친 학습 쌍(가중치 0.25)을 섞고, 손실은 L1 + 1.2 × 분광 손실입니다. 학습률 1e-4로 120에폭 뒤 30에폭 감쇠합니다.
-4. **관측 일치 사영:** 출력을 다시 관측했을 때 입력 MS와 맞도록 추론 뒤에 고치는 단계(파라미터 없음)
+3. **축척 혼합 학습:** 원래 학습 쌍과 2배 거친 학습 쌍(가중치 0.25)을 섞고, 손실은 L1 + 1.2 × 분광 손실입니다.
+4. **분해 후 감쇠:** 원래 크기로 학습률 1e-4에서 120에폭 학습한 뒤, backbone과 W2의 3×3 합성곱을 가벼운 합성곱 조합으로 분해(K2)하고 30에폭 감쇠합니다. 분해하지 않은 모델과 성능은 같고 연산은 66%입니다.
+5. **관측 일치 사영:** 출력을 다시 관측했을 때 입력 MS와 맞도록 추론 뒤에 고치는 단계(파라미터 없음)
 
-<p align="center"><img src="SSA-MRN/docs/images/ssa-mrn-smoc.png" alt="SMOC 전체 구조도: (a) PAN·LMS·LRPAN 초기 특징(PAN MTF 축소와 23탭 확대)과 원본 ResBlock×4 backbone, 2×2 합성곱 입·출력의 W2 병렬 가지, (b) MTF 축소와 23탭 확대를 쓰는 전체·1/2·1/4 크기의 밴드별 SSAI 융합, (c) 23탭 확대로 단계적 복원과 출력 뒤 관측 일치 사영, (d) SSAI 블록 내부, (e) λ 1.2·c 0.25의 L1·분광 손실 축척 혼합 학습" width="100%" /></p>
+<p align="center"><img src="SSA-MRN/docs/images/ssa-mrn-smoc.png" alt="SMOC 전체 구조도: (a) PAN·LMS·LRPAN 초기 특징(PAN MTF 축소와 23탭 확대)과 랭크 32로 분해한 원본 ResBlock×4 backbone, 2×2 합성곱 입·출력과 1×1·깊이별 3×3·1×1로 분해한 ResBlock의 W2 병렬 가지, (b) MTF 축소와 23탭 확대를 쓰는 전체·1/2·1/4 크기의 밴드별 SSAI 융합, (c) 23탭 확대로 단계적 복원과 출력 뒤 관측 일치 사영, (d) SSAI 블록 내부, (e) λ 1.2·c 0.25의 L1·분광 손실 축척 혼합 학습" width="100%" /></p>
 
 | 항목 | SMOC |
 |---|---|
-| 구성 | [90번](SSA-MRN/experiments/performance/90_dataset_matched_internal_resampling/README.md) 가중치 + 사영(공액 기울기법 10회) |
-| 파라미터(실사용) | 2,735,418개 (원본 426,654개) |
-| 연산(256²) | 59.7 GMAC (고정 축소·확대 필터 제외) |
-| 근거 | 원본 대비 3시드 RR PSNR QB +0.915, GF2 +2.902, WV3 +1.600 dB, 2026-11-23 최종 확정(150에폭) |
+| 구성 | [90번](SSA-MRN/experiments/performance/90_dataset_matched_internal_resampling/README.md) `CK` 가중치 + 사영(공액 기울기법 10회) |
+| 파라미터(실사용) | 1,873,210개 (분해 전 2,735,418개, 원본 426,654개) |
+| 연산(256²) | 39.1 GMAC (분해 전 59.6 GMAC의 66%, 고정 축소·확대 필터 제외) |
+| 근거 | 원본 대비 3시드 RR PSNR QB +0.935, GF2 +2.925, WV3 +1.571 dB, 분해 전 모델과 0.04 dB 안에서 같음, 2026-11-24 최종 확정 |
 
 학습하지 않은 센서에 쓸 때는 입력 밴드의 밝기 비율을 학습 센서에 맞추는 **밴드별 센서 보정**([82번](SSA-MRN/experiments/performance/82_cross_sensor_band_calibration/README.md))을 함께 붙입니다. 모델 안의 MTF 축소는 학습 센서의 MTF를 그대로 씁니다.
 
@@ -46,9 +47,9 @@
 | 8 | [성능 83번](SSA-MRN/experiments/performance/83_factorized_c2ms_finetuning/README.md) | 학습된 가중치를 **분해 + 짧은 미세조정**(**C2MS-SP-Lite**) | 연산 66%로 세 센서 모두 C2MS 대비 3시드 개선, C2MS-SP와 0.01-0.03 dB 차이 |
 | 9 | [성능 88번](SSA-MRN/experiments/performance/88_factorization_at_decay_start/README.md) | 학습률을 120에폭 고정한 뒤 감쇠 구간을 분해 모델로 학습(K2D) | C2MS-SP 대비 QB +0.036, GF2 +0.154, WV3 +0.310 dB(1시드) |
 | 10 | [성능 89번](SSA-MRN/experiments/performance/89_spectral_coarse_loss_weights/README.md) | 분광 손실 계수 λ와 2배 거친 쌍 계수 c를 다시 찾고, W2 입·출력을 2×2 합성곱으로 | λ = 1.2, c = 0.25. 88번 대비 GF2·WV3 개선, QB 개선 없음(1시드) |
-| 11 | [성능 90번](SSA-MRN/experiments/performance/90_dataset_matched_internal_resampling/README.md) | 모델 안의 bilinear 축소·확대를 데이터셋 방식(MTF 블러 + 솎음, 23탭 보간)으로 바꾸고 분해 없이 150에폭 학습(**SMOC**) | C2MS-SP 대비 3시드 GF2 +0.667, WV3 +0.463 dB, QB −0.029 dB(부분 개선). 300에폭으로 늘려도 test가 좋아지지 않아 150에폭으로 → **최종 개선 모델 확정(2026-11-23)** |
+| 11 | [성능 90번](SSA-MRN/experiments/performance/90_dataset_matched_internal_resampling/README.md) | 모델 안의 bilinear 축소·확대를 데이터셋 방식(MTF 블러 + 솎음, 23탭 보간)으로 바꾸고 120에폭 뒤 분해해 30에폭 감쇠(**SMOC**) | C2MS-SP 대비 3시드 GF2 +0.690, WV3 +0.434 dB, QB −0.009 dB(부분 개선). 분해하지 않은 150에폭 모델과 0.04 dB 안에서 같고 연산 66%, 300에폭으로 늘려도 test가 좋아지지 않음 → **최종 개선 모델 확정(2026-11-24)** |
 
-연구 중 비교 기준(기준 모델)은 원본 → F1([성능 49번](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/README.md), 2026-10-20) → C2MS(2026-10-21) → C2MS-SP(2026-11-14) 순서로 바뀌었고, 최종 개선 모델은 SMOC(2026-11-23)입니다. C2MS-SP 구조도는 [ssa-mrn-c2ms.png](SSA-MRN/docs/images/ssa-mrn-c2ms.png)에 남겼습니다.
+연구 중 비교 기준(기준 모델)은 원본 → F1([성능 49번](SSA-MRN/experiments/performance/49_observation_refinement_seed_repeat/README.md), 2026-10-20) → C2MS(2026-10-21) → C2MS-SP(2026-11-14) 순서로 바뀌었고, 최종 개선 모델은 SMOC(2026-11-24, 분해 전 모델은 2026-11-23)입니다. C2MS-SP 구조도는 [ssa-mrn-c2ms.png](SSA-MRN/docs/images/ssa-mrn-c2ms.png)에 남겼습니다.
 
 </details>
 
@@ -61,13 +62,13 @@ test 20장, 같은 시드(42·43·44) 원본과 짝지은 3시드 평균입니�
 | 데이터셋 | 모델 | RR PSNR (dB) | SAM (°) | ERGAS | FR QNR / Dλ / Ds (참고) | 판정 |
 |---|---|---:|---:|---:|:---:|:---:|
 | QB | 원본 SSA-MRN | 37.429 | 4.941 | 4.124 | 0.914 / 0.044 / 0.045 | |
-|  | **SMOC** | **38.344** (+0.915) | **4.520** (−0.421) | **3.702** (−0.422) | 0.882 / 0.026 / 0.095 | 개선 |
+|  | **SMOC** | **38.364** (+0.935) | **4.497** (−0.444) | **3.692** (−0.432) | 0.887 / 0.025 / 0.090 | 개선 |
 | GF2 | 원본 SSA-MRN | 46.549 | 0.953 | 0.896 | 0.907 / 0.036 / 0.059 | |
-|  | **SMOC** | **49.452** (+2.902) | **0.710** (−0.244) | **0.640** (−0.255) | 0.967 / 0.020 / 0.013 | 개선 |
+|  | **SMOC** | **49.475** (+2.925) | **0.708** (−0.245) | **0.638** (−0.257) | 0.967 / 0.020 / 0.013 | 개선 |
 | WV3 | 원본 SSA-MRN | 37.536 | 3.494 | 2.571 | 0.948 / 0.018 / 0.035 | |
-|  | **SMOC** | **39.136** (+1.600) | **2.859** (−0.635) | **2.121** (−0.450) | 0.936 / 0.030 / 0.035 | 개선 |
+|  | **SMOC** | **39.107** (+1.571) | **2.864** (−0.630) | **2.127** (−0.444) | 0.938 / 0.029 / 0.034 | 개선 |
 | WV2 전이 | 원본 SSA-MRN | 28.586 | 6.253 | 5.046 | 0.916 / 0.043 / 0.043 | |
-|  | **SMOC** | **32.011** (+3.426) | **4.951** (−1.302) | **3.456** (−1.589) | 0.916 / 0.042 / 0.044 | 참고 |
+|  | **SMOC** | **32.006** (+3.420) | **4.954** (−1.299) | **3.458** (−1.588) | 0.919 / 0.041 / 0.042 | 참고 |
 
 학습한 세 데이터셋 모두 시드별로도 원본보다 높았습니다. 괄호는 원본 대비 차이입니다.
 
@@ -92,19 +93,19 @@ SMOC의 개선(원본 대비)이 가장 큰 64×64 영역을 4배 확대했습�
 
 | 정답 대비 (WV2 test 20장, 3시드 평균) | 원본 SSA-MRN | SMOC | 참고: SMOC, 보정 없이 |
 |---|---:|---:|---:|
-| RR PSNR | 28.59 dB | **32.01 dB** | 29.89 dB |
+| RR PSNR | 28.59 dB | **32.01 dB** | 29.81 dB |
 | 선명도 (출력 고주파 세기 ÷ 정답, 1이 정답) | 0.33 | **0.54** | 0.41 |
 | 넣은 세부와 실제 세부의 상관 | 0.70 | **0.86** | 0.77 |
-| 밴드별 평균 밝기 치우침 (가장 큰 밴드) | 7.2% | **0.1%** | 1.2% |
+| 밴드별 평균 밝기 치우침 (가장 큰 밴드) | 7.2% | **0.1%** | 1.3% |
 
 | 장면 | 장면 PSNR 원본 | SMOC | 확대 영역 PSNR 원본 / SMOC |
 |---:|---:|---:|---|
-| 0 | 27.80 | 31.76 (+3.96) | 24.19 / 28.61 |
-| 1 | 26.02 | 30.01 (+3.99) | 23.00 / 28.15 |
-| 3 | 33.71 | 37.17 (+3.46) | 27.19 / 31.13 |
-| 7 | 28.38 | 31.93 (+3.55) | 24.03 / 28.05 |
-| 14 | 27.91 | 31.53 (+3.62) | 25.65 / 30.72 |
-| 17 | 28.43 | 31.78 (+3.35) | 25.77 / 29.78 |
+| 0 | 27.80 | 31.76 (+3.96) | 24.19 / 28.57 |
+| 1 | 26.02 | 29.95 (+3.92) | 23.00 / 28.06 |
+| 3 | 33.71 | 37.22 (+3.51) | 27.19 / 31.06 |
+| 7 | 28.38 | 31.90 (+3.52) | 24.03 / 27.93 |
+| 14 | 27.91 | 31.51 (+3.61) | 25.65 / 30.67 |
+| 17 | 28.43 | 31.74 (+3.31) | 25.77 / 29.70 |
 
 장면은 QB에서 정답 영상만 보고 정한 고정 번호(0·1·3·7·14·17)입니다.
 
@@ -158,7 +159,7 @@ SMOC의 개선(원본 대비)이 가장 큰 64×64 영역을 4배 확대했습�
 | SRINO | 38.864 | 4.351 | 3.542 | 0.940 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
 | ADWM (Ours 환경 재현, QB 직접 학습 seed 42) | 38.523 | 4.471 | 3.628 | 0.936 | [MATLAB 평가](SSA-MRN/benchmarks/adwm/README.md) |
 | ADWM | 38.466 | 4.450 | 3.705 | 0.937 | [ADWM](https://arxiv.org/html/2503.13214v1) |
-| **SMOC (최종 개선 모델, 3시드 평균)** | **38.344** | **4.520** | **3.702** | **0.935** | [Ours](SSA-MRN/docs/images/smoc/baseline_metrics.json) |
+| **SMOC (최종 개선 모델, 3시드 평균)** | **38.364** | **4.497** | **3.692** | **0.935** | [Ours](SSA-MRN/docs/images/smoc/baseline_metrics.json) |
 | HFIN | 38.247 | 4.542 | 3.813 | 0.934 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
 | LAGNet | 38.209 | 4.534 | 3.812 | 0.934 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 | U2Net | 38.065 | 4.642 | 3.987 | 0.931 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
@@ -187,7 +188,7 @@ SMOC의 개선(원본 대비)이 가장 큰 64×64 영역을 4배 확대했습�
 | CANNet | 38.488 | 4.496 | 3.698 | 0.937 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
 | ADWM | 38.466 | 4.450 | 3.705 | 0.937 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 | DCINN | 38.430 | 4.220 | 3.570 | — | [ABFNet](https://proceedings.mlr.press/v306/wang26hx.html) |
-| **SMOC (최종 개선 모델, 3시드 평균)** | **38.344** | **4.520** | **3.702** | **0.935** | [Ours](SSA-MRN/docs/images/smoc/baseline_metrics.json) |
+| **SMOC (최종 개선 모델, 3시드 평균)** | **38.364** | **4.497** | **3.692** | **0.935** | [Ours](SSA-MRN/docs/images/smoc/baseline_metrics.json) |
 | HFIN | 38.247 | 4.542 | 3.813 | 0.934 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
 | HOIF | 38.242 | 4.521 | 3.825 | 0.933 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
 | ProtoFormer | 38.238 | 4.568 | 3.768 | — | [MSFFusion](https://www.mdpi.com/2072-4292/18/18/3236) |

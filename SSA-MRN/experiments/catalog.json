@@ -3011,7 +3011,7 @@
     "experimenter": "이병현",
     "status": "평가 완료",
     "improvement": "부분 개선",
-    "result": "SMOC 3시드: C2MS-SP 대비 QB −0.029·GF2 +0.667·WV3 +0.463 dB, QB 개선 없음",
+    "result": "SMOC(분해, 연산 66%) 3시드: C2MS-SP 대비 QB −0.009·GF2 +0.690·WV3 +0.434 dB, QB 개선 없음",
     "report": "experiments/performance/90_dataset_matched_internal_resampling/README.md",
     "sensor": "QB, GF2, WV3 (WV2 transfer)",
     "evaluated_seeds": [
@@ -3020,11 +3020,11 @@
       44
     ],
     "retraining": true,
-    "limits": "50에폭 선별 validation으로 갈래 C를 골랐습니다. 최종 모델 SMOC는 C를 분해 없이 원래 크기 150에폭으로 학습한 모델이며, 같은 시드 C2MS-SP와 3시드로 비교했습니다(GF2·WV3 개선, QB 개선 없음). 300에폭(seed 42)은 validation만 오르고 test는 좋아지지 않았습니다. test는 보고만 합니다.",
+    "limits": "50에폭 선별 validation으로 갈래 C를 골랐습니다. 최종 모델 SMOC는 C를 원래 크기로 120에폭 학습한 뒤 K2 분해해 30에폭 감쇠한 모델(CK)이며, 같은 시드 C2MS-SP와 3시드로 비교했습니다(GF2·WV3 개선, QB 개선 없음). 분해 전 모델(CF)과는 0.04 dB 안에서 같습니다. 300에폭(seed 42)은 validation만 오르고 test는 좋아지지 않았습니다. test는 보고만 합니다.",
     "config": "experiments/performance/90_dataset_matched_internal_resampling/config.json",
     "entrypoint": "experiments/performance/90_dataset_matched_internal_resampling/run.py",
     "manifest": "experiments/performance/90_dataset_matched_internal_resampling/manifest.json",
     "results": "experiments/performance/90_dataset_matched_internal_resampling/results",
-    "last_checked": "2026-11-23T13:30:00+09:00"
+    "last_checked": "2026-11-24T15:30:00+09:00"
   }
 }

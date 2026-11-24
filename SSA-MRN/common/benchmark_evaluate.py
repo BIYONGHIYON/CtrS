@@ -18,6 +18,8 @@ checkpoint and data SHA-256, parameter count. WV2 is evaluated with the WV3 weig
 --summary pools the runs into results/summary_smoc.json: per setting and sensor the seed mean and the paired difference to SMOC
 (same seeds, docs/images/smoc/baseline_metrics.json). No judgement is attached; the numbers are reported as they are.
 --baseline c2ms_sp reproduces archived comparisons (summary.json and images/); the default SMOC writes summary_smoc.json and images_smoc/.
+SMOC is the factorized model (90 CK) since 2026-11-24; comparisons archived before that date are against the full-size SMOC (90 CF), which
+--baseline smoc_full reproduces (docs/images/smoc_full/baseline_metrics.json).
 --figures renders the fixed six scenes in both formats (common/result_images.render_multi): SMOC, then the model.
 --figures --release takes the model's saved predictions from Release predictions-benchmarks-<model>-<setting> instead of running
 its weights (common/benchmark_predictions.py), so images can be made for author weights that are not redistributed.
@@ -50,9 +52,11 @@ TRAINING_SENSOR = {'QB': 'QB', 'GF2': 'GF2', 'WV3': 'WV3', 'WV2': 'WV3'}  # WV2 
 RR_KEYS = ('PSNR', 'SAM', 'ERGAS', 'SCC', 'Q2n'); FR_KEYS = ('QNR', 'D_lambda', 'D_s')
 BASELINES = {
     'smoc': ROOT / 'docs/images/smoc/baseline_metrics.json',
+    'smoc_full': ROOT / 'docs/images/smoc_full/baseline_metrics.json',
     'c2ms_sp': ROOT / 'docs/images/c2ms_sp/baseline_metrics.json',
 }
-BASELINE_LABELS = {'smoc': 'SMOC', 'c2ms_sp': 'C2MS-SP'}
+BASELINE_LABELS = {'smoc': 'SMOC', 'smoc_full': 'SMOC', 'c2ms_sp': 'C2MS-SP'}
+BASELINE_KEY = {'smoc_full': 'smoc'}  # the archived full-size metrics file stores SMOC under 'smoc'
 KST = timezone(timedelta(hours=9))
 
 
@@ -131,7 +135,7 @@ def evaluate(a, folder):
 
 
 def summary(folder, baseline='smoc'):
-    baseline_path = BASELINES[baseline]; label = BASELINE_LABELS[baseline]; comparison = f'vs_{baseline}'
+    baseline_path = BASELINES[baseline]; label = BASELINE_LABELS[baseline]; comparison = f'vs_{BASELINE_KEY.get(baseline, baseline)}'
     base = json.loads(baseline_path.read_text(encoding='utf-8'))['results']; groups = {}
     for p in sorted((folder / 'results').glob('*/metrics.json')):
         r = json.loads(p.read_text(encoding='utf-8'))
@@ -142,7 +146,7 @@ def summary(folder, baseline='smoc'):
         per = {str(r['seed']): dict(rr=r['rr']['mean'], fr=r['fr']['mean']) for r in runs}
         entry = dict(seeds=[r['seed'] for r in runs], transfer=runs[0]['transfer'], parameters=runs[0]['parameters'], per_seed=per,
                      mean=dict(rr=mean([r['rr']['mean'] for r in runs], RR_KEYS), fr=mean([r['fr']['mean'] for r in runs], FR_KEYS)))
-        ref = base[sensor][baseline]['per_seed']
+        ref = base[sensor][BASELINE_KEY.get(baseline, baseline)]['per_seed']
         paired = [r for r in runs if r['seed'] is not None and str(r['seed']) in ref]
         if paired:
             d = [{k: r['rr']['mean'][k] - ref[str(r['seed'])][k] for k in RR_KEYS} for r in paired]
@@ -150,7 +154,7 @@ def summary(folder, baseline='smoc'):
             entry[comparison] = dict(paired_seeds=[r['seed'] for r in paired], difference=diff, per_seed=dict(zip([str(r['seed']) for r in paired], d)),
                                        note='WV2 전이, 참고' if runs[0]['transfer'] else None)
         elif runs:
-            m = entry['mean']['rr']; c = base[sensor][baseline]['mean']
+            m = entry['mean']['rr']; c = base[sensor][BASELINE_KEY.get(baseline, baseline)]['mean']
             entry[comparison] = dict(paired_seeds=[], difference={k: m[k] - c[k] for k in RR_KEYS},
                                      note=f'같은 시드 짝 없음: {label} 3시드 평균과의 차이')
         res[f'{setting}_{sensor}'] = entry
@@ -160,7 +164,7 @@ def summary(folder, baseline='smoc'):
               f"SAM {v.get('difference', {}).get('SAM', float('nan')):+.3f} ERGAS {v.get('difference', {}).get('ERGAS', float('nan')):+.3f}")
     out = dict(model=folder.name, description=f'seed means and the paired difference to {label} (same seeds); common/benchmark_evaluate.py --summary',
                baseline=baseline_path.relative_to(ROOT).as_posix(), created=datetime.now(KST).isoformat(timespec='seconds'), results=res)
-    filename = 'summary_smoc.json' if baseline == 'smoc' else 'summary.json'
+    filename = 'summary_smoc.json' if baseline in ('smoc', 'smoc_full') else 'summary.json'
     (folder / 'results' / filename).write_text(json.dumps(out, ensure_ascii=False, indent=1) + '\n', encoding='utf-8')
 
 
@@ -176,7 +180,7 @@ def figures(a, folder):
         net, _ = load_model(folder, a.setting, a.sensor, a.seed, a.checkpoint, a.device)
     name = json.loads((folder / 'config.json').read_text(encoding='utf-8')).get('display_name', folder.name) if (folder / 'config.json').exists() else folder.name
     nets = {a.baseline: B.build(a.baseline, a.sensor, seed, device=a.device), folder.name: net}
-    image_dir = 'images_smoc' if a.baseline == 'smoc' else 'images'
+    image_dir = 'images_smoc' if a.baseline in ('smoc', 'smoc_full') else 'images'
     result_images.render_multi(nets, Path(a.data), folder / 'results' / image_dir / run_name(a.setting, a.sensor, a.seed), [BASELINE_LABELS[a.baseline], name], seed=seed,
                                device=a.device, rr_file=f'test_{stem}_multiExm1.h5', scale=scale, bands=bands,
                                land_cover=result_images.LAND_COVER if a.sensor == 'QB' else {i: f'{a.sensor} 장면 {i}' for i in result_images.SCENES}, chooser=1)
