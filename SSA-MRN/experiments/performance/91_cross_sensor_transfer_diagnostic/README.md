@@ -105,9 +105,15 @@ MTF 검토 근거: [CAS500-1 검보정 논문](https://doi.org/10.3390/rs1801017
 </details>
 
 <details>
-<summary><b>동국대 주변 시각화</b> · QB 무사영 모자이크 계획</summary>
+<summary><b>동국대 주변 시각화</b> · QB 무사영 모자이크</summary>
 
-사용자 지정 지역의 큰 영상 제작이며 성능 비교가 아닙니다. [고정 계획](provenance/mosaic_plan.json)에 따라 QB 무사영 출력을 겹쳐 합성합니다. 기존 고정 20패치와 수치는 바꾸지 않습니다. 출력은 원본 픽셀 좌표를 기준으로 하며 지리참조 정확도는 인증하지 않습니다.
+동국대 서울캠퍼스 주변을 QB 무사영으로 팬샤프닝해 **2,560×2,688픽셀**로 합성했습니다. 명목 PAN GSD 0.5m 기준 약 1.28×1.344km입니다. 사용자 지정 지역의 시각화이며 성능 비교가 아닙니다. 기존 고정 20패치와 수치는 바꾸지 않았습니다.
+
+[고정 계획](provenance/mosaic_plan.json)에 따라 512픽셀 입력 타일 100개의 가장자리 64픽셀을 제외하고, 384픽셀 코어를 stride 256으로 겹쳐 Hann 가중 합성했습니다. 밴드 보정 계수와 RGB 표시 척도는 전체 ROI에서 하나씩 계산해 모든 타일에 공유했습니다. 개별 밴드에 흩어진 원본 0 DN은 채우거나 지우지 않고 유지했습니다.
+
+전체 영역의 피복·유한값, 원본 halo 보간의 일치, PNG 형식, 4밴드 float32 DN TIFF의 정확한 재읽기를 확인했습니다. 그림과 예측은 로컬에 보관하고 SHA-256을 manifest에 기록했습니다. RGB 표시에서만 범위를 잘라내며, 4밴드 DN TIFF에는 출력의 음수와 명목 최대값 초과값도 보존했습니다. 출력은 원본 픽셀 좌표를 기준으로 하며 지리참조 정확도는 인증하지 않습니다.
+
+[합성 실행 자료](results/mosaic_summary.json) · [소스 근거](provenance/mosaic_source_manifest.json) · [추가 의존성](provenance/mosaic_requirements.txt)
 
 ```bash
 python run.py --repo /path/to/CtrS --mosaic --device mps

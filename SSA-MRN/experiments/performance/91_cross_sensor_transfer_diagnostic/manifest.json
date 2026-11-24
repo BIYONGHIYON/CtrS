@@ -5,8 +5,8 @@
   "state": "preliminary FR diagnostic and assumed-MTF K10 comparison verified; physical sensor validation pending",
   "files": {
     "README.md": {
-      "bytes": 10194,
-      "sha256": "12586f82fb1168cb029e1f1286a2409bcf48d813d537faf5e7f92495a4490798"
+      "bytes": 11209,
+      "sha256": "26bdae1c2d4e483bb90e33cb91f39e54bdb27d827174014ebdfa4ae995c36584"
     },
     "config.json": {
       "bytes": 2361,
@@ -32,6 +32,10 @@
       "bytes": 111,
       "sha256": "3a0907523d40ab0fce48fd66811fce82ca944641b63fd2a8d1d8eea41fe39f7a"
     },
+    "provenance/mosaic_source_manifest.json": {
+      "bytes": 2319,
+      "sha256": "8939f3e99b77f0078c498535639088a920c80c286f83dafe2083d23ea1307fe6"
+    },
     "provenance/preparation_requirements.txt": {
       "bytes": 55,
       "sha256": "819b5838c45d1f9e04c9084ef888d230aa1ab0a250dbe526d598be3f163d48c4"
@@ -55,6 +59,10 @@
     "results/descriptive_diagnostics.json": {
       "bytes": 13859,
       "sha256": "5484d132db89c6ec733ad2ebb16fd1807ce0468a4aef9e7c6ef27c2a7a992216"
+    },
+    "results/mosaic_summary.json": {
+      "bytes": 19735,
+      "sha256": "47d01827adaa467ce5683f92cb4df260383cd480c1e2bd4191e72c9ddded50ba"
     },
     "results/projection_preflight.json": {
       "bytes": 246,
@@ -138,6 +146,42 @@
     "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/assumed_mtf026_k10/summary.json": {
       "bytes": 35027,
       "sha256": "bfdbe1e445ce661a41c5cdbba0ab794c95b63b99b3976b9779e50b8c8e07eb41"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/dongguk_QB_no_projection/summary.json": {
+      "bytes": 19735,
+      "sha256": "47d01827adaa467ce5683f92cb4df260383cd480c1e2bd4191e72c9ddded50ba"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/dongguk_QB_no_projection/frozen_plan.json": {
+      "bytes": 1739,
+      "sha256": "e423ad207243ddd5e3cd38ffebe3bdc4d8d21ecaf482e94767f75f713c2031b2"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/dongguk_QB_no_projection/dongguk_QB_no_projection.jpg": {
+      "bytes": 5657698,
+      "sha256": "bfa2161bc2d114a0fadb560e3c9c44e7d3b505b32b6fc55129b64276514cb849"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/dongguk_QB_no_projection/dongguk_QB_no_projection.png": {
+      "bytes": 14616014,
+      "sha256": "6a1ab8734b491c9b6c414cb1ee38ce1326dd1a0bce08fa24f58f84b2b9d16796"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/dongguk_QB_no_projection/dongguk_QB_no_projection_BGRNIR_DN.tif": {
+      "bytes": 95614123,
+      "sha256": "cd46aacdc37c9659e7b2b375d9a581e6f9d5054e6321d984d3d304a8e6cece99"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/dongguk_QB_no_projection/dongguk_preview.jpg": {
+      "bytes": 1036988,
+      "sha256": "5636dfe4205ef4790fac3ba525c0c789f2dc72ba2329013bfa27e9ceee1091e8"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/dongguk_QB_no_projection/dongguk_input_LMS.png": {
+      "bytes": 8776248,
+      "sha256": "c7a99890a19ef5274b02a2540ac933bf19d8706ac0590b064bacaee98e230096"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/dongguk_QB_no_projection/manifest.json": {
+      "bytes": 1306,
+      "sha256": "8a4be676cceeeb0ff894e8aa1ddad2f596526ff867bde5648e49731e21074500"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/dongguk_QB_no_projection/center_comparison.png": {
+      "bytes": 1358309,
+      "sha256": "bec1a4fced245f30f3a853e0776ad969682af5f2f5d3fe4f6b86550bf973a90d"
     }
   },
   "retained_source_weights": {
@@ -193,5 +237,15 @@
     "independent_scenes": 1,
     "seed": 42
   },
-  "mosaic_state": "qualitative visualization planned; no performance selection"
+  "mosaic_state": "qualitative mosaic complete and verified; no performance claim",
+  "mosaic_verification": {
+    "all_tiles_finite": true,
+    "full_coverage": true,
+    "minimum_weight": 2.7999466634121006e-10,
+    "coverage_count_min": 1,
+    "coverage_count_max": 4,
+    "float_tiff_exact_readback": true,
+    "rgb_png_verified": true,
+    "interpolation_matches_whole_roi": true
+  }
 }
