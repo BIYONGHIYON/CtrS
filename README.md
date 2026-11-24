@@ -167,7 +167,7 @@ SMOC의 개선(원본 대비)이 가장 큰 64×64 영역을 4배 확대했습�
 | MTF-GLP-FS (고전 방법) | 32.709 | 7.792 | 7.373 | 0.835 | [ADWM](https://arxiv.org/html/2503.13214v1) |
 
 <details>
-<summary>전체 비교 표 (PSNR 순, 30행)와 주의점</summary>
+<summary>전체 비교 표 (PSNR 순, 31행)와 주의점</summary>
 
 | 모델 | PSNR ↑ | SAM ↓ | ERGAS ↓ | Q4 ↑ | 출처 |
 |---|---:|---:|---:|---:|---|
@@ -179,6 +179,7 @@ SMOC의 개선(원본 대비)이 가장 큰 64×64 영역을 4배 확대했습�
 | PanDiff | 38.538 | 4.524 | 3.688 | 0.937 | [SRINO 보충자료](https://openaccess.thecvf.com/content/CVPR2026/supplemental/Huang_Spatial-Spectral_Residuals_Informed_CVPR_2026_supplemental.pdf) |
 | S2WMamba | 38.533 | 4.445 | 3.679 | 0.938 | [S2WMamba](https://arxiv.org/html/2512.06330v1) |
 | DCPNet | 38.531 | 4.426 | 3.622 | — | [MSFFusion](https://www.mdpi.com/2072-4292/18/18/3236) |
+| ADWM (Ours 환경 재현, QB 직접 학습 seed 42) | 38.523 | 4.471 | 3.628 | 0.936 | [MATLAB 평가](SSA-MRN/benchmarks/adwm/README.md) |
 | OTPNet | 38.521 | 4.415 | 3.624 | — | [OTPNet](https://ojs.aaai.org/index.php/AAAI/article/download/33048/35203) |
 | U2Net + PAKAN | 38.520 | 4.439 | 3.698 | 0.939 | [PAKAN](https://arxiv.org/html/2603.15109v1) |
 | SSMNet | 38.506 | 4.423 | 3.635 | — | [MSFFusion](https://www.mdpi.com/2072-4292/18/18/3236) |
