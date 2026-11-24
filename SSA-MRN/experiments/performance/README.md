@@ -20,7 +20,7 @@ SSA-MRN의 구조·학습·손실을 바꿔 수치를 개선하는 연구입니�
 <!-- experiments:start -->
 | 실험 | 핵심 결과 | 상태 | 판정 |
 |---|---|:---:|:---:|
-| [91. 학습 센서별 가중치의 밴드 보정 전이 진단](91_cross_sensor_transfer_diagnostic/README.md)<br>이병현 | QB·GF2 CK seed 42를 CAS500 고정 FR 20패치에서 비교 예정, 밴드 보정·사영 제외 | 계획 | 성능&nbsp;비교&nbsp;아님 |
+| [91. 학습 센서별 가중치의 밴드 보정 전이 진단](91_cross_sensor_transfer_diagnostic/README.md)<br>이병현 | FR 20패치·1시드: GF2-QB QNR +0.0992, 밴드 보정·사영 제외(참고) | 사전&nbsp;검증&nbsp;완료 | 성능&nbsp;비교&nbsp;아님 |
 | [90. 모델 내부 축소·확대를 데이터셋 방식(23탭 보간, MTF 블러 + 솎음)으로 교체](90_dataset_matched_internal_resampling/README.md)<br>이병현 | SMOC(분해, 연산 66%) 3시드: C2MS-SP 대비 QB −0.009·GF2 +0.690·WV3 +0.434 dB, QB 개선 없음 | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [89. 분광 손실 계수(λ)와 2배 거친 쌍 계수(c) 탐색: K2D 학습법, W2 2×2 합성곱 구현](89_spectral_coarse_loss_weights/README.md)<br>이병현 | λ*=1.2·c*=0.25, 88번 K2D 대비 QB −0.103·GF2 +0.438·WV3 +0.095 dB (1시드) | 평가&nbsp;완료 | 부분&nbsp;개선 |
 | [88. 일정 학습률 학습 뒤 감쇠 시작 시점의 저랭크 분해(K2)와 감쇠 구간 학습: 150에폭 경량 C2MS-SP 단일 시드 확인](88_factorization_at_decay_start/README.md)<br>이병현 | K2D(연산 66%) +0.036/+0.154/+0.310 dB (QB/GF2/WV3, 1시드), Lite보다 세 센서 모두 개선 | 평가&nbsp;완료 | 부분&nbsp;개선 |

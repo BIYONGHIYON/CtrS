@@ -1,0 +1,127 @@
+{
+  "experiment": "performance/91_cross_sensor_transfer_diagnostic",
+  "experiment_number": 91,
+  "research_track": "performance",
+  "state": "diagnostic preflight complete; no training, no RR, no projection; full evaluation pending",
+  "files": {
+    "README.md": {
+      "bytes": 7089,
+      "sha256": "1b5fc85acd123cfcbadca0e108db9f91993be3f5d5a30e73c9e2681078893c39"
+    },
+    "config.json": {
+      "bytes": 2361,
+      "sha256": "a9663c8ddb3d715e5ea32258169be799e2cdbc6c11d719aca22e21bbb8cb71f8"
+    },
+    "provenance/data_manifest.json": {
+      "bytes": 5600,
+      "sha256": "9f27520e92a1a546676a0e1fe4d046bfcb6b08629f99a00e9b0df61509d4b774"
+    },
+    "provenance/inference_requirements.txt": {
+      "bytes": 90,
+      "sha256": "16b14854b01252c4b8ed559afcb6864501d1f3cbe6a75b0c1fd809bb485332c8"
+    },
+    "provenance/preparation_requirements.txt": {
+      "bytes": 55,
+      "sha256": "819b5838c45d1f9e04c9084ef888d230aa1ab0a250dbe526d598be3f163d48c4"
+    },
+    "provenance/prepare_input.py": {
+      "bytes": 13792,
+      "sha256": "9794d863cb9aabb49358dc87540081f4e2b9f85d3d0b4b14ec6218366b144a28"
+    },
+    "provenance/source_manifest.json": {
+      "bytes": 3174,
+      "sha256": "33ccb5b8efec3b71bd2df72050e7ecfe466e78dcf9cdfbef155a2b0b34bd73b7"
+    },
+    "results/descriptive_diagnostics.json": {
+      "bytes": 13859,
+      "sha256": "5484d132db89c6ec733ad2ebb16fd1807ce0468a4aef9e7c6ef27c2a7a992216"
+    },
+    "results/summary.json": {
+      "bytes": 37769,
+      "sha256": "a590d952bf6fff0f404f4871dd3f0386c8c64480fe512305d58cd288f73e6b15"
+    },
+    "run.py": {
+      "bytes": 11906,
+      "sha256": "c502559c4e5ac5dd846053ff747d5818dc4561a5c2632558479f1b90e92c5754"
+    }
+  },
+  "release_assets": {},
+  "external_local_artifacts": {
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/predictions_QB.h5": {
+      "bytes": 67666054,
+      "sha256": "46af3f1fe11fa184aef496f2af4c1dcc4b10ff7f249c6da0c66b923f0f196e06"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/summary.json": {
+      "bytes": 37769,
+      "sha256": "a590d952bf6fff0f404f4871dd3f0386c8c64480fe512305d58cd288f73e6b15"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/comparison_contact.png": {
+      "bytes": 6794150,
+      "sha256": "04f0c4b1d8c316450ff132bcfc76eec49b484b7b5f2481680412a7fc2a3f507e"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/descriptive_diagnostics.json": {
+      "bytes": 13859,
+      "sha256": "5484d132db89c6ec733ad2ebb16fd1807ce0468a4aef9e7c6ef27c2a7a992216"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/predictions_GF2.h5": {
+      "bytes": 64898723,
+      "sha256": "92575f55fb7d32e87c56c147d9a077679f34a394c32d4f574092e7eddd71a053"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/comparison.png": {
+      "bytes": 11124966,
+      "sha256": "824ccac77ee084c4cc043db7f58b28acd733c3260797edd87402aa9a12b06ee5"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/comparison_review.jpg": {
+      "bytes": 1042956,
+      "sha256": "32df5887d10e658d91712a3c87a0f34321ffad8d43c2cc343b4086abdfe2e08e"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/comparison_first.png": {
+      "bytes": 1138362,
+      "sha256": "5daca302f676e6c0b0fbab838c40e091dca4fd82be082097ff5084165d0f0f4e"
+    }
+  },
+  "retained_source_weights": {
+    "QB": {
+      "path": "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/experiments/performance/90_dataset_matched_internal_resampling/checkpoints/QB_CK_s42/best.pt",
+      "sha256": "070451657936f3050e7d5b96375f4e0fd52fbeaf5c250d76a951e18e5155b9ce",
+      "best_epoch": 30,
+      "seed": 42,
+      "calibration_reference_sha256": "ade287a43333379d7c5c528278c9641b723971b540f084a1791c64614a7e911b",
+      "parameters": 1991518,
+      "predictions": {
+        "path": "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/predictions_QB.h5",
+        "bytes": 67666054,
+        "sha256": "46af3f1fe11fa184aef496f2af4c1dcc4b10ff7f249c6da0c66b923f0f196e06",
+        "verified_all_chunks": true
+      }
+    },
+    "GF2": {
+      "path": "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/experiments/performance/90_dataset_matched_internal_resampling/checkpoints/GF2_CK_s42/best.pt",
+      "sha256": "6f1d2106506304d9c40c01cafbbcb6fbb2e89c3c4977861b289aab60c6a87874",
+      "best_epoch": 30,
+      "seed": 42,
+      "calibration_reference_sha256": "ad455e83d29004d7721db2acc1a15f304d89cf04baad99f63c512ab4c32a4c6f",
+      "parameters": 1991518,
+      "predictions": {
+        "path": "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/predictions_GF2.h5",
+        "bytes": 64898723,
+        "sha256": "92575f55fb7d32e87c56c147d9a077679f34a394c32d4f574092e7eddd71a053",
+        "verified_all_chunks": true
+      }
+    }
+  },
+  "input": {
+    "path": "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/fr_patches.h5",
+    "sha256": "2e7e99345ee78293bf1faec4a865cd37aff554af51a53223e18d5a36ecc361ee"
+  },
+  "verification": {
+    "all_prediction_chunks_read": true,
+    "all_predictions_finite": true,
+    "exact_patch_order": true,
+    "calibration_matches_experiment82_cpu": true,
+    "underlying_source_weights_reused": true
+  },
+  "independent_scenes": 1,
+  "seed": 42,
+  "not_full_smoc": true
+}

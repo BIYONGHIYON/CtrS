@@ -1,0 +1,74 @@
+{
+  "data": {
+    "path": "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/fr_patches.h5",
+    "sha256": "2e7e99345ee78293bf1faec4a865cd37aff554af51a53223e18d5a36ecc361ee"
+  },
+  "weights": {
+    "QB": {
+      "path": "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/experiments/performance/90_dataset_matched_internal_resampling/checkpoints/QB_CK_s42/best.pt",
+      "sha256": "070451657936f3050e7d5b96375f4e0fd52fbeaf5c250d76a951e18e5155b9ce",
+      "best_epoch": 30,
+      "seed": 42,
+      "calibration_reference_sha256": "ade287a43333379d7c5c528278c9641b723971b540f084a1791c64614a7e911b",
+      "parameters": 1991518,
+      "predictions": {
+        "path": "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/predictions_QB.h5",
+        "bytes": 67666054,
+        "sha256": "46af3f1fe11fa184aef496f2af4c1dcc4b10ff7f249c6da0c66b923f0f196e06",
+        "verified_all_chunks": true
+      }
+    },
+    "GF2": {
+      "path": "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/experiments/performance/90_dataset_matched_internal_resampling/checkpoints/GF2_CK_s42/best.pt",
+      "sha256": "6f1d2106506304d9c40c01cafbbcb6fbb2e89c3c4977861b289aab60c6a87874",
+      "best_epoch": 30,
+      "seed": 42,
+      "calibration_reference_sha256": "ad455e83d29004d7721db2acc1a15f304d89cf04baad99f63c512ab4c32a4c6f",
+      "parameters": 1991518,
+      "predictions": {
+        "path": "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/predictions_GF2.h5",
+        "bytes": 64898723,
+        "sha256": "92575f55fb7d32e87c56c147d9a077679f34a394c32d4f574092e7eddd71a053",
+        "verified_all_chunks": true
+      }
+    }
+  },
+  "sources": {
+    "run_script_sha256": "c502559c4e5ac5dd846053ff747d5818dc4561a5c2632558479f1b90e92c5754",
+    "config_sha256": "a9663c8ddb3d715e5ea32258169be799e2cdbc6c11d719aca22e21bbb8cb71f8",
+    "model_source_sha256": "b8354ca745b8e98e65726df3c0c7ccccfe003d9b8e3ce9a2399c3e27c1c310c6",
+    "imported_sources": {
+      "common/interpolation.py": {
+        "bytes": 1554,
+        "sha256": "526c6c6a563b085d2212557675ea0cdfe9371b7a26d7c6dabfc8c490b54afb41"
+      },
+      "common/metrics.py": {
+        "bytes": 7419,
+        "sha256": "509c0bd4fe8731772ef8f1a85b7528025bb6701eda316360a650be2dbef626ac"
+      },
+      "experiments/performance/43_normalized_parallel_capacity/provenance/source/common/model.py": {
+        "bytes": 5524,
+        "sha256": "a8beac506922c7a7e2cd0148d29b84b9ee38175f72a87590e836243f8fdecb41"
+      }
+    }
+  },
+  "environment": {
+    "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+    "torch": "2.15.0",
+    "numpy": "2.3.5",
+    "platform": "macOS-27.2.1-arm64-arm-64bit",
+    "device": "mps"
+  },
+  "MTF_references": [
+    {
+      "doi": "10.3390/rs18010177",
+      "interpretation": "MTF bounds only, not a measured per-band L2G operator"
+    },
+    {
+      "doi": "10.7780/kjrs.2023.39.4.6",
+      "interpretation": "0.26 is an assumed simulation value, not a measured sensor MTF"
+    }
+  ],
+  "owning_repository_commit": "eebd7ecf255e9af44cdcabfeead6637504526f1e",
+  "frozen_plan_commit": "ed3f05550b81e4981027370cb94009ef9085effd"
+}
