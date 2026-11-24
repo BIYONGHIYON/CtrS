@@ -3,438 +3,312 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CtrS — 처음 보는 위성에서도 선명한 팬샤프닝, SMOC</title>
-<meta name="description" content="SSA-MRN을 개선한 위성영상 팬샤프닝 모델 SMOC. 축척 혼합 학습·관측 일치 보정·밴드별 밝기 보정으로 학습하지 않은 위성 WV2에서 원본보다 3.42 dB 높고, 학습한 위성에서는 최신 모델 수준입니다.">
+<title>CtrS · SMOC — 처음 보는 위성에서도 선명한 팬샤프닝</title>
+<meta name="description" content="SSA-MRN을 개선한 위성영상 팬샤프닝 모델 SMOC. 축척 혼합 학습·관측 일치 보정·밴드별 밝기 보정으로 학습하지 않은 위성 WV2에서 원본보다 3.42 dB 높고, 학습한 위성에서는 최신 모델과 같은 수준입니다.">
 <link rel="icon" href="assets/icon.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300..900&display=swap">
-<link rel="stylesheet" href="deck.css?v=1">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
+<script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
-<header class="pg-header">
- <a class="pg-brand" href="#top"><img src="assets/icon.png" alt="" width="26" height="26"><span>CtrS</span></a>
- <nav aria-label="페이지 목차">
-  <a href="#top">도입</a><a href="#model">모델</a><a href="#results">결과</a><a href="#business">활용</a>
- </nav>
- <a class="pg-back" href="https://biyonghiyon.github.io/portfolio/">← 포트폴리오</a>
- <div class="pg-progress" aria-hidden="true"><i></i></div>
+<header class="hd">
+ <div class="hd-in">
+  <a class="brand" href="#top"><img src="assets/icon.png" alt="" width="26" height="26"><span>CtrS</span></a>
+  <nav aria-label="페이지 목차">
+   <a href="#problem">문제</a><a href="#smoc">SMOC</a><a href="#results">결과</a><a href="#impact">활용</a>
+  </nav>
+  <a class="back" href="https://biyonghiyon.github.io/portfolio/">← 포트폴리오</a>
+ </div>
+ <div class="prog" aria-hidden="true"><i></i></div>
 </header>
-<main>
 
-<article class="pg-scene" id="top" data-scene="cover" style="--steps:0">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide cover" data-id="cover" data-transition="fade">
-<p class="eyebrow a" style="--i:0">동국대학교 종합설계1 · CtrS</p>
-<h1 class="hero a" style="--i:1">위성영상<br>팬샤프닝</h1>
-<p class="who a" style="--i:3">SMOC · 처음 보는 위성에서도 재학습 없이</p>
-<img class="shot focus-in" src="assets/deck/cover.jpg" alt="WorldView-2 위성의 도시 컬러 영상">
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">도입</span><span class="pg-no">01 / 22</span><span class="pg-dots"></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">흐린 위성 컬러 영상을 선명하게 만드는 팬샤프닝 연구입니다. 특히 학습에 쓰지 않은, <b>처음 보는 위성에서도 다시 학습하지 않고 정확한 결과</b>를 내는 데 집중했습니다. 아래로 스크롤하면 발표 화면이 한 단계씩 넘어가고, 그 단계의 설명이 여기에 나옵니다.</p></div>
-  </div>
- </div></div>
-</article>
-<section class="pg-detail pg-summary">
- <p class="pg-kicker">프로젝트 요약</p>
- <h2 class="pg-dh">SSA-MRN을 개선한 팬샤프닝 모델 SMOC</h2>
- 
- <p class="pg-lead">고해상도 흑백 위성영상(PAN)과 저해상도 다중분광영상(MS)을 합쳐 고해상도 컬러 영상을 복원합니다. 2025년에 공개된 오픈소스 모델 SSA-MRN을 재현한 뒤 구조·학습·추론을 바꿔, 학습한 위성에서는 최신 모델 수준, <b>학습하지 않은 위성에서는 비교한 모델 중 가장 정확한</b> 모델 SMOC를 만들었습니다.</p>
- <div class="pg-stats">
-  <div><b>+3.42 dB</b><span>처음 보는 위성 WV2<br>원본 대비 PSNR</span></div>
-  <div><b>+0.93 dB</b><span>QB · 원본 대비<br>3시드 평균</span></div>
-  <div><b>+2.93 dB</b><span>GF2 · 원본 대비<br>3시드 평균</span></div>
-  <div><b>+1.57 dB</b><span>WV3 · 원본 대비<br>3시드 평균</span></div>
+<main id="top">
+
+<!-- 첫 화면 -->
+<section class="hero wrap">
+ <div class="hero-text">
+  <p class="eyebrow" data-r>딥러닝 연구 · 위성영상 팬샤프닝</p>
+  <h1 data-r style="--d:1">처음 보는 위성에서도<br><span class="t">다시 학습하지 않고</span> 선명하게</h1>
+  <p class="lead" data-r style="--d:2">흐린 위성 컬러 영상(MS)을 같은 위성이 찍은 선명한 흑백 영상(PAN)으로 복원하는 팬샤프닝 모델 <b>SMOC</b>를 만들었습니다. 오픈소스 모델 SSA-MRN을 바탕으로, 학습에 쓰지 않은 위성에서도 재학습 없이 정확한 결과를 내는 데 집중했습니다.</p>
+  <dl class="facts" data-r style="--d:3">
+   <div><dt>역할</dt><dd>팀장 · 4인 팀</dd></div>
+   <div><dt>기간</dt><dd>2026.09 — 2026.11</dd></div>
+   <div><dt>과정</dt><dd>동국대학교 종합설계1</dd></div>
+   <div><dt>기술</dt><dd>PyTorch · MATLAB 평가 · GitHub Actions</dd></div>
+  </dl>
+  <div class="btns" data-r style="--d:4"><a class="btn pri" href="https://github.com/BIYONGHIYON/CtrS">GitHub 저장소</a><a class="btn" href="https://biyonghiyon.github.io/CtrS/">결과 비교 사이트</a></div>
  </div>
- <dl class="pg-spec"><div><dt>역할</dt><dd>팀장 · 연구 방향과 모델 개선 실험 주도, 결과 비교 사이트 제작</dd></div><div><dt>기간</dt><dd>2026.09 — 2026.11 · 동국대학교 종합설계1</dd></div><div><dt>기술</dt><dd>PyTorch · 위성영상 처리 · MATLAB 평가(DLPan-Toolbox) · GitHub Actions · 정적 웹 뷰어</dd></div><div><dt>규모</dt><dd>성능 개선 실험 90여 건 · 다른 팬샤프닝 모델 5종 재평가 · 생성형 모델 2종 비교</dd></div></dl>
- <div class="pg-links"><a class="pg-btn primary" href="https://github.com/BIYONGHIYON/CtrS">GitHub 저장소</a><a class="pg-btn" href="https://biyonghiyon.github.io/CtrS/">결과 비교 사이트</a></div>
+ <figure class="hero-fig" data-r style="--d:2">
+  <div class="cmp" style="--x:50%">
+   <img src="assets/deck/pansharp_result.jpg" alt="SMOC로 팬샤프닝한 GaoFen-2 영상, 파란 공장 지붕과 경계가 선명함">
+   <div class="cmp-top"><img src="assets/deck/ms_gf2.jpg" alt="같은 곳의 입력 컬러 영상 MS, 지붕이 뭉개짐"></div>
+   <span class="cmp-l">입력 MS · 3.2 m</span><span class="cmp-r">SMOC · 0.8 m</span>
+   <div class="cmp-bar" aria-hidden="true"><i></i></div>
+   <input type="range" min="0" max="100" value="50" aria-label="입력과 결과 비교 위치">
+  </div>
+  <figcaption>GaoFen-2 위성 영상. 가운데 선을 좌우로 끌어 입력과 결과를 비교할 수 있습니다.</figcaption>
+ </figure>
+</section>
 
+<section class="stats wrap" aria-label="주요 결과">
+ <div data-r><b data-count="3.42" data-pre="+" data-suf=" dB">+3.42 dB</b><span>처음 보는 위성 WV2에서<br>원본 SSA-MRN 대비 PSNR</span></div>
+ <div data-r style="--d:1"><b data-count="1.51" data-pre="+" data-suf=" dB">+1.51 dB</b><span>같은 조건에서 비교한<br>다른 모델 5종 중 최고(U2Net)보다</span></div>
+ <div data-r style="--d:2"><b>0.2 dB 안</b><span>학습한 위성에서<br>최신 모델과의 차이</span></div>
+ <div data-r style="--d:3"><b data-count="66" data-suf="%">66%</b><span>합성곱 분해로 줄인 연산량<br>정확도는 그대로</span></div>
 </section>
-<article class="pg-scene" data-scene="uses" style="--steps:2">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="uses" data-transition="fade">
-<p class="eyebrow a" style="--i:0">위성영상은 어디에 쓰일까</p>
-<h2 class="title a" style="--i:1">중요한 건 <span class="hl">경계</span>와 <span class="hl">색</span>입니다</h2>
-<div class="uses">
-<div class="use fragment up">
-<img src="assets/deck/city.jpg" alt="도로와 건물이 보이는 도시 위성영상">
-<p class="kw">경계</p>
-<p class="for">재난 모니터링 · 도로 · 건물</p>
-</div>
-<div class="use fragment up">
-<img src="assets/deck/farm.jpg" alt="색이 다른 논밭이 이어진 농경지 위성영상">
-<p class="kw">색</p>
-<p class="for">농업 · 환경 · 토지 분류</p>
-</div>
-</div>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">도입</span><span class="pg-no">02 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">위성영상은 지도, 재난 대응, 농업, 환경 감시에 쓰이고, 이때 중요한 것은 두 가지입니다.</p><p class="pg-say" data-step="1">첫째는 <b>경계</b>입니다. 무너진 건물이나 끊긴 도로를 찾으려면 경계가 선명해야 합니다.</p><p class="pg-say" data-step="2">둘째는 <b>색</b>입니다. 작물 상태나 토지 종류는 파장별 밝기, 즉 색으로 구분하기 때문에 색이 정확해야 합니다.</p></div>
-  </div>
- </div></div>
-</article>
-<article class="pg-scene" data-scene="need" style="--steps:1">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="need" data-transition="fade">
-<p class="eyebrow a" style="--i:0">얼마나 선명해야 할까</p>
-<h2 class="title a" style="--i:1">필요한 건 <span class="hl">30cm급</span>, 실제 컬러 영상은 <span class="hl2">m급</span></h2>
-<img class="pic a" style="--i:2; left:288px; top:300px; width:480px; height:480px" src="assets/deck/pan_gf2.jpg" alt="0.8m 흑백 영상, 공장 지붕의 골과 경계가 선명하게 보임">
-<p class="lbl-big a" style="--i:2; left:288px; top:800px; width:480px">0.8m</p>
-<p class="why a" style="--i:2; left:208px; top:878px; width:640px">흑백 · GaoFen-2</p>
-<img class="pic fragment up" data-fragment-index="1" style="left:1152px; top:300px; width:480px; height:480px" src="assets/deck/ms_gf2.jpg" alt="같은 곳의 3.2m 컬러 영상, 파란 지붕이 뭉개진 색 덩어리로 보임">
-<p class="lbl-big fragment up" data-fragment-index="1" style="left:1152px; top:800px; width:480px; color:#B14A17">3.2m</p>
-<p class="why fragment up" data-fragment-index="1" style="left:1072px; top:878px; width:640px">컬러 · GaoFen-2</p>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">도입</span><span class="pg-no">03 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">얼마나 선명해야 할까요? 2026년 보도에 따르면 정부 기관이 원하는 수준은 차 한 대를 구분하는 30cm급입니다. 학습에 쓴 GaoFen-2 위성의 흑백 영상은 한 칸이 0.8m라 공장 지붕의 무늬까지 보입니다.</p><p class="pg-say" data-step="1">하지만 같은 곳의 컬러 영상은 한 칸이 <b>3.2m</b>라, 파란 지붕이 뭉개진 색 덩어리로만 보입니다.</p></div>
-  </div>
- </div></div>
-</article>
-<article class="pg-scene" data-scene="two-images" style="--steps:2">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="two-images" data-transition="fade">
-<p class="eyebrow a" style="--i:0">왜 흑백과 컬러일까</p>
-<h2 class="title a" style="--i:1">위성은 선명한 흑백과 흐린 컬러를 함께 찍습니다</h2>
-<img id="pic-pan" class="pic" style="left:288px; top:300px; width:480px; height:480px" src="assets/deck/pan_gf2.jpg" alt="선명한 흑백 전정색(PAN) 영상, 공장 지붕의 경계가 선명함">
-<img id="pic-ms" class="pic" style="left:1152px; top:300px; width:480px; height:480px" src="assets/deck/ms_gf2.jpg" alt="같은 곳의 흐린 다중분광(MS) 컬러 영상">
-<div class="word a" style="--i:4; left:208px; top:804px; width:640px">
-<p class="wp key fragment mv-pan" data-fragment-index="1">Pan</p><p class="wp fragment drop-out" data-fragment-index="1">chromatic</p>
-</div>
-<p class="lbl-big fragment acr-in" data-fragment-index="1" style="left:288px; top:800px; width:480px">PAN</p>
-<p class="why a" style="--i:4; left:208px; top:878px; width:640px">빛을 한꺼번에 받아 해상도가 높음</p>
-<div class="word a" style="--i:5; left:1072px; top:804px; width:640px">
-<p class="wp key fragment mv-m" data-fragment-index="2">M</p><p class="wp fragment drop-out" data-fragment-index="2">ulti</p><p class="wp key gap fragment mv-s" data-fragment-index="2">S</p><p class="wp fragment drop-out" data-fragment-index="2">pectral</p>
-</div>
-<p class="lbl-big fragment acr-in" data-fragment-index="2" style="left:1152px; top:800px; width:480px">MS</p>
-<p class="why a" style="--i:5; left:1072px; top:878px; width:640px">빛을 색별로 나눠 받아 해상도가 낮음</p>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">도입</span><span class="pg-no">04 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">두 장은 같은 위성이 같은 곳을 함께 찍은 영상입니다. 흑백 영상은 빛을 파장 구분 없이 한꺼번에 받습니다.</p><p class="pg-say" data-step="1">이것이 <b>PAN</b>(Panchromatic)입니다. 받는 빛이 많아 한 칸을 작게 만들 수 있으므로 선명합니다. 반면 컬러 영상은 빛을 파랑·초록·빨강·근적외선처럼 색별로 나눠 받습니다.</p><p class="pg-say" data-step="2">이것이 <b>MS</b>(Multi Spectral)입니다. 한 칸에 들어오는 빛이 적어 칸이 커야 하고, 그래서 가로세로 네 배 흐립니다.</p></div>
-  </div>
- </div></div>
-</article>
-<article class="pg-scene" data-scene="pansharpening" style="--steps:1">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="pansharpening" data-transition="fade">
-<p class="eyebrow">팬샤프닝</p>
-<h2 class="title">두 장의 장점만 합칩니다</h2>
-<img id="pic-pan" class="pic fly-ms" style="left:190px; top:300px; width:400px; height:400px" src="assets/deck/pan_gf2.jpg" alt="선명한 흑백 전정색(PAN) 영상, 앞 장과 같은 장면">
-<p class="glyph f" style="--i:6; left:590px; top:450px; width:120px">+</p>
-<img id="pic-ms" class="pic fly-pan" style="left:710px; top:300px; width:400px; height:400px" src="assets/deck/ms_gf2.jpg" alt="흐린 다중분광(MS) 컬러 영상, 앞 장과 같은 장면">
-<p class="kwl f" style="--i:7; left:190px; top:720px; width:400px">경계</p>
-<p class="lbl f" style="--i:7; left:190px; top:786px; width:400px">PAN에서</p>
-<p class="kwl f" style="--i:7; left:710px; top:720px; width:400px">색</p>
-<p class="lbl f" style="--i:7; left:710px; top:786px; width:400px">MS에서</p>
-<x-connector class="arrow fragment fade" data-fragment-index="1" x1="1140" y1="500" x2="1320" y2="500" head="end"></x-connector>
-<img class="pic fragment sharp" data-fragment-index="1" style="left:1350px; top:300px; width:400px; height:400px" src="assets/deck/pansharp_result.jpg" alt="같은 장면을 SMOC로 팬샤프닝한 선명한 컬러 영상, 파란 지붕이 선명한 경계와 함께 보임">
-<p class="kwl fragment fade" data-fragment-index="1" style="left:1350px; top:720px; width:400px; color:#15191E">경계 + 색</p>
-<p class="lbl fragment fade" data-fragment-index="1" style="left:1350px; top:786px; width:400px">선명한 컬러</p>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">도입</span><span class="pg-no">05 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">두 장의 장점을 합치는 기술이 <b>팬샤프닝</b>입니다. PAN에서 경계를, MS에서 색을 가져옵니다.</p><p class="pg-say" data-step="1">그러면 흑백만큼 선명하고 색도 정확한 컬러 영상이 됩니다. 오른쪽은 이 연구의 모델 SMOC로 만든 결과입니다.</p></div>
-  </div>
- </div></div>
-</article>
-<article class="pg-scene" data-scene="gen-ai" style="--steps:2">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="gen-ai" data-transition="fade">
-<p class="eyebrow a" style="--i:0">왜 딥러닝 모델일까</p>
-<h2 class="title a" style="--i:1">그럴듯해 보여도, 확대하면 디테일이 무너집니다</h2>
-<p class="hl-lbl a" style="--i:2; left:128px; top:300px; width:380px">정답</p>
-<div class="zbox a" style="--i:2; left:128px; top:354px"><img class="fragment zoom" data-fragment-index="1" src="assets/deck/genai_gt.jpg" alt="정답 영상, 공장 지대와 논밭"></div>
-<p class="hl-lbl a" style="--i:3; left:556px; top:300px; width:380px; color:#0E6E73">우리 모델</p>
-<div class="zbox a" style="--i:3; left:556px; top:354px"><img class="fragment zoom" data-fragment-index="1" src="assets/deck/genai_ours.jpg" alt="우리 딥러닝 모델 결과, 정답과 같은 장면"></div>
-<p class="hl-lbl a" style="--i:4; left:984px; top:300px; width:380px">GPT Image 2.6</p>
-<div class="zbox a" style="--i:4; left:984px; top:354px"><img class="fragment zoom" data-fragment-index="1" src="assets/deck/genai_gpt.jpg" alt="GPT Image 2.6 결과, 건물 사이 녹지가 회색 바닥으로 바뀌고 논밭 사이 길이 사라짐"></div>
-<p class="hl-lbl a" style="--i:5; left:1412px; top:300px; width:380px">Nano Banana 2.1</p>
-<div class="zbox a" style="--i:5; left:1412px; top:354px"><img class="fragment zoom" data-fragment-index="1" src="assets/deck/genai_nano.jpg" alt="Nano Banana 2.1 결과, 건물 사이 녹지가 사라지고 논밭이 다른 모양으로 바뀜"></div>
-<div class="ring t fragment fade" data-fragment-index="2" style="left:256px; top:395px; width:152px; height:152px"></div>
-<div class="ring t fragment fade" data-fragment-index="2" style="left:291px; top:582px; width:150px; height:150px"></div>
-<div class="ring t fragment fade" data-fragment-index="2" style="left:684px; top:395px; width:152px; height:152px"></div>
-<div class="ring t fragment fade" data-fragment-index="2" style="left:719px; top:582px; width:150px; height:150px"></div>
-<div class="ring fragment fade" data-fragment-index="2" style="left:1112px; top:395px; width:152px; height:152px"></div>
-<div class="ring fragment fade" data-fragment-index="2" style="left:1147px; top:582px; width:150px; height:150px"></div>
-<div class="ring fragment fade" data-fragment-index="2" style="top:395px;left:1540px;width:152px;height:152px;box-sizing:border-box"></div>
-<div class="ring fragment fade" data-fragment-index="2" style="top:582px;left:1575px;width:150px;height:150px;box-sizing:border-box"></div>
-<p class="hl-kw t fragment fade" data-fragment-index="2" style="left:556px; top:760px; width:380px">그대로</p>
-<p class="hl-kw o fragment fade" data-fragment-index="2" style="left:984px; top:760px; width:380px">녹지·길이 사라짐</p>
-<p class="hl-kw o fragment fade" data-fragment-index="2" style="left:1412px; top:760px; width:380px">녹지·길이 사라짐</p>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">도입</span><span class="pg-no">06 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">생성형 AI도 영상을 잘 만드는데, 왜 딥러닝 팬샤프닝 모델일까요? 같은 입력을 GPT Image 2.6과 Nano Banana 2.1에 넣어 비교했습니다. 왼쪽부터 정답, 우리 모델, 두 생성형 모델이고, 얼핏 보면 생성형 결과가 더 선명해 보입니다.</p><p class="pg-say" data-step="1">왼쪽 아래를 두 배로 확대해 보겠습니다.</p><p class="pg-say" data-step="2">정답과 우리 모델에는 건물 사이 녹지와 논밭 사이 길이 그대로 있지만, GPT는 녹지를 회색 바닥으로 바꾸고 길을 지웠고, Nano Banana는 논밭을 전혀 다른 모양으로 그렸습니다. 없는 것을 그려 넣는 <b>할루시네이션</b>입니다. RGB 세 밴드 PSNR도 우리 모델 42.1 dB, 생성형 30.1·25.5 dB였습니다. 그래서 입력에 있는 정보만 쓰는 모델이 필요합니다.</p></div>
-  </div>
- </div></div>
-</article>
-<article class="pg-scene" data-scene="korea" style="--steps:3">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="korea" data-transition="fade">
-<p class="eyebrow a" style="--i:0">국내 위성의 현실</p>
-<h2 class="title a" style="--i:1">해외 데이터로 배운 모델, 우리 위성엔 쓰기 어렵습니다</h2>
-<div class="kr">
-<div class="kr-left">
-<div class="blk fragment up">
-<p class="bh o">국내</p>
-<div class="chiprow"><p class="tchip o">민간 위성 5m급</p><p class="tchip o">데이터 부족</p><p class="tchip o">보안 규제</p></div>
-<p class="br">→ 쓸 수 있는 데이터가 적음</p>
-</div>
-<div class="blk fragment up">
-<p class="bh t">해외</p>
-<div class="chiprow"><p class="tchip">중국 등 활발한 연구</p><p class="tchip">공개 데이터셋 다수</p></div>
-<p class="br">→ 방대한 해외 데이터로 학습</p>
-</div>
-</div>
-<div class="kr-right fragment up">
-<p class="ex-l">원본 SSA-MRN</p>
-<div class="expair">
-<div class="ex">
-<img src="assets/deck/korea_wv3.jpg" alt="WV3로 학습한 SSA-MRN을 WV3 도시 장면에 적용한 선명한 결과, 건물·나무·도로가 또렷함">
-<p class="ek t">선명</p>
-<p class="es">학습한 위성 · WV3</p>
-</div>
-<div class="ex">
-<img src="assets/deck/korea_wv2.jpg" alt="같은 모델을 학습하지 않은 WV2 도시 장면에 적용한 흐린 결과, 건물과 도로 경계가 뭉개짐">
-<p class="ek o">흐림</p>
-<p class="es">처음 보는 위성 · WV2</p>
-</div>
-</div>
-</div>
-</div>
-<p class="src-line a" style="--i:2;width:1664px;top:984px;left:50%;transform:translateX(-50%)">머니투데이 2026.7 · 조선비즈 2026.9 · 매일일보 2026.2 · PanCollection (중국 UESTC 공개)</p>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">도입</span><span class="pg-no">07 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button><button type="button" class="pg-dot" data-go="3" aria-label="4단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">국산 위성은 어떨까요?</p><p class="pg-say" data-step="1">국내 민간 위성은 5m급으로 선명도가 낮고, 고해상도 영상은 보안 규제로 학습에 쓰기 어렵습니다. 2026년에는 국내 위성 기업 대표가 영상을 한 장도 팔지 못했다고 말하기도 했습니다.</p><p class="pg-say" data-step="2">반면 중국 등 해외는 연구가 활발하고, 이 연구에서 쓴 PanCollection도 중국 대학이 공개한 해외 위성 데이터입니다. 대부분의 모델이 이런 해외 데이터로 학습됩니다.</p><p class="pg-say" data-step="3">문제는 학습하지 않은 위성에 쓰면 성능이 떨어진다는 점입니다. 원본 SSA-MRN을 WorldView-3로 학습해 WorldView-2에 쓰면 흐려지고 색이 7% 넘게 치우칩니다. 우리 위성도 마찬가지일 수 있어, <b>처음 보는 위성에서도 정확한 모델</b>이 필요합니다. 그래서 2025년에 공개된 오픈소스 모델 SSA-MRN을 재현하고, 이를 바탕으로 개선했습니다.</p></div>
-  </div>
- </div></div>
-</article>
-<article class="pg-scene" id="data" data-scene="data" style="--steps:1">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="data" data-transition="fade">
-<p class="eyebrow a" style="--i:0">데이터 · PanCollection 공개 데이터셋</p>
-<h2 class="title a" style="--i:1">위성 네 종류로 실험했습니다</h2>
-<div class="tiles">
-<div class="tile a" style="--i:2">
-<img src="assets/deck/data_qb.jpg" alt="QuickBird 해안 방파제 영상">
-<p class="name">QB</p>
-<p class="full">QuickBird · 4밴드</p>
-<p class="tag">학습 · 평가</p>
-</div>
-<div class="tile a" style="--i:3">
-<img src="assets/deck/farm.jpg" alt="GaoFen-2 농경지 영상">
-<p class="name">GF2</p>
-<p class="full">GaoFen-2 · 4밴드</p>
-<p class="tag">학습 · 평가</p>
-</div>
-<div class="tile a" style="--i:4">
-<img src="assets/deck/data_wv3.jpg" alt="WorldView-3 해변 영상">
-<p class="name">WV3</p>
-<p class="full">WorldView-3 · 8밴드</p>
-<p class="tag">학습 · 평가</p>
-</div>
-<div class="tile fragment up">
-<img src="assets/deck/data_wv2.jpg" alt="WorldView-2 도시 영상">
-<p class="name">WV2</p>
-<p class="full">WorldView-2 · 8밴드</p>
-<p class="tag new">학습 안 함</p>
-</div>
-</div>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">데이터</span><span class="pg-no">08 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">데이터는 공개 데이터셋 PanCollection을 썼고, QB·GF2·WV3로 학습하고 평가했습니다. 평가는 영상을 4분의 1로 줄여 복원한 뒤 원래 영상과 PSNR·SAM·ERGAS로 비교하는 RR 방식이고, 세 시드(42·43·44) 평균으로 판정했습니다.</p><p class="pg-say" data-step="1"><b>WV2는 학습에 쓰지 않고</b>, WV3로 학습한 모델을 그대로 적용해 처음 보는 위성에서의 성능을 확인했습니다.</p></div>
-  </div>
- </div></div>
-</article>
-<article class="pg-scene" id="model" data-scene="smoc" style="--steps:3">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="smoc" data-transition="fade">
-<p class="eyebrow a" style="--i:0">우리 모델</p>
-<div class="sword a" style="--i:1; left:128px; top:214px; width:1664px">
-<p class="sw sk fragment mv-s1" data-fragment-index="1">S</p><p class="sw fragment drop-out" data-fragment-index="1">cale-</p><p class="sw sk fragment mv-s2" data-fragment-index="1">M</p><p class="sw fragment drop-out" data-fragment-index="1">ixed,</p><p class="sw sk sp fragment mv-s3" data-fragment-index="1">O</p><p class="sw fragment drop-out" data-fragment-index="1">bservation-</p><p class="sw sk fragment mv-s4" data-fragment-index="1">C</p><p class="sw fragment drop-out" data-fragment-index="1">onsistent</p>
-</div>
-<p class="smoc-big fragment acr-in" data-fragment-index="1" style="left:128px; top:190px; width:1664px">SMOC</p>
-<p class="smoc-read fragment acr-in" data-fragment-index="1" style="left:1150px; top:250px; width:300px">에스목</p>
-<div class="mcard fragment up" data-fragment-index="2" style="left:128px; top:470px; width:800px">
-<p class="mh">SM · 축척 혼합 학습</p>
-<div class="mrow">
-<img class="mbig" src="assets/deck/sm_orig.jpg" alt="원래 크기 학습 영상">
-<p class="mt">+</p>
-<img class="msm" src="assets/deck/sm_coarse.jpg" alt="2배 거친 학습 영상">
-<p class="mt">원래 크기와<br>2배 거친 크기를<br>함께 학습</p>
-</div>
-<p class="ms">해상도가 달라져도 세부를 알맞게</p>
-</div>
-<div class="mcard fragment up" data-fragment-index="3" style="left:992px; top:470px; width:800px">
-<p class="mh">OC · 관측 일치 보정</p>
-<div class="mrow">
-<img class="mbig" src="assets/deck/smoc_result.jpg" alt="모델 결과 영상">
-<p class="mt">다시 줄이면 →</p>
-<img class="msm" src="assets/deck/oc_ms_small.png" alt="입력 컬러 영상">
-<p class="mt">= 입력 MS</p>
-</div>
-<p class="ms">입력과 정확히 맞도록 마지막에 보정</p>
-</div>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">모델 SMOC</span><span class="pg-no">09 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button><button type="button" class="pg-dot" data-go="3" aria-label="4단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">모델의 이름은 Scale-Mixed, Observation-Consistent의 앞 글자를 땄습니다.</p><p class="pg-say" data-step="1"><b>SMOC</b>, 에스목입니다.</p><p class="pg-say" data-step="2"><b>SM은 축척 혼합 학습</b>입니다. 원래 크기와 두 배 거친 학습 쌍을 섞어 배워, 해상도가 달라져도 세부를 알맞은 만큼 넣습니다.</p><p class="pg-say" data-step="3"><b>OC는 관측 일치 보정</b>입니다. 결과를 다시 줄였을 때 입력과 정확히 같아지도록 마지막에 맞춥니다.</p></div>
-  </div>
- </div></div>
-</article>
-<article class="pg-scene" data-scene="arch" style="--steps:2">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="arch" data-transition="fade">
-<p class="eyebrow a" style="--i:0">SMOC 구조 · 주 개선</p>
-<h2 class="title a" style="--i:1">핵심은 처음 보는 위성에서의 일반화입니다</h2>
-<x-connector class="arrow f" style="--i:3" x1="308" y1="370" x2="364" y2="370" head="end"></x-connector>
-<x-connector class="arrow f" style="--i:4" x1="586" y1="370" x2="642" y2="370" head="end"></x-connector>
-<x-connector class="arrow f" style="--i:5" x1="944" y1="370" x2="1000" y2="370" head="end"></x-connector>
-<x-connector class="arrow t f" style="--i:6" x1="1252" y1="370" x2="1308" y2="370" head="end"></x-connector>
-<x-connector class="arrow t f" style="--i:7" x1="1570" y1="370" x2="1630" y2="370" head="end"></x-connector>
-<div class="nd a" style="--i:2; left:128px; top:320px; width:180px; height:100px"><p class="nt">입력</p></div>
-<div class="nd a" style="--i:3; left:366px; top:320px; width:220px; height:100px"><p class="nt">특징 추출</p></div>
-<div class="nd a" style="--i:4; left:644px; top:320px; width:300px; height:100px"><p class="nt">여러 크기 융합</p><p class="ns">전체 · 1/2 · 1/4</p></div>
-<div class="nd a" style="--i:5; left:1002px; top:320px; width:250px; height:100px"><p class="nt">단계적 복원</p><p class="ns">작은 크기부터</p></div>
-<div class="nd new a" style="--i:6; left:1310px; top:320px; width:260px; height:100px"><p class="nt">관측 일치 보정</p></div>
-<div class="nd a" style="--i:7; left:1632px; top:320px; width:160px; height:100px"><p class="nt">결과</p></div>
-<p class="bdg d f" style="--i:8;top:294px;left:218px">②</p>
-<p class="bdg o f" style="--i:8; left:276px; top:294px">⑦</p>
-<p class="bdg d g f" style="--i:8; left:1702px; top:294px">⑥</p>
-<p class="bdg g f" style="--i:8; left:912px; top:294px">①</p>
-<p class="bdg g f" style="--i:8; left:1220px; top:294px">⑤</p>
-<p class="bdg f" style="--i:8; left:1538px; top:294px">④</p>
-<p class="bdg d g f" style="--i:8; left:1760px; top:294px">③</p>
-<div class="f" style="--i:9; position:absolute; left:128px; top:438px; width:1664px; display:flex; align-items:center; gap:36px">
-<div style="display:flex; align-items:center; gap:10px"><div style="width:24px; height:24px; border-radius:50%; background:#0E6E73"></div><p style="font-size:24px; color:#5B6470">주 개선</p></div>
-<div style="display:flex; align-items:center; gap:10px"><div style="width:24px; height:24px; border-radius:50%; background:#B14A17"></div><p style="font-size:24px; color:#5B6470">처음 보는 위성에만 적용</p></div>
-<div style="display:flex; align-items:center; gap:10px"><div style="width:24px; height:24px; border-radius:50%; background:#9AA1AA"></div><p style="font-size:24px; color:#5B6470">보조 개선</p></div>
-<div style="display:flex; align-items:center; gap:10px"><div style="width:24px; height:24px; box-sizing:border-box; border-radius:50%; border:3px dashed #5B6470"></div><p style="font-size:24px; color:#5B6470">점선: 학습할 때만 바뀜</p></div>
-<div style="display:flex; align-items:center; gap:10px"><div style="width:36px; height:24px; box-sizing:border-box; border-radius:6px; border:3px solid #9AA1AA; background:#F3F4F1"></div><p style="font-size:24px; color:#5B6470">원본 흐름</p></div>
-<div style="display:flex; align-items:center; gap:10px"><div style="width:36px; height:24px; box-sizing:border-box; border-radius:6px; border:3px solid #0E6E73; background:#E6F0EF"></div><p style="font-size:24px; color:#5B6470">새로 추가</p></div>
-</div>
-<div class="gcol fragment up" data-fragment-index="1" style="left:128px; top:490px; width:1040px">
-<p class="gh">주 개선 · 처음 보는 위성에서도 정확하게</p>
-<div class="gi ef"><p class="gn d">②</p><div><p class="gt">축척 혼합 학습</p><p class="gs">문제: 처음 보는 위성에서 없는 무늬를 그려 넣음</p></div></div>
-<div class="gi ef"><p class="gn">④</p><div><p class="gt">관측 일치 보정</p><p class="gs">문제: 결과의 색·밝기가 입력에서 어긋남</p></div></div>
-<div class="gi ef"><p class="gn o">⑦</p><div><p class="gt">밴드별 밝기 보정</p><p class="gs">문제: 위성마다 밴드 밝기 비율이 달라 흐려짐</p></div></div>
-</div>
-<div class="gcol sub fragment up" data-fragment-index="2" style="left:1240px; top:490px; width:552px">
-<p class="gh">보조 개선 · 정확도와 크기</p>
-<div class="gi"><p class="gn g">①</p><div><p class="gt">넓게 보는 가지</p></div></div>
-<div class="gi"><p class="gn g">⑤</p><div><p class="gt">축소·확대를 위성 방식으로</p></div></div>
-<div class="gi"><p class="gn d g">③</p><div><p class="gt">분광 손실</p></div></div>
-<div class="gi"><p class="gn d g">⑥</p><div><p class="gt">가볍게 분해 · 연산 66%</p></div></div>
-</div>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">모델 SMOC</span><span class="pg-no">10 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">SMOC의 주 개선은 처음 보는 위성에서의 일반화입니다. 회색 상자가 원본 SSA-MRN의 흐름이고, 색 번호가 주 개선, 회색 번호가 보조 개선입니다. 점선 번호는 학습할 때만 바뀌는 부분입니다.</p><p class="pg-say" data-step="1">주 개선은 세 문제를 푼 것입니다. 처음 보는 위성에서 없는 무늬를 그려 넣는 문제는 두 크기를 함께 학습해(②) 막았고, 결과의 색이 입력에서 어긋나는 문제는 관측 일치 보정(④)으로, 위성마다 밴드 밝기 비율이 달라 흐려지는 문제는 밴드별 밝기 보정(⑦)으로 풀었습니다. 그 결과 <b>재학습 없이 처음 보는 위성에서 원본보다 3.4 dB</b> 높습니다.</p><p class="pg-say" data-step="2">나머지 넷(①⑤③⑥)은 학습한 위성의 정확도와 모델 크기를 다듬은 보조 개선입니다. 아래 전체 구조도에서 각 번호가 실제로 어디에 들어가는지 볼 수 있습니다.</p></div>
-  </div>
- </div></div>
-</article>
-<section class="pg-detail ">
- <p class="pg-kicker">SMOC 구조도</p>
- <h2 class="pg-dh">실제로 적용한 전체 구조</h2>
- 
- <p class="pg-lead">주황색이 원본 SSA-MRN에 더한 부분입니다. (a) 초기 특징과 backbone, (b) 전체·1/2·1/4 크기에서 밴드별 SSAI 융합, (c) 작은 크기부터의 단계적 복원과 관측 일치 사영, (d) SSAI 블록 내부, (e) 축척 혼합 학습입니다.</p>
- <figure class="pg-fig"><a href="assets/smoc-structure.svg" target="_blank" rel="noopener"><img src="assets/smoc-structure.svg" alt="SMOC 전체 구조도: (a) PAN·LMS·LRPAN 초기 특징(PAN MTF 축소와 23탭 확대)과 랭크 32로 분해한 ResBlock×4 backbone, 2×2 합성곱 입·출력의 W2 병렬 가지, (b) MTF 축소와 23탭 확대를 쓰는 전체·1/2·1/4 크기의 밴드별 SSAI 융합, (c) 23탭 확대로 단계적 복원과 출력 뒤 관측 일치 사영, (d) SSAI 블록 내부, (e) λ 1.2·c 0.25의 L1·분광 손실 축척 혼합 학습" loading="lazy"></a>
- <figcaption>눌러서 원본 크기로 볼 수 있습니다. 입력은 PAN(H×W), 4배 확대한 MS(LMS), 저해상도 MS(H/4×W/4) 세 가지입니다.</figcaption></figure>
- <div class="pg-tablewrap"><table class="pg-table">
-  <thead><tr><th></th><th>개선</th><th>바꾼 곳</th><th>푼 문제</th><th>효과</th></tr></thead>
-  <tbody>
-   <tr class="main"><td><i class="n d">②</i></td><td>축척 혼합 학습</td><td>학습</td><td>처음 보는 위성에서 없는 무늬를 그려 넣음</td><td>WV2 +1.3 dB</td></tr>
-   <tr class="main"><td><i class="n">④</i></td><td>관측 일치 보정</td><td>추론 뒤</td><td>결과의 색·밝기가 입력에서 어긋남</td><td>관측 오차 15.7 → 0</td></tr>
-   <tr class="main"><td><i class="n o">⑦</i></td><td>밴드별 밝기 보정</td><td>처음 보는 위성 입력·출력</td><td>위성마다 밴드 밝기 비율이 달라 흐려짐</td><td>WV2 약 +2 dB</td></tr>
-   <tr><td><i class="n g">①</i></td><td>넓게 보는 가지(W2)</td><td>구조</td><td>원본 backbone의 좁은 수용 영역</td><td>RR +0.70 dB</td></tr>
-   <tr><td><i class="n g">⑤</i></td><td>위성 방식 축소·확대</td><td>구조(파라미터 없음)</td><td>모델 안 축소가 데이터 생성 방식과 다름</td><td>+0.04-0.24 dB</td></tr>
-   <tr><td><i class="n g d">③</i></td><td>분광 손실</td><td>학습</td><td>색 오차(SAM)가 큼</td><td>SAM 60/60장 감소</td></tr>
-   <tr><td><i class="n g d">⑥</i></td><td>분해 후 감쇠</td><td>학습 일정</td><td>병렬 가지로 커진 모델 크기</td><td>연산 66%</td></tr>
-  </tbody></table></div>
 
-</section>
-<article class="pg-scene" data-scene="sub-model" style="--steps:3">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="sub-model" data-transition="fade">
-<p class="eyebrow a" style="--i:0">보조 개선 ① ⑤ · 모델 구조</p>
-<h2 class="title a" style="--i:1">더 넓게 보고, 위성처럼 줄입니다</h2>
-<div class="scard a" style="--i:2; left:128px; top:300px; width:792px">
-<div class="gi"><p class="gn g">①</p><div><p class="gt">넓게 보는 가지</p><p class="gs">특징 추출 후 절반 해상도 가지를 붙임</p></div></div>
-</div>
-<div class="chart f" style="--i:3;left:150px;width:200px;height:200px;top:440px"><svg width="200" height="200" viewBox="0 0 478 478" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="58" height="58" rx="3" fill="#69422a"/><rect x="60" y="0" width="58" height="58" rx="3" fill="#6d5534"/><rect x="120" y="0" width="58" height="58" rx="3" fill="#92684e"/><rect x="180" y="0" width="58" height="58" rx="3" fill="#915c55"/><rect x="240" y="0" width="58" height="58" rx="3" fill="#9c7268"/><rect x="300" y="0" width="58" height="58" rx="3" fill="#ac764d"/><rect x="360" y="0" width="58" height="58" rx="3" fill="#916763"/><rect x="420" y="0" width="58" height="58" rx="3" fill="#9a5e41"/><rect x="0" y="60" width="58" height="58" rx="3" fill="#684e48"/><rect x="60" y="60" width="58" height="58" rx="3" fill="#4f3a19"/><rect x="120" y="60" width="58" height="58" rx="3" fill="#72574f"/><rect x="180" y="60" width="58" height="58" rx="3" fill="#cca089"/><rect x="240" y="60" width="58" height="58" rx="3" fill="#443819"/><rect x="300" y="60" width="58" height="58" rx="3" fill="#8d6854"/><rect x="360" y="60" width="58" height="58" rx="3" fill="#c29773"/><rect x="420" y="60" width="58" height="58" rx="3" fill="#e9c3c0"/><rect x="0" y="120" width="58" height="58" rx="3" fill="#8e5c3f"/><rect x="60" y="120" width="58" height="58" rx="3" fill="#875e55"/><rect x="120" y="120" width="58" height="58" rx="3" fill="#6b544b"/><rect x="180" y="120" width="58" height="58" rx="3" fill="#c69d7b"/><rect x="240" y="120" width="58" height="58" rx="3" fill="#d0aca4"/><rect x="300" y="120" width="58" height="58" rx="3" fill="#d9bcb8"/><rect x="360" y="120" width="58" height="58" rx="3" fill="#97755a"/><rect x="420" y="120" width="58" height="58" rx="3" fill="#755c57"/><rect x="0" y="180" width="58" height="58" rx="3" fill="#8a6662"/><rect x="60" y="180" width="58" height="58" rx="3" fill="#765f49"/><rect x="120" y="180" width="58" height="58" rx="3" fill="#c4aea6"/><rect x="180" y="180" width="58" height="58" rx="3" fill="#fcf7ed"/><rect x="240" y="180" width="58" height="58" rx="3" fill="#fcdab9"/><rect x="300" y="180" width="58" height="58" rx="3" fill="#a9978d"/><rect x="360" y="180" width="58" height="58" rx="3" fill="#b4917a"/><rect x="420" y="180" width="58" height="58" rx="3" fill="#66513c"/><rect x="0" y="240" width="58" height="58" rx="3" fill="#6b574d"/><rect x="60" y="240" width="58" height="58" rx="3" fill="#9b8982"/><rect x="120" y="240" width="58" height="58" rx="3" fill="#877459"/><rect x="180" y="240" width="58" height="58" rx="3" fill="#fffee7"/><rect x="240" y="240" width="58" height="58" rx="3" fill="#f8dbbc"/><rect x="300" y="240" width="58" height="58" rx="3" fill="#e3c2bd"/><rect x="360" y="240" width="58" height="58" rx="3" fill="#9a9385"/><rect x="420" y="240" width="58" height="58" rx="3" fill="#685248"/><rect x="0" y="300" width="58" height="58" rx="3" fill="#8f7f79"/><rect x="60" y="300" width="58" height="58" rx="3" fill="#464221"/><rect x="120" y="300" width="58" height="58" rx="3" fill="#baa892"/><rect x="180" y="300" width="58" height="58" rx="3" fill="#b5aba4"/><rect x="240" y="300" width="58" height="58" rx="3" fill="#d4bcba"/><rect x="300" y="300" width="58" height="58" rx="3" fill="#b0a395"/><rect x="360" y="300" width="58" height="58" rx="3" fill="#4d4029"/><rect x="420" y="300" width="58" height="58" rx="3" fill="#3f3e2c"/><rect x="0" y="360" width="58" height="58" rx="3" fill="#685f56"/><rect x="60" y="360" width="58" height="58" rx="3" fill="#3d3518"/><rect x="120" y="360" width="58" height="58" rx="3" fill="#867971"/><rect x="180" y="360" width="58" height="58" rx="3" fill="#958b8e"/><rect x="240" y="360" width="58" height="58" rx="3" fill="#9d9678"/><rect x="300" y="360" width="58" height="58" rx="3" fill="#232b14"/><rect x="360" y="360" width="58" height="58" rx="3" fill="#4c4548"/><rect x="420" y="360" width="58" height="58" rx="3" fill="#3b3112"/><rect x="0" y="420" width="58" height="58" rx="3" fill="#6c6048"/><rect x="60" y="420" width="58" height="58" rx="3" fill="#5f6248"/><rect x="120" y="420" width="58" height="58" rx="3" fill="#4e484c"/><rect x="180" y="420" width="58" height="58" rx="3" fill="#4b4635"/><rect x="240" y="420" width="58" height="58" rx="3" fill="#b4b2a7"/><rect x="300" y="420" width="58" height="58" rx="3" fill="#2b2b0e"/><rect x="360" y="420" width="58" height="58" rx="3" fill="#4b5239"/><rect x="420" y="420" width="58" height="58" rx="3" fill="#152105"/></svg></div>
-<p class="cap c a" style="--i:3;left:130px;width:240px;color:#15191E;font-weight:700;font-size:24px;top:654px">원래 · 8×8 칸</p>
-<div style="position:absolute;left:150px;width:200px;height:200px;top:440px"><div class="bx o fragment pop" data-fragment-index="1" style="left:0.0px; top:0.0px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:0ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:50.2px; top:0.0px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:160ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:100.4px; top:0.0px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:320ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:150.6px; top:0.0px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:480ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:0.0px; top:50.2px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:640ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:50.2px; top:50.2px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:800ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:100.4px; top:50.2px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:960ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:150.6px; top:50.2px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:1120ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:0.0px; top:100.4px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:1280ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:50.2px; top:100.4px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:1440ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:100.4px; top:100.4px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:1600ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:150.6px; top:100.4px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:1760ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:0.0px; top:150.6px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:1920ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:50.2px; top:150.6px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:2080ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:100.4px; top:150.6px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:2240ms"></div><div class="bx o fragment pop" data-fragment-index="1" style="left:150.6px; top:150.6px; width:49.4px; height:49.4px; border-width:3px; box-shadow:none; transition-delay:2400ms"></div></div>
-<x-connector class="arrow fragment fade" data-fragment-index="1" x1="364" y1="580" x2="546" y2="580" head="end"></x-connector>
-<p class="cap c fragment fade" data-fragment-index="1" style="left:350px;width:210px;color:#B14A17;font-weight:700;font-size:24px;top:490px">2×2 합성곱<br>보폭 2</p>
-<div style="position:absolute;left:560px;width:200px;height:200px;top:440px"><div class="cel4 fragment pop" data-fragment-index="1" style="left:0.0px; top:0.0px; width:49.4px; height:49.4px; background:#634830; transition-delay:60ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:50.2px; top:0.0px; width:49.4px; height:49.4px; background:#986f5f; transition-delay:220ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:100.4px; top:0.0px; width:49.4px; height:49.4px; background:#866248; transition-delay:380ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:150.6px; top:0.0px; width:49.4px; height:49.4px; background:#b68876; transition-delay:540ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:0.0px; top:50.2px; width:49.4px; height:49.4px; background:#856050; transition-delay:700ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:50.2px; top:50.2px; width:49.4px; height:49.4px; background:#bca696; transition-delay:860ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:100.4px; top:50.2px; width:49.4px; height:49.4px; background:#d4b6a8; transition-delay:1020ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:150.6px; top:50.2px; width:49.4px; height:49.4px; background:#8a6d5a; transition-delay:1180ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:0.0px; top:100.4px; width:49.4px; height:49.4px; background:#77685a; transition-delay:1340ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:50.2px; top:100.4px; width:49.4px; height:49.4px; background:#bdb19e; transition-delay:1500ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:100.4px; top:100.4px; width:49.4px; height:49.4px; background:#d8bfb2; transition-delay:1660ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:150.6px; top:100.4px; width:49.4px; height:49.4px; background:#645948; transition-delay:1820ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:0.0px; top:150.6px; width:49.4px; height:49.4px; background:#5c5640; transition-delay:1980ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:50.2px; top:150.6px; width:49.4px; height:49.4px; background:#6d6460; transition-delay:2140ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:100.4px; top:150.6px; width:49.4px; height:49.4px; background:#686850; transition-delay:2300ms"></div><div class="cel4 fragment pop" data-fragment-index="1" style="left:150.6px; top:150.6px; width:49.4px; height:49.4px; background:#3a3a26; transition-delay:2460ms"></div></div>
-<p class="cap c fragment late" data-fragment-index="1" style="left:540px;width:240px;color:#B14A17;font-weight:700;font-size:24px;transition-delay:2600ms;top:654px">절반 · 4×4 칸</p>
-<div class="chart fragment fade" data-fragment-index="2" style="left:150px;width:200px;height:200px;top:440px"><svg width="200" height="200" viewBox="0 0 478 478" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="0" width="478" height="478" fill="#FBFBF9"/><rect x="0" y="0" width="58" height="58" rx="3" fill="#69422a"/><rect x="60" y="0" width="58" height="58" rx="3" fill="#6d5534"/><rect x="120" y="0" width="58" height="58" rx="3" fill="#92684e"/><rect x="180" y="0" width="58" height="58" rx="3" fill="#915c55"/><rect x="240" y="0" width="58" height="58" rx="3" fill="#9c7268"/><rect x="300" y="0" width="58" height="58" rx="3" fill="#ac764d"/><rect x="360" y="0" width="58" height="58" rx="3" fill="#916763"/><rect x="420" y="0" width="58" height="58" rx="3" fill="#9a5e41"/><rect x="0" y="60" width="58" height="58" rx="3" fill="#684e48"/><rect x="60" y="60" width="58" height="58" rx="3" fill="#4f3a19"/><rect x="120" y="60" width="58" height="58" rx="3" fill="#72574f"/><rect x="180" y="60" width="58" height="58" rx="3" fill="#cca089"/><rect x="240" y="60" width="58" height="58" rx="3" fill="#443819"/><rect x="300" y="60" width="58" height="58" rx="3" fill="#8d6854"/><rect x="360" y="60" width="58" height="58" rx="3" fill="#c29773"/><rect x="420" y="60" width="58" height="58" rx="3" fill="#e9c3c0"/><rect x="0" y="120" width="58" height="58" rx="3" fill="#8e5c3f"/><rect x="60" y="120" width="58" height="58" rx="3" fill="#875e55"/><rect x="120" y="120" width="58" height="58" rx="3" fill="#6b544b"/><rect x="180" y="120" width="58" height="58" rx="3" fill="#c69d7b"/><rect x="240" y="120" width="58" height="58" rx="3" fill="#d0aca4"/><rect x="300" y="120" width="58" height="58" rx="3" fill="#d9bcb8"/><rect x="360" y="120" width="58" height="58" rx="3" fill="#97755a"/><rect x="420" y="120" width="58" height="58" rx="3" fill="#755c57"/><rect x="0" y="180" width="58" height="58" rx="3" fill="#8a6662"/><rect x="60" y="180" width="58" height="58" rx="3" fill="#765f49"/><rect x="120" y="180" width="58" height="58" rx="3" fill="#c4aea6"/><rect x="180" y="180" width="58" height="58" rx="3" fill="#fcf7ed"/><rect x="240" y="180" width="58" height="58" rx="3" fill="#fcdab9"/><rect x="300" y="180" width="58" height="58" rx="3" fill="#a9978d"/><rect x="360" y="180" width="58" height="58" rx="3" fill="#b4917a"/><rect x="420" y="180" width="58" height="58" rx="3" fill="#66513c"/><rect x="0" y="240" width="58" height="58" rx="3" fill="#6b574d"/><rect x="60" y="240" width="58" height="58" rx="3" fill="#9b8982"/><rect x="120" y="240" width="58" height="58" rx="3" fill="#877459"/><rect x="180" y="240" width="58" height="58" rx="3" fill="#fffee7"/><rect x="240" y="240" width="58" height="58" rx="3" fill="#f8dbbc"/><rect x="300" y="240" width="58" height="58" rx="3" fill="#e3c2bd"/><rect x="360" y="240" width="58" height="58" rx="3" fill="#9a9385"/><rect x="420" y="240" width="58" height="58" rx="3" fill="#685248"/><rect x="0" y="300" width="58" height="58" rx="3" fill="#8f7f79"/><rect x="60" y="300" width="58" height="58" rx="3" fill="#464221"/><rect x="120" y="300" width="58" height="58" rx="3" fill="#baa892"/><rect x="180" y="300" width="58" height="58" rx="3" fill="#b5aba4"/><rect x="240" y="300" width="58" height="58" rx="3" fill="#d4bcba"/><rect x="300" y="300" width="58" height="58" rx="3" fill="#b0a395"/><rect x="360" y="300" width="58" height="58" rx="3" fill="#4d4029"/><rect x="420" y="300" width="58" height="58" rx="3" fill="#3f3e2c"/><rect x="0" y="360" width="58" height="58" rx="3" fill="#685f56"/><rect x="60" y="360" width="58" height="58" rx="3" fill="#3d3518"/><rect x="120" y="360" width="58" height="58" rx="3" fill="#867971"/><rect x="180" y="360" width="58" height="58" rx="3" fill="#958b8e"/><rect x="240" y="360" width="58" height="58" rx="3" fill="#9d9678"/><rect x="300" y="360" width="58" height="58" rx="3" fill="#232b14"/><rect x="360" y="360" width="58" height="58" rx="3" fill="#4c4548"/><rect x="420" y="360" width="58" height="58" rx="3" fill="#3b3112"/><rect x="0" y="420" width="58" height="58" rx="3" fill="#6c6048"/><rect x="60" y="420" width="58" height="58" rx="3" fill="#5f6248"/><rect x="120" y="420" width="58" height="58" rx="3" fill="#4e484c"/><rect x="180" y="420" width="58" height="58" rx="3" fill="#4b4635"/><rect x="240" y="420" width="58" height="58" rx="3" fill="#b4b2a7"/><rect x="300" y="420" width="58" height="58" rx="3" fill="#2b2b0e"/><rect x="360" y="420" width="58" height="58" rx="3" fill="#4b5239"/><rect x="420" y="420" width="58" height="58" rx="3" fill="#152105"/></svg></div>
-<div class="bx fragment fade" data-fragment-index="2" style="left:148px;width:79.5px;height:79.5px;border-width:4px;top:438px"></div>
-<div class="bx fragment fade" data-fragment-index="2" style="left:558px;width:154.8px;height:154.8px;border-width:4px;top:438px"></div>
-<p class="sv fragment up" data-fragment-index="2" style="position:absolute;left:150px;width:760px;font-size:44px;font-weight:800;top:710px">3×3 → 6×6</p>
-<p class="cap fragment up" data-fragment-index="2" style="left:150px;width:760px;font-size:24px;top:770px">같은 3×3 합성곱이 원래 기준 두 배 넓은 범위</p>
-<div class="scard fragment up" data-fragment-index="3" style="left:1000px; top:300px; width:792px">
-<div class="gi"><p class="gn g">⑤</p><div><p class="gt">축소·확대를 위성 방식으로</p><p class="gs">단순 축소 대신 위성 흐림을 거쳐 decimation</p></div></div>
-<div class="simgs">
-<div class="sfig"><img src="assets/deck/down_simple.png" alt="단순 축소한 PAN, 자글자글한 잡음이 많음" style="width:340px; height:340px"><p class="sc" style="color:#5B6470">원본: 단순 축소</p></div>
-<div class="sfig"><img src="assets/deck/down_sensor.png" alt="위성 흐림을 거쳐 줄인 PAN, 부드러움" style="width:340px; height:340px"><p class="sc" style="color:#0E6E73">SMOC: 위성 방식</p></div>
-</div>
-<p class="sk" style="margin-top:0">PSNR 학습한 위성 +0.04-0.11 dB · 처음 보는 WV2 +0.24 dB</p>
-</div>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">모델 SMOC</span><span class="pg-no">11 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button><button type="button" class="pg-dot" data-go="3" aria-label="4단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">모델 구조에서는 두 가지를 바꿨습니다. 첫째는 <b>넓게 보는 가지(①)</b>입니다.</p><p class="pg-say" data-step="1">2×2 칸을 한 칸으로 묶는 보폭 2의 2×2 합성곱으로 절반 해상도 특징을 만듭니다.</p><p class="pg-say" data-step="2">그 위에서 같은 3×3 합성곱을 쓰면 원래 해상도 기준 6×6, 두 배 넓은 범위를 봅니다. 계산할 위치는 4분의 1이라 부담이 적습니다.</p><p class="pg-say" data-step="3">둘째(<b>⑤</b>), 모델 안에서 영상을 줄이고 키울 때 단순 축소 대신 위성처럼 센서 MTF로 흐린 뒤 솎아 내고, 23탭 보간으로 키우도록 바꿨습니다. 학습할 파라미터는 늘지 않고, 네 데이터셋 모두 PSNR이 올랐습니다.</p></div>
+<!-- 01 문제 -->
+<section class="sec" id="problem">
+ <div class="wrap">
+  <div class="sh" data-r><span class="no">01</span><p class="kick">문제</p><h2>위성은 선명한 흑백과 흐린 컬러를 따로 찍습니다</h2></div>
+  <div class="cols2">
+   <p class="body" data-r>위성영상은 지도, 재난 대응, 농업, 환경 감시에 쓰입니다. 무너진 건물이나 끊긴 도로를 찾으려면 <b>경계</b>가 선명해야 하고, 작물 상태나 토지 종류는 파장별 밝기로 구분하므로 <b>색</b>이 정확해야 합니다.</p>
+   <p class="body" data-r style="--d:1">그런데 위성은 둘을 한 장에 담지 못합니다. 흑백(PAN)은 빛을 한꺼번에 받아 칸을 작게 만들 수 있고, 컬러(MS)는 빛을 파랑·초록·빨강·근적외선으로 나눠 받아 칸이 가로세로 네 배 큽니다. 정부 기관이 원하는 수준은 차 한 대를 구분하는 30 cm급이지만, 실제 컬러 영상은 m급입니다.</p>
   </div>
- </div></div>
-</article>
-<section class="pg-detail ">
- <p class="pg-kicker">보조 개선 ① ⑤ 자세히</p>
- <h2 class="pg-dh">더 넓게 보는 가지와 위성 방식의 축소·확대</h2>
- 
- <div class="pg-grid2">
-  <div class="pg-card"><h3><i class="n g">①</i>넓게 보는 가지 (W2 병렬 가지)</h3>
-   <p>원본 구조는 그대로 두고, 초기 특징 F<sub>0</sub>(64채널)에서 갈라져 원본 backbone(ResBlock×4)과 나란히 흐르는 가지를 더했습니다. 보폭 2의 2×2 합성곱으로 해상도를 절반으로 접어 128채널로 만들고, 잔차 블록 8개를 거친 뒤 2×2 전치 합성곱(0으로 초기화)으로 펼쳐 backbone 출력에 더합니다.</p>
-   <p>0으로 초기화했기 때문에 학습을 시작할 때는 원본과 똑같이 동작하고, 필요한 만큼만 가지의 기여가 커집니다.</p>
-   <dl class="pg-spec"><div><dt>입·출력</dt><dd>Conv 2×2 s2 64→128 · ConvT 2×2 s2 128→64</dd></div><div><dt>본체</dt><dd>ResBlock×8 · 128채널 · H/2×W/2</dd></div><div><dt>근거</dt><dd>성능 <a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/29_capacity_refinement/README.md">29번</a> 처음 도입 · <a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/43_normalized_parallel_capacity/README.md">43번</a> 3시드 재현 RR +0.70 dB</dd></div></dl>
+
+  <figure class="merge" data-r>
+   <div class="m-item m-pan"><img src="assets/deck/pan_gf2.jpg" alt="GaoFen-2 흑백 PAN 영상, 공장 지붕의 골까지 선명함"><b>PAN · 흑백 0.8 m</b><span>경계가 선명함</span></div>
+   <p class="m-op">+</p>
+   <div class="m-item m-ms"><img src="assets/deck/ms_gf2.jpg" alt="같은 곳의 컬러 MS 영상, 파란 지붕이 뭉개짐"><b>MS · 컬러 3.2 m</b><span>색이 정확함</span></div>
+   <p class="m-op">=</p>
+   <div class="m-item m-out"><img src="assets/deck/pansharp_result.jpg" alt="팬샤프닝 결과, 선명한 경계와 정확한 색"><b class="t">팬샤프닝 · 컬러 0.8 m</b><span>PAN의 경계 + MS의 색</span></div>
+  </figure>
+
+  <div class="sub" data-r>
+   <h3>생성형 AI로는 안 되는 이유</h3>
+   <p class="body">같은 입력을 생성형 이미지 모델 GPT Image 2.6과 Nano Banana 2.1에 넣어 비교했습니다. 얼핏 보면 생성형 결과가 더 선명하지만, 확대하면 건물 사이 녹지와 논밭 사이 길이 사라지거나 전혀 다른 모양으로 바뀝니다. 위성영상에서 없는 것을 그려 넣는 <b>할루시네이션</b>은 치명적이므로, 입력에 있는 정보만 쓰는 모델이 필요합니다.</p>
   </div>
-  <div class="pg-card"><h3><i class="n g">⑤</i>축소·확대를 위성 방식으로</h3>
-   <p>SSA-MRN은 모델 안에서 PAN을 1/2·1/4로 줄이고 MS를 키울 때 단순 bilinear 보간을 씁니다. 그런데 학습 데이터의 저해상도 영상은 <b>센서 MTF로 흐린 뒤 솎아 내는</b> 방식(Wald 프로토콜)으로 만들어집니다. 둘이 다르면 모델이 받는 축소 영상에 실제 관측에는 없는 자글자글한 잡음이 섞입니다.</p>
-   <p>모델 안의 고정 축소·확대를 데이터를 만든 연산(MTF 블러 + 솎음, 23탭 보간)으로 바꿨습니다. 필터는 고정값이라 학습할 파라미터가 늘지 않습니다.</p>
-   <dl class="pg-spec"><div><dt>효과</dt><dd>학습한 위성 PSNR +0.04-0.11 dB · 처음 보는 WV2 +0.24 dB</dd></div><div><dt>근거</dt><dd>성능 <a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/90_dataset_matched_internal_resampling/README.md">90번</a> · 3시드</dd></div></dl>
+  <figure class="gen" data-r>
+   <div class="gen-tabs" role="group" aria-label="보기"><button type="button" class="on" data-zoom="0">전체</button><button type="button" data-zoom="1">왼쪽 아래 2배 확대</button></div>
+   <div class="gen-row">
+    <div class="g"><div class="zb"><img src="assets/deck/genai_gt.jpg" alt="정답 영상, 공장 지대와 논밭"><i class="ring t" style="left:34%;top:11%;width:40%"></i><i class="ring t" style="left:43%;top:60%;width:39%"></i></div><b>정답</b><span>&nbsp;</span></div>
+    <div class="g"><div class="zb"><img src="assets/deck/genai_ours.jpg" alt="SMOC 결과, 정답과 같은 장면"><i class="ring t" style="left:34%;top:11%;width:40%"></i><i class="ring t" style="left:43%;top:60%;width:39%"></i></div><b class="t">SMOC</b><span>42.1 dB · 녹지·길 그대로</span></div>
+    <div class="g"><div class="zb"><img src="assets/deck/genai_gpt.jpg" alt="GPT Image 2.6 결과, 녹지가 회색 바닥으로 바뀌고 길이 사라짐"><i class="ring" style="left:34%;top:11%;width:40%"></i><i class="ring" style="left:43%;top:60%;width:39%"></i></div><b>GPT Image 2.6</b><span class="o">30.1 dB · 녹지·길 사라짐</span></div>
+    <div class="g"><div class="zb"><img src="assets/deck/genai_nano.jpg" alt="Nano Banana 2.1 결과, 녹지가 사라지고 논밭이 다른 모양"><i class="ring" style="left:34%;top:11%;width:40%"></i><i class="ring" style="left:43%;top:60%;width:39%"></i></div><b>Nano Banana 2.1</b><span class="o">25.5 dB · 논밭 모양 바뀜</span></div>
+   </div>
+   <figcaption>GaoFen-2 장면. PSNR은 RGB 세 밴드로만 잰 값입니다.</figcaption>
+  </figure>
+
+  <div class="split">
+   <div data-r>
+    <h3>학습한 위성 밖에서 무너지는 모델</h3>
+    <p class="body">국내 민간 위성은 5 m급이고, 고해상도 영상은 보안 규제로 학습에 쓰기 어렵습니다. 공개 데이터셋은 대부분 해외 위성이며 이 연구에서 쓴 PanCollection도 중국 대학이 공개한 데이터입니다. 대부분의 모델이 이런 해외 데이터로 학습됩니다.</p>
+    <p class="body">문제는 학습하지 않은 위성에 쓰면 성능이 떨어진다는 점입니다. 원본 SSA-MRN을 WorldView-3로 학습해 WorldView-2에 적용하면 결과가 흐려지고 밴드 밝기가 7% 넘게 치우칩니다. 국산 위성에도 같은 일이 생길 수 있습니다.</p>
+    <p class="goal"><span>목표</span>새 위성마다 데이터를 모아 다시 학습하지 않아도, <b>처음 보는 위성에서 정확한 모델</b></p>
+    <p class="src">출처: 머니투데이 2026.7 · 조선비즈 2026.9 · 매일일보 2026.2 · PanCollection</p>
+   </div>
+   <div class="pair" data-r style="--d:1">
+    <figure><img src="assets/deck/korea_wv3.jpg" alt="WV3로 학습한 SSA-MRN을 WV3에 적용한 선명한 결과"><figcaption><b class="t">선명</b>학습한 위성 · WV3</figcaption></figure>
+    <figure><img src="assets/deck/korea_wv2.jpg" alt="같은 모델을 WV2에 적용한 흐린 결과"><figcaption><b class="o">흐림</b>처음 보는 위성 · WV2</figcaption></figure>
+    <p class="pair-cap">원본 SSA-MRN, WorldView-3로 학습</p>
+   </div>
   </div>
  </div>
-
 </section>
-<article class="pg-scene" data-scene="sub-train" style="--steps:3">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="sub-train" data-transition="fade">
-<p class="eyebrow a" style="--i:0">보조 개선 ③ ⑥ · 학습 방법</p>
-<h2 class="title a" style="--i:1">색 오차까지 줄이고, 다 배운 뒤 가볍게 나눕니다</h2>
-<div class="scard a" style="--i:2; left:128px; top:300px; width:792px">
-<div class="gi"><p class="gn d g">③</p><div><p class="gt">분광 손실</p><p class="gs">밝기 차이(L1)에 색의 방향 차이를 더함</p></div></div>
-</div>
-<p class="formula a" style="--i:3; left:128px; top:408px; width:792px; text-align:left; font-size:36px">손실 = L1(원래) + <span style="color:#0E6E73">c</span>·L1(거친) + <span style="color:#0E6E73">λ</span>·분광</p>
-<p class="cap a" style="--i:3; left:128px; top:462px; width:792px; font-size:24px">분광: 밴드 비율(색)의 방향 차이 · λ·c는 짧은 학습으로 비교해 선택</p>
-<div class="chart fragment draw" data-fragment-index="1" style="left:128px;top:494px">
-<svg width="760" height="412" viewBox="0 0 760 412" style="transform:translate(0, 56px)">
+
+<!-- 02 데이터 -->
+<section class="sec alt" id="data">
+ <div class="wrap">
+  <div class="sh" data-r><span class="no">02</span><p class="kick">데이터와 평가</p><h2>위성 네 종류, 하나는 학습에 쓰지 않았습니다</h2></div>
+  <div class="tiles">
+   <figure data-r><img src="assets/deck/data_qb.jpg" alt="QuickBird 해안 영상"><b>QB</b><span>QuickBird · 4밴드</span><em>학습 · 평가</em></figure>
+   <figure data-r style="--d:1"><img src="assets/deck/farm.jpg" alt="GaoFen-2 농경지 영상"><b>GF2</b><span>GaoFen-2 · 4밴드</span><em>학습 · 평가</em></figure>
+   <figure data-r style="--d:2"><img src="assets/deck/data_wv3.jpg" alt="WorldView-3 해변 영상"><b>WV3</b><span>WorldView-3 · 8밴드</span><em>학습 · 평가</em></figure>
+   <figure data-r style="--d:3"><img src="assets/deck/data_wv2.jpg" alt="WorldView-2 도시 영상"><b>WV2</b><span>WorldView-2 · 8밴드</span><em class="o">학습 안 함 · 일반화 평가</em></figure>
+  </div>
+  <ul class="checks" data-r>
+   <li><b>RR 평가</b>영상을 1/4로 줄여 복원한 뒤 원래 영상과 PSNR·SAM·ERGAS로 비교합니다.</li>
+   <li><b>3시드 판정</b>시드 42·43·44로 학습해 같은 시드의 원본과 짝지어 비교하고, validation으로 고른 뒤 test로 판정합니다.</li>
+   <li><b>일반화</b>WV3로 학습한 모델을 WV2에 그대로 적용합니다.</li>
+   <li><b>다른 모델</b>5종을 공식 코드와 저자 가중치로 같은 test에서 다시 평가하고, 실제 MATLAB 평가 코드로 채점했습니다.</li>
+  </ul>
+ </div>
+</section>
+
+<!-- 03 SMOC -->
+<section class="sec" id="smoc">
+ <div class="wrap">
+  <div class="sh" data-r><span class="no">03</span><p class="kick">모델</p><h2><span class="t">S</span>cale-<span class="t">M</span>ixed, <span class="t">O</span>bservation-<span class="t">C</span>onsistent</h2></div>
+  <p class="lead2" data-r>원본 SSA-MRN에 일곱 가지를 더했습니다. 처음 보는 위성에서의 정확도를 끌어올린 <b class="t">주 개선 셋</b>과, 학습한 위성의 정확도와 모델 크기를 다듬은 <b>보조 개선 넷</b>입니다. 이름은 두 핵심인 축척 혼합 학습(SM)과 관측 일치 보정(OC)에서 땄습니다.</p>
+
+  <figure class="pipe" data-r>
+   <div class="pipe-row">
+    <div class="pn" style="--d:0"><b>입력</b><span>PAN · LMS · MS</span><i class="bd d">②</i><i class="bd o">⑦</i></div>
+    <div class="pn" style="--d:1"><b>특징 추출</b><span>backbone + 가지</span><i class="bd g">①</i></div>
+    <div class="pn" style="--d:2"><b>여러 크기 융합</b><span>전체 · 1/2 · 1/4</span><i class="bd g">⑤</i></div>
+    <div class="pn" style="--d:3"><b>단계적 복원</b><span>작은 크기부터</span></div>
+    <div class="pn new" style="--d:4"><b>관측 일치 보정</b><span>추론 뒤 · 파라미터 없음</span><i class="bd">④</i></div>
+    <div class="pn" style="--d:5"><b>결과</b><span>고해상도 MS</span><i class="bd g d">③</i><i class="bd g d">⑥</i><i class="bd o">⑦</i></div>
+   </div>
+   <figcaption class="legend"><span><i class="lg t"></i>주 개선</span><span><i class="lg o"></i>처음 보는 위성에만 적용</span><span><i class="lg g"></i>보조 개선</span><span><i class="lg d"></i>점선: 학습할 때만 바뀜</span><span><i class="lg nw"></i>새로 추가한 단계</span></figcaption>
+  </figure>
+
+  <div class="imp">
+   <a class="ic main" href="#imp2" data-r><i class="bd d">②</i><b>축척 혼합 학습</b><span>없는 무늬를 그려 넣는 문제</span><em>WV2 +1.3 dB</em></a>
+   <a class="ic main" href="#imp4" data-r style="--d:1"><i class="bd">④</i><b>관측 일치 보정</b><span>색·밝기가 입력에서 어긋나는 문제</span><em>관측 오차 15.7 → 0</em></a>
+   <a class="ic main" href="#imp7" data-r style="--d:2"><i class="bd o">⑦</i><b>밴드별 밝기 보정</b><span>위성마다 밴드 비율이 달라 흐려지는 문제</span><em>WV2 약 +2 dB</em></a>
+   <a class="ic" href="#imp15" data-r style="--d:3"><i class="bd g">①</i><b>넓게 보는 가지</b><em>RR +0.70 dB</em></a>
+   <a class="ic" href="#imp15" data-r style="--d:4"><i class="bd g">⑤</i><b>위성 방식 축소·확대</b><em>+0.04-0.24 dB</em></a>
+   <a class="ic" href="#imp36" data-r style="--d:5"><i class="bd g d">③</i><b>분광 손실</b><em>SAM 60/60장 감소</em></a>
+   <a class="ic" href="#imp36" data-r style="--d:6"><i class="bd g d">⑥</i><b>분해 후 다듬기</b><em>연산 66%</em></a>
+  </div>
+
+  <figure class="arch" data-r>
+   <a href="assets/smoc-structure.svg" target="_blank" rel="noopener"><img src="assets/smoc-structure.svg" alt="SMOC 전체 구조도: (a) PAN·LMS·LRPAN 초기 특징(PAN MTF 축소와 23탭 확대)과 랭크 32로 분해한 ResBlock×4 backbone, 2×2 합성곱 입·출력의 W2 병렬 가지, (b) MTF 축소와 23탭 확대를 쓰는 전체·1/2·1/4 크기의 밴드별 SSAI 융합, (c) 23탭 확대로 단계적 복원과 출력 뒤 관측 일치 사영, (d) SSAI 블록 내부, (e) λ 1.2·c 0.25의 L1·분광 손실 축척 혼합 학습" loading="lazy"></a>
+   <figcaption><b>SMOC 전체 구조도.</b> 주황색이 원본에 더한 부분입니다. (a) 초기 특징과 backbone, (b) 세 크기에서의 밴드별 SSAI 융합, (c) 단계적 복원과 관측 일치 사영, (d) SSAI 블록 내부, (e) 축척 혼합 학습. 눌러서 원본 크기로 볼 수 있습니다.</figcaption>
+  </figure>
+ </div>
+
+ <!-- ② -->
+ <article class="deep" id="imp2">
+  <div class="wrap">
+   <div class="dh" data-r><i class="bd d">②</i><div><p class="kick">주 개선</p><h3>축척 혼합 학습</h3><p>원래 크기와 두 배 거친 크기를 함께 보며 배웁니다</p></div></div>
+   <div class="split">
+    <ol class="flow" data-r>
+     <li><b>증상</b><span>넓게 보는 가지(①)를 붙이자 학습한 위성에서는 PSNR이 0.70 dB 올랐지만, 한 단계 더 거친 시험과 처음 보는 위성에서는 결과가 무너졌습니다.</span></li>
+     <li><b>진단</b><span>학습 없이 가지 출력의 세기만 줄여 보니 거친 시험의 성능이 돌아왔습니다. 원인은 <em>한 축척에 맞춰 세부를 너무 세게 넣도록 배운 것</em>이었습니다.</span></li>
+     <li><b>해결</b><span>같은 패치를 위성처럼 흐려 2배 거친 학습 쌍(32×32)을 하나 더 만들고, 같은 가중치의 모델로 두 쌍을 함께 학습합니다. 거친 쌍의 손실에는 0.25를 곱합니다.</span></li>
+     <li><b>결과</b><span>원본 대비 QB +0.87 · GF2 +2.05 · WV3 +1.01 dB(3시드)로 거친 시험의 약점이 사라졌습니다. 거친 쌍을 빼면 처음 보는 WV2에서 1.3 dB 떨어집니다.</span></li>
+    </ol>
+    <div class="smfig" data-r style="--d:1">
+     <div class="sm-in">
+      <figure class="sm64"><img src="assets/deck/sm_ms64.png" alt="WV2 입력 MS 64×64, 왼쪽 아래 연못"><i class="box" style="left:6.25%;top:62.5%;width:25%"></i><figcaption>원래 크기 · 64×64</figcaption></figure>
+      <p class="op">+</p>
+      <figure class="sm32"><img src="assets/deck/sm_ms32.png" alt="2배 거칠게 줄인 MS 32×32"><i class="box" style="left:6.25%;top:62.5%;width:25%"></i><figcaption>2배 거친 크기 · 32×32</figcaption></figure>
+     </div>
+     <div class="sm-out">
+      <figure><img src="assets/deck/sm_pond_single.jpg" alt="한 크기만 배운 결과, 연못 둘레에 링 무늬"><figcaption class="o">한 크기만 학습<br><small>없는 링 무늬</small></figcaption></figure>
+      <figure><img src="assets/deck/sm_pond_mixed.jpg" alt="두 크기를 함께 배운 결과, 링 무늬 없음"><figcaption class="t">함께 학습<br><small>무늬 사라짐</small></figcaption></figure>
+      <figure><img src="assets/deck/sm_pond_gt.jpg" alt="정답"><figcaption>정답<br><small>&nbsp;</small></figcaption></figure>
+     </div>
+     <p class="cap">WV3로 학습해 WV2 장면 14에 적용, 주황 상자 위치를 확대. 개선이 가장 큰 곳을 고른 예입니다.</p>
+    </div>
+   </div>
+  </div>
+ </article>
+
+ <!-- ④ -->
+ <article class="deep" id="imp4">
+  <div class="wrap">
+   <div class="dh" data-r><i class="bd">④</i><div><p class="kick">주 개선</p><h3>관측 일치 보정</h3><p>결과를 다시 줄여, 입력과 같아지도록 맞춥니다</p></div></div>
+   <p class="body w" data-r>팬샤프닝 결과는 위성처럼 다시 흐리게 해 줄이면(D) 입력 MS와 같아야 합니다. 실제로는 조금 어긋나고, 이 어긋남이 색 치우침으로 나타납니다. 추론 뒤에 이 조건을 만족하는 영상 중 결과에 가장 가까운 영상으로 옮겨, 답을 검산해 어긋난 부분만 고칩니다.</p>
+   <figure class="ocp" data-r>
+    <div class="oc-s" style="--d:0"><img class="big" src="assets/deck/oc_y.jpg" alt="모델 결과 Y"><b>결과 Y</b></div>
+    <p class="oc-a" style="--d:1"><small>흐림 + 1/4</small>→</p>
+    <div class="oc-s" style="--d:2"><img class="sm" src="assets/deck/oc_dy.png" alt="다시 줄인 DY"><b>다시 줄인 DY</b></div>
+    <p class="oc-a o" style="--d:3">≠</p>
+    <div class="oc-s" style="--d:3"><img class="sm" src="assets/deck/oc_ms.png" alt="입력 MS"><b>입력 MS</b></div>
+    <p class="oc-a" style="--d:4"><small>빼기</small>→</p>
+    <div class="oc-s" style="--d:5"><img class="sm" src="assets/deck/oc_diff.png" alt="어긋난 만큼의 차이"><b class="o">어긋난 만큼</b></div>
+    <p class="oc-a t" style="--d:6"><small>넓혀 더하기</small>→</p>
+    <div class="oc-s" style="--d:7"><img class="big" src="assets/deck/oc_corrected.jpg" alt="보정된 결과"><b class="t">보정된 Ŷ</b></div>
+   </figure>
+   <div class="split">
+    <div data-r>
+     <p class="formula">Ŷ = Y + Dᵀ(DDᵀ)⁻¹(MS − DY)<small>D: 센서 MTF 블러 + 1/4 솎음</small></p>
+     <dl class="spec">
+      <div><dt>계산</dt><dd>(DDᵀ)⁻¹은 공액 기울기법 10회로 풀고, 학습할 파라미터가 없어 어떤 가중치에도 붙습니다.</dd></div>
+      <div><dt>효과</dt><dd>관측 오차 15.7 → <b>0</b> DN · PSNR +0.04-0.09 dB</dd></div>
+      <div><dt>배경</dt><dd>분광 손실(③)로 색 오차는 줄었지만 입력과의 일치가 나빠졌고, 이 보정으로 둘을 함께 얻었습니다.</dd></div>
+     </dl>
+    </div>
+    <figure class="trio" data-r style="--d:1">
+     <div><img src="assets/deck/oc_roof_lms.jpg" alt="국토위성 1호 입력 컬러, 파란 지붕"><figcaption>입력 컬러</figcaption></div>
+     <div><img src="assets/deck/oc_roof_before.jpg" alt="보정 전, 파란 지붕이 초록으로 바뀜"><figcaption class="o">보정 전</figcaption></div>
+     <div><img src="assets/deck/oc_roof_after.jpg" alt="보정 후, 파란 지붕이 돌아옴"><figcaption class="t">보정 후</figcaption></div>
+     <p class="cap">국토위성 1호 영상에 QB로 학습한 모델을 쓰면 파란 지붕이 초록으로 바뀌지만, 보정하면 입력의 파란색으로 돌아옵니다.</p>
+    </figure>
+   </div>
+  </div>
+ </article>
+
+ <!-- ⑦ -->
+ <article class="deep" id="imp7">
+  <div class="wrap">
+   <div class="dh" data-r><i class="bd o">⑦</i><div><p class="kick">주 개선 · 처음 보는 위성에만</p><h3>밴드별 밝기 보정</h3><p>위성마다 다른 밴드 밝기 비율을 맞췄다가 되돌립니다</p></div></div>
+   <p class="body w" data-r>WV2가 흐려지는 원인을 추적해 보니 모델 구조가 아니라 <b>위성마다 다른 밴드 대 PAN 밝기 비율</b>이었습니다. 모델은 학습한 위성의 비율을 기준으로 PAN에서 세부를 얼마나 가져올지 배우기 때문에, 비율이 다른 위성에서는 세부를 덜 넣습니다. 입력의 통계만으로 비율을 맞추므로 정답도, 재학습도 필요 없습니다.</p>
+   <div class="calib" data-r data-phase="0">
+    <div class="cal-chart">
+     <p class="cal-t">밴드 평균 ÷ PAN 평균 · 8개 밴드</p>
+     <div class="cal-bars">
+      <div class="cb"><i class="b3" style="--h:0.419"></i><i class="b2" style="--h2:0.686;--h3:0.419"></i></div><div class="cb"><i class="b3" style="--h:0.492"></i><i class="b2" style="--h2:0.486;--h3:0.492"></i></div><div class="cb"><i class="b3" style="--h:0.622"></i><i class="b2" style="--h2:0.644;--h3:0.622"></i></div><div class="cb"><i class="b3" style="--h:0.536"></i><i class="b2" style="--h2:0.744;--h3:0.536"></i></div><div class="cb"><i class="b3" style="--h:0.436"></i><i class="b2" style="--h2:0.531;--h3:0.436"></i></div><div class="cb"><i class="b3" style="--h:0.511"></i><i class="b2" style="--h2:0.797;--h3:0.511"></i></div><div class="cb"><i class="b3" style="--h:0.661"></i><i class="b2" style="--h2:0.936;--h3:0.661"></i></div><div class="cb"><i class="b3" style="--h:0.486"></i><i class="b2" style="--h2:0.772;--h3:0.486"></i></div>
+     </div>
+     <p class="cal-smoc">SMOC</p>
+     <div class="cal-lg"><span><i class="t"></i>학습한 위성 WV3</span><span><i class="o"></i>처음 보는 위성 WV2</span><span><i class="m"></i>맞춘 WV2</span></div>
+    </div>
+    <ol class="cal-steps">
+     <li data-s="0"><b>WV2는 밴드 비율이 다름</b><span>모델은 WV3 비율에 맞춰 세부를 넣음</span></li>
+     <li data-s="1"><b>배율을 곱해 WV3 비율로</b><span>입력 통계만 사용 · 정답은 쓰지 않음</span></li>
+     <li data-s="2"><b>SMOC로 선명하게</b><span>재학습 없음</span></li>
+     <li data-s="3"><b>배율을 되돌려 원래 색으로</b><span>WV2의 밴드 비율 그대로</span></li>
+     <li class="replay"><button type="button">다시 보기 ↻</button></li>
+    </ol>
+   </div>
+   <div class="split">
+    <figure class="trio" data-r>
+     <div><img src="assets/deck/cal_bldg_before.jpg" alt="보정 전 WV2 결과, 건물 윤곽이 흐림"><figcaption class="o">보정 전</figcaption></div>
+     <div><img src="assets/deck/cal_bldg_after.jpg" alt="보정 후 WV2 결과, 지붕 모서리와 그림자가 또렷함"><figcaption class="t">보정 후</figcaption></div>
+     <div><img src="assets/deck/cal_bldg_gt.jpg" alt="정답"><figcaption>정답</figcaption></div>
+     <p class="cap">WV3로 학습해 WV2 장면 0에 적용, 개선이 가장 큰 곳을 확대한 예입니다.</p>
+    </figure>
+    <div data-r style="--d:1">
+     <table class="tbl">
+      <caption>WV2에서 정답과 비교 · test 20장 · 3시드 평균</caption>
+      <thead><tr><th></th><th>원본</th><th>SMOC</th><th>보정 없이</th></tr></thead>
+      <tbody>
+       <tr><td>PSNR (dB)</td><td>28.59</td><td class="t">32.01</td><td>29.81</td></tr>
+       <tr><td>선명도 (정답 = 1)</td><td>0.33</td><td class="t">0.54</td><td>0.41</td></tr>
+       <tr><td>세부 상관</td><td>0.70</td><td class="t">0.86</td><td>0.77</td></tr>
+       <tr><td>밝기 치우침 (최대 밴드)</td><td>7.2%</td><td class="t">0.1%</td><td>1.3%</td></tr>
+      </tbody>
+     </table>
+     <p class="note">보정만으로 PSNR이 약 2 dB(1.95-2.15) 오르고, 세부 세기는 0.52 → 0.70으로 정답에 가까워졌습니다.</p>
+    </div>
+   </div>
+  </div>
+ </article>
+
+ <!-- ①⑤ -->
+ <article class="deep" id="imp15">
+  <div class="wrap">
+   <div class="dh" data-r><span class="bds"><i class="bd g">①</i><i class="bd g">⑤</i></span><div><p class="kick">보조 개선 · 모델 구조</p><h3>더 넓게 보고, 위성처럼 줄입니다</h3></div></div>
+   <div class="cols2 top">
+    <div data-r>
+     <div class="w2" aria-label="8×8 칸을 2×2씩 묶어 4×4 칸으로 만들면, 같은 3×3 합성곱이 원래 기준 6×6 범위를 봄">
+      <div class="gr g8"><i style="background:#69422a"></i><i style="background:#6d5534"></i><i style="background:#92684e"></i><i style="background:#915c55"></i><i style="background:#9c7268"></i><i style="background:#ac764d"></i><i style="background:#916763"></i><i style="background:#9a5e41"></i><i style="background:#684e48"></i><i style="background:#4f3a19"></i><i style="background:#72574f"></i><i style="background:#cca089"></i><i style="background:#443819"></i><i style="background:#8d6854"></i><i style="background:#c29773"></i><i style="background:#e9c3c0"></i><i style="background:#8e5c3f"></i><i style="background:#875e55"></i><i style="background:#6b544b"></i><i style="background:#c69d7b"></i><i style="background:#d0aca4"></i><i style="background:#d9bcb8"></i><i style="background:#97755a"></i><i style="background:#755c57"></i><i style="background:#8a6662"></i><i style="background:#765f49"></i><i style="background:#c4aea6"></i><i style="background:#fcf7ed"></i><i style="background:#fcdab9"></i><i style="background:#a9978d"></i><i style="background:#b4917a"></i><i style="background:#66513c"></i><i style="background:#6b574d"></i><i style="background:#9b8982"></i><i style="background:#877459"></i><i style="background:#fffee7"></i><i style="background:#f8dbbc"></i><i style="background:#e3c2bd"></i><i style="background:#9a9385"></i><i style="background:#685248"></i><i style="background:#8f7f79"></i><i style="background:#464221"></i><i style="background:#baa892"></i><i style="background:#b5aba4"></i><i style="background:#d4bcba"></i><i style="background:#b0a395"></i><i style="background:#4d4029"></i><i style="background:#3f3e2c"></i><i style="background:#685f56"></i><i style="background:#3d3518"></i><i style="background:#867971"></i><i style="background:#958b8e"></i><i style="background:#9d9678"></i><i style="background:#232b14"></i><i style="background:#4c4548"></i><i style="background:#3b3112"></i><i style="background:#6c6048"></i><i style="background:#5f6248"></i><i style="background:#4e484c"></i><i style="background:#4b4635"></i><i style="background:#b4b2a7"></i><i style="background:#2b2b0e"></i><i style="background:#4b5239"></i><i style="background:#152105"></i><i class="win w6"></i></div>
+      <p class="w2-a"><small>2×2 합성곱<br>보폭 2</small>→</p>
+      <div class="gr g4"><i style="background:#634830;--k:0"></i><i style="background:#986f5f;--k:1"></i><i style="background:#866248;--k:2"></i><i style="background:#b68876;--k:3"></i><i style="background:#856050;--k:4"></i><i style="background:#bca696;--k:5"></i><i style="background:#d4b6a8;--k:6"></i><i style="background:#8a6d5a;--k:7"></i><i style="background:#77685a;--k:8"></i><i style="background:#bdb19e;--k:9"></i><i style="background:#d8bfb2;--k:10"></i><i style="background:#645948;--k:11"></i><i style="background:#5c5640;--k:12"></i><i style="background:#6d6460;--k:13"></i><i style="background:#686850;--k:14"></i><i style="background:#3a3a26;--k:15"></i><i class="win w3"></i></div>
+     </div>
+     <p class="w2-cap"><b>3×3 → 6×6</b>절반 해상도에서 같은 3×3 합성곱이 원래 기준 두 배 넓은 범위를 봅니다.</p>
+     <h4><i class="bd g">①</i>넓게 보는 가지</h4>
+     <p class="body">원본 구조는 그대로 두고, 초기 특징(64채널)에서 갈라져 원본 backbone과 나란히 흐르는 가지를 더했습니다. 보폭 2의 2×2 합성곱으로 절반 해상도 128채널을 만들고, 잔차 블록 8개를 거쳐 0으로 초기화한 전치 합성곱으로 펼쳐 더합니다. 계산할 위치가 4분의 1이라 부담이 적고, 학습 시작 때는 원본과 똑같이 동작합니다.</p>
+    </div>
+    <div data-r style="--d:1">
+     <div class="ds">
+      <figure><img src="assets/deck/down_simple.png" alt="단순 축소한 PAN, 자글자글한 잡음"><figcaption>원본 · 단순 축소</figcaption></figure>
+      <figure><img src="assets/deck/down_sensor.png" alt="위성 흐림을 거쳐 줄인 PAN, 부드러움"><figcaption class="t">SMOC · 위성 방식</figcaption></figure>
+     </div>
+     <h4><i class="bd g">⑤</i>축소·확대를 위성 방식으로</h4>
+     <p class="body">원본은 모델 안에서 PAN을 1/2·1/4로 줄일 때 단순 보간을 씁니다. 그런데 학습 데이터의 저해상도 영상은 센서 MTF로 흐린 뒤 솎아 내는 방식으로 만들어져, 둘이 다르면 실제 관측에 없는 잡음이 섞입니다. 모델 안의 축소·확대를 데이터를 만든 연산(MTF 블러 + 솎음, 23탭 보간)으로 바꿨습니다. 고정 필터라 파라미터는 늘지 않습니다.</p>
+     <p class="note">PSNR 학습한 위성 +0.04-0.11 dB · 처음 보는 WV2 +0.24 dB</p>
+    </div>
+   </div>
+  </div>
+ </article>
+
+ <!-- ③⑥ -->
+ <article class="deep" id="imp36">
+  <div class="wrap">
+   <div class="dh" data-r><span class="bds"><i class="bd g d">③</i><i class="bd g d">⑥</i></span><div><p class="kick">보조 개선 · 학습 방법</p><h3>색 오차까지 줄이고, 다 배운 뒤 가볍게 나눕니다</h3></div></div>
+   <p class="formula wide" data-r>L = L1(Y, GT) + <span class="t">λ</span>·(1 − cos(Y, GT)) + <span class="t">c</span>·L1(Y′, GT′)<small>λ = 1.2 · c = 0.25</small></p>
+   <div class="cols2 top">
+    <div data-r>
+     <h4><i class="bd g d">③</i>분광 손실</h4>
+     <p class="body">픽셀마다 밴드 값을 하나의 벡터로 보고, 정답과 방향이 얼마나 다른지를 손실에 더했습니다. 밝기가 맞아도 밴드 비율이 틀리면 색이 바뀌는데, 색 오차 SAM이 재는 바로 그 오차입니다. 비율 λ와 거친 쌍 비율 c는 짧은 학습으로 비교해 골랐습니다.</p>
+     <div class="charts">
+      <div class="chart" data-r><svg role="img" aria-label="분광 손실 비율 λ에 따른 PSNR 변화와 SAM 감소, λ 1.2에서 PSNR이 가장 높음" viewBox="0 0 760 412">
 <text x="90" y="24" font-size="30" font-weight="800" fill="#15191E">분광 손실 비율 λ</text>
 <text x="730" y="56" font-size="21" fill="#0E6E73" font-weight="700" text-anchor="end">PSNR 변화 (dB) ↑ 좋음</text>
 <text x="730" y="222" font-size="21" fill="#B14A17" font-weight="700" text-anchor="end">색 오차(SAM) 감소 (°) ↑ 좋음</text>
@@ -466,11 +340,8 @@
 <line class="pt" x1="474.0" y1="64" x2="474.0" y2="360" stroke="#15191E" stroke-width="3"/>
 <circle class="pt" cx="474.0" cy="88.5" r="14" fill="none" stroke="#15191E" stroke-width="4"/><circle class="pt" cx="474.0" cy="275.7" r="14" fill="none" stroke="#15191E" stroke-width="4"/>
 
-<text x="474.0" y="384" font-size="24" font-weight="800" fill="#15191E" text-anchor="middle">1.2</text><text x="474.0" y="408" font-size="22" font-weight="800" fill="#15191E" text-anchor="middle">선택</text><text class="pt" x="456" y="76.5" font-size="24" font-weight="800" fill="#0E6E73" text-anchor="end">+0.016</text></svg>
-</div>
-<div class="fragment fade" data-fragment-index="2" style="position:absolute;left:110px;width:820px;height:490px;background:#FBFBF9;top:494px"></div>
-<div class="chart fragment draw" data-fragment-index="2" style="left:128px;top:494px">
-<svg width="760" height="412" viewBox="0 0 760 412" style="transform:translate(0, 56px)"><rect x="0" y="0" width="760" height="412" fill="#FBFBF9"/>
+<text x="474.0" y="384" font-size="24" font-weight="800" fill="#15191E" text-anchor="middle">1.2</text><text x="474.0" y="408" font-size="22" font-weight="800" fill="#15191E" text-anchor="middle">선택</text><text class="pt" x="456" y="76.5" font-size="24" font-weight="800" fill="#0E6E73" text-anchor="end">+0.016</text></svg></div>
+      <div class="chart" data-r style="--d:1"><svg role="img" aria-label="거친 쌍 비율 c에 따른 PSNR 변화와 SAM 감소, 0.25를 선택" viewBox="0 0 760 412">
 <text x="90" y="24" font-size="30" font-weight="800" fill="#15191E">거친 쌍 비율 c</text>
 <text x="730" y="56" font-size="21" fill="#0E6E73" font-weight="700" text-anchor="end">PSNR 변화 (dB) ↑ 좋음</text>
 <text x="730" y="222" font-size="21" fill="#B14A17" font-weight="700" text-anchor="end">색 오차(SAM) 감소 (°) ↑ 좋음</text>
@@ -498,522 +369,198 @@
 <line class="pt" x1="250.0" y1="64" x2="250.0" y2="360" stroke="#15191E" stroke-width="3"/>
 <circle class="pt" cx="250.0" cy="76.0" r="14" fill="none" stroke="#15191E" stroke-width="4"/><circle class="pt" cx="250.0" cy="256.4" r="14" fill="none" stroke="#15191E" stroke-width="4"/>
 
-<text x="730" y="24" font-size="24" font-weight="800" fill="#B14A17" text-anchor="end">0이면 WV2 −1.3 dB</text></svg>
-</div>
-<div class="scard fragment up" data-fragment-index="3" style="left:1000px; top:300px; width:792px">
-<div class="gi"><p class="gn d g">⑥</p><div><p class="gt">학습 일정 · 가볍게 분해</p><p class="gs">충분히 배운 뒤 층을 나눠 다듬음</p></div></div>
-</div>
-<div class="fragment up" data-fragment-index="3" style="position:absolute; left:1000px; top:420px; width:600px; height:56px; box-sizing:border-box; background:#B9BEC4; border-radius:8px 0 0 8px; display:flex; align-items:center; justify-content:center; transition-delay:150ms"><p style="font-size:24px; font-weight:700; color:#15191E; line-height:1">120에폭 · 원래 크기로 충분히</p></div>
-<div class="fragment up" data-fragment-index="3" style="position:absolute; left:1604px; top:420px; width:188px; height:56px; box-sizing:border-box; background:#0E6E73; border-radius:0 8px 8px 0; display:flex; align-items:center; justify-content:center; transition-delay:300ms"><p style="font-size:24px; font-weight:700; color:#FBFBF9; line-height:1">30에폭 다듬기</p></div>
-<div class="nd fragment up" data-fragment-index="3" style="left:1000px; top:550px; width:230px; height:110px; transition-delay:600ms"><p class="nt">3×3 합성곱</p><p class="ns">64 → 64 채널</p></div>
-<x-connector class="arrow t fragment fade" data-fragment-index="3" x1="1240" y1="605" x2="1300" y2="605" head="end"></x-connector>
-<div class="nd new fragment up" data-fragment-index="3" style="left:1310px; top:550px; width:200px; height:110px; transition-delay:800ms"><p class="nt">3×3</p><p class="ns">64 → 32</p></div>
-<p class="glyph fragment fade" data-fragment-index="3" style="left:1510px; top:572px; width:60px; font-size:44px; color:#15191E; text-align:center; transition-delay:900ms">+</p>
-<div class="nd new fragment up" data-fragment-index="3" style="left:1570px; top:550px; width:200px; height:110px; transition-delay:1000ms"><p class="nt">1×1</p><p class="ns">32 → 64</p></div>
-<p class="sv fragment up" data-fragment-index="3" style="position:absolute; left:1000px; top:704px; width:792px; font-size:52px; font-weight:800; transition-delay:1200ms">274만 → 187만</p>
-<p class="cap fragment up" data-fragment-index="3" style="left:1000px; top:776px; width:792px; font-size:24px; transition-delay:1200ms">파라미터 · 연산량 66%</p>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">모델 SMOC</span><span class="pg-no">12 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button><button type="button" class="pg-dot" data-go="3" aria-label="4단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">학습 방법도 두 가지를 다듬었습니다. 손실은 밝기 차이 L1에, 밴드 비율(색)의 방향 차이를 재는 <b>분광 손실(③)</b>을 더했습니다.</p><p class="pg-say" data-step="1">분광 손실의 비율 λ는 짧은 학습으로 비교해, PSNR이 가장 높고 색 오차도 줄어드는 <b>1.2</b>로 정했습니다.</p><p class="pg-say" data-step="2">거친 쌍의 비율 c는 낮출수록 학습한 위성에서 좋아지지만, 0으로 빼면 처음 보는 WV2에서 1.3 dB 떨어집니다. 그래서 <b>0.25</b>로 정했습니다.</p><p class="pg-say" data-step="3">그리고 원래 크기로 120에폭을 충분히 배운 뒤 3×3 합성곱을 가벼운 합성곱 조합으로 나눠(<b>⑥</b>) 30에폭 다듬었습니다. 정확도는 그대로 두고 파라미터를 274만 개에서 187만 개로, 연산량을 66%로 줄였습니다.</p></div>
+<text x="730" y="24" font-size="24" font-weight="800" fill="#B14A17" text-anchor="end">0이면 WV2 −1.3 dB</text></svg></div>
+     </div>
+     <p class="note">λ = 1.2에서 PSNR이 가장 높고 SAM도 줄었습니다. c는 낮출수록 학습한 위성에서 좋아지지만 0이면 WV2에서 1.3 dB 떨어져 0.25로 정했습니다. SAM은 3시드 60장 모두에서 줄었습니다.</p>
+    </div>
+    <div data-r style="--d:1">
+     <h4><i class="bd g d">⑥</i>충분히 배운 뒤 가볍게 분해</h4>
+     <p class="body">병렬 가지로 파라미터가 274만 개로 늘었습니다. 처음부터 작은 모델로 학습하면 정확도가 떨어지므로, 원래 크기로 120에폭을 배운 뒤 3×3 합성곱을 가벼운 조합으로 나눠 30에폭 동안 학습률을 낮추며 다듬었습니다.</p>
+     <div class="sched"><span class="s1">120에폭 · 원래 크기로 충분히</span><span class="s2">30에폭 다듬기</span></div>
+     <div class="fact">
+      <div class="fb"><b>3×3 합성곱</b><span>64 → 64</span></div>
+      <p>→</p>
+      <div class="fb new"><b>3×3</b><span>64 → 32</span></div>
+      <p>+</p>
+      <div class="fb new"><b>1×1</b><span>32 → 64</span></div>
+     </div>
+     <p class="big"><span data-count="187" data-suf="만">187만</span><small>파라미터 · 274만에서</small></p>
+     <p class="big"><span data-count="66" data-suf="%">66%</span><small>연산량 · 59.6 → 39.1 GMAC</small></p>
+     <p class="note">분해하지 않은 모델과 정확도가 0.04 dB 안에서 같습니다.</p>
+    </div>
+   </div>
   </div>
- </div></div>
-</article>
-<section class="pg-detail ">
- <p class="pg-kicker">보조 개선 ③ ⑥ 자세히</p>
- <h2 class="pg-dh">손실 함수와 학습 일정</h2>
- 
- <div class="pg-formula">L = L1(Y, GT) + <span class="t">λ</span>·(1 − cos(Y, GT)) + <span class="t">c</span>·L1(Y′, GT′) <small>λ = 1.2 · c = 0.25</small></div>
- <div class="pg-grid2">
-  <div class="pg-card"><h3><i class="n g d">③</i>분광 손실</h3>
-   <p>픽셀마다 밴드 값을 하나의 벡터로 보고, 정답 벡터와 방향이 얼마나 다른지(1 − 코사인 유사도)를 손실에 더했습니다. 밝기는 맞아도 밴드 비율이 틀리면 색이 바뀌는데, SAM이 재는 바로 그 오차입니다.</p>
-   <p>λ는 0, 0.2, 0.46, 0.8, 1.2, 2로 짧게 학습해 비교했고, PSNR이 가장 높으면서 SAM도 꾸준히 줄어드는 1.2를 골랐습니다.</p>
-   <dl class="pg-spec"><div><dt>효과</dt><dd>SAM이 3시드 60/60장에서 감소</dd></div><div><dt>근거</dt><dd>성능 <a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/65_l1_spectral_loss/README.md">65번</a> 도입 · <a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/89_spectral_coarse_loss_weights/README.md">89번</a> λ·c 재탐색</dd></div></dl>
-  </div>
-  <div class="pg-card"><h3><i class="n g d">⑥</i>충분히 배운 뒤 가볍게 분해</h3>
-   <p>병렬 가지로 파라미터가 274만 개로 늘었습니다. 처음부터 작은 모델로 학습하면 정확도가 떨어지므로, 원래 크기로 학습률 1e-4에서 120에폭을 배운 뒤 합성곱을 나눴습니다.</p>
-   <p>backbone의 3×3 합성곱(64→64)은 특잇값 분해로 3×3(64→32) + 1×1(32→64), 가지의 3×3(128→128)은 1×1 128→384 · 깊이별 3×3 · 1×1 384→128로 바꾼 뒤 30에폭 동안 학습률을 1e-6까지 코사인 감쇠하며 다듬었습니다.</p>
-   <dl class="pg-spec"><div><dt>크기</dt><dd>파라미터 2,735,418 → 1,873,210개 (원본 426,654개)</dd></div><div><dt>연산</dt><dd>59.6 → 39.1 GMAC (256², 66%)</dd></div><div><dt>정확도</dt><dd>분해 전과 0.04 dB 안에서 같음</dd></div><div><dt>근거</dt><dd>성능 <a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/83_factorized_c2ms_finetuning/README.md">83번</a> · <a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/88_factorization_at_decay_start/README.md">88번</a> · <a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/90_dataset_matched_internal_resampling/README.md">90번</a></dd></div></dl>
+ </article>
+
+ <div class="wrap">
+  <div class="journey" data-r>
+   <h3>원본에서 SMOC까지</h3>
+   <ol>
+    <li><span>10.09</span><b>원본 SSA-MRN 재현</b><em>논문 설정을 재현해 이후 모든 비교의 기준으로</em></li>
+    <li><span>10월</span><b>① 넓게 보는 가지</b><em>+0.70 dB, 거친 시험에서 약점 발견</em></li>
+    <li><span>10.21</span><b>② 축척 혼합 학습</b><em>약점의 원인을 진단해 해결</em></li>
+    <li><span>11.14</span><b>③ 분광 손실 + ④ 관측 일치 보정</b><em>세 위성 모두 3시드 개선</em></li>
+    <li><span>11월</span><b>⑦ 밴드별 밝기 보정</b><em>처음 보는 위성 흐림의 원인을 찾아 재학습 없이 +2 dB</em></li>
+    <li><span>11월</span><b>⑥ 분해 후 다듬기 · λ와 c 재탐색</b><em>연산 66%로 같은 정확도</em></li>
+    <li class="on"><span>11.24</span><b>⑤ 위성 방식 축소·확대 → SMOC 확정</b><em>이전 모델 대비 GF2 +0.69 · WV3 +0.43 dB</em></li>
+   </ol>
+   <p class="note">각 단계는 같은 시드의 이전 모델과 짝지어 3시드 이상에서 개선이 확인될 때만 채택했습니다. 실험 기록은 <a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/README.md">저장소</a>에 있습니다.</p>
   </div>
  </div>
+</section>
 
-</section>
-<article class="pg-scene" data-scene="scalemix" style="--steps:2">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="scalemix" data-transition="fade">
-<p class="eyebrow a" style="--i:0">주 개선 ② · 축척 혼합 학습</p>
-<h2 class="title a" style="--i:1">원래 크기와 거친 크기를 함께 보며 배웁니다</h2>
-<img class="pic a" style="--i:2; left:128px; top:300px; width:320px; height:320px; border-radius:4px" src="assets/deck/sm_ms64.png" alt="WV2 장면 14의 실제 입력 MS 64×64 컬러 영상, 왼쪽 아래에 연못">
-<div class="a" style="--i:2; position:absolute; left:148px; top:500px; width:80px; height:80px; box-sizing:border-box; border:4px solid #B14A17; border-radius:3px; box-shadow:0 0 0 2px #FBFBF9"></div>
-<p class="cap c a" style="--i:2; left:88px; top:636px; width:400px; color:#15191E; font-weight:700">원래 크기 · MS 64×64</p>
-<p class="glyph a" style="--i:3; left:470px; top:410px; width:60px; font-size:64px; color:#15191E">+</p>
-<img class="pic a" style="--i:3; left:560px; top:380px; width:160px; height:160px; border-radius:4px" src="assets/deck/sm_ms32.png" alt="같은 입력을 2배 거칠게 줄인 MS 32×32 영상">
-<div class="a" style="--i:3; position:absolute; left:570px; top:480px; width:40px; height:40px; box-sizing:border-box; border:3px solid #B14A17; border-radius:2px; box-shadow:0 0 0 2px #FBFBF9"></div>
-<p class="cap c a" style="--i:3; left:480px; top:556px; width:320px; color:#15191E; font-weight:700">2배 거친 크기 · 32×32</p>
-<p class="colh a" style="--i:4; left:128px; top:720px; width:820px; color:#0E6E73">같은 장면을 두 해상도로 함께 학습</p>
-<p class="cap a" style="--i:4; left:128px; top:780px; width:820px; font-size:24px">거친 영상은 위성처럼 2배 다운샘플링 · <span style="color:#B14A17; font-weight:700">□ 오른쪽 확대 위치</span></p>
-<img class="pic fragment up" data-fragment-index="1" src="assets/deck/sm_pond_single.jpg" alt="한 크기만 배운 모델의 WV2 결과, 연못 둘레에 겹겹의 링 무늬와 갈색 얼룩" style="left:1040px; top:300px; width:196px; height:196px">
-<p class="pill o fragment up" data-fragment-index="1" style="left:1264px; top:306px">한 크기만 배우면</p>
-<p class="colh fragment up" data-fragment-index="1" style="left:1264px; top:372px; width:528px; color:#B14A17">처음 보는 위성에서<br>없는 무늬까지 그려 넣음</p>
-<img class="pic fragment up" data-fragment-index="2" src="assets/deck/sm_pond_mixed.jpg" alt="두 크기를 함께 배운 모델의 WV2 결과, 링 무늬가 사라짐" style="left:1040px; top:512px; width:196px; height:196px">
-<p class="pill fragment up" data-fragment-index="2" style="left:1264px; top:518px">함께 배우면</p>
-<p class="colh fragment up" data-fragment-index="2" style="left:1264px; top:584px; width:528px; color:#0E6E73">세부를 알맞은 만큼만 넣음</p>
-<img class="pic fragment up" data-fragment-index="2" src="assets/deck/sm_pond_gt.jpg" alt="정답 영상, 무늬 없는 연못" style="left:1040px; top:724px; width:196px; height:196px; transition-delay:200ms">
-<p class="colh fragment up" data-fragment-index="2" style="left:1264px; top:730px; width:528px; color:#15191E; transition-delay:200ms">정답</p>
-<div class="ncard fragment up" data-fragment-index="2" style="left:1264px; top:790px; width:528px; transition-delay:300ms"><p class="nk">처음 보는 위성 WV2 · PSNR</p><p class="nv">+1.3 dB</p></div>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">모델 SMOC</span><span class="pg-no">13 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">이제 주 개선입니다. 첫째는 <b>축척 혼합 학습(②)</b>입니다. 왼쪽은 실제 입력 MS 64×64이고, 같은 장면을 위성처럼 흐리게 해 두 배 거칠게 만든 32×32 영상을 함께 학습합니다. 주황 상자가 오른쪽에서 확대한 연못입니다.</p><p class="pg-say" data-step="1">한 크기로만 배우면 처음 보는 위성에서 없는 무늬를 그려 넣습니다. 연못 둘레에 겹겹의 링 무늬와 갈색 얼룩이 생겼습니다.</p><p class="pg-say" data-step="2">두 크기를 함께 배우면 이런 무늬가 사라지고 정답에 가까워지며, WV2에서 PSNR이 <b>1.3 dB</b> 올랐습니다. (WV3로 학습해 WV2 장면 14에 적용, 개선이 가장 큰 곳을 확대한 예입니다.)</p></div>
+<!-- 04 결과 -->
+<section class="sec alt" id="results">
+ <div class="wrap">
+  <div class="sh" data-r><span class="no">04</span><p class="kick">결과</p><h2>처음 보는 위성에서 가장 정확합니다</h2></div>
+  <div class="split wide">
+   <div data-r>
+    <p class="body">WV3로 학습한 모델을 WV2에 그대로 적용했습니다. SMOC는 원본보다 3.42 dB 높아, 같은 조건에서 비교한 다른 모델 중 가장 높은 U2Net보다 1.5 dB 앞섰습니다. 학습한 위성에서는 SMOC와 비슷한 모델들도 처음 보는 위성에서는 크게 뒤처집니다.</p>
+    <div class="hbars">
+     <p class="hb-t">원본 SSA-MRN 대비 PSNR 차이 (dB) · WV2 test 20장</p>
+     <div class="hb me" style="--v:3.42"><b>SMOC</b><i></i><span>+3.42 <small>32.01</small></span></div>
+     <div class="hb" style="--v:1.91"><b>U2Net <small>2023</small></b><i></i><span>+1.91 <small>30.50</small></span></div>
+     <div class="hb" style="--v:1.37"><b>CANNet <small>2024</small></b><i></i><span>+1.37 <small>29.96</small></span></div>
+     <div class="hb" style="--v:1.27"><b>ARConv <small>2025</small></b><i></i><span>+1.27 <small>29.85</small></span></div>
+     <div class="hb" style="--v:1.02"><b>ADWM <small>2025</small></b><i></i><span>+1.02 <small>29.60</small></span></div>
+     <div class="hb base"><b>원본 SSA-MRN</b><i></i><span>기준 <small>28.59</small></span></div>
+     <div class="hb neg" style="--v:-1.53"><b>FusionNet <small>2021</small></b><i></i><span>−1.53 <small>27.06</small></span></div>
+    </div>
+   </div>
+   <figure class="trio tall" data-r style="--d:1">
+    <div><img src="assets/deck/gen_orig.jpg" alt="원본 SSA-MRN 결과, 흐리고 색이 치우침"><figcaption>원본 <small>28.0 dB</small></figcaption></div>
+    <div><img src="assets/deck/gen_smoc.jpg" alt="SMOC 결과, 정답에 가까움"><figcaption class="t">SMOC <small>31.8 dB</small></figcaption></div>
+    <div><img src="assets/deck/gen_gt.jpg" alt="정답"><figcaption>정답</figcaption></div>
+    <p class="cap">WV2 장면 15 일부. 색 오차 SAM도 6.25° → <b>4.95°</b>로 줄었습니다.</p>
+   </figure>
   </div>
- </div></div>
-</article>
-<section class="pg-detail ">
- <p class="pg-kicker">주 개선 ② 자세히</p>
- <h2 class="pg-dh">축척 혼합 학습: 원인 진단부터 해결까지</h2>
- 
- <ol class="pg-flow">
-  <li><b>증상</b><span>병렬 가지(①)를 붙이자 RR PSNR이 0.70 dB 올랐지만, 한 단계 더 거친 시험(RR2)과 처음 보는 위성에서는 오히려 무너졌습니다.</span></li>
-  <li><b>진단</b><span>학습 없이 가지 출력의 세기만 줄여 보니 거친 시험의 성능이 돌아왔습니다. 원인은 <em>축척에 따라 맞지 않는 세부 주입 세기</em>였습니다. 한 축척에만 맞춰 세부를 세게 넣도록 배운 것입니다. (<a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/50_w2_branch_inference_scaling/README.md">50번</a>)</span></li>
-  <li><b>해결</b><span>같은 패치에서 2배 거친 학습 쌍을 하나 더 만듭니다. 정답 64×64를 MTF로 흐려 32×32(GT′)로 줄이고, 다시 Wald 4배 관측으로 MS′ 8×8을 만든 뒤 23탭 보간으로 LMS′를 만듭니다. 두 쌍을 <em>같은 가중치</em>의 모델에 넣고 거친 쌍의 손실에 c = 0.25를 곱해 더합니다.</span></li>
-  <li><b>결과</b><span>원본 대비 RR QB +0.873 · GF2 +2.045 · WV3 +1.007 dB(3시드)로 거친 시험의 약점이 사라졌고, 기준 모델(C2MS)로 채택했습니다. c를 0으로 빼면 처음 보는 WV2에서 1.3 dB 떨어집니다. (<a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/53_scale_mixed_training/README.md">53번</a> · <a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/54_multi_sensor_scale_mixed_training/README.md">54번</a>)</span></li>
- </ol>
 
-</section>
-<article class="pg-scene" data-scene="oc" style="--steps:5">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="oc" data-transition="fade">
-<p class="eyebrow a" style="--i:0">주 개선 ④ · 관측 일치 보정</p>
-<h2 class="title a" style="--i:1">결과를 다시 줄여, 입력과 같아지도록 맞춥니다</h2>
-<img class="pic a" src="assets/deck/oc_y.jpg" alt="모델이 만든 결과 영상 Y" style="--i:2;left:128px;width:190px;height:190px;top:300px">
-<p class="cap c a" style="--i:2;left:113px;width:220px;color:#15191E;font-weight:700;top:506px">결과 Y</p>
-<x-connector class="arrow fragment fade" data-fragment-index="1" x1="328" y1="395" x2="438" y2="395" head="end"></x-connector>
-<p class="cap c fragment fade" data-fragment-index="1" style="left:283px;width:200px;font-size:20px;top:333px">흐림 +<br>1/4 축소</p>
-<img class="pic fragment from" data-fragment-index="1" src="assets/deck/oc_dy.png" alt="결과를 다시 줄인 영상 DY" style="--tx:-275px;--s:1.9;left:448px;width:100px;height:100px;border-radius:4px;top:345px">
-<p class="cap c fragment fade" data-fragment-index="1" style="left:398px;width:200px;font-size:24px;top:506px">다시 줄인 DY</p>
-<p class="glyph fragment fade" data-fragment-index="1" style="transition-delay:1400ms;left:548px;width:60px;font-size:60px;color:#B14A17;top:353px">≠</p>
-<img class="pic fragment fade" data-fragment-index="1" src="assets/deck/oc_ms.png" alt="입력 컬러 영상 MS" style="transition-delay:900ms;left:608px;width:100px;height:100px;border-radius:4px;top:345px">
-<p class="cap c fragment fade" data-fragment-index="1" style="transition-delay:900ms;left:558px;width:200px;font-size:24px;top:506px">입력 MS</p>
-<x-connector class="arrow fragment fade" data-fragment-index="2" x1="718" y1="395" x2="818" y2="395" head="end"></x-connector>
-<p class="cap c fragment fade" data-fragment-index="2" style="left:668px;width:200px;font-size:22px;top:344px">빼기</p>
-<img class="pic fragment fly2" data-fragment-index="2" src="assets/deck/oc_dy.png" alt="" style="--tx:380px;left:448px;width:100px;height:100px;border-radius:4px;top:345px">
-<img class="pic fragment fly2" data-fragment-index="2" src="assets/deck/oc_ms.png" alt="" style="--tx:220px;left:608px;width:100px;height:100px;border-radius:4px;top:345px">
-<img class="pic fragment late" data-fragment-index="2" src="assets/deck/oc_diff.png" alt="입력과 다시 줄인 결과의 차이 지도" style="left:828px;width:100px;height:100px;border-radius:4px;top:345px">
-<p class="cap c fragment late" data-fragment-index="2" style="left:778px;width:200px;font-size:24px;color:#B14A17;font-weight:700;top:506px">어긋난 만큼</p>
-<x-connector class="arrow t fragment fade" data-fragment-index="3" x1="938" y1="395" x2="1038" y2="395" head="end"></x-connector>
-<img class="pic fragment from" data-fragment-index="3" src="assets/deck/oc_diff.png" alt="원래 크기로 넓힌 차이" style="--tx:-265px;--s:0.526;left:1048px;width:190px;height:190px;top:300px">
-<p class="cap c fragment fade" data-fragment-index="3" style="transition-delay:600ms;left:1043px;width:200px;font-size:24px;color:#0E6E73;top:506px">넓힌 차이</p>
-<p class="glyph fragment fade" data-fragment-index="3" style="transition-delay:1000ms;left:1238px;width:64px;font-size:64px;color:#15191E;top:348px">+</p>
-<img class="pic fragment up" data-fragment-index="3" src="assets/deck/oc_y.jpg" alt="모델이 만든 결과 영상 Y" style="transition-delay:1400ms;left:1302px;width:190px;height:190px;top:300px">
-<p class="cap c fragment fade" data-fragment-index="3" style="transition-delay:1400ms;left:1297px;width:200px;color:#15191E;font-weight:700;top:506px">결과 Y</p>
-<p class="glyph fragment fade" data-fragment-index="3" style="transition-delay:1900ms;left:1492px;width:110px;font-size:64px;color:#15191E;top:348px">=</p>
-<img class="pic fragment fade" data-fragment-index="3" src="assets/deck/oc_corrected.jpg" alt="보정된 결과 영상" style="transition-delay:2300ms;left:1602px;width:190px;height:190px;top:300px">
-<p class="cap c fragment fade" data-fragment-index="3" style="transition-delay:2300ms;left:1597px;width:200px;color:#0E6E73;font-weight:700;top:506px">보정된 Ŷ</p>
-<p class="formula fragment fade" data-fragment-index="4" style="left:128px;width:780px;text-align:left;top:622px">Ŷ = Y + Dᵀ(DDᵀ)⁻¹ (MS − DY)</p>
-<p class="cap fragment fade" data-fragment-index="4" style="left:128px;width:780px;font-size:24px;top:690px">D: 위성의 흐림 + 1/4 축소</p>
-<div class="ncard fragment up" data-fragment-index="4" style="left:128px;width:330px;top:746px"><p class="nk">관측 오차 (DN)</p><p class="nv" style="font-size:40px">15.7 → 0</p></div>
-<div class="ncard fragment up" data-fragment-index="4" style="left:490px;width:400px;top:746px"><p class="nk">PSNR (dB)</p><p class="nv" style="font-size:40px; white-space:nowrap">+0.04~0.09</p></div>
-<p class="cap c fragment fade" data-fragment-index="5" style="left:960px;width:240px;font-size:24px;color:#15191E;font-weight:700;top:586px">입력 컬러</p>
-<p class="cap c fragment fade" data-fragment-index="5" style="left:1256px;width:240px;font-size:24px;color:#B14A17;font-weight:700;top:586px">보정 전</p>
-<p class="cap c fragment fade" data-fragment-index="5" style="left:1552px;width:240px;font-size:24px;color:#0E6E73;font-weight:700;top:586px">보정 후</p>
-<img class="pic fragment up" data-fragment-index="5" src="assets/deck/oc_roof_lms.jpg" alt="국토위성 1호 입력 컬러, 파란 지붕" style="left:960px;width:240px;height:240px;top:626px">
-<img class="pic fragment up" data-fragment-index="5" src="assets/deck/oc_roof_before.jpg" alt="보정 전 결과, 파란 지붕이 초록으로 바뀜" style="left:1256px;width:240px;height:240px;transition-delay:150ms;top:626px">
-<img class="pic fragment up" data-fragment-index="5" src="assets/deck/oc_roof_after.jpg" alt="보정 후 결과, 파란 지붕이 돌아옴" style="left:1552px;width:240px;height:240px;transition-delay:300ms;top:626px">
-<x-connector class="arrow fragment fade" data-fragment-index="5" x1="1208" y1="746" x2="1248" y2="746" head="end"></x-connector>
-<x-connector class="arrow t fragment fade" data-fragment-index="5" x1="1504" y1="746" x2="1544" y2="746" head="end"></x-connector>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">모델 SMOC</span><span class="pg-no">14 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button><button type="button" class="pg-dot" data-go="3" aria-label="4단계"></button><button type="button" class="pg-dot" data-go="4" aria-label="5단계"></button><button type="button" class="pg-dot" data-go="5" aria-label="6단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">둘째는 <b>관측 일치 보정(④)</b>입니다. 모델이 만든 결과 Y가 있습니다.</p><p class="pg-say" data-step="1">Y를 위성처럼 흐리게 해 4분의 1로 줄이면(DY) 입력 MS와 같아야 하지만, 실제로는 조금 어긋납니다.</p><p class="pg-say" data-step="2">둘을 빼면 어긋난 만큼이 나옵니다. 주황색이 어긋난 곳입니다.</p><p class="pg-say" data-step="3">이 차이를 원래 크기로 넓혀 결과에 더하면, 다시 줄였을 때 입력과 정확히 맞는 Ŷ가 됩니다.</p><p class="pg-say" data-step="4">학습할 값이 없는 후처리이고, 관측 오차가 15.7에서 <b>0</b>이 되며 PSNR도 0.04-0.09 dB 오릅니다.</p><p class="pg-say" data-step="5">효과가 가장 잘 보이는 예입니다. 국토위성 1호 영상에 QB로 학습한 모델을 쓰면 파란 지붕이 초록으로 바뀌는데, 관측 일치 보정을 하면 입력의 파란색으로 돌아옵니다.</p></div>
+  <div class="sub" data-r>
+   <h3>학습한 위성에서는 최신 모델과 같은 수준</h3>
+   <p class="body">같은 test에서 원본 대비 PSNR 변화입니다. SMOC는 세 위성 모두 원본보다 높고, ADWM·ARConv가 일부 위성에서 조금 높을 뿐 가장 좋은 모델과 0.2 dB 안입니다. 반면 처음 보는 위성에서는 두 번째 모델보다 1.5 dB 앞섭니다.</p>
   </div>
- </div></div>
-</article>
-<section class="pg-detail ">
- <p class="pg-kicker">주 개선 ④ 자세히</p>
- <h2 class="pg-dh">관측 일치 사영</h2>
- 
- <div class="pg-formula">Ŷ = Y + Dᵀ(DDᵀ)⁻¹(MS − DY) <small>D: 센서 MTF 블러 + 1/4 솎음</small></div>
- <div class="pg-grid2">
-  <div class="pg-card"><h3>왜 필요한가</h3>
-   <p>팬샤프닝 결과는 다시 위성처럼 관측했을 때(D) 입력 MS와 같아야 합니다. 분광 손실(③)로 색은 좋아졌지만 원래 해상도에서의 관측 일치가 나빠지고 처음 보는 위성에서 흐려지는 부작용이 생겼습니다.</p>
-   <p>그래서 추론 뒤에 <b>DŶ = MS</b>를 만족하는 영상 중 결과 Y에 가장 가까운 영상으로 옮깁니다. 답을 검산해서 어긋난 부분만 고치는 것과 같습니다.</p>
-  </div>
-  <div class="pg-card"><h3>어떻게 계산하나</h3>
-   <p>(DDᵀ)⁻¹은 직접 구하지 않고 공액 기울기법으로 풉니다. 10회면 충분히 수렴해 그 이상 반복해도 결과가 같습니다. 학습할 파라미터가 없어 어떤 가중치에도 그대로 붙습니다.</p>
-   <dl class="pg-spec"><div><dt>관측 오차</dt><dd>15.7 → 0 DN</dd></div><div><dt>PSNR</dt><dd>+0.04-0.09 dB</dd></div><div><dt>근거</dt><dd>성능 <a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/66_observation_error_projection_analysis/README.md">66번</a> 분석 · <a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/81_l1_spectral_loss_projection/README.md">81번</a> 3시드 정식 판정</dd></div></dl>
-  </div>
- </div>
-
-</section>
-<article class="pg-scene" data-scene="calib" style="--steps:5">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="calib" data-transition="fade">
-<p class="eyebrow a" style="--i:0">주 개선 ⑦ · 밴드별 밝기 보정</p>
-<h2 class="title a" style="--i:1">위성마다 다른 밴드 밝기 비율을 맞췄다가 되돌립니다</h2>
-<p class="cap a" style="--i:2; left:128px; top:300px; width:600px">밴드 평균 ÷ PAN 평균 · 8개 밴드</p>
-<div class="zero a" style="--i:2; left:150px; top:760px; width:830px"></div>
-<div class="cb w3 a" style="--i:3; left:170px; top:609px; width:32px; height:151px"></div>
-<div class="cb w3 a" style="--i:3; left:270px; top:583px; width:32px; height:177px"></div>
-<div class="cb w3 a" style="--i:3; left:370px; top:536px; width:32px; height:224px"></div>
-<div class="cb w3 a" style="--i:3; left:470px; top:567px; width:32px; height:193px"></div>
-<div class="cb w3 a" style="--i:3; left:570px; top:603px; width:32px; height:157px"></div>
-<div class="cb w3 a" style="--i:3; left:670px; top:576px; width:32px; height:184px"></div>
-<div class="cb w3 a" style="--i:3; left:770px; top:522px; width:32px; height:238px"></div>
-<div class="cb w3 a" style="--i:3; left:870px; top:585px; width:32px; height:175px"></div>
-<div style="position:absolute; left:150px; top:400px; width:830px; height:360px"><div class="cb w2 fragment only" data-fragment-index="1" style="left:58px; top:113px; width:32px; height:247px"></div><div class="cb w2 fragment only" data-fragment-index="1" style="left:158px; top:185px; width:32px; height:175px"></div><div class="cb w2 fragment only" data-fragment-index="1" style="left:258px; top:128px; width:32px; height:232px"></div><div class="cb w2 fragment only" data-fragment-index="1" style="left:358px; top:92px; width:32px; height:268px"></div><div class="cb w2 fragment only" data-fragment-index="1" style="left:458px; top:169px; width:32px; height:191px"></div><div class="cb w2 fragment only" data-fragment-index="1" style="left:558px; top:73px; width:32px; height:287px"></div><div class="cb w2 fragment only" data-fragment-index="1" style="left:658px; top:23px; width:32px; height:337px"></div><div class="cb w2 fragment only" data-fragment-index="1" style="left:758px; top:82px; width:32px; height:278px"></div><div class="cb fragment fit2 f1" data-fragment-index="2" style="left:58px; top:113px; width:32px; height:247px"></div><div class="cb fragment fit2 f2" data-fragment-index="2" style="left:158px; top:185px; width:32px; height:175px"></div><div class="cb fragment fit2 f3" data-fragment-index="2" style="left:258px; top:128px; width:32px; height:232px"></div><div class="cb fragment fit2 f4" data-fragment-index="2" style="left:358px; top:92px; width:32px; height:268px"></div><div class="cb fragment fit2 f5" data-fragment-index="2" style="left:458px; top:169px; width:32px; height:191px"></div><div class="cb fragment fit2 f6" data-fragment-index="2" style="left:558px; top:73px; width:32px; height:287px"></div><div class="cb fragment fit2 f7" data-fragment-index="2" style="left:658px; top:23px; width:32px; height:337px"></div><div class="cb fragment fit2 f8" data-fragment-index="2" style="left:758px; top:82px; width:32px; height:278px"></div></div>
-<div style="position:absolute; left:150px; top:400px; width:830px; height:360px"><div class="cb fragment rev r1" data-fragment-index="4" style="left:58px; top:113px; width:32px; height:247px"></div><div class="cb fragment rev r2" data-fragment-index="4" style="left:158px; top:185px; width:32px; height:175px"></div><div class="cb fragment rev r3" data-fragment-index="4" style="left:258px; top:128px; width:32px; height:232px"></div><div class="cb fragment rev r4" data-fragment-index="4" style="left:358px; top:92px; width:32px; height:268px"></div><div class="cb fragment rev r5" data-fragment-index="4" style="left:458px; top:169px; width:32px; height:191px"></div><div class="cb fragment rev r6" data-fragment-index="4" style="left:558px; top:73px; width:32px; height:287px"></div><div class="cb fragment rev r7" data-fragment-index="4" style="left:658px; top:23px; width:32px; height:337px"></div><div class="cb fragment rev r8" data-fragment-index="4" style="left:758px; top:82px; width:32px; height:278px"></div></div>
-<div class="nd dark fragment up" data-fragment-index="3" style="left:700px; top:300px; width:240px; height:80px"><p class="nt" style="font-size:32px">SMOC</p></div>
-<div class="lg a" style="--i:4; left:150px; top:790px"><div class="sw2" style="background:#0E6E73"></div><p class="lt">학습한 위성 WV3</p></div>
-<div class="lg fragment fade" data-fragment-index="1" style="left:470px; top:790px"><div class="sw2" style="background:#B14A17"></div><p class="lt">처음 보는 위성 WV2</p></div>
-<div class="step fragment up" data-fragment-index="1" style="left:1100px; top:300px; width:692px"><p class="sn o">1</p><div><p class="st">WV2는 밴드 비율이 다름</p><p class="ss">모델은 WV3 비율에 맞춰 세부를 넣음</p></div></div>
-<div class="step fragment up" data-fragment-index="2" style="left:1100px; top:396px; width:692px"><p class="sn ">2</p><div><p class="st">배율을 곱해 WV3 비율로</p><p class="ss">입력 통계만 사용 · 정답은 쓰지 않음</p></div></div>
-<div class="step fragment up" data-fragment-index="3" style="left:1100px; top:492px; width:692px"><p class="sn ">3</p><div><p class="st">SMOC로 선명하게</p><p class="ss">재학습 없음</p></div></div>
-<div class="step fragment up" data-fragment-index="4" style="left:1100px; top:588px; width:692px"><p class="sn o">4</p><div><p class="st">배율을 되돌려 원래 색으로</p><p class="ss">WV2의 밴드 비율 그대로</p></div></div>
-<div class="ncard fragment up" data-fragment-index="5" style="left:128px; top:850px; width:940px"><p class="nk">WV3로 학습해 WV2에 적용 · 세부 세기 정답 = 1</p><p class="nv" style="font-size:38px; white-space:nowrap">PSNR 약 +2 dB · 세부 세기 0.52 → 0.70</p></div>
-<p class="cap c fragment fade" data-fragment-index="5" style="left:1100px; top:690px; width:200px; font-size:24px; color:#B14A17; font-weight:700">보정 전</p>
-<p class="cap c fragment fade" data-fragment-index="5" style="left:1346px; top:690px; width:200px; font-size:24px; color:#0E6E73; font-weight:700">보정 후</p>
-<p class="cap c fragment fade" data-fragment-index="5" style="left:1592px; top:690px; width:200px; font-size:24px; color:#15191E; font-weight:700">정답</p>
-<img class="pic fragment up" data-fragment-index="5" src="assets/deck/cal_bldg_before.jpg" alt="밴드 보정 전 WV2 결과, 건물 윤곽이 흐림" style="left:1100px; top:730px; width:200px; height:200px">
-<img class="pic fragment up" data-fragment-index="5" src="assets/deck/cal_bldg_after.jpg" alt="밴드 보정 후 WV2 결과, 건물 윤곽과 그림자가 또렷함" style="left:1346px; top:730px; width:200px; height:200px; transition-delay:150ms">
-<img class="pic fragment up" data-fragment-index="5" src="assets/deck/cal_bldg_gt.jpg" alt="정답 영상" style="left:1592px; top:730px; width:200px; height:200px; transition-delay:300ms">
-<x-connector class="arrow t fragment fade" data-fragment-index="5" x1="1306" y1="830" x2="1340" y2="830" head="end"></x-connector>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">모델 SMOC</span><span class="pg-no">15 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button><button type="button" class="pg-dot" data-go="3" aria-label="4단계"></button><button type="button" class="pg-dot" data-go="4" aria-label="5단계"></button><button type="button" class="pg-dot" data-go="5" aria-label="6단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">셋째는 <b>밴드별 밝기 보정(⑦)</b>입니다. 청록 막대는 학습한 WV3의 밴드 평균 대 PAN 평균 비율입니다.</p><p class="pg-say" data-step="1">처음 보는 WV2는 이 비율이 달라서, WV3 비율에 맞춰 세부를 넣는 모델이 세부를 덜 넣고 결과가 흐려집니다.</p><p class="pg-say" data-step="2">그래서 밴드마다 배율을 곱해 WV3 비율로 맞춥니다. 입력의 통계만 쓰고 정답은 쓰지 않습니다.</p><p class="pg-say" data-step="3">맞춘 입력을 SMOC로 선명하게 복원합니다. 재학습은 없습니다.</p><p class="pg-say" data-step="4">마지막으로 배율을 되돌려 WV2의 원래 밝기 비율로 돌립니다.</p><p class="pg-say" data-step="5">재학습 없이 PSNR이 <b>약 2 dB</b>(1.95-2.15) 올랐고, 세부 세기는 0.52에서 0.70으로 정답(1)에 가까워졌습니다. 보정 전에는 건물 윤곽이 뭉개지지만, 보정 후에는 지붕 모서리와 그림자가 정답처럼 또렷합니다.</p></div>
-  </div>
- </div></div>
-</article>
-<section class="pg-detail ">
- <p class="pg-kicker">주 개선 ⑦ 자세히</p>
- <h2 class="pg-dh">밴드별 밝기 보정과 SMOC까지의 과정</h2>
- 
- <div class="pg-grid2">
-  <div class="pg-card"><h3><i class="n o">⑦</i>입력 통계만 쓰는 보정</h3>
-   <p>WV2가 흐려지는 원인을 추적해 보니 모델 구조가 아니라 <b>센서마다 다른 밴드 대 PAN 밝기 비율</b>이었습니다. 모델은 학습 위성의 비율을 기준으로 PAN에서 세부를 얼마나 가져올지 배우기 때문입니다.</p>
-   <p>새 위성 입력에서 밴드 평균 ÷ PAN 평균을 재고, 학습 위성의 비율과의 차이만큼 배율을 곱해 넣은 뒤, 출력에서 배율을 되돌립니다. 정답도 재학습도 쓰지 않습니다.</p>
-   <dl class="pg-spec"><div><dt>효과</dt><dd>WV2 PSNR 약 +2 dB(1.95-2.15) · 세부 세기 0.52 → 0.70</dd></div><div><dt>근거</dt><dd>성능 <a href="https://github.com/BIYONGHIYON/CtrS/blob/main/SSA-MRN/experiments/performance/82_cross_sensor_band_calibration/README.md">82번</a></dd></div></dl>
-  </div>
-  <div class="pg-card"><h3>WV2에서 정답과 비교 <small>test 20장 · 3시드</small></h3>
-   <div class="pg-tablewrap"><table class="pg-table compact">
-    <thead><tr><th></th><th>원본</th><th>SMOC</th><th>보정 없이</th></tr></thead>
+  <div class="tblwrap" data-r>
+   <table class="tbl heat">
+    <thead><tr><th>모델</th><th>QB</th><th>GF2</th><th>WV3</th><th class="o">WV2 · 처음 보는 위성</th></tr></thead>
     <tbody>
-     <tr><td>RR PSNR</td><td>28.59</td><td><b>32.01</b></td><td>29.81</td></tr>
-     <tr><td>선명도 (정답 = 1)</td><td>0.33</td><td><b>0.54</b></td><td>0.41</td></tr>
-     <tr><td>세부 상관</td><td>0.70</td><td><b>0.86</b></td><td>0.77</td></tr>
-     <tr><td>밝기 치우침 (최대 밴드)</td><td>7.2%</td><td><b>0.1%</b></td><td>1.3%</td></tr>
-    </tbody></table></div>
+     <tr class="me"><td>SMOC</td><td style="--v:.93">+0.93</td><td style="--v:2.93">+2.93</td><td style="--v:1.57">+1.57</td><td style="--v:3.42">+3.42</td></tr>
+     <tr><td>ADWM <small>2025</small></td><td style="--v:1.09">+1.09</td><td style="--v:3.03">+3.03</td><td style="--v:.32">+0.32</td><td style="--v:1.02">+1.02</td></tr>
+     <tr><td>ARConv <small>2025</small></td><td style="--v:1">+1.00</td><td style="--v:2.84">+2.84</td><td style="--v:1.63">+1.63</td><td style="--v:1.27">+1.27</td></tr>
+     <tr><td>CANNet <small>2024</small></td><td style="--v:.83">+0.83</td><td style="--v:2.73">+2.73</td><td style="--v:1.44">+1.44</td><td style="--v:1.37">+1.37</td></tr>
+     <tr><td>U2Net <small>2023</small></td><td class="n">−0.93</td><td style="--v:2.36">+2.36</td><td style="--v:1.31">+1.31</td><td style="--v:1.91">+1.91</td></tr>
+     <tr><td>FusionNet <small>2021</small></td><td class="n">−5.94</td><td class="n">−1.00</td><td class="n">−5.02</td><td class="n">−1.53</td></tr>
+     <tr class="base"><td>원본 SSA-MRN</td><td>37.43</td><td>46.55</td><td>37.54</td><td>28.59</td></tr>
+    </tbody>
+   </table>
+   <p class="note">PSNR 차이(dB), RR test 20장. 마지막 줄은 원본의 PSNR입니다. SMOC는 3시드 평균, 다른 모델은 공식 코드와 저자 가중치(없으면 논문 설정으로 직접 학습)로 같은 test를 실제 MATLAB 평가 코드로 채점한 값입니다.</p>
+  </div>
+
+  <details class="more" data-r>
+   <summary>원본 대비 PSNR · SAM · ERGAS 전체 (3시드 평균)</summary>
+   <div class="tblwrap">
+    <table class="tbl">
+     <thead><tr><th>데이터셋</th><th>모델</th><th>PSNR (dB) ↑</th><th>SAM (°) ↓</th><th>ERGAS ↓</th></tr></thead>
+     <tbody>
+      <tr><td rowspan="2">QB</td><td>원본</td><td>37.429</td><td>4.941</td><td>4.124</td></tr>
+      <tr class="me"><td>SMOC</td><td>38.364</td><td>4.497</td><td>3.692</td></tr>
+      <tr><td rowspan="2">GF2</td><td>원본</td><td>46.549</td><td>0.953</td><td>0.896</td></tr>
+      <tr class="me"><td>SMOC</td><td>49.475</td><td>0.708</td><td>0.638</td></tr>
+      <tr><td rowspan="2">WV3</td><td>원본</td><td>37.536</td><td>3.494</td><td>2.571</td></tr>
+      <tr class="me"><td>SMOC</td><td>39.107</td><td>2.864</td><td>2.127</td></tr>
+      <tr><td rowspan="2">WV2 전이</td><td>원본</td><td>28.586</td><td>6.253</td><td>5.046</td></tr>
+      <tr class="me"><td>SMOC</td><td>32.006</td><td>4.954</td><td>3.458</td></tr>
+     </tbody>
+    </table>
+   </div>
+  </details>
+
+  <div class="sub" data-r>
+   <h3>국토위성 1호에도 재학습 없이</h3>
+   <p class="body">국토위성 1호가 2026년 5월에 찍은 서울 동국대 일대(1.28 km × 1.34 km)에 QB로 학습한 SMOC를 그대로 적용했습니다. 받은 자료는 0.5 m 흑백 PAN과 네 밴드가 따로 담긴 2 m MS입니다. 두 영상의 어긋난 위치를 맞추고 밴드별 밝기 보정과 관측 일치 보정을 붙여, 512픽셀 타일 100장을 처리해 이어 붙였습니다.</p>
+  </div>
+  <div class="cas" data-r>
+   <div class="cas-in">
+    <figure><img src="assets/deck/cas_in_pan.jpg" alt="입력 흑백 PAN 전체"><figcaption>PAN · 흑백 0.5 m</figcaption></figure>
+    <figure class="bands"><div><img src="assets/deck/cas_in_ms_B.jpg" alt="파랑 밴드"><i>B</i></div><div><img src="assets/deck/cas_in_ms_G.jpg" alt="초록 밴드"><i>G</i></div><div><img src="assets/deck/cas_in_ms_R.jpg" alt="빨강 밴드"><i>R</i></div><div><img src="assets/deck/cas_in_ms_N.jpg" alt="근적외선 밴드"><i>NIR</i></div><figcaption>MS 4밴드 · 2 m</figcaption></figure>
+    <figure><img src="assets/deck/cas_in_ms_rgb.jpg" alt="MS 밴드를 합친 흐린 컬러"><figcaption>MS 컬러 · 2 m</figcaption></figure>
+   </div>
+   <p class="cas-arrow"><b>SMOC</b><span>QB로 학습 · 재학습 없음</span></p>
+   <figure class="cas-out"><img src="assets/deck/cas_result_overview.jpg" alt="SMOC로 만든 0.5 m 컬러 결과 전체"><figcaption class="t">SMOC 결과 · 컬러 0.5 m</figcaption></figure>
+  </div>
+  <figure class="trio cas-zoom" data-r>
+   <div><img src="assets/deck/cas_zoom_ms.jpg" alt="확대한 입력 컬러, 흐림"><figcaption>MS 컬러</figcaption></div>
+   <div><img src="assets/deck/cas_zoom_pan.jpg" alt="확대한 입력 흑백, 선명"><figcaption>PAN</figcaption></div>
+   <div><img src="assets/deck/cas_zoom_smoc.jpg" alt="확대한 SMOC 결과, 선명한 컬러"><figcaption class="t">SMOC 결과</figcaption></div>
+   <p class="cap">동국대 팔정도 128 m × 128 m 확대. 컬러는 뭉개지고 흑백은 색이 없지만, 결과는 흑백의 윤곽에 색이 입혀졌습니다. MS에서는 보이지 않던 코끼리상 위의 '전법' 글자도 결과에서 보입니다.</p>
+  </figure>
+
+  <a class="site" href="https://biyonghiyon.github.io/CtrS/" data-r>
+   <img src="assets/deck/site.jpg" alt="결과 비교 사이트 화면: WV2 장면에서 SMOC, 원본 SSA-MRN, 정답, 오차 지도를 나란히 보여 줌" loading="lazy">
+   <div><p class="kick">결과 비교 사이트</p><h3>모든 결과를 장면별로 직접 비교</h3><p>데이터셋과 장면을 고르면 SMOC, 원본, 다른 모델, 정답과 오차 지도를 나란히 확대해 볼 수 있습니다. 정적 웹 뷰어로 만들어 GitHub Pages에 배포했습니다.</p><span class="btn pri">사이트 열기 →</span></div>
+  </a>
+ </div>
+</section>
+
+<!-- 05 활용 -->
+<section class="sec" id="impact">
+ <div class="wrap">
+  <div class="sh" data-r><span class="no">05</span><p class="kick">활용</p><h2>새 위성마다 다시 학습하지 않는 팬샤프닝</h2></div>
+  <div class="biz">
+   <div data-r><p class="kick">고객</p><h4>국내 위성 영상 기업·기관</h4><p>국토위성 · 아리랑 · 민간 소형위성 영상을 처리하고 판매하는 곳</p></div>
+   <div data-r style="--d:1" class="o"><p class="kick">문제</p><h4>학습 데이터 없는 새 위성</h4><p>보안 규제로 학습용 영상이 부족하고, 컬러 해상도가 낮아 해외 위성에 밀림</p></div>
+   <div data-r style="--d:2"><p class="kick">가치</p><h4>재학습 없이 바로 적용</h4><p>처음 보는 위성에서 원본 대비 +3.4 dB, 국토위성 1호에 그대로 적용</p></div>
+  </div>
+
+  <div class="sub" data-r>
+   <h3>특허 후보: 처음 보는 위성에 쓰는 절차</h3>
+   <p class="body">단계 하나하나는 알려진 기술이라, 청구 대상은 네 단계의 결합입니다. 세 가지 위성 전이 조합 모두에서 1.6-2.3 dB 올랐고(3시드), 논문과 특허 검색에서 같은 결합은 찾지 못했습니다.</p>
+  </div>
+  <ol class="steps4" data-r>
+   <li style="--d:0"><b>1</b><h4>비율 재기</h4><p>밴드 평균 ÷ PAN 평균</p></li>
+   <li style="--d:1"><b>2</b><h4>배율 곱하기</h4><p>학습 위성 비율로 맞춤</p></li>
+   <li style="--d:2"><b>3</b><h4>SMOC 복원</h4><p>재학습 없음</p></li>
+   <li style="--d:3"><b>4</b><h4>되돌리고 보정</h4><p>원래 밝기 + 관측 일치</p></li>
+  </ol>
+  <div class="vs">
+   <div data-r>
+    <p class="vs-h o">선행기술 · 목표는 같지만 모두 다시 학습</p>
+    <ul>
+     <li><b>UniPAN</b> <small>ICCV 2025</small><span>분포를 바꾼 데이터로 처음부터 학습</span></li>
+     <li><b>SWIFT</b> <small>AAAI 2026</small><span>새 위성 데이터로 일부 가중치 재학습</span></li>
+     <li><b>CN119579847B</b> <small>중국 특허 · 2025</small><span>도메인 일반화 학습으로 처음 보는 위성 대응</span></li>
+     <li><b>CN118505561B</b> <small>중국 특허 · 2024</small><span>여러 위성 데이터로 학습한 확산 모델</span></li>
+    </ul>
+   </div>
+   <div data-r style="--d:1">
+    <p class="vs-h t">이 절차 · 이미 학습된 모델을 그대로</p>
+    <ul>
+     <li><b>재학습 없음</b><span>학습한 위성의 SMOC를 그대로 사용</span></li>
+     <li><b>정답 불필요</b><span>입력의 밴드/PAN 밝기 비율만 사용</span></li>
+     <li><b>입력과 일치</b><span>원래 밝기로 되돌린 뒤 관측 일치 보정</span></li>
+     <li><b class="t">+1.6-2.3 dB</b><span>처음 보는 위성 전이 3쌍 모두 · 3시드 평균</span></li>
+    </ul>
+   </div>
+  </div>
+
+  <div class="next" data-r>
+   <h3>다음 단계</h3>
+   <ol>
+    <li><b>설치형 소프트웨어</b><span>인터넷 없는 보안망에서도 영상을 넣으면 바로 팬샤프닝</span></li>
+    <li><b>영상 처리 API</b><span>영상을 올리면 선명한 컬러 영상을 돌려받음, 국토위성·아리랑부터</span></li>
+    <li><b>특허 출원</b><span>첫 공개(2026.11.14)로부터 1년 안에 공지예외 주장으로 국내 출원</span></li>
+   </ol>
   </div>
  </div>
- <h3 class="pg-sub">원본에서 SMOC까지</h3>
- <ol class="pg-tl">
-  <li><span>10.09</span><b>원본 SSA-MRN 재현</b><em>논문 설정 재현, 이후 모든 비교의 기준</em></li>
-  <li><span>10월</span><b>① 병렬 가지 W2</b><em>RR +0.70 dB, 거친 시험에서 약점</em></li>
-  <li><span>10.21</span><b>② 축척 혼합 학습 → C2MS</b><em>약점 원인 진단 후 해결, 기준 모델 채택</em></li>
-  <li><span>11월</span><b>③ 분광 손실 + ④ 관측 일치 사영 → C2MS-SP</b><em>세 위성 모두 3시드 개선, 기준 모델 채택(11.14)</em></li>
-  <li><span>11월</span><b>⑦ 밴드별 밝기 보정</b><em>처음 보는 위성 흐림의 원인을 찾아 재학습 없이 +2 dB</em></li>
-  <li><span>11월</span><b>⑥ 분해 + 감쇠, λ·c 재탐색</b><em>연산 66%로 같은 정확도</em></li>
-  <li class="on"><span>11.24</span><b>⑤ 위성 방식 축소·확대 → SMOC</b><em>C2MS-SP 대비 GF2 +0.69, WV3 +0.43 dB, 최종 모델 확정</em></li>
- </ol>
+</section>
 
-</section>
-<article class="pg-scene" id="results" data-scene="result-gen" style="--steps:3">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="result-gen" data-transition="fade">
-<p class="eyebrow a" style="--i:0">결과 ① 일반화 · 처음 보는 위성 WV2</p>
-<h2 class="title a" style="--i:1">처음 보는 위성에서는 가장 정확합니다</h2>
-<p class="cap a" style="--i:2;left:128px;width:960px;top:300px">원본 SSA-MRN 대비 PSNR 차이 (dB) · WV2 RR test 20장</p>
-<div class="fragment up" data-fragment-index="1" style="position:absolute;left:128px;width:960px;top:360px">
-<svg aria-label="처음 보는 위성 WV2에서 원본 SSA-MRN 대비 PSNR 차이: SMOC가 가장 높음" width="960" height="456" viewBox="0 0 960 456">
-<line x1="380" y1="0" x2="380" y2="456" stroke="#15191E" stroke-width="3"/>
-<text x="210" y="45" font-size="28" font-weight="800" fill="#0E6E73" text-anchor="end">SMOC</text>
-<rect x="380" y="14" width="342" height="44" rx="5" fill="#0E6E73"/>
-<text x="734" y="45" font-size="24" font-weight="800" fill="#0E6E73">+3.42 · 32.01 dB</text>
-<text x="210" y="109" font-size="25" font-weight="700" fill="#15191E" text-anchor="end">U2Net (2023)</text>
-<rect x="380" y="78" width="191" height="44" rx="5" fill="#B9BEC4"/>
-<text x="583" y="109" font-size="24" font-weight="600" fill="#15191E">+1.91 · 30.50 dB</text>
-<text x="210" y="173" font-size="25" font-weight="700" fill="#15191E" text-anchor="end">CANNet (2024)</text>
-<rect x="380" y="142" width="137" height="44" rx="5" fill="#B9BEC4"/>
-<text x="529" y="173" font-size="24" font-weight="600" fill="#15191E">+1.37 · 29.96 dB</text>
-<text x="210" y="237" font-size="25" font-weight="700" fill="#15191E" text-anchor="end">ARConv (2025)</text>
-<rect x="380" y="206" width="127" height="44" rx="5" fill="#B9BEC4"/>
-<text x="519" y="237" font-size="24" font-weight="600" fill="#15191E">+1.27 · 29.85 dB</text>
-<text x="210" y="301" font-size="25" font-weight="700" fill="#15191E" text-anchor="end">ADWM (2025)</text>
-<rect x="380" y="270" width="102" height="44" rx="5" fill="#B9BEC4"/>
-<text x="494" y="301" font-size="24" font-weight="600" fill="#15191E">+1.02 · 29.60 dB</text>
-<text x="210" y="365" font-size="25" font-weight="700" fill="#15191E" text-anchor="end">원본 SSA-MRN</text>
-<text x="392" y="365" font-size="24" fill="#5B6470">기준 · 28.59 dB</text>
-<text x="210" y="429" font-size="25" font-weight="700" fill="#15191E" text-anchor="end">FusionNet (2021)</text>
-<rect x="227" y="398" width="153" height="44" rx="5" fill="#B9BEC4"/>
-<text x="392" y="429" font-size="24" font-weight="600" fill="#B14A17">−1.53 · 27.06 dB</text>
-</svg>
-</div>
-<p class="cap c fragment fade" data-fragment-index="2" style="left:1132px;width:660px;top:300px">WV2 장면 15 일부 · 장면 PSNR</p>
-<img class="pic fragment up" data-fragment-index="2" src="assets/deck/gen_orig.jpg" alt="흐리고 색이 치우친 원본 SSA-MRN 결과" style="left:1132px;width:210px;height:210px;top:360px">
-<p class="cap c fragment fade" data-fragment-index="2" style="left:1122px;width:230px;color:#15191E;font-weight:800;font-size:26px;top:582px">원본 SSA-MRN</p>
-<p class="cap c fragment fade" data-fragment-index="2" style="left:1122px;width:230px;font-size:24px;top:620px">28.0 dB</p>
-<img class="pic fragment up" data-fragment-index="2" src="assets/deck/gen_smoc.jpg" alt="선명하고 정답에 가까운 SMOC 결과" style="left:1357px;width:210px;height:210px;top:360px">
-<p class="cap c fragment fade" data-fragment-index="2" style="left:1347px;width:230px;color:#0E6E73;font-weight:800;font-size:26px;top:582px">SMOC</p>
-<p class="cap c fragment fade" data-fragment-index="2" style="left:1347px;width:230px;font-size:24px;top:620px">31.8 dB</p>
-<img class="pic fragment up" data-fragment-index="2" src="assets/deck/gen_gt.jpg" alt="정답 영상" style="left:1582px;width:210px;height:210px;top:360px">
-<p class="cap c fragment fade" data-fragment-index="2" style="left:1572px;width:230px;color:#15191E;font-weight:800;font-size:26px;top:582px">정답</p>
-<div class="ncard fragment up" data-fragment-index="3" style="left:1132px;width:660px;top:690px"><p class="nk">색 오차 SAM · WV2</p><p class="nv">6.25° → 4.95°</p></div>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">결과</span><span class="pg-no">16 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button><button type="button" class="pg-dot" data-go="3" aria-label="4단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">먼저 핵심인 일반화입니다. WV3로 학습한 모델을 WV2에 그대로 적용했고, 다른 모델 다섯 개도 같은 데이터와 지표로 다시 평가해 비교했습니다.</p><p class="pg-say" data-step="1">SMOC는 원본보다 <b>3.42 dB</b> 올라, 두 번째인 U2Net보다 1.5 dB 높았습니다. 학습한 위성에서는 SMOC와 비슷한 모델들도 처음 보는 위성에서는 크게 뒤처집니다.</p><p class="pg-say" data-step="2">확대하면 원본은 흐리고 색이 치우쳤지만, SMOC는 건물과 나무가 정답에 가깝습니다.</p><p class="pg-say" data-step="3">색 오차 SAM도 6.25°에서 <b>4.95°</b>로 줄었습니다.</p></div>
-  </div>
- </div></div>
-</article>
-<article class="pg-scene" data-scene="result-acc" style="--steps:2">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="result-acc" data-transition="fade">
-<p class="eyebrow a" style="--i:0">결과 ② 정확도 · 학습한 위성</p>
-<h2 class="title a" style="--i:1">학습한 위성에서는 최신 모델과 같은 수준입니다</h2>
-<p class="cap a" style="--i:2; left:128px; top:300px; width:1664px">원본 SSA-MRN 대비 PSNR 차이 (dB) · RR test 20장</p>
-<div class="fragment up" data-fragment-index="1" style="position:absolute; left:128px; top:350px; width:1664px">
-<svg aria-label="학습한 세 위성에서 원본 SSA-MRN 대비 PSNR 차이: SMOC, ADWM, ARConv, CANNet, U2Net, FusionNet" width="1664" height="520" viewBox="0 0 1664 520">
-<text x="226" y="105" font-size="28" font-weight="800" fill="#0E6E73" text-anchor="end">SMOC</text>
-<text x="226" y="169" font-size="25" font-weight="700" fill="#15191E" text-anchor="end">ADWM (2025)</text>
-<text x="226" y="233" font-size="25" font-weight="700" fill="#15191E" text-anchor="end">ARConv (2025)</text>
-<text x="226" y="297" font-size="25" font-weight="700" fill="#15191E" text-anchor="end">CANNet (2024)</text>
-<text x="226" y="361" font-size="25" font-weight="700" fill="#15191E" text-anchor="end">U2Net (2023)</text>
-<text x="226" y="425" font-size="25" font-weight="700" fill="#15191E" text-anchor="end">FusionNet (2021)</text>
-<text x="226" y="489" font-size="25" font-weight="700" fill="#15191E" text-anchor="end">원본 SSA-MRN</text>
-<text x="260" y="34" font-size="32" font-weight="800" fill="#15191E">QB</text>
-<text x="340" y="34" font-size="22" fill="#5B6470">SMOC 38.36 dB</text>
-<line x1="360" y1="58" x2="360" y2="516" stroke="#15191E" stroke-width="2"/>
-<rect x="360" y="78" width="79" height="36" rx="4" fill="#0E6E73"/>
-<text x="447" y="104" font-size="22" font-weight="800" fill="#0E6E73">+0.93</text>
-<rect x="360" y="142" width="93" height="36" rx="4" fill="#B9BEC4"/>
-<text x="461" y="168" font-size="22" font-weight="600" fill="#15191E">+1.09</text>
-<rect x="360" y="206" width="85" height="36" rx="4" fill="#B9BEC4"/>
-<text x="453" y="232" font-size="22" font-weight="600" fill="#15191E">+1.00</text>
-<rect x="360" y="270" width="71" height="36" rx="4" fill="#B9BEC4"/>
-<text x="439" y="296" font-size="22" font-weight="600" fill="#15191E">+0.83</text>
-<rect x="281" y="334" width="79" height="36" rx="4" fill="#B9BEC4"/>
-<text x="370" y="360" font-size="22" font-weight="600" fill="#B14A17">−0.93</text>
-<rect x="266" y="398" width="94" height="36" rx="4" fill="#B9BEC4"/>
-<path d="M290 438 L298 394 M302 438 L310 394" stroke="#FBFBF9" stroke-width="5"/>
-<text x="370" y="424" font-size="22" font-weight="600" fill="#B14A17">−5.94</text>
-<text x="370" y="488" font-size="22" fill="#5B6470">기준 37.43</text>
-<text x="728" y="34" font-size="32" font-weight="800" fill="#15191E">GF2</text>
-<text x="808" y="34" font-size="22" fill="#5B6470">SMOC 49.48 dB</text>
-<line x1="828" y1="58" x2="828" y2="516" stroke="#15191E" stroke-width="2"/>
-<rect x="828" y="78" width="249" height="36" rx="4" fill="#0E6E73"/>
-<text x="1085" y="104" font-size="22" font-weight="800" fill="#0E6E73">+2.93</text>
-<rect x="828" y="142" width="258" height="36" rx="4" fill="#B9BEC4"/>
-<text x="1094" y="168" font-size="22" font-weight="600" fill="#15191E">+3.03</text>
-<rect x="828" y="206" width="241" height="36" rx="4" fill="#B9BEC4"/>
-<text x="1077" y="232" font-size="22" font-weight="600" fill="#15191E">+2.84</text>
-<rect x="828" y="270" width="232" height="36" rx="4" fill="#B9BEC4"/>
-<text x="1068" y="296" font-size="22" font-weight="600" fill="#15191E">+2.73</text>
-<rect x="828" y="334" width="200" height="36" rx="4" fill="#B9BEC4"/>
-<text x="1036" y="360" font-size="22" font-weight="600" fill="#15191E">+2.36</text>
-<rect x="743" y="398" width="85" height="36" rx="4" fill="#B9BEC4"/>
-<text x="838" y="424" font-size="22" font-weight="600" fill="#B14A17">−1.00</text>
-<text x="838" y="488" font-size="22" fill="#5B6470">기준 46.55</text>
-<text x="1196" y="34" font-size="32" font-weight="800" fill="#15191E">WV3</text>
-<text x="1276" y="34" font-size="22" fill="#5B6470">SMOC 39.11 dB</text>
-<line x1="1296" y1="58" x2="1296" y2="516" stroke="#15191E" stroke-width="2"/>
-<rect x="1296" y="78" width="134" height="36" rx="4" fill="#0E6E73"/>
-<text x="1438" y="104" font-size="22" font-weight="800" fill="#0E6E73">+1.57</text>
-<rect x="1296" y="142" width="27" height="36" rx="4" fill="#B9BEC4"/>
-<text x="1331" y="168" font-size="22" font-weight="600" fill="#15191E">+0.32</text>
-<rect x="1296" y="206" width="139" height="36" rx="4" fill="#B9BEC4"/>
-<text x="1443" y="232" font-size="22" font-weight="600" fill="#15191E">+1.63</text>
-<rect x="1296" y="270" width="122" height="36" rx="4" fill="#B9BEC4"/>
-<text x="1426" y="296" font-size="22" font-weight="600" fill="#15191E">+1.44</text>
-<rect x="1296" y="334" width="111" height="36" rx="4" fill="#B9BEC4"/>
-<text x="1415" y="360" font-size="22" font-weight="600" fill="#15191E">+1.31</text>
-<rect x="1202" y="398" width="94" height="36" rx="4" fill="#B9BEC4"/>
-<path d="M1226 438 L1234 394 M1238 438 L1246 394" stroke="#FBFBF9" stroke-width="5"/>
-<text x="1306" y="424" font-size="22" font-weight="600" fill="#B14A17">−5.02</text>
-<text x="1306" y="488" font-size="22" fill="#5B6470">기준 37.54</text>
-</svg>
-</div>
-<p class="big-msg fragment up" data-fragment-index="2" style="left:128px;width:1664px;top:894px">원본보다 +0.9 ~ 2.9 dB</p>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">결과</span><span class="pg-no">17 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">다음은 학습한 위성에서의 정확도입니다.</p><p class="pg-say" data-step="1">막대는 원본 대비 PSNR 변화입니다. SMOC는 QB 0.93, GF2 2.93, WV3 1.57 dB 올랐습니다. ADWM과 ARConv가 일부 위성에서 조금 높고, CANNet과 U2Net보다는 모두 높습니다.</p><p class="pg-say" data-step="2">즉 학습한 위성에서는 <b>가장 좋은 모델과 0.2 dB 안의 같은 수준</b>입니다.</p></div>
-  </div>
- </div></div>
-</article>
-<section class="pg-detail ">
- <p class="pg-kicker">결과 자세히</p>
- <h2 class="pg-dh">원본 대비 개선 (RR test 20장 · 3시드 평균)</h2>
- 
- <div class="pg-tablewrap"><table class="pg-table">
-  <thead><tr><th>데이터셋</th><th>모델</th><th>PSNR (dB) ↑</th><th>SAM (°) ↓</th><th>ERGAS ↓</th></tr></thead>
-  <tbody>
-   <tr><td rowspan="2">QB</td><td>원본 SSA-MRN</td><td>37.429</td><td>4.941</td><td>4.124</td></tr>
-   <tr class="me"><td>SMOC</td><td>38.364 <small>+0.935</small></td><td>4.497</td><td>3.692</td></tr>
-   <tr><td rowspan="2">GF2</td><td>원본 SSA-MRN</td><td>46.549</td><td>0.953</td><td>0.896</td></tr>
-   <tr class="me"><td>SMOC</td><td>49.475 <small>+2.925</small></td><td>0.708</td><td>0.638</td></tr>
-   <tr><td rowspan="2">WV3</td><td>원본 SSA-MRN</td><td>37.536</td><td>3.494</td><td>2.571</td></tr>
-   <tr class="me"><td>SMOC</td><td>39.107 <small>+1.571</small></td><td>2.864</td><td>2.127</td></tr>
-   <tr><td rowspan="2">WV2 전이</td><td>원본 SSA-MRN</td><td>28.586</td><td>6.253</td><td>5.046</td></tr>
-   <tr class="me"><td>SMOC</td><td>32.006 <small>+3.420</small></td><td>4.954</td><td>3.458</td></tr>
-  </tbody></table></div>
- <p class="pg-note">학습한 세 데이터셋은 시드별로도 모두 원본보다 높았습니다. WV2는 WV3로 학습한 모델을 학습하지 않은 위성에 그대로 적용한 결과이며 SMOC는 밴드별 밝기 보정을 포함합니다. 다른 모델(ADWM·ARConv·CANNet·U2Net·FusionNet)은 공식 코드와 저자 가중치(없으면 논문 설정으로 직접 학습)로 같은 test를 실제 MATLAB 평가 코드로 채점했습니다. 전체 표는 <a href="https://github.com/BIYONGHIYON/CtrS#compare">저장소 README</a>에 있습니다.</p>
-
-</section>
-<article class="pg-scene" data-scene="cas500" style="--steps:2">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="cas500" data-transition="fade">
-<p class="eyebrow a" style="--i:0">결과 ③ 국산 위성 · 국토위성 1호</p>
-<h2 class="title a" style="--i:1">국토위성 1호 영상에도 재학습 없이 적용했습니다</h2>
-<p class="cap a" style="--i:2; left:128px; top:288px; width:820px; color:#15191E; font-weight:800">입력 · 2026-05-22 촬영 · 서울 중구 1.28 km × 1.34 km</p>
-<img class="pic a" style="--i:2; left:128px; top:336px; width:238px; height:250px" src="assets/deck/cas_in_pan.jpg" alt="입력 흑백 PAN 영상 전체">
-<p class="cap c a" style="--i:2; left:118px; top:596px; width:258px; font-size:22px; color:#15191E; font-weight:700">PAN · 흑백 0.5 m</p>
-<img class="pic a" style="--i:3; left:398px; top:336px; width:114px; height:120px; border-radius:4px" src="assets/deck/cas_in_ms_B.jpg" alt="MS 파랑 밴드">
-<img class="pic a" style="--i:3; left:522px; top:336px; width:114px; height:120px; border-radius:4px" src="assets/deck/cas_in_ms_G.jpg" alt="MS 초록 밴드">
-<img class="pic a" style="--i:3; left:398px; top:466px; width:114px; height:120px; border-radius:4px" src="assets/deck/cas_in_ms_R.jpg" alt="MS 빨강 밴드">
-<img class="pic a" style="--i:3; left:522px; top:466px; width:114px; height:120px; border-radius:4px" src="assets/deck/cas_in_ms_N.jpg" alt="MS 근적외선 밴드">
-<p class="a" style="--i:3; position:absolute; left:402px; top:340px; font-size:20px; font-weight:800; color:#FBFBF9; background:#15191E; padding:0 8px; border-radius:4px">B</p>
-<p class="a" style="--i:3; position:absolute; left:526px; top:340px; font-size:20px; font-weight:800; color:#FBFBF9; background:#15191E; padding:0 8px; border-radius:4px">G</p>
-<p class="a" style="--i:3; position:absolute; left:402px; top:470px; font-size:20px; font-weight:800; color:#FBFBF9; background:#15191E; padding:0 8px; border-radius:4px">R</p>
-<p class="a" style="--i:3; position:absolute; left:526px; top:470px; font-size:20px; font-weight:800; color:#FBFBF9; background:#15191E; padding:0 8px; border-radius:4px">NIR</p>
-<p class="cap c a" style="--i:3; left:388px; top:596px; width:258px; font-size:22px; color:#15191E; font-weight:700">MS 4밴드 · 2 m</p>
-<x-connector class="arrow a" style="--i:4" x1="648" y1="461" x2="700" y2="461" head="end"></x-connector>
-<p class="cap c a" style="--i:4; left:634px; top:418px; width:80px; font-size:20px">합침</p>
-<img class="pic a" style="--i:4; left:708px; top:336px; width:238px; height:250px" src="assets/deck/cas_in_ms_rgb.jpg" alt="MS 밴드를 합친 흐린 컬러 영상">
-<p class="cap c a" style="--i:4; left:698px; top:596px; width:258px; font-size:22px; color:#15191E; font-weight:700">MS 컬러 · 2 m</p>
-<x-connector class="arrow t fragment fade" data-fragment-index="1" x1="954" y1="461" x2="1210" y2="461" head="end"></x-connector>
-<p class="cap c fragment fade" data-fragment-index="1" style="left:962px; top:412px; width:240px; font-size:24px; color:#0E6E73; font-weight:800">SMOC</p>
-<p class="cap c fragment fade" data-fragment-index="1" style="left:962px; top:476px; width:240px; font-size:20px">QB로 학습<br>재학습 없음</p>
-<img class="pic fragment up" data-fragment-index="1" style="left:1221px; top:300px; width:571px; height:600px" src="assets/deck/cas_result_overview.jpg" alt="SMOC로 만든 0.5 m 컬러 결과 전체">
-<p class="cap c fragment fade" data-fragment-index="1" style="left:1221px; top:908px; width:571px; font-size:22px; color:#0E6E73; font-weight:800">SMOC 결과 · 0.5 m 컬러 · 타일 100장 이어 붙임</p>
-<div class="fragment fade" data-fragment-index="2" style="position:absolute; left:1471px; top:571px; width:57px; height:57px; box-sizing:border-box; border:5px solid #B14A17; border-radius:3px; box-shadow:0 0 0 3px #FBFBF9"></div>
-<p class="cap fragment fade" data-fragment-index="2" style="left:128px; top:648px; width:820px; color:#B14A17; font-weight:800">동국대 확대 · 128 m × 128 m</p>
-<img class="pic fragment up" data-fragment-index="2" style="left:128px; top:692px; width:258px; height:258px" src="assets/deck/cas_zoom_ms.jpg" alt="확대한 입력 컬러, 흐림">
-<img class="pic fragment up" data-fragment-index="2" style="left:409px; top:692px; width:258px; height:258px; transition-delay:150ms" src="assets/deck/cas_zoom_pan.jpg" alt="확대한 입력 흑백, 선명">
-<img class="pic fragment up" data-fragment-index="2" style="left:690px; top:692px; width:258px; height:258px; transition-delay:300ms" src="assets/deck/cas_zoom_smoc.jpg" alt="확대한 SMOC 결과, 선명한 컬러">
-<p class="fragment fade" data-fragment-index="2" style="position:absolute; left:136px; top:910px; font-size:20px; font-weight:700; color:#FBFBF9; background:#15191E; padding:2px 10px; border-radius:4px">MS 컬러</p>
-<p class="fragment fade" data-fragment-index="2" style="position:absolute; left:417px; top:910px; font-size:20px; font-weight:700; color:#FBFBF9; background:#15191E; padding:2px 10px; border-radius:4px; transition-delay:150ms">PAN</p>
-<p class="fragment fade" data-fragment-index="2" style="position:absolute; left:698px; top:910px; font-size:20px; font-weight:700; color:#FBFBF9; background:#0E6E73; padding:2px 10px; border-radius:4px; transition-delay:300ms">SMOC 결과</p>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">결과</span><span class="pg-no">18 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">국산 위성입니다. 국토위성 1호가 2026년 5월에 찍은 서울 동국대 일대입니다. 받은 자료는 0.5 m 흑백 PAN과, 파랑·초록·빨강·근적외선 네 밴드가 따로 담긴 2 m MS입니다. 네 밴드를 합치면 흐린 컬러 영상이 됩니다.</p><p class="pg-say" data-step="1">여기에 QB로 학습한 SMOC를 <b>재학습 없이</b> 적용했습니다. 두 영상의 어긋난 위치를 맞추고 밴드별 밝기 보정과 관측 일치 보정을 붙여, 512픽셀 타일 100장을 처리해 이어 붙였습니다.</p><p class="pg-say" data-step="2">캠퍼스를 확대하면 컬러는 뭉개져 있고 흑백은 색이 없지만, SMOC 결과는 흑백의 선명한 윤곽에 색이 입혀졌습니다. MS에서는 보이지 않던 팔정도 코끼리상 위의 '전법' 글자도 결과 영상에서 보입니다.</p></div>
-  </div>
- </div></div>
-</article>
-<article class="pg-scene" data-scene="site" style="--steps:0">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="site" data-transition="fade">
-<p class="eyebrow a" style="--i:0">결과 비교 사이트</p>
-<h2 class="title a" style="--i:1">모든 결과를 장면별로 직접 비교할 수 있습니다</h2>
-<img class="pic a" style="--i:2; left:128px; top:300px; width:1040px; height:650px; object-fit:cover; border:2px solid #D5D8DC; box-sizing:border-box" src="assets/deck/site.jpg" alt="결과 비교 사이트 화면: WV2 장면 15에서 SMOC와 원본 SSA-MRN, 정답, 오차 지도를 나란히 보여 줌">
-<p class="a" style="--i:3; position:absolute; left:1240px; top:340px; width:552px; font-size:40px; font-weight:800; color:#15191E; line-height:1.3">장면별 확대 비교<br>오차 지도<br>다른 모델과 나란히</p><p class="cap a" style="--i:4; left:1240px; top:560px; width:552px; font-size:26px; line-height:1.5">QB · GF2 · WV3 · WV2 전이의 test 장면에서 SMOC, 원본 SSA-MRN, 다른 모델, 정답을 나란히 봅니다.</p><a class="a" href="https://biyonghiyon.github.io/CtrS/" style="--i:5; position:absolute; left:1240px; top:760px; font-size:30px; font-weight:800; color:#FBFBF9; background:#0E6E73; padding:14px 30px; border-radius:999px; text-decoration:none">결과 비교 사이트 열기 →</a></section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">결과</span><span class="pg-no">19 / 22</span><span class="pg-dots"></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">모든 결과는 <a href="https://biyonghiyon.github.io/CtrS/">결과 비교 사이트</a>에서 장면별로 확대해 직접 비교할 수 있습니다. 데이터셋과 장면을 고르면 SMOC, 원본 SSA-MRN, 다른 모델, 정답과 오차 지도를 나란히 보여 줍니다.</p></div>
-  </div>
- </div></div>
-</article>
-<article class="pg-scene" id="business" data-scene="biz" style="--steps:4">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="biz" data-transition="fade">
-<p class="eyebrow a" style="--i:0">사업화 가능성</p>
-<h2 class="title a" style="--i:1">새 위성마다 다시 학습하지 않는 팬샤프닝</h2>
-<div class="fcard fragment up" data-fragment-index="1" style="left:128px; top:300px; width:528px"><p class="fn">고객</p><p class="ft">국내 위성 영상 기업·기관</p><p class="fs">국토위성 · 아리랑 · 민간 소형위성<br>영상을 처리하고 판매하는 곳</p></div>
-<div class="fcard fragment up" data-fragment-index="2" style="left:696px; top:300px; width:528px; border-color:#B14A17"><p class="fn" style="color:#B14A17">문제</p><p class="ft">학습 데이터 없는 새 위성</p><p class="fs">보안 규제로 학습용 영상이 부족하고<br>컬러 영상의 해상도가 낮아 해외 위성에 밀림</p></div>
-<div class="fcard fragment up" data-fragment-index="3" style="left:1264px; top:300px; width:528px"><p class="fn">가치</p><p class="ft">재학습 없이 바로 적용</p><p class="fs">처음 보는 위성에서 원본 대비 +3.4 dB<br>국토위성 1호에도 그대로 적용</p></div>
-<div class="fragment up" data-fragment-index="4" style="position:absolute; left:128px; top:650px; width:1664px; box-sizing:border-box; padding:36px 48px; background:#EDF3F2; border-radius:16px; display:flex; flex-direction:column; gap:8px">
-<p style="font-size:26px; font-weight:700; color:#0E6E73">제공 방식</p>
-<p style="font-size:46px; font-weight:800; color:#15191E; line-height:1.25">설치형 소프트웨어 · 영상 처리 API</p>
-<p style="font-size:26px; color:#5B6470">보안망 안 서버에 설치하거나, 영상을 올리면 선명한 컬러 영상을 돌려받음</p>
-</div>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">활용</span><span class="pg-no">20 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button><button type="button" class="pg-dot" data-go="3" aria-label="4단계"></button><button type="button" class="pg-dot" data-go="4" aria-label="5단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">사업화 가능성입니다.</p><p class="pg-say" data-step="1">고객은 국토위성·아리랑·민간 소형위성 영상을 처리하고 판매하는 국내 기업과 공공기관입니다.</p><p class="pg-say" data-step="2">문제는 새 위성은 학습 데이터가 없고, 보안 규제로 모으기도 어렵다는 점입니다.</p><p class="pg-say" data-step="3">SMOC는 재학습 없이 처음 보는 위성에서 원본보다 3.4 dB 정확하고, 국토위성 1호에도 그대로 적용했습니다.</p><p class="pg-say" data-step="4">보안망 안에 설치하는 소프트웨어나, 영상을 올리면 결과를 돌려주는 API로 제공할 수 있습니다.</p></div>
-  </div>
- </div></div>
-</article>
-<article class="pg-scene" data-scene="patent" style="--steps:3">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="patent" data-transition="fade">
-<p class="eyebrow a" style="--i:0">특허출원 가능성</p>
-<h2 class="title a" style="--i:1">처음 보는 위성에 쓰는 절차를 출원합니다</h2>
-<div class="nd new a" style="--i:2; left:128px; top:300px; width:380px; height:104px"><p class="nt">1 비율 재기</p><p class="ns">밴드 평균 ÷ PAN 평균</p></div>
-<x-connector class="arrow t f" style="--i:3" x1="512" y1="352" x2="552" y2="352" head="end"></x-connector>
-<div class="nd new a" style="--i:3; left:556px; top:300px; width:380px; height:104px"><p class="nt">2 배율 곱하기</p><p class="ns">학습 위성 비율로 맞춤</p></div>
-<x-connector class="arrow t f" style="--i:4" x1="940" y1="352" x2="980" y2="352" head="end"></x-connector>
-<div class="nd new a" style="--i:4; left:984px; top:300px; width:380px; height:104px"><p class="nt">3 SMOC 복원</p><p class="ns">재학습 없음</p></div>
-<x-connector class="arrow t f" style="--i:5" x1="1368" y1="352" x2="1408" y2="352" head="end"></x-connector>
-<div class="nd new a" style="--i:5; left:1412px; top:300px; width:380px; height:104px"><p class="nt">4 되돌리고 보정</p><p class="ns">원래 밝기 + 관측 일치</p></div>
-<p class="fragment fade" data-fragment-index="1" style="position:absolute; left:128px; top:444px; width:800px; font-size:28px; font-weight:800; color:#B14A17">선행기술 · 목표는 같지만 모두 다시 학습</p>
-<div class="fragment fade" data-fragment-index="1" style="position:absolute; left:128px; top:504px; width:4px; height:350px; background:#B14A17; border-radius:2px"></div>
-<p class="fragment up" data-fragment-index="1" style="position:absolute; left:156px; top:500px; width:760px; font-size:29px; font-weight:800; color:#15191E">UniPAN <span style="font-size:22px; font-weight:500; color:#5B6470">· ICCV 2025 논문</span></p>
-<p class="fragment up" data-fragment-index="1" style="position:absolute; left:156px; top:542px; width:760px; font-size:24px; color:#5B6470">분포를 바꾼 데이터로 처음부터 학습</p>
-<p class="fragment up" data-fragment-index="1" style="position:absolute; left:156px; top:592px; width:760px; font-size:29px; font-weight:800; color:#15191E; transition-delay:120ms">SWIFT <span style="font-size:22px; font-weight:500; color:#5B6470">· AAAI 2026 논문</span></p>
-<p class="fragment up" data-fragment-index="1" style="position:absolute; left:156px; top:634px; width:760px; font-size:24px; color:#5B6470; transition-delay:120ms">새 위성 데이터로 일부 가중치 재학습</p>
-<p class="fragment up" data-fragment-index="1" style="position:absolute; left:156px; top:684px; width:760px; font-size:29px; font-weight:800; color:#15191E; transition-delay:240ms">CN119579847B <span style="font-size:22px; font-weight:500; color:#5B6470">· 중국 특허 · 2025</span></p>
-<p class="fragment up" data-fragment-index="1" style="position:absolute; left:156px; top:726px; width:760px; font-size:24px; color:#5B6470; transition-delay:240ms">도메인 일반화 학습으로 처음 보는 위성 대응</p>
-<p class="fragment up" data-fragment-index="1" style="position:absolute; left:156px; top:776px; width:760px; font-size:29px; font-weight:800; color:#15191E; transition-delay:360ms">CN118505561B <span style="font-size:22px; font-weight:500; color:#5B6470">· 중국 특허 · 2024</span></p>
-<p class="fragment up" data-fragment-index="1" style="position:absolute; left:156px; top:818px; width:760px; font-size:24px; color:#5B6470; transition-delay:360ms">여러 위성 데이터로 학습한 확산 모델</p>
-<p class="fragment fade" data-fragment-index="2" style="position:absolute; left:1000px; top:444px; width:792px; font-size:28px; font-weight:800; color:#0E6E73">우리 절차 · 이미 학습된 모델을 그대로</p>
-<div class="fragment fade" data-fragment-index="2" style="position:absolute; left:1000px; top:504px; width:4px; height:350px; background:#0E6E73; border-radius:2px"></div>
-<p class="fragment up" data-fragment-index="2" style="position:absolute; left:1028px; top:500px; width:764px; font-size:29px; font-weight:800; color:#15191E">재학습 없음</p>
-<p class="fragment up" data-fragment-index="2" style="position:absolute; left:1028px; top:542px; width:764px; font-size:24px; color:#5B6470">학습한 위성의 SMOC를 그대로 사용</p>
-<p class="fragment up" data-fragment-index="2" style="position:absolute; left:1028px; top:592px; width:764px; font-size:29px; font-weight:800; color:#15191E; transition-delay:120ms">정답 불필요</p>
-<p class="fragment up" data-fragment-index="2" style="position:absolute; left:1028px; top:634px; width:764px; font-size:24px; color:#5B6470; transition-delay:120ms">입력의 밴드/PAN 밝기 비율만 사용</p>
-<p class="fragment up" data-fragment-index="2" style="position:absolute; left:1028px; top:684px; width:764px; font-size:29px; font-weight:800; color:#15191E; transition-delay:240ms">입력과 일치</p>
-<p class="fragment up" data-fragment-index="2" style="position:absolute; left:1028px; top:726px; width:764px; font-size:24px; color:#5B6470; transition-delay:240ms">원래 밝기로 되돌린 뒤 관측 일치 보정</p>
-<p class="fragment up" data-fragment-index="2" style="position:absolute; left:1028px; top:770px; width:764px; font-size:40px; font-weight:800; color:#0E6E73; line-height:1.15; transition-delay:360ms">+1.6-2.3 dB</p>
-<p class="fragment up" data-fragment-index="2" style="position:absolute; left:1028px; top:818px; width:764px; font-size:24px; color:#5B6470; transition-delay:360ms">처음 보는 위성 전이 3쌍 모두 · 3시드 평균</p>
-<p class="foot-line fragment fade" data-fragment-index="3" style="left:128px; top:916px; width:1664px; font-size:22px; text-align:left">조사 출처: UniPAN (ICCV 2025) · SWIFT (AAAI 2026) · Google Patents 검색 (2026-11-24)</p>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">활용</span><span class="pg-no">21 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button><button type="button" class="pg-dot" data-go="3" aria-label="4단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">특허 후보는 처음 보는 위성에 재학습 없이 쓰는 절차입니다. 밴드 대 PAN 비율을 재고, 배율을 곱해 학습 위성에 맞추고, SMOC로 복원한 뒤, 되돌리고 관측 일치 보정을 합니다.</p><p class="pg-say" data-step="1">처음 보는 위성에 대응하려는 연구와 특허는 이미 있습니다. ICCV 2025의 UniPAN, AAAI 2026의 SWIFT, 그리고 중국 특허 두 건입니다. 하지만 모두 분포를 바꾼 데이터나 새 위성 데이터, 여러 위성 데이터로 모델을 <b>다시 학습</b>해야 합니다.</p><p class="pg-say" data-step="2">이 절차는 이미 학습된 모델을 그대로 쓰고, 입력의 밝기 비율만 사용하며, 결과를 되돌린 뒤 관측 일치 보정으로 입력과 맞춥니다. 세 전이 쌍 모두에서 1.6-2.3 dB 올랐습니다. 단계 하나하나는 알려진 기술이라 청구 대상은 이 네 단계의 결합입니다.</p><p class="pg-say" data-step="3">논문과 특허 검색에서 같은 결합은 찾지 못했고, 첫 공개가 2026년 11월 14일이라 공지예외 주장으로 1년 안에 국내 출원할 수 있습니다.</p></div>
-  </div>
- </div></div>
-</article>
-<article class="pg-scene" data-scene="future" style="--steps:2">
- <div class="pg-stage"><div class="pg-box">
-  <div class="pg-frame"><section class="slide" data-id="future" data-transition="fade">
-<p class="eyebrow a" style="--i:0">향후 계획 · 결론</p>
-<h2 class="title a" style="--i:1">누구나 설치해서 쓰는 팬샤프닝으로 만듭니다</h2>
-<div class="a" style="--i:2; position:absolute; left:154px; top:325px; width:1144px; height:3px; background:#D5D8DC"></div>
-<div class="fragment up" data-fragment-index="1" style="position:absolute; left:128px; top:300px; width:54px; height:54px; border-radius:50%; background:#0E6E73; display:flex; align-items:center; justify-content:center"><p style="font-size:28px; font-weight:800; color:#FBFBF9">1</p></div>
-<p class="fragment up" data-fragment-index="1" style="position:absolute; left:128px; top:378px; width:520px; font-size:36px; font-weight:800; color:#15191E">설치형 소프트웨어</p>
-<p class="fragment up" data-fragment-index="1" style="position:absolute; left:128px; top:434px; width:520px; font-size:25px; color:#5B6470; line-height:1.45">설치 후 위성 영상을 넣으면 바로 팬샤프닝<br>인터넷 없는 보안망에서도 사용</p>
-<div class="fragment up" data-fragment-index="1" style="position:absolute; left:700px; top:300px; width:54px; height:54px; border-radius:50%; background:#0E6E73; display:flex; align-items:center; justify-content:center; transition-delay:200ms"><p style="font-size:28px; font-weight:800; color:#FBFBF9">2</p></div>
-<p class="fragment up" data-fragment-index="1" style="position:absolute; left:700px; top:378px; width:520px; font-size:36px; font-weight:800; color:#15191E; transition-delay:200ms">영상 처리 API</p>
-<p class="fragment up" data-fragment-index="1" style="position:absolute; left:700px; top:434px; width:520px; font-size:25px; color:#5B6470; line-height:1.45; transition-delay:200ms">영상을 올리면 선명한 컬러 영상을 출력</p>
-<div class="fragment up" data-fragment-index="1" style="position:absolute; left:1272px; top:300px; width:54px; height:54px; border-radius:50%; background:#0E6E73; display:flex; align-items:center; justify-content:center; transition-delay:400ms"><p style="font-size:28px; font-weight:800; color:#FBFBF9">3</p></div>
-<p class="fragment up" data-fragment-index="1" style="position:absolute; left:1272px; top:378px; width:520px; font-size:36px; font-weight:800; color:#15191E; transition-delay:400ms">특허 출원</p>
-<p class="fragment up" data-fragment-index="1" style="position:absolute; left:1272px; top:434px; width:520px; font-size:25px; color:#5B6470; line-height:1.45; transition-delay:400ms">처음 보는 위성에 쓰는 절차</p>
-<div class="fragment up" data-fragment-index="2" style="position:absolute; left:128px; top:582px; width:120px; height:6px; background:#0E6E73; border-radius:3px"></div>
-<p class="fragment up" data-fragment-index="2" style="position:absolute; left:128px; top:612px; width:1664px; font-size:54px; font-weight:800; color:#15191E; line-height:1.25">새 위성도 <span style="color:#0E6E73">다시 학습하지 않고</span> 바로 선명하게</p>
-</section>
-</div>
-  <div class="pg-narr">
-   <div class="pg-meta"><span class="pg-ch">활용</span><span class="pg-no">22 / 22</span><span class="pg-dots"><button type="button" class="pg-dot on" data-go="0" aria-label="1단계"></button><button type="button" class="pg-dot" data-go="1" aria-label="2단계"></button><button type="button" class="pg-dot" data-go="2" aria-label="3단계"></button></span></div>
-   <div class="pg-says"><p class="pg-say on" data-step="0">앞으로의 계획입니다.</p><p class="pg-say" data-step="1">설치만 하면 위성 영상을 넣어 바로 팬샤프닝할 수 있고 인터넷이 없는 보안망에서도 쓰는 소프트웨어, 영상을 올리면 선명한 컬러 영상을 돌려주는 API, 그리고 처음 보는 위성에 쓰는 절차의 특허 출원입니다.</p><p class="pg-say" data-step="2">정리하면, SMOC는 학습한 위성에서 최신 모델 수준이고, 처음 보는 위성에서는 원본보다 3.4 dB 높아 비교한 모델 중 가장 정확했습니다. 학습 데이터를 모아 다시 학습할 필요가 없으니, <b>새 위성도 바로 선명한 컬러 영상</b>으로 쓸 수 있습니다.</p></div>
-  </div>
- </div></div>
-</article>
-<footer class="pg-end">
- <p class="pg-kicker">CtrS</p>
- <h2>새 위성도 다시 학습하지 않고 바로 선명하게</h2>
- <div class="pg-links"><a class="pg-btn primary" href="https://github.com/BIYONGHIYON/CtrS">GitHub 저장소</a><a class="pg-btn" href="https://biyonghiyon.github.io/CtrS/">결과 비교 사이트</a><a class="pg-btn" href="https://biyonghiyon.github.io/portfolio/">← 포트폴리오</a></div>
+<footer class="end">
+ <div class="wrap">
+  <p class="kick" data-r>CtrS · SMOC</p>
+  <h2 data-r style="--d:1">새 위성도 다시 학습하지 않고<br><span class="t">바로 선명한 컬러 영상으로</span></h2>
+  <div class="btns" data-r style="--d:2"><a class="btn pri" href="https://github.com/BIYONGHIYON/CtrS">GitHub 저장소</a><a class="btn" href="https://biyonghiyon.github.io/CtrS/">결과 비교 사이트</a><a class="btn" href="https://biyonghiyon.github.io/portfolio/">← 포트폴리오</a></div>
+ </div>
 </footer>
 </main>
-<script src="deck.js?v=1"></script>
+<script src="main.js?v=2"></script>
 </body>
 </html>
