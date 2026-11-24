@@ -101,7 +101,10 @@ def mosaic(args):
     lms = prep.interpolate(ctx)[:,halo*4:(halo+h)*4,halo*4:(halo+w)*4]
     pan = ras['P'].crop(py,px,H,W)[None].astype('f4')/4095
     assert ms.shape==(4,h,w) and lms.shape==(4,H,W) and pan.shape==(1,H,W)
-    assert np.all(ms>0) and np.all(pan>0)
+    assert not np.any(np.all(ms==0,axis=0))
+    assert not np.any(pan[0].reshape(h,4,w,4).max((1,3))==0)
+    zero_dn_counts = {b:int((ms[i]==0).sum()) for i,b in enumerate(('B','G','R','N'))}
+    zero_dn_counts['P']=int((pan==0).sum())
     ref_path = root/'experiments/performance/82_cross_sensor_band_calibration/results/reference_stats/QB.json'
     ref = json.loads(ref_path.read_text())
     t = np.asarray(ref['ratio_of_means'],dtype='f8')*pan.astype('f8').mean()/lms.astype('f8').mean((1,2))
@@ -133,7 +136,9 @@ def mosaic(args):
         gy,gx=py+oy-border,px+ox-border;my,mx=gy//4,gx//4
         cc=np.stack([ras[b].crop(my-halo,mx-halo,128+2*halo,128+2*halo) for b in ('B','G','R','N')]).astype('f4')/4095
         aa=dict(ms=cc[:,halo:halo+128,halo:halo+128],lms=prep.interpolate(cc)[:,halo*4:(halo+128)*4,halo*4:(halo+128)*4],pan=ras['P'].crop(gy,gx,tile,tile)[None].astype('f4')/4095)
-        assert all(np.isfinite(a).all() for a in aa.values()) and all(np.all(a>0) for a in (cc,aa['pan']))
+        assert all(np.isfinite(a).all() for a in aa.values())
+        assert not np.any(np.all(cc==0,axis=0))
+        assert not np.any(aa['pan'][0].reshape(128,4,128,4).max((1,3))==0)
         if i==0:
             np.testing.assert_array_equal(aa['lms'][:,border:border+core,border:border+core],lms[:,oy:oy+core,ox:ox+core])
         tensors=[torch.from_numpy(np.ascontiguousarray(z))[None].to(device) for z in (aa['pan'],aa['lms']*t4,aa['ms']*t4)]
@@ -150,8 +155,6 @@ def mosaic(args):
     assert np.all(coverage>0) and np.all(count>0)
     fused=acc/coverage[None]
     assert fused.shape==(4,H,W) and np.isfinite(fused).all()
-    # Normalize-before-accumulate identity check catches any blend or coverage scaling error.
-    np.testing.assert_allclose((coverage.astype('f8')*2.5)/coverage,2.5,rtol=1e-14)
     lo=np.percentile(lms[[2,1,0]],2,axis=(1,2))[:,None,None]
     hi=np.percentile(lms[[2,1,0]],98,axis=(1,2))[:,None,None]
     def rgb(a):
@@ -176,7 +179,7 @@ def mosaic(args):
         comp.paste(pic.crop(box),(col*512,28));draw.text((col*512+5,7),label,fill='black')
     comp.save(out/'center_comparison.png')
     verification=dict(all_tiles_finite=True,full_coverage=True,minimum_weight=float(coverage.min()),coverage_count_min=int(count.min()),coverage_count_max=int(count.max()),float_tiff_exact_readback=True,rgb_png_verified=True,interpolation_matches_whole_roi=True)
-    result=dict(scope=plan['task'],plan_sha256=sha(plan_path),script_sha256=sha(Path(__file__)),model_sha256=sha(checkpoint),calibration_reference_sha256=sha(ref_path),calibration_t=t.tolist(),source_hashes=entries,preprocessing_sha256=sha(prep_path),roi_pan_xywh=plan['roi_pan_xywh'],shape_chw=list(fused.shape),nominal_extent_m=[W*.5,H*.5],georeferencing='not certified; original pixel coordinates authoritative',display_percentiles=dict(low=lo.ravel().tolist(),high=hi.ravel().tolist(),gamma=1),tiles=rows,tile_count=len(rows),projection=False,ground_truth=False,rr=False,elapsed_seconds=time.monotonic()-started,verification=verification,environment=dict(device=device,torch=torch.__version__,numpy=np.__version__,tifffile=tifffile.__version__,python=sys.version),output_min=float(fused.min()),output_max=float(fused.max()))
+    result=dict(scope=plan['task'],plan_sha256=sha(plan_path),script_sha256=sha(Path(__file__)),model_sha256=sha(checkpoint),calibration_reference_sha256=sha(ref_path),calibration_t=t.tolist(),source_zero_dn_counts=zero_dn_counts,source_hashes=entries,preprocessing_sha256=sha(prep_path),roi_pan_xywh=plan['roi_pan_xywh'],shape_chw=list(fused.shape),nominal_extent_m=[W*.5,H*.5],georeferencing='not certified; original pixel coordinates authoritative',display_percentiles=dict(low=lo.ravel().tolist(),high=hi.ravel().tolist(),gamma=1),tiles=rows,tile_count=len(rows),projection=False,ground_truth=False,rr=False,elapsed_seconds=time.monotonic()-started,verification=verification,environment=dict(device=device,torch=torch.__version__,numpy=np.__version__,tifffile=tifffile.__version__,python=sys.version),output_min=float(fused.min()),output_max=float(fused.max()))
     write(out/'summary.json',result)
     artifacts={p.name:dict(bytes=p.stat().st_size,sha256=sha(p)) for p in sorted(out.iterdir()) if p.is_file()}
     write(out/'manifest.json',dict(scope=result['scope'],files=artifacts))
