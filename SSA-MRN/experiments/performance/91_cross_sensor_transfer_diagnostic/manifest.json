@@ -2,11 +2,11 @@
   "experiment": "performance/91_cross_sensor_transfer_diagnostic",
   "experiment_number": 91,
   "research_track": "performance",
-  "state": "no-projection diagnostic retained; assumed-MTF K10 extension planned",
+  "state": "preliminary FR diagnostic and assumed-MTF K10 comparison verified; physical sensor validation pending",
   "files": {
     "README.md": {
-      "bytes": 8123,
-      "sha256": "579ef67d7b6594cafa33417d96d23bb5ad641e5954e3d0011406e39d6bdd7e39"
+      "bytes": 9660,
+      "sha256": "bcdd4ef122abbe89ebe52b8196873982c68dd6e05b7b7f4568f9f85b08789a70"
     },
     "config.json": {
       "bytes": 2361,
@@ -36,6 +36,10 @@
       "bytes": 1483,
       "sha256": "29c3faefcec512793f97e1dcc28cf6713a27a38f51bf6aedcd13f5d904458b1a"
     },
+    "provenance/projection_source_manifest.json": {
+      "bytes": 1370,
+      "sha256": "0be7474b698a715c00cda199580050ca8e8db2ea53ca820d1de984dc7bfe3555"
+    },
     "provenance/source_manifest.json": {
       "bytes": 3174,
       "sha256": "33ccb5b8efec3b71bd2df72050e7ecfe466e78dcf9cdfbef155a2b0b34bd73b7"
@@ -43,6 +47,14 @@
     "results/descriptive_diagnostics.json": {
       "bytes": 13859,
       "sha256": "5484d132db89c6ec733ad2ebb16fd1807ce0468a4aef9e7c6ef27c2a7a992216"
+    },
+    "results/projection_preflight.json": {
+      "bytes": 246,
+      "sha256": "a6e271c4c890f6954caf20751c9bcb02c617ad05ec112adb93de8b6a281549a7"
+    },
+    "results/projection_summary.json": {
+      "bytes": 35027,
+      "sha256": "bfdbe1e445ce661a41c5cdbba0ab794c95b63b99b3976b9779e50b8c8e07eb41"
     },
     "results/summary.json": {
       "bytes": 37769,
@@ -86,6 +98,38 @@
     "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/comparison_first.png": {
       "bytes": 1138362,
       "sha256": "5daca302f676e6c0b0fbab838c40e091dca4fd82be082097ff5084165d0f0f4e"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/assumed_mtf026_k10/comparison.png": {
+      "bytes": 8600631,
+      "sha256": "7d8eeba17693749ff1fcd20f148631ac5858a4a7843ae3bad1d13d0ea0879c99"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/assumed_mtf026_k10/comparison_first.png": {
+      "bytes": 1500423,
+      "sha256": "6a9eade2243a82da1860f9c5ae63526f5fbbb5d2da54e8b5f1228dbcf1bb3fe4"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/assumed_mtf026_k10/comparison_review.jpg": {
+      "bytes": 1291572,
+      "sha256": "cb14bb12de8edc134357dbc8bf2fdb434c5be2825a74cfe1e8f963594c77180b"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/assumed_mtf026_k10/frozen_plan.json": {
+      "bytes": 1556,
+      "sha256": "175ea26f2faac9d91a78311b214194f241739f1acfe17d69cda8ab45d4db91ab"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/assumed_mtf026_k10/predictions_GF2_assumed_P.h5": {
+      "bytes": 65235837,
+      "sha256": "c5678d31aa0b8e13027afa93e46bdb0d501588cb7e59821aa4ae4108853d7112"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/assumed_mtf026_k10/predictions_QB_assumed_P.h5": {
+      "bytes": 67662488,
+      "sha256": "9d0621ac611dd32b780924b6d63511376f6cf10d8b6673226dcfdc7b8a920717"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/assumed_mtf026_k10/preflight.json": {
+      "bytes": 246,
+      "sha256": "a6e271c4c890f6954caf20751c9bcb02c617ad05ec112adb93de8b6a281549a7"
+    },
+    "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/assumed_mtf026_k10/summary.json": {
+      "bytes": 35027,
+      "sha256": "bfdbe1e445ce661a41c5cdbba0ab794c95b63b99b3976b9779e50b8c8e07eb41"
     }
   },
   "retained_source_weights": {
@@ -131,5 +175,14 @@
   },
   "independent_scenes": 1,
   "seed": 42,
-  "not_full_smoc": true
+  "not_full_smoc": true,
+  "assumed_mtf_projection": {
+    "measured_mtf": false,
+    "verified_all_chunks": true,
+    "all_predictions_finite": true,
+    "exact_patch_order": true,
+    "source_predictions_unchanged": true,
+    "independent_scenes": 1,
+    "seed": 42
+  }
 }

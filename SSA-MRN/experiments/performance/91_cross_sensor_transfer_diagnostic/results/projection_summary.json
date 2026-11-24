@@ -1,0 +1,1101 @@
+{
+  "scope": "Assumed-MTF projection reference only, not a measured CAS500 observation model",
+  "plan": {
+    "scope": "Assumed-MTF observation projection on the frozen diagnostic subset; not calibrated CAS500 physics",
+    "experiment": 91,
+    "sources": [
+      "QB",
+      "GF2"
+    ],
+    "seed": 42,
+    "input_predictions": "Reuse verified CK + experiment-82 calibration predictions from the no-projection diagnostic",
+    "subset": "Exactly config.json selected_patch_indices, no additional patch selection",
+    "ms_gnyq": [
+      0.26,
+      0.26,
+      0.26,
+      0.26
+    ],
+    "gain_basis": {
+      "doi": "10.7780/kjrs.2023.39.4.6",
+      "kind": "simulation assumption, not a measured L2G MTF",
+      "additional_assumption": "The source study uses RGB airborne imagery; equal NIR gain 0.26 is an additional assumption here"
+    },
+    "pan_gnyq": null,
+    "kernel": "experiment 54 gen_mtf, radial Kaiser, signed taps and DC gain unchanged",
+    "kernel_size": 41,
+    "ratio": 4,
+    "phase_yx": [
+      2,
+      2
+    ],
+    "boundary": "replicate",
+    "ms_margin": 5,
+    "projection": "experiment 79 Projector conjugate gradient and autograd adjoint, unchanged",
+    "max_iterations": 10,
+    "relative_tolerance": 1e-08,
+    "dtype": "float64 CPU; stored predictions float32",
+    "output_clip": false,
+    "metrics": "same common.metrics.fr_metrics as the no-projection diagnostic; Python reference only",
+    "observation_metric": "interior RMSE of assumed D(prediction) - input MS in DN; consistency only, not reconstruction accuracy",
+    "display_indices": [
+      0,
+      1,
+      3,
+      7,
+      14,
+      17
+    ],
+    "no_ground_truth": true,
+    "no_retraining": true,
+    "no_rr": true,
+    "no_model_selection": true
+  },
+  "plan_sha256": "29c3faefcec512793f97e1dcc28cf6713a27a38f51bf6aedcd13f5d904458b1a",
+  "checks": {
+    "fft_vs_direct_max_abs": 1.1657341758564144e-15,
+    "adjoint_relative_error": 1.9626928821247746e-15,
+    "zero_residual_max_change": 0.0,
+    "passed": true,
+    "kernel_sha256": "e404a75f0965eda99afea4ffbd15716443b968c8b532cee63e51157eae93282b"
+  },
+  "means": {
+    "QB": {
+      "before": {
+        "D_lambda": 0.05573550235075948,
+        "D_s": 0.08835901325705306,
+        "QNR": 0.8610115675962232
+      },
+      "after": {
+        "D_lambda": 0.04421769198843555,
+        "D_s": 0.06654627710178877,
+        "QNR": 0.892352351828684
+      },
+      "assumed_observation_rmse_dn_before": 30.176934612035904,
+      "assumed_observation_rmse_dn_after": 1.369666111735379
+    },
+    "GF2": {
+      "before": {
+        "D_lambda": 0.021549261192783664,
+        "D_s": 0.01867463175677751,
+        "QNR": 0.9602215128887124
+      },
+      "after": {
+        "D_lambda": 0.026463887483369326,
+        "D_s": 0.025743645631186963,
+        "QNR": 0.9485454087160721
+      },
+      "assumed_observation_rmse_dn_before": 11.78395232342752,
+      "assumed_observation_rmse_dn_after": 0.9766134706490612
+    }
+  },
+  "rows": {
+    "QB": [
+      {
+        "diagnostic_index": 0,
+        "patch_index": 0,
+        "ms_yx": [
+          256,
+          5632
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.043499736950345924,
+          "D_s": 0.1058251858713504,
+          "QNR": 0.8552784449264289
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.03098101153651604,
+          "D_s": 0.06576790952178649,
+          "QNR": 0.9052886353053246
+        },
+        "assumed_observation_rmse_dn_before": 32.62910291687578,
+        "assumed_observation_rmse_dn_after": 1.6428832299347038,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6604594999989786,
+        "output_min": -0.12440736591815948,
+        "output_max": 2.458979368209839
+      },
+      {
+        "diagnostic_index": 1,
+        "patch_index": 454,
+        "ms_yx": [
+          2176,
+          256
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.04017585629002011,
+          "D_s": 0.07231976348527959,
+          "QNR": 0.8904098886494132
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.025411332985554928,
+          "D_s": 0.052301607337046474,
+          "QNR": 0.92361611323712
+        },
+        "assumed_observation_rmse_dn_before": 36.23003014584979,
+        "assumed_observation_rmse_dn_after": 1.0254132015922854,
+        "cg_iterations": 10,
+        "projection_seconds": 0.5882829170004698,
+        "output_min": -0.05279974639415741,
+        "output_max": 1.0539439916610718
+      },
+      {
+        "diagnostic_index": 2,
+        "patch_index": 497,
+        "ms_yx": [
+          2176,
+          6528
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.10372791962350945,
+          "D_s": 0.07368764679770606,
+          "QNR": 0.8302278998830624
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.0949630284626205,
+          "D_s": 0.06575389307944662,
+          "QNR": 0.8455272672779646
+        },
+        "assumed_observation_rmse_dn_before": 31.532812289632044,
+        "assumed_observation_rmse_dn_after": 2.335873074458323,
+        "cg_iterations": 10,
+        "projection_seconds": 0.5726676659996883,
+        "output_min": -0.051746759563684464,
+        "output_max": 1.9703184366226196
+      },
+      {
+        "diagnostic_index": 3,
+        "patch_index": 89,
+        "ms_yx": [
+          1024,
+          2304
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.061077075585137225,
+          "D_s": 0.0945194923262788,
+          "QNR": 0.8501764062656649
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.050271957699336046,
+          "D_s": 0.06717932791862,
+          "QNR": 0.8859259507134386
+        },
+        "assumed_observation_rmse_dn_before": 26.316451732220592,
+        "assumed_observation_rmse_dn_after": 1.0890417357055175,
+        "cg_iterations": 10,
+        "projection_seconds": 0.5742129999998724,
+        "output_min": 0.015260959975421429,
+        "output_max": 1.2616766691207886
+      },
+      {
+        "diagnostic_index": 4,
+        "patch_index": 434,
+        "ms_yx": [
+          2048,
+          3328
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.03502931541215396,
+          "D_s": 0.08564529088562854,
+          "QNR": 0.8823254896102158
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.02531799179491312,
+          "D_s": 0.061743971866708436,
+          "QNR": 0.9145012697114852
+        },
+        "assumed_observation_rmse_dn_before": 40.1700268173613,
+        "assumed_observation_rmse_dn_after": 1.4481587054802891,
+        "cg_iterations": 10,
+        "projection_seconds": 0.5735621659987373,
+        "output_min": -0.03261983394622803,
+        "output_max": 1.9038547277450562
+      },
+      {
+        "diagnostic_index": 5,
+        "patch_index": 180,
+        "ms_yx": [
+          1280,
+          5120
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.09535604189436549,
+          "D_s": 0.07310156445266816,
+          "QNR": 0.8385130694954587
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.08502274453563517,
+          "D_s": 0.07181081585098051,
+          "QNR": 0.8492719922643778
+        },
+        "assumed_observation_rmse_dn_before": 26.856874159156725,
+        "assumed_observation_rmse_dn_after": 1.5915394630933428,
+        "cg_iterations": 10,
+        "projection_seconds": 0.5856226249998144,
+        "output_min": -0.036397069692611694,
+        "output_max": 2.2031443119049072
+      },
+      {
+        "diagnostic_index": 6,
+        "patch_index": 235,
+        "ms_yx": [
+          1536,
+          896
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.05259745869039382,
+          "D_s": 0.09068312391900997,
+          "QNR": 0.8614891192548422
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.03726841569871728,
+          "D_s": 0.06744036325814992,
+          "QNR": 0.8978046165359099
+        },
+        "assumed_observation_rmse_dn_before": 18.669397360674637,
+        "assumed_observation_rmse_dn_after": 0.8087649874270771,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6072810420009773,
+        "output_min": 0.01987891085445881,
+        "output_max": 0.7749747037887573
+      },
+      {
+        "diagnostic_index": 7,
+        "patch_index": 27,
+        "ms_yx": [
+          640,
+          3968
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.06990520045251174,
+          "D_s": 0.06234259040923282,
+          "QNR": 0.8721102804175417
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.05582698171729409,
+          "D_s": 0.06203454137869793,
+          "QNR": 0.8856016781113973
+        },
+        "assumed_observation_rmse_dn_before": 30.352245573153397,
+        "assumed_observation_rmse_dn_after": 1.751543063792794,
+        "cg_iterations": 10,
+        "projection_seconds": 0.5807889999996405,
+        "output_min": -0.0958232656121254,
+        "output_max": 2.2573821544647217
+      },
+      {
+        "diagnostic_index": 8,
+        "patch_index": 398,
+        "ms_yx": [
+          1920,
+          4992
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.05242225784780751,
+          "D_s": 0.07511498163559745,
+          "QNR": 0.8764004574521296
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.043063691172382845,
+          "D_s": 0.06735807718368685,
+          "QNR": 0.8924789190777341
+        },
+        "assumed_observation_rmse_dn_before": 25.01826979488463,
+        "assumed_observation_rmse_dn_after": 1.6884503603472134,
+        "cg_iterations": 10,
+        "projection_seconds": 0.5717662500010192,
+        "output_min": -0.043575264513492584,
+        "output_max": 1.5910320281982422
+      },
+      {
+        "diagnostic_index": 9,
+        "patch_index": 87,
+        "ms_yx": [
+          896,
+          6272
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.033019146866778655,
+          "D_s": 0.11900213058444112,
+          "QNR": 0.8519080713760075
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.013622884265159388,
+          "D_s": 0.0828029473055353,
+          "QNR": 0.9047021833972628
+        },
+        "assumed_observation_rmse_dn_before": 35.90383818819197,
+        "assumed_observation_rmse_dn_after": 1.6646852135310128,
+        "cg_iterations": 10,
+        "projection_seconds": 0.5695450000002893,
+        "output_min": -0.10966391116380692,
+        "output_max": 1.9407223463058472
+      },
+      {
+        "diagnostic_index": 10,
+        "patch_index": 250,
+        "ms_yx": [
+          1536,
+          2816
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.08264185759998782,
+          "D_s": 0.11986101350598011,
+          "QNR": 0.8074026657039834
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.06915812731704153,
+          "D_s": 0.08577822459096529,
+          "QNR": 0.8509959094692849
+        },
+        "assumed_observation_rmse_dn_before": 25.945640710563993,
+        "assumed_observation_rmse_dn_after": 1.148821193420979,
+        "cg_iterations": 10,
+        "projection_seconds": 0.5739102909992653,
+        "output_min": 0.019272416830062866,
+        "output_max": 1.1760634183883667
+      },
+      {
+        "diagnostic_index": 11,
+        "patch_index": 422,
+        "ms_yx": [
+          2048,
+          1792
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.050239133957410975,
+          "D_s": 0.08706737772809445,
+          "QNR": 0.8670676779674968
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.037989918805922875,
+          "D_s": 0.06356459936680686,
+          "QNR": 0.9008602957961463
+        },
+        "assumed_observation_rmse_dn_before": 25.738806385290847,
+        "assumed_observation_rmse_dn_after": 1.1000392962843504,
+        "cg_iterations": 10,
+        "projection_seconds": 0.633044999998674,
+        "output_min": -0.08176662772893906,
+        "output_max": 1.5962928533554077
+      },
+      {
+        "diagnostic_index": 12,
+        "patch_index": 132,
+        "ms_yx": [
+          1152,
+          3712
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.03191117292060438,
+          "D_s": 0.07192941801680743,
+          "QNR": 0.8984547611590009
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.024357069384474735,
+          "D_s": 0.05195362258061134,
+          "QNR": 0.9249547460248848
+        },
+        "assumed_observation_rmse_dn_before": 24.372473157001863,
+        "assumed_observation_rmse_dn_after": 1.2852581387803799,
+        "cg_iterations": 10,
+        "projection_seconds": 0.7847389170001406,
+        "output_min": -0.047429390251636505,
+        "output_max": 1.9409747123718262
+      },
+      {
+        "diagnostic_index": 13,
+        "patch_index": 274,
+        "ms_yx": [
+          1536,
+          6272
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.024175651362796563,
+          "D_s": 0.0896727940789553,
+          "QNR": 0.8883194527646288
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.010642595036935654,
+          "D_s": 0.06231953120399879,
+          "QNR": 0.9277011152925614
+        },
+        "assumed_observation_rmse_dn_before": 32.45821610868918,
+        "assumed_observation_rmse_dn_after": 1.3027251341423254,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6941509579992271,
+        "output_min": -0.06077159568667412,
+        "output_max": 2.470867156982422
+      },
+      {
+        "diagnostic_index": 14,
+        "patch_index": 260,
+        "ms_yx": [
+          1536,
+          4096
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.012480584440245635,
+          "D_s": 0.066605094424756,
+          "QNR": 0.921745591640117
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.0074866624780394785,
+          "D_s": 0.041934837381140344,
+          "QNR": 0.9508924521143642
+        },
+        "assumed_observation_rmse_dn_before": 32.83014153975472,
+        "assumed_observation_rmse_dn_after": 1.3876460939453665,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6336055830015539,
+        "output_min": -0.023018259555101395,
+        "output_max": 2.0478668212890625
+      },
+      {
+        "diagnostic_index": 15,
+        "patch_index": 53,
+        "ms_yx": [
+          768,
+          5120
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.09508846330073738,
+          "D_s": 0.14416021294661818,
+          "QNR": 0.7744592968708455
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.08320580124474093,
+          "D_s": 0.09336403128429525,
+          "QNR": 0.8311985965014126
+        },
+        "assumed_observation_rmse_dn_before": 32.7697196257886,
+        "assumed_observation_rmse_dn_after": 1.5297246213874651,
+        "cg_iterations": 10,
+        "projection_seconds": 0.576119875000586,
+        "output_min": 0.02967287227511406,
+        "output_max": 1.5584405660629272
+      },
+      {
+        "diagnostic_index": 16,
+        "patch_index": 154,
+        "ms_yx": [
+          1280,
+          1536
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.06864412081187281,
+          "D_s": 0.1006865839444618,
+          "QNR": 0.8375808372760838
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.055233696838682206,
+          "D_s": 0.07304250503907815,
+          "QNR": 0.875758205701906
+        },
+        "assumed_observation_rmse_dn_before": 18.731892040729004,
+        "assumed_observation_rmse_dn_after": 0.8179992940201337,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6397755830003007,
+        "output_min": 0.019678710028529167,
+        "output_max": 0.9004094004631042
+      },
+      {
+        "diagnostic_index": 17,
+        "patch_index": 319,
+        "ms_yx": [
+          1792,
+          256
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.05457411532910445,
+          "D_s": 0.06165723199820623,
+          "QNR": 0.8871335415626327
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.04248958798917687,
+          "D_s": 0.04840472738161433,
+          "QNR": 0.9111623815523819
+        },
+        "assumed_observation_rmse_dn_before": 40.047026834635055,
+        "assumed_observation_rmse_dn_after": 1.1308596361768735,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6719444999998814,
+        "output_min": 0.012927532196044922,
+        "output_max": 1.1005890369415283
+      },
+      {
+        "diagnostic_index": 18,
+        "patch_index": 483,
+        "ms_yx": [
+          2176,
+          4352
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.06949474289225628,
+          "D_s": 0.12884203393619756,
+          "QNR": 0.8106170671936576
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.06301624108202979,
+          "D_s": 0.08727899917149035,
+          "QNR": 0.8552047541996688
+        },
+        "assumed_observation_rmse_dn_before": 39.687614848257105,
+        "assumed_observation_rmse_dn_after": 1.3515368867032607,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6870612909988267,
+        "output_min": -0.0032781141344457865,
+        "output_max": 1.3848458528518677
+      },
+      {
+        "diagnostic_index": 19,
+        "patch_index": 288,
+        "ms_yx": [
+          1664,
+          1792
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.038650194787149435,
+          "D_s": 0.04445673419379148,
+          "QNR": 0.9186113324552496
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.029024099723537557,
+          "D_s": 0.05909100933511635,
+          "QNR": 0.9135999542890529
+        },
+        "assumed_observation_rmse_dn_before": 27.278112012006872,
+        "assumed_observation_rmse_dn_after": 1.2923589044838832,
+        "cg_iterations": 10,
+        "projection_seconds": 0.625431665999713,
+        "output_min": -0.026645096018910408,
+        "output_max": 1.4053441286087036
+      }
+    ],
+    "GF2": [
+      {
+        "diagnostic_index": 0,
+        "patch_index": 0,
+        "ms_yx": [
+          256,
+          5632
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.025679737998345168,
+          "D_s": 0.02479554283363189,
+          "QNR": 0.9501614622115172
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.024357444945416154,
+          "D_s": 0.01337710823348913,
+          "QNR": 0.9625912789984208
+        },
+        "assumed_observation_rmse_dn_before": 11.014790185819239,
+        "assumed_observation_rmse_dn_after": 1.0015359187071122,
+        "cg_iterations": 10,
+        "projection_seconds": 0.628729124999154,
+        "output_min": -0.01542675867676735,
+        "output_max": 1.5167882442474365
+      },
+      {
+        "diagnostic_index": 1,
+        "patch_index": 454,
+        "ms_yx": [
+          2176,
+          256
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.007054057291871664,
+          "D_s": 0.010294796383430997,
+          "QNR": 0.9827237664081941
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.018920984531947946,
+          "D_s": 0.017915880364739248,
+          "QNR": 0.9635021211985704
+        },
+        "assumed_observation_rmse_dn_before": 10.748203413712321,
+        "assumed_observation_rmse_dn_after": 0.8417277553622734,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6495910409994394,
+        "output_min": -0.00027879339177161455,
+        "output_max": 0.9930260181427002
+      },
+      {
+        "diagnostic_index": 2,
+        "patch_index": 497,
+        "ms_yx": [
+          2176,
+          6528
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.06880390114008034,
+          "D_s": 0.02257717656451813,
+          "QNR": 0.9101723201197688
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.06390053064724129,
+          "D_s": 0.04169540144310824,
+          "QNR": 0.8970684261874148
+        },
+        "assumed_observation_rmse_dn_before": 16.798513394819434,
+        "assumed_observation_rmse_dn_after": 1.592972658397105,
+        "cg_iterations": 10,
+        "projection_seconds": 0.7008494999990944,
+        "output_min": -0.09301350265741348,
+        "output_max": 1.4619237184524536
+      },
+      {
+        "diagnostic_index": 3,
+        "patch_index": 89,
+        "ms_yx": [
+          1024,
+          2304
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.010043250504535512,
+          "D_s": 0.020110006570426643,
+          "QNR": 0.9700487127586725
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.016719194584481265,
+          "D_s": 0.025674441232460814,
+          "QNR": 0.9580356201618714
+        },
+        "assumed_observation_rmse_dn_before": 9.084839041133042,
+        "assumed_observation_rmse_dn_after": 0.828795934482712,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6028862090006442,
+        "output_min": 0.03216329589486122,
+        "output_max": 0.8303422927856445
+      },
+      {
+        "diagnostic_index": 4,
+        "patch_index": 434,
+        "ms_yx": [
+          2048,
+          3328
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.010406578484511262,
+          "D_s": 0.008745878752112635,
+          "QNR": 0.9809385574370261
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.01748042583749541,
+          "D_s": 0.015953472243606742,
+          "QNR": 0.9668449754073027
+        },
+        "assumed_observation_rmse_dn_before": 12.31826202412359,
+        "assumed_observation_rmse_dn_after": 1.0631117308037537,
+        "cg_iterations": 10,
+        "projection_seconds": 0.609381416999895,
+        "output_min": -0.008498188108205795,
+        "output_max": 1.5126887559890747
+      },
+      {
+        "diagnostic_index": 5,
+        "patch_index": 180,
+        "ms_yx": [
+          1280,
+          5120
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.04839268937297894,
+          "D_s": 0.024035943114301767,
+          "QNR": 0.9287345314416363
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.04909341552808264,
+          "D_s": 0.045755701278619026,
+          "QNR": 0.9073971868489483
+        },
+        "assumed_observation_rmse_dn_before": 15.87184625270526,
+        "assumed_observation_rmse_dn_after": 1.1780853600044447,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6044363330001943,
+        "output_min": -0.03220270201563835,
+        "output_max": 1.834829330444336
+      },
+      {
+        "diagnostic_index": 6,
+        "patch_index": 235,
+        "ms_yx": [
+          1536,
+          896
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.014972787839627971,
+          "D_s": 0.016042003713063684,
+          "QNR": 0.9692254019654266
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.02858159181161521,
+          "D_s": 0.023527956036467776,
+          "QNR": 0.948562918587513
+        },
+        "assumed_observation_rmse_dn_before": 6.573305311456958,
+        "assumed_observation_rmse_dn_after": 0.6197961249781085,
+        "cg_iterations": 10,
+        "projection_seconds": 0.7556074999993143,
+        "output_min": 0.022796258330345154,
+        "output_max": 0.7132468819618225
+      },
+      {
+        "diagnostic_index": 7,
+        "patch_index": 27,
+        "ms_yx": [
+          640,
+          3968
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.031123528427425374,
+          "D_s": 0.017550311848348404,
+          "QNR": 0.9518723873539484
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.031508786327670006,
+          "D_s": 0.03769970492003186,
+          "QNR": 0.9319793806992397
+        },
+        "assumed_observation_rmse_dn_before": 15.651598879366027,
+        "assumed_observation_rmse_dn_after": 1.2239662517394105,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6101097909995588,
+        "output_min": -0.1213739812374115,
+        "output_max": 1.6292736530303955
+      },
+      {
+        "diagnostic_index": 8,
+        "patch_index": 398,
+        "ms_yx": [
+          1920,
+          4992
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.029631234066939932,
+          "D_s": 0.015723975424802472,
+          "QNR": 0.9551107113045328
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.03427303640174471,
+          "D_s": 0.031595417207614496,
+          "QNR": 0.9352144172747257
+        },
+        "assumed_observation_rmse_dn_before": 12.65336541628566,
+        "assumed_observation_rmse_dn_after": 1.151844686203859,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6168750420001743,
+        "output_min": -0.023641053587198257,
+        "output_max": 1.2711771726608276
+      },
+      {
+        "diagnostic_index": 9,
+        "patch_index": 87,
+        "ms_yx": [
+          896,
+          6272
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.021333024002505963,
+          "D_s": 0.029834263278337422,
+          "QNR": 0.9494691677737706
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.023020778701610966,
+          "D_s": 0.022021530350437954,
+          "QNR": 0.9554646437248193
+        },
+        "assumed_observation_rmse_dn_before": 13.551573258197346,
+        "assumed_observation_rmse_dn_after": 1.047023542021328,
+        "cg_iterations": 10,
+        "projection_seconds": 0.5702830410009483,
+        "output_min": 0.008853210136294365,
+        "output_max": 1.237424612045288
+      },
+      {
+        "diagnostic_index": 10,
+        "patch_index": 250,
+        "ms_yx": [
+          1536,
+          2816
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.01740828746710501,
+          "D_s": 0.030296573295419592,
+          "QNR": 0.9528225506946704
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.023190878263225842,
+          "D_s": 0.03651975647748608,
+          "QNR": 0.9411362904859601
+        },
+        "assumed_observation_rmse_dn_before": 8.467819093101767,
+        "assumed_observation_rmse_dn_after": 0.8075128937919173,
+        "cg_iterations": 10,
+        "projection_seconds": 0.5672040839999681,
+        "output_min": -0.020934108644723892,
+        "output_max": 0.8670850396156311
+      },
+      {
+        "diagnostic_index": 11,
+        "patch_index": 422,
+        "ms_yx": [
+          2048,
+          1792
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.011652403374678934,
+          "D_s": 0.019173840374151714,
+          "QNR": 0.9693971775734507
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.024365362033671917,
+          "D_s": 0.025428856573659134,
+          "QNR": 0.9508253646891885
+        },
+        "assumed_observation_rmse_dn_before": 8.535967188923737,
+        "assumed_observation_rmse_dn_after": 0.8264753795040052,
+        "cg_iterations": 10,
+        "projection_seconds": 0.573876582999219,
+        "output_min": 0.0054635717533528805,
+        "output_max": 1.4442968368530273
+      },
+      {
+        "diagnostic_index": 12,
+        "patch_index": 132,
+        "ms_yx": [
+          1152,
+          3712
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.010018248668876717,
+          "D_s": 0.008766710284515061,
+          "QNR": 0.9813028681302466
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.007944983757554161,
+          "D_s": 0.023904919339203218,
+          "QNR": 0.9683400210991182
+        },
+        "assumed_observation_rmse_dn_before": 12.536816345809028,
+        "assumed_observation_rmse_dn_after": 0.9710484673844607,
+        "cg_iterations": 10,
+        "projection_seconds": 0.5861359169994103,
+        "output_min": -0.016145603731274605,
+        "output_max": 1.677085280418396
+      },
+      {
+        "diagnostic_index": 13,
+        "patch_index": 274,
+        "ms_yx": [
+          1536,
+          6272
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.029136095727163094,
+          "D_s": 0.027206942477137022,
+          "QNR": 0.9444496658761571
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.040779384708849974,
+          "D_s": 0.02002568442777132,
+          "QNR": 0.9400115659527168
+        },
+        "assumed_observation_rmse_dn_before": 12.627483625975472,
+        "assumed_observation_rmse_dn_after": 0.8741608394983447,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6018092909998813,
+        "output_min": -0.0030032587237656116,
+        "output_max": 1.3435600996017456
+      },
+      {
+        "diagnostic_index": 14,
+        "patch_index": 260,
+        "ms_yx": [
+          1536,
+          4096
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.009540574819882417,
+          "D_s": 0.012157212493030561,
+          "QNR": 0.9784181994824779
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.011061680582744704,
+          "D_s": 0.01646316268331685,
+          "QNR": 0.9726572669809231
+        },
+        "assumed_observation_rmse_dn_before": 13.779159865311042,
+        "assumed_observation_rmse_dn_after": 0.9612344139485041,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6141207910004596,
+        "output_min": -0.020571263507008553,
+        "output_max": 1.6173598766326904
+      },
+      {
+        "diagnostic_index": 15,
+        "patch_index": 53,
+        "ms_yx": [
+          768,
+          5120
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.024382839461937342,
+          "D_s": 0.02405427637424014,
+          "QNR": 0.9521493957230287
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.024960796963667885,
+          "D_s": 0.02328940883786393,
+          "QNR": 0.9523311164038739
+        },
+        "assumed_observation_rmse_dn_before": 11.882358676438356,
+        "assumed_observation_rmse_dn_after": 1.046010302168298,
+        "cg_iterations": 10,
+        "projection_seconds": 0.5704832499995973,
+        "output_min": 0.03876788541674614,
+        "output_max": 1.2798058986663818
+      },
+      {
+        "diagnostic_index": 16,
+        "patch_index": 154,
+        "ms_yx": [
+          1280,
+          1536
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.01346131809034176,
+          "D_s": 0.013924066368864663,
+          "QNR": 0.9728020518272958
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.023744556680797568,
+          "D_s": 0.02046051079570187,
+          "QNR": 0.9562807582818071
+        },
+        "assumed_observation_rmse_dn_before": 6.566508994094441,
+        "assumed_observation_rmse_dn_after": 0.623002335864834,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6121645839994017,
+        "output_min": 0.03607030585408211,
+        "output_max": 0.6853065490722656
+      },
+      {
+        "diagnostic_index": 17,
+        "patch_index": 319,
+        "ms_yx": [
+          1792,
+          256
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.015208274068194846,
+          "D_s": 0.008402612139128268,
+          "QNR": 0.9765169030209775
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.02612759791170408,
+          "D_s": 0.016721252953149635,
+          "QNR": 0.9575880353088861
+        },
+        "assumed_observation_rmse_dn_before": 10.892447270747512,
+        "assumed_observation_rmse_dn_after": 0.874370035495523,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6179087500004243,
+        "output_min": 0.011507370509207249,
+        "output_max": 0.9060125946998596
+      },
+      {
+        "diagnostic_index": 18,
+        "patch_index": 483,
+        "ms_yx": [
+          2176,
+          4352
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.016312643439959192,
+          "D_s": 0.021159282708084592,
+          "QNR": 0.9628732376862185
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.016441404337686146,
+          "D_s": 0.02049832659084303,
+          "QNR": 0.9633972903471968
+        },
+        "assumed_observation_rmse_dn_before": 12.234297274024561,
+        "assumed_observation_rmse_dn_after": 0.9964396869607073,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6113723750004283,
+        "output_min": 0.008548224344849586,
+        "output_max": 0.9618256688117981
+      },
+      {
+        "diagnostic_index": 19,
+        "patch_index": 288,
+        "ms_yx": [
+          1664,
+          1792
+        ],
+        "before_FR_reference": {
+          "D_lambda": 0.016423749608711874,
+          "D_s": 0.018641220138004566,
+          "QNR": 0.965241188985231
+        },
+        "after_FR_reference": {
+          "D_lambda": 0.022804915110178698,
+          "D_s": 0.03634442063416887,
+          "QNR": 0.9416794956829433
+        },
+        "assumed_observation_rmse_dn_before": 13.889890956505614,
+        "assumed_observation_rmse_dn_after": 1.0031550956645259,
+        "cg_iterations": 10,
+        "projection_seconds": 0.6072737080012303,
+        "output_min": -0.04035703092813492,
+        "output_max": 1.0468878746032715
+      }
+    ]
+  },
+  "predictions": {
+    "QB": {
+      "path": "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/assumed_mtf026_k10/predictions_QB_assumed_P.h5",
+      "bytes": 67662488,
+      "sha256": "9d0621ac611dd32b780924b6d63511376f6cf10d8b6673226dcfdc7b8a920717",
+      "verified_all_chunks": true
+    },
+    "GF2": {
+      "path": "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/assumed_mtf026_k10/predictions_GF2_assumed_P.h5",
+      "bytes": 65235837,
+      "sha256": "c5678d31aa0b8e13027afa93e46bdb0d501588cb7e59821aa4ae4108853d7112",
+      "verified_all_chunks": true
+    }
+  },
+  "independent_scenes": 1,
+  "seed": 42,
+  "source_baseline": {
+    "path": "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/diagnostic91/summary.json",
+    "sha256": "a590d952bf6fff0f404f4871dd3f0386c8c64480fe512305d58cd288f73e6b15"
+  },
+  "source_data": {
+    "path": "/Users/biyonghiyon_e/Desktop/CtrS/SSA-MRN/data/cas500_1_l2g_20260522/fr_patches.h5",
+    "sha256": "2e7e99345ee78293bf1faec4a865cd37aff554af51a53223e18d5a36ecc361ee"
+  },
+  "sources": {
+    "experiments/performance/79_deep_narrow_branch_projection/prepare.py": {
+      "bytes": 4165,
+      "sha256": "f658efc0506affb7cc8dc76e3ae2a34b202a75f0d7cfa83766838ec0d49e6b28"
+    },
+    "experiments/performance/54_multi_sensor_scale_mixed_training/prepare.py": {
+      "bytes": 5211,
+      "sha256": "4ce20628d333b9e7b34501ab95a931055cc2c97227ec261b898150badc1986d2"
+    },
+    "common/metrics.py": {
+      "bytes": 7419,
+      "sha256": "509c0bd4fe8731772ef8f1a85b7528025bb6701eda316360a650be2dbef626ac"
+    }
+  },
+  "script_sha256": "1a48150c0ab4b317564125bbd3dace9707094b1a9736abe72ae55730f6b5af5a",
+  "dtype": "CPU float64, stored float32",
+  "physical_accuracy_verified": false,
+  "ground_truth": false,
+  "rr": false
+}
