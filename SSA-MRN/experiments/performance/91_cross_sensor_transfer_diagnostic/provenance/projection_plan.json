@@ -1,0 +1,33 @@
+{
+  "scope": "Assumed-MTF observation projection on the frozen diagnostic subset; not calibrated CAS500 physics",
+  "experiment": 91,
+  "sources": ["QB", "GF2"],
+  "seed": 42,
+  "input_predictions": "Reuse verified CK + experiment-82 calibration predictions from the no-projection diagnostic",
+  "subset": "Exactly config.json selected_patch_indices, no additional patch selection",
+  "ms_gnyq": [0.26, 0.26, 0.26, 0.26],
+  "gain_basis": {
+    "doi": "10.7780/kjrs.2023.39.4.6",
+    "kind": "simulation assumption, not a measured L2G MTF",
+    "additional_assumption": "The source study uses RGB airborne imagery; equal NIR gain 0.26 is an additional assumption here"
+  },
+  "pan_gnyq": null,
+  "kernel": "experiment 54 gen_mtf, radial Kaiser, signed taps and DC gain unchanged",
+  "kernel_size": 41,
+  "ratio": 4,
+  "phase_yx": [2, 2],
+  "boundary": "replicate",
+  "ms_margin": 5,
+  "projection": "experiment 79 Projector conjugate gradient and autograd adjoint, unchanged",
+  "max_iterations": 10,
+  "relative_tolerance": 1e-8,
+  "dtype": "float64 CPU; stored predictions float32",
+  "output_clip": false,
+  "metrics": "same common.metrics.fr_metrics as the no-projection diagnostic; Python reference only",
+  "observation_metric": "interior RMSE of assumed D(prediction) - input MS in DN; consistency only, not reconstruction accuracy",
+  "display_indices": [0, 1, 3, 7, 14, 17],
+  "no_ground_truth": true,
+  "no_retraining": true,
+  "no_rr": true,
+  "no_model_selection": true
+}
