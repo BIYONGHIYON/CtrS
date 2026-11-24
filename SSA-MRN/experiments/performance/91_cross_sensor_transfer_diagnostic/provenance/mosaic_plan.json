@@ -1,0 +1,46 @@
+{
+  "task": "Qualitative QB no-projection mosaic requested by user; no performance experiment or model selection",
+  "source": "CAS500-1 L2G 2026-05-22 existing source TIFFs",
+  "source_directory": "/Users/biyonghiyon_e/Downloads/FileDrop-1234",
+  "roi_pan_xywh": [
+    11776,
+    16128,
+    2560,
+    2688
+  ],
+  "nominal_pan_gsd_m": 0.5,
+  "roi_basis": "Approximate screenshot extent; Dongguk campus, Chungmuro and Jangchung area identified visually in the source image. Pixel ROI is authoritative; georeferencing not certified.",
+  "model": {
+    "experiment": 90,
+    "arm": "CK",
+    "source": "QB",
+    "seed": 42,
+    "projection": false,
+    "calibration": "experiment 82 scene-mode, one frozen coefficient vector across the whole mosaic ROI"
+  },
+  "normalization": "DN/4095 no input or output clipping",
+  "interpolation": "same source-halo interp23tap, 16 MS pixels",
+  "tiling": {
+    "input_pan": 512,
+    "discard_pan_border": 64,
+    "retained_core": 384,
+    "stride": 256,
+    "blend": "separable half-sample Hann positive weights; normalize accumulated weights"
+  },
+  "display": {
+    "rgb_order": [
+      "R",
+      "G",
+      "B"
+    ],
+    "stretch": "global ROI LMS channelwise 2-98 percentile shared by input and output",
+    "gamma": 1
+  },
+  "outputs": [
+    "QB no-projection RGB full-resolution PNG/JPEG",
+    "float32 B G R NIR DN TIFF without certified georeferencing",
+    "input LMS RGB PNG",
+    "preview and fixed campus crop comparison",
+    "manifest with source and output hashes, tile coordinates and coverage"
+  ]
+}

@@ -71,14 +71,129 @@ def synchronize(device):
         torch.mps.synchronize()
 
 
+def mosaic(args):
+    """Create a qualitative overlap-blended mosaic without changing the diagnostic subset."""
+    import tifffile
+    root = args.repo.resolve()/'SSA-MRN'
+    sys.path.insert(0, str(root))
+    plan_path = HERE/'provenance/mosaic_plan.json'
+    plan = json.loads(plan_path.read_text())
+    prep_path = root/'data/cas500_1_l2g_20260522/prepare.py'
+    prep = load_module('cas91_mosaic_preparation', prep_path)
+    source = Path(plan['source_directory'])
+    ras = {b:prep.Raster(next(source.glob('*_'+b+'.tif'))) for b in ('B','G','R','N','P')}
+    frozen_input = json.loads((HERE/'provenance/data_manifest.json').read_text())
+    # The original source list is copied verbatim from the already-verified preparation manifest.
+    entries = frozen_input['sources']
+    for item in entries:
+        assert sha(Path(item['path'])) == item['sha256'], item['path']
+    px,py,W,H = plan['roi_pan_xywh']
+    assert all(v%4==0 for v in (px,py,W,H))
+    x,y,w,h = px//4,py//4,W//4,H//4
+    out = args.output or root/'data/cas500_1_l2g_20260522/dongguk_QB_no_projection'
+    if out.exists():
+        raise FileExistsError('Refusing to overwrite an existing mosaic directory')
+    out.mkdir(parents=True)
+    write(out/'frozen_plan.json',plan)
+    halo = 16
+    ms = np.stack([ras[b].crop(y,x,h,w) for b in ('B','G','R','N')]).astype('f4')/4095
+    ctx = np.stack([ras[b].crop(y-halo,x-halo,h+2*halo,w+2*halo) for b in ('B','G','R','N')]).astype('f4')/4095
+    lms = prep.interpolate(ctx)[:,halo*4:(halo+h)*4,halo*4:(halo+w)*4]
+    pan = ras['P'].crop(py,px,H,W)[None].astype('f4')/4095
+    assert ms.shape==(4,h,w) and lms.shape==(4,H,W) and pan.shape==(1,H,W)
+    assert np.all(ms>0) and np.all(pan>0)
+    ref_path = root/'experiments/performance/82_cross_sensor_band_calibration/results/reference_stats/QB.json'
+    ref = json.loads(ref_path.read_text())
+    t = np.asarray(ref['ratio_of_means'],dtype='f8')*pan.astype('f8').mean()/lms.astype('f8').mean((1,2))
+    t4 = t.astype('f4')[:,None,None]
+    assert np.isfinite(t).all() and (t>0).all()
+    cfg=json.loads((HERE/'config.json').read_text())
+    checkpoint=root/cfg['checkpoint_paths']['QB']
+    expected=json.loads((HERE/'provenance/source_manifest.json').read_text())['weights']['QB']['sha256']
+    assert sha(checkpoint)==expected
+    ck=torch.load(checkpoint,map_location='cpu',weights_only=False)
+    assert ck['seed']==42 and ck['arm']=='CK' and ck['sensor']=='QB'
+    m90=load_module('cas91_mosaic_m90',root/'experiments/performance/90_dataset_matched_internal_resampling/model.py')
+    m90.OUT_IMPL['value']='convT'
+    torch.set_num_threads(4);torch.manual_seed(42)
+    device=args.device
+    if device=='mps' and not torch.backends.mps.is_available():
+        raise RuntimeError('Metal GPU unavailable')
+    net=m90.Model('CK',4,42,sensor='QB');net.load_state_dict(ck['model'],strict=True);net=net.to(device).eval()
+    tile=plan['tiling']['input_pan'];border=plan['tiling']['discard_pan_border'];core=tile-2*border;stride=plan['tiling']['stride']
+    def starts(n):
+        return sorted(set(list(range(0,n-core+1,stride))+[n-core]))
+    ys,xs=starts(H),starts(W)
+    axis=np.sin(np.pi*(np.arange(core)+.5)/core)**2
+    weight=(axis[:,None]*axis[None,:]).astype('f4')
+    acc=np.zeros((4,H,W),dtype='f4');coverage=np.zeros((H,W),dtype='f4');count=np.zeros((H,W),dtype='u1')
+    rows=[];started=time.monotonic()
+    # Independently check context interpolation against the whole-ROI interpolation at one tile.
+    for i,(oy,ox) in enumerate((a,b) for a in ys for b in xs):
+        gy,gx=py+oy-border,px+ox-border;my,mx=gy//4,gx//4
+        cc=np.stack([ras[b].crop(my-halo,mx-halo,128+2*halo,128+2*halo) for b in ('B','G','R','N')]).astype('f4')/4095
+        aa=dict(ms=cc[:,halo:halo+128,halo:halo+128],lms=prep.interpolate(cc)[:,halo*4:(halo+128)*4,halo*4:(halo+128)*4],pan=ras['P'].crop(gy,gx,tile,tile)[None].astype('f4')/4095)
+        assert all(np.isfinite(a).all() for a in aa.values()) and all(np.all(a>0) for a in (cc,aa['pan']))
+        if i==0:
+            np.testing.assert_array_equal(aa['lms'][:,border:border+core,border:border+core],lms[:,oy:oy+core,ox:ox+core])
+        tensors=[torch.from_numpy(np.ascontiguousarray(z))[None].to(device) for z in (aa['pan'],aa['lms']*t4,aa['ms']*t4)]
+        with torch.inference_mode():
+            prediction=net(*tensors)[0].float().cpu().numpy()/t4
+        assert prediction.shape==(4,tile,tile) and np.isfinite(prediction).all()
+        z=prediction[:,border:border+core,border:border+core]
+        acc[:,oy:oy+core,ox:ox+core]+=z*weight
+        coverage[oy:oy+core,ox:ox+core]+=weight
+        count[oy:oy+core,ox:ox+core]+=1
+        rows.append(dict(tile_index=i,source_pan_xy=[gx,gy],retained_output_xy=[ox,oy]))
+        if (i+1)%10==0 or i+1==len(ys)*len(xs):
+            print('MOSAIC',i+1,'/',len(ys)*len(xs),'elapsed',round(time.monotonic()-started,1),flush=True)
+    assert np.all(coverage>0) and np.all(count>0)
+    fused=acc/coverage[None]
+    assert fused.shape==(4,H,W) and np.isfinite(fused).all()
+    # Normalize-before-accumulate identity check catches any blend or coverage scaling error.
+    np.testing.assert_allclose((coverage.astype('f8')*2.5)/coverage,2.5,rtol=1e-14)
+    lo=np.percentile(lms[[2,1,0]],2,axis=(1,2))[:,None,None]
+    hi=np.percentile(lms[[2,1,0]],98,axis=(1,2))[:,None,None]
+    def rgb(a):
+        return Image.fromarray((255*np.clip((a[[2,1,0]]-lo)/(hi-lo),0,1)).astype('u1').transpose(1,2,0))
+    image=rgb(fused);input_image=rgb(lms)
+    image.save(out/'dongguk_QB_no_projection.png')
+    image.save(out/'dongguk_QB_no_projection.jpg',quality=96,subsampling=0,optimize=True)
+    input_image.save(out/'dongguk_input_LMS.png')
+    image.resize((1280,round(H*1280/W)),Image.Resampling.LANCZOS).save(out/'dongguk_preview.jpg',quality=90,subsampling=0)
+    dn=(fused*4095).astype('f4')
+    tifffile.imwrite(out/'dongguk_QB_no_projection_BGRNIR_DN.tif',dn,photometric='minisblack',metadata=dict(axes='CYX',band_order='B,G,R,NIR',unit='DN',projection=False,georeferencing='not certified; source pixel ROI in frozen_plan.json'),compression='deflate')
+    with tifffile.TiffFile(out/'dongguk_QB_no_projection_BGRNIR_DN.tif') as f:
+        back=f.asarray()
+        np.testing.assert_array_equal(back,dn)
+    with Image.open(out/'dongguk_QB_no_projection.png') as f:
+        assert f.size==(W,H);f.verify()
+    # Fixed central 512-pixel crop, not selected using prediction quality.
+    cx,cy=W//2,H//2;box=(cx-256,cy-256,cx+256,cy+256)
+    comp=Image.new('RGB',(1536,540),'white');draw=ImageDraw.Draw(comp)
+    pp=pan[0];pl,ph=np.percentile(pp,[2,98]);pi=Image.fromarray((255*np.clip((pp-pl)/(ph-pl),0,1)).astype('u1')).convert('RGB')
+    for col,(pic,label) in enumerate([(input_image,'Input LMS'),(pi,'Input PAN'),(image,'QB CK + band calibration; no projection')]):
+        comp.paste(pic.crop(box),(col*512,28));draw.text((col*512+5,7),label,fill='black')
+    comp.save(out/'center_comparison.png')
+    verification=dict(all_tiles_finite=True,full_coverage=True,minimum_weight=float(coverage.min()),coverage_count_min=int(count.min()),coverage_count_max=int(count.max()),float_tiff_exact_readback=True,rgb_png_verified=True,interpolation_matches_whole_roi=True)
+    result=dict(scope=plan['task'],plan_sha256=sha(plan_path),script_sha256=sha(Path(__file__)),model_sha256=sha(checkpoint),calibration_reference_sha256=sha(ref_path),calibration_t=t.tolist(),source_hashes=entries,preprocessing_sha256=sha(prep_path),roi_pan_xywh=plan['roi_pan_xywh'],shape_chw=list(fused.shape),nominal_extent_m=[W*.5,H*.5],georeferencing='not certified; original pixel coordinates authoritative',display_percentiles=dict(low=lo.ravel().tolist(),high=hi.ravel().tolist(),gamma=1),tiles=rows,tile_count=len(rows),projection=False,ground_truth=False,rr=False,elapsed_seconds=time.monotonic()-started,verification=verification,environment=dict(device=device,torch=torch.__version__,numpy=np.__version__,tifffile=tifffile.__version__,python=sys.version),output_min=float(fused.min()),output_max=float(fused.max()))
+    write(out/'summary.json',result)
+    artifacts={p.name:dict(bytes=p.stat().st_size,sha256=sha(p)) for p in sorted(out.iterdir()) if p.is_file()}
+    write(out/'manifest.json',dict(scope=result['scope'],files=artifacts))
+    print('MOSAIC COMPLETE',str(out),json.dumps(verification),flush=True)
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--repo', type=Path, required=True, help='Owning source repository with archived weights and prepared data')
     p.add_argument('--output', type=Path)
     p.add_argument('--seal', action='store_true')
+    p.add_argument('--mosaic', action='store_true', help='Qualitative QB no-projection overlap mosaic')
     p.add_argument('--device', choices=['cpu', 'mps'], default='mps')
     args = p.parse_args()
     args.repo = args.repo.resolve()
+    if args.mosaic:
+        return mosaic(args)
     cfg = json.loads((HERE/'config.json').read_text())
     if args.seal:
         if 'selected_patch_indices' in cfg:

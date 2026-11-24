@@ -103,3 +103,14 @@ QNR이 오른 패치는 QB 19/20개, GF2 4/20개입니다. 관측 잔차는 두 
 MTF 검토 근거: [CAS500-1 검보정 논문](https://doi.org/10.3390/rs18010177)은 보정 전후 MTF의 하한값을 제시하고, [CAS500 초해상도 데이터 생성 논문](https://doi.org/10.7780/kjrs.2023.39.4.6)은 시뮬레이션에 0.26을 가정했습니다. 이 값들을 이번 L2G의 밴드별 실측 MTF로 사용하지 않았습니다.
 
 </details>
+
+<details>
+<summary><b>동국대 주변 시각화</b> · QB 무사영 모자이크 계획</summary>
+
+사용자 지정 지역의 큰 영상 제작이며 성능 비교가 아닙니다. [고정 계획](provenance/mosaic_plan.json)에 따라 QB 무사영 출력을 겹쳐 합성합니다. 기존 고정 20패치와 수치는 바꾸지 않습니다. 출력은 원본 픽셀 좌표를 기준으로 하며 지리참조 정확도는 인증하지 않습니다.
+
+```bash
+python run.py --repo /path/to/CtrS --mosaic --device mps
+```
+
+</details>
