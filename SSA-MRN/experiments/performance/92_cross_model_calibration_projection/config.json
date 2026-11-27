@@ -1,0 +1,60 @@
+{
+  "ctrs_evaluation_commit": "6f332624d8241d2726b29a71b227f80423a943d5",
+  "models": {
+    "adwm": {
+      "weights": "WV3 author",
+      "inference": "Windows CPU"
+    },
+    "arconv": {
+      "weights": "WV3 author",
+      "inference": "Windows CPU"
+    },
+    "cannet": {
+      "weights": "WV3 author",
+      "inference": "Kaggle Tesla T4"
+    },
+    "fusionnet": {
+      "weights": "WV3 author",
+      "inference": "Windows CPU"
+    },
+    "u2net": {
+      "weights": "WV3 author",
+      "inference": "Windows CPU"
+    }
+  },
+  "test_file": "test_wv2_multiExm1.h5",
+  "protocol": "WV2 RR",
+  "scenes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "scale": 2047,
+  "conditions": [
+    "original",
+    "brightness",
+    "projection",
+    "both"
+  ],
+  "calibration": "Experiment 82, WV3 reference statistics, scene mode",
+  "projection": "Experiment 83, WV2 observation operator, K10, CPU",
+  "metrics": "CtrS Python rr_metrics",
+  "retraining": false
+}
