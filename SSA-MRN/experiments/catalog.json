@@ -3026,5 +3026,15 @@
     "manifest": "experiments/performance/90_dataset_matched_internal_resampling/manifest.json",
     "results": "experiments/performance/90_dataset_matched_internal_resampling/results",
     "last_checked": "2026-11-24T15:30:00+09:00"
+  },
+  "performance/92_cross_model_calibration_projection": {
+    "display_name": "92. 외부 모델에서 밴드별 밝기 보정과 관측 일치 사영 효과 검증",
+    "experimenter": "김경찬",
+    "status": "평가 완료",
+    "improvement": "성능 비교 아님",
+    "result": "WV2 RR 20장, 저자 가중치 모델 5종: 두 보정 적용 시 원본 대비 PSNR +1.75-3.08 dB",
+    "report": "experiments/performance/92_cross_model_calibration_projection/README.md",
+    "entrypoint": "experiments/performance/92_cross_model_calibration_projection/evaluate.py",
+    "results": "experiments/performance/92_cross_model_calibration_projection/results"
   }
 }
